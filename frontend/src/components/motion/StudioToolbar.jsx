@@ -16,6 +16,7 @@ import {
   IconLayersSubtract,
   IconScissors,
   IconAdjustments,
+  IconCode,
 } from "@tabler/icons-react"
 
 /**
@@ -41,6 +42,7 @@ export default function StudioToolbar({
 }) {
   return (
     <Box
+      data-testid="studio-toolbar"
       sx={{
         height: 48,
         minHeight: 48,
@@ -213,6 +215,7 @@ export default function StudioToolbar({
             <Tooltip title="HyperFrames Multi-track Timeline" arrow>
               <IconButton
                 size="small"
+                data-testid="studio-toolbar-timeline-btn"
                 onClick={() => onSelectContext("hyperframes")}
                 sx={{
                   width: 28,
@@ -228,6 +231,7 @@ export default function StudioToolbar({
             <Tooltip title="Clip Studio Range & Filmstrip Bench" arrow>
               <IconButton
                 size="small"
+                data-testid="studio-toolbar-clip-btn"
                 onClick={() => onSelectContext("clip")}
                 sx={{
                   width: 28,
@@ -243,6 +247,7 @@ export default function StudioToolbar({
             <Tooltip title="Deterministic Media Tools" arrow>
               <IconButton
                 size="small"
+                data-testid="studio-toolbar-tools-btn"
                 onClick={() => onSelectContext("tools")}
                 sx={{
                   width: 28,
@@ -253,6 +258,23 @@ export default function StudioToolbar({
                 }}
               >
                 <IconAdjustments size={16} stroke={1.8} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="CodeMirror 6 & Project Code" arrow>
+              <IconButton
+                size="small"
+                aria-label="CodeMirror 6 & Project Code"
+                data-testid="studio-toolbar-code-btn"
+                onClick={() => onSelectContext("code")}
+                sx={{
+                  width: 28,
+                  height: 28,
+                  bgcolor: activeContext === "code" ? "#ede9fe" : "transparent",
+                  color: activeContext === "code" ? "primary.main" : "text.secondary",
+                  borderRadius: 1.5,
+                }}
+              >
+                <IconCode size={16} stroke={1.8} />
               </IconButton>
             </Tooltip>
           </Stack>

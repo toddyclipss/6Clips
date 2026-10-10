@@ -4,7 +4,7 @@
 import json
 import logging
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi import APIRouter, HTTPException, Query, Depends, Header
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -114,7 +114,11 @@ async def get_project_revisions(project_id: str):
 
 
 @router.post("/{project_id}/operations")
-async def apply_project_operation(project_id: str, body: dict):
+async def apply_project_operation(
+    project_id: str,
+    body: dict,
+    idempotency_key_header: Optional[str] = Header(None, alias="Idempotency-Key")
+):
     """
     Apply a controlled operation to the versioned project.
     Requires expected_revision for optimistic concurrency control.
@@ -122,7 +126,7 @@ async def apply_project_operation(project_id: str, body: dict):
     expected_revision = body.get("expected_revision")
     operation_type = body.get("operation_type")
     payload = body.get("payload", {})
-    idempotency_key = body.get("idempotency_key")
+    idempotency_key = body.get("idempotency_key") or idempotency_key_header
     author = body.get("author", "user")
 
     if expected_revision is None or not operation_type:
@@ -269,6 +273,56 @@ async def get_catalog_item_detail(block_id: str):
     if not item:
         raise HTTPException(status_code=404, detail=f"Block '{block_id}' not found")
     return item
+
+
+@router.get("/{project_id}/code/files")
+async def get_project_code_files(project_id: str, revision: Optional[int] = None):
+    """Retrieve all logical code files for a project or specific revision snapshot."""
+    try:
+        if revision is not None:
+            snapshot = await ProjectService.get_revision_snapshot(project_id, revision)
+            doc = snapshot
+        else:
+            p = await ProjectService.get_project(project_id)
+            import json
+            doc = json.loads(p.document_json)
+        code_sec = doc.get("code") or {}
+        files = code_sec.get("files") or []
+        return {
+            "project_id": project_id,
+            "revision": revision if revision is not None else p.revision,
+            "files": files,
+            "count": len(files),
+        }
+    except ProjectNotFoundError:
+        raise HTTPException(status_code=404, detail="Project not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/{project_id}/code/files/{file_id}")
+async def get_project_code_file_detail(project_id: str, file_id: str, revision: Optional[int] = None):
+    """Retrieve detail and content for a single code file."""
+    try:
+        if revision is not None:
+            snapshot = await ProjectService.get_revision_snapshot(project_id, revision)
+            doc = snapshot
+        else:
+            p = await ProjectService.get_project(project_id)
+            import json
+            doc = json.loads(p.document_json)
+        code_sec = doc.get("code") or {}
+        files = code_sec.get("files") or []
+        target = next((f for f in files if f.get("id") == file_id or f.get("path") == file_id), None)
+        if not target:
+            raise HTTPException(status_code=404, detail=f"File '{file_id}' not found in project")
+        return target
+    except HTTPException:
+        raise
+    except ProjectNotFoundError:
+        raise HTTPException(status_code=404, detail="Project not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 

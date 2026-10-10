@@ -248,6 +248,50 @@ class RegistryAdapter:
         return normalized
 
     @classmethod
+    def read_block_source(cls, block_name: str, file_rel_path: Optional[str] = None, version_hash: Optional[str] = None) -> Dict[str, Any]:
+        """Read original immutable source file from pinned block snapshot without mutating disk."""
+        snapshot = cls.freeze_block_snapshot(block_name, expected_version=version_hash)
+        snapshot_dir = Path(snapshot["snapshot_dir"])
+
+        target_file = None
+        if file_rel_path:
+            p = (snapshot_dir / file_rel_path).resolve()
+            if p.is_file() and p.is_relative_to(snapshot_dir):
+                target_file = p
+
+        if not target_file:
+            # Check manifest for composition file
+            manifest_file = snapshot_dir / "registry-item.json"
+            if manifest_file.exists():
+                try:
+                    manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+                    for f in manifest.get("files", []):
+                        if f.get("type") == "hyperframes:composition":
+                            cand = snapshot_dir / f.get("path")
+                            if cand.exists():
+                                target_file = cand
+                                break
+                except Exception:
+                    pass
+        if not target_file:
+            # Fallback to block_name.html or any html
+            candidates = list(snapshot_dir.glob("*.html"))
+            if candidates:
+                target_file = candidates[0]
+
+        if not target_file or not target_file.is_file():
+            raise FileNotFoundError(f"File '{file_rel_path or 'composition'}' not found in block '{block_name}'")
+
+        rel_name = target_file.relative_to(snapshot_dir).as_posix()
+        return {
+            "block_name": block_name,
+            "version_hash": snapshot.get("version_hash"),
+            "path": rel_name,
+            "content": target_file.read_text(encoding="utf-8"),
+            "read_only": True,
+        }
+
+    @classmethod
     def stage_block_instance(
         cls,
         block_name: str,
@@ -257,12 +301,14 @@ class RegistryAdapter:
         variables: Optional[Dict[str, Any]] = None,
         aspect_ratio: Optional[str] = None,
         stage_dimensions: Optional[Tuple[int, int]] = None,
+        override_content: Optional[str] = None,
     ) -> Path:
         """
         Materialize an isolated composition file for this block instance.
         Rewrites composition IDs, timelines keys, injects variables, and adapts geometry/typography
         responsively to parent canvas aspect ratio.
         Guarantees independent DOM and timeline isolation.
+        Allows explicit project-owned override_content to take precedence over immutable template HTML.
         """
         dest_compositions_dir.mkdir(parents=True, exist_ok=True)
         snapshot = cls.freeze_block_snapshot(block_name, expected_version=version_hash)
@@ -290,7 +336,10 @@ class RegistryAdapter:
                 target_folder.mkdir(parents=True, exist_ok=True)
                 shutil.copytree(src_folder, target_folder, dirs_exist_ok=True)
 
-        html_content = comp_file.read_text(encoding="utf-8")
+        if override_content is not None:
+            html_content = override_content
+        else:
+            html_content = comp_file.read_text(encoding="utf-8")
 
         # 1. Scope and isolate data-composition-id
         # Replace original composition id with instance_id
@@ -395,6 +444,18 @@ class RegistryAdapter:
       }}
     }} catch(e) {{}}
   }}
+
+  window.addEventListener("message", function(e) {{
+    if (!e.data || e.data.action !== "seek") return;
+    var t = e.data.time != null ? Number(e.data.time) : 0;
+    var tls = window.__timelines || {{}};
+    var k = Object.keys(tls);
+    if (k.length && tls[k[0]] && typeof tls[k[0]].seek === "function") {{
+      tls[k[0]].seek(t);
+    }} else if (window.tl && typeof window.tl.seek === "function") {{
+      window.tl.seek(t);
+    }}
+  }});
 
   if (document.readyState === "loading") {{
     document.addEventListener("DOMContentLoaded", function() {{

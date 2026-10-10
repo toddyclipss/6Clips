@@ -38,9 +38,14 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   const [muted, setMuted] = useState(false)
   const lastPostedPlayRef = useRef(null)
 
+  const ALLOWED_OUTBOUND_ACTIONS = new Set(["play", "pause", "seek", "mute"])
+
   const postControl = (action, extra = {}) => {
+    if (!ALLOWED_OUTBOUND_ACTIONS.has(action)) return
     try {
       if (iframeRef.current && iframeRef.current.contentWindow) {
+        // Sandboxed iframe without allow-same-origin has an opaque origin ("null").
+        // Outbound command targetOrigin must be "*" to reach the opaque frame window.
         iframeRef.current.contentWindow.postMessage(
           { source: "vm-parent", action, ...extra },
           "*"
@@ -54,7 +59,8 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   // Expose imperative methods to parent (e.g. for scrubbing from timeline)
   useImperativeHandle(ref, () => ({
     seek: (time) => {
-      postControl("seek", { time })
+      const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, time) : 0
+      postControl("seek", { time: validTime })
     },
     play: () => {
       postControl("play")
@@ -75,25 +81,49 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   // Listen to bidirectional playback events from composition runtime
   useEffect(() => {
     const handleRuntimeMessage = (ev) => {
-      if (!ev.data || ev.data.source !== "vm-runtime") return
-      if (typeof ev.data.currentTime === "number") {
+      // 1. Strict sending window check: only accept messages from our exact composition iframe
+      if (!iframeRef.current || !iframeRef.current.contentWindow) return
+      if (ev.source !== iframeRef.current.contentWindow) return
+
+      // 2. Sandboxed iframe with allow-scripts and without allow-same-origin evaluates to origin "null".
+      // Verify origin is either "null" (opaque sandbox) or matches current window origin
+      if (ev.origin !== "null" && ev.origin !== window.location.origin) return
+
+      // 3. Message shape validation
+      const data = ev.data
+      if (!data || typeof data !== "object") return
+      if (data.source !== "vm-runtime") return
+
+      // 4. Runtime state playback time & paused validation
+      if (typeof data.currentTime === "number") {
+        if (!Number.isFinite(data.currentTime) || data.currentTime < 0) return
+        const maxTime = typeof duration === "number" && Number.isFinite(duration) && duration > 0 ? duration + 60 : 3600
+        if (data.currentTime > maxTime) return
+
         if (onTimeUpdate) {
-          onTimeUpdate(ev.data.currentTime)
+          onTimeUpdate(data.currentTime)
         } else if (onSeek) {
-          onSeek(ev.data.currentTime)
+          onSeek(data.currentTime)
         }
       }
-      if (typeof ev.data.paused === "boolean" && onPlaybackStateChange) {
-        lastPostedPlayRef.current = !ev.data.paused
-        onPlaybackStateChange(!ev.data.paused)
+
+      if (typeof data.paused === "boolean" && onPlaybackStateChange) {
+        lastPostedPlayRef.current = !data.paused
+        onPlaybackStateChange(!data.paused)
       }
-      if (ev.data.action === "element_selected" && ev.data.id && onSelectElementId) {
-        onSelectElementId(ev.data.id)
+
+      // 5. Permitted action allowlist and identifier validation
+      if (data.action === "element_selected") {
+        const id = data.id
+        // Ensure id is a safe, non-empty string identifier (alphanumeric, dashes, underscores, colons, slashes)
+        if (typeof id === "string" && id.length > 0 && id.length <= 128 && /^[a-zA-Z0-9_\-:\/.]+$/.test(id)) {
+          if (onSelectElementId) onSelectElementId(id)
+        }
       }
     }
     window.addEventListener("message", handleRuntimeMessage)
     return () => window.removeEventListener("message", handleRuntimeMessage)
-  }, [onTimeUpdate, onSeek, onPlaybackStateChange, onSelectElementId])
+  }, [duration, onTimeUpdate, onSeek, onPlaybackStateChange, onSelectElementId])
 
   const handleTogglePlay = () => {
     const nextState = !isPlaying
@@ -166,6 +196,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
               ref={iframeRef}
               src={previewUrl}
               title="Composition Stage"
+              sandbox="allow-scripts"
               style={{
                 width: "100%",
                 height: "100%",

@@ -173,15 +173,45 @@ class HyperFramesAdapter:
                             ease = curr.get("ease") or "none"
                             gsap_tweens.append(f'      tl.to("#{cid}", {{ {prop_name}: {curr_val}, duration: {dur}, ease: "{ease}" }}, {prev_time});')
 
+        # Collect project-level and clip-level code files
+        code_section = doc.get("code") or {}
+        code_files = code_section.get("files") or []
+        custom_css_chunks = []
+        custom_js_chunks = []
+        project_configs = {}
+        for cf in code_files:
+            c_path = cf.get("path", "")
+            c_content = cf.get("content", "")
+            if not c_content.strip():
+                continue
+            if c_path.lower().endswith(".css"):
+                safe_css = re.sub(r'</style>', r'<\\/style>', c_content, flags=re.IGNORECASE)
+                custom_css_chunks.append(f"    /* {c_path} */\n{safe_css}")
+            elif c_path.lower().endswith((".js", ".jsx", ".ts", ".tsx")):
+                safe_js = re.sub(r'</script>', r'<\\/script>', c_content, flags=re.IGNORECASE)
+                custom_js_chunks.append(f"    // {c_path}\n{safe_js}")
+            elif c_path.lower().endswith((".html", ".htm")):
+                # Injected custom HTML blocks
+                elements_html.append(f"  <!-- Custom HTML: {c_path} -->\n{c_content}")
+            elif c_path.lower().endswith(".json"):
+                try:
+                    project_configs[c_path] = json.loads(c_content)
+                except Exception:
+                    pass
+
         inner_content = "\n".join(elements_html) if elements_html else "  <!-- empty canvas -->"
         timelines_json = json.dumps(timelines_data)
+        project_configs_json = json.dumps(project_configs)
         gsap_tweens_code = "\n".join(gsap_tweens)
+        extra_css = ("\n" + "\n\n".join(custom_css_chunks)) if custom_css_chunks else ""
+        extra_js = ("\n" + "\n\n".join(custom_js_chunks)) if custom_js_chunks else ""
 
         # Standard HyperFrames HTML template satisfying composition issue validator
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob: data:; media-src 'self' blob: data:; img-src 'self' blob: data:; script-src 'self' 'unsafe-inline' blob: data:; style-src 'self' 'unsafe-inline'; frame-src 'self' blob: data:; connect-src 'none';">
   <title>{title}</title>
   <!-- GSAP vendored locally in assets/ for offline timeline animation -->
   <script src="assets/gsap.min.js"></script>
@@ -258,15 +288,20 @@ class HyperFramesAdapter:
       top: 60px;
       font-size: 40px;
     }}
+{extra_css}
   </style>
 </head>
 <body>
   <div id="stage" data-composition-id="viralmint_stage" data-width="{w}" data-height="{h}" data-start="0" data-duration="{duration}">
 {inner_content}
   </div>
+  <script id="vm-custom-code">
+{extra_js}
+  </script>
   <script id="vm-timelines">
     window.__timelines = window.__timelines || {{}};
     window.__timelines_data = {timelines_json};
+    window.__project_configs = {project_configs_json};
     if (window.gsap) {{
       var tl = gsap.timeline({{ paused: true }});
       tl.set({{}}, {{}}, {duration});
@@ -327,6 +362,14 @@ class HyperFramesAdapter:
       }}
 
       function updateComposition(time, playing, forceSeek) {{
+        window.__compositionTime = time;
+        if (typeof window.onCompositionTimeUpdate === "function") {{
+          try {{ window.onCompositionTimeUpdate(time); }} catch(e) {{}}
+        }}
+        try {{
+          window.dispatchEvent(new CustomEvent("compositiontimeupdate", {{ detail: {{ time: time, isPlaying: playing }} }}));
+        }} catch(e) {{}}
+
         // 1. Root Master GSAP Timeline
         var master = getMasterTl();
         if (master && typeof master.seek === "function") {{
@@ -350,6 +393,7 @@ class HyperFramesAdapter:
                   cTl.pause();
                   cTl.seek(0);
                 }}
+                try {{ if (f.contentWindow) f.contentWindow.postMessage({{ action: "seek", time: 0 }}, "*"); }} catch(e) {{}}
               }} else if (time >= start && time <= (start + dur)) {{
                 if (pEl) {{ pEl.style.visibility = "visible"; }}
                 var localTime = Math.max(0, Math.min(dur, time - start));
@@ -357,12 +401,14 @@ class HyperFramesAdapter:
                   cTl.pause();
                   cTl.seek(localTime);
                 }}
+                try {{ if (f.contentWindow) f.contentWindow.postMessage({{ action: "seek", time: localTime }}, "*"); }} catch(e) {{}}
               }} else {{
                 if (pEl) {{ pEl.style.visibility = "hidden"; }}
                 if (cTl && typeof cTl.seek === "function") {{
                   cTl.pause();
                   cTl.seek(dur);
                 }}
+                try {{ if (f.contentWindow) f.contentWindow.postMessage({{ action: "seek", time: dur }}, "*"); }} catch(e) {{}}
               }}
             }} catch(e) {{}}
           }});
@@ -624,6 +670,12 @@ class HyperFramesAdapter:
                     cid = c.get("id")
                     if block_name and cid:
                         try:
+                            # Look for explicit project-owned code overrides for this block instance
+                            code_files = (doc.get("code") or {}).get("files") or []
+                            block_override = next(
+                                (cf.get("content") for cf in code_files if cf.get("clip_id") == cid or cf.get("path") in (f"compositions/{cid}.html", f"blocks/{cid}.html")),
+                                None
+                            )
                             from backend.services.registry_adapter import RegistryAdapter
                             RegistryAdapter.stage_block_instance(
                                 block_name=block_name,
@@ -633,6 +685,7 @@ class HyperFramesAdapter:
                                 variables=c.get("variables"),
                                 aspect_ratio=aspect,
                                 stage_dimensions=stage_dims,
+                                override_content=block_override,
                             )
                         except Exception as e:
                             logger.error("Failed staging block instance %s in studio: %s", cid, e)
@@ -654,6 +707,17 @@ class HyperFramesAdapter:
                             }
 
         html = cls.project_doc_to_html(doc)
+
+        # Stage physical copies of project code files into project staging directory
+        code_sec = doc.get("code") or {}
+        c_files = code_sec.get("files") or []
+        for cf in c_files:
+            cpath = cf.get("path")
+            ccontent = cf.get("content", "")
+            if cpath:
+                target_cf = proj_dir / cpath
+                target_cf.parent.mkdir(parents=True, exist_ok=True)
+                target_cf.write_text(ccontent, encoding="utf-8")
 
         # Write index.html, project_meta.json, and assets_manifest.json
         (proj_dir / "index.html").write_text(html, encoding="utf-8")
@@ -698,6 +762,12 @@ class HyperFramesAdapter:
                     cid = c.get("id")
                     if block_name and cid:
                         try:
+                            # Look for explicit project-owned code overrides for this block instance
+                            code_files = (doc.get("code") or {}).get("files") or []
+                            block_override = next(
+                                (cf.get("content") for cf in code_files if cf.get("clip_id") == cid or cf.get("path") in (f"compositions/{cid}.html", f"blocks/{cid}.html")),
+                                None
+                            )
                             from backend.services.registry_adapter import RegistryAdapter
                             RegistryAdapter.stage_block_instance(
                                 block_name=block_name,
@@ -707,6 +777,7 @@ class HyperFramesAdapter:
                                 variables=c.get("variables"),
                                 aspect_ratio=aspect,
                                 stage_dimensions=stage_dims,
+                                override_content=block_override,
                             )
                         except Exception as e:
                             logger.error("Failed staging block instance %s for render: %s", cid, e)
@@ -729,6 +800,18 @@ class HyperFramesAdapter:
                         }
 
         html = cls.project_doc_to_html(doc)
+
+        # Stage physical copies of project code files into isolated render directory
+        code_sec = doc.get("code") or {}
+        c_files = code_sec.get("files") or []
+        for cf in c_files:
+            cpath = cf.get("path")
+            ccontent = cf.get("content", "")
+            if cpath:
+                target_cf = work_dir / cpath
+                target_cf.parent.mkdir(parents=True, exist_ok=True)
+                target_cf.write_text(ccontent, encoding="utf-8")
+
         (work_dir / "index.html").write_text(html, encoding="utf-8")
         (work_dir / "project_meta.json").write_text(json.dumps({
             "project_id": project_id,

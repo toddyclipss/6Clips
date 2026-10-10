@@ -130,13 +130,42 @@ def resolve_gsap_js(hyperframes_root: Path) -> Path:
     return hyperframes_root / "node_modules" / "gsap" / "dist" / "gsap.min.js"
 
 
+# Explicit allowlist of environment variables permitted in child render/preview subprocesses.
+# Only standard runtime, path, temp, and platform initialization keys are inherited.
+# API keys, tokens, secrets, credentials, and application config are strictly excluded.
+_SAFE_ENV_ALLOWLIST = {
+    # System execution & core paths
+    "PATH", "PATHEXT", "SYSTEMDRIVE", "SYSTEMROOT", "WINDIR", "COMSPEC",
+    # User / home & temporary locations
+    "TEMP", "TMP", "USERPROFILE", "HOMEDRIVE", "HOMEPATH", "LOCALAPPDATA", "APPDATA", "PROGRAMDATA",
+    "PROGRAMFILES", "PROGRAMFILES(X86)", "COMMONPROGRAMFILES", "COMMONPROGRAMFILES(X86)",
+    "HOME", "XDG_DATA_HOME", "XDG_CONFIG_HOME", "XDG_CACHE_HOME",
+    # Architecture & processor definitions
+    "NUMBER_OF_PROCESSORS", "PROCESSOR_ARCHITECTURE", "PROCESSOR_IDENTIFIER",
+    "PROCESSOR_LEVEL", "PROCESSOR_REVISION", "OS",
+    # Language & locale
+    "LANG", "LC_ALL", "LC_CTYPE",
+    # Explicit HyperFrames overrides if set by operator
+    "HYPERFRAMES_BROWSER_PATH", "HYPERFRAMES_ROOT",
+}
+
+
 def base_env() -> dict:
     """Shared subprocess env for every HyperFrames invocation: telemetry/update
     checks off, deterministic on-disk caches under motion/, and the loopback
     studio pin. render_env() (hyperframes_service) extends this with the FFmpeg
-    binary pins; the studio uses it as-is (preview needs no binaries)."""
+    binary pins; the studio uses it as-is (preview needs no binaries).
+
+    Environment inheritance is strictly filtered against an allowlist to prevent
+    exposing backend credentials, API keys, tokens, or private secrets to child
+    rendering processes.
+    """
+    safe_parent_env = {
+        k: v for k, v in os.environ.items()
+        if k.upper() in _SAFE_ENV_ALLOWLIST or k in _SAFE_ENV_ALLOWLIST
+    }
     return {
-        **os.environ,
+        **safe_parent_env,
         "HYPERFRAMES_NO_TELEMETRY": "1",
         "HYPERFRAMES_NO_UPDATE_CHECK": "1",
         "HYPERFRAMES_PREVIEW_HOST": STUDIO_HOST,

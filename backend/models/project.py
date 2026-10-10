@@ -42,6 +42,9 @@ def default_empty_document(title: str = "Untitled Project", aspect_ratio: str = 
         },
         "bench_ranges": {},
         "assets": [],
+        "code": {
+            "files": []
+        },
         "metadata": {
             "created_by": "user",
             "render_preset": "high",

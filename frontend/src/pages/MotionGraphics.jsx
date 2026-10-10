@@ -20,6 +20,7 @@ import StudioTimelineWorkspace from "../components/motion/StudioTimelineWorkspac
 import StudioToolsWorkspace from "../components/motion/StudioToolsWorkspace"
 import StudioLayersPanel from "../components/motion/StudioLayersPanel"
 import StudioVariablesPanel from "../components/motion/StudioVariablesPanel"
+import StudioCodeWorkspace from "../components/motion/StudioCodeWorkspace"
 import SourceBench from "../components/clip/bench/SourceBench"
 import ExtractDialog from "../components/clip/ExtractDialog"
 import useClipSettings from "../components/clip/useClipSettings"
@@ -292,10 +293,12 @@ export default function MotionGraphics() {
     }
     setIsSaving(true)
     try {
+      const opType = conflictState?.pendingOp?.type || "update_document"
+      const opPayload = conflictState?.pendingOp?.payload || { document }
       const res = await http.post(`/api/projects/${project.id}/operations`, {
         expected_revision: targetRev,
-        operation_type: "update_document",
-        payload: { document },
+        operation_type: opType,
+        payload: opPayload,
         author: "user",
       })
       setRevision(res.data.revision)
@@ -477,6 +480,7 @@ export default function MotionGraphics() {
             setConflictState({
               remoteRevision: refreshed.data.revision,
               remoteDocument: refreshed.data.document,
+              pendingOp: { type: operation_type, payload },
             })
           }
         } catch {
@@ -1060,6 +1064,20 @@ export default function MotionGraphics() {
                   onToolSuccess={() => showSnackbar("Tool executed successfully", "success")}
                 />
               )}
+
+              {activeContext === "code" && (
+                <StudioCodeWorkspace
+                  project={project}
+                  revision={revision}
+                  codeFiles={document?.code?.files || []}
+                  selectedElement={selectedElement}
+                  onApplyOperation={handleApplyOperation}
+                  onDirtyChange={setIsDirty}
+                  onFileSaved={async (savedFile, newRev) => {
+                    showSnackbar(`File "${savedFile.path}" persisted (Rev ${newRev})`, "success")
+                  }}
+                />
+              )}
             </Box>
           )}
         </Box>
@@ -1132,25 +1150,25 @@ export default function MotionGraphics() {
 
       {/* Conflict Reconciliation Dialog */}
       {conflictState && (
-        <Dialog open={!!conflictState} onClose={handleDismissConflict} maxWidth="sm" fullWidth>
+        <Dialog open={!!conflictState} onClose={handleDismissConflict} maxWidth="sm" fullWidth data-testid="conflict-dialog">
           <DialogTitle>Concurrent Modification Conflict</DialogTitle>
           <DialogContent>
-            <DialogContentText sx={{ mb: 2 }}>
+            <DialogContentText sx={{ mb: 2 }} data-testid="conflict-dialog-text">
               Another process or user saved revision {conflictState.remoteRevision} while you were editing revision {revision}.
               Your local draft changes have been preserved. What would you like to do?
             </DialogContentText>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button onClick={handleDismissConflict} color="inherit">
+            <Button onClick={handleDismissConflict} color="inherit" data-testid="conflict-dismiss-btn">
               Keep Editing Locally
             </Button>
-            <Button onClick={handleResolveConflictDiscard} color="error" variant="outlined">
+            <Button onClick={handleResolveConflictDiscard} color="error" variant="outlined" data-testid="conflict-discard-btn">
               Discard My Changes
             </Button>
-            <Button onClick={handleResolveConflictReconcile} color="secondary" variant="outlined">
+            <Button onClick={handleResolveConflictReconcile} color="secondary" variant="outlined" data-testid="conflict-reconcile-btn">
               Reconcile (Merge)
             </Button>
-            <Button onClick={handleResolveConflictOverwrite} color="primary" variant="contained">
+            <Button onClick={handleResolveConflictOverwrite} color="primary" variant="contained" data-testid="conflict-overwrite-btn">
               Overwrite Remote
             </Button>
           </DialogActions>

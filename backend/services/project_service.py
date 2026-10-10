@@ -5,6 +5,7 @@ import asyncio
 import copy
 import json
 import logging
+import re
 from typing import Optional
 from uuid import uuid4
 from datetime import datetime
@@ -88,6 +89,11 @@ class ProjectService:
                     c["layer_order"] = idx
         doc.setdefault("bench_ranges", {})
         doc.setdefault("assets", [])
+        code = doc.setdefault("code", {})
+        if not isinstance(code, dict):
+            code = {"files": []}
+            doc["code"] = code
+        code.setdefault("files", [])
         doc.setdefault("metadata", {})
         return doc
 
@@ -120,6 +126,19 @@ class ProjectService:
                     break
         if clip.get("locked") is True:
             raise ProjectError(f"Cannot perform '{op_name}' on locked element '{cid}'. Unlock it first.")
+
+    @classmethod
+    def _check_associated_clip_unlocked(cls, tracks: list, file_entry: dict, op_name: str) -> None:
+        """Raise ProjectError if code file is associated with a locked clip or composition."""
+        clip_id = file_entry.get("clip_id")
+        if not clip_id and file_entry.get("path", "").startswith("compositions/"):
+            m = re.match(r"^compositions/([^/]+)\.(html|htm)$", file_entry.get("path", ""))
+            if m:
+                clip_id = m.group(1)
+        if clip_id:
+            c, _ = cls._find_clip_and_track(tracks, clip_id)
+            if c:
+                cls._check_clip_unlocked(c, op_name, tracks=tracks)
 
     @classmethod
     def validate_block_variables(cls, block_id: Optional[str], variables: dict) -> None:
@@ -173,6 +192,53 @@ class ProjectService:
             raise
         except Exception as e:
             logger.warning("Variable validation skipped for %s: %s", block_id, e)
+
+    @classmethod
+    def _normalize_file_path(cls, raw_path: str) -> str:
+        """Validate and normalize relative logical file paths.
+
+        Strictly prevents directory traversal ('..'), absolute paths ('/'),
+        drive letter paths ('C:'), and invalid characters.
+        """
+        import re
+        if not isinstance(raw_path, str):
+            raise ProjectError("File path must be a string.")
+        p = raw_path.replace("\\", "/").strip()
+        if p.startswith("/") or p.startswith("\\"):
+            raise ProjectError(f"Absolute paths starting with / are not permitted: {raw_path}")
+        if re.match(r"^[a-zA-Z]:", p):
+            raise ProjectError(f"Drive letter paths are not permitted: {raw_path}")
+        parts = p.split("/")
+        if any(seg == "" for seg in parts):
+            raise ProjectError(f"Empty path segments or duplicate slashes are not permitted: {raw_path}")
+        resolved = []
+        for seg in parts:
+            if seg == "..":
+                raise ProjectError(f"Directory traversal (..) is not permitted: {raw_path}")
+            if seg == ".":
+                raise ProjectError(f"Dot path segments (.) are not permitted: {raw_path}")
+            if not re.match(r"^[a-zA-Z0-9_\-\.\@]+$", seg):
+                raise ProjectError(f"Invalid characters in path component '{seg}': {raw_path}")
+            resolved.append(seg)
+        if not resolved:
+            raise ProjectError("Path cannot be empty.")
+        return "/".join(resolved)
+
+    @classmethod
+    def _validate_file_extension_and_content(cls, path: str, content: str) -> None:
+        """Ensure file extension is supported, file size <= 1MB, and JSON content is valid."""
+        import json
+        allowed_exts = (".html", ".htm", ".css", ".js", ".jsx", ".ts", ".tsx", ".json", ".md", ".txt")
+        lowered = path.lower()
+        if not any(lowered.endswith(ext) for ext in allowed_exts):
+            raise ProjectError(f"File extension for '{path}' is not supported. Allowed: {allowed_exts}")
+        if len(content.encode("utf-8")) > 1024 * 1024:
+            raise ProjectError(f"File size for '{path}' exceeds 1MB limit ({len(content.encode('utf-8'))} bytes).")
+        if lowered.endswith(".json") and content.strip():
+            try:
+                json.loads(content)
+            except Exception as e:
+                raise ProjectError(f"Invalid JSON content in '{path}': {e}")
 
     @classmethod
     async def validate_asset_reference(
@@ -993,6 +1059,189 @@ class ProjectService:
             for key in ("muted", "locked", "visible", "collapsed", "name"):
                 if key in patch:
                     target_track[key] = patch[key]
+
+        elif operation_type == "create_file":
+            raw_path = payload.get("path") or payload.get("name")
+            if not raw_path:
+                raise ProjectError("Missing 'path' in create_file operation.")
+            norm_path = cls._normalize_file_path(raw_path)
+            content = payload.get("content", "")
+            cls._validate_file_extension_and_content(norm_path, content)
+            file_id = payload.get("id") or f"file_{uuid4().hex[:8]}"
+
+            # Lock enforcement on associated clip
+            clip_id = payload.get("clip_id")
+            if not clip_id and norm_path.startswith("compositions/"):
+                m = re.match(r"^compositions/([^/]+)\.(html|htm)$", norm_path)
+                if m:
+                    clip_id = m.group(1)
+            if clip_id:
+                c, _ = cls._find_clip_and_track(tracks, clip_id)
+                if c:
+                    cls._check_clip_unlocked(c, "create_file", tracks=tracks)
+
+            code = doc.setdefault("code", {})
+            files = code.setdefault("files", [])
+            # Check for path collision
+            if any(f.get("path") == norm_path for f in files):
+                raise ProjectError(f"File path '{norm_path}' already exists in project.")
+            if any(f.get("id") == file_id for f in files):
+                raise ProjectError(f"File ID '{file_id}' already exists in project.")
+
+            file_entry = {
+                "id": file_id,
+                "path": norm_path,
+                "content": content,
+                "clip_id": clip_id,
+                "read_only": bool(payload.get("read_only", False)),
+            }
+            files.append(file_entry)
+
+        elif operation_type == "update_file":
+            file_id = payload.get("id")
+            file_path = payload.get("path")
+            if not file_id and not file_path:
+                raise ProjectError("update_file requires 'id' or 'path'.")
+            content = payload.get("content")
+            if content is None:
+                raise ProjectError("Missing 'content' in update_file operation.")
+
+            code = doc.setdefault("code", {})
+            files = code.setdefault("files", [])
+            target = next((f for f in files if (file_id and f.get("id") == file_id) or (file_path and f.get("path") == file_path)), None)
+            if not target:
+                raise ProjectError(f"File '{file_id or file_path}' not found in project.")
+            if target.get("read_only"):
+                raise ProjectError(f"Cannot update read-only file '{target.get('path')}'.")
+
+            cls._check_associated_clip_unlocked(tracks, target, "update_file")
+            cls._validate_file_extension_and_content(target.get("path", ""), content)
+            target["content"] = content
+
+        elif operation_type in ("rename_file", "move_file"):
+            file_id = payload.get("id")
+            old_path = payload.get("old_path") or payload.get("path")
+            new_path_raw = payload.get("new_path") or payload.get("new_name")
+            if not new_path_raw:
+                raise ProjectError("Missing 'new_path' in file rename/move operation.")
+
+            code = doc.setdefault("code", {})
+            files = code.setdefault("files", [])
+            target = next((f for f in files if (file_id and f.get("id") == file_id) or (old_path and f.get("path") == old_path)), None)
+            if not target:
+                raise ProjectError(f"File '{file_id or old_path}' not found in project.")
+            if target.get("read_only"):
+                raise ProjectError(f"Cannot rename/move read-only file '{target.get('path')}'.")
+
+            cls._check_associated_clip_unlocked(tracks, target, operation_type)
+
+            if "/" not in new_path_raw and target and "/" in target.get("path", "") and operation_type == "rename_file":
+                parent_dir = target["path"].rsplit("/", 1)[0]
+                new_path_raw = f"{parent_dir}/{new_path_raw}"
+
+            new_path = cls._normalize_file_path(new_path_raw)
+
+            # Check collision with other files
+            collision = next((f for f in files if f.get("path") == new_path and f.get("id") != target.get("id")), None)
+            if collision:
+                raise ProjectError(f"Cannot rename/move to '{new_path}': path already exists.")
+
+            cls._validate_file_extension_and_content(new_path, target.get("content", ""))
+            target["path"] = new_path
+
+        elif operation_type == "delete_file":
+            file_id = payload.get("id")
+            file_path = payload.get("path")
+            if not file_id and not file_path:
+                raise ProjectError("delete_file requires 'id' or 'path'.")
+
+            code = doc.setdefault("code", {})
+            files = code.setdefault("files", [])
+            target = next((f for f in files if (file_id and f.get("id") == file_id) or (file_path and f.get("path") == file_path)), None)
+            if not target:
+                raise ProjectError(f"File '{file_id or file_path}' not found in project.")
+            if target.get("read_only"):
+                raise ProjectError(f"Cannot delete read-only file '{target.get('path')}'.")
+
+            cls._check_associated_clip_unlocked(tracks, target, "delete_file")
+
+            # Safe deletion: verify if file is referenced by active clips/composition elements
+            tid = target.get("id")
+            tpath = target.get("path")
+            target_clip_id = target.get("clip_id")
+            active_clip_ref = next(
+                (c for tr in tracks for c in tr.get("clips", [])
+                 if c.get("file") == tpath
+                 or c.get("code_file_id") == tid
+                 or (target_clip_id and c.get("id") == target_clip_id)
+                 or tpath == f"compositions/{c.get('id')}.html"
+                 or tpath == f"blocks/{c.get('id')}.html"),
+                None
+            )
+            if active_clip_ref and not payload.get("force", False):
+                raise ProjectError(
+                    f"Cannot delete file '{tpath}': referenced by active clip '{active_clip_ref.get('id')}'. Set force=True to delete."
+                )
+
+            code["files"] = [f for f in files if f.get("id") != target.get("id")]
+
+        elif operation_type == "update_code_files":
+            new_files = payload.get("files")
+            if not isinstance(new_files, list):
+                raise ProjectError("update_code_files requires 'files' list.")
+            code = doc.setdefault("code", {})
+            existing_files = {f.get("id"): f for f in code.get("files", [])}
+
+            # Pre-audit existing files for read-only and lock protections
+            new_file_map = {f.get("id"): f for f in new_files if isinstance(f, dict) and f.get("id")}
+            for eid, ef in existing_files.items():
+                if ef.get("read_only"):
+                    matching_new = new_file_map.get(eid)
+                    if not matching_new or matching_new.get("content") != ef.get("content") or matching_new.get("path") != ef.get("path"):
+                        raise ProjectError(f"Cannot modify or remove read-only file '{ef.get('path')}'.")
+                # Check locked element protection on modified or removed files
+                matching_new = new_file_map.get(eid)
+                if not matching_new or matching_new.get("content") != ef.get("content") or matching_new.get("path") != ef.get("path"):
+                    cls._check_associated_clip_unlocked(tracks, ef, "update_code_files")
+
+            # Check active clip references for deleted files
+            if not payload.get("force", False):
+                for eid, ef in existing_files.items():
+                    if eid not in new_file_map:
+                        tpath = ef.get("path")
+                        active_clip_ref = next(
+                            (c for tr in tracks for c in tr.get("clips", []) if c.get("file") == tpath or c.get("code_file_id") == eid),
+                            None
+                        )
+                        if active_clip_ref:
+                            raise ProjectError(
+                                f"Cannot delete file '{tpath}': referenced by active clip '{active_clip_ref.get('id')}'. Set force=True to delete."
+                            )
+
+            normalized_list = []
+            seen_paths = set()
+            seen_ids = set()
+            for f in new_files:
+                if not isinstance(f, dict):
+                    continue
+                fid = f.get("id") or f"file_{uuid4().hex[:8]}"
+                fpath = cls._normalize_file_path(f.get("path", ""))
+                fcontent = str(f.get("content", ""))
+                cls._validate_file_extension_and_content(fpath, fcontent)
+                if fpath in seen_paths:
+                    raise ProjectError(f"Duplicate file path '{fpath}' in code files list.")
+                if fid in seen_ids:
+                    raise ProjectError(f"Duplicate file ID '{fid}' in code files list.")
+                seen_paths.add(fpath)
+                seen_ids.add(fid)
+                normalized_list.append({
+                    "id": fid,
+                    "path": fpath,
+                    "content": fcontent,
+                    "clip_id": f.get("clip_id"),
+                    "read_only": bool(f.get("read_only", False)),
+                })
+            code["files"] = normalized_list
 
         else:
             raise ProjectError(f"Unsupported operation type: {operation_type}")
