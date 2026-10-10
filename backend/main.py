@@ -14,7 +14,7 @@ from backend.core.logging_config import setup_logging
 from backend.core import plugins
 from backend.database import init_db
 
-from backend.api import captions, channels, chat, chat_sessions, config as config_router, downloaded, generate, jobs, library, media, messaging as messaging_router, news, settings as settings_router, templates, tools, trends, tts_preview, videos
+from backend.api import capabilities_api, captions, channels, chat, chat_sessions, config as config_router, downloaded, generate, jobs, library, media, messaging as messaging_router, news, projects as projects_router, settings as settings_router, templates, tools, trends, tts_preview, videos
 
 # Initialize logging before anything else
 setup_logging(debug=settings.DEBUG)
@@ -324,6 +324,8 @@ def create_app() -> FastAPI:
     app.include_router(captions.router, prefix="/api")
     app.include_router(tools.router, prefix="/api")
     app.include_router(library.router, prefix="/api")
+    app.include_router(projects_router.router, prefix="/api")
+    app.include_router(capabilities_api.router, prefix="/api")
     app.include_router(messaging_router.router, prefix="/api")
     app.include_router(tts_preview.router, prefix="/api")
 

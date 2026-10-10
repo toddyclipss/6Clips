@@ -141,26 +141,25 @@ async def chat_websocket(websocket: WebSocket):
         await websocket.close(code=1008)
         return
     await ws_manager.connect(websocket, user_id)
-
-    # Load user settings
-    async with AsyncSessionLocal() as db:
-        result = await db.execute(
-            select(UserSettings).where(UserSettings.user_id == user_id)
-        )
-        user_settings = result.scalar_one_or_none()
-
-    # Send smart suggestions on connect (for returning users)
-    suggestions = await intelligence.get_smart_suggestions(user_id)
-    if suggestions:
-        await ws_manager.send({
-            "type": "smart_suggestions",
-            "suggestions": suggestions,
-        }, user_id)
-
-    # Current session ID — set by frontend via set_session message
-    current_session_id = None
-
     try:
+        # Load user settings
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(
+                select(UserSettings).where(UserSettings.user_id == user_id)
+            )
+            user_settings = result.scalar_one_or_none()
+
+        # Send smart suggestions on connect (for returning users)
+        suggestions = await intelligence.get_smart_suggestions(user_id)
+        if suggestions:
+            await ws_manager.send({
+                "type": "smart_suggestions",
+                "suggestions": suggestions,
+            }, user_id)
+
+        # Current session ID — set by frontend via set_session message
+        current_session_id = None
+
         while True:
             raw = await websocket.receive_text()
             try:
@@ -226,6 +225,21 @@ async def chat_websocket(websocket: WebSocket):
                 if len(history) == 0:
                     prev_context = await _load_previous_session_context(user_id, current_session_id)
 
+                # Extract project, provider, and model from payload or fallback to active project
+                project_id = msg.get("project_id")
+                pinned_provider = msg.get("provider")
+                pinned_model = msg.get("model")
+                if not project_id:
+                    async with AsyncSessionLocal() as db:
+                        from backend.models.project import Project
+                        p_res = await db.execute(
+                            select(Project.id)
+                            .where(Project.user_id == user_id)
+                            .order_by(Project.updated_at.desc())
+                            .limit(1)
+                        )
+                        project_id = p_res.scalar_one_or_none()
+
                 # Run planner and capture response via return value (concurrency-safe)
                 assistant_response = None
                 try:
@@ -235,6 +249,9 @@ async def chat_websocket(websocket: WebSocket):
                         user_settings=user_settings,
                         user_id=user_id,
                         previous_session_context=prev_context,
+                        pinned_provider=pinned_provider,
+                        pinned_model=pinned_model,
+                        project_id=project_id,
                     )
                 except Exception as e:
                     logger.error(f"Planner error: {e}", exc_info=True)
@@ -286,9 +303,10 @@ async def chat_websocket(websocket: WebSocket):
                     await cancel_if_live(job_id)
 
     except WebSocketDisconnect:
-        ws_manager.disconnect(websocket, user_id)
+        pass
     except Exception as e:
         logger.error(f"WS error: {e}", exc_info=True)
+    finally:
         ws_manager.disconnect(websocket, user_id)
 
 

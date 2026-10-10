@@ -196,6 +196,19 @@ async def update_job_status(
             job.completed_at = datetime.utcnow()
         await db.commit()
 
+        # Terminal callback for ExecutionStep / ExecutionRun resumption
+        if status in ("success", "failed", "cancelled"):
+            try:
+                from backend.services.executor_service import ExecutorService
+                await ExecutorService.handle_job_completed(
+                    job_id=job_id,
+                    job_status=status,
+                    output_data=output_data,
+                    error_message=error_message,
+                )
+            except Exception as exc:
+                logger.debug("handle_job_completed callback failed: %s", exc)
+
         # On the FIRST transition to success, emit a behavior event so the
         # personalization engine learns this action happened. Fire-and-forget;
         # never blocks or fails job completion. (Args evaluated now, while the

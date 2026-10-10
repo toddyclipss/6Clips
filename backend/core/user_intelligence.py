@@ -380,7 +380,11 @@ class UserIntelligence:
         perf = await self.get_performance_insights(user_id)
         try:
             from backend.core.ai_provider import get_ai_client
-            ai = get_ai_client()
+            from backend.models.user_settings import UserSettings
+            async with AsyncSessionLocal() as db:
+                us_res = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id))
+                user_settings = us_res.scalar_one_or_none()
+            ai = get_ai_client(user_settings)
 
             prompt = f"""You are ViralMint's suggestion engine. Given this creator's context, generate exactly 3 short, specific, actionable suggestions.
 
@@ -686,7 +690,11 @@ Rules:
 Return ONLY the JSON array."""
 
         try:
-            ai = get_ai_client()
+            from backend.models.user_settings import UserSettings
+            async with AsyncSessionLocal() as db:
+                us_res = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id))
+                user_settings = us_res.scalar_one_or_none()
+            ai = get_ai_client(user_settings)
             response = await ai.chat(
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=1024,
@@ -698,7 +706,7 @@ Return ONLY the JSON array."""
             if isinstance(calendar, list):
                 return calendar
         except Exception as e:
-            logger.warning(f"Content calendar generation failed: {e}")
+            logger.info(f"Content calendar generation skipped or failed ({type(e).__name__}): {e}")
         return None
 
     async def get_performance_insights(self, user_id: str = "local") -> dict | None:

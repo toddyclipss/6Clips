@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (c) 2025-2026 ViralMint Contributors
 """Connected YouTube/TikTok channels — supports multiple channels per user."""
-from sqlalchemy import Column, String, Text, Integer, DateTime
+from sqlalchemy import Column, String, Text, Integer, DateTime, Boolean
 from datetime import datetime
 from uuid import uuid4
 from backend.database import Base
@@ -21,3 +21,11 @@ class ConnectedChannel(Base, TimestampMixin):
     thumbnail_url = Column(Text, nullable=True)
     subscriber_count = Column(Integer, default=0)
     video_count = Column(Integer, default=0)
+
+    # Publishing authorization distinction
+    # auth_type: 'tracked_url' (read-only research/monitoring) vs 'oauth_publishing' (authenticated to publish)
+    auth_type = Column(String(50), default="tracked_url", nullable=False)
+    can_publish = Column(Boolean, default=False, nullable=False)
+    publish_account_identifier = Column(String(200), nullable=True)
+    credentials_ref = Column(String(100), nullable=True)
+

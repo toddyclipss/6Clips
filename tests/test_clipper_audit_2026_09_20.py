@@ -224,7 +224,7 @@ class TestProbeFanOutIsBounded:
         """ffprobe is a blocking subprocess on the loop's default thread pool,
         which every ffmpeg call in the backend shares. 50 unbounded probes
         starved the bench's own filmstrip requests."""
-        src = Path("backend/services/clip_extractor.py").read_text()
+        src = Path("backend/services/clip_extractor.py").read_text(encoding="utf-8")
         i = src.index("clip_probes = await asyncio.gather")
         window = src[i:i + 200]
         assert "_ffmpeg_limited(_probe_one(" in window, window
@@ -234,7 +234,7 @@ class TestAspectProbeIsOutsideTheWriteLock:
     def test_no_probe_is_awaited_inside_the_save_transaction(self):
         """A 15s ffprobe awaited while the session held SQLite's write lock gave
         every other writer "database is locked" (busy_timeout is 5s)."""
-        src = Path("backend/core/task_runner.py").read_text()
+        src = Path("backend/core/task_runner.py").read_text(encoding="utf-8")
         assert "resolved_aspects" in src
         assert "or await _fallback_aspect(clip)" not in src
 

@@ -17,6 +17,7 @@ from backend.core.ai_provider import get_ai_client
 from backend.core.user_intelligence import UserIntelligence
 from backend.core.setup_wizard import WIZARDS
 from backend.core.ws_manager import ws_manager
+from backend.core.capabilities import CapabilityRegistry
 from backend.config import settings
 
 logger = logging.getLogger(__name__)
@@ -155,6 +156,11 @@ Output these JSON blocks at the END of your response to trigger actions:
 <action>{{"type": "show_downloaded"}}</action>
 <action>{{"type": "show_videos"}}</action>
 <action>{{"type": "content_calendar", "days": 7}}</action>
+<action>{{"type": "project_operation", "project_id": "proj_123", "operation_type": "insert_track_clip", "payload": {{"track_id": "overlay_1", "clip": {{"id": "clip_lt_1", "block_id": "lower_third_minimal", "block_version": "1.0.0", "start_time": 2.0, "duration": 3.0, "variables": {{"title": "ViralMint"}}}}}}}}</action>
+<action>{{"type": "project_render", "project_id": "proj_123"}}</action>
+<action>{{"type": "apply_captions", "video_id": "vid_123"}}</action>
+<action>{{"type": "extract_clips", "video_id": "vid_123"}}</action>
+<action>{{"type": "tool_speed", "video_id": "vid_123", "speed": 1.5}}</action>
 ```
 
 ### News Research Actions (NEW — intelligent news scouting)
@@ -379,13 +385,16 @@ class PlannerAgent:
         user_settings,
         user_id: str = "local",
         previous_session_context: list[dict] = None,
+        pinned_provider: Optional[str] = None,
+        pinned_model: Optional[str] = None,
+        project_id: Optional[str] = None,
     ):
         """
         Main handler: stream AI response over WS, then dispatch any <action> blocks.
         history: list of {"role": "user"|"assistant", "content": "..."}
         previous_session_context: last few messages from the user's previous session (for continuity)
         """
-        logger.info("PLANNER handle_message | user=%s | msg=%s", user_id, message[:100])
+        logger.info("PLANNER handle_message | user=%s | project=%s | msg=%s", user_id, project_id, message[:100])
 
         # Shared fetches (user-intel summary, suggestions, credential map,
         # profile, recent failures, perf, news, funnel state) — built once in a
@@ -466,7 +475,11 @@ class PlannerAgent:
 
         # Get AI client — BYOK from .env or per-user settings
         try:
-            ai = get_ai_client(user_settings)
+            ai = get_ai_client(
+                user_settings,
+                pinned_provider=pinned_provider,
+                pinned_model=pinned_model,
+            )
         except Exception:
             direct_actions = self._infer_missing_action(message, "")
             if direct_actions:
@@ -522,7 +535,7 @@ class PlannerAgent:
         # clarifying question is an intentional no-action turn; inferring one
         # here would clobber it).
         if not actions and not quick_replies:
-            actions = self._infer_missing_action(message, qr_stripped)
+            actions = self._infer_missing_action(message, qr_stripped, project_id=project_id)
             if actions:
                 logger.info("PLANNER safety-net inferred action: %s", actions)
 
@@ -535,14 +548,28 @@ class PlannerAgent:
             for action_json in actions:
                 try:
                     action = json.loads(action_json.strip())
-                    await self._dispatch_action(action, user_settings, user_id)
+                    await self._dispatch_action(
+                        action,
+                        user_settings,
+                        user_id,
+                        pinned_provider=pinned_provider,
+                        pinned_model=pinned_model,
+                        default_project_id=project_id,
+                    )
                 except json.JSONDecodeError as e:
                     logger.warning(f"Malformed action JSON, attempting AI repair: {action_json!r}")
                     try:
                         from backend.core.ai_retry import ai_fix_action
                         repaired = await ai_fix_action(action_json, str(e), user_settings)
                         if repaired:
-                            await self._dispatch_action(repaired, user_settings, user_id)
+                            await self._dispatch_action(
+                                repaired,
+                                user_settings,
+                                user_id,
+                                pinned_provider=pinned_provider,
+                                pinned_model=pinned_model,
+                                default_project_id=project_id,
+                            )
                         else:
                             logger.error(f"AI could not repair action JSON: {action_json!r}")
                     except Exception as repair_err:
@@ -695,8 +722,18 @@ class PlannerAgent:
 
         return clean_response or "Working on it. ✅"
 
-    async def _dispatch_action(self, action: dict, user_settings, user_id: str):
+    async def _dispatch_action(
+        self,
+        action: dict,
+        user_settings,
+        user_id: str,
+        pinned_provider: Optional[str] = None,
+        pinned_model: Optional[str] = None,
+        default_project_id: Optional[str] = None,
+    ):
         action_type = action.get("type")
+        if default_project_id and "project_id" not in action:
+            action["project_id"] = default_project_id
         logger.info("DISPATCH action=%s | user=%s | payload=%s", action_type, user_id, json.dumps(action, ensure_ascii=False)[:200])
 
         if action_type in ("start_trend", "start_trends", "start_scout"):
@@ -768,11 +805,6 @@ class PlannerAgent:
             await self._show_videos(user_id)
 
         elif action_type == "content_calendar":
-            # Coerce: the model supplies this and it's used as an integer
-            # downstream, so a `"seven"` raised TypeError straight out of the
-            # dispatcher and took the whole chat turn with it. Every other
-            # action here either ignores a wrongly-typed payload or degrades;
-            # this was the only unguarded coercion.
             try:
                 days = int(action.get("days", 7))
             except (TypeError, ValueError):
@@ -798,6 +830,362 @@ class PlannerAgent:
 
         elif action_type == "save_news_to_library":
             await self._save_news_to_library(action, user_id)
+
+        elif action_type == "project_operation":
+            await self._dispatch_project_operation(
+                action,
+                user_id,
+                pinned_provider=pinned_provider,
+                pinned_model=pinned_model,
+                default_project_id=default_project_id,
+            )
+
+        elif CapabilityRegistry.get(action_type):
+            await self._dispatch_capability(
+                action_type,
+                action,
+                user_settings,
+                user_id,
+                pinned_provider=pinned_provider,
+                pinned_model=pinned_model,
+            )
+
+        else:
+            from backend.core import plugins
+            plugin_handler = plugins.get_planner_action(action_type)
+            if plugin_handler:
+                try:
+                    import inspect
+                    res = plugin_handler(action, user_settings, user_id)
+                    if inspect.isawaitable(res):
+                        await res
+                except Exception as err:
+                    logger.error("Plugin action %s failed: %s", action_type, err, exc_info=True)
+            else:
+                logger.warning("Unrecognized planner action: %s", action_type)
+
+    async def _dispatch_capability(
+        self,
+        capability_name: str,
+        action: dict,
+        user_settings,
+        user_id: str,
+        pinned_provider: Optional[str] = None,
+        pinned_model: Optional[str] = None,
+    ):
+        from backend.services.executor_service import ExecutorService
+        project_id = action.get("project_id")
+        objective = action.get("objective") or f"Planner execution of {capability_name}"
+        run = None
+        try:
+            run = await ExecutorService.create_run(
+                objective=objective,
+                project_id=project_id,
+                user_settings=user_settings,
+                user_id=user_id,
+                provider=pinned_provider,
+                model=pinned_model,
+            )
+            step_res = await ExecutorService.execute_step(
+                run_id=run.id,
+                step_name=capability_name,
+                capability_name=capability_name,
+                payload=action,
+                user_id=user_id,
+                authorized=True,
+            )
+            await ExecutorService.complete_run(run.id, status="completed")
+            await ws_manager.send({
+                "type": "capability_executed",
+                "capability": capability_name,
+                "run_id": run.id,
+                "step_id": step_res["step_id"],
+                "status": "success",
+                "output": step_res["output"],
+            }, user_id)
+        except Exception as e:
+            logger.error("Planner capability %s execution failed: %s", capability_name, e)
+            if run:
+                try:
+                    await ExecutorService.complete_run(run.id, status="failed", error_message=str(e))
+                except Exception:
+                    pass
+            await ws_manager.send({
+                "type": "capability_failed",
+                "capability": capability_name,
+                "error": str(e),
+            }, user_id)
+
+    async def _dispatch_project_operation(
+        self,
+        action: dict,
+        user_id: str,
+        pinned_provider: Optional[str] = None,
+        pinned_model: Optional[str] = None,
+        default_project_id: Optional[str] = None,
+    ):
+        from backend.services.executor_service import ExecutorService
+        from backend.services.project_service import ProjectService
+        from backend.core.exceptions import RevisionConflictError
+        project_id = action.get("project_id") or default_project_id
+        if not project_id:
+            try:
+                projects = await ProjectService.list_projects(user_id=user_id)
+                if projects:
+                    project_id = projects[0].id
+                else:
+                    new_p = await ProjectService.create_project("Default Project", user_id=user_id)
+                    project_id = new_p.id
+            except Exception as pe:
+                logger.warning("Could not auto-resolve project for operation: %s", pe)
+                return
+
+        action["project_id"] = project_id
+        operation_type = action.get("operation_type")
+        payload = action.get("payload", {})
+        if not operation_type:
+            return
+
+        expected_revision = action.get("expected_revision")
+        if expected_revision is None or expected_revision < 1:
+            try:
+                p_current = await ProjectService.get_project(project_id)
+                expected_revision = p_current.revision
+            except Exception:
+                expected_revision = 1
+
+        run = None
+        try:
+            run = await ExecutorService.create_run(
+                objective=f"Apply project operation '{operation_type}' on project {project_id}",
+                project_id=project_id,
+                input_revision=expected_revision,
+                user_id=user_id,
+                provider=pinned_provider,
+                model=pinned_model,
+            )
+            step_res = await ExecutorService.execute_step(
+                run_id=run.id,
+                step_name=f"project_op_{operation_type}",
+                capability_name="project_operation",
+                payload={
+                    "project_id": project_id,
+                    "expected_revision": expected_revision,
+                    "operation_type": operation_type,
+                    "payload": payload,
+                    "idempotency_key": action.get("idempotency_key"),
+                    "author": "agent",
+                },
+                user_id=user_id,
+                authorized=True,
+            )
+            res = step_res["output"]
+            await ExecutorService.complete_run(run.id, status="completed")
+            await ws_manager.send({
+                "type": "project_updated",
+                "project_id": project_id,
+                "revision": res["revision"],
+                "operation_type": operation_type,
+                "document": res.get("document"),
+                "summary": res.get("change_summary", operation_type),
+                "run_id": run.id,
+                "step_id": step_res["step_id"],
+            }, user_id)
+        except RevisionConflictError:
+            # OBSERVE CONFLICT -> REPLAN WITH LATEST REVISION
+            try:
+                p_fresh = await ProjectService.get_project(project_id)
+                logger.info("Conflict on %s (expected %s): replanning against revision %s", operation_type, expected_revision, p_fresh.revision)
+                step_res = await ExecutorService.execute_step(
+                    run_id=run.id,
+                    step_name=f"project_op_{operation_type}_replan",
+                    capability_name="project_operation",
+                    payload={
+                        "project_id": project_id,
+                        "expected_revision": p_fresh.revision,
+                        "operation_type": operation_type,
+                        "payload": payload,
+                        "idempotency_key": action.get("idempotency_key"),
+                        "author": "agent",
+                    },
+                    user_id=user_id,
+                    authorized=True,
+                )
+                res = step_res["output"]
+                await ExecutorService.complete_run(run.id, status="completed", context_data={"replanned": True, "conflict_revision": expected_revision})
+                await ws_manager.send({
+                    "type": "project_updated",
+                    "project_id": project_id,
+                    "revision": res["revision"],
+                    "operation_type": operation_type,
+                    "document": res.get("document"),
+                    "summary": f"{operation_type} (auto-replanned after conflict)",
+                    "run_id": run.id,
+                    "step_id": step_res["step_id"],
+                }, user_id)
+            except Exception as e2:
+                logger.error("Planner project operation retry failed: %s", e2)
+                if run:
+                    await ExecutorService.complete_run(run.id, status="failed", error_message=str(e2))
+                await ws_manager.send({
+                    "type": "project_error",
+                    "project_id": project_id,
+                    "error": str(e2),
+                }, user_id)
+        except Exception as e:
+            logger.error("Planner project operation failed: %s", e)
+            if run:
+                await ExecutorService.complete_run(run.id, status="failed", error_message=str(e))
+            await ws_manager.send({
+                "type": "project_error",
+                "project_id": project_id,
+                "error": str(e),
+            }, user_id)
+
+    async def execute_plan(
+        self,
+        objective: str,
+        plan_steps: list[dict],
+        project_id: Optional[str] = None,
+        user_settings=None,
+        user_id: str = "local",
+        provider: Optional[str] = None,
+        model: Optional[str] = None,
+        max_replans: int = 3,
+    ) -> dict:
+        """
+        Execute an agent plan with the full OaaS loop:
+        Observe -> Verify -> Replan.
+        - Run is created with pinned provider/model
+        - Steps are executed through CapabilityRegistry and ExecutorService
+        - Verification evidence is observed after each step
+        - When a step fails (or has revision conflict), the agent replans and retries
+        - Concludes with final status and full execution trace
+        """
+        from backend.services.executor_service import ExecutorService
+        from backend.services.project_service import ProjectService
+        from backend.core.exceptions import RevisionConflictError
+
+        run = await ExecutorService.create_run(
+            objective=objective,
+            project_id=project_id,
+            user_settings=user_settings,
+            user_id=user_id,
+            provider=provider,
+            model=model,
+        )
+
+        executed_steps = []
+        replans_count = 0
+        step_idx = 0
+        steps_queue = list(plan_steps)
+
+        while steps_queue:
+            step_spec = steps_queue.pop(0)
+            step_idx += 1
+            cap_name = step_spec.get("capability") or step_spec.get("type")
+            step_name = step_spec.get("name") or f"Step {step_idx}: {cap_name}"
+            payload = dict(step_spec.get("payload") or step_spec)
+
+            if project_id and "project_id" not in payload:
+                payload["project_id"] = project_id
+
+            if project_id and cap_name in ("project_operation", "set_bench_ranges"):
+                p_current = await ProjectService.get_project(project_id)
+                if "expected_revision" not in payload:
+                    payload["expected_revision"] = p_current.revision
+
+            step_success = False
+            step_attempts = 0
+
+            while not step_success and step_attempts <= max_replans:
+                step_attempts += 1
+                try:
+                    res = await ExecutorService.execute_step(
+                        run_id=run.id,
+                        step_name=step_name,
+                        capability_name=cap_name,
+                        payload=payload,
+                        user_id=user_id,
+                        authorized=True,
+                    )
+                    verif = res.get("verification", {})
+                    # OBSERVE & VERIFY
+                    if verif.get("ok"):
+                        step_success = True
+                        executed_steps.append(res)
+                        await ws_manager.send({
+                            "type": "agent_step_progress",
+                            "run_id": run.id,
+                            "step_id": res["step_id"],
+                            "status": "verified",
+                            "step_name": step_name,
+                            "capability": cap_name,
+                            "output": res.get("output"),
+                        }, user_id)
+                    else:
+                        logger.warning("Step %s verifier failed: %s; triggering replan", step_name, verif)
+                        replans_count += 1
+                        if step_attempts <= max_replans:
+                            await ws_manager.send({
+                                "type": "agent_plan_replan",
+                                "run_id": run.id,
+                                "step_name": step_name,
+                                "reason": "verification_failed",
+                                "details": verif,
+                            }, user_id)
+                        else:
+                            raise RuntimeError(f"Step {step_name} verifier failed after retries: {verif}")
+
+                except RevisionConflictError as rce:
+                    logger.info("Revision conflict on %s: %s; replanning with latest revision", step_name, rce)
+                    replans_count += 1
+                    # REPLAN ON REVISION CONFLICT
+                    if project_id:
+                        p_latest = await ProjectService.get_project(project_id)
+                        payload["expected_revision"] = p_latest.revision
+                        await ws_manager.send({
+                            "type": "agent_plan_replan",
+                            "run_id": run.id,
+                            "step_name": step_name,
+                            "reason": "revision_conflict",
+                            "new_expected_revision": p_latest.revision,
+                        }, user_id)
+                    else:
+                        raise
+
+                except Exception as err:
+                    logger.error("Step execution error on %s: %s", step_name, err)
+                    if step_attempts > max_replans:
+                        await ExecutorService.complete_run(
+                            run.id,
+                            status="failed",
+                            error_message=f"Failed at {step_name}: {err}",
+                            context_data={"replans": replans_count, "failed_step": step_name},
+                        )
+                        raise
+                    replans_count += 1
+
+        await ExecutorService.complete_run(
+            run.id,
+            status="completed",
+            context_data={"replans": replans_count, "steps_count": len(executed_steps)},
+        )
+        await ws_manager.send({
+            "type": "agent_run_completed",
+            "run_id": run.id,
+            "objective": objective,
+            "replans": replans_count,
+            "steps": len(executed_steps),
+        }, user_id)
+
+        return {
+            "run_id": run.id,
+            "status": "completed",
+            "replans": replans_count,
+            "steps": executed_steps,
+        }
+
 
     async def _start_news_scout(self, action: dict, user_id: str):
         """Start a news scout job."""
@@ -1125,16 +1513,69 @@ class PlannerAgent:
     _check_and_start_scout = _check_and_start_trend
 
     @staticmethod
-    def _infer_missing_action(user_message: str, ai_response: str) -> list[str]:
+    def _infer_missing_action(user_message: str, ai_response: str, project_id: Optional[str] = None) -> list[str]:
         """
-        Safety net: if the AI clearly intended to find trends but forgot the <action> block,
-        or if direct intent was detected without an active LLM, infer the action.
+        Safety net: if the AI clearly intended to perform an action or edit but forgot
+        the <action> block, infer the action. Conversational questions return [].
         """
-        msg_lower = user_message.lower()
-        resp_lower = ai_response.lower()
+        msg_lower = user_message.lower().strip()
+        resp_lower = ai_response.lower().strip()
 
-        # Detect direct article URL — always trigger analyze_url
+        # 1. Direct conversational / inquiry check — strictly NO action
+        conversational_prefixes = [
+            "explain ", "explain what", "what is ", "what are ", "what does ", "how does ",
+            "how do i ", "tell me about ", "why is ", "why do ", "who is ",
+            "help me understand ", "can you explain ", "o que é ", "explique ", "como funciona ",
+        ]
+        if any(msg_lower.startswith(p) for p in conversational_prefixes) or msg_lower in (
+            "hi", "hello", "hey", "olá", "ola", "oi", "thanks", "thank you", "obrigado", "valeu"
+        ):
+            return []
+
         import re as _re
+
+        # 2. Motion graphics & project edit action intents
+        if "lower third" in msg_lower or "lower-third" in msg_lower:
+            if any(act in msg_lower for act in ["add", "insert", "adicionar", "insere", "inserir", "put", "colocar"]):
+                sec_match = _re.search(r'(?:at|em|aos?)\s*(\d+(?:\.\d+)?)\s*(?:s|sec|seg|segundos?|seconds?)?', msg_lower)
+                start_time = float(sec_match.group(1)) if sec_match else 2.0
+                action = json.dumps({
+                    "type": "project_operation",
+                    "project_id": project_id,
+                    "operation_type": "insert_track_clip",
+                    "payload": {
+                        "track_id": "overlay_1",
+                        "clip": {
+                            "id": "clip_lt_1",
+                            "block_id": "lower_third_minimal",
+                            "block_version": "1.0.0",
+                            "start_time": start_time,
+                            "duration": 3.0,
+                            "variables": {"title": "ViralMint", "subtitle": "Trending"},
+                        },
+                    },
+                })
+                return [action]
+
+        if any(act in msg_lower for act in ["add caption", "add captions", "apply caption", "apply captions", "adicionar legendas", "legendas", "colocar legenda"]):
+            return [json.dumps({"type": "apply_captions", "video_id": "latest"})]
+
+        if any(act in msg_lower for act in ["cut this into clips", "cut clips", "extract clips", "cortar em clipes", "gerar clipes"]):
+            return [json.dumps({"type": "extract_clips", "video_id": "latest"})]
+
+        if any(act in msg_lower for act in ["make this faster", "faster", "speed up", "aumentar velocidade", "mais rápido"]):
+            return [json.dumps({"type": "tool_speed", "speed": 1.5, "video_id": "latest"})]
+
+        if any(act in msg_lower for act in ["render video", "render project", "export video", "renderizar vídeo", "renderizar video", "exportar vídeo"]):
+            return [json.dumps({"type": "project_render", "project_id": project_id})]
+
+        if any(act in msg_lower for act in ["upload to youtube", "upload youtube", "publicar no youtube"]):
+            return [json.dumps({"type": "upload_youtube", "video_id": "latest"})]
+
+        if any(act in msg_lower for act in ["upload to tiktok", "upload tiktok", "publicar no tiktok"]):
+            return [json.dumps({"type": "upload_tiktok", "video_id": "latest"})]
+
+        # 3. Detect direct article URL — always trigger analyze_url
         url_match = _re.search(r'(https?://[^\s<>"\']+)', user_message)
         if url_match:
             url = url_match.group(1).rstrip(".,;:)")
@@ -1143,11 +1584,11 @@ class PlannerAgent:
             if not is_video_url:
                 return [json.dumps({"type": "analyze_url", "url": url})]
 
-        # Detect news intent
+        # 4. Detect news intent
         news_keywords = ["news", "article", "headlines", "notícias", "noticias", "新闻", "热点", "资讯"]
         has_news_intent = any(kw in msg_lower for kw in news_keywords)
 
-        # Detect trend intent from user message
+        # 5. Detect trend intent from user message
         trend_keywords = [
             "trend", "trends", "tendencia", "tendencias", "tendência", "tendências",
             "scout", "search", "find", "look for", "trending", "viral",

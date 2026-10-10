@@ -369,17 +369,36 @@ export default function SourceBench({
   const findMoments = async () => {
     if (!sourceId || suggesting) return
     try {
-      const body = { max_clips: Math.max(1, Math.min(MAX_RANGES, Number(ai.max_clips) || 5)) }
-      if (ai.min_duration) body.min_duration = Number(ai.min_duration)
-      if (ai.max_duration) body.max_duration = Number(ai.max_duration)
-      if (ai.user_query.trim()) body.user_query = ai.user_query.trim()
-      if (ai.target_platform) body.target_platform = ai.target_platform
-      if (ai.genre) body.genre = ai.genre
-      body.whisper_quality = settings.whisper_quality
-      if (settings.force_retranscribe) body.force_retranscribe = true
-      const { data } = await http.post(`/api/downloaded/${sourceId}/suggest-clips`, body)
-      setSuggestJobId(data.job_id)
-      showSnackbar("Reading the video for its strongest moments…", "info")
+      const payload = {
+        video_id: sourceId,
+        max_clips: Math.max(1, Math.min(MAX_RANGES, Number(ai.max_clips) || 5)),
+      }
+      if (ai.min_duration) payload.min_duration = Number(ai.min_duration)
+      if (ai.max_duration) payload.max_duration = Number(ai.max_duration)
+      if (ai.user_query.trim()) payload.user_query = ai.user_query.trim()
+      if (ai.target_platform) payload.target_platform = ai.target_platform
+      if (ai.genre) payload.genre = ai.genre
+
+      // Execute via unified CapabilityRegistry and ExecutorService
+      const { data } = await http.post("/api/capabilities/suggest_clips/execute", payload)
+      if (data?.output?.suggestions && data.output.suggestions.length > 0) {
+        const found = data.output.suggestions
+        const accepted = R.addMany(found.map((f) => ({
+          start: f.start,
+          end: f.end,
+          label: f.label || f.title || "Moment",
+          meta: { title: f.title || f.label, score: f.score, hook_score: f.hook_score, reason: f.reason },
+        })))
+        showSnackbar(
+          `Added ${accepted} moment${accepted !== 1 ? "s" : ""} via Agent capability — adjust them, then cut.`,
+          "success",
+        )
+        return
+      }
+      if (data?.job_id) {
+        setSuggestJobId(data.job_id)
+        showSnackbar("Reading the video for its strongest moments…", "info")
+      }
     } catch (e) {
       showSnackbar(e.response?.data?.detail || "Could not start the search", "error")
     }

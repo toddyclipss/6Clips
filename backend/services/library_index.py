@@ -142,6 +142,16 @@ def _json_or_none(raw: str | None) -> dict | None:
     return parsed if isinstance(parsed, dict) else None
 
 
+def _json_list_or_none(raw: str | None) -> list | None:
+    if not raw:
+        return None
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+    return parsed if isinstance(parsed, list) else None
+
+
 def _exists(path_str: str | None) -> bool:
     if not path_str:
         return False
@@ -213,9 +223,20 @@ async def _generated_items(db: AsyncSession) -> list[dict]:
             "hook_score": v.clip_hook_score,
             "virality_score": v.clip_virality_score,
             "parent_key": (
-                f"{KEY_DOWNLOADED}:{v.source_downloaded_video_id}"
-                if v.source_downloaded_video_id else None
+                v.source_asset_id or (
+                    f"{KEY_DOWNLOADED}:{v.source_downloaded_video_id}"
+                    if v.source_downloaded_video_id else None
+                )
             ),
+            "parent_keys": _json_list_or_none(getattr(v, "parent_asset_ids_json", None)) or (
+                [v.source_asset_id] if getattr(v, "source_asset_id", None) else (
+                    [f"{KEY_DOWNLOADED}:{v.source_downloaded_video_id}"] if v.source_downloaded_video_id else []
+                )
+            ),
+            "project_id": getattr(v, "project_id", None),
+            "project_revision": getattr(v, "project_revision", None),
+            "operation": getattr(v, "operation", None),
+            "file_hash": getattr(v, "file_hash", None),
             "created_at": v.created_at.isoformat() if v.created_at else None,
         })
     return items
@@ -353,6 +374,7 @@ async def _job_items(db: AsyncSession) -> tuple[list[dict], set[str]]:
             # apart from the clip and render paths (which carry it on the
             # generated_videos row instead).
             "parent_key": _resolve_parent(inp),
+            "parent_keys": _resolve_parents(inp),
             "created_at": (j.completed_at or j.created_at).isoformat() if (j.completed_at or j.created_at) else None,
         })
     return items, music_copies
@@ -424,31 +446,69 @@ async def poster_source(db: AsyncSession, key: str) -> Path | None:
     return await resolve_job_video(db, key.split(":", 1)[1])
 
 
-def _resolve_parent(inp: dict) -> str | None:
-    """Raw parent reference from a job's input, still store-unqualified.
+def _resolve_parents(inp: dict) -> list[str]:
+    """Raw parent references from a job or model's input, preserving order.
 
-    Resolved against the gathered item set in `_link_parents`, because the same
-    id could name a job asset, a generated video or a download depending on
-    which surface started the run.
+    Resolves multiple inputs (e.g. merge, concat, multi-clip composition)
+    as well as singular inputs from tools, downloads, or studio.
     """
-    for field in ("asset_id", "source_asset_id", "video_id", "downloaded_video_id"):
+    parents = []
+    # Multi-parent list fields
+    for list_field in ("asset_ids", "video_ids", "source_asset_ids", "input_files", "inputs", "parent_asset_ids"):
+        val = inp.get(list_field)
+        if isinstance(val, list):
+            for item in val:
+                if isinstance(item, str) and item and item not in parents:
+                    parents.append(item)
+                elif isinstance(item, dict) and "asset_id" in item:
+                    aid = str(item["asset_id"])
+                    if aid and aid not in parents:
+                        parents.append(aid)
+
+    # Singular parent fields
+    for field in ("asset_id", "source_asset_id", "video_id", "downloaded_video_id", "source_downloaded_video_id"):
         val = inp.get(field)
-        if isinstance(val, str) and val:
-            return val
-    return None
+        if isinstance(val, str) and val and val not in parents:
+            parents.append(val)
+
+    return parents
+
+
+def _resolve_parent(inp: dict) -> str | None:
+    plist = _resolve_parents(inp)
+    return plist[0] if plist else None
 
 
 def _link_parents(items: list[dict]) -> None:
-    """Turn raw parent ids into store-qualified keys, in place."""
+    """Turn raw parent ids into store-qualified keys, in place, supporting multi-parent lineage."""
     by_id: dict[str, str] = {}
     for it in items:
         by_id.setdefault(str(it["id"]), it["key"])
+        by_id.setdefault(it["key"], it["key"])
+        if it["key"].startswith("dl:"):
+            by_id.setdefault(f"downloaded:{it['id']}", it["key"])
+        elif it["key"].startswith("gv:"):
+            by_id.setdefault(f"generated:{it['id']}", it["key"])
+
     for it in items:
+        # Resolve primary parent_key
         parent = it.get("parent_key")
-        if not parent or ":" in parent:
-            continue  # already qualified (generated → dl:<id>) or absent
-        resolved = by_id.get(parent)
-        it["parent_key"] = resolved if resolved and resolved != it["key"] else None
+        if parent:
+            resolved = by_id.get(parent)
+            it["parent_key"] = resolved if resolved and resolved != it["key"] else None
+
+        # Resolve parent_keys list
+        raw_parents = it.get("parent_keys") or ([] if not parent else [parent])
+        resolved_list = []
+        for p in raw_parents:
+            rk = by_id.get(p) or (p if ":" in p else None)
+            if rk and rk != it["key"] and rk not in resolved_list:
+                resolved_list.append(rk)
+
+        it["parent_keys"] = resolved_list
+        if not it.get("parent_key") and resolved_list:
+            it["parent_key"] = resolved_list[0]
+
 
 
 def _fill_titles(items: list[dict]) -> None:
@@ -674,22 +734,38 @@ async def lineage(db: AsyncSession, key: str) -> dict[str, Any] | None:
     The drawer needs "made from" / "used to make" in BOTH views, and the grid
     deliberately doesn't load the whole tree, so this answers for a single key
     instead of making the page hold a lineage map it mostly won't use.
+    Supports multi-parent ancestry (parent_keys) as well as single parent_key.
     """
     all_items = await gather(db)
     by_key = {it["key"]: it for it in all_items}
+    for it in all_items:
+        by_key.setdefault(str(it["id"]), it)
+        if it["key"].startswith("dl:"):
+            by_key.setdefault(f"downloaded:{it['id']}", it)
+        elif it["key"].startswith("gv:"):
+            by_key.setdefault(f"generated:{it['id']}", it)
     item = by_key.get(key)
     if item is None:
         return None
+
     ancestors: list[dict] = []
-    cur = item
-    seen = {cur["key"]}
-    while cur["parent_key"] and cur["parent_key"] in by_key:
-        cur = by_key[cur["parent_key"]]
-        if cur["key"] in seen:  # pragma: no cover — cycle guard
-            break
-        seen.add(cur["key"])
-        ancestors.append(cur)
-    children = _sorted([it for it in all_items if it["parent_key"] == key], "newest")
+    seen = {item["key"]}
+    queue = list(item.get("parent_keys") or ([item["parent_key"]] if item.get("parent_key") else []))
+    while queue:
+        pk = queue.pop(0)
+        if pk in by_key and pk not in seen:
+            seen.add(pk)
+            p_item = by_key[pk]
+            ancestors.append(p_item)
+            p_parents = p_item.get("parent_keys") or ([p_item["parent_key"]] if p_item.get("parent_key") else [])
+            for next_p in p_parents:
+                if next_p not in seen and next_p not in queue:
+                    queue.append(next_p)
+
+    children = _sorted([
+        it for it in all_items
+        if key in (it.get("parent_keys") or []) or it.get("parent_key") == key
+    ], "newest")
     return {"item": item, "ancestors": ancestors, "children": children}
 
 
@@ -700,13 +776,16 @@ async def families(db: AsyncSession, limit: int = 20, offset: int = 0, **filters
     whole family so the view can show context, marking the members that fall
     outside the current filters rather than hiding them (a clip listed without
     the download it came from is the confusion this view exists to remove).
+    Supports multi-parent links.
     """
     all_items = await gather(db)
     by_key = {it["key"]: it for it in all_items}
     children: dict[str, list[dict]] = {}
     for it in all_items:
-        if it["parent_key"] and it["parent_key"] in by_key:
-            children.setdefault(it["parent_key"], []).append(it)
+        p_keys = it.get("parent_keys") or ([it["parent_key"]] if it.get("parent_key") else [])
+        for pk in p_keys:
+            if pk in by_key:
+                children.setdefault(pk, []).append(it)
 
     media_sel = _csv(filters.get("media"))
     origin_sel = _csv(filters.get("origin"))
@@ -721,12 +800,13 @@ async def families(db: AsyncSession, limit: int = 20, offset: int = 0, **filters
     def root_of(item: dict) -> dict:
         cur = item
         seen = {cur["key"]}
-        while cur["parent_key"] and cur["parent_key"] in by_key:
-            nxt = by_key[cur["parent_key"]]
-            if nxt["key"] in seen:  # pragma: no cover — cycle guard
+        while True:
+            p_keys = cur.get("parent_keys") or ([cur["parent_key"]] if cur.get("parent_key") else [])
+            nxt_key = next((k for k in p_keys if k in by_key and k not in seen), None)
+            if not nxt_key:
                 break
-            seen.add(nxt["key"])
-            cur = nxt
+            seen.add(nxt_key)
+            cur = by_key[nxt_key]
         return cur
 
     def subtree(key: str, seen: frozenset[str] = frozenset()) -> list[dict]:

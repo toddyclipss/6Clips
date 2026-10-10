@@ -433,6 +433,7 @@ def wa(wiring, tmp_path, monkeypatch):
     ch._register_handlers(uc, neo)
     persisted = []
 
+    monkeypatch.setattr(w, "_import_neonize", lambda: neo)
     async def fake_persist(user_id, chat_id):
         persisted.append(chat_id)
     monkeypatch.setattr(ch, "_persist_connection", fake_persist)

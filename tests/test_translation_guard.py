@@ -34,14 +34,14 @@ class TestWiring:
 
     def test_guard_patches_both_methods(self) -> None:
         """Only patching removeChild leaves the insertBefore crash live."""
-        src = GUARD.read_text()
+        src = GUARD.read_text(encoding="utf-8")
         assert "removeChild" in src
         assert "insertBefore" in src
 
     def test_installed_before_the_first_render(self) -> None:
         """The whole point is to patch BEFORE React mounts anything — installing
         after createRoot would leave the first render unprotected."""
-        src = MAIN.read_text()
+        src = MAIN.read_text(encoding="utf-8")
         assert "installTranslationGuard" in src, "guard never installed"
         install_at = src.index("installTranslationGuard()")
         render_at = src.index("createRoot")
@@ -54,7 +54,7 @@ class TestBehaviour:
 
     def _run(self) -> dict:
         script = f"""
-        import {{ installTranslationGuard }} from {json.dumps(str(GUARD))}
+        import {{ installTranslationGuard }} from {json.dumps(GUARD.as_uri())}
 
         // A minimal stand-in for the DOM's Node: the two methods the guard
         // patches, each throwing the way a browser does on a foreign child.

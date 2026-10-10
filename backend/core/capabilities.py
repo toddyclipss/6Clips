@@ -1,0 +1,233 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2025-2026 ViralMint Contributors
+"""Capability Registry defining typed contracts, preconditions, and surface scopes."""
+from dataclasses import dataclass, field
+from typing import Callable, Any, Optional
+import logging
+
+from backend.core.exceptions import CapabilityPreconditionError
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class Capability:
+    name: str
+    description: str
+    surface: str  # "discover" | "create" | "distribute" | "common"
+    required_params: list[str] = field(default_factory=list)
+    optional_params: list[str] = field(default_factory=list)
+    idempotent: bool = True
+    requires_authorization: bool = False
+    cost_estimate_usd: float = 0.0
+
+
+class CapabilityRegistry:
+    _registry: dict[str, Capability] = {}
+
+    @classmethod
+    def register(cls, cap: Capability) -> None:
+        cls._registry[cap.name] = cap
+
+    @classmethod
+    def get(cls, name: str) -> Optional[Capability]:
+        return cls._registry.get(name)
+
+    @classmethod
+    def all(cls) -> list[Capability]:
+        return list(cls._registry.values())
+
+    @classmethod
+    def list_for_surface(cls, surface: str) -> list[dict]:
+        """Return capabilities scoped to a specific workspace surface."""
+        return [
+            {
+                "name": c.name,
+                "description": c.description,
+                "surface": c.surface,
+                "required_params": c.required_params,
+                "optional_params": c.optional_params,
+                "requires_authorization": c.requires_authorization,
+                "idempotent": c.idempotent,
+            }
+            for c in cls._registry.values()
+            if c.surface in (surface, "common")
+        ]
+
+    @classmethod
+    def validate_input(cls, name: str, payload: dict) -> Capability:
+        cap = cls.get(name)
+        if not cap:
+            raise CapabilityPreconditionError(f"Unknown capability: '{name}'")
+        missing = [p for p in cap.required_params if p not in payload or payload[p] is None]
+        if missing:
+            raise CapabilityPreconditionError(f"Capability '{name}' missing required parameters: {missing}")
+        return cap
+
+
+# ── Register core capabilities ────────────────────────────────────────────────
+
+CapabilityRegistry.register(Capability(
+    name="extract_clips",
+    description="Extract viral or manual cut clips from a source video",
+    surface="create",
+    required_params=["video_id"],
+    optional_params=["time_ranges", "max_clips", "caption_style", "min_duration", "max_duration"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="apply_captions",
+    description="Burn word-by-word synchronized subtitles into video",
+    surface="create",
+    required_params=["video_id"],
+    optional_params=["caption_style", "emoji_style"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="project_operation",
+    description="Apply a controlled, versioned operation to a project document",
+    surface="create",
+    required_params=["project_id", "expected_revision", "operation_type", "payload"],
+    optional_params=["idempotency_key", "author"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="project_render",
+    description="Render a video from a frozen project revision",
+    surface="create",
+    required_params=["project_id"],
+    optional_params=["revision", "aspect_ratio"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="upload_youtube",
+    description="Upload a generated video to YouTube channel",
+    surface="distribute",
+    required_params=["video_id"],
+    optional_params=["title", "description", "privacy", "tags"],
+    idempotent=False,
+    requires_authorization=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="upload_tiktok",
+    description="Deliver a video to TikTok inbox or channel",
+    surface="distribute",
+    required_params=["video_id"],
+    optional_params=["title", "privacy"],
+    idempotent=False,
+    requires_authorization=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="search_youtube_trends",
+    description="Search trending topics and channel metrics via YouTube API",
+    surface="discover",
+    required_params=["query"],
+    optional_params=["max_results"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="ingest_trend",
+    description="Ingest a trending video into library and link to active project",
+    surface="create",
+    required_params=["trend_result_id", "project_id"],
+    optional_params=["expected_revision"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="suggest_clips",
+    description="Analyze source video and propose viral timestamp moments for bench review",
+    surface="create",
+    required_params=["video_id"],
+    optional_params=["max_clips", "min_duration", "max_duration", "user_query"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="set_bench_ranges",
+    description="Persist cutting bench ranges for a source video into the project document",
+    surface="create",
+    required_params=["project_id", "expected_revision", "source_id", "ranges"],
+    optional_params=["idempotency_key"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_trim",
+    description="Trim a video asset to a [start, end] window",
+    surface="create",
+    required_params=["video_id", "start_seconds", "end_seconds"],
+    optional_params=["project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_speed",
+    description="Adjust playback speed of a video asset",
+    surface="create",
+    required_params=["video_id", "speed"],
+    optional_params=["keep_pitch", "project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_crop",
+    description="Crop a video asset to normalized rectangle [x, y, w, h]",
+    surface="create",
+    required_params=["video_id", "x", "y", "w", "h"],
+    optional_params=["project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_reframe",
+    description="Reframe landscape video asset to vertical 9:16",
+    surface="create",
+    required_params=["video_id"],
+    optional_params=["project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_compress",
+    description="Compress a video asset with specified resolution and quality level",
+    surface="create",
+    required_params=["video_id"],
+    optional_params=["resolution", "level", "project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_transform",
+    description="Transform video: flip, rotate, loop, volume adjustment",
+    surface="create",
+    required_params=["video_id", "operation"],
+    optional_params=["amount", "project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="tool_watermark",
+    description="Overlay image watermark onto video asset",
+    surface="create",
+    required_params=["video_id", "logo_path"],
+    optional_params=["position", "opacity", "scale", "project_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="search_catalog",
+    description="Search normalized HyperFrames motion graphics catalog by query or category",
+    surface="create",
+    required_params=[],
+    optional_params=["query", "category", "limit"],
+    idempotent=True,
+))
+

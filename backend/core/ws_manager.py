@@ -4,6 +4,7 @@
 WebSocket connection manager.
 Supports multiple concurrent connections (for future multi-user support).
 """
+import asyncio
 import json
 import logging
 from typing import Dict, Set
@@ -51,9 +52,9 @@ class ConnectionManager:
             logger.debug("WS send skipped — no connections for %s", user_id)
             return
         dead = set()
-        for ws in self._connections[user_id]:
+        for ws in list(self._connections.get(user_id, set())):
             try:
-                await ws.send_text(data)
+                await asyncio.wait_for(ws.send_text(data), timeout=2.0)
             except Exception as e:
                 logger.debug("WS send failed for %s (removing dead connection): %s", user_id, e)
                 dead.add(ws)

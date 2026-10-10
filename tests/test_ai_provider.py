@@ -146,3 +146,30 @@ async def test_chat_stream_dispatches_to_openai_impl():
     with patch.object(c, "_openai_stream", _fake_openai):
         chunks = [t async for t in c.chat_stream([{"role": "user", "content": "q"}])]
     assert chunks == ["x"] and seen.get("hit")
+
+
+def test_env_fallback_sanitizes_incompatible_model():
+    # User configured openai model gpt-5.4-mini, but env only has Anthropic key
+    s = SimpleNamespace(ai_provider="", ai_api_key_encrypted="", ai_model="gpt-5.4-mini")
+    with patch.multiple(ap.settings, ANTHROPIC_API_KEY="anthr-key", OPENAI_API_KEY="", OPENROUTER_API_KEY=""):
+        c = get_ai_client(s)
+    assert c.provider == AIProvider.ANTHROPIC
+    assert c.model == PROVIDER_DEFAULTS[AIProvider.ANTHROPIC]  # Sanitized away from gpt-5.4-mini!
+
+
+def test_pinned_provider_honors_explicit_execution():
+    s = SimpleNamespace(ai_provider="anthropic", ai_api_key_encrypted=encrypt("anthr-user"), ai_model="claude-sonnet-4-6")
+    with patch.multiple(ap.settings, ANTHROPIC_API_KEY="", OPENAI_API_KEY="openai-env-key", OPENROUTER_API_KEY=""):
+        # Explicitly pin to OpenAI with specific model
+        c = get_ai_client(s, pinned_provider="openai", pinned_model="gpt-5.4-nano")
+        assert c.provider == AIProvider.OPENAI
+        assert c.api_key == "openai-env-key"
+        assert c.model == "gpt-5.4-nano"
+
+
+def test_pinned_provider_raises_when_key_missing():
+    with patch.multiple(ap.settings, ANTHROPIC_API_KEY="anthr-env-key", OPENAI_API_KEY="", OPENROUTER_API_KEY=""):
+        # Pinning to OpenAI when no OpenAI key exists should raise AIKeyMissingError
+        with pytest.raises(AIKeyMissingError):
+            get_ai_client(None, pinned_provider="openai")
+

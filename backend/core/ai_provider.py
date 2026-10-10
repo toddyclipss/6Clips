@@ -186,45 +186,115 @@ def _resolve_user_provider_and_key(user_settings) -> tuple[Optional[AIProvider],
     return provider, api_key or None
 
 
-def get_ai_client(user_settings=None, **_kwargs) -> AIClient:
+def is_model_compatible_with_provider(model: Optional[str], provider: AIProvider) -> bool:
+    """Check if a model name is structurally compatible with the provider."""
+    if not model or not isinstance(model, str):
+        return True
+    m = model.strip().lower()
+    # Vendor-prefixed slugs (e.g. "anthropic/claude-...", "google/...") only work with OpenRouter
+    if "/" in m and provider != AIProvider.OPENROUTER:
+        return False
+    if provider == AIProvider.ANTHROPIC:
+        # OpenAI or other vendor prefixes sent to Anthropic will fail
+        if m.startswith(("gpt-", "o1", "o3", "o4", "openai", "text-davinci")):
+            return False
+    elif provider == AIProvider.OPENAI:
+        # Anthropic claude models sent to OpenAI will fail
+        if m.startswith(("claude-", "anthropic")):
+            return False
+    return True
+
+
+def sanitize_model_for_provider(model: Optional[str], provider: AIProvider) -> str:
+    """Ensure the model is valid for the provider; fallback to provider default if mismatched."""
+    if model and is_model_compatible_with_provider(model, provider):
+        return model
+    default_m = PROVIDER_DEFAULTS.get(provider, "default")
+    if model:
+        logger.warning(
+            "Model '%s' is incompatible with provider '%s'; defaulting to '%s'",
+            model, provider.value, default_m
+        )
+    return default_m
+
+
+def get_ai_client(
+    user_settings=None,
+    pinned_provider: Optional[AIProvider | str] = None,
+    pinned_model: Optional[str] = None,
+    **_kwargs,
+) -> AIClient:
     """
     Return a configured AI client.
 
     Resolution order:
-      1. UserSettings.ai_provider + UserSettings.ai_api_key_encrypted (BYOK from UI)
-      2. .env keys (ANTHROPIC_API_KEY → OPENAI_API_KEY → OPENROUTER_API_KEY)
-      3. Raise AIKeyMissingError with setup instructions.
+      1. If pinned_provider is provided, honor pinned execution configuration.
+      2. UserSettings.ai_provider + UserSettings.ai_api_key_encrypted (BYOK from UI)
+      3. .env keys (ANTHROPIC_API_KEY → OPENAI_API_KEY → OPENROUTER_API_KEY)
+      4. Raise AIKeyMissingError with setup instructions.
     """
     user_model = getattr(user_settings, "ai_model", None) if user_settings else None
+    effective_model = pinned_model or user_model
+
+    # Pinned provider execution
+    if pinned_provider:
+        try:
+            target_prov = AIProvider(str(pinned_provider).lower().strip())
+        except ValueError:
+            target_prov = None
+
+        if target_prov:
+            # Check user key first for this provider
+            user_provider, user_key = _resolve_user_provider_and_key(user_settings)
+            key = None
+            if user_provider == target_prov and user_key:
+                key = user_key
+            elif target_prov == AIProvider.ANTHROPIC and settings.ANTHROPIC_API_KEY:
+                key = settings.ANTHROPIC_API_KEY
+            elif target_prov == AIProvider.OPENAI and settings.OPENAI_API_KEY:
+                key = settings.OPENAI_API_KEY
+            elif target_prov == AIProvider.OPENROUTER and settings.OPENROUTER_API_KEY:
+                key = settings.OPENROUTER_API_KEY
+
+            if not key:
+                raise AIKeyMissingError(
+                    f"No API key configured for pinned provider '{target_prov.value}'."
+                )
+            resolved_model = sanitize_model_for_provider(effective_model, target_prov)
+            return AIClient(provider=target_prov, api_key=key, model=resolved_model)
 
     # 1. User-configured BYOK
     user_provider, user_key = _resolve_user_provider_and_key(user_settings)
     if user_provider and user_key:
-        return AIClient(provider=user_provider, api_key=user_key, model=user_model)
+        resolved_model = sanitize_model_for_provider(effective_model, user_provider)
+        return AIClient(provider=user_provider, api_key=user_key, model=resolved_model)
 
-    # 2. .env fallback. Order is by historical precedence, not preference —
-    # whichever key is set in the env wins. Users who want a different
-    # default should configure it in Settings.
+    # 2. .env fallback. Whichever key is set in the env wins.
+    # Prevent model mismatch by sanitizing the model for the resolved provider.
     if settings.ANTHROPIC_API_KEY:
+        resolved_model = sanitize_model_for_provider(effective_model, AIProvider.ANTHROPIC)
         return AIClient(
             provider=AIProvider.ANTHROPIC,
             api_key=settings.ANTHROPIC_API_KEY,
-            model=user_model,
+            model=resolved_model,
         )
     if settings.OPENAI_API_KEY:
+        resolved_model = sanitize_model_for_provider(effective_model, AIProvider.OPENAI)
         return AIClient(
             provider=AIProvider.OPENAI,
             api_key=settings.OPENAI_API_KEY,
-            model=user_model,
+            model=resolved_model,
         )
     if settings.OPENROUTER_API_KEY:
+        resolved_model = sanitize_model_for_provider(effective_model, AIProvider.OPENROUTER)
         return AIClient(
             provider=AIProvider.OPENROUTER,
             api_key=settings.OPENROUTER_API_KEY,
-            model=user_model,
+            model=resolved_model,
         )
 
     raise AIKeyMissingError(
         "No AI provider configured. Set ANTHROPIC_API_KEY, OPENAI_API_KEY, or "
         "OPENROUTER_API_KEY in your .env, or configure your provider and key in Settings."
     )
+

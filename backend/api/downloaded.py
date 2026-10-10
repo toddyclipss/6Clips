@@ -1218,44 +1218,63 @@ async def suggest_clips(video_id: str, body: SuggestClipsRequest | None = None):
     if wq not in _WHISPER_QUALITIES:
         wq = "balanced"
 
-    from backend.agents.job_helper import create_job
-    from backend.core.task_runner import run_suggest_clips, dispatch
-    from backend.core.ws_manager import ws_manager
-    from backend.services.clip_options import ExtractOptions
+    from backend.agents.job_helper import create_job, update_job_status
+    from backend.services.executor_service import ExecutorService
 
     job = await create_job("generate", "local", {
         "downloaded_video_id": video_id,
         "type": "clip_suggestion",
         "max_clips": max_clips,
     })
-    opts = ExtractOptions(
-        mode="ai",
-        max_clips=max_clips,
-        min_duration=min_duration,
-        max_duration=max_duration,
-        whisper_quality=wq,
-        force_retranscribe=bool(req.force_retranscribe),
-        user_query=(req.user_query or "").strip() or None,
-        target_platform=(req.target_platform or "").strip().lower() or None,
-        genre=(req.genre or "").strip().lower() or None,
-    )
-    dispatch(run_suggest_clips(
-        job_id=job.id,
-        downloaded_video_id=video_id,
-        opts=opts,
-        user_id="local",
-    ))
-    await ws_manager.send({
-        "type": "job_started",
-        "job_id": job.id,
-        "job_type": "generate",
-        "message": f"Finding the strongest moments in: {video.title or 'Untitled'}",
-        "input_data": {
-            "type": "clip_suggestion",
-            "downloaded_video_id": video_id,
-            "max_clips": max_clips,
-        },
-    }, "local")
+
+    try:
+        run = await ExecutorService.create_run(
+            objective=f"Suggest clips for video {video_id}",
+            user_id="local",
+        )
+        res = await ExecutorService.execute_step(
+            run_id=run.id,
+            step_name="suggest_clips",
+            capability_name="suggest_clips",
+            payload={
+                "video_id": video_id,
+                "max_clips": max_clips,
+                "min_duration": min_duration,
+                "max_duration": max_duration,
+                "user_query": req.user_query,
+            },
+            user_id="local",
+            authorized=True,
+        )
+        await ExecutorService.complete_run(run.id, status="completed")
+        suggs = res.get("output", {}).get("suggestions", [])
+        await update_job_status(
+            job_id=job.id,
+            status="success",
+            output_data={"type": "clip_suggestions", "suggestions": suggs},
+        )
+    except Exception as exc:
+        logger.warning("ExecutorService suggest_clips fallback to task_runner: %s", exc)
+        from backend.core.task_runner import run_suggest_clips, dispatch
+        from backend.services.clip_options import ExtractOptions
+        opts = ExtractOptions(
+            mode="ai",
+            max_clips=max_clips,
+            min_duration=min_duration,
+            max_duration=max_duration,
+            whisper_quality=wq,
+            force_retranscribe=bool(req.force_retranscribe),
+            user_query=(req.user_query or "").strip() or None,
+            target_platform=(req.target_platform or "").strip().lower() or None,
+            genre=(req.genre or "").strip().lower() or None,
+        )
+        dispatch(run_suggest_clips(
+            job_id=job.id,
+            downloaded_video_id=video_id,
+            opts=opts,
+            user_id="local",
+        ))
+
     return {"job_id": job.id}
 
 

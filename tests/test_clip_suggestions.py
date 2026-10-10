@@ -384,10 +384,13 @@ def test_suggest_caps_proposals_at_the_manual_range_limit(client, tmp_path, monk
     vid = asyncio.run(_seed(src, 5400))
 
     asked = {}
-    from backend.core import task_runner as tr
-    monkeypatch.setattr(tr, "dispatch", lambda coro: None)
-    monkeypatch.setattr(tr, "run_suggest_clips",
-                        lambda **kw: asked.setdefault("max_clips", kw["opts"].max_clips))
+    from backend.services.executor_service import ExecutorService
+    orig_step = ExecutorService.execute_step
+    async def spy_step(*args, **kw):
+        payload = kw.get("payload") or (args[3] if len(args) > 3 else {})
+        asked["max_clips"] = payload.get("max_clips")
+        return await orig_step(*args, **kw)
+    monkeypatch.setattr(ExecutorService, "execute_step", spy_step)
 
     r = client.post(f"/api/downloaded/{vid}/suggest-clips", json={})
     assert r.status_code == 200, r.text
@@ -400,10 +403,13 @@ def test_suggest_clamps_an_over_large_request(client, tmp_path, monkeypatch):
     vid = asyncio.run(_seed(src, 600))
 
     asked = {}
-    from backend.core import task_runner as tr
-    monkeypatch.setattr(tr, "dispatch", lambda coro: None)
-    monkeypatch.setattr(tr, "run_suggest_clips",
-                        lambda **kw: asked.setdefault("max_clips", kw["opts"].max_clips))
+    from backend.services.executor_service import ExecutorService
+    orig_step = ExecutorService.execute_step
+    async def spy_step(*args, **kw):
+        payload = kw.get("payload") or (args[3] if len(args) > 3 else {})
+        asked["max_clips"] = payload.get("max_clips")
+        return await orig_step(*args, **kw)
+    monkeypatch.setattr(ExecutorService, "execute_step", spy_step)
 
     client.post(f"/api/downloaded/{vid}/suggest-clips", json={"max_clips": 500})
     assert asked["max_clips"] == dl._MANUAL_MAX_RANGES

@@ -135,8 +135,14 @@ async def _upload_via_api(
                 status_data = status_resp.json().get("data", {})
                 status = status_data.get("status")
                 if status == "PUBLISH_COMPLETE":
-                    logger.info(f"TikTok upload complete: {publish_id}")
-                    return {"publish_id": publish_id}
+                    logger.info(f"TikTok upload delivered to creator inbox: {publish_id}")
+                    return {
+                        "publish_id": publish_id,
+                        "delivery_mode": "inbox",
+                        "status": "sent_to_inbox",
+                        "requires_human_completion": True,
+                        "message": "Video sent to TikTok Inbox. Open the TikTok app to review and finalize publication.",
+                    }
                 elif status in ("FAILED", "PUBLISH_FAILED"):
                     fail_reason = status_data.get("fail_reason", "Unknown")
                     raise UploadError(f"TikTok publish failed: {fail_reason}")
@@ -167,7 +173,13 @@ async def _upload_via_cookies(
                 description=title[:150],
                 cookies=str(cookie_path),
             )
-            return {"publish_id": f"cookie_upload_{hash(str(video_path)) & 0xFFFFFFFF:08x}"}
+            return {
+                "publish_id": f"cookie_upload_{hash(str(video_path)) & 0xFFFFFFFF:08x}",
+                "delivery_mode": "cookie_direct",
+                "status": "uploaded",
+                "requires_human_completion": False,
+                "message": "Video uploaded to TikTok via session cookie.",
+            }
         finally:
             cookie_path.unlink(missing_ok=True)
 

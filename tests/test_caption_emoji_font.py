@@ -163,7 +163,10 @@ def test_real_libass_finds_every_emoji_glyph(tmp_path):
     assert not not_found, not_found[:5]
 
 
-@pytest.mark.skipif(_ffmpeg() is None, reason="ffmpeg not installed")
+import os
+
+
+@pytest.mark.skipif(_ffmpeg() is None or os.name == "nt", reason="colon in directory name is POSIX-only")
 def test_fontsdir_survives_a_drive_colon_path(tmp_path):
     """`fontsdir=` goes through the same escaper as `ass=`: a folder literally
     named "C:" (plus an apostrophe and `=`) must still load the font."""

@@ -13,10 +13,13 @@ class Base(DeclarativeBase):
     pass
 
 
+from sqlalchemy.pool import NullPool
+
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=settings.DEBUG,
     connect_args={"check_same_thread": False},  # SQLite only
+    poolclass=NullPool,
 )
 
 AsyncSessionLocal = async_sessionmaker(
@@ -63,6 +66,7 @@ async def init_db():
         messaging_config, chat_session, user_profile,
         video_metrics, viral_formula,
         connected_channel, dynamic_template, caption_style,
+        project, project_revision, execution,
     )
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -86,11 +90,38 @@ async def init_db():
         await _add_column_if_missing(conn, "generated_videos", "caption_status", "VARCHAR(20)", existing=_cols)
         await _add_column_if_missing(conn, "generated_videos", "metadata_status", "VARCHAR(20)", existing=_cols)
         await _add_column_if_missing(conn, "generated_videos", "clip_selection", "VARCHAR(20)", existing=_cols)
+        # Lineage, delivery status and project versioning
+        await _add_column_if_missing(conn, "generated_videos", "tiktok_delivery_status", "VARCHAR(30)", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "project_id", "VARCHAR(36)", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "project_revision", "INTEGER", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "operation", "VARCHAR(50)", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "parent_asset_ids_json", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "source_asset_id", "VARCHAR(100)", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "lineage_json", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "generated_videos", "file_hash", "VARCHAR(64)", existing=_cols)
+        # Connected channels: distinction between tracked URL and publishing-authorized accounts
+        await _add_column_if_missing(conn, "connected_channels", "auth_type", "VARCHAR(50)", existing=_cols)
+        await _add_column_if_missing(conn, "connected_channels", "can_publish", "BOOLEAN", existing=_cols)
+        await _add_column_if_missing(conn, "connected_channels", "publish_account_identifier", "VARCHAR(200)", existing=_cols)
+        await _add_column_if_missing(conn, "connected_channels", "credentials_ref", "VARCHAR(100)", existing=_cols)
         # BYOK: per-user encrypted keys (override .env at runtime)
         await _add_column_if_missing(conn, "user_settings", "ai_provider", "VARCHAR(20)", existing=_cols)
         await _add_column_if_missing(conn, "user_settings", "ai_model", "VARCHAR(100)", existing=_cols)
         await _add_column_if_missing(conn, "user_settings", "ai_api_key_encrypted", "TEXT", existing=_cols)
         await _add_column_if_missing(conn, "user_settings", "youtube_api_key_encrypted", "TEXT", existing=_cols)
+
+        # Project revision fingerprint and idempotency
+        await _add_column_if_missing(conn, "project_revisions", "request_fingerprint", "VARCHAR(64)", existing=_cols)
+
+        # Uniqueness on project revisions
+        await conn.exec_driver_sql(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uq_project_revisions_project_revision "
+            "ON project_revisions (project_id, revision)"
+        )
+        await conn.exec_driver_sql(
+            "CREATE INDEX IF NOT EXISTS ix_project_revisions_fingerprint "
+            "ON project_revisions (project_id, idempotency_key, request_fingerprint)"
+        )
 
     # Drift sentinel — compare every model's columns against the live DB
     # schema and log a loud warning for any column the model declares but

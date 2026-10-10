@@ -44,12 +44,9 @@ const round3 = (v) => Math.round(v * 1000) / 1000
  * @param {number} duration       Source duration in seconds; every edit
  *   is clamped into [0, duration].
  */
-export default function useBenchRanges(sourceId, duration) {
+export default function useBenchRanges(sourceId, duration, projectRanges = null, onCommitProjectRanges = null) {
   const [ranges, setRanges] = useState([])
   const [activeId, setActiveId] = useState(null)
-  // Guards the restore→persist round trip: without it the first render
-  // after a source switch persists the OUTGOING source's empty state
-  // over the incoming source's saved ranges.
   const loadedFor = useRef(null)
 
   const skey = sourceId ? storageKey("clipper", `bench:${sourceId}`) : null
@@ -63,31 +60,36 @@ export default function useBenchRanges(sourceId, duration) {
       return
     }
     let restored = []
-    try {
-      const raw = sessionStorage.getItem(skey)
-      const parsed = raw ? JSON.parse(raw) : null
-      if (Array.isArray(parsed)) {
-        restored = parsed
-          .filter((r) => r && Number.isFinite(r.start) && Number.isFinite(r.end) && r.end > r.start)
-          // A source re-fetched shorter under the same row id restores blocks
-          // past the end, and the backend 400s the ENTIRE Cut submit for one
-          // stale range. Clamp like add() does (duration is the mount-time
-          // row value — deliberately not a dep, a re-restore would clobber
-          // live edits).
-          .filter((r) => !(duration > 0) || r.start < duration)
-          .map((r) => ({ ...r, end: duration > 0 ? Math.min(r.end, duration) : r.end }))
-          .filter((r) => r.end - r.start >= MIN_LEN_SEC)
-          .slice(0, MAX_RANGES)
-          .map((r) => ({ id: nextId(), start: r.start, end: r.end, meta: r.meta || null }))
+    // 1. Prefer persisted projectRanges if provided
+    if (Array.isArray(projectRanges) && projectRanges.length > 0) {
+      restored = projectRanges
+        .filter((r) => r && Number.isFinite(r.start) && Number.isFinite(r.end) && r.end > r.start)
+        .filter((r) => !(duration > 0) || r.start < duration)
+        .map((r) => ({ ...r, end: duration > 0 ? Math.min(r.end, duration) : r.end }))
+        .filter((r) => r.end - r.start >= MIN_LEN_SEC)
+        .slice(0, MAX_RANGES)
+        .map((r) => ({ id: r.id || nextId(), start: r.start, end: r.end, meta: r.meta || null }))
+    } else {
+      try {
+        const raw = sessionStorage.getItem(skey)
+        const parsed = raw ? JSON.parse(raw) : null
+        if (Array.isArray(parsed)) {
+          restored = parsed
+            .filter((r) => r && Number.isFinite(r.start) && Number.isFinite(r.end) && r.end > r.start)
+            .filter((r) => !(duration > 0) || r.start < duration)
+            .map((r) => ({ ...r, end: duration > 0 ? Math.min(r.end, duration) : r.end }))
+            .filter((r) => r.end - r.start >= MIN_LEN_SEC)
+            .slice(0, MAX_RANGES)
+            .map((r) => ({ id: nextId(), start: r.start, end: r.end, meta: r.meta || null }))
+        }
+      } catch {
+        // Private mode / disabled storage
       }
-    } catch {
-      // Private mode / disabled storage — an empty bench is a fine
-      // degradation, and a throw here would blank the whole page.
     }
     setRanges(restored)
     setActiveId(restored[0]?.id ?? null)
     loadedFor.current = sourceId
-  }, [sourceId, skey])
+  }, [sourceId, skey, projectRanges])
 
   // ── Persist ────────────────────────────────────────────────
   useEffect(() => {
@@ -102,7 +104,11 @@ export default function useBenchRanges(sourceId, duration) {
         sessionStorage.removeItem(skey)
       }
     } catch { /* see above */ }
-  }, [ranges, skey, sourceId])
+
+    if (typeof onCommitProjectRanges === "function") {
+      onCommitProjectRanges(ranges.map(({ start, end, meta }) => ({ start, end, meta })))
+    }
+  }, [ranges, skey, sourceId, onCommitProjectRanges])
 
   const atCap = ranges.length >= MAX_RANGES
 

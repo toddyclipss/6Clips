@@ -94,7 +94,11 @@ def _run(cwd: Path, *args: str) -> subprocess.CompletedProcess:
     )
 
 
+import os
+
+
 @needs_ffmpeg
+@pytest.mark.skipif(os.name == "nt", reason="POSIX-only: colon is not a valid character in Windows file/directory names")
 class TestRealFfmpeg:
     @pytest.fixture()
     def work(self, tmp_path: Path) -> Path:

@@ -49,6 +49,18 @@ motion/fonts/
 motion/node/
 motion/studio/
 motion/tmp/
+motion/cache/
+motion_registry_cache/
+motion/*.mp4
+
+# Test artifacts & debug dumps
+tmp_test/
+test_debug_dir/
+/*.png
+/*.mp4
+*.telemetry.json
+visual_quality_closure_telemetry.json
+
 
 # IDE / tooling
 .vscode/

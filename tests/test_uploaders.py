@@ -326,7 +326,12 @@ class TestTikTokUpload:
         c = _TTClient()
         monkeypatch.setattr(TT.httpx, "AsyncClient", c)
         assert await TT.upload_to_tiktok(str(video), "t", access_token="TOK") == {
-            "publish_id": "pub_1"}
+            "publish_id": "pub_1",
+            "delivery_mode": "inbox",
+            "status": "sent_to_inbox",
+            "requires_human_completion": True,
+            "message": "Video sent to TikTok Inbox. Open the TikTok app to review and finalize publication.",
+        }
 
     async def test_the_whole_file_is_uploaded_in_content_range_chunks(
             self, tmp_path, monkeypatch):

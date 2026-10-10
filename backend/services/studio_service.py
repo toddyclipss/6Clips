@@ -78,19 +78,12 @@ def _theme_css(mode: str = "dark") -> str:
 
 
 def _studio_js(mode: str) -> str:
-    """Injected script: (1) hide the class-less HeyGen wordmark SVG (top-left,
-    CSS can't target it), and (2) in LIGHT mode, recolor near-black INLINE
-    backgrounds (the timeline canvas/lanes hardcode `background: rgb(10,10,11)`
-    inline, which CSS classes can't reliably override) to the light surface. A
-    MutationObserver (incl. style-attr changes) keeps both applied across the
-    SPA's re-renders."""
+    """Injected script: (1) hide the class-less HeyGen wordmark SVG, (2) in LIGHT mode recolor near-black backgrounds, (3) postMessage bridge for preview transport controls."""
     light = "true" if mode == "light" else "false"
     return (
         "(function(){var L=" + light + ";function f(){try{"
-        # (1) hide the wordmark
         "document.querySelectorAll('svg').forEach(function(s){var r=s.getBoundingClientRect();"
         "if(r.top<48&&r.left<210&&r.width>58){s.style.display='none';}});"
-        # (2) light-mode: recolor near-black inline backgrounds
         "if(L){document.querySelectorAll('[style]').forEach(function(el){"
         "var b=el.style.background||el.style.backgroundColor||'';"
         "var m=b.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);"
@@ -100,7 +93,29 @@ def _studio_js(mode: str) -> str:
         "if(document.readyState!=='loading'){f();}else{document.addEventListener('DOMContentLoaded',f);}"
         "try{new MutationObserver(f).observe(document.documentElement,"
         "{childList:true,subtree:true,attributes:true,attributeFilter:['style']});}catch(e){}"
-        "setInterval(f,1000);})();"
+        "setInterval(f,1000);"
+        "window.addEventListener('message',function(ev){if(!ev.data)return;"
+        "if(ev.data.source!=='vm-parent'&&ev.data.source!=='hf-parent')return;"
+        "var a=ev.data.action||ev.data.type;"
+        "if(a==='play'){"
+        "var pb=document.querySelector('button[aria-label*=\"Play\" i],button[data-action=\"play\" i],.play-button');if(pb)pb.click();"
+        "document.querySelectorAll('video').forEach(function(v){v.play().catch(function(){});});"
+        "if(window.__player&&window.__player.play)window.__player.play();"
+        "}else if(a==='pause'){"
+        "var pb=document.querySelector('button[aria-label*=\"Pause\" i],button[data-action=\"pause\" i],.pause-button');if(pb)pb.click();"
+        "document.querySelectorAll('video').forEach(function(v){v.pause();});"
+        "if(window.__player&&window.__player.pause)window.__player.pause();"
+        "}else if(a==='seek'){"
+        "var t=ev.data.time!=null?ev.data.time:ev.data.seconds;"
+        "document.querySelectorAll('video').forEach(function(v){v.currentTime=t;});"
+        "if(window.__player&&window.__player.seek)window.__player.seek(t);"
+        "}else if(a==='mute'){"
+        "var m=!!ev.data.muted;document.querySelectorAll('video').forEach(function(v){v.muted=m;});"
+        "}});"
+        "setInterval(function(){var v=document.querySelector('video');if(v){"
+        "window.parent.postMessage({source:'vm-runtime',currentTime:v.currentTime,duration:v.duration,paused:v.paused},'*');"
+        "}},300);"
+        "})();"
     )
 
 
@@ -612,7 +627,13 @@ class StudioService:
     _COMP_RE = re.compile(r"^comp_[0-9a-f]{8}\.html$")
 
     @classmethod
-    def stage_asset_from_path(cls, src: Path, display_name: str | None = None) -> dict:
+    def stage_asset_from_path(
+        cls,
+        src: Path,
+        display_name: str | None = None,
+        asset_id: str | None = None,
+        source_key: str | None = None,
+    ) -> dict:
         """Stage an EXISTING local file (a Library asset) into the project's
         assets/ — same contract as stage_asset but without loading the bytes
         into RAM. The source is NEVER consumed: video/audio are hardlinked
@@ -650,7 +671,26 @@ class StudioService:
                 duration = round(probe_duration(dest, 0.0), 1) or None
             except Exception:
                 duration = None
-        return {"file": name, "type": kind, "duration": duration}
+
+        # Persist staging lineage in project manifest so renders retain parent references
+        try:
+            manifest_path = _project_dir() / "assets_manifest.json"
+            manifest = {}
+            if manifest_path.is_file():
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest[name] = {
+                "source_path": str(src.resolve()),
+                "asset_id": asset_id,
+                "source_key": source_key,
+                "display_name": display_name or src.name,
+                "kind": kind,
+            }
+            manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        except Exception as e:
+            logger.warning("Failed to record staged asset manifest: %s", e)
+
+        return {"file": name, "type": kind, "duration": duration, "asset_id": asset_id}
+
 
     @classmethod
     def stage_asset(cls, filename: str, data: bytes) -> dict:
@@ -823,8 +863,36 @@ class StudioService:
         w, h, dur = await asyncio.to_thread(probe_media, dest)
         aspect = aspect_from_dims(w, h)
         thumb = await MotionGeneratorAgent._thumbnail(dest)
+
+        # Recover lineage from project manifest and metadata
+        parent_asset_ids = []
+        try:
+            manifest_file = _project_dir() / "assets_manifest.json"
+            if manifest_file.is_file():
+                manifest = _json.loads(manifest_file.read_text())
+                for item in manifest.values():
+                    aid = item.get("asset_id") or item.get("source_key")
+                    if aid and aid not in parent_asset_ids:
+                        parent_asset_ids.append(aid)
+        except Exception:
+            pass
+
+        proj_id = None
+        proj_rev = None
+        try:
+            pm_file = _project_dir() / "project_meta.json"
+            if pm_file.is_file():
+                pm = _json.loads(pm_file.read_text())
+                proj_id = pm.get("project_id")
+                proj_rev = pm.get("revision")
+        except Exception:
+            pass
+
         return await MotionGeneratorAgent._save(
             user_id="local", title="Motion Studio video", variables={}, niche=None,
             video_path=dest, thumb_path=thumb, audio_path=None, aspect_ratio=aspect,
             duration_seconds=int(round(dur)) if dur else None,
-            script=None, caption_status=None)
+            script=None, caption_status=None,
+            project_id=proj_id, project_revision=proj_rev,
+            parent_asset_ids=parent_asset_ids, operation="motion_render",
+        )

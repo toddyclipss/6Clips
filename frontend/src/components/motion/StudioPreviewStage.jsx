@@ -1,0 +1,260 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) 2025-2026 ViralMint Contributors
+import React, { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react"
+import {
+  Box, Stack, Typography, IconButton, Slider, Tooltip, CircularProgress,
+} from "@mui/material"
+import {
+  IconPlayerPlay,
+  IconPlayerPause,
+  IconPlayerSkipBack,
+  IconPlayerSkipForward,
+  IconVolume,
+  IconVolumeOff,
+  IconMaximize,
+  IconRefresh,
+} from "@tabler/icons-react"
+
+/**
+ * Central Stage & Video Preview using HyperFrames Player integration.
+ * Respects 9:16 and 16:9 aspect ratios without distortion.
+ * Uses Light theme canvas surrounding with crisp composition stage.
+ */
+const StudioPreviewStage = forwardRef(function StudioPreviewStage({
+  previewUrl,
+  aspectRatio = "9:16",
+  isLoading = false,
+  currentTime = 0,
+  duration = 15,
+  isPlaying = false,
+  onTogglePlay,
+  onPlaybackStateChange,
+  onTimeUpdate,
+  onSeek,
+  onRefresh,
+  onSelectElementId,
+}, ref) {
+  const iframeRef = useRef(null)
+  const [muted, setMuted] = useState(false)
+  const lastPostedPlayRef = useRef(null)
+
+  const postControl = (action, extra = {}) => {
+    try {
+      if (iframeRef.current && iframeRef.current.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(
+          { source: "vm-parent", action, ...extra },
+          "*"
+        )
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // Expose imperative methods to parent (e.g. for scrubbing from timeline)
+  useImperativeHandle(ref, () => ({
+    seek: (time) => {
+      postControl("seek", { time })
+    },
+    play: () => {
+      postControl("play")
+    },
+    pause: () => {
+      postControl("pause")
+    },
+  }))
+
+  // Synchronize external isPlaying state (e.g. from Timeline or Spacebar) to iframe runtime
+  useEffect(() => {
+    if (isPlaying !== lastPostedPlayRef.current) {
+      lastPostedPlayRef.current = isPlaying
+      postControl(isPlaying ? "play" : "pause")
+    }
+  }, [isPlaying])
+
+  // Listen to bidirectional playback events from composition runtime
+  useEffect(() => {
+    const handleRuntimeMessage = (ev) => {
+      if (!ev.data || ev.data.source !== "vm-runtime") return
+      if (typeof ev.data.currentTime === "number") {
+        if (onTimeUpdate) {
+          onTimeUpdate(ev.data.currentTime)
+        } else if (onSeek) {
+          onSeek(ev.data.currentTime)
+        }
+      }
+      if (typeof ev.data.paused === "boolean" && onPlaybackStateChange) {
+        lastPostedPlayRef.current = !ev.data.paused
+        onPlaybackStateChange(!ev.data.paused)
+      }
+      if (ev.data.action === "element_selected" && ev.data.id && onSelectElementId) {
+        onSelectElementId(ev.data.id)
+      }
+    }
+    window.addEventListener("message", handleRuntimeMessage)
+    return () => window.removeEventListener("message", handleRuntimeMessage)
+  }, [onTimeUpdate, onSeek, onPlaybackStateChange, onSelectElementId])
+
+  const handleTogglePlay = () => {
+    const nextState = !isPlaying
+    lastPostedPlayRef.current = nextState
+    postControl(nextState ? "play" : "pause")
+    if (onTogglePlay) onTogglePlay()
+  }
+
+  const handleSeek = (time) => {
+    postControl("seek", { time })
+    if (onSeek) onSeek(time)
+  }
+
+  const handleToggleMute = () => {
+    const nextMuted = !muted
+    setMuted(nextMuted)
+    postControl("mute", { muted: nextMuted })
+  }
+
+  // Aspect ratio styling
+  const isPortrait = aspectRatio === "9:16"
+  // For portrait 9:16, maximum height bounding; for landscape 16:9, maximum width bounding
+  const stageAspectRatio = isPortrait ? 9 / 16 : 16 / 9
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        bgcolor: "#f8fafc",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Central Viewport */}
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 2,
+          minHeight: 0,
+          position: "relative",
+        }}
+      >
+        {/* Composition Canvas Box */}
+        <Box
+          sx={{
+            height: isPortrait ? "100%" : "auto",
+            width: isPortrait ? "auto" : "100%",
+            maxHeight: "100%",
+            maxWidth: "100%",
+            aspectRatio: `${stageAspectRatio}`,
+            bgcolor: "#000000",
+            borderRadius: 2,
+            boxShadow: "0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)",
+            overflow: "hidden",
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {previewUrl ? (
+            <iframe
+              id="studio-preview-iframe"
+              ref={iframeRef}
+              src={previewUrl}
+              title="Composition Stage"
+              style={{
+                width: "100%",
+                height: "100%",
+                border: 0,
+                display: "block",
+                backgroundColor: "#0b0f19",
+              }}
+            />
+          ) : (
+            <Stack alignItems="center" spacing={1} sx={{ color: "#94a3b8" }}>
+              <CircularProgress size={24} color="inherit" />
+              <Typography variant="caption">Loading composition…</Typography>
+            </Stack>
+          )}
+
+          {isLoading && (
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                bgcolor: "rgba(15,23,42,0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 2,
+              }}
+            >
+              <CircularProgress size={28} sx={{ color: "#ffffff" }} />
+            </Box>
+          )}
+        </Box>
+      </Box>
+
+      {/* Floating Bottom Playback Controls */}
+      <Box
+        sx={{
+          height: 44,
+          minHeight: 44,
+          bgcolor: "#ffffff",
+          borderTop: "1px solid",
+          borderColor: "divider",
+          px: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Transport Buttons */}
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <IconButton size="small" onClick={() => handleSeek(0)}>
+            <IconPlayerSkipBack size={16} />
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={handleTogglePlay}
+            sx={{
+              bgcolor: "primary.main",
+              color: "#ffffff",
+              width: 30,
+              height: 30,
+              "&:hover": { bgcolor: "primary.dark" },
+            }}
+          >
+            {isPlaying ? <IconPlayerPause size={16} stroke={2.5} /> : <IconPlayerPlay size={16} stroke={2.5} />}
+          </IconButton>
+          <IconButton size="small" onClick={() => handleSeek(duration)}>
+            <IconPlayerSkipForward size={16} />
+          </IconButton>
+          <Tooltip title="Refresh stage" arrow>
+            <IconButton size="small" onClick={onRefresh} sx={{ ml: 0.5 }}>
+              <IconRefresh size={15} />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+
+        {/* Timecode Readout */}
+        <Typography variant="caption" sx={{ fontFamily: "monospace", fontWeight: 700, fontSize: "0.75rem", color: "text.primary" }}>
+          {Number(currentTime || 0).toFixed(2)}s / {Number(duration || 0).toFixed(2)}s
+        </Typography>
+
+        {/* Volume & Fullscreen */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <IconButton size="small" onClick={handleToggleMute}>
+            {muted ? <IconVolumeOff size={16} /> : <IconVolume size={16} />}
+          </IconButton>
+        </Stack>
+      </Box>
+    </Box>
+  )
+})
+
+export default StudioPreviewStage

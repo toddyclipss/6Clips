@@ -132,6 +132,68 @@ def safe_tools_path(path_str: str) -> Path:
     return p
 
 
+@router.post("/{tool_name}/from-asset")
+async def tool_from_asset(tool_name: str, body: dict):
+    """Execute a tool directly on an existing Library video asset without re-uploading."""
+    video_id = body.get("video_id") or body.get("asset_id")
+    if not video_id:
+        raise HTTPException(400, "Missing required 'video_id' parameter")
+
+    from backend.services.asset_resolver import resolve_asset_record_and_path, AssetNotFoundError
+    try:
+        canonical_key, src_path, meta = await resolve_asset_record_and_path(str(video_id), must_exist=True)
+    except AssetNotFoundError as e:
+        raise HTTPException(404, str(e))
+
+    clean_id = meta["id"]
+    title = meta.get("title", "video")
+
+    ext = src_path.suffix.lower()
+    from backend.agents.job_helper import create_job
+    from backend.core.task_runner import dispatch
+    import shutil
+    import os
+
+    job = await create_job(f"tool:{tool_name}", "local", {
+        "video_id": clean_id,
+        "title": title,
+        "tool": tool_name,
+        "params": body,
+    })
+
+    in_dir = tools_in_dir()
+    in_dir.mkdir(parents=True, exist_ok=True)
+    in_path = in_dir / f"{job.id}{ext}"
+    try:
+        os.link(src_path, in_path)
+    except OSError:
+        shutil.copyfile(src_path, in_path)
+
+    if tool_name == "trim":
+        from backend.core.tool_runners import run_tool_trim
+        start_sec = float(body.get("start_seconds") or body.get("start_time") or 0.0)
+        end_sec = float(body.get("end_seconds") or body.get("end_time") or 5.0)
+        dispatch(run_tool_trim(job.id, in_path, start_sec, end_sec))
+    elif tool_name == "speed":
+        from backend.core.tool_runners import run_tool_speed
+        speed_val = float(body.get("speed") or 1.5)
+        keep_pitch = bool(body.get("keep_pitch", True))
+        dispatch(run_tool_speed(job.id, in_path, speed_val, keep_pitch))
+    elif tool_name == "reframe":
+        from backend.core.tool_runners import run_tool_reframe
+        dispatch(run_tool_reframe(job.id, in_path))
+    elif tool_name == "compress":
+        from backend.core.tool_runners import run_tool_compress
+        res_val = str(body.get("resolution") or "original")
+        lvl_val = str(body.get("level") or "high")
+        dispatch(run_tool_compress(job.id, in_path, res_val, lvl_val))
+    else:
+        raise HTTPException(400, f"Unsupported tool: {tool_name}")
+
+    return {"job_id": job.id, "status": "queued", "tool": tool_name}
+
+
+
 # Output extension → content-type, for the lightweight /download-meta probe
 # the frontend uses to PICK a preview element (it branches on
 # `content_type.startsWith("video/")`, which is why the default here is

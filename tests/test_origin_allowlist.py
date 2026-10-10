@@ -34,6 +34,10 @@ from backend.messaging import manager as messaging_manager
 
 @pytest.fixture(scope="module")
 def client():
+    import time
+    from backend.services import ytdlp_service as ytdlp_svc
+    ytdlp_svc._last_update_attempt = time.time() + 86400  # cooldown active
+
     async def _noop(*a, **k):
         return None
     messaging_manager.messaging.start_all = _noop      # type: ignore[assignment]
@@ -46,7 +50,7 @@ class TestTheAllowlistIsShared:
     def test_the_middleware_reads_the_shared_module(self):
         """Rule #32: two copies of a security rule drift, and the copy that
         drifts is the one nobody is testing."""
-        src = Path("backend/main.py").read_text()
+        src = Path("backend/main.py").read_text(encoding="utf-8")
         assert "from backend.core.origins import" in src
         assert "urlparse(header)" not in src, "main.py re-implements the check"
 
@@ -67,6 +71,15 @@ class TestTheAllowlistIsShared:
 
 
 class TestChatSocketOrigin:
+    @pytest.fixture(autouse=True)
+    def _isolate_ws(self):
+        from unittest.mock import AsyncMock, patch
+        from backend.core.ws_manager import ws_manager
+        ws_manager._connections.clear()
+        with patch("backend.api.chat.intelligence.get_smart_suggestions", new=AsyncMock(return_value=[])):
+            yield
+        ws_manager._connections.clear()
+
     def test_a_foreign_origin_cannot_open_the_chat_socket(self, client):
         with pytest.raises(WebSocketDisconnect):
             with client.websocket_connect(

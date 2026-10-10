@@ -27,7 +27,7 @@ ENGINE_IDS = {k for k in CAPTION_STYLES if k != "brainrot"}
 
 def _js_values(path: Path, const: str) -> set[str]:
     """Pull the `value: "..."` entries out of a JS array literal."""
-    src = path.read_text()
+    src = path.read_text(encoding="utf-8")
     start = src.index(f"export const {const} = [")
     end = src.index("]", start)
     return set(re.findall(r'value:\s*"([^"]+)"', src[start:end]))
@@ -69,9 +69,9 @@ def test_clip_surfaces_derive_their_styles_and_share_one_default():
     once in useClipSettings — which ClipStudio owns and hands to both, so
     there is exactly one caption_style in play at any moment.
     """
-    dialog = (FRONTEND / "components" / "clip" / "ExtractDialog.jsx").read_text()
-    bench = (FRONTEND / "components" / "clip" / "bench" / "SourceBench.jsx").read_text()
-    shared = (FRONTEND / "components" / "clip" / "useClipSettings.js").read_text()
+    dialog = (FRONTEND / "components" / "clip" / "ExtractDialog.jsx").read_text(encoding="utf-8")
+    bench = (FRONTEND / "components" / "clip" / "bench" / "SourceBench.jsx").read_text(encoding="utf-8")
+    shared = (FRONTEND / "components" / "clip" / "useClipSettings.js").read_text(encoding="utf-8")
 
     # Neither surface may carry its own style ids.
     for name, src in (("ExtractDialog", dialog), ("SourceBench", bench)):

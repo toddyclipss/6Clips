@@ -41,9 +41,27 @@ class MotionGeneratorAgent:
     @staticmethod
     async def _save(*, user_id, title, variables, niche, video_path, thumb_path,
                     audio_path, aspect_ratio, duration_seconds,
-                    script, caption_status) -> str:
+                    script, caption_status,
+                    project_id=None, project_revision=None, operation="motion_render",
+                    parent_asset_ids=None, source_asset_id=None, lineage=None,
+                    file_hash=None) -> str:
+        import hashlib
         from backend.database import AsyncSessionLocal
         from backend.models.generated_video import GeneratedVideo
+
+        if not file_hash and video_path and Path(video_path).is_file():
+            try:
+                h = hashlib.sha256()
+                with open(video_path, "rb") as f:
+                    while chunk := f.read(65536):
+                        h.update(chunk)
+                file_hash = h.hexdigest()
+            except Exception:
+                pass
+
+        parent_list = list(parent_asset_ids or [])
+        primary_parent = source_asset_id or (parent_list[0] if parent_list else None)
+
         gv = GeneratedVideo(
             user_id=user_id,
             title=title,
@@ -63,9 +81,17 @@ class MotionGeneratorAgent:
             youtube_title=title,
             estimated_cost_usd=0.0,   # rendered locally
             status="ready",
+            project_id=project_id,
+            project_revision=project_revision,
+            operation=operation,
+            parent_asset_ids_json=json.dumps(parent_list),
+            source_asset_id=primary_parent,
+            lineage_json=json.dumps(lineage) if lineage else None,
+            file_hash=file_hash,
         )
         async with AsyncSessionLocal() as db:
             db.add(gv)
             await db.commit()
             await db.refresh(gv)
             return gv.id
+

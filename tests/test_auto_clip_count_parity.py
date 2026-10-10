@@ -24,7 +24,7 @@ JS = Path("frontend/src/components/clip/autoClipCount.js")
 
 
 def _js_const(name: str) -> int:
-    m = re.search(rf"export const {name} = (\d+)", JS.read_text())
+    m = re.search(rf"export const {name} = (\d+)", JS.read_text(encoding="utf-8"))
     assert m, f"{name} is missing from {JS} — the two copies have diverged"
     return int(m.group(1))
 
@@ -43,7 +43,7 @@ def test_the_constants_match(name, py):
 
 def test_the_js_mirrors_the_python_formula():
     """Same shape, not just the same constants: floor(duration / N), clamped."""
-    src = JS.read_text()
+    src = JS.read_text(encoding="utf-8")
     assert "Math.floor(durationSeconds / AUTO_CLIP_SECONDS_PER_CLIP)" in src
     assert "Math.max(\n    AUTO_CLIP_MIN," in src or "Math.max(AUTO_CLIP_MIN," in src
     assert "Math.min(AUTO_CLIP_MAX" in src
@@ -60,7 +60,7 @@ def test_known_points(duration, expected):
 
 
 def test_the_endpoint_uses_the_helper_rather_than_its_own_arithmetic():
-    src = Path("backend/api/downloaded.py").read_text()
+    src = Path("backend/api/downloaded.py").read_text(encoding="utf-8")
     assert "auto_clip_count(duration)" in src
     assert "duration // 30" not in src, (
         "the inline formula is back — it is the copy this helper replaced")
@@ -73,10 +73,10 @@ def test_the_min_length_floor_matches_the_extractor():
     int(min_duration))`. If the backend's floor moves and the dialog's
     doesn't, the quote stops being an upper bound on what the run can cut.
     """
-    backend = Path("backend/services/clip_extractor.py").read_text()
+    backend = Path("backend/services/clip_extractor.py").read_text(encoding="utf-8")
     m = re.search(r"min_clip_floor = max\((\d+), int\(min_duration\)\)", backend)
     assert m, "clip_extractor's min_clip_floor rule changed — update autoClipCount.js too"
-    js = JS.read_text()
+    js = JS.read_text(encoding="utf-8")
     assert f"Math.max({m.group(1)}, minDurationSeconds)" in js, (
         f"backend floors a named minimum at {m.group(1)}s; autoClipCount.js does not"
     )

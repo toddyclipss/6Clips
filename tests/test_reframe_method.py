@@ -165,9 +165,9 @@ def test_fit_into_frame_only_exists_where_we_decided_it_should():
     for path in BACKEND.rglob("*.py"):
         if "__pycache__" in str(path):
             continue
-        if FIT_SIGNATURE not in path.read_text():
+        if FIT_SIGNATURE not in path.read_text(encoding="utf-8", errors="replace"):
             continue
-        rel = str(path.relative_to(BACKEND))
+        rel = str(path.relative_to(BACKEND)).replace("\\", "/")
         if rel not in ALLOWED:
             offenders.append(rel)
     assert not offenders, (

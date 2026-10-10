@@ -251,7 +251,7 @@ class TestNoCallSiteCanGoSilentAgain:
     def test_every_job_transcribe_names_its_progress_bar(self):
         offenders = []
         for rel in self.JOB_MODULES:
-            src = Path(rel).read_text()
+            src = Path(rel).read_text(encoding="utf-8")
             for m in re.finditer(r"whisper_service\.transcribe\((?:[^()]|\([^()]*\))*\)", src):
                 if "on_download" not in m.group(0):
                     line = src[:m.start()].count("\n") + 1
@@ -270,7 +270,7 @@ class TestNoCallSiteCanGoSilentAgain:
         import ast
         offenders = []
         for rel in self.JOB_MODULES:
-            tree = ast.parse(Path(rel).read_text())
+            tree = ast.parse(Path(rel).read_text(encoding="utf-8"))
             for fn in ast.walk(tree):
                 if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     continue
@@ -284,7 +284,7 @@ class TestNoCallSiteCanGoSilentAgain:
                 # A use with no import at or above it inside this function, and
                 # none at module level, cannot resolve.
                 module_level = "\nfrom backend.services.whisper_service import" in \
-                    "\n".join(Path(rel).read_text().splitlines()[:40])
+                    "\n".join(Path(rel).read_text(encoding="utf-8").splitlines()[:40])
                 for u in uses:
                     if not module_level and not any(i < u for i in imports):
                         offenders.append(f"{rel}:{u} in {fn.name}()")
@@ -299,7 +299,7 @@ class TestNoCallSiteCanGoSilentAgain:
         for rel in Path("backend").rglob("*.py"):
             if rel.name == "whisper_service.py":
                 continue
-            src = rel.read_text()
+            src = rel.read_text(encoding="utf-8")
             if re.search(r"whisper_service\.load\(|whisper_service,\s*\"load\"", src):
                 offenders.append(str(rel))
         assert not offenders, f"call ensure_model() instead of load(): {offenders}"

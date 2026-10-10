@@ -42,7 +42,7 @@ def _backend_route_job_types() -> dict[str, set[str]]:
     them; the assertion below only requires the frontend's value to be one the
     handler can actually produce.
     """
-    tree = ast.parse(TOOLS_API.read_text())
+    tree = ast.parse(TOOLS_API.read_text(encoding="utf-8"))
     routes: dict[str, set[str]] = {}
     for node in ast.walk(tree):
         if not isinstance(node, (ast.AsyncFunctionDef, ast.FunctionDef)):
@@ -82,7 +82,7 @@ def _js_overrides() -> dict[str, str]:
     mentions job-type strings, and a comment-blind pattern happily matches those
     instead. The non-empty assertion catches a shape change.
     """
-    src = JOB_TYPE_JS.read_text()
+    src = JOB_TYPE_JS.read_text(encoding="utf-8")
     block = re.search(r"JOB_TYPE_OVERRIDES\s*=\s*\{(.*?)\n\}", src, re.S)
     assert block, "JOB_TYPE_OVERRIDES literal not found in toolJobType.js"
     pairs = {}
@@ -104,7 +104,7 @@ def _page_endpoints() -> set[str]:
     """Every `endpoint="/api/tools/…"` a page hands to ToolRunner."""
     found: set[str] = set()
     for f in FRONTEND_SRC.rglob("*.jsx"):
-        found.update(re.findall(r'endpoint="(/api/tools/[^"]+)"', f.read_text()))
+        found.update(re.findall(r'endpoint="(/api/tools/[^"]+)"', f.read_text(encoding="utf-8")))
     return found
 
 

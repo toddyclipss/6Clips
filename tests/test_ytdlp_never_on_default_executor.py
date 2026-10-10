@@ -32,7 +32,7 @@ def _runs_ytdlp(fn: ast.AST, helpers: set[str]) -> bool:
 
 
 def _offenders(path: Path) -> list[str]:
-    tree = ast.parse(path.read_text())
+    tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"))
     # Module-level sync helpers that run yt-dlp themselves.
     helpers = {
         n.name for n in tree.body

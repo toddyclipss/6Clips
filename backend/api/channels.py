@@ -53,6 +53,9 @@ async def list_channels(platform: str = Query(None), user_id: str = "local"):
                 "thumbnail_url": ch.thumbnail_url,
                 "subscriber_count": ch.subscriber_count,
                 "video_count": ch.video_count,
+                "auth_type": getattr(ch, "auth_type", "tracked_url") or "tracked_url",
+                "can_publish": bool(getattr(ch, "can_publish", False)),
+                "publish_account_identifier": getattr(ch, "publish_account_identifier", None),
             }
             for ch in channels
         ]

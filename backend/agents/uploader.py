@@ -78,14 +78,20 @@ class UploadAgent:
                 elif platform == "tiktok":
                     result = await self._upload_tiktok(video, user_settings)
                     uploaded.append("tiktok")
+                    deliv_status = result.get("status") or ("sent_to_inbox" if result.get("delivery_mode") == "inbox" else "uploaded")
                     await self._mark_platform_uploaded(
                         generated_video_id, "tiktok",
                         id_field="tiktok_publish_id", id_value=result.get("publish_id"),
+                        delivery_status=deliv_status,
                     )
                     await ws_manager.send({
                         "type": "upload_complete",
                         "platform": "tiktok",
                         "publish_id": result.get("publish_id"),
+                        "delivery_mode": result.get("delivery_mode", "direct"),
+                        "status": deliv_status,
+                        "requires_human_completion": result.get("requires_human_completion", False),
+                        "message": result.get("message", "Delivered to TikTok"),
                     }, user_id)
 
                 elif platform == "instagram":
@@ -94,6 +100,7 @@ class UploadAgent:
                     await self._mark_platform_uploaded(
                         generated_video_id, "instagram",
                         id_field="instagram_media_id", id_value=result.get("media_id"),
+                        delivery_status="uploaded",
                     )
                     await ws_manager.send({
                         "type": "upload_complete",
@@ -139,8 +146,9 @@ class UploadAgent:
 
     async def _mark_platform_uploaded(
         self, video_id: str, platform: str, id_field: str, id_value: str,
+        delivery_status: str = "uploaded",
     ):
-        """Update DB: set platform-specific ID, add to uploaded_platforms, mark as uploaded."""
+        """Update DB: set platform-specific ID, add to uploaded_platforms, mark as uploaded or sent_to_inbox."""
         async with AsyncSessionLocal() as db:
             db_result = await db.execute(
                 select(GeneratedVideo).where(GeneratedVideo.id == video_id)
@@ -151,11 +159,16 @@ class UploadAgent:
                 return
             if id_field and id_value:
                 setattr(v, id_field, id_value)
+            if platform == "tiktok":
+                v.tiktok_delivery_status = delivery_status
             existing = safe_json_loads(v.uploaded_platforms_json, [], logger)
             if platform not in existing:
                 existing.append(platform)
             v.uploaded_platforms_json = json.dumps(existing)
-            v.status = "uploaded"
+            if delivery_status == "sent_to_inbox" and v.status != "uploaded":
+                v.status = "sent_to_inbox"
+            else:
+                v.status = "uploaded"
             await db.commit()
 
     async def _upload_youtube(self, video: GeneratedVideo, user_settings) -> dict:

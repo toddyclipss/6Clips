@@ -48,7 +48,7 @@ def _edge_recommended() -> dict[str, str]:
     ("pages/tools/Translate.jsx", "DUB_VOICES"),
 ])
 def test_every_offered_edge_voice_exists_in_the_engine(page, const):
-    offered = _voice_ids((FRONTEND / page).read_text(), const)
+    offered = _voice_ids((FRONTEND / page).read_text(encoding="utf-8"), const)
     real = set(_edge_recommended())
     assert offered, f"{const} parsed empty — the test, not the app, is broken"
     assert offered <= real, (
@@ -63,7 +63,7 @@ def test_every_offered_edge_voice_exists_in_the_engine(page, const):
 def test_the_offered_edge_names_match_the_engines_own(page, const):
     """A name that differs makes the voice RENAME ITSELF under the user the
     moment the live list loads. Four of six had drifted."""
-    text = (FRONTEND / page).read_text()
+    text = (FRONTEND / page).read_text(encoding="utf-8")
     start = text.index(f"const {const} = [")
     body = text[start:text.index("\n]", start)]
     real = _edge_recommended()
@@ -90,7 +90,7 @@ def test_the_openai_fallback_is_a_real_subset():
 
     real = {v["voice_id"] for v in asyncio.run(list_voices(TTSProvider.OPENAI_TTS))}
     offered = _voice_ids(
-        (FRONTEND / "pages/tools/Voiceover.jsx").read_text(), "FALLBACK_OPENAI_VOICES")
+        (FRONTEND / "pages/tools/Voiceover.jsx").read_text(encoding="utf-8"), "FALLBACK_OPENAI_VOICES")
     assert offered, "FALLBACK_OPENAI_VOICES parsed empty"
     assert offered <= real, (
         f"offline OpenAI voices the API will reject: {sorted(offered - real)}"

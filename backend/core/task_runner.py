@@ -1698,15 +1698,20 @@ async def run_studio_author(job_id: str, brief: dict, user_id: str = "local", **
 
 async def run_studio_render(job_id: str, aspect_ratio: str = "9:16",
                             title: str | None = None,
-                            supersample: bool | None = None, **kwargs):
-    """Render the live studio composition to MP4 and land it in the Library.
+                            supersample: bool | None = None,
+                            project_id: str | None = None,
+                            project_revision: int | None = None,
+                            project_dir: str | None = None,
+                            user_id: str = "local",
+                            **kwargs):
+    """Render the studio composition to MP4 and land it in the Library.
 
-    Holds the studio's author lock for the render itself: index.html is a
-    single mutable file, and a composition swapped in halfway through a render
-    produces a video that is half one piece and half another.
+    If project_dir or project_id is given, renders from an immutable isolated
+    staging directory rather than the shared global studio directory.
     """
     from uuid import uuid4
     from pathlib import Path
+    import shutil
     from backend.agents.job_helper import create_job, update_job_status, job_cancelled
     from backend.agents.generator_motion import MotionGeneratorAgent
     from backend.config import settings
@@ -1716,7 +1721,51 @@ async def run_studio_render(job_id: str, aspect_ratio: str = "9:16",
     from backend.services.studio_service import StudioService
     from backend.services.video_utils import probe_duration
 
-    logger.info("TASK START studio-render | job=%s aspect=%s", job_id[:8], aspect_ratio)
+    # Resolve project_id, project_revision, and project_dir from job input if not explicitly passed
+    if not project_id or not project_dir:
+        try:
+            from backend.models.job import Job
+            from backend.database import AsyncSessionLocal
+            async with AsyncSessionLocal() as db:
+                j_row = await db.get(Job, job_id)
+                if j_row and j_row.input_json:
+                    j_inp = json.loads(j_row.input_json)
+                    if not project_id:
+                        project_id = j_inp.get("project_id")
+                    if project_revision is None:
+                        project_revision = j_inp.get("project_revision")
+                    if not project_dir:
+                        project_dir = j_inp.get("project_dir")
+                    if j_inp.get("aspect_ratio"):
+                        aspect_ratio = j_inp["aspect_ratio"]
+        except Exception:
+            pass
+
+    isolated_cleanup = False
+    render_dir = None
+    if project_dir and Path(project_dir).is_dir():
+        render_dir = Path(project_dir)
+        isolated_cleanup = True
+    elif project_id:
+        from backend.services.hyperframes_adapter import HyperFramesAdapter
+        frozen_rev, staged_dir = await HyperFramesAdapter.stage_project_for_render(project_id, revision=project_revision)
+        render_dir = staged_dir
+        project_revision = frozen_rev
+        isolated_cleanup = True
+    else:
+        render_dir = StudioService.project_dir()
+
+    # Canonical aspect ratio from metadata if present
+    meta_file = render_dir / "project_meta.json"
+    if meta_file.is_file():
+        try:
+            p_meta = json.loads(meta_file.read_text())
+            if p_meta.get("aspect_ratio"):
+                aspect_ratio = p_meta["aspect_ratio"]
+        except Exception:
+            pass
+
+    logger.info("TASK START studio-render | job=%s dir=%s aspect=%s", job_id[:8], render_dir.name, aspect_ratio)
     try:
         await update_job_status(job_id, "running", progress_pct=15,
                                 current_step="Rendering the composition")
@@ -1724,10 +1773,18 @@ async def run_studio_render(job_id: str, aspect_ratio: str = "9:16",
             raise JobCancelledError("Render cancelled before it started")
         out = settings.GENERATED_DIR / f"motion_{uuid4().hex[:12]}.mp4"
         out.parent.mkdir(parents=True, exist_ok=True)
-        async with StudioService._author_lock:
+
+        if render_dir == StudioService.project_dir():
+            async with StudioService._author_lock:
+                video = await MotionRenderService.render_project(
+                    render_dir, aspect_ratio, out_path=out, keep=True,
+                    supersample=supersample)
+        else:
+            # Isolated directory: completely safe from concurrent writes
             video = await MotionRenderService.render_project(
-                StudioService.project_dir(), aspect_ratio, out_path=out, keep=True,
+                render_dir, aspect_ratio, out_path=out, keep=True,
                 supersample=supersample)
+
         # A cancelled render must not land in the Library or overwrite
         # "cancelled" with "success" — check again now that the slow part is
         # done and before anything is persisted.
@@ -1738,12 +1795,33 @@ async def run_studio_render(job_id: str, aspect_ratio: str = "9:16",
                                 current_step="Saving to library")
         dur = await asyncio.to_thread(probe_duration, video, 0.0)
         thumb = await MotionGeneratorAgent._thumbnail(video)
+
+        # Collect lineage from staged assets manifest
+        parent_asset_ids = []
+        try:
+            manifest_file = render_dir / "assets_manifest.json"
+            if not manifest_file.is_file() and project_id:
+                manifest_file = StudioService.project_dir() / "assets_manifest.json"
+            if manifest_file.is_file():
+                manifest_data = json.loads(manifest_file.read_text())
+                for entry in manifest_data.values():
+                    aid = entry.get("asset_id")
+                    if aid and aid not in parent_asset_ids:
+                        parent_asset_ids.append(aid)
+        except Exception:
+            pass
+
         gen_id = await MotionGeneratorAgent._save(
-            user_id="local", title=(title or "Motion composition")[:120], variables={},
+            user_id=user_id or "local", title=(title or "Motion composition")[:120], variables={},
             niche=None, video_path=video, thumb_path=thumb, audio_path=None,
             aspect_ratio=aspect_ratio,
             duration_seconds=int(round(dur)) if dur else None,
-            script=None, caption_status=None)
+            script=None, caption_status=None,
+            project_id=project_id,
+            project_revision=project_revision,
+            operation="project_render" if project_id else "motion_render",
+            parent_asset_ids=parent_asset_ids,
+        )
         await update_job_status(job_id, "success", progress_pct=100, current_step="Done",
                                 output_data={"generated_video_id": gen_id,
                                              "source_type": "motion_graphics"})
@@ -1753,7 +1831,7 @@ async def run_studio_render(job_id: str, aspect_ratio: str = "9:16",
         await ws_manager.send({
             "type": "job_complete", "job_id": job_id, "job_type": "motion_render",
             "result": {"generated_video_id": gen_id, "source_type": "motion_graphics"},
-        }, "local")
+        }, user_id or "local")
         logger.info("TASK DONE  studio-render | job=%s gen=%s", job_id[:8], gen_id[:8])
     except Exception as e:
         from backend.core.exceptions import JobCancelledError as _JC
@@ -1766,7 +1844,16 @@ async def run_studio_render(job_id: str, aspect_ratio: str = "9:16",
         logger.error("TASK FAIL  studio-render | job=%s: %s", job_id[:8], e, exc_info=True)
         await _u(job_id, "failed", error_message=str(e))
         await _ws.send({"type": "job_failed", "job_id": job_id,
-                        "error": f"Motion render failed: {e}"}, "local")
+                        "error": f"Motion render failed: {e}"}, user_id or "local")
+    finally:
+        if isolated_cleanup and render_dir and render_dir.name.startswith("render_"):
+            try:
+                shutil.rmtree(render_dir, ignore_errors=True)
+            except Exception:
+                pass
+
+
+run_motion_render = run_studio_render
 
 
 def dispatch(coro):

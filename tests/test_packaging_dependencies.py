@@ -27,7 +27,7 @@ SPEC = ROOT / "desktop" / "scripts" / "viralmint.spec"
 
 def _requirement_names() -> set[str]:
     names = set()
-    for line in REQS.read_text().splitlines():
+    for line in REQS.read_text(encoding="utf-8").splitlines():
         line = line.split("#")[0].strip()
         if not line:
             continue
@@ -41,7 +41,7 @@ def test_every_collect_all_in_the_spec_is_a_real_requirement():
     """A `collect_all("x")` for a package nothing requires silently collects
     NOTHING — PyInstaller warns and carries on, and the binary ships without
     whatever x provided."""
-    spec = SPEC.read_text()
+    spec = SPEC.read_text(encoding="utf-8")
     collected = set(re.findall(r'collect_all\(\s*["\']([A-Za-z0-9._-]+)["\']', spec))
     # Names the spec collects from a loop variable rather than a literal are
     # listed in that loop; this checks the literal ones.
@@ -78,7 +78,7 @@ def test_the_moviepy_shim_went_with_moviepy():
     """backend/main.py monkeypatched Pillow's removed ANTIALIAS constants back
     on, solely for moviepy 1.0.3. Leaving a monkeypatch behind after its one
     consumer is gone is how a codebase accumulates rules nobody can explain."""
-    main = (ROOT / "backend" / "main.py").read_text()
+    main = (ROOT / "backend" / "main.py").read_text(encoding="utf-8")
     assert "ANTIALIAS" not in main
     assert "moviepy" not in main
 
@@ -87,7 +87,7 @@ def test_no_requirement_pins_a_version_below_its_documented_floor():
     """The two floors in this file that are safety decisions, not freshness:
     curl-cffi <0.15 SIGABRTs the whole process on concurrent TikTok probes,
     and an unbounded yt-dlp resolves to an ancient build on an old Python."""
-    text = REQS.read_text()
+    text = REQS.read_text(encoding="utf-8")
     m = re.search(r"^curl-cffi>=(\d+)\.(\d+)", text, re.M)
     assert m, "the curl-cffi floor is gone"
     assert (int(m.group(1)), int(m.group(2))) >= (0, 15), (

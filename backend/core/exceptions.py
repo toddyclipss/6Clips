@@ -176,3 +176,78 @@ class HyperFramesNotInstalledError(MotionGraphicsError):
 
 class MotionRenderError(MotionGraphicsError):
     """A render was attempted and did not produce a usable MP4."""
+
+
+# ── Project versioning & execution errors ─────────────────────────────────────
+class ProjectError(ViralMintError):
+    """Base for project document and versioning errors."""
+    pass
+
+
+class ProjectNotFoundError(ProjectError):
+    """Requested project does not exist."""
+    pass
+
+
+class RevisionConflictError(ProjectError):
+    """Optimistic concurrency conflict when applying an operation to a project."""
+    def __init__(self, current_revision: int, expected_revision: int, message: str = None):
+        self.current_revision = current_revision
+        self.expected_revision = expected_revision
+        msg = message or f"Conflict: project is at revision {current_revision}, but operation expected revision {expected_revision}."
+        super().__init__(msg)
+
+
+class IdempotencyConflictError(ProjectError):
+    """Raised when an idempotency key is reused with a different operation type, mismatched payload, or incompatible revision scope."""
+    def __init__(self, message: str, existing_revision: int = None, expected_revision: int = None):
+        self.existing_revision = existing_revision
+        self.expected_revision = expected_revision
+        super().__init__(message)
+
+
+class AssetError(ProjectError, ValueError):
+    """Base error for media asset resolution, ownership scope, and type compatibility."""
+    pass
+
+
+class AssetNotFoundError(AssetError):
+    """Raised when an asset record or its physical media file is missing."""
+    pass
+
+
+class AssetAccessError(AssetError, PermissionError):
+    """Raised when an asset is outside authorized project or user scope."""
+    pass
+
+
+class AssetTypeMismatchError(AssetError, TypeError):
+    """Raised when an asset's media type does not match the expected track or variable type."""
+    pass
+
+
+class InvalidAssetReferenceError(AssetError):
+    """Raised when an asset identifier contains path traversal, directory injection, or illegal characters."""
+    pass
+
+
+class CapabilityPreconditionError(ViralMintError):
+    """Preconditions for executing a capability are not met."""
+    pass
+
+
+class AuthorizationRequiredError(ViralMintError):
+    """Execution blocked because action requires explicit user authorization."""
+    pass
+
+
+class CapabilityExecutionError(ViralMintError):
+    """Capability execution failed or unsupported."""
+    pass
+
+
+class VerificationError(ViralMintError):
+    """Verification of an execution step output failed."""
+    pass
+
+
