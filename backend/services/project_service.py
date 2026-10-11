@@ -81,6 +81,11 @@ class ProjectService:
         timeline.setdefault("duration_seconds", 0.0)
         tracks = timeline.setdefault("tracks", [])
         for t in tracks:
+            t.setdefault("visible", True)
+            t.setdefault("locked", False)
+            t.setdefault("muted", False)
+            t.setdefault("solo", False)
+            t.setdefault("collapsed", False)
             for idx, c in enumerate(t.get("clips", [])):
                 c.setdefault("visible", True)
                 c.setdefault("locked", False)
@@ -596,7 +601,9 @@ class ProjectService:
 
         elif operation_type == "update_clip":
             clip_id = payload.get("clip_id")
-            patch = payload.get("patch", {})
+            patch = payload.get("patch")
+            if patch is None or not isinstance(patch, dict):
+                patch = {k: v for k, v in payload.items() if k != "clip_id"}
             c, _ = cls._find_clip_and_track(tracks, clip_id)
             if not c:
                 raise ProjectError(f"Clip '{clip_id}' not found in project document.")
@@ -777,8 +784,26 @@ class ProjectService:
             if new_track_id and new_track_id != source_track.get("id"):
                 dest_track = next((t for t in tracks if t.get("id") == new_track_id), None)
                 if not dest_track:
-                    dest_track = {"id": new_track_id, "type": source_track.get("type", "video"), "name": new_track_id, "clips": []}
-                    tracks.append(dest_track)
+                    raise ProjectError(f"Destination track '{new_track_id}' not found in project document.")
+                if dest_track.get("locked"):
+                    raise ProjectError(f"Cannot move clip '{clip_id}' to locked track '{new_track_id}'.")
+
+                # Validate media/type compatibility between clip and destination track
+                dest_type = dest_track.get("type", "video").lower()
+                c_type = (found_clip.get("type") or "").lower()
+                is_audio_clip = c_type == "audio" or bool(found_clip.get("audio_file"))
+                is_caption_clip = c_type in ("captions", "caption") or bool(found_clip.get("caption_text"))
+                is_block_clip = c_type == "block" or bool(found_clip.get("block_id"))
+
+                if is_audio_clip and dest_type != "audio":
+                    raise ProjectError(f"Cannot move audio clip '{clip_id}' to non-audio track '{new_track_id}' ({dest_type}).")
+                if not is_audio_clip and dest_type == "audio":
+                    raise ProjectError(f"Cannot move non-audio clip '{clip_id}' ({c_type or 'video'}) to audio track '{new_track_id}'.")
+                if is_caption_clip and dest_type != "captions":
+                    raise ProjectError(f"Cannot move captions clip '{clip_id}' to non-captions track '{new_track_id}' ({dest_type}).")
+                if not is_caption_clip and dest_type == "captions":
+                    raise ProjectError(f"Cannot move non-captions clip '{clip_id}' ({c_type or 'video'}) to captions track '{new_track_id}'.")
+
                 source_track["clips"] = [c for c in source_track.get("clips", []) if c.get("id") != clip_id]
                 dest_track.setdefault("clips", []).append(found_clip)
 
@@ -1050,13 +1075,91 @@ class ProjectService:
                         c["parent_id"] = parent_of_group
             group_track["clips"] = [c for c in group_track.get("clips", []) if c.get("id") != group_id]
 
+        elif operation_type == "add_track":
+            raw_type = str(payload.get("type") or payload.get("track_type") or "video").lower().strip()
+            type_aliases = {"components": "graphics", "image": "video"}
+            t_type = type_aliases.get(raw_type, raw_type)
+            if t_type not in ("video", "audio", "captions", "graphics"):
+                raise ProjectError(f"Invalid track type '{raw_type}'. Allowed types: video, audio, captions, graphics.")
+
+            track_id = str(payload.get("track_id") or f"track_{t_type}_{uuid4().hex[:6]}").strip()
+            if any(t.get("id") == track_id for t in tracks):
+                raise ProjectError(f"Track ID '{track_id}' already exists in project document.")
+
+            same_type_count = sum(1 for t in tracks if t.get("type") == t_type)
+            name = str(payload.get("name") or payload.get("title") or f"{t_type.title()} Track {same_type_count + 1}").strip()
+
+            new_track = {
+                "id": track_id,
+                "type": t_type,
+                "name": name,
+                "muted": False,
+                "locked": False,
+                "visible": True,
+                "solo": False,
+                "collapsed": False,
+                "clips": [],
+            }
+
+            insert_index = payload.get("insert_index")
+            if insert_index is not None and isinstance(insert_index, int) and 0 <= insert_index <= len(tracks):
+                tracks.insert(insert_index, new_track)
+            else:
+                tracks.append(new_track)
+
+        elif operation_type == "delete_track":
+            track_id = str(payload.get("track_id") or "").strip()
+            if not track_id:
+                raise ProjectError("Missing 'track_id' in delete_track operation.")
+            if track_id == "track_video_main":
+                raise ProjectError(f"Cannot delete protected base track '{track_id}'.")
+
+            target_track = next((t for t in tracks if t.get("id") == track_id), None)
+            if not target_track:
+                raise ProjectError(f"Track '{track_id}' not found in project document.")
+            if target_track.get("locked"):
+                raise ProjectError(f"Cannot delete locked track '{track_id}'. Unlock the track first.")
+
+            clips_in_track = target_track.get("clips", [])
+            if clips_in_track:
+                if not payload.get("force", False):
+                    raise ProjectError(f"Cannot delete track '{track_id}' containing active clips. Remove clips first or set force=True.")
+                locked_c = next((c for c in clips_in_track if c.get("locked")), None)
+                if locked_c:
+                    raise ProjectError(f"Cannot delete track '{track_id}' because clip '{locked_c.get('id')}' is locked.")
+
+            timeline["tracks"] = [t for t in tracks if t.get("id") != track_id]
+
+        elif operation_type == "reorder_tracks":
+            track_ids = payload.get("track_ids")
+            if not isinstance(track_ids, list):
+                raise ProjectError("reorder_tracks requires 'track_ids' list.")
+            existing_ids = [t.get("id") for t in tracks]
+            if len(track_ids) != len(existing_ids) or set(track_ids) != set(existing_ids):
+                raise ProjectError("reorder_tracks 'track_ids' must include all existing track IDs without duplicates or missing IDs.")
+
+            track_map = {t.get("id"): t for t in tracks}
+            timeline["tracks"] = [track_map[tid] for tid in track_ids]
+
+        elif operation_type == "rename_track":
+            track_id = payload.get("track_id")
+            name = str(payload.get("name") or "").strip()
+            if not name:
+                raise ProjectError("Track name cannot be empty.")
+            target_track = next((t for t in tracks if t.get("id") == track_id), None)
+            if not target_track:
+                raise ProjectError(f"Track '{track_id}' not found in project document.")
+            if target_track.get("locked"):
+                raise ProjectError(f"Cannot rename locked track '{track_id}'. Unlock the track first.")
+            target_track["name"] = name
+
         elif operation_type == "update_track_state":
             track_id = payload.get("track_id")
             patch = payload.get("patch") or {}
             target_track = next((t for t in tracks if t.get("id") == track_id), None)
             if not target_track:
                 raise ProjectError(f"Track '{track_id}' not found in project document.")
-            for key in ("muted", "locked", "visible", "collapsed", "name"):
+            for key in ("muted", "locked", "visible", "collapsed", "name", "solo"):
                 if key in patch:
                     target_track[key] = patch[key]
 

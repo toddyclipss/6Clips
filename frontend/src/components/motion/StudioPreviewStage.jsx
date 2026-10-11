@@ -150,6 +150,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
 
   return (
     <Box
+      data-testid="studio-preview-stage"
       sx={{
         width: "100%",
         height: "100%",

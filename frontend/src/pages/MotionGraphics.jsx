@@ -4,9 +4,13 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import {
   Box, Stack, Typography, CircularProgress, useTheme,
-  Button, Alert, Snackbar,
+  Button, Alert, Snackbar, IconButton, Tooltip,
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
 } from "@mui/material"
+import {
+  IconLayoutSidebarLeftExpand,
+  IconLayoutSidebarRightExpand,
+} from "@tabler/icons-react"
 import useDocumentTitle from "../hooks/useDocumentTitle"
 import useAppStore from "../store/appStore"
 import http from "../api/http"
@@ -68,6 +72,7 @@ export default function MotionGraphics() {
   // Pinned panels control
   const [pinnedLeft, setPinnedLeft] = useState(true)
   const [pinnedRight, setPinnedRight] = useState(true)
+  const [expandedPreview, setExpandedPreview] = useState(false)
 
   // Selection & playback
   const previewStageRef = useRef(null)
@@ -415,42 +420,46 @@ export default function MotionGraphics() {
     }
   }
 
-  // 5. Add Media to Timeline
-  const handleAddMedia = (asset) => {
-    if (!document) return
-    const timeline = document.timeline || { tracks: [] }
-    const tracks = [...(timeline.tracks || [])]
-    let videoTrack = tracks.find((t) => t.type === "video")
-    if (!videoTrack) {
-      videoTrack = { id: "track_video_main", type: "video", name: "Video Track", clips: [] }
-      tracks.push(videoTrack)
+  // 5. Add Media to Timeline via atomic operation
+  const handleAddMedia = async (asset) => {
+    if (!project || !document) return
+    const tracks = document.timeline?.tracks || []
+    const filename = (asset.filename || asset.title || "").toLowerCase()
+    const isAudio = asset.media_type === "audio" || filename.endsWith(".mp3") || filename.endsWith(".wav") || filename.endsWith(".aac")
+    const mType = isAudio ? "audio" : "video"
+
+    let targetTrack = null
+    if (isAudio) {
+      targetTrack = tracks.find((t) => t.type === "audio")
+      if (!targetTrack) {
+        const addRes = await handleApplyOperation("add_track", { type: "audio", name: "Audio Track" })
+        if (!addRes) return
+        targetTrack = (addRes.document?.timeline?.tracks || []).find((t) => t.type === "audio")
+      }
+    } else {
+      targetTrack = tracks.find((t) => t.type === "video") || tracks[0]
     }
 
-    const currentClips = videoTrack.clips || []
+    if (!targetTrack) return
+
+    const currentClips = targetTrack.clips || []
     const lastClip = currentClips[currentClips.length - 1]
     const startSec = lastClip ? Number(lastClip.start_seconds || 0) + Number(lastClip.duration_seconds || 5) : 0
 
     const newClip = {
       id: `clip_${Date.now()}`,
+      type: mType,
       asset_id: asset.id,
-      asset_file: asset.filename || asset.title || "media.mp4",
+      asset_file: asset.filename || asset.title || (isAudio ? "audio.mp3" : "media.mp4"),
+      title: asset.title || asset.filename || (isAudio ? "Audio Clip" : "Video Clip"),
       start_seconds: startSec,
       duration_seconds: asset.duration ? Math.min(asset.duration, 10) : 5,
     }
 
-    videoTrack.clips = [...currentClips, newClip]
-    const updatedDoc = {
-      ...document,
-      timeline: {
-        ...timeline,
-        tracks,
-        duration_seconds: Math.max(timeline.duration_seconds || 0, startSec + newClip.duration_seconds),
-      },
+    const res = await handleApplyOperation("add_clip", { track_id: targetTrack.id, clip: newClip })
+    if (res) {
+      showSnackbar(`Added ${newClip.title} to ${targetTrack.name} (Rev ${res.revision})`, "success")
     }
-
-    setDocument(updatedDoc)
-    setIsDirty(true)
-    showSnackbar(`Added ${newClip.asset_file} to timeline`, "info")
   }
 
   const handleApplyOperation = async (operation_type, payload, targetRevision = null) => {
@@ -664,6 +673,49 @@ export default function MotionGraphics() {
     const res = await handleApplyOperation("update_track_state", { track_id: trackId, patch })
     if (res) {
       showSnackbar(`Track updated (Rev ${res.revision})`, "info")
+    }
+  }
+
+  // 7g-2. Track CRUD operations
+  const handleAddTrack = async (type, name) => {
+    if (!project) return
+    const res = await handleApplyOperation("add_track", { type, name })
+    if (res) {
+      showSnackbar(`Added ${type} track (Rev ${res.revision})`, "success")
+    }
+  }
+
+  const handleDeleteTrack = async (trackId, force = false) => {
+    if (!project || !trackId) return
+    const res = await handleApplyOperation("delete_track", { track_id: trackId, force })
+    if (res) {
+      showSnackbar(`Track deleted (Rev ${res.revision})`, "info")
+    }
+  }
+
+  const handleReorderTracks = async (trackIds) => {
+    if (!project || !trackIds?.length) return
+    const res = await handleApplyOperation("reorder_tracks", { track_ids: trackIds })
+    if (res) {
+      showSnackbar(`Tracks reordered (Rev ${res.revision})`, "info")
+    }
+  }
+
+  const handleRenameTrack = async (trackId, name) => {
+    if (!project || !trackId || !name) return
+    const res = await handleApplyOperation("rename_track", { track_id: trackId, name })
+    if (res) {
+      showSnackbar(`Track renamed to "${name}" (Rev ${res.revision})`, "success")
+    }
+  }
+
+  const handleMoveClip = async (clipId, newTrackId, startSeconds) => {
+    if (!project || !clipId || !newTrackId) return
+    const payload = { clip_id: clipId, new_track_id: newTrackId }
+    if (startSeconds != null) payload.start_seconds = startSeconds
+    const res = await handleApplyOperation("move_clip", payload)
+    if (res) {
+      showSnackbar(`Clip moved to track (Rev ${res.revision})`, "success")
     }
   }
 
@@ -889,10 +941,44 @@ export default function MotionGraphics() {
         isRendering={isRendering}
         activeContext={activeContext}
         onSelectContext={setActiveContext}
+        pinnedLeft={pinnedLeft}
+        onToggleLeft={() => setPinnedLeft(!pinnedLeft)}
+        pinnedRight={pinnedRight}
+        onToggleRight={() => setPinnedRight(!pinnedRight)}
+        expandedPreview={expandedPreview}
+        onToggleExpandedPreview={() => setExpandedPreview(!expandedPreview)}
       />
 
       {/* 2. Main Studio Body */}
       <Box sx={{ flex: 1, display: "flex", minHeight: 0, overflow: "hidden" }}>
+        {/* Left: Collapsed Rail Indicator */}
+        {(workspaceMode === "refine" || workspaceMode === "create") && !pinnedLeft && (
+          <Box
+            sx={{
+              width: 24,
+              height: "100%",
+              bgcolor: "#ffffff",
+              borderRight: "1px solid",
+              borderColor: "divider",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              pt: 1,
+              zIndex: 2,
+            }}
+          >
+            <Tooltip title="Expand Left Panel" placement="right" arrow>
+              <IconButton
+                size="small"
+                onClick={() => setPinnedLeft(true)}
+                sx={{ width: 22, height: 22, color: "text.secondary" }}
+              >
+                <IconLayoutSidebarLeftExpand size={14} />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
+
         {/* Left: Layers or Sources / Assets / Catalog (Refine & Create modes) */}
         {(workspaceMode === "refine" || workspaceMode === "create") && pinnedLeft && (
           <Box sx={{ width: 280, minWidth: 260, maxWidth: 340, height: "100%", zIndex: 2, display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderRight: "1px solid", borderColor: "divider" }}>
@@ -973,7 +1059,7 @@ export default function MotionGraphics() {
         {/* Center: Stage & Contextual Workspace */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, height: "100%" }}>
           {/* Top: Central Video Preview Stage */}
-          <Box sx={{ flex: workspaceMode === "refine" ? "1 1 55%" : "1 1 100%", minHeight: 0 }}>
+          <Box sx={{ flex: workspaceMode === "refine" ? (expandedPreview ? "1 1 75%" : "1 1 55%") : "1 1 100%", minHeight: expandedPreview ? 460 : 360, display: "flex", flexDirection: "column" }}>
             <StudioPreviewStage
               ref={previewStageRef}
               previewUrl={previewUrl}
@@ -993,7 +1079,7 @@ export default function MotionGraphics() {
 
           {/* Bottom: Contextual Workspace (Refine Mode) */}
           {workspaceMode === "refine" && (
-            <Box sx={{ height: 240, minHeight: 180, maxHeight: 320 }}>
+            <Box sx={{ flex: expandedPreview ? "0 0 160px" : "1 1 45%", minHeight: expandedPreview ? 140 : 220, display: "flex", flexDirection: "column", overflow: "hidden" }}>
               {activeContext === "hyperframes" && (
                 <StudioTimelineWorkspace
                   tracks={document?.timeline?.tracks || []}
@@ -1013,6 +1099,11 @@ export default function MotionGraphics() {
                   onUpdateKeyframe={handleUpdateKeyframe}
                   onRemoveKeyframe={handleRemoveKeyframe}
                   onToggleTrackState={handleToggleTrackState}
+                  onAddTrack={handleAddTrack}
+                  onDeleteTrack={handleDeleteTrack}
+                  onReorderTracks={handleReorderTracks}
+                  onRenameTrack={handleRenameTrack}
+                  onMoveClip={handleMoveClip}
                 />
               )}
 
@@ -1144,6 +1235,34 @@ export default function MotionGraphics() {
                 />
               )}
             </Box>
+          </Box>
+        )}
+
+        {/* Right: Collapsed Rail Indicator */}
+        {(workspaceMode === "refine" || workspaceMode === "review") && !pinnedRight && (
+          <Box
+            sx={{
+              width: 24,
+              height: "100%",
+              bgcolor: "#ffffff",
+              borderLeft: "1px solid",
+              borderColor: "divider",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              pt: 1,
+              zIndex: 2,
+            }}
+          >
+            <Tooltip title="Expand Inspector" placement="left" arrow>
+              <IconButton
+                size="small"
+                onClick={() => setPinnedRight(true)}
+                sx={{ width: 22, height: 22, color: "text.secondary" }}
+              >
+                <IconLayoutSidebarRightExpand size={14} />
+              </IconButton>
+            </Tooltip>
           </Box>
         )}
       </Box>

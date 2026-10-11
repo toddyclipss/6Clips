@@ -69,22 +69,65 @@ class HyperFramesAdapter:
                     parent = next((item for tr in tracks for item in tr.get("clips", []) if item.get("id") == pid), None)
                     pid = parent.get("parent_id") if parent else None
 
-        # Collect visible non-group clips
+        # Collect visible non-group clips with track association
         visible_clips = []
+        caption_track_order = {}
+        cap_order_idx = 0
         for t in tracks:
             t_type = t.get("type", "video")
+            tid = t.get("id")
+            if t_type == "captions":
+                caption_track_order[tid] = cap_order_idx
+                cap_order_idx += 1
             for c in t.get("clips", []):
                 cid = c.get("id") or "clip_elem"
                 if not clip_vis.get(cid, True):
                     continue
                 if c.get("type") == "group":
                     continue
-                visible_clips.append((t_type, c))
+                visible_clips.append((t_type, c, tid, t))
+
+        # Precalculate dynamic collision-free caption track stacking offsets
+        caption_track_offsets_bottom = {}
+        caption_track_offsets_top = {}
+        accum_bottom_px = 0
+        accum_top_px = 0
+        cap_avail_w = w * 0.8  # left: 10%, right: 10%
+        cap_tracks = [t for t in tracks if t.get("type") == "captions"]
+        for tr in cap_tracks:
+            tid = tr.get("id")
+            caption_track_offsets_bottom[tid] = accum_bottom_px
+            caption_track_offsets_top[tid] = accum_top_px
+            tr_clips = tr.get("clips", [])
+            max_clip_h = 0
+            for cc in tr_clips:
+                ctext = cc.get("caption_text") or cc.get("text") or ""
+                c_fs = cc.get("font_size")
+                has_custom_fs = c_fs is not None
+                c_fs_num = 32.0
+                if has_custom_fs:
+                    try:
+                        c_fs_num = float(c_fs)
+                    except (ValueError, TypeError):
+                        c_fs_num = 32.0
+                char_w = max(14.0, c_fs_num * 0.58)
+                chars_per_line = max(12, int(cap_avail_w / char_w))
+                raw_lines = ctext.split("\n") if "\n" in ctext else [ctext]
+                line_count = sum(max(1, (len(ln) + chars_per_line - 1) // chars_per_line) for ln in raw_lines) if ctext else 1
+                clip_h = (line_count * (c_fs_num * 1.25)) + 24
+                if clip_h > max_clip_h:
+                    max_clip_h = clip_h
+            if max_clip_h > 0 and (line_count > 1 or c_fs_num > 36):
+                track_offset = max(72, int(max_clip_h + 36))  # Dynamic clearance for multiline or large subtitles
+            else:
+                track_offset = 72  # Canonical baseline offset for standard single-line dialogue
+            accum_bottom_px += track_offset
+            accum_top_px += track_offset
 
         # Sort by layer_order ascending (lower rendered first, higher on top)
         visible_clips.sort(key=lambda item: int(item[1].get("layer_order", 0) or 0))
 
-        for t_type, c in visible_clips:
+        for t_type, c, track_id, tr_obj in visible_clips:
             cid = c.get("id") or "clip_elem"
             c_start = float(c.get("start_seconds", 0.0) or 0.0)
             c_dur = float(c.get("duration_seconds", 5.0) or 5.0)
@@ -96,25 +139,68 @@ class HyperFramesAdapter:
             custom_style = c.get("style") or ""
             fit_mode = c.get("fit") or "contain"
             z_style = f' style="z-index: {layer_order}; {custom_style}"'
+            is_muted = bool((tr_obj and tr_obj.get("muted")) or c.get("muted"))
 
             if c.get("type") == "block" or c.get("block_id"):
                 vars_val = c.get("variables") or {}
                 vars_json = json.dumps(vars_val).replace("'", "&#39;")
+                # User positioning, scaling and transforms
+                block_transforms = []
+                if c.get("offset_x") or c.get("offset_y"):
+                    ox = c.get("offset_x", 0)
+                    oy = c.get("offset_y", 0)
+                    ox_val = f"{ox}px" if isinstance(ox, (int, float)) else str(ox)
+                    oy_val = f"{oy}px" if isinstance(oy, (int, float)) else str(oy)
+                    block_transforms.append(f"translate({ox_val}, {oy_val})")
+                if c.get("scale") and c.get("scale") != 1:
+                    block_transforms.append(f"scale({c.get('scale')})")
+                init_kf_styles = []
+                for a in (c.get("animations") or []):
+                    if a.get("property") == "opacity" and float(a.get("time", 0.0) or 0.0) == 0.0:
+                        init_kf_styles.append(f"opacity: {a.get('value')}")
+                init_kf_str = (" " + "; ".join(init_kf_styles) + ";") if init_kf_styles else ""
+                block_transform_style = f"transform: {' '.join(block_transforms)};" if block_transforms else ""
+                block_z_style = f' style="z-index: {layer_order}; {block_transform_style}{init_kf_str} {custom_style}"'.strip()
                 elements_html.append(
-                    f'  <div data-hf-id="{cid}" id="{cid}" class="component-block"{z_style} data-composition-id="{cid}" data-composition-src="compositions/{cid}.html" data-start="{c_start}" data-duration="{c_dur}" data-variable-values=\'{vars_json}\'>'
+                    f'  <div data-hf-id="{cid}" id="{cid}" class="component-block"{block_z_style} data-composition-id="{cid}" data-composition-src="compositions/{cid}.html" data-start="{c_start}" data-duration="{c_dur}" data-variable-values=\'{vars_json}\'>'
                     f'<iframe class="subcomp-frame" src="compositions/{cid}.html" title="{cid}" loading="eager"></iframe></div>'
                 )
             elif t_type == "captions" or caption_text:
                 pos = c.get("position") or "bottom"
                 pos_class = f"caption-block caption-pos-{pos}"
+                cap_track_idx = caption_track_order.get(track_id, 0)
+
+                cap_extra_style = []
+                if cap_track_idx > 0 and pos == "bottom":
+                    offset_px = caption_track_offsets_bottom.get(track_id, cap_track_idx * 160)
+                    cap_extra_style.append(f"bottom: calc(20% + {offset_px}px)")
+                elif cap_track_idx > 0 and pos == "top":
+                    offset_px = caption_track_offsets_top.get(track_id, cap_track_idx * 160)
+                    cap_extra_style.append(f"top: calc(10% + {offset_px}px)")
+
+                if c.get("color"):
+                    cap_extra_style.append(f"color: {c.get('color')}")
+                if c.get("font_size"):
+                    fs = c.get("font_size")
+                    fs_val = f"{fs}px" if isinstance(fs, (int, float)) else str(fs)
+                    cap_extra_style.append(f"font-size: {fs_val}")
+                if c.get("offset_y"):
+                    oy = c.get("offset_y")
+                    oy_val = f"{oy}px" if isinstance(oy, (int, float)) else str(oy)
+                    cap_extra_style.append(f"transform: translateY({oy_val})")
+
+                cap_style_str = ("; ".join(cap_extra_style) + ";") if cap_extra_style else ""
+                cap_z_style = f' style="z-index: {layer_order}; {custom_style}; {cap_style_str}"'.strip()
+
                 elements_html.append(
-                    f'  <div data-hf-id="{cid}" id="{cid}" class="{pos_class}"{z_style} data-start="{c_start}" data-duration="{c_dur}">'
+                    f'  <div data-hf-id="{cid}" id="{cid}" class="{pos_class}"{cap_z_style} data-start="{c_start}" data-duration="{c_dur}">'
                     f'<span>{caption_text}</span></div>'
                 )
             elif t_type == "audio":
                 src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
+                muted_attr = ' muted data-muted="true" data-hidden="true" data-volume="0"' if is_muted else ' data-volume="1"'
                 elements_html.append(
-                    f'  <audio data-hf-id="{cid}" id="{cid}"{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}"></audio>'
+                    f'  <audio data-hf-id="{cid}" id="{cid}"{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}"{muted_attr}></audio>'
                 )
             elif t_type == "image" or c.get("type") == "image":
                 src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
@@ -127,8 +213,9 @@ class HyperFramesAdapter:
                 src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
                 obj_pos = c.get("object_position") or c.get("crop_position") or "center center"
                 combined_style = f'style="z-index: {layer_order}; object-fit: {fit_mode}; object-position: {obj_pos}; {custom_style}"'.strip()
+                muted_attr = ' muted' if (is_muted or True) else ''  # videos default to muted
                 elements_html.append(
-                    f'  <video data-hf-id="{cid}" id="{cid}" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}" data-trim-start="{trim_start}" data-trim-end="{trim_end}" playsinline webkit-playsinline muted preload="auto"></video>'
+                    f'  <video data-hf-id="{cid}" id="{cid}" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}" data-trim-start="{trim_start}" data-trim-end="{trim_end}" playsinline webkit-playsinline{muted_attr} preload="auto"></video>'
                 )
             else:
                 elements_html.append(
@@ -374,7 +461,7 @@ class HyperFramesAdapter:
         var master = getMasterTl();
         if (master && typeof master.seek === "function") {{
           master.pause();
-          master.seek(time);
+          master.seek(time, false);
         }}
 
         // 2. Child Subcomposition Iframes
@@ -391,7 +478,7 @@ class HyperFramesAdapter:
                 if (pEl) {{ pEl.style.visibility = "hidden"; }}
                 if (cTl && typeof cTl.seek === "function") {{
                   cTl.pause();
-                  cTl.seek(0);
+                  cTl.seek(0, false);
                 }}
                 try {{ if (f.contentWindow) f.contentWindow.postMessage({{ action: "seek", time: 0 }}, "*"); }} catch(e) {{}}
               }} else if (time >= start && time <= (start + dur)) {{
@@ -399,14 +486,14 @@ class HyperFramesAdapter:
                 var localTime = Math.max(0, Math.min(dur, time - start));
                 if (cTl && typeof cTl.seek === "function") {{
                   cTl.pause();
-                  cTl.seek(localTime);
+                  cTl.seek(localTime, false);
                 }}
                 try {{ if (f.contentWindow) f.contentWindow.postMessage({{ action: "seek", time: localTime }}, "*"); }} catch(e) {{}}
               }} else {{
                 if (pEl) {{ pEl.style.visibility = "hidden"; }}
                 if (cTl && typeof cTl.seek === "function") {{
                   cTl.pause();
-                  cTl.seek(dur);
+                  cTl.seek(dur, false);
                 }}
                 try {{ if (f.contentWindow) f.contentWindow.postMessage({{ action: "seek", time: dur }}, "*"); }} catch(e) {{}}
               }}
@@ -428,7 +515,9 @@ class HyperFramesAdapter:
               var trimStart = parseFloat(trimVal) || 0;
 
               m.playsInline = true;
-              if (isMuted) {{ m.muted = true; }}
+              if (isMuted || (typeof m.hasAttribute === "function" && m.hasAttribute("muted")) || ds.muted === "true") {{
+                m.muted = true;
+              }}
 
               var isActive = (time >= cStart && time < (cStart + cDur));
               if (isActive) {{
@@ -535,6 +624,10 @@ class HyperFramesAdapter:
         updateComposition(compTime, isPlaying, true);
         emitRuntimeState();
       }}
+
+      window.startPlayback = startPlayback;
+      window.pausePlayback = pausePlayback;
+      window.seekTo = seekTo;
 
       if (typeof document !== "undefined" && document.addEventListener) {{
         document.addEventListener("click", function(ev) {{

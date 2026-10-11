@@ -24,7 +24,7 @@ def test_vertical_composition_typography_adaptation(tmp_path: Path):
 
     content = staged_html.read_text(encoding="utf-8")
     assert "var LINE_MAX_WIDTH = 960;" in content
-    assert "width: 960px;" in content
+    assert "width: 800px;" in content
     assert "__adaptBlockGeometry" in content
     assert 'maxWidth = "100vw"' in content
 
@@ -240,6 +240,95 @@ async def test_chromium_computes_intended_media_object_fit():
         assert vid_contain_fit == "contain", f"Expected 'contain' on #vid_contain, got: {vid_contain_fit}"
         assert img_cover_fit == "cover", f"Expected 'cover' on #img_cover, got: {img_cover_fit}"
         assert img_contain_fit == "contain", f"Expected 'contain' on #img_contain, got: {img_contain_fit}"
+
+        await browser.close()
+
+
+@pytest.mark.asyncio
+async def test_no_duplicate_typography_and_word_wrapping(tmp_path: Path):
+    """Verify that portrait compositions render exactly ONE title instance with non-breaking words, zero duplicates, and 16:9 preserves native metrics."""
+    from playwright.async_api import async_playwright
+
+    dest_dir = tmp_path / "compositions"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1. Test canonical acceptance headline in 9:16 portrait
+    staged_portrait = RegistryAdapter.stage_block_instance(
+        block_name="weight-wave",
+        version_hash="c7e1d443c713d24c",
+        instance_id="test_ww_single_title",
+        dest_compositions_dir=dest_dir,
+        variables={"text": "PRESSURE MOVES THROUGH TYPE"},
+        aspect_ratio="9:16",
+        stage_dimensions=(1080, 1920),
+    )
+
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch(headless=True)
+        page = await browser.new_page(viewport={"width": 1080, "height": 1920})
+        await page.goto(f"file:///{staged_portrait.as_posix()}")
+        await page.wait_for_timeout(500)
+
+        rendered_text = await page.evaluate("document.getElementById('ww-line').innerText")
+        rendered_text_clean = " ".join(rendered_text.split())
+        assert rendered_text_clean == "PRESSURE MOVES THROUGH TYPE", f"Unexpected rendered text: {rendered_text}"
+
+        ch_count = await page.evaluate("document.querySelectorAll('.ww-ch').length")
+        assert ch_count == len("PRESSURE MOVES THROUGH TYPE"), f"Expected 27 characters, got {ch_count} (possible duplication)"
+
+        word_count = await page.evaluate("document.querySelectorAll('.ww-word').length")
+        assert word_count == 4, f"Expected 4 word containers, got {word_count}"
+
+        lines_by_y = await page.evaluate("""() => {
+            const words = Array.from(document.querySelectorAll('.ww-word'));
+            const yMap = {};
+            words.forEach(w => {
+                const top = Math.round(w.getBoundingClientRect().top);
+                if (!yMap[top]) yMap[top] = [];
+                yMap[top].push(w.innerText.trim());
+            });
+            return yMap;
+        }""")
+        y_keys = sorted([int(k) for k in lines_by_y.keys()])
+        assert len(y_keys) == 2, f"Expected exactly 2 lines in portrait, got {len(y_keys)}: {lines_by_y}"
+        assert lines_by_y[str(y_keys[0])] == ["PRESSURE", "MOVES"], f"Line 1 mismatch: {lines_by_y}"
+        assert lines_by_y[str(y_keys[1])] == ["THROUGH", "TYPE"], f"Line 2 mismatch: {lines_by_y}"
+
+        # 2. Test additional title string to prevent fixture-specific workaround
+        staged_second = RegistryAdapter.stage_block_instance(
+            block_name="weight-wave",
+            version_hash="c7e1d443c713d24c",
+            instance_id="test_ww_second_string",
+            dest_compositions_dir=dest_dir,
+            variables={"text": "DYNAMIC RESONANCE FREQUENCY"},
+            aspect_ratio="9:16",
+            stage_dimensions=(1080, 1920),
+        )
+        await page.goto(f"file:///{staged_second.as_posix()}")
+        await page.wait_for_timeout(500)
+
+        second_text = await page.evaluate("document.getElementById('ww-line').innerText")
+        assert " ".join(second_text.split()) == "DYNAMIC RESONANCE FREQUENCY"
+        second_ch_count = await page.evaluate("document.querySelectorAll('.ww-ch').length")
+        assert second_ch_count == len("DYNAMIC RESONANCE FREQUENCY")
+
+        # 3. Test 16:9 landscape regression
+        staged_landscape = RegistryAdapter.stage_block_instance(
+            block_name="weight-wave",
+            version_hash="c7e1d443c713d24c",
+            instance_id="test_ww_landscape_single",
+            dest_compositions_dir=dest_dir,
+            variables={"text": "PRESSURE MOVES THROUGH TYPE"},
+            aspect_ratio="16:9",
+            stage_dimensions=(1920, 1080),
+        )
+        await page.goto(f"file:///{staged_landscape.as_posix()}")
+        await page.wait_for_timeout(500)
+
+        land_text = await page.evaluate("document.getElementById('ww-line').innerText")
+        assert " ".join(land_text.split()) == "PRESSURE MOVES THROUGH TYPE"
+        land_ch_count = await page.evaluate("document.querySelectorAll('.ww-ch').length")
+        assert land_ch_count == len("PRESSURE MOVES THROUGH TYPE")
 
         await browser.close()
 

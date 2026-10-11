@@ -216,7 +216,7 @@ async def get_project_preview(project_id: str, revision: Optional[int] = None):
         content = content.replace('src="assets/', f'src="/api/projects/{project_id}/preview/assets/')
         content = content.replace('src="compositions/', f'src="/api/projects/{project_id}/preview/compositions/')
         content = content.replace('data-composition-src="compositions/', f'data-composition-src="/api/projects/{project_id}/preview/compositions/')
-        return HTMLResponse(content, headers={"Cache-Control": "no-cache"})
+        return HTMLResponse(content, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache"})
     except ProjectNotFoundError:
         raise HTTPException(status_code=404, detail="Project not found")
     except Exception as e:
@@ -233,7 +233,7 @@ async def get_project_preview_asset(project_id: str, filename: str):
     asset_path = (proj_dir / "assets" / filename).resolve()
     if not asset_path.is_file() or not asset_path.is_relative_to((proj_dir / "assets").resolve()):
         raise HTTPException(status_code=404, detail="Asset not found")
-    return FileResponse(asset_path)
+    return FileResponse(asset_path, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache"})
 
 
 @router.get("/{project_id}/preview/compositions/{filename:path}")
@@ -249,8 +249,8 @@ async def get_project_preview_composition(project_id: str, filename: str):
         html_text = comp_path.read_text(encoding="utf-8")
         html_text = html_text.replace('src="assets/', f'src="/api/projects/{project_id}/preview/compositions/assets/')
         html_text = html_text.replace('url("assets/', f'url("/api/projects/{project_id}/preview/compositions/assets/')
-        return HTMLResponse(html_text)
-    return FileResponse(comp_path)
+        return HTMLResponse(html_text, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache"})
+    return FileResponse(comp_path, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache"})
 
 
 @router.get("/catalog/items")

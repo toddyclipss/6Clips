@@ -362,15 +362,94 @@ class RegistryAdapter:
         is_vertical = (aspect_ratio == "9:16") or (stage_w < stage_h)
 
         if is_vertical:
-            # Adapt hardcoded 1920 canvas coordinates to vertical stage (1080px width)
+            # Adapt hardcoded 1920 canvas coordinates to vertical stage (1080px width x 1920px height)
             # Available width with safe margins: 1080 - 120 = 960px
             max_line_w = max(400, stage_w - 120)
+            target_center_y = int(round(stage_h * 0.302))  # Y ~ 580px
+            elevate_y = target_center_y - (stage_h // 2)   # -380px in 1920h
             html_content = re.sub(r'var LINE_MAX_WIDTH\s*=\s*\d+;', f'var LINE_MAX_WIDTH = {max_line_w};', html_content)
             html_content = re.sub(r'width:\s*1760px;', f'width: {max_line_w}px;', html_content)
             html_content = re.sub(r'width:\s*1920px;', f'width: {stage_w}px;', html_content)
+            html_content = re.sub(r'height:\s*1080px;', f'height: {stage_h}px;', html_content)
             html_content = re.sub(r'data-width="1920"', f'data-width="{stage_w}"', html_content)
+            html_content = re.sub(r'data-height="1080"', f'data-height="{stage_h}"', html_content)
 
-        # 3. Inject responsive viewport and variable overrides
+            # Static CSS rewriting for headless HyperFrames render compiler:
+            # 1. Update #ww-line static CSS cleanly replacing font-size, line-height, width and white-space
+            clean_ww_line_css = f"""#ww-line {{
+        display: block;
+        width: 800px;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        white-space: pre-wrap;
+        word-break: normal;
+        overflow-wrap: normal;
+        font-family: "Recursive Wave", sans-serif;
+        font-size: 72px;
+        line-height: 1.2;
+        letter-spacing: 0.005em;
+        color: var(--color, #f5f5f7);
+        font-variation-settings:
+          "wght" 400,
+          "slnt" 0;
+      }}"""
+            html_content = re.sub(
+                r'#ww-line\s*\{[^}]+?font-variation-settings:[^}]+?\}',
+                clean_ww_line_css,
+                html_content
+            )
+
+            # 2. Update #ww-stage static CSS to place headline in upper focal zone (Y ~ 580px)
+            html_content = re.sub(
+                r'(#ww-stage\s*\{[^}]*?justify-content:\s*center;)',
+                r'\1\n        transform: translateY(' + str(elevate_y) + 'px);',
+                html_content
+            )
+
+            # 3. Prevent mid-word splitting & group text into non-breaking words without duplicating elements:
+            span_replacement_pattern = r'var chars = Array\.prototype\.slice\.call\(TEXT\);[\s\S]*?var N = spans\.length;'
+            new_span_create = '''var chars = Array.prototype.slice.call(TEXT);
+          var spans = [];
+          line.innerHTML = "";
+          var currentWord = null;
+          for (var ci = 0; ci < chars.length; ci++) {
+            var ch = chars[ci];
+            if (ch.charCodeAt(0) === 10 || ch.charCodeAt(0) === 13) {
+              currentWord = null;
+              var br = document.createElement("br");
+              line.appendChild(br);
+            } else if (ch === " " || ch.charCodeAt(0) === 9) {
+              currentWord = null;
+              var spaceEl = document.createElement("span");
+              spaceEl.className = "ww-ch";
+              spaceEl.textContent = ch;
+              line.appendChild(spaceEl);
+              spans.push(spaceEl);
+            } else {
+              if (!currentWord) {
+                currentWord = document.createElement("span");
+                currentWord.className = "ww-word";
+                currentWord.style.display = "inline-block";
+                currentWord.style.whiteSpace = "nowrap";
+                line.appendChild(currentWord);
+              }
+              var charEl = document.createElement("span");
+              charEl.className = "ww-ch";
+              charEl.textContent = ch;
+              currentWord.appendChild(charEl);
+              spans.push(charEl);
+            }
+          }
+          var N = spans.length;'''
+            html_content = re.sub(span_replacement_pattern, lambda _: new_span_create, html_content, count=1)
+
+            # 4. In vertical mode, pin font size to 72px rather than single-line shrink-down
+            html_content = re.sub(
+                r'line\.style\.fontSize\s*=\s*fontSize\s*\+\s*"px";',
+                f'line.style.fontSize = "72px"; line.style.lineHeight = "1.2"; line.style.whiteSpace = "pre-wrap"; line.style.width = "800px";',
+                html_content
+            )
         vars_dict = variables or {}
         vars_json = json.dumps(vars_dict)
 
@@ -412,48 +491,107 @@ class RegistryAdapter:
       var stageW = {stage_w};
       var stageH = {stage_h};
 
-      // Ensure root containers adapt to actual parent iframe size
+      // Ensure root containers adapt to actual stage dimensions
+      if (document.documentElement) {{
+        document.documentElement.style.width = stageW + "px";
+        document.documentElement.style.height = stageH + "px";
+        document.documentElement.style.margin = "0";
+        document.documentElement.style.padding = "0";
+        document.documentElement.style.overflow = "hidden";
+      }}
       if (document.body) {{
-        document.body.style.width = "100%";
-        document.body.style.maxWidth = "100vw";
+        document.body.style.width = stageW + "px";
+        document.body.style.height = stageH + "px";
+        document.body.style.margin = "0";
+        document.body.style.padding = "0";
+        document.body.style.overflow = "hidden";
       }}
       var rootEl = document.getElementById("ww-root") || document.getElementById("lb-root") || document.querySelector("[data-composition-id]");
       if (rootEl) {{
-        rootEl.style.width = "100%";
+        rootEl.style.width = stageW + "px";
+        rootEl.style.height = stageH + "px";
         rootEl.style.maxWidth = "100vw";
+        rootEl.style.maxHeight = "100vh";
+        rootEl.style.position = "relative";
+        rootEl.style.overflow = "hidden";
       }}
 
       // Specific adaptation for weight-wave kinetic typography in vertical / narrow compositions
+      var wwStage = document.getElementById("ww-stage");
       var wwLine = document.getElementById("ww-line");
       if (wwLine) {{
-        var maxW = Math.min(1760, stageW - 80);
-        wwLine.style.width = maxW + "px";
-        wwLine.style.maxWidth = "calc(100vw - 80px)";
-        wwLine.style.margin = "0 auto";
-        wwLine.style.textAlign = "center";
-        wwLine.style.wordBreak = "break-word";
+        if (isVert) {{
+          var maxW = Math.min(800, stageW - 120);
+          wwLine.style.width = maxW + "px";
+          wwLine.style.maxWidth = "calc(100vw - 120px)";
+          wwLine.style.margin = "0 auto";
+          wwLine.style.textAlign = "center";
+          wwLine.style.whiteSpace = "pre-wrap";
+          wwLine.style.wordBreak = "normal";
+          wwLine.style.overflowWrap = "normal";
+          wwLine.style.lineHeight = "1.2";
 
-        // If line is wider than maxW, scale down font-size proportionally
-        var currentFont = parseFloat(window.getComputedStyle(wwLine).fontSize);
-        if (currentFont && isVert) {{
-          // In 9:16 (1080px wide), ratio of available width (1000px) to native (1760px) is ~0.57
-          var scaleRatio = Math.min(1.0, maxW / 1760.0);
-          var fittedFont = Math.max(36, Math.floor(currentFont * scaleRatio));
-          wwLine.style.fontSize = fittedFont + "px";
+          // Prominent headline scale (72px) for 9:16 vertical canvas
+          wwLine.style.fontSize = "72px";
+
+          // Intentional placement in upper focal zone (Y ~ 580px, well above lower caption area)
+          if (wwStage) {{
+            wwStage.style.display = "flex";
+            wwStage.style.alignItems = "center";
+            wwStage.style.justifyContent = "center";
+            wwStage.style.paddingTop = "0";
+            // In 1920px height, center is at 960px; translateY(-380px) elevates center to Y = 580px
+            var targetCenterY = Math.round(stageH * 0.302);
+            var elevateY = targetCenterY - Math.round(stageH / 2);
+            wwStage.style.transform = "translateY(" + elevateY + "px)";
+          }}
+        }} else {{
+          wwLine.style.whiteSpace = "pre";
+          if (wwStage) {{
+            wwStage.style.transform = "";
+          }}
         }}
       }}
     }} catch(e) {{}}
   }}
 
   window.addEventListener("message", function(e) {{
-    if (!e.data || e.data.action !== "seek") return;
-    var t = e.data.time != null ? Number(e.data.time) : 0;
+    if (!e.data) return;
+    var a = e.data.action;
     var tls = window.__timelines || {{}};
-    var k = Object.keys(tls);
-    if (k.length && tls[k[0]] && typeof tls[k[0]].seek === "function") {{
-      tls[k[0]].seek(t);
-    }} else if (window.tl && typeof window.tl.seek === "function") {{
-      window.tl.seek(t);
+    var allKeys = Object.keys(tls);
+
+    if (a === "seek") {{
+      var t = e.data.time != null ? Number(e.data.time) : 0;
+      for (var i = 0; i < allKeys.length; i++) {{
+        var tlObj = tls[allKeys[i]];
+        if (tlObj && typeof tlObj.seek === "function") {{
+          tlObj.seek(t, false);
+        }}
+      }}
+      if (window.tl && typeof window.tl.seek === "function") {{
+        window.tl.seek(t, false);
+      }}
+    }} else if (a === "play") {{
+      for (var i = 0; i < allKeys.length; i++) {{
+        var tlObj = tls[allKeys[i]];
+        if (tlObj && typeof tlObj.play === "function") {{
+          tlObj.play();
+        }}
+      }}
+      if (window.tl && typeof window.tl.play === "function") {{
+        window.tl.play();
+      }}
+    }} else if (a === "pause") {{
+      for (var i = 0; i < allKeys.length; i++) {{
+        var tlObj = tls[allKeys[i]];
+        if (tlObj && typeof tlObj.pause === "function") {{
+          tlObj.pause();
+        }}
+      }}
+      if (window.tl && typeof window.tl.pause === "function") {{
+        window.tl.pause();
+      }}
     }}
   }});
 
@@ -479,7 +617,10 @@ class RegistryAdapter:
   (function() {{
     try {{
       window.__timelines = window.__timelines || {{}};
-      if (!window.__timelines["{instance_id}"] && typeof tl !== "undefined") {{
+      var allKeys = Object.keys(window.__timelines);
+      if (!window.__timelines["{instance_id}"] && allKeys.length > 0) {{
+        window.__timelines["{instance_id}"] = window.__timelines[allKeys[0]];
+      }} else if (!window.__timelines["{instance_id}"] && typeof tl !== "undefined") {{
         window.__timelines["{instance_id}"] = tl;
       }}
       window.parent.postMessage({{
