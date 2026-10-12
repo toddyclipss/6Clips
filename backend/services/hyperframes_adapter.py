@@ -131,12 +131,28 @@ class HyperFramesAdapter:
 
         for t_type, c, track_id, tr_obj in visible_clips:
             cid = c.get("id") or "clip_elem"
-            c_start = float(c.get("start_seconds", 0.0) or 0.0)
-            c_dur = float(c.get("duration_seconds", 5.0) or 5.0)
-            trim_start = float(c.get("trim_start", 0.0) or 0.0)
-            trim_end = float(c.get("trim_end", 0.0) or (trim_start + c_dur))
+            c_start = float(c.get("start_seconds") if c.get("start_seconds") is not None else (c.get("start_time") if c.get("start_time") is not None else 0.0))
+            c_dur = float(c.get("duration_seconds") if c.get("duration_seconds") is not None else (c.get("duration") if c.get("duration") is not None else 5.0))
+            trim_start = float(
+                c.get("trim_start")
+                if c.get("trim_start") is not None
+                else (
+                    c.get("trim_in")
+                    if c.get("trim_in") is not None
+                    else (c.get("source_in") if c.get("source_in") is not None else 0.0)
+                )
+            )
+            trim_end = float(
+                c.get("trim_end")
+                if c.get("trim_end") is not None
+                else (
+                    c.get("trim_out")
+                    if c.get("trim_out") is not None
+                    else (c.get("source_out") if c.get("source_out") is not None else (trim_start + c_dur))
+                )
+            )
             caption_text = c.get("caption_text") or c.get("text") or ""
-            asset_file = c.get("file") or c.get("asset_file") or ""
+            asset_file = c.get("file") or c.get("asset_file") or c.get("filename") or ""
             layer_order = int(c.get("layer_order", 0) or 0)
             custom_style = c.get("style") or ""
             fit_mode = c.get("fit") or "contain"

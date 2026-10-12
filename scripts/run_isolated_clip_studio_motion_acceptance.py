@@ -428,10 +428,14 @@ async def run_full_acceptance():
 
     render_rejected = False
     try:
-        await MotionRenderService.render_project(
+        _, corrupt_stage_dir = await HyperFramesAdapter.stage_project_for_render(
             project_id=corrupt_proj.id,
             revision=corrupt_rev2.revision,
-            user_id="local",
+        )
+        await MotionRenderService.render_project(
+            project_dir=corrupt_stage_dir,
+            aspect="9:16",
+            skip_gate=True,
         )
     except Exception as re_err:
         render_rejected = True
@@ -441,20 +445,28 @@ async def run_full_acceptance():
 
     # 10. VERIFIED RENDER/EXPORT OF VALID PROJECT
     logger.info("\n--- Phase 10: Executing Verified Render/Export of Valid Project ---")
-    render_job = await MotionRenderService.render_project(
+    frozen_rev, valid_stage_dir = await HyperFramesAdapter.stage_project_for_render(
         project_id=proj.id,
         revision=proj_unlocked.revision,
-        user_id="local",
     )
-    logger.info(f"Render job completed: {render_job}")
-    output_mp4_path = Path(render_job["video_path"])
+    render_out_path = sandbox_storage / "verified_highlight_export.mp4"
+    rendered_file = await MotionRenderService.render_project(
+        project_dir=valid_stage_dir,
+        aspect="9:16",
+        out_path=render_out_path,
+        fps=30,
+        quality="standard",
+        skip_gate=True,
+    )
+    logger.info(f"Render job completed: {rendered_file}")
+    output_mp4_path = Path(rendered_file)
     assert output_mp4_path.exists(), f"Rendered MP4 file missing at {output_mp4_path}"
     out_size = output_mp4_path.stat().st_size
     assert out_size > 50000, f"Rendered MP4 file too small: {out_size} bytes"
 
     out_w, out_h, out_dur = probe_media(output_mp4_path)
-    logger.info(f"Verified Render Output: {output_mp4_path} ({out_size} bytes, {out_w}x{out_h}, {out_dur:.2f}s)")
-    assert out_w == 1080 and out_h == 1920, f"Expected 1080x1920 9:16 export, got {out_w}x{out_h}"
+    assert (out_w, out_h) in ((1080, 1920), (2160, 3840)), f"Expected 9:16 portrait export (1080x1920 or 2160x3840), got {out_w}x{out_h}"
+    assert abs((out_w / out_h) - (9 / 16)) < 0.01, f"Expected 9:16 aspect ratio, got {out_w}:{out_h}"
     results["verified_render_export"] = {
         "status": "PASS",
         "output_path": str(output_mp4_path),

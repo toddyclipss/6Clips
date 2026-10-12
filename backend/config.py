@@ -137,6 +137,11 @@ class Settings(BaseSettings):
     # be reachable from that path.
     @property
     def MOTION_DIR(self) -> Path:
+        if (DATA_DIR / "motion" / "hyperframes").exists():
+            return DATA_DIR / "motion"
+        repo_motion = Path(__file__).resolve().parent.parent / "motion"
+        if (repo_motion / "hyperframes").exists():
+            return repo_motion
         return DATA_DIR / "motion"
 
     # Render motion pieces at 4x device-pixel ratio and let the encoder
