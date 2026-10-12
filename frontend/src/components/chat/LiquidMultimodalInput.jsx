@@ -29,10 +29,11 @@ const PROVIDER_NAMES = {
   openai: "OpenAI",
   anthropic: "Anthropic",
   openrouter: "OpenRouter",
+  ollama: "Ollama",
 }
 
 export function LiquidMultimodalInput({
-  placeholder = "Message ViralMint or describe a video...",
+  placeholder = "Message 6Clips or describe a video...",
   maxHeight = 200,
   accept = "image/*,video/*,text/*,application/pdf,.doc,.docx,.xls,.xlsx,.csv,.json",
   onSubmit,
@@ -74,9 +75,52 @@ export function LiquidMultimodalInput({
     })
   }
 
+  const { settings } = useSettings()
+  const [registry, setRegistry] = React.useState({})
+
+  React.useEffect(() => {
+    http
+      .get("/api/config/model_registry")
+      .then(({ data }) => setRegistry(data?.value || {}))
+      .catch(() => {})
+  }, [])
+
+  const currentProvider = settings?.ai_provider || "openai"
+  const defaultModel = registry[currentProvider]?.default_model || ""
+  const effectiveModel = settings?.ai_model || defaultModel
+  const modelMetadata = registry[currentProvider]?.model_metadata?.[effectiveModel] || registry.ollama?.model_metadata?.[effectiveModel]
+  const thinkingCap = modelMetadata?.thinking
+  const hasThinkingCapability = Boolean(thinkingCap && Array.isArray(thinkingCap.values) && thinkingCap.values.length > 1)
+
+  const [thinking, setThinking] = React.useState(() => {
+    const stored = typeof window !== "undefined" ? localStorage.getItem("viralmint_thinking_" + effectiveModel) : null
+    if (stored !== null) return stored === "true"
+    return thinkingCap?.default ?? true
+  })
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return
+    const stored = localStorage.getItem("viralmint_thinking_" + effectiveModel)
+    if (stored !== null) {
+      setThinking(stored === "true")
+    } else if (thinkingCap) {
+      setThinking(thinkingCap.default ?? true)
+    }
+  }, [effectiveModel, thinkingCap])
+
+  const toggleThinking = () => {
+    setThinking((prev) => {
+      const next = !prev
+      if (typeof window !== "undefined") {
+        localStorage.setItem("viralmint_thinking_" + effectiveModel, String(next))
+      }
+      return next
+    })
+  }
+
   function submit() {
     if ((!value.trim() && files.length === 0) || disabled) return
-    onSubmit?.(value, files.map((f) => f.file))
+    onSubmit?.(value, files.map((f) => f.file), hasThinkingCapability ? thinking : undefined)
     setValue("")
     files.forEach((f) => f.preview && URL.revokeObjectURL(f.preview))
     setFiles([])
@@ -333,7 +377,24 @@ export function LiquidMultimodalInput({
                 }}
               />
 
-              <ModelSelector />
+              <ModelSelector registry={registry} setRegistry={setRegistry} />
+
+              {hasThinkingCapability && (
+                <button
+                  type="button"
+                  onClick={toggleThinking}
+                  aria-label={`Thinking: ${thinking ? "On" : "Off"}`}
+                  className={cn(
+                    "inline-flex h-7 items-center gap-1 rounded-full px-2 text-[12px] font-medium transition-all duration-200 cursor-pointer select-none",
+                    thinking
+                      ? "bg-purple-500/15 text-purple-700 dark:bg-purple-400/20 dark:text-purple-300 border border-purple-500/30"
+                      : "bg-black/5 text-slate-500 dark:bg-white/5 dark:text-slate-400 border border-transparent hover:bg-black/10 dark:hover:bg-white/10"
+                  )}
+                >
+                  <IconBulb size={13} className={thinking ? "text-purple-600 dark:text-purple-400" : "text-slate-400"} />
+                  <span>Thinking: {thinking ? "On" : "Off"}</span>
+                </button>
+              )}
             </div>
 
             {/* Right controls: Submit button */}
@@ -385,9 +446,11 @@ export function LiquidMultimodalInput({
 
 /* ───────────────────────── Dynamic Model & Provider Selector ───────────────────────── */
 
-function ModelSelector() {
+function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistry }) {
   const [open, setOpen] = React.useState(false)
-  const [registry, setRegistry] = React.useState({})
+  const [localRegistry, setLocalRegistry] = React.useState({})
+  const registry = passedRegistry && Object.keys(passedRegistry).length > 0 ? passedRegistry : localRegistry
+  const setRegistry = passedSetRegistry || setLocalRegistry
   const [menuPosition, setMenuPosition] = React.useState(null)
   const wrapRef = React.useRef(null)
   const buttonRef = React.useRef(null)
@@ -400,23 +463,26 @@ function ModelSelector() {
   const provider = settings?.ai_provider || "openai"
   const model = settings?.ai_model || ""
 
-  // Load registry once
+  // Load registry if not passed
   React.useEffect(() => {
+    if (passedRegistry && Object.keys(passedRegistry).length > 0) return
     http
       .get("/api/config/model_registry")
       .then(({ data }) => setRegistry(data?.value || {}))
       .catch(() => {})
-  }, [])
+  }, [passedRegistry, setRegistry])
 
   const availableProviders = Object.keys(registry).length > 0
     ? Object.keys(registry)
-    : ["openai", "anthropic", "openrouter"]
+    : ["openai", "anthropic", "openrouter", "ollama"]
 
   const currentModels = registry[provider]?.models || [
     ...(provider === "openai"
       ? ["gpt-5.4-mini", "gpt-5.4", "gpt-5.5"]
       : provider === "anthropic"
       ? ["claude-haiku-4-5", "claude-sonnet-4-6", "claude-opus-4-7"]
+      : provider === "ollama"
+      ? ["gemma4:e4b"]
       : ["anthropic/claude-opus-4.7", "openai/gpt-5.5", "google/gemini-3.1-pro-preview"]),
   ]
   const defaultModel = registry[provider]?.default_model || currentModels[0] || ""
@@ -431,6 +497,7 @@ function ModelSelector() {
       .replace(/^claude-/, "Claude ")
       .replace(/^gpt-/, "GPT-")
       .replace(/^gemini-/, "Gemini ")
+      .replace(/^gemma4:/, "Gemma 4 ")
   }, [effectiveModel])
 
   const updateMenuPosition = React.useCallback(() => {

@@ -597,6 +597,9 @@ class ProjectService:
                 target_track = {"id": track_id, "type": "video", "name": "Video", "clips": []}
                 tracks.append(target_track)
 
+            if target_track.get("locked"):
+                raise ProjectError(f"Cannot add clip to locked track '{track_id}'. Unlock the track first.")
+
             target_track.setdefault("clips", []).append(clip_data)
 
         elif operation_type == "update_clip":
@@ -719,6 +722,9 @@ class ProjectService:
                 if not target_track:
                     target_track = {"id": track_id, "type": "graphics", "name": "Graphics", "clips": []}
                     tracks.append(target_track)
+
+            if target_track.get("locked"):
+                raise ProjectError(f"Cannot add block to locked track '{target_track.get('id', track_id)}'. Unlock the track first.")
 
             max_lo = max((int(c.get("layer_order", 0) or 0) for tr in tracks for c in tr.get("clips", [])), default=-1)
             clip_data = {
@@ -1155,7 +1161,9 @@ class ProjectService:
 
         elif operation_type == "update_track_state":
             track_id = payload.get("track_id")
-            patch = payload.get("patch") or {}
+            patch = payload.get("patch")
+            if patch is None or not isinstance(patch, dict):
+                patch = {k: v for k, v in payload.items() if k != "track_id"}
             target_track = next((t for t in tracks if t.get("id") == track_id), None)
             if not target_track:
                 raise ProjectError(f"Track '{track_id}' not found in project document.")

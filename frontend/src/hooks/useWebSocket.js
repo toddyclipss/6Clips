@@ -132,6 +132,12 @@ export default function useWebSocket() {
         addMessage(m)
       }),
 
+      ws.on("chat_status", (msg) => {
+        if (msg.status === "thinking") {
+          setStreaming(true)
+        }
+      }),
+
       ws.on("chat_error", (msg) => {
         endStream()
         setStreaming(false)

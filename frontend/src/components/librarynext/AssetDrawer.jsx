@@ -64,7 +64,7 @@ export default function AssetDrawer({
   const [detailLoading, setDetailLoading] = useState(false)
 
   const oc = item ? originColor(item.origin, isDark) : theme.palette.primary.main
-  const embeds = item ? DETAIL_SOURCE[item.source] : null
+  const embeds = item && item.media !== "audio" ? DETAIL_SOURCE[item.source] : null
 
   // Reset to the first tab when a different item opens — landing on "Lineage"
   // because that is where you were last is disorienting.
@@ -105,7 +105,22 @@ export default function AssetDrawer({
     return rows.filter(([, v]) => v != null && v !== "")
   }, [item])
 
-  const hasLineage = ancestors.length > 0 || derivatives.length > 0
+  // Waveform peaks for audio items
+  const [realPeaks, setRealPeaks] = useState(null)
+
+  useEffect(() => {
+    if (!open || !item || item.media !== "audio") {
+      setRealPeaks(null)
+      return
+    }
+    let alive = true
+    http.get(`/api/library/waveform/${encodeURIComponent(item.key)}`, { params: { count: 46 } })
+      .then(({ data }) => { if (alive && Array.isArray(data?.peaks)) setRealPeaks(data.peaks) })
+      .catch(() => { if (alive) setRealPeaks(null) })
+    return () => { alive = false }
+  }, [open, item?.key, item?.media])
+
+  const hasLineage = (ancestors?.length || 0) > 0 || (derivatives?.length || 0) > 0
 
   const performDelete = async () => {
     if (!item) return
@@ -113,11 +128,15 @@ export default function AssetDrawer({
       generated: () => http.delete(`/api/videos/${item.id}`),
       downloaded: () => http.delete(`/api/downloaded/${item.id}`),
       job: () => http.delete(`/api/library/asset/${item.id}`),
-      music: () => http.delete(`/api/music/${encodeURIComponent(item.id)}`),
+      music: () => http.delete(`/api/music/${encodeURIComponent(item.id)}?hide_if_blocked=true`),
     }
     try {
-      await endpoints[item.source]()
-      showSnackbar("Deleted", "info")
+      const res = await endpoints[item.source]()
+      if (res?.data?.hidden) {
+        showSnackbar(`Removed “${item.title}” from Library (preserved on disk)`, "info")
+      } else {
+        showSnackbar("Deleted", "info")
+      }
       onDeleted?.(item)
       onClose?.()
     } catch (e) {
@@ -222,7 +241,7 @@ export default function AssetDrawer({
                   <>
                     <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5}
                       sx={{ width: "100%", height: "100%", px: 3, pb: 5 }}>
-                      {waveformBars(item.key, 46).map((h, i) => (
+                      {waveformBars(item.key, 46, realPeaks).map((h, i) => (
                         <Box key={i} sx={{
                           width: 3, borderRadius: 2, height: `${Math.round(h * 55)}%`,
                           bgcolor: oc, opacity: 0.3 + h * 0.5,
@@ -357,11 +376,15 @@ export default function AssetDrawer({
                 sx={{ flex: 1, borderRadius: "20px" }} href={item.stream_url} download>
                 Save a copy
               </Button>
-              <Tooltip title="Delete">
-                <Button variant="outlined" size="small" color="error" sx={{ minWidth: 0, px: 1.25, borderRadius: "20px" }}
-                  aria-label="Delete" onClick={handleDelete}>
-                  <IconTrash size={16} stroke={1.8} />
-                </Button>
+              <Tooltip title={item.is_bundled ? "Bundled system tracks cannot be deleted" : "Delete"}>
+                <span>
+                  <Button variant="outlined" size="small" color="error"
+                    disabled={Boolean(item.is_bundled)}
+                    sx={{ minWidth: 0, px: 1.25, borderRadius: "20px" }}
+                    aria-label="Delete" onClick={handleDelete}>
+                    <IconTrash size={16} stroke={1.8} />
+                  </Button>
+                </span>
               </Tooltip>
             </Stack>
           )}

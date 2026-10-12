@@ -64,6 +64,82 @@ class CapabilityRegistry:
             raise CapabilityPreconditionError(f"Capability '{name}' missing required parameters: {missing}")
         return cap
 
+    @classmethod
+    def to_tool_definitions(
+        cls,
+        surface: Optional[str] = None,
+        user_settings: Optional[Any] = None,
+    ) -> list[dict]:
+        """Convert registered capabilities to provider-compatible function tool definitions.
+        Filters out publishing capabilities when platform credentials are not configured."""
+        tools = []
+        caps = cls.all() if not surface else [c for c in cls.all() if c.surface in (surface, "common")]
+        for cap in caps:
+            # Publishing tools remain unavailable until genuinely configured in settings
+            if cap.name == "upload_youtube":
+                has_yt = user_settings and bool(getattr(user_settings, "youtube_credentials_json_encrypted", None))
+                if not has_yt:
+                    continue
+            elif cap.name == "upload_tiktok":
+                has_tt = user_settings and bool(
+                    getattr(user_settings, "tiktok_cookie_encrypted", None)
+                    or getattr(user_settings, "tiktok_upload_token_encrypted", None)
+                )
+                if not has_tt:
+                    continue
+
+            properties = {}
+            for param in cap.required_params + cap.optional_params:
+                if param == "expected_revision":
+                    properties[param] = {
+                        "type": "integer",
+                        "description": "Current expected project revision number (optimistic concurrency CAS)",
+                    }
+                elif param == "payload":
+                    properties[param] = {
+                        "type": "object",
+                        "description": "Operation payload dictionary",
+                    }
+                elif param in ("limit", "max_clips", "max_videos", "start_seconds", "end_seconds", "speed", "days"):
+                    properties[param] = {
+                        "type": "number",
+                        "description": f"Numeric parameter for {param}",
+                    }
+                elif param in ("platforms", "ranges", "time_ranges", "article_ids", "trend_result_ids"):
+                    properties[param] = {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": f"List parameter for {param}",
+                    }
+                else:
+                    properties[param] = {
+                        "type": "string",
+                        "description": f"Parameter {param}",
+                    }
+
+            # Prefix description with mutation class
+            desc = cap.description
+            if cap.name == "search_catalog":
+                desc = "Read-only: search normalized motion graphics catalog by query or category"
+            elif cap.name == "search_youtube_trends":
+                desc = "Read-only: search trending topics via YouTube Data API"
+            elif cap.name == "project_operation":
+                desc = "Mutating: apply versioned CAS edit to project document"
+
+            tools.append({
+                "type": "function",
+                "function": {
+                    "name": cap.name,
+                    "description": desc,
+                    "parameters": {
+                        "type": "object",
+                        "properties": properties,
+                        "required": cap.required_params,
+                    },
+                },
+            })
+        return tools
+
 
 # ── Register core capabilities ────────────────────────────────────────────────
 

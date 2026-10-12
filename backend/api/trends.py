@@ -50,7 +50,7 @@ async def get_trends_results(
         query = (
             select(TrendsResult)
             .where(TrendsResult.user_id == "local")
-            .order_by(TrendsResult.created_at.desc())
+            .order_by(TrendsResult.virality_score.desc().nullslast(), TrendsResult.created_at.desc())
         )
         if job_id:
             query = query.where(TrendsResult.job_id == job_id)

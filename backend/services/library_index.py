@@ -43,6 +43,8 @@ from backend.models.generated_video import GeneratedVideo, NICHE_MAX_CHARS
 from backend.models.job import Job
 from backend.services.library_taxonomy import (
     MEDIA_AUDIO,
+    MEDIA_IMAGE,
+    MEDIA_VIDEO,
     MEDIA_ORDER,
     ORIGIN_ORDER,
     classify,
@@ -246,19 +248,33 @@ async def _downloaded_items(db: AsyncSession) -> list[dict]:
     rows = (await db.execute(select(DownloadedVideo))).scalars().all()
     items = []
     for v in rows:
+        if (
+            v.id == "test-moving-vid-1"
+            or getattr(v, "scout_result_id", None) == "test"
+        ):
+            continue
         has_video = _exists(v.video_path)
         has_audio = _exists(v.audio_path)
         if not (has_video or has_audio):
             continue
-        # An audio-only download is the case the old tabs could not file: it
-        # belonged to both "Downloaded" and "Audio". Here it is one row that
-        # answers audio · imported.
-        media = "video" if has_video else MEDIA_AUDIO
+        file_path = v.video_path if has_video else v.audio_path
+        ext_lower = Path(file_path).suffix.lower() if file_path else ""
+        if ext_lower in MUSIC_EXTS:
+            media = MEDIA_AUDIO
+        elif ext_lower in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
+            media = MEDIA_IMAGE
+        else:
+            media = "video" if has_video else MEDIA_AUDIO
         key = "import" if (v.platform or "").lower() == "import" else "download"
         p = classify(key, media_override=media)
         if p is None:  # pragma: no cover — both keys are mapped
             continue
-        file_path = v.video_path if has_video else v.audio_path
+        if media == MEDIA_IMAGE:
+            thumb_url = f"/api/downloaded/{v.id}/stream"
+        elif media == "video":
+            thumb_url = f"/api/downloaded/{v.id}/thumbnail?v={_version(v.thumbnail_path)}"
+        else:
+            thumb_url = None
         items.append({
             "key": f"{KEY_DOWNLOADED}:{v.id}",
             "source": "downloaded",
@@ -268,10 +284,7 @@ async def _downloaded_items(db: AsyncSession) -> list[dict]:
             "producer_key": p.key,
             "producer": p.label,
             "title": v.title or "Untitled",
-            "thumb_url": (
-                f"/api/downloaded/{v.id}/thumbnail?v={_version(v.thumbnail_path)}"
-                if _exists(v.thumbnail_path) else None
-            ),
+            "thumb_url": thumb_url,
             "stream_url": f"/api/downloaded/{v.id}/stream",
             "aspect": None,
             "duration_seconds": v.duration_seconds,
@@ -557,8 +570,65 @@ def _track_genre(filename: str) -> str | None:
     return head or None
 
 
+_TRACK_DURATION_CACHE: dict[tuple[str, float], float] = {}
+
+def evict_track_duration(path: Path | str) -> None:
+    """Evict cached track duration when a file is modified or removed."""
+    p_str = str(path)
+    keys_to_del = [k for k in _TRACK_DURATION_CACHE if k[0] == p_str]
+    for k in keys_to_del:
+        _TRACK_DURATION_CACHE.pop(k, None)
+
+
+def load_hidden_tracks() -> set[str]:
+    """Load set of track filenames hidden from the browsable Library."""
+    from backend.services.music_service import MUSIC_DIR
+    f = MUSIC_DIR / ".library_hidden.json"
+    if not f.is_file():
+        return set()
+    try:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        if isinstance(data, list):
+            return {str(x).strip().lower() for x in data if x}
+    except Exception:
+        pass
+    return set()
+
+
+def hide_track(filename: str) -> None:
+    """Hide a track filename so it no longer appears in the Library."""
+    from backend.services.music_service import MUSIC_DIR
+    MUSIC_DIR.mkdir(parents=True, exist_ok=True)
+    f = MUSIC_DIR / ".library_hidden.json"
+    current = load_hidden_tracks()
+    current.add(filename.strip().lower())
+    f.write_text(json.dumps(sorted(list(current)), indent=2), encoding="utf-8")
+
+
+def unhide_track(filename: str) -> None:
+    """Unhide a track filename so it reappears in the Library."""
+    from backend.services.music_service import MUSIC_DIR
+    f = MUSIC_DIR / ".library_hidden.json"
+    current = load_hidden_tracks()
+    clean_name = filename.strip().lower()
+    if clean_name in current:
+        current.remove(clean_name)
+        f.write_text(json.dumps(sorted(list(current)), indent=2), encoding="utf-8")
+
+
 def _track_items(skip_filenames: set[str]) -> list[dict]:
     from backend.services.music_service import MUSIC_DIR
+    from backend.services.video_utils import probe_duration
+
+    bundled_set = {
+        "ambient_calm.mp3",
+        "bundled_ambient.mp3",
+        "cinematic_dramatic.mp3",
+        "corporate_motivational.mp3",
+        "lofi_chill.mp3",
+        "upbeat_electronic.mp3",
+    }
+    hidden_set = load_hidden_tracks()
 
     items = []
     try:
@@ -570,12 +640,20 @@ def _track_items(skip_filenames: set[str]) -> list[dict]:
     for path in paths:
         if not path.is_file() or path.suffix.lower() not in MUSIC_EXTS:
             continue
-        if path.name in skip_filenames:
+        if path.name in skip_filenames or path.name.lower() in hidden_set:
             continue
         try:
             st = path.stat()
         except OSError:
             continue
+
+        cache_key = (str(path), st.st_mtime)
+        dur = _TRACK_DURATION_CACHE.get(cache_key)
+        if dur is None:
+            dur = probe_duration(path, default=0.0)
+            if dur > 0.0:
+                _TRACK_DURATION_CACHE[cache_key] = dur
+
         items.append({
             "key": f"{KEY_TRACK}:{path.name}",
             "source": "music",
@@ -588,7 +666,7 @@ def _track_items(skip_filenames: set[str]) -> list[dict]:
             "thumb_url": None,
             "stream_url": f"/api/library/track/{path.name}",
             "aspect": None,
-            "duration_seconds": None,
+            "duration_seconds": dur if dur > 0.0 else None,
             "size_mb": round(st.st_size / (1024 * 1024), 2),
             "ext": path.suffix.lstrip(".") or None,
             "status": None,
@@ -598,6 +676,7 @@ def _track_items(skip_filenames: set[str]) -> list[dict]:
             "hook_score": None,
             "virality_score": None,
             "parent_key": None,
+            "is_bundled": path.name.lower() in bundled_set,
             "created_at": _iso_from_mtime(st.st_mtime),
         })
     return items

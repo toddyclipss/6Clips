@@ -32,7 +32,10 @@ async def list_videos(
     the browser, so a library with enough recent non-clip rows rendered
     "No clips yet" over a library full of clips.
     """
-    base_query = select(GeneratedVideo).order_by(GeneratedVideo.created_at.desc())
+    base_query = (
+        select(GeneratedVideo)
+        .order_by(GeneratedVideo.created_at.desc())
+    )
     if status:
         base_query = base_query.where(GeneratedVideo.status == status)
     if source_type:
@@ -371,13 +374,33 @@ async def delete_video(video_id: str, db: AsyncSession = Depends(get_db)):
     return {"ok": True}
 
 
-def _safe_resolve_path(path_str: str) -> Path:
-    """Resolve a file path and verify it's within the storage directory. Prevents path traversal."""
+ALLOWED_MEDIA_EXTENSIONS = {
+    # Video
+    ".mp4", ".webm", ".mkv", ".mov", ".avi",
+    # Audio
+    ".mp3", ".wav", ".m4a", ".ogg", ".flac",
+    # Images
+    ".png", ".jpg", ".jpeg", ".webp", ".gif",
+    # Subtitles
+    ".srt", ".vtt",
+}
+
+
+def _safe_resolve_path(path_str: str, allowed_extensions: set[str] | None = None) -> Path:
+    """Resolve a file path, verify it's within allowed directories, and enforce allowed extensions.
+    Prevents path traversal and unauthorized file reads.
+    """
     from backend.config import settings
-    storage_root = settings.STORAGE_ROOT.resolve()
+    allowed_roots = [
+        settings.STORAGE_ROOT.resolve(),
+        (settings.MOTION_DIR / "studio").resolve(),
+    ]
     resolved = Path(path_str).resolve()
-    if not resolved.is_relative_to(storage_root):
-        raise HTTPException(status_code=403, detail="Access denied: path outside storage directory")
+    if not any(resolved.is_relative_to(root) for root in allowed_roots):
+        raise HTTPException(status_code=403, detail="Access denied: path outside allowed directories")
+    valid_exts = allowed_extensions if allowed_extensions is not None else ALLOWED_MEDIA_EXTENSIONS
+    if resolved.suffix.lower() not in valid_exts:
+        raise HTTPException(status_code=403, detail="Access denied: file type not permitted for media streaming")
     return resolved
 
 
@@ -465,9 +488,15 @@ async def stream_video(video_id: str, request: Request, db: AsyncSession = Depen
     if not video or not video.video_path:
         raise HTTPException(status_code=404, detail="Video not found")
 
+    req_user = request.headers.get("x-user-id") or request.query_params.get("user_id")
+    if req_user and video.user_id and video.user_id != req_user and req_user != "local":
+        raise HTTPException(status_code=403, detail="Access denied: unauthorized media record")
+
     path = _safe_resolve_path(video.video_path)
     if not path.exists():
         raise HTTPException(status_code=404, detail="Video file not found on disk")
+    if path.suffix.lower() not in {".mp4", ".webm", ".mkv", ".mov", ".avi", ".mp3", ".wav", ".m4a", ".ogg", ".flac"}:
+        raise HTTPException(status_code=403, detail="Access denied: non-media file type")
 
     return serve_media_with_range(path, request, filename=f"{video.title or 'video'}.mp4")
 

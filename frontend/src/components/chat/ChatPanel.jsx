@@ -167,7 +167,7 @@ export default function ChatPanel() {
     })
   }
 
-  const handleSend = (text, files = []) => {
+  const handleSend = (text, files = [], think = undefined) => {
     const trimmed = text.trim()
     if (!trimmed && files.length === 0) return
 
@@ -177,7 +177,11 @@ export default function ChatPanel() {
     if (activeSessionId) {
       ws.send({ type: "set_session", session_id: activeSessionId })
     }
-    ws.send({ type: "chat_message", content: trimmed })
+    const payload = { type: "chat_message", content: trimmed }
+    if (think !== undefined) {
+      payload.think = think
+    }
+    ws.send(payload)
   }
 
   return (
@@ -397,7 +401,7 @@ export default function ChatPanel() {
             }}
           >
             <LiquidMultimodalInput
-              placeholder="Ask anything, or drop files…"
+              placeholder="Message 6Clips or describe a video..."
               disabled={isStreaming}
               onSubmit={handleSend}
             />

@@ -77,13 +77,15 @@ class Settings(BaseSettings):
     # dead source sooner.
     DOWNLOAD_STALL_TIMEOUT_S: int = 600
 
-    # ── AI Providers (BYOK) ───────────────────────────
-    # Set at least one. OpenRouter unlocks Claude / GPT / Gemini / Llama
+    # ── AI Providers (BYOK & Local) ───────────────────
+    # Set at least one remote key, or run Ollama locally on OLLAMA_BASE_URL.
+    # OpenRouter unlocks Claude / GPT / Gemini / Llama
     # / Mistral through a single key — handy if you want to mix premium
     # models without managing multiple provider accounts.
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
     OPENROUTER_API_KEY: str = ""
+    OLLAMA_BASE_URL: str = "http://127.0.0.1:11434"
 
     # ── Service keys (BYOK) ───────────────────────────
     # All optional — features gracefully degrade when keys are missing.

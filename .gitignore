@@ -42,6 +42,7 @@ frontend/dist/
 .pytest_cache/
 htmlcov/
 .coverage
+.artifacts
 
 # Motion graphics runtime & temporary downloads
 motion/.installed
@@ -52,6 +53,7 @@ motion/tmp/
 motion/cache/
 motion_registry_cache/
 motion/*.mp4
+artifacts/
 
 # Test artifacts & debug dumps
 tmp_test/

@@ -145,6 +145,7 @@ export default function StudioToolbar({
         <Stack direction="row" spacing={0.2} sx={{ bgcolor: "#f1f5f9", p: 0.2, borderRadius: 1.2 }}>
           <Button
             size="small"
+            data-testid="aspect-ratio-btn-9-16"
             variant={aspectRatio === "9:16" ? "contained" : "text"}
             onClick={() => onAspectChange("9:16")}
             sx={{
@@ -167,6 +168,7 @@ export default function StudioToolbar({
           </Button>
           <Button
             size="small"
+            data-testid="aspect-ratio-btn-16-9"
             variant={aspectRatio === "16:9" ? "contained" : "text"}
             onClick={() => onAspectChange("16:9")}
             sx={{

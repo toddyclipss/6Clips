@@ -29,30 +29,61 @@ def _diff_images(path1, path2):
     return count, pct
 
 
+@pytest.fixture
+async def cleanup_test_moving_vid():
+    yield
+    from backend.database import AsyncSessionLocal
+    from backend.models.downloaded_video import DownloadedVideo
+    async with AsyncSessionLocal() as db:
+        v = await db.get(DownloadedVideo, "test-moving-vid-1")
+        if v:
+            await db.delete(v)
+            await db.commit()
+
+
 @pytest.mark.asyncio
-async def test_motion_preview_visual_playback_regression(tmp_path):
+async def test_motion_preview_visual_playback_regression(tmp_path, cleanup_test_moving_vid):
     # Skip if live background dev server is not running
     try:
         async with httpx.AsyncClient(base_url="http://127.0.0.1:16888", timeout=1.0) as check_client:
             health = await check_client.get("/api/projects")
-            if health.status_code != 200:
-                pytest.skip("Live server on 16888 returned non-200")
     except Exception:
         pytest.skip("Live dev server on http://127.0.0.1:16888 not running")
 
-    # 1. Create acceptance project with real video + animated block
-    async with httpx.AsyncClient(base_url="http://127.0.0.1:16888") as client:
-        res = await client.post("/api/projects", json={
-            "name": "Regression Visual Playback Test",
-            "aspect_ratio": "9:16"
-        })
-        assert res.status_code == 200
-        p = res.json()
-        pid = p["id"]
-        rev = p["revision"]
+    # 0. Ensure test-moving-vid-1 asset exists in downloaded_videos
+    from backend.database import init_db, AsyncSessionLocal
+    from backend.models.downloaded_video import DownloadedVideo
+    await init_db()
+    vid_path = Path("motion/studio/test_moving_video.mp4").resolve()
+    async with AsyncSessionLocal() as db:
+        v = await db.get(DownloadedVideo, "test-moving-vid-1")
+        if not v:
+            v = DownloadedVideo(
+                id="test-moving-vid-1",
+                title="Moving Video Test Asset",
+                video_path=str(vid_path),
+                duration_seconds=10.0,
+            )
+            db.add(v)
+            await db.commit()
 
-        # Add moving video
-        res_v = await client.post(f"/api/projects/{pid}/operations", json={
+    BASE_URL = os.environ.get("TEST_SERVER_URL", "http://127.0.0.1:16888")
+    pid = None
+
+    try:
+        # 1. Create acceptance project with real video + animated block
+        async with httpx.AsyncClient(base_url=BASE_URL) as client:
+            res = await client.post("/api/projects", json={
+                "name": "Regression Visual Playback Test",
+                "aspect_ratio": "9:16"
+            })
+            assert res.status_code == 200
+            p = res.json()
+            pid = p["id"]
+            rev = p["revision"]
+
+            # Add moving video
+            res_v = await client.post(f"/api/projects/{pid}/operations", json={
             "expected_revision": rev,
             "operation_type": "add_clip",
             "payload": {
@@ -96,9 +127,13 @@ async def test_motion_preview_visual_playback_regression(tmp_path):
         iframe_element = await iframe_locator.element_handle()
         comp_frame = await iframe_element.content_frame()
         assert comp_frame is not None
+        await comp_frame.wait_for_load_state("domcontentloaded")
 
         stage = comp_frame.locator("#stage")
         await stage.wait_for(state="visible", timeout=10000)
+
+        video_elem = comp_frame.locator("video")
+        await video_elem.wait_for(state="attached", timeout=10000)
 
         # Record t0 before Play
         shot_t0 = tmp_path / "t0.png"
@@ -185,3 +220,10 @@ async def test_motion_preview_visual_playback_regression(tmp_path):
     # E. Preview pixel diff exceeds meaningful threshold (> 5%)
     diff_count, diff_pct = _diff_images(shot_t0, shot_t2)
     assert diff_pct > 5.0, f"Preview pixels remained static! Changed: {diff_count} ({diff_pct:.2f}%)"
+    finally:
+        if pid:
+            try:
+                async with httpx.AsyncClient(base_url=BASE_URL) as client:
+                    await client.delete(f"/api/projects/{pid}")
+            except Exception:
+                pass

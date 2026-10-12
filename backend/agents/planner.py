@@ -22,20 +22,24 @@ from backend.config import settings
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are ViralMint — the most capable AI content strategy assistant.
-You are proactive, resourceful, and speak like a sharp colleague who always has the next move ready.
-You have memory across sessions and know what the user was working on before.
+SYSTEM_PROMPT = """You are 6Clips — a gaming-first Outcomes-as-a-Service video creation platform with one Main Agent, one Global Chat, trend discovery, a canonical video project system, and an editor that supports Create, Review, and optional Refine.
+Your objective is to help creators research, script, edit, review, and produce original videos through authorized integrated capabilities.
+You speak like a sharp, helpful colleague who is truthful, concise, and technically grounded.
 
-## Your Full Capabilities
+## Absolute Priority: Tool Execution Results
+When a tool (such as search_catalog, project_operation, etc.) has been executed in the conversation, your response MUST directly present, summarize, and list the actual tool results (including found item titles and IDs) to answer the user's request.
+NEVER replace or ignore tool results with an introductory greeting, a welcome pitch, or generic menu options.
 
-You can do ANYTHING related to video content strategy:
-
-1. **Trends** — Find trending videos across ANY platform. YouTube, TikTok, Douyin have dedicated APIs (richer results). ALL other platforms (Bilibili, SoundCloud, Niconico, Instagram, Vimeo, etc.) are searched dynamically — no API key needed. You can put ANY platform name in the platforms list and it just works.
-2. **Download ANY video from ANY platform** — 1000+ sites supported via yt-dlp. You NEVER refuse a download request. If a user gives you a URL, you download it — period.
-3. **Transcribe & Analyze** — Extract transcripts, hooks, structure, tone, viral factors from any downloaded video
-4. **Generate original videos** — Script → AI voice → AI visuals → captions → finished MP4
-5. **Upload** — Publish to YouTube and TikTok on schedule
-6. **Direct URL operations** — User pastes a URL? Download it. Analyze it. No questions asked. NEVER say "I don't support that platform". You support ALL platforms.
+## Capabilities Status (Strict Truthfulness)
+- **Available & Active:**
+  * Motion Graphics Catalog: Search and discover normalized motion graphics templates, lower thirds, and titles (`search_catalog`).
+  * Video Editing & Timeline: Controlled versioned edits with CAS (`project_operation`), trimming (`tool_trim`), cropping (`tool_crop`), speed adjustments (`tool_speed`), and reframing (`tool_reframe`).
+  * Trend Discovery: YouTube trending discovery via authorized YouTube Data API (`search_youtube_trends`).
+  * AI Video Generation: Scripting, voice synthesis, captions, and rendering from frozen project revisions (`project_render`).
+- **External Publishing (YouTube Upload, TikTok, Instagram, X):**
+  * NOT configured or validated by default.
+  * NEVER claim you can upload or publish to TikTok or YouTube unless the user has verified and connected live credentials in Settings.
+  * If the user asks to publish or upload to social platforms without configured credentials, truthfully explain that publishing accounts are not connected in Settings.
 
 ## CRITICAL Behavior Rules
 
@@ -388,6 +392,7 @@ class PlannerAgent:
         pinned_provider: Optional[str] = None,
         pinned_model: Optional[str] = None,
         project_id: Optional[str] = None,
+        pinned_think: Optional[bool | str] = None,
     ):
         """
         Main handler: stream AI response over WS, then dispatch any <action> blocks.
@@ -496,19 +501,141 @@ class PlannerAgent:
                 return
 
             welcome = (
-                "Welcome to ViralMint!\n\n"
-                "To get started, set `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` in your `.env` file, "
-                "or configure your provider and key in **Settings**."
+                "Welcome to 6Clips!\n\n"
+                "To get started, run Ollama locally (`http://127.0.0.1:11434`), set `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` in your `.env` file, "
+                "or configure your provider in **Settings**."
             )
             await ws_manager.send({"type": "chat_token", "token": welcome}, user_id)
             await ws_manager.send({"type": "chat_done", "full_response": welcome}, user_id)
             return
 
         full_response = ""
+        native_tool_calls_executed = []
 
-        async for token in ai.chat_stream(messages=messages, system=system, max_tokens=1024):
-            full_response += token
-            await ws_manager.send({"type": "chat_token", "token": token}, user_id)
+        async def _on_status(status_name: str):
+            if status_name == "thinking":
+                await ws_manager.send({"type": "chat_status", "status": "thinking"}, user_id)
+            elif status_name.startswith("calling_tool:"):
+                tool_called = status_name.split(":", 1)[1]
+                await ws_manager.send({"type": "chat_status", "status": f"Executing tool {tool_called}..."}, user_id)
+
+        if ai.provider.value == "ollama":
+            tool_defs = CapabilityRegistry.to_tool_definitions(user_settings=user_settings)
+
+            async def _planner_tool_executor(fn_name: str, fn_args: dict) -> dict:
+                logger.info("PLANNER TOOL EXECUTOR called | tool=%s | args=%s", fn_name, fn_args)
+                await ws_manager.send({"type": "chat_status", "status": f"Running tool {fn_name}..."}, user_id)
+
+                cap = CapabilityRegistry.get(fn_name)
+                if not cap:
+                    return {"error": f"Unauthorized or unknown capability '{fn_name}'"}
+
+                # Guard unconfigured publishing tools
+                if fn_name in ("upload_youtube", "upload_tiktok"):
+                    return {"status": "error", "error": f"{fn_name} is not available: platform credentials are not configured in Settings."}
+
+                try:
+                    CapabilityRegistry.validate_input(fn_name, fn_args)
+                except Exception as ex:
+                    return {"error": f"Invalid arguments: {ex}"}
+
+                if not fn_args.get("project_id") and project_id:
+                    fn_args["project_id"] = project_id
+
+                if fn_name == "project_operation":
+                    from backend.services.project_service import ProjectService
+                    try:
+                        op_res = await ProjectService.apply_operation(
+                            project_id=fn_args["project_id"],
+                            expected_revision=fn_args["expected_revision"],
+                            operation_type=fn_args["operation_type"],
+                            payload=fn_args.get("payload", {}),
+                            idempotency_key=fn_args.get("idempotency_key"),
+                            author=fn_args.get("author", "agent"),
+                        )
+                        return {"status": "success", "result": op_res}
+                    except Exception as ex:
+                        return {"status": "error", "error": str(ex)}
+
+                elif fn_name == "search_catalog":
+                    from backend.services.registry_adapter import RegistryAdapter
+                    q = fn_args.get("query") or fn_args.get("search")
+                    cat = fn_args.get("category")
+                    lim = int(fn_args.get("limit") or 20)
+                    items = RegistryAdapter.list_catalog_items(category=cat, search=q, limit=lim)
+                    result_items = []
+                    for it in items[:10]:
+                        result_items.append({
+                            "id": it.get("id"),
+                            "title": it.get("title") or it.get("name"),
+                            "category": it.get("category"),
+                            "description": it.get("description", "")[:120],
+                        })
+                    return {"status": "success", "items": result_items, "count": len(items)}
+
+                else:
+                    from backend.services.executor_service import ExecutorService
+                    run = None
+                    try:
+                        run = await ExecutorService.create_run(
+                            objective=f"Planner tool execution: {fn_name}",
+                            project_id=fn_args.get("project_id") or project_id,
+                            user_settings=user_settings,
+                            user_id=user_id,
+                            provider=pinned_provider,
+                            model=pinned_model,
+                        )
+                        step_res = await ExecutorService.execute_step(
+                            run_id=run.id,
+                            step_name=fn_name,
+                            capability_name=fn_name,
+                            payload=fn_args,
+                            user_id=user_id,
+                            authorized=True,
+                        )
+                        await ExecutorService.complete_run(run.id, status="completed")
+                        return {"status": "success", "output": step_res.get("output", {})}
+                    except Exception as ex:
+                        if run:
+                            try:
+                                await ExecutorService.complete_run(run.id, status="failed", error_message=str(ex))
+                            except Exception:
+                                pass
+                        return {"status": "error", "error": str(ex)}
+
+            async def _stream_token(tok: str):
+                await ws_manager.send({"type": "chat_token", "token": tok}, user_id)
+
+            tool_res = await ai.chat_with_tools(
+                messages=messages,
+                system=system,
+                tools=tool_defs,
+                tool_executor=_planner_tool_executor,
+                max_tokens=1024,
+                think=pinned_think,
+                on_status=_on_status,
+                on_token=_stream_token,
+            )
+            full_response = tool_res.get("content", "")
+            native_tool_calls_executed = tool_res.get("tool_calls", [])
+
+            for tc in native_tool_calls_executed:
+                await ws_manager.send({
+                    "type": "capability_executed",
+                    "capability": tc.get("name"),
+                    "status": "success" if "error" not in tc.get("result", {}) else "failed",
+                    "output": tc.get("result"),
+                }, user_id)
+        else:
+            async for token in ai.chat_stream(
+                messages=messages,
+                system=system,
+                max_tokens=1024,
+                think=pinned_think,
+                on_status=_on_status,
+            ):
+                full_response += token
+                await ws_manager.send({"type": "chat_token", "token": token}, user_id)
 
         # Signal completion. Strip both <action> and <quick_replies> markers from
         # the user-visible text; the chips ride on chat_done as a structured
@@ -525,19 +652,22 @@ class PlannerAgent:
             "quick_replies": quick_replies,
         }, user_id)
 
-        # Parse and dispatch action blocks (from the qr-stripped response, so
-        # chip labels can never spawn phantom actions).
-        actions = ACTION_PATTERN.findall(qr_stripped)
-        logger.debug("PLANNER parsed %d action block(s) from AI response", len(actions))
+        # Parse and dispatch action blocks.
+        # If native tool calls were executed, do NOT double-dispatch legacy action blocks.
+        if native_tool_calls_executed:
+            actions = []
+        else:
+            actions = ACTION_PATTERN.findall(qr_stripped)
+            logger.debug("PLANNER parsed %d action block(s) from AI response", len(actions))
 
-        # Safety net: if AI talked about scouting but forgot the action block,
-        # auto-trigger — UNLESS it deliberately offered quick replies (a
-        # clarifying question is an intentional no-action turn; inferring one
-        # here would clobber it).
-        if not actions and not quick_replies:
-            actions = self._infer_missing_action(message, qr_stripped, project_id=project_id)
-            if actions:
-                logger.info("PLANNER safety-net inferred action: %s", actions)
+            # Safety net: if AI talked about scouting but forgot the action block,
+            # auto-trigger — UNLESS it deliberately offered quick replies (a
+            # clarifying question is an intentional no-action turn; inferring one
+            # here would clobber it).
+            if not actions and not quick_replies:
+                actions = self._infer_missing_action(message, qr_stripped, project_id=project_id)
+                if actions:
+                    logger.info("PLANNER safety-net inferred action: %s", actions)
 
         # Collect any dispatch-time follow-ups (clarifying questions, no-op
         # notes) so they're folded into the persisted assistant turn — otherwise

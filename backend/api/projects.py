@@ -4,7 +4,7 @@
 import json
 import logging
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Query, Depends, Header
+from fastapi import APIRouter, HTTPException, Query, Depends, Header, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -66,22 +66,6 @@ async def list_projects(user_id: str = "local", db: AsyncSession = Depends(get_d
         ]
     }
 
-
-@router.get("/catalog/items")
-async def list_catalog_blocks():
-    """List all available HyperFrames registry blocks."""
-    from backend.services.registry_adapter import RegistryAdapter
-    return RegistryAdapter.list_catalog_items()
-
-
-@router.get("/catalog/items/{block_id}")
-async def get_catalog_block(block_id: str):
-    """Get metadata and variables for a specific HyperFrames block."""
-    from backend.services.registry_adapter import RegistryAdapter
-    item = RegistryAdapter.get_catalog_item(block_id)
-    if not item:
-        raise HTTPException(status_code=404, detail=f"Catalog block '{block_id}' not found.")
-    return item
 
 
 @router.get("/{project_id}")
@@ -225,14 +209,17 @@ async def get_project_preview(project_id: str, revision: Optional[int] = None):
 
 
 @router.get("/{project_id}/preview/assets/{filename:path}")
-async def get_project_preview_asset(project_id: str, filename: str):
+async def get_project_preview_asset(project_id: str, filename: str, request: Request):
     """Serve staged composition assets (media files, gsap script) for preview."""
     from backend.services.studio_service import StudioService
     from fastapi.responses import FileResponse
+    from backend.api.videos import serve_media_with_range
     proj_dir = StudioService.project_dir()
     asset_path = (proj_dir / "assets" / filename).resolve()
     if not asset_path.is_file() or not asset_path.is_relative_to((proj_dir / "assets").resolve()):
         raise HTTPException(status_code=404, detail="Asset not found")
+    if asset_path.suffix.lower() in (".mp3", ".wav", ".aac", ".ogg", ".m4a", ".mp4", ".mov", ".webm"):
+        return serve_media_with_range(asset_path, request, filename=asset_path.name)
     return FileResponse(asset_path, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache"})
 
 
@@ -257,12 +244,21 @@ async def get_project_preview_composition(project_id: str, filename: str):
 async def list_catalog_items(
     category: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
-    limit: int = Query(100),
+    limit: int = Query(300),
+    offset: int = Query(0),
 ):
     """List available normalized catalog blocks from registry."""
     from backend.services.registry_adapter import RegistryAdapter
-    items = RegistryAdapter.list_catalog_items(category=category, search=search, limit=limit)
-    return {"items": items, "count": len(items)}
+    items = RegistryAdapter.list_catalog_items(category=category, search=search, limit=limit, offset=offset)
+    enriched = []
+    for it in items:
+        b_name = it.get("name") or it.get("id")
+        enriched.append({
+            **it,
+            "poster_url": f"/api/projects/catalog/blocks/{b_name}/poster",
+            "preview_url": f"/api/projects/catalog/blocks/{b_name}/preview",
+        })
+    return {"items": enriched, "count": len(enriched)}
 
 
 @router.get("/catalog/items/{block_id}")
@@ -272,7 +268,81 @@ async def get_catalog_item_detail(block_id: str):
     item = RegistryAdapter.get_catalog_item(block_id)
     if not item:
         raise HTTPException(status_code=404, detail=f"Block '{block_id}' not found")
-    return item
+    b_name = item.get("name") or item.get("id")
+    return {
+        **item,
+        "poster_url": f"/api/projects/catalog/blocks/{b_name}/poster",
+        "preview_url": f"/api/projects/catalog/blocks/{b_name}/preview",
+    }
+
+
+@router.get("/catalog/blocks/{block_id}/poster")
+async def get_catalog_block_poster(
+    block_id: str,
+    aspect_ratio: str = Query("9:16"),
+    version: Optional[str] = Query(None),
+):
+    """Serve cached visual poster thumbnail for catalog block."""
+    from backend.services.catalog_preview_service import CatalogPreviewService, CatalogPreviewError
+    from fastapi.responses import FileResponse
+    try:
+        poster_path = CatalogPreviewService.get_poster_path(block_id, version_hash=version, aspect_ratio=aspect_ratio)
+        return FileResponse(
+            poster_path,
+            media_type="image/png",
+            headers={"Cache-Control": "public, max-age=86400", "Access-Control-Allow-Origin": "*"},
+        )
+    except CatalogPreviewError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error("Failed serving poster for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail="Could not generate poster")
+
+
+@router.get("/catalog/blocks/{block_id}/preview")
+async def get_catalog_block_preview(
+    block_id: str,
+    aspect_ratio: str = Query("9:16"),
+    version: Optional[str] = Query(None),
+):
+    """Serve standalone animated preview HTML for catalog block."""
+    from backend.services.catalog_preview_service import CatalogPreviewService, CatalogPreviewError
+    from fastapi.responses import HTMLResponse
+    try:
+        html = CatalogPreviewService.get_preview_html(block_id, version_hash=version, aspect_ratio=aspect_ratio)
+        return HTMLResponse(
+            html,
+            headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache"},
+        )
+    except CatalogPreviewError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error("Failed serving preview for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail="Could not generate preview")
+
+
+@router.get("/catalog/blocks/{block_id}/preview/assets/{filename:path}")
+async def get_catalog_block_asset(block_id: str, filename: str):
+    """Serve block asset file (fonts, images) for standalone preview."""
+    from backend.services.catalog_preview_service import CatalogPreviewService
+    from fastapi.responses import FileResponse
+    try:
+        p = CatalogPreviewService.resolve_block_asset_file(block_id, filename, subfolder="assets")
+        return FileResponse(p, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=3600"})
+    except (FileNotFoundError, Exception):
+        raise HTTPException(status_code=404, detail="Asset not found")
+
+
+@router.get("/catalog/blocks/{block_id}/preview/lib/{filename:path}")
+async def get_catalog_block_lib(block_id: str, filename: str):
+    """Serve block lib file for standalone preview."""
+    from backend.services.catalog_preview_service import CatalogPreviewService
+    from fastapi.responses import FileResponse
+    try:
+        p = CatalogPreviewService.resolve_block_asset_file(block_id, filename, subfolder="lib")
+        return FileResponse(p, headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=3600"})
+    except (FileNotFoundError, Exception):
+        raise HTTPException(status_code=404, detail="Lib file not found")
 
 
 @router.get("/{project_id}/code/files")

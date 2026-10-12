@@ -127,6 +127,8 @@ class HyperFramesAdapter:
         # Sort by layer_order ascending (lower rendered first, higher on top)
         visible_clips.sort(key=lambda item: int(item[1].get("layer_order", 0) or 0))
 
+        has_any_solo = any(bool(t.get("solo")) for t in tracks if t.get("type") in ("audio", "video"))
+
         for t_type, c, track_id, tr_obj in visible_clips:
             cid = c.get("id") or "clip_elem"
             c_start = float(c.get("start_seconds", 0.0) or 0.0)
@@ -139,7 +141,7 @@ class HyperFramesAdapter:
             custom_style = c.get("style") or ""
             fit_mode = c.get("fit") or "contain"
             z_style = f' style="z-index: {layer_order}; {custom_style}"'
-            is_muted = bool((tr_obj and tr_obj.get("muted")) or c.get("muted"))
+            is_muted = bool((tr_obj and tr_obj.get("muted")) or (has_any_solo and not bool(tr_obj and tr_obj.get("solo"))) or c.get("muted"))
 
             if c.get("type") == "block" or c.get("block_id"):
                 vars_val = c.get("variables") or {}
@@ -198,25 +200,55 @@ class HyperFramesAdapter:
                 )
             elif t_type == "audio":
                 src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
-                muted_attr = ' muted data-muted="true" data-hidden="true" data-volume="0"' if is_muted else ' data-volume="1"'
+                t_vol = float(tr_obj.get("volume", 1.0) if tr_obj.get("volume") is not None else 1.0)
+                c_vol = float(c.get("volume", 1.0) if c.get("volume") is not None else 1.0)
+                eff_vol = max(0.0, min(1.0, t_vol * c_vol))
+                if is_muted or eff_vol <= 0.0:
+                    muted_attr = ' muted data-muted="true" data-hidden="true" data-volume="0"'
+                else:
+                    muted_attr = f' data-volume="{eff_vol:.3f}"'
                 elements_html.append(
                     f'  <audio data-hf-id="{cid}" id="{cid}"{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}"{muted_attr}></audio>'
                 )
             elif t_type == "image" or c.get("type") == "image":
-                src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
-                obj_pos = c.get("object_position") or c.get("crop_position") or "center center"
-                combined_style = f'style="z-index: {layer_order}; object-fit: {fit_mode}; object-position: {obj_pos}; {custom_style}"'.strip()
-                elements_html.append(
-                    f'  <img data-hf-id="{cid}" id="{cid}" class="image-block" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" />'
-                )
+                if c.get("missing_media"):
+                    missing_id = c.get("missing_asset_id") or asset_file or "unknown"
+                    elements_html.append(
+                        f'  <div data-hf-id="{cid}" id="{cid}" class="missing-media-block" {z_style} data-start="{c_start}" data-duration="{c_dur}">'
+                        f'    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0f172a; color:#f87171; border:2px dashed #ef4444; border-radius:8px; padding:16px; box-sizing:border-box; text-align:center;">'
+                        f'      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                        f'      <div style="font-weight:700; font-size:14px; margin-top:8px;">Missing Media Asset</div>'
+                        f'      <div style="font-size:11px; color:#94a3b8; margin-top:4px; max-width:90%; word-break:break-all;">{missing_id}</div>'
+                        f'    </div>'
+                        f'  </div>'
+                    )
+                else:
+                    src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
+                    obj_pos = c.get("object_position") or c.get("crop_position") or "center center"
+                    combined_style = f'style="z-index: {layer_order}; object-fit: {fit_mode}; object-position: {obj_pos}; {custom_style}"'.strip()
+                    elements_html.append(
+                        f'  <img data-hf-id="{cid}" id="{cid}" class="image-block" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" />'
+                    )
             elif t_type == "video" or c.get("type") == "video":
-                src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
-                obj_pos = c.get("object_position") or c.get("crop_position") or "center center"
-                combined_style = f'style="z-index: {layer_order}; object-fit: {fit_mode}; object-position: {obj_pos}; {custom_style}"'.strip()
-                muted_attr = ' muted' if (is_muted or True) else ''  # videos default to muted
-                elements_html.append(
-                    f'  <video data-hf-id="{cid}" id="{cid}" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}" data-trim-start="{trim_start}" data-trim-end="{trim_end}" playsinline webkit-playsinline{muted_attr} preload="auto"></video>'
-                )
+                if c.get("missing_media"):
+                    missing_id = c.get("missing_asset_id") or asset_file or "unknown"
+                    elements_html.append(
+                        f'  <div data-hf-id="{cid}" id="{cid}" class="missing-media-block" {z_style} data-start="{c_start}" data-duration="{c_dur}">'
+                        f'    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0f172a; color:#f87171; border:2px dashed #ef4444; border-radius:8px; padding:16px; box-sizing:border-box; text-align:center;">'
+                        f'      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                        f'      <div style="font-weight:700; font-size:14px; margin-top:8px;">Missing Media Asset</div>'
+                        f'      <div style="font-size:11px; color:#94a3b8; margin-top:4px; max-width:90%; word-break:break-all;">{missing_id}</div>'
+                        f'    </div>'
+                        f'  </div>'
+                    )
+                else:
+                    src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
+                    obj_pos = c.get("object_position") or c.get("crop_position") or "center center"
+                    combined_style = f'style="z-index: {layer_order}; object-fit: {fit_mode}; object-position: {obj_pos}; {custom_style}"'.strip()
+                    muted_attr = ' muted' if (is_muted or True) else ''  # videos default to muted
+                    elements_html.append(
+                        f'  <video data-hf-id="{cid}" id="{cid}" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}" data-trim-start="{trim_start}" data-trim-end="{trim_end}" playsinline webkit-playsinline{muted_attr} preload="auto"></video>'
+                    )
             else:
                 elements_html.append(
                     f'  <div data-hf-id="{cid}" id="{cid}" class="generic-block"{z_style} data-start="{c_start}" data-duration="{c_dur}"></div>'
@@ -515,8 +547,17 @@ class HyperFramesAdapter:
               var trimStart = parseFloat(trimVal) || 0;
 
               m.playsInline = true;
-              if (isMuted || (typeof m.hasAttribute === "function" && m.hasAttribute("muted")) || ds.muted === "true") {{
+              var isElementMuted = isMuted || (typeof m.hasAttribute === "function" && m.hasAttribute("muted")) || ds.muted === "true";
+              if (isElementMuted) {{
                 m.muted = true;
+              }} else {{
+                m.muted = false;
+                if (ds.volume != null) {{
+                  var v = parseFloat(ds.volume);
+                  if (!isNaN(v)) m.volume = Math.max(0, Math.min(1, v));
+                }} else {{
+                  m.volume = 1.0;
+                }}
               }}
 
               var isActive = (time >= cStart && time < (cStart + cDur));
@@ -783,9 +824,13 @@ class HyperFramesAdapter:
                         except Exception as e:
                             logger.error("Failed staging block instance %s in studio: %s", cid, e)
                 else:
-                    aid = c.get("asset_id") or c.get("video_id")
+                    aid = c.get("asset_id") or c.get("video_id") or c.get("asset_file") or c.get("file")
                     if aid:
-                        src_path = await cls._resolve_asset_path(aid, must_exist=True)
+                        src_path = None
+                        try:
+                            src_path = await cls._resolve_asset_path(aid, must_exist=False)
+                        except Exception as e:
+                            logger.warning("Could not resolve asset '%s' for preview: %s", aid, e)
                         if src_path and src_path.is_file():
                             staged = StudioService.stage_asset_from_path(
                                 src=src_path,
@@ -798,6 +843,9 @@ class HyperFramesAdapter:
                                 "display_name": c.get("title") or src_path.name,
                                 "file": staged["file"],
                             }
+                        else:
+                            c["missing_media"] = True
+                            c["missing_asset_id"] = str(aid)
 
         html = cls.project_doc_to_html(doc)
 
@@ -875,7 +923,7 @@ class HyperFramesAdapter:
                         except Exception as e:
                             logger.error("Failed staging block instance %s for render: %s", cid, e)
                 else:
-                    aid = c.get("asset_id") or c.get("video_id")
+                    aid = c.get("asset_id") or c.get("video_id") or c.get("asset_file") or c.get("file")
                     if aid:
                         src_path = await cls._resolve_asset_path(aid, must_exist=True)
                         if not src_path or not src_path.is_file():

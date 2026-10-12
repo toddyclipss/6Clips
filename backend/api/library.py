@@ -215,8 +215,9 @@ async def resolve_asset_path(job_id: str, db: AsyncSession) -> Path:
     if not file_str:
         raise HTTPException(status_code=404, detail="Asset has no file")
 
-    from backend.api.videos import _safe_resolve_path
-    path = _safe_resolve_path(file_str)
+    from backend.api.videos import ALLOWED_MEDIA_EXTENSIONS, _safe_resolve_path
+    allowed_tool_exts = ALLOWED_MEDIA_EXTENSIONS | {".txt", ".json", ".csv", ".zip", ".md"}
+    path = _safe_resolve_path(file_str, allowed_extensions=allowed_tool_exts)
     if not path.is_file():
         raise HTTPException(status_code=404, detail="Asset file missing on disk")
     return path
@@ -237,27 +238,88 @@ async def stream_asset(job_id: str, request: Request, db: AsyncSession = Depends
 
 @router.get("/track/{filename}")
 async def stream_track(filename: str, request: Request):
-    """Stream a background-music file from storage/music/.
-
-    There is no music router here — tracks are files you drop into that
-    directory yourself — but they are still files you own, so the Library lists
-    them and therefore has to be able to play them. Path traversal is refused
-    the same way the music service refuses it: resolve, then require the result
-    to still be inside the directory.
-    """
-    from backend.services.music_service import MUSIC_DIR
-    from backend.services.library_index import MUSIC_EXTS
-
-    try:
-        candidate = (MUSIC_DIR / filename).resolve()
-    except (OSError, ValueError):
-        raise HTTPException(status_code=400, detail="Bad track name")
-    if not candidate.is_relative_to(MUSIC_DIR.resolve()):
-        raise HTTPException(status_code=400, detail="Bad track name")
-    if not candidate.is_file() or candidate.suffix.lower() not in MUSIC_EXTS:
-        raise HTTPException(status_code=404, detail="Track not found")
+    """Stream a background-music file from storage/music/."""
+    from backend.api.music import _validate_track_path
+    candidate = _validate_track_path(filename)
     from backend.api.videos import serve_media_with_range
     return serve_media_with_range(candidate, request, filename=candidate.name)
+
+
+@router.get("/waveform/{key:path}")
+async def get_item_waveform(key: str, count: int = 46, db: AsyncSession = Depends(get_db)):
+    """Extract and return authentic cached audio waveform peaks (0.05..1.0) for any audio/video item."""
+    from backend.services.waveform_service import extract_audio_peaks
+    points = max(10, min(200, count))
+    target_path = None
+
+    if key.startswith("trk:") or key.startswith("music:"):
+        fname = key.split(":", 1)[1]
+        from backend.api.music import _validate_track_path
+        target_path = _validate_track_path(fname)
+    elif key.startswith("job:"):
+        jid = key.split(":", 1)[1]
+        target_path = await resolve_asset_path(jid, db)
+    elif key.startswith("dl:"):
+        from backend.models.downloaded_video import DownloadedVideo
+        did = key.split(":", 1)[1]
+        dl_row = await db.get(DownloadedVideo, did)
+        if dl_row and (dl_row.audio_path or dl_row.video_path):
+            p = Path(dl_row.audio_path if dl_row.audio_path and Path(dl_row.audio_path).is_file() else dl_row.video_path)
+            if p.is_file():
+                target_path = p
+    elif key.startswith("gv:"):
+        from backend.models.generated_video import GeneratedVideo
+        gid = key.split(":", 1)[1]
+        gv_row = await db.get(GeneratedVideo, gid)
+        if gv_row and (gv_row.audio_path or gv_row.video_path):
+            p = Path(gv_row.audio_path if gv_row.audio_path and Path(gv_row.audio_path).is_file() else gv_row.video_path)
+            if p.is_file():
+                target_path = p
+    else:
+        # Direct filename lookup in storage/music
+        from backend.api.music import _validate_track_path
+        try:
+            target_path = _validate_track_path(key)
+        except Exception:
+            target_path = None
+
+    if not target_path or not target_path.is_file():
+        raise HTTPException(status_code=404, detail="Audio file not found for waveform extraction")
+
+    peaks = extract_audio_peaks(target_path, points=points)
+    return {"key": key, "peaks": peaks, "count": len(peaks)}
+
+
+@router.post("/track/{filename}/hide")
+async def hide_library_track(filename: str):
+    """Hide a music track so it disappears from the Library."""
+    from backend.api.music import _validate_track_path
+    _validate_track_path(filename)
+    from backend.services.library_index import hide_track
+    hide_track(filename)
+    return {"ok": True, "hidden": filename}
+
+
+@router.post("/track/{filename}/unhide")
+async def unhide_library_track(filename: str):
+    """Unhide a music track so it returns to the Library."""
+    from backend.api.music import _validate_track_path
+    _validate_track_path(filename)
+    from backend.services.library_index import unhide_track
+    unhide_track(filename)
+    return {"ok": True, "unhidden": filename}
+
+
+@router.delete("/track/{filename}")
+async def delete_track(
+    filename: str,
+    hide_if_blocked: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    """Safely delete a user-owned music track from storage/music/."""
+    from backend.api.music import safe_delete_music_file
+    return await safe_delete_music_file(filename, db, hide_if_blocked=hide_if_blocked)
+
 
 
 def _drop_poster_cache(job_id: str) -> None:

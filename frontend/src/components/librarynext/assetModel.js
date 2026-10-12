@@ -199,8 +199,17 @@ export function hashUnit(str, i) {
   return ((h >>> 0) % 1000) / 1000
 }
 
-export function waveformBars(id, count = 30) {
-  return Array.from({ length: count }, (_, i) => 0.22 + hashUnit(id, i) * 0.78)
+export function waveformBars(id, count = 30, peaks = null) {
+  if (Array.isArray(peaks) && peaks.length > 0) {
+    if (peaks.length === count) return peaks
+    return Array.from({ length: count }, (_, i) => {
+      const idx = Math.min(peaks.length - 1, Math.floor((i / count) * peaks.length))
+      const val = peaks[idx]
+      return typeof val === "number" ? val : 0.0
+    })
+  }
+  // Neutral loading/unavailable state: flat subtle baseline, never fabricated fake peaks
+  return Array.from({ length: count }, () => 0.06)
 }
 
 /** Fold a stored key onto its canonical form — the frontend half of

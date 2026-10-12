@@ -95,7 +95,7 @@ async def get_settings():
     return SettingsResponse(
         ai_provider=s.ai_provider or "openai",
         ai_model=s.ai_model,
-        ai_api_key_set=bool(s.ai_api_key_encrypted),
+        ai_api_key_set=bool(s.ai_api_key_encrypted) or (s.ai_provider == "ollama"),
         youtube_api_key_set=bool(s.youtube_api_key_encrypted),
         douyin_cookie_set=bool(s.douyin_cookie_encrypted),
         tiktok_cookie_set=bool(s.tiktok_cookie_encrypted),
@@ -346,11 +346,14 @@ async def get_health():
         except Exception:
             health["ytdlp"] = {"status": "not_found"}
 
-    # AI provider configured (BYOK)
+    # AI provider configured (BYOK & Local Ollama)
+    from backend.core.ai_provider import _is_ollama_available
     has_ai_key = bool(
         app_settings.ANTHROPIC_API_KEY
         or app_settings.OPENAI_API_KEY
         or (s and s.ai_api_key_encrypted)
+        or (s and s.ai_provider == "ollama")
+        or (not app_settings.ANTHROPIC_API_KEY and not app_settings.OPENAI_API_KEY and _is_ollama_available())
     )
     health["ai_provider"] = {"status": "configured" if has_ai_key else "not_configured"}
 

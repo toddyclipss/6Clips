@@ -229,6 +229,7 @@ async def chat_websocket(websocket: WebSocket):
                 project_id = msg.get("project_id")
                 pinned_provider = msg.get("provider")
                 pinned_model = msg.get("model")
+                pinned_think = msg.get("think")
                 if not project_id:
                     async with AsyncSessionLocal() as db:
                         from backend.models.project import Project
@@ -252,6 +253,7 @@ async def chat_websocket(websocket: WebSocket):
                         pinned_provider=pinned_provider,
                         pinned_model=pinned_model,
                         project_id=project_id,
+                        pinned_think=pinned_think,
                     )
                 except Exception as e:
                     logger.error(f"Planner error: {e}", exc_info=True)

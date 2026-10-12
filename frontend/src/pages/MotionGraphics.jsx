@@ -63,10 +63,10 @@ export default function MotionGraphics() {
   const [extractTarget, setExtractTarget] = useState(null)
   const [isExtracting, setIsExtracting] = useState(false)
 
-  // Workspace exposure mode (Create / Review / Refine)
-  const [workspaceMode, setWorkspaceMode] = useState("refine")
+  // Workspace exposure mode (Create / Review / Refine) — P0 spec: default to Create
+  const [workspaceMode, setWorkspaceMode] = useState("create")
   const [activeContext, setActiveContext] = useState("hyperframes") // hyperframes | clip | tools
-  const [leftNav, setLeftNav] = useState("layers") // layers | resources
+  const [leftNav, setLeftNav] = useState("resources") // layers | resources
   const [rightNav, setRightNav] = useState("properties") // properties | variables
 
   // Pinned panels control
@@ -88,12 +88,67 @@ export default function MotionGraphics() {
   }, [])
 
   // External data & active asset selection
+  const [dataLoading, setDataLoading] = useState(false)
   const [libraryVideos, setLibraryVideos] = useState([])
   const [trendItems, setTrendItems] = useState([])
-  const [dataLoading, setDataLoading] = useState(false)
   const [selectedAsset, setSelectedAsset] = useState(null)
-
   const activeAsset = selectedAsset || libraryVideos[0] || null
+
+  // Ghost Preview state for HyperFrames Catalog blocks (non-destructive hover preview)
+  const [ghostPreview, setGhostPreview] = useState(null)
+  const preGhostPlayingRef = useRef(false)
+
+  const handleStartGhostPreview = useCallback((catalogItem) => {
+    if (!catalogItem) return
+    const bName = catalogItem.name || catalogItem.id
+    const aspect = aspectRatio || "9:16"
+    const previewUrl = `/api/projects/catalog/blocks/${bName}/preview?aspect_ratio=${aspect}`
+    const posterUrl = catalogItem.poster_url || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspect}`
+    if (isPlaying) {
+      preGhostPlayingRef.current = true
+      setIsPlaying(false)
+    } else {
+      preGhostPlayingRef.current = false
+    }
+    setGhostPreview({
+      block_id: bName,
+      title: catalogItem.title || bName,
+      previewUrl,
+      posterUrl,
+      item: catalogItem,
+    })
+  }, [aspectRatio, isPlaying])
+
+  const handleEndGhostPreview = useCallback(() => {
+    setGhostPreview(null)
+    if (preGhostPlayingRef.current) {
+      setIsPlaying(true)
+      preGhostPlayingRef.current = false
+    }
+  }, [])
+
+  // Keep active ghost preview in sync if aspect ratio toggles
+  useEffect(() => {
+    if (ghostPreview?.item) {
+      const bName = ghostPreview.item.name || ghostPreview.item.id
+      const aspect = aspectRatio || "9:16"
+      setGhostPreview((prev) => prev ? ({
+        ...prev,
+        previewUrl: `/api/projects/catalog/blocks/${bName}/preview?aspect_ratio=${aspect}`,
+        posterUrl: prev.item?.poster_url || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspect}`,
+      }) : null)
+    }
+  }, [aspectRatio])
+
+  const handleAskAiToInsert = useCallback((catalogItem) => {
+    const bName = catalogItem.name || catalogItem.id
+    const varsList = (catalogItem.variables || []).map(v => v.name || v.id).join(", ")
+    const instruction = `Insert HyperFrames block "${bName}" at t=${Number(currentTime || 0).toFixed(2)}s with aspect ratio ${aspectRatio}. Variables: [${varsList}].`
+    showSnackbar(`Copied AI instruction for block "${bName}"`, "info")
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(instruction).catch(() => {})
+    }
+  }, [currentTime, aspectRatio, showSnackbar])
 
   // Clip Studio hooks for contextual clip workspace with Project document persistence
   const clipSettings = useClipSettings()
@@ -158,7 +213,26 @@ export default function MotionGraphics() {
         }
       }
     })
-    return () => unsub && unsub()
+
+    const unsubRun = ws.on("agent_run_completed", async (msg) => {
+      if (project && (!msg.project_id || msg.project_id === project.id)) {
+        try {
+          const detail = await http.get(`/api/projects/${project.id}`)
+          const doc = detail.data?.document
+          const totalClips = (doc?.timeline?.tracks || []).reduce((acc, t) => acc + (t.clips || []).length, 0)
+          if (totalClips > 0) {
+            setWorkspaceMode("review")
+            showSnackbar("Agent finished execution — switched to Review mode", "success")
+          }
+        } catch {
+          // non-blocking
+        }
+      }
+    })
+    return () => {
+      unsub && unsub()
+      unsubRun && unsubRun()
+    }
   }, [project, revision, isDirty, showSnackbar])
 
   // 1. Initial Load: Ensure HyperFrames server is running and load/create active project
@@ -178,28 +252,44 @@ export default function MotionGraphics() {
         setInstalled(true)
         if (studioRes.data?.port) setPreviewPort(studioRes.data.port)
 
-        // Load requested project from URL query or recent project or create new one
+        // Load requested project from URL query or create clean new project
         const queryParams = new URLSearchParams(window.location.search)
         const requestedId = queryParams.get("projectId") || queryParams.get("project_id")
-        const projRes = await http.get("/api/projects")
-        const existing = projRes.data?.projects || []
-        const targetProj = (requestedId && existing.find(p => p.id === requestedId)) || (requestedId ? { id: requestedId } : existing[0])
-
-        if (targetProj) {
-          const detail = await http.get(`/api/projects/${targetProj.id}`)
-          setProject(detail.data)
-          setRevision(detail.data.revision)
-          setAspectRatio(detail.data.aspect_ratio || "9:16")
-          setDocument(detail.data.document)
+        
+        if (requestedId) {
+          try {
+            const detail = await http.get(`/api/projects/${requestedId}`)
+            setProject(detail.data)
+            setRevision(detail.data.revision)
+            setAspectRatio(detail.data.aspect_ratio || "9:16")
+            setDocument(detail.data.document)
+          } catch (fetchErr) {
+            console.warn(`Requested project ${requestedId} not found, initializing clean project`, fetchErr)
+            const created = await http.post("/api/projects", {
+              name: "New Motion Project",
+              aspect_ratio: "9:16",
+            })
+            setProject(created.data)
+            setRevision(created.data.revision)
+            setAspectRatio(created.data.aspect_ratio || "9:16")
+            setDocument(created.data.document)
+            const newUrl = new URL(window.location.href)
+            newUrl.searchParams.set("projectId", created.data.id)
+            window.history.replaceState({ projectId: created.data.id }, "", newUrl.toString())
+          }
         } else {
+          // Fresh navigation to /motion always creates an isolated, clean new project
           const created = await http.post("/api/projects", {
-            name: "Main Motion Project",
+            name: "New Motion Project",
             aspect_ratio: "9:16",
           })
           setProject(created.data)
           setRevision(created.data.revision)
           setAspectRatio(created.data.aspect_ratio || "9:16")
           setDocument(created.data.document)
+          const newUrl = new URL(window.location.href)
+          newUrl.searchParams.set("projectId", created.data.id)
+          window.history.replaceState({ projectId: created.data.id }, "", newUrl.toString())
         }
       } catch (err) {
         if (!cancelled) setStartError(err.message)
@@ -424,8 +514,8 @@ export default function MotionGraphics() {
   const handleAddMedia = async (asset) => {
     if (!project || !document) return
     const tracks = document.timeline?.tracks || []
-    const filename = (asset.filename || asset.title || "").toLowerCase()
-    const isAudio = asset.media_type === "audio" || filename.endsWith(".mp3") || filename.endsWith(".wav") || filename.endsWith(".aac")
+    const filename = (asset.filename || asset.title || asset.id || "").toLowerCase()
+    const isAudio = asset.media === "audio" || asset.media_type === "audio" || filename.endsWith(".mp3") || filename.endsWith(".wav") || filename.endsWith(".aac") || filename.endsWith(".ogg") || filename.endsWith(".m4a")
     const mType = isAudio ? "audio" : "video"
 
     let targetTrack = null
@@ -446,14 +536,17 @@ export default function MotionGraphics() {
     const lastClip = currentClips[currentClips.length - 1]
     const startSec = lastClip ? Number(lastClip.start_seconds || 0) + Number(lastClip.duration_seconds || 5) : 0
 
+    const resolvedAssetId = asset.key || asset.id
+    const resolvedAssetFile = asset.filename || (asset.id && asset.id.includes(".") ? asset.id : (isAudio ? `${asset.title || "audio"}.${asset.ext || "mp3"}` : asset.id ? `${asset.id}.mp4` : null))
+
     const newClip = {
       id: `clip_${Date.now()}`,
       type: mType,
-      asset_id: asset.id,
-      asset_file: asset.filename || asset.title || (isAudio ? "audio.mp3" : "media.mp4"),
+      asset_id: resolvedAssetId,
+      asset_file: resolvedAssetFile,
       title: asset.title || asset.filename || (isAudio ? "Audio Clip" : "Video Clip"),
       start_seconds: startSec,
-      duration_seconds: asset.duration ? Math.min(asset.duration, 10) : 5,
+      duration_seconds: asset.duration_seconds ? Math.min(asset.duration_seconds, 10) : (asset.duration ? Math.min(asset.duration, 10) : 5),
     }
 
     const res = await handleApplyOperation("add_clip", { track_id: targetTrack.id, clip: newClip })
@@ -552,11 +645,89 @@ export default function MotionGraphics() {
     }
   }
 
+  // 5c. Handle Native Drag & Drop from Resources to Timeline
+  const handleDropExternalClip = async ({ item, targetTrackId, startSeconds }) => {
+    if (!project) return
+    const tracks = project.document?.timeline?.tracks || []
+    const targetTrack = tracks.find((t) => t.id === targetTrackId)
+    if (targetTrack?.locked) {
+      showSnackbar(`Track "${targetTrack.name || targetTrackId}" is locked.`, "error")
+      return
+    }
+    const kind = item.kind || (item.block_id || item.variables || item.type === "block" ? "catalog" : "asset")
+    const startSec = Math.max(0, Number(startSeconds || 0))
+
+    if (kind === "catalog" || item.type === "block") {
+      const blockData = item.data || item.item || item
+      const defaultVars = {}
+      if (Array.isArray(blockData.variables)) {
+        blockData.variables.forEach((v) => {
+          defaultVars[v.name] = v.default !== undefined ? v.default : ""
+        })
+      }
+      const res = await handleApplyOperation("add_block", {
+        block_id: blockData.name || blockData.id,
+        track_id: targetTrackId,
+        variables: defaultVars,
+        start_seconds: startSec,
+        duration_seconds: Number(blockData.duration_seconds || 3.0),
+      })
+      if (res) {
+        showSnackbar(`Block "${blockData.title || blockData.name}" placed at ${startSec.toFixed(2)}s (Rev ${res.revision})`, "success")
+      }
+    } else if (kind === "source") {
+      const trend = item.data || item
+      const res = await handleApplyOperation("add_clip", {
+        track_id: targetTrackId,
+        clip: {
+          id: `clip_${Date.now()}`,
+          type: "video",
+          asset_id: `trend:${trend.id || trend.query || "source"}`,
+          asset_file: trend.video_url || "source.mp4",
+          title: trend.title || trend.query || "Trend Source",
+          start_seconds: startSec,
+          duration_seconds: 5.0,
+        },
+      })
+      if (res) {
+        showSnackbar(`Source "${trend.title || "Trend"}" placed at ${startSec.toFixed(2)}s (Rev ${res.revision})`, "success")
+      }
+    } else {
+      // Asset
+      const asset = item.data || item
+      const isAudio = asset.media === "audio" || item.mediaType === "audio" || (asset.ext && ["mp3", "wav", "aac", "ogg"].includes(asset.ext.toLowerCase())) || asset.source === "music"
+      const isImage = asset.media === "image" || item.mediaType === "image" || (asset.ext && ["png", "jpg", "jpeg", "webp", "gif"].includes(asset.ext.toLowerCase()))
+      const mType = isAudio ? "audio" : isImage ? "image" : "video"
+      const resolvedAssetId = asset.key || asset.id
+      const resolvedAssetFile = asset.filename || (asset.id && asset.id.includes(".") ? asset.id : (isAudio ? `${asset.title || "audio"}.${asset.ext || "mp3"}` : isImage ? `${asset.id || "image"}.${asset.ext || "png"}` : asset.id ? `${asset.id}.mp4` : null))
+
+      const newClip = {
+        id: `clip_${Date.now()}`,
+        type: mType,
+        asset_id: resolvedAssetId,
+        asset_file: resolvedAssetFile,
+        title: asset.title || asset.filename || (isAudio ? "Audio Clip" : isImage ? "Image Clip" : "Video Clip"),
+        start_seconds: startSec,
+        duration_seconds: asset.duration_seconds ? Math.min(asset.duration_seconds, 10) : (asset.duration ? Math.min(asset.duration, 10) : (isImage ? 3 : 5)),
+      }
+
+      const res = await handleApplyOperation("add_clip", {
+        track_id: targetTrackId,
+        clip: newClip,
+      })
+      if (res) {
+        showSnackbar(`Added ${newClip.title} at ${startSec.toFixed(2)}s (Rev ${res.revision})`, "success")
+      }
+    }
+  }
+
   // 6. Delete Clip via atomic operation
-  const handleDeleteClip = async (clip) => {
-    if (!project || !clip?.id) return
-    if (selectedElement?.id === clip.id) setSelectedElement(null)
-    const res = await handleApplyOperation("remove_clip", { clip_id: clip.id })
+  const handleDeleteClip = async (clipOrId) => {
+    if (!project || !clipOrId) return
+    const clipId = typeof clipOrId === "string" ? clipOrId : clipOrId?.id
+    if (!clipId) return
+    if (selectedElement?.id === clipId) setSelectedElement(null)
+    const res = await handleApplyOperation("remove_clip", { clip_id: clipId })
     if (res) {
       showSnackbar(`Removed clip from timeline (Rev ${res.revision})`, "info")
     }
@@ -949,9 +1120,20 @@ export default function MotionGraphics() {
         onToggleExpandedPreview={() => setExpandedPreview(!expandedPreview)}
       />
 
-      {/* 2. Main Studio Body */}
-      <Box sx={{ flex: 1, display: "flex", minHeight: 0, overflow: "hidden" }}>
-        {/* Left: Collapsed Rail Indicator */}
+      {/* 2. Main Studio Body: Vertical Split (Upper: Stage & Panels; Lower: Full-Width Contextual Workspace) */}
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
+
+        {/* Upper Stage & Sidebars Row */}
+        <Box
+          sx={{
+            flex: workspaceMode === "refine" ? (expandedPreview ? "1 1 70%" : "1 1 56%") : "1 1 100%",
+            display: "flex",
+            minHeight: expandedPreview ? 400 : 320,
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          {/* Left: Collapsed Rail Indicator */}
         {(workspaceMode === "refine" || workspaceMode === "create") && !pinnedLeft && (
           <Box
             sx={{
@@ -1044,10 +1226,14 @@ export default function MotionGraphics() {
                   trendItems={trendItems}
                   loading={dataLoading}
                   selectedAssetId={activeAsset?.id}
+                  aspectRatio={aspectRatio}
                   onSelectSource={(asset) => setSelectedAsset(asset)}
                   onAddMediaToTimeline={handleAddMedia}
                   onAddBlock={handleAddBlock}
                   onIngestTrend={handleIngestTrend}
+                  onStartGhostPreview={handleStartGhostPreview}
+                  onEndGhostPreview={handleEndGhostPreview}
+                  onAskAiToInsert={handleAskAiToInsert}
                   isPinned={pinnedLeft}
                   onTogglePin={() => setPinnedLeft(!pinnedLeft)}
                 />
@@ -1056,121 +1242,26 @@ export default function MotionGraphics() {
           </Box>
         )}
 
-        {/* Center: Stage & Contextual Workspace */}
+        {/* Center: Stage */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, height: "100%" }}>
-          {/* Top: Central Video Preview Stage */}
-          <Box sx={{ flex: workspaceMode === "refine" ? (expandedPreview ? "1 1 75%" : "1 1 55%") : "1 1 100%", minHeight: expandedPreview ? 460 : 360, display: "flex", flexDirection: "column" }}>
-            <StudioPreviewStage
-              ref={previewStageRef}
-              previewUrl={previewUrl}
-              aspectRatio={aspectRatio}
-              isLoading={starting}
-              currentTime={currentTime}
-              duration={document?.timeline?.duration_seconds || 15}
-              isPlaying={isPlaying}
-              onTogglePlay={() => setIsPlaying(!isPlaying)}
-              onPlaybackStateChange={setIsPlaying}
-              onTimeUpdate={setCurrentTime}
-              onSeek={handleUserSeek}
-              onRefresh={() => window.location.reload()}
-              onSelectElementId={handleSelectElementId}
-            />
-          </Box>
-
-          {/* Bottom: Contextual Workspace (Refine Mode) */}
-          {workspaceMode === "refine" && (
-            <Box sx={{ flex: expandedPreview ? "0 0 160px" : "1 1 45%", minHeight: expandedPreview ? 140 : 220, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-              {activeContext === "hyperframes" && (
-                <StudioTimelineWorkspace
-                  tracks={document?.timeline?.tracks || []}
-                  currentTime={currentTime}
-                  duration={document?.timeline?.duration_seconds || 15}
-                  fps={document?.timeline?.fps || 30}
-                  isPlaying={isPlaying}
-                  onTogglePlay={() => setIsPlaying(!isPlaying)}
-                  onSeek={handleUserSeek}
-                  selectedElementId={selectedElement?.id}
-                  onSelectElement={setSelectedElement}
-                  onDeleteClip={handleDeleteClip}
-                  onUpdateClipTiming={handleCommitClipTiming}
-                  onDuplicateClip={handleDuplicateClip}
-                  onSplitClip={handleSplitClip}
-                  onAddKeyframe={handleAddKeyframe}
-                  onUpdateKeyframe={handleUpdateKeyframe}
-                  onRemoveKeyframe={handleRemoveKeyframe}
-                  onToggleTrackState={handleToggleTrackState}
-                  onAddTrack={handleAddTrack}
-                  onDeleteTrack={handleDeleteTrack}
-                  onReorderTracks={handleReorderTracks}
-                  onRenameTrack={handleRenameTrack}
-                  onMoveClip={handleMoveClip}
-                />
-              )}
-
-              {activeContext === "clip" && (
-                <Box sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderTop: "1px solid", borderColor: "divider" }}>
-                  {benchRanges.ranges.length > 0 && (
-                    <Box sx={{ px: 2, py: 0.75, bgcolor: "#f8fafc", borderBottom: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
-                        {benchRanges.ranges.length} range(s) marked for extraction
-                      </Typography>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        disabled={isExtracting}
-                        onClick={handleDoCut}
-                        sx={{
-                          py: 0.25,
-                          px: 1.5,
-                          fontSize: "0.72rem",
-                          fontWeight: 700,
-                          bgcolor: "primary.main",
-                          borderRadius: 1.5,
-                        }}
-                      >
-                        {isExtracting ? <CircularProgress size={14} sx={{ color: "#ffffff", mr: 1 }} /> : null}
-                        Cut {benchRanges.ranges.length} clip{benchRanges.ranges.length !== 1 ? "s" : ""}
-                      </Button>
-                    </Box>
-                  )}
-                  <Box sx={{ flex: 1, minHeight: 0 }}>
-                    <SourceBench
-                      source={activeAsset}
-                      ranges={benchRanges}
-                      settings={clipSettings.settings}
-                      onSettings={clipSettings.update}
-                      existingClips={[]}
-                      onOpenDialog={() => {
-                        setExtractTarget(activeAsset)
-                        setExtractDialogOpen(true)
-                      }}
-                    />
-                  </Box>
-                </Box>
-              )}
-
-              {activeContext === "tools" && (
-                <StudioToolsWorkspace
-                  activeAsset={activeAsset}
-                  onToolSuccess={() => showSnackbar("Tool executed successfully", "success")}
-                />
-              )}
-
-              {activeContext === "code" && (
-                <StudioCodeWorkspace
-                  project={project}
-                  revision={revision}
-                  codeFiles={document?.code?.files || []}
-                  selectedElement={selectedElement}
-                  onApplyOperation={handleApplyOperation}
-                  onDirtyChange={setIsDirty}
-                  onFileSaved={async (savedFile, newRev) => {
-                    showSnackbar(`File "${savedFile.path}" persisted (Rev ${newRev})`, "success")
-                  }}
-                />
-              )}
-            </Box>
-          )}
+          <StudioPreviewStage
+            ref={previewStageRef}
+            previewUrl={previewUrl}
+            aspectRatio={aspectRatio}
+            isLoading={starting}
+            currentTime={currentTime}
+            duration={document?.timeline?.duration_seconds || 15}
+            isPlaying={isPlaying}
+            onTogglePlay={() => setIsPlaying(!isPlaying)}
+            onPlaybackStateChange={setIsPlaying}
+            onTimeUpdate={setCurrentTime}
+            onSeek={handleUserSeek}
+            onRefresh={() => window.location.reload()}
+            onSelectElementId={handleSelectElementId}
+            ghostPreview={ghostPreview}
+            onDismissGhostPreview={handleEndGhostPreview}
+            onInsertGhostBlock={handleAddBlock}
+          />
         </Box>
 
         {/* Right: Properties / Variables Inspector (Refine & Review modes) */}
@@ -1266,6 +1357,115 @@ export default function MotionGraphics() {
           </Box>
         )}
       </Box>
+
+      {/* Lower: Full-Width Contextual Workspace (Refine Mode) spanning 100% of editor width */}
+      {workspaceMode === "refine" && (
+        <Box
+          sx={{
+            flex: expandedPreview ? "0 0 160px" : "1 1 44%",
+            minHeight: expandedPreview ? 140 : 220,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            borderTop: "1px solid",
+            borderColor: "divider",
+            zIndex: 3,
+          }}
+        >
+          {activeContext === "hyperframes" && (
+            <StudioTimelineWorkspace
+              tracks={document?.timeline?.tracks || []}
+              currentTime={currentTime}
+              duration={document?.timeline?.duration_seconds || 15}
+              fps={document?.timeline?.fps || 30}
+              isPlaying={isPlaying}
+              onTogglePlay={() => setIsPlaying(!isPlaying)}
+              onSeek={handleUserSeek}
+              selectedElementId={selectedElement?.id}
+              onSelectElement={setSelectedElement}
+              onDeleteClip={handleDeleteClip}
+              onUpdateClipTiming={handleCommitClipTiming}
+              onDuplicateClip={handleDuplicateClip}
+              onSplitClip={handleSplitClip}
+              onAddKeyframe={handleAddKeyframe}
+              onUpdateKeyframe={handleUpdateKeyframe}
+              onRemoveKeyframe={handleRemoveKeyframe}
+              onToggleTrackState={handleToggleTrackState}
+              onAddTrack={handleAddTrack}
+              onDeleteTrack={handleDeleteTrack}
+              onReorderTracks={handleReorderTracks}
+              onRenameTrack={handleRenameTrack}
+              onMoveClip={handleMoveClip}
+              onDropExternalClip={handleDropExternalClip}
+            />
+          )}
+
+          {activeContext === "clip" && (
+            <Box sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderTop: "1px solid", borderColor: "divider" }}>
+              {benchRanges.ranges.length > 0 && (
+                <Box sx={{ px: 2, py: 0.75, bgcolor: "#f8fafc", borderBottom: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
+                    {benchRanges.ranges.length} range(s) marked for extraction
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    disabled={isExtracting}
+                    onClick={handleDoCut}
+                    sx={{
+                      py: 0.25,
+                      px: 1.5,
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      bgcolor: "primary.main",
+                      borderRadius: 1.5,
+                    }}
+                  >
+                    {isExtracting ? <CircularProgress size={14} sx={{ color: "#ffffff", mr: 1 }} /> : null}
+                    Cut {benchRanges.ranges.length} clip{benchRanges.ranges.length !== 1 ? "s" : ""}
+                  </Button>
+                </Box>
+              )}
+              <Box sx={{ flex: 1, minHeight: 0 }}>
+                <SourceBench
+                  source={activeAsset}
+                  ranges={benchRanges}
+                  settings={clipSettings.settings}
+                  onSettings={clipSettings.update}
+                  existingClips={[]}
+                  onOpenDialog={() => {
+                    setExtractTarget(activeAsset)
+                    setExtractDialogOpen(true)
+                  }}
+                />
+              </Box>
+            </Box>
+          )}
+
+          {activeContext === "tools" && (
+            <StudioToolsWorkspace
+              activeAsset={activeAsset}
+              onToolSuccess={() => showSnackbar("Tool executed successfully", "success")}
+            />
+          )}
+
+          {activeContext === "code" && (
+            <StudioCodeWorkspace
+              project={project}
+              revision={revision}
+              codeFiles={document?.code?.files || []}
+              selectedElement={selectedElement}
+              onApplyOperation={handleApplyOperation}
+              onDirtyChange={setIsDirty}
+              onFileSaved={async (savedFile, newRev) => {
+                showSnackbar(`File "${savedFile.path}" persisted (Rev ${newRev})`, "success")
+              }}
+            />
+          )}
+        </Box>
+      )}
+    </Box>
 
       {/* Conflict Reconciliation Dialog */}
       {conflictState && (

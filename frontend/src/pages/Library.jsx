@@ -300,9 +300,7 @@ export default function Library() {
       const form = new FormData()
       form.append("file", file)
       form.append("title", file.name.replace(/\.[^.]+$/, ""))
-      const { data } = await http.post("/api/downloaded/import", form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      const { data } = await http.post("/api/downloaded/import", form)
       showSnackbar(data.message || "Imported", "success")
       refresh()
     } catch (e) {
@@ -312,37 +310,41 @@ export default function Library() {
     }
   }
 
-  /** Endpoint per store — there is no single delete route across all four. */
+  /** Endpoint per store — safe deletion across all four stores. */
   const DELETE_BY_SOURCE = {
     generated: (it) => http.delete(`/api/videos/${it.id}`),
     downloaded: (it) => http.delete(`/api/downloaded/${it.id}`),
     job: (it) => http.delete(`/api/library/asset/${it.id}`),
-    // No delete route for the music directory — see deleteSelected.
-    music: null,
+    music: (it) => http.delete(`/api/music/${encodeURIComponent(it.id)}?hide_if_blocked=true`),
   }
 
   const deleteOne = async (item) => {
     const del = DELETE_BY_SOURCE[item.source]
     if (!del) {
-      showSnackbar(
-        "Music tracks live in storage/music/ — remove the file there", "info",
-      )
+      showSnackbar("Unsupported asset type for deletion", "error")
       return
     }
     try {
-      await del(item)
+      const res = await del(item)
       removeLocal(item.key)
       refresh()  // facet counts and pageCount come from the server
-      showSnackbar("Deleted", "success")
+      if (res?.data?.hidden) {
+        showSnackbar(`Removed “${item.title}” from Library (preserved on disk)`, "info")
+      } else {
+        showSnackbar("Deleted", "success")
+      }
     } catch (e) {
       showSnackbar(e.response?.data?.detail || "Could not delete that item", "error")
     }
   }
 
   const confirmDeleteOne = (item) => openConfirm(
-    "Delete this item?",
-    `“${item.title}” is removed from disk. This cannot be undone.`,
+    item.source === "music" && item.is_bundled ? "Remove from Library?" : "Delete this item?",
+    item.source === "music" && item.is_bundled
+      ? `“${item.title}” will be hidden from your Library view while preserving the audio file.`
+      : `“${item.title}” is removed from disk. This cannot be undone.`,
     () => deleteOne(item),
+    { confirmLabel: item.source === "music" && item.is_bundled ? "Remove" : "Delete" },
   )
 
   /** Delete everything selected, grouped by the store each item lives in.
@@ -380,10 +382,19 @@ export default function Library() {
     for (const it of byStore.downloaded) {
       try { await http.delete(`/api/downloaded/${it.id}`); ok++; succeeded.push(it) } catch { failures.push(it.title) }
     }
-    // Music tracks are yours on disk and there is no endpoint that removes
-    // them. Counting them as failures is the honest read: the user asked and
-    // it did not happen.
-    failures.push(...byStore.music.map((i) => `${i.title} (music tracks are removed from storage/music/)`))
+    for (const it of byStore.music) {
+      if (it.is_bundled) {
+        failures.push(`${it.title} (bundled system track)`)
+        continue
+      }
+      try {
+        await http.delete(`/api/music/${encodeURIComponent(it.id)}`)
+        ok++
+        succeeded.push(it)
+      } catch (e) {
+        failures.push(`${it.title} (${e.response?.data?.detail || "could not delete"})`)
+      }
+    }
     succeeded.forEach((i) => removeLocal(i.key))
     setSelected(new Map())
     refresh()
@@ -720,7 +731,7 @@ export default function Library() {
         </MenuItem>
         <MenuItem sx={{ fontSize: "0.84rem", color: "error.main" }}
           onClick={() => { const it = moreMenu.item; setMoreMenu(null); confirmDeleteOne(it) }}>
-          Delete
+          {moreMenu?.item?.source === "music" && moreMenu?.item?.is_bundled ? "Remove from Library" : "Delete"}
         </MenuItem>
       </Menu>
 

@@ -66,23 +66,26 @@ class RegistryAdapter:
         description = raw_manifest.get("description") or ""
         tags = list(raw_manifest.get("tags") or [])
         
-        # Categorize logically from tags or name
+        # Categorize logically into the 8 canonical categories
         category = "general"
         tags_lower = [t.lower() for t in tags]
-        if any(t in tags_lower for t in ["typography", "kinetic-type", "text", "title", "title-card", "handwritten"]):
-            category = "typography"
-        elif any(t in tags_lower for t in ["lower-third", "broadcast", "news"]):
-            category = "lower-thirds"
-        elif any(t in tags_lower for t in ["chart", "data-chart", "charts", "bar-chart-race"]):
-            category = "charts"
-        elif any(t in tags_lower for t in ["mock-ui", "notification", "chat", "app-showcase", "social"]):
-            category = "mock-ui"
-        elif any(t in tags_lower for t in ["shader", "webgpu", "webgpu-shader", "background", "particles"]):
-            category = "backgrounds"
-        elif any(t in tags_lower for t in ["transition", "wipe", "dissolve"]):
-            category = "transitions"
-        elif any(t in tags_lower for t in ["cta", "ad-template", "badge"]):
+        bname_lower = block_name.lower()
+        if block_name in ["instagram-follow", "tiktok-follow", "heygen-avatar-promo-card", "vpn-youtube-spot", "logo-outro"]:
             category = "call-to-action"
+        elif any(t in tags_lower for t in ["typography", "kinetic-type", "text", "title", "title-card", "handwritten"]) or "wave" in bname_lower or "type" in bname_lower or block_name.startswith("hw-"):
+            category = "typography"
+        elif any(t in tags_lower for t in ["lower-third", "broadcast", "news"]) or block_name.startswith("lt-") or "lower-third" in bname_lower:
+            category = "lower-thirds"
+        elif any(t in tags_lower for t in ["chart", "data-chart", "charts", "bar-chart-race", "flowchart"]) or "chart" in bname_lower:
+            category = "charts"
+        elif any(t in tags_lower for t in ["transition", "wipe", "dissolve", "cut", "flash", "pan"]) or block_name.startswith("transitions-") or "transition" in bname_lower:
+            category = "transitions"
+        elif any(t in tags_lower for t in ["shader", "webgpu", "webgpu-shader", "background", "particles", "aurora", "frost", "glitch", "liquid-metal"]) or "shader" in bname_lower or "bg" in bname_lower:
+            category = "backgrounds"
+        elif any(t in tags_lower for t in ["mock-ui", "notification", "chat", "app-showcase", "social", "ios", "vision", "carousel", "macos"]) or "ui" in bname_lower or "chat" in bname_lower:
+            category = "mock-ui"
+        else:
+            category = "general"
 
         dims = raw_manifest.get("dimensions") or {"width": 1080, "height": 1920}
         width = int(dims.get("width") or 1080)
@@ -135,6 +138,14 @@ class RegistryAdapter:
         
         version_hash = cls.compute_block_hash(block_dir) if block_dir else "0000000000000000"
 
+        is_vert_native = (width < height)
+        if is_vert_native:
+            aspect_compat_9x16 = "NATIVE"
+            aspect_compat_16x9 = "CONTAINED_ONLY"
+        else:
+            aspect_compat_16x9 = "NATIVE"
+            aspect_compat_9x16 = "ADAPTED" if block_name == "weight-wave" else "CONTAINED_ONLY"
+
         return {
             "id": block_name,
             "name": block_name,
@@ -148,6 +159,8 @@ class RegistryAdapter:
             "files": files,
             "preview": preview,
             "version_hash": version_hash,
+            "aspect_compat_9x16": aspect_compat_9x16,
+            "aspect_compat_16x9": aspect_compat_16x9,
         }
 
     @classmethod
@@ -155,14 +168,17 @@ class RegistryAdapter:
         cls,
         category: Optional[str] = None,
         search: Optional[str] = None,
-        limit: int = 100,
+        limit: Optional[int] = 300,
+        offset: int = 0,
+        query: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
-        """List and normalize available catalog blocks."""
+        """List and normalize available catalog blocks with full discovery and pagination support."""
+        search_query = search or query
         reg_dir = get_registry_dir()
         if not reg_dir.exists():
             return []
 
-        items = []
+        all_matching = []
         for bdir in sorted(reg_dir.iterdir()):
             if not bdir.is_dir():
                 continue
@@ -177,17 +193,26 @@ class RegistryAdapter:
                 if category and category.lower() != "all" and item["category"].lower() != category.lower():
                     continue
                 # Filter search
-                if search:
-                    q = search.lower()
-                    haystack = f"{item['title']} {item['description']} {' '.join(item['tags'])}".lower()
+                if search_query:
+                    q = search_query.lower().strip()
+                    haystack = f"{item['title']} {item['description']} {' '.join(item['tags'])} {item['name']}".lower()
                     if q not in haystack:
-                        continue
-                items.append(item)
-                if len(items) >= limit:
-                    break
+                        # Fallback to keyword matching excluding generic search qualifiers
+                        stop_words = {"blocks", "block", "template", "templates", "element", "elements", "items", "item"}
+                        keywords = [w for w in re.findall(r'\w+', q) if w not in stop_words]
+                        if not keywords or not all(k in haystack for k in keywords):
+                            continue
+                all_matching.append(item)
             except Exception as e:
                 logger.error("Error reading registry block %s: %s", bdir.name, e)
-        return items
+
+        # Apply offset and limit
+        if offset > 0:
+            all_matching = all_matching[offset:]
+        if limit is not None and limit > 0:
+            all_matching = all_matching[:limit]
+
+        return all_matching
 
     @classmethod
     def get_catalog_item(cls, block_name: str) -> Optional[Dict[str, Any]]:
@@ -342,14 +367,19 @@ class RegistryAdapter:
             html_content = comp_file.read_text(encoding="utf-8")
 
         # 1. Scope and isolate data-composition-id
-        # Replace original composition id with instance_id
+        # Replace original composition id with instance_id across all HTML elements and CSS selectors
         orig_comp_id = manifest.get("name") or block_name
-        html_content = re.sub(
-            r'data-composition-id="[^"]+"',
-            f'data-composition-id="{instance_id}"',
-            html_content,
-            count=1
-        )
+        found_comp_ids = set(re.findall(r'data-composition-id=[\'"]([^\'"]+)[\'"]', html_content))
+        found_comp_ids.add(orig_comp_id)
+        if block_name:
+            found_comp_ids.add(block_name)
+
+        for cid in found_comp_ids:
+            if not cid:
+                continue
+            pattern = r'data-composition-id=([\'"])' + re.escape(cid) + r'\1'
+            replacement = r'data-composition-id=\1' + instance_id + r'\1'
+            html_content = re.sub(pattern, replacement, html_content)
 
         # 2. Scope timeline dictionary key: window.__timelines["..."] = tl;
         html_content = re.sub(
@@ -361,7 +391,8 @@ class RegistryAdapter:
         stage_w, stage_h = stage_dimensions if stage_dimensions else ((1080, 1920) if aspect_ratio == "9:16" else (1920, 1080))
         is_vertical = (aspect_ratio == "9:16") or (stage_w < stage_h)
 
-        if is_vertical:
+        is_ww_or_text_block = (block_name == "weight-wave") or ("Recursive Wave" in html_content) or ("#ww-line" in html_content)
+        if is_vertical and is_ww_or_text_block:
             # Adapt hardcoded 1920 canvas coordinates to vertical stage (1080px width x 1920px height)
             # Available width with safe margins: 1080 - 120 = 960px
             max_line_w = max(400, stage_w - 120)

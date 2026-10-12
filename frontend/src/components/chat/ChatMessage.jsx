@@ -128,7 +128,7 @@ export default function ChatMessage({ role, content }) {
             textTransform: "uppercase",
           }}
         >
-          {isUser ? "You" : isSystem ? "System" : "ViralMint"}
+          {isUser ? "You" : isSystem ? "System" : "6Clips"}
         </Typography>
 
         <Box

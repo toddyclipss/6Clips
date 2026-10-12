@@ -243,13 +243,32 @@ export default function StudioLayersPanel({
     }
   }
 
+  // Check if clip or any ancestor group is locked
+  const isElementLocked = useCallback((clip) => {
+    if (!clip) return false
+    if (clip.locked) return true
+    let currPid = clip.parent_id
+    const visited = new Set()
+    while (currPid && !visited.has(currPid)) {
+      visited.add(currPid)
+      const pClip = allClips.find((c) => c.id === currPid)
+      if (pClip) {
+        if (pClip.locked) return true
+        currPid = pClip.parent_id
+      } else {
+        break
+      }
+    }
+    return false
+  }, [allClips])
+
   // Row Renderer
   const renderLayerRow = (clip, depth = 0) => {
     const isSelected = selectedElementId === clip.id
     const isGroup = clip.type === "group"
     const isCollapsed = isGroup && !!collapsedGroups[clip.id]
     const children = childrenMap[clip.id] || []
-    const isLocked = !!clip.locked
+    const isLocked = isElementLocked(clip)
     const isVisible = clip.visible !== false
     const hasAnimation = Array.isArray(clip.animations) && clip.animations.length > 0
     const isRenaming = renamingId === clip.id
@@ -428,6 +447,30 @@ export default function StudioLayersPanel({
                 }}
               >
                 {isVisible ? <IconEye size={14} /> : <IconEyeOff size={14} />}
+              </IconButton>
+            </Tooltip>
+
+            {/* Quick Action Delete Button */}
+            <Tooltip title="Delete layer" arrow>
+              <IconButton
+                size="small"
+                data-testid={`delete-layer-btn-${clip.id}`}
+                disabled={isLocked}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (onDeleteClip && !isLocked) {
+                    onDeleteClip(clip.id)
+                  }
+                }}
+                sx={{
+                  p: 0.25,
+                  width: 22,
+                  height: 22,
+                  color: "text.disabled",
+                  "&:hover": { color: "error.main" },
+                }}
+              >
+                <IconTrash size={13} />
               </IconButton>
             </Tooltip>
 

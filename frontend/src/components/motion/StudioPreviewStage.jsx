@@ -2,7 +2,7 @@
 // Copyright (c) 2025-2026 ViralMint Contributors
 import React, { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react"
 import {
-  Box, Stack, Typography, IconButton, Slider, Tooltip, CircularProgress,
+  Box, Stack, Typography, IconButton, Slider, Tooltip, CircularProgress, Chip, Button,
 } from "@mui/material"
 import {
   IconPlayerPlay,
@@ -13,12 +13,15 @@ import {
   IconVolumeOff,
   IconMaximize,
   IconRefresh,
+  IconX,
+  IconSparkles,
 } from "@tabler/icons-react"
 
 /**
  * Central Stage & Video Preview using HyperFrames Player integration.
  * Respects 9:16 and 16:9 aspect ratios without distortion.
  * Uses Light theme canvas surrounding with crisp composition stage.
+ * Supports temporary non-destructive Ghost Preview for HyperFrames Catalog blocks.
  */
 const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   previewUrl,
@@ -33,10 +36,29 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   onSeek,
   onRefresh,
   onSelectElementId,
+  ghostPreview = null,
+  onDismissGhostPreview,
+  onInsertGhostBlock,
 }, ref) {
   const iframeRef = useRef(null)
   const [muted, setMuted] = useState(false)
   const lastPostedPlayRef = useRef(null)
+  const [ghostFrameLoaded, setGhostFrameLoaded] = useState(false)
+
+  // Listen to Escape key to dismiss temporary ghost preview immediately
+  useEffect(() => {
+    if (!ghostPreview) {
+      setGhostFrameLoaded(false)
+      return
+    }
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (onDismissGhostPreview) onDismissGhostPreview()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [ghostPreview, onDismissGhostPreview])
 
   const ALLOWED_OUTBOUND_ACTIONS = new Set(["play", "pause", "seek", "mute"])
 
@@ -197,7 +219,8 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
               ref={iframeRef}
               src={previewUrl}
               title="Composition Stage"
-              sandbox="allow-scripts"
+              allow="autoplay"
+              sandbox="allow-scripts allow-same-origin"
               style={{
                 width: "100%",
                 height: "100%",
@@ -226,6 +249,56 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
               }}
             >
               <CircularProgress size={28} sx={{ color: "#ffffff" }} />
+            </Box>
+          )}
+
+          {/* Ghost Preview Stage Frame (Pure visual preview, zero overlay clutter) */}
+          {ghostPreview && (
+            <Box
+              id="studio-ghost-preview-stage"
+              data-testid="studio-ghost-preview-stage"
+              sx={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 10,
+                bgcolor: "#000000",
+                overflow: "hidden",
+              }}
+            >
+              {ghostPreview.posterUrl && !ghostFrameLoaded && (
+                <Box
+                  component="img"
+                  src={ghostPreview.posterUrl}
+                  alt={ghostPreview.title || ghostPreview.block_id}
+                  sx={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    zIndex: 1,
+                  }}
+                />
+              )}
+              {ghostPreview.previewUrl && (
+                <iframe
+                  id="studio-ghost-preview-iframe"
+                  src={ghostPreview.previewUrl}
+                  title={`Ghost Preview: ${ghostPreview.title || ghostPreview.block_id}`}
+                  sandbox="allow-scripts"
+                  onLoad={() => setGhostFrameLoaded(true)}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: 0,
+                    display: "block",
+                    backgroundColor: "#0b0f19",
+                    zIndex: 2,
+                  }}
+                />
+              )}
             </Box>
           )}
         </Box>

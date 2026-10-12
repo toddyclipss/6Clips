@@ -12,8 +12,9 @@
  * page. It repeats as the connector in the by-source view, so one visual
  * device answers "where did this come from?" in both layouts.
  */
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Box, Typography, Stack, IconButton, Tooltip, alpha, useTheme } from "@mui/material"
+import http from "../../api/http"
 import {
   IconPlayerPlay,
   IconDots,
@@ -26,6 +27,8 @@ import {
 } from "@tabler/icons-react"
 import { ORIGINS, originColor, originTextColor, fmtDay, waveformBars } from "./assetModel"
 import { formatClock } from "../../utils/format"
+
+const TILE_WAVEFORM_CACHE = new Map()
 
 const MEDIA_ICON = {
   video: IconMovie,
@@ -61,6 +64,27 @@ export default function AssetTile({
   // landing on the tile OR on anything inside it.
   const [focused, setFocused] = useState(false)
   const [broken, setBroken] = useState(false)
+  const [tilePeaks, setTilePeaks] = useState(() => (item?.key ? TILE_WAVEFORM_CACHE.get(item.key) : null))
+
+  useEffect(() => {
+    if (item?.media !== "audio" || !item?.key) return
+    if (TILE_WAVEFORM_CACHE.has(item.key)) {
+      setTilePeaks(TILE_WAVEFORM_CACHE.get(item.key))
+      return
+    }
+    let alive = true
+    const count = dense ? 22 : 30
+    http.get(`/api/library/waveform/${encodeURIComponent(item.key)}`, { params: { count } })
+      .then(({ data }) => {
+        if (Array.isArray(data?.peaks)) {
+          TILE_WAVEFORM_CACHE.set(item.key, data.peaks)
+          if (alive) setTilePeaks(data.peaks)
+        }
+      })
+      .catch(() => {})
+    return () => { alive = false }
+  }, [item?.key, item?.media, dense])
+
   const active = hovered || focused
 
   const oc = originColor(item.origin, isDark)
@@ -129,7 +153,7 @@ export default function AssetTile({
         ) : item.media === "audio" ? (
           <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.4}
             sx={{ height: "100%", px: 2, bgcolor: alpha(oc, isDark ? 0.1 : 0.06) }}>
-            {waveformBars(item.key, dense ? 22 : 30).map((h, i) => (
+            {waveformBars(item.key, dense ? 22 : 30, tilePeaks).map((h, i) => (
               <Box key={i} sx={{
                 width: 3, borderRadius: 2, height: `${Math.round(h * 62)}%`,
                 bgcolor: oc, opacity: 0.28 + h * 0.5,

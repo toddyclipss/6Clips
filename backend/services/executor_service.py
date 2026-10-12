@@ -482,6 +482,53 @@ class ExecutorService:
         clip_paths = [c.get("video_path") for c in clips if c.get("video_path")]
         clip_ids = [c.get("generated_video_id") for c in clips if c.get("generated_video_id")]
 
+        if payload.get("project_id") and clips:
+            from backend.services.project_service import ProjectService
+            proj_id = payload["project_id"]
+            try:
+                p = await ProjectService.get_project(proj_id)
+                top = clips[0]
+                top_id = top.get("generated_video_id")
+                top_path = top.get("video_path")
+                dur_val = top.get("duration") or 5.0
+                if top_id and top_path:
+                    await ProjectService.apply_operation(
+                        project_id=proj_id,
+                        expected_revision=p.revision,
+                        operation_type="add_asset",
+                        payload={"asset": {
+                            "id": f"gv:{top_id}",
+                            "type": "generated",
+                            "title": top.get("title") or "Extracted Clip",
+                            "video_path": str(top_path),
+                            "duration": dur_val,
+                        }},
+                        author="agent",
+                    )
+                    p = await ProjectService.get_project(proj_id)
+                    await ProjectService.apply_operation(
+                        project_id=proj_id,
+                        expected_revision=p.revision,
+                        operation_type="add_clip",
+                        payload={
+                            "track_id": "track_video_main",
+                            "clip": {
+                                "id": f"clip_extracted_{top_id[:8]}",
+                                "type": "video",
+                                "name": top.get("title") or "Extracted Clip",
+                                "asset_id": f"gv:{top_id}",
+                                "video_id": f"gv:{top_id}",
+                                "start_time": 0.0,
+                                "duration": dur_val,
+                                "source_in": 0.0,
+                                "source_out": dur_val,
+                            }
+                        },
+                        author="agent",
+                    )
+            except Exception as e:
+                logger.warning("Failed linking extracted clip to project: %s", e)
+
         return {
             "clips": clips,
             "files": clip_paths,
@@ -845,10 +892,22 @@ class ExecutorService:
             verif = {"ok": True, "verifier": "trends_indexed_check", "count": len(items)}
             return output, verif
 
-    @staticmethod
-    async def _execute_suggest_clips(payload: dict, user_id: str) -> tuple[dict, dict]:
+    @classmethod
+    async def _execute_suggest_clips(cls, payload: dict, user_id: str) -> tuple[dict, dict]:
+        from uuid import uuid4
+        from sqlalchemy import select
+        from backend.database import AsyncSessionLocal
+        from backend.models.downloaded_video import DownloadedVideo
+        from backend.models.user_settings import UserSettings
         from backend.services.asset_resolver import resolve_asset_record_and_path
         from backend.services.video_utils import probe_duration
+        from backend.services.clip_extractor import (
+            _load_or_transcribe_segments,
+            _select_clip_windows_with_retries,
+            _remove_overlapping_clips,
+            _snap_to_sentence_boundaries,
+            _generate_duration_based_clips,
+        )
 
         video_id = payload["video_id"]
         canonical_key, src_path, meta = await resolve_asset_record_and_path(video_id, must_exist=True)
@@ -856,34 +915,157 @@ class ExecutorService:
         max_clips = int(payload.get("max_clips") or 3)
         min_dur = float(payload.get("min_duration") or 5.0)
         max_dur = float(payload.get("max_duration") or 30.0)
+        whisper_quality = payload.get("whisper_quality", "fast")
 
-        # Propose viral window cuts deterministically
-        window_len = max(min_dur, min(max_dur, dur / max(1, max_clips)))
-        suggestions = []
-        for i in range(max_clips):
-            start = round(i * (dur / max_clips), 1)
-            end = round(min(dur, start + window_len), 1)
-            if end > start:
+        async with AsyncSessionLocal() as db:
+            dv_id = canonical_key.replace("dl:", "").replace("gv:", "")
+            res_v = await db.execute(select(DownloadedVideo).where(DownloadedVideo.id == dv_id))
+            dv_record = res_v.scalar_one_or_none()
+
+            res_s = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id))
+            user_settings = res_s.scalar_one_or_none()
+
+        segments = []
+        if dv_record:
+            try:
+                segments = await _load_or_transcribe_segments(
+                    dv_record,
+                    user_settings=user_settings,
+                    whisper_quality=whisper_quality,
+                    user_id=user_id,
+                )
+            except Exception as e:
+                logger.warning(f"Whisper transcription failed or skipped in suggest_clips: {e}")
+                segments = []
+
+        if segments and len(segments) > 0:
+            windows = await _select_clip_windows_with_retries(
+                segments=segments,
+                title=meta.get("title") or "Source Video",
+                duration=int(dur),
+                max_clips=max_clips,
+                user_settings=user_settings,
+                min_duration=min_dur,
+                max_duration=max_dur,
+                user_id=user_id,
+                user_query=payload.get("user_query"),
+            )
+            clean = []
+            for w in windows or []:
+                if isinstance(w, dict) and w.get("end", 0) > w.get("start", 0):
+                    clean.append(w)
+            clean = _snap_to_sentence_boundaries(clean, segments)
+            clean = _remove_overlapping_clips(clean)
+            suggestions = []
+            for i, w in enumerate(clean[:max_clips]):
+                s_in = round(float(w["start"]), 2)
+                s_out = round(float(w["end"]), 2)
                 suggestions.append({
                     "id": f"sugg_{i+1}",
-                    "start": start,
-                    "end": end,
-                    "label": f"Highlight {i+1}",
-                    "score": round(8.5 - i * 0.5, 1),
-                    "hook_score": round(9.0 - i * 0.4, 1),
-                    "reason": f"High engagement segment at {start}s - {end}s",
+                    "start": s_in,
+                    "end": s_out,
+                    "duration": round(s_out - s_in, 2),
+                    "title": w.get("title") or f"Highlight {i+1}",
+                    "hook": w.get("hook", ""),
+                    "hook_score": float(w.get("hook_score") or 8.0),
+                    "hook_type": w.get("hook_type", "general"),
+                    "virality_score": float(w.get("virality_score") or 8.0),
+                    "score_breakdown": w.get("score_breakdown") or {
+                        "flow": 8.0, "value": 8.0, "trend": 7.0, "shareability": 8.0
+                    },
+                    "reason": w.get("reason") or f"Strong engagement moment at {s_in}s - {s_out}s",
+                    "provenance": "ai_transcript_analysis",
                 })
+        else:
+            fallback_windows = _generate_duration_based_clips(
+                int(dur), max_clips,
+                min_duration=int(min_dur), max_duration=int(max_dur),
+                title=meta.get("title") or "Source Video",
+            )
+            suggestions = []
+            for i, w in enumerate(fallback_windows):
+                s_in = round(float(w["start"]), 2)
+                s_out = round(float(w["end"]), 2)
+                suggestions.append({
+                    "id": f"sugg_{i+1}",
+                    "start": s_in,
+                    "end": s_out,
+                    "duration": round(s_out - s_in, 2),
+                    "title": w.get("title") or f"Clip {i+1}",
+                    "hook": "",
+                    "hook_score": 5.0,
+                    "hook_type": "general",
+                    "virality_score": 5.0,
+                    "score_breakdown": {
+                        "flow": 5.0, "value": 5.0, "trend": 5.0, "shareability": 5.0
+                    },
+                    "reason": "Duration-based split (no speech detected in transcript)",
+                    "provenance": "duration_fallback",
+                })
+
+        project_mutation = None
+        if payload.get("project_id") and payload.get("apply_to_project") and suggestions:
+            top_clip = suggestions[0]
+            from backend.services.project_service import ProjectService
+            proj = await ProjectService.get_project(payload["project_id"])
+            exp_rev = payload.get("expected_revision", proj.revision)
+            clip_id = f"clip_highlight_{uuid4().hex[:6]}"
+
+            # Ensure asset is attached to project
+            try:
+                await ProjectService.apply_operation(
+                    project_id=proj.id,
+                    expected_revision=exp_rev,
+                    operation_type="add_asset",
+                    payload={"asset": {
+                        "id": canonical_key,
+                        "type": "downloaded" if canonical_key.startswith("dl:") else "generated",
+                        "title": meta.get("title") or "Source Video",
+                        "video_path": str(src_path),
+                        "duration": dur,
+                    }},
+                    author="agent",
+                )
+                proj = await ProjectService.get_project(payload["project_id"])
+                exp_rev = proj.revision
+            except Exception:
+                pass
+
+            project_mutation = await ProjectService.apply_operation(
+                project_id=proj.id,
+                expected_revision=exp_rev,
+                operation_type="add_clip",
+                payload={
+                    "track_id": "track_video_main",
+                    "clip": {
+                        "id": clip_id,
+                        "type": "video",
+                        "name": top_clip["title"],
+                        "asset_id": canonical_key,
+                        "video_id": canonical_key,
+                        "start_time": 0.0,
+                        "duration": top_clip["duration"],
+                        "source_in": top_clip["start"],
+                        "source_out": top_clip["end"],
+                        "virality_score": top_clip["virality_score"],
+                        "hook_type": top_clip["hook_type"],
+                    }
+                },
+                author="agent",
+            )
 
         output = {
             "video_id": video_id,
             "canonical_asset": canonical_key,
             "suggestions": suggestions,
             "count": len(suggestions),
+            "project_mutation": project_mutation,
         }
         verif = {
             "ok": len(suggestions) > 0,
             "verifier": "clip_suggestions_check",
             "count": len(suggestions),
+            "top_candidate": suggestions[0] if suggestions else None,
         }
         return output, verif
 

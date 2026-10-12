@@ -869,6 +869,7 @@ export default function StudioTimelineWorkspace({
   onReorderTracks,
   onRenameTrack,
   onMoveClip,
+  onDropExternalClip,
 }) {
   const containerRef = useRef(null)
   const [zoom, setZoom] = useState(1.0)
@@ -886,6 +887,10 @@ export default function StudioTimelineWorkspace({
   // Drag / Trim State
   // { mode: 'move'|'trim-left'|'trim-right', clipId, sourceTrackId, clip, startX, startY, origStart, origDur, origTrimStart, currentStart, currentDur, currentTrimStart, hoverTrackId }
   const [dragState, setDragState] = useState(null)
+
+  // External Native Drag & Drop State (from Resources: Assets, Sources, Catalog)
+  // { hoverTrackId: string, dropTime: number, isValid: boolean, title: string, duration: number, item: any }
+  const [externalDrag, setExternalDrag] = useState(null)
 
   const pixelsPerSecond = 40 * zoom
   const contentWidth = Math.max(900, (duration + 5) * pixelsPerSecond)
@@ -937,6 +942,49 @@ export default function StudioTimelineWorkspace({
     }
     return { time: candidateTime, target: null }
   }, [fps])
+
+  // External item compatibility checker for destination track
+  const isExternalItemValidForTrack = useCallback((item, track) => {
+    if (!track || track.locked) return false
+    const destType = (track.type || "video").toLowerCase()
+    const mediaType = (item?.mediaType || item?.kind || "").toLowerCase()
+    const isAudio = mediaType === "audio" || item?.data?.media === "audio" || (item?.data?.ext && ["mp3", "wav", "aac", "ogg"].includes(item.data.ext.toLowerCase())) || item?.data?.source === "music"
+    const isBlock = mediaType === "block" || item?.kind === "catalog" || item?.type === "block"
+    const isCaption = mediaType === "caption" || mediaType === "captions"
+
+    if (isAudio && destType !== "audio") return false
+    if (!isAudio && destType === "audio") return false
+    if (isCaption && destType !== "captions") return false
+    if (!isCaption && destType === "captions") return false
+    if (isBlock && !["graphics", "components", "video"].includes(destType)) return false
+    return true
+  }, [])
+
+  // Window listeners for Escape cancellation and dragend cleanup
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (externalDrag) {
+          setExternalDrag(null)
+          setSnapGuideTime(null)
+        }
+        if (dragState) {
+          setDragState(null)
+          setSnapGuideTime(null)
+        }
+      }
+    }
+    const handleDragEnd = () => {
+      setExternalDrag(null)
+      setSnapGuideTime(null)
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("dragend", handleDragEnd)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+      window.removeEventListener("dragend", handleDragEnd)
+    }
+  }, [externalDrag, dragState])
 
   // Drag / Trim Mouse Move & Mouse Up
   useEffect(() => {
@@ -1380,6 +1428,10 @@ export default function StudioTimelineWorkspace({
               const isDragSource = dragState?.sourceTrackId === track.id
               const isTargetValid = isDragHover ? isDropTargetValid(dragState?.clip, track) : true
 
+              // External drag hover and validity
+              const isExtHover = externalDrag?.hoverTrackId === track.id
+              const isExtValid = externalDrag ? externalDrag.isValid : true
+
               // Clips on this track with expanded animation lanes
               const expandedClips = isCollapsed ? [] : clips.filter((c) => expandedLanes.has(c.id))
 
@@ -1414,17 +1466,103 @@ export default function StudioTimelineWorkspace({
                     {/* Track Clips Canvas Lane */}
                     <Box
                       data-track-lane-id={track.id}
+                      data-track-id={track.id}
+                      onDragOver={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        e.dataTransfer.dropEffect = "copy"
+
+                        const rect = e.currentTarget.getBoundingClientRect()
+                        const offsetX = e.clientX - rect.left
+                        let rawTime = Math.max(0, offsetX / pixelsPerSecond)
+                        let snappedTime = rawTime
+                        let guide = null
+                        if (snap) {
+                          const s = snapValue(rawTime, snapTargets, pixelsPerSecond)
+                          if (s.target) {
+                            snappedTime = s.time
+                            guide = s.time
+                          }
+                        }
+                        setSnapGuideTime(guide)
+
+                        let itemData = externalDrag?.item || null
+                        if (!itemData) {
+                          try {
+                            const raw = e.dataTransfer.getData("application/viralmint-clip") || e.dataTransfer.getData("application/json")
+                            if (raw) itemData = JSON.parse(raw)
+                          } catch {}
+                        }
+
+                        const valid = !track.locked && (itemData ? isExternalItemValidForTrack(itemData, track) : true)
+
+                        setExternalDrag((prev) => ({
+                          hoverTrackId: track.id,
+                          dropTime: Number(snappedTime.toFixed(2)),
+                          isValid: valid,
+                          title: itemData?.title || prev?.title || "New Clip",
+                          duration: itemData?.duration || prev?.duration || 3.0,
+                          item: itemData || prev?.item,
+                        }))
+                      }}
+                      onDragLeave={(e) => {
+                        const related = e.relatedTarget
+                        if (!e.currentTarget.contains(related)) {
+                          if (externalDrag?.hoverTrackId === track.id) {
+                            setExternalDrag(null)
+                            setSnapGuideTime(null)
+                          }
+                        }
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setSnapGuideTime(null)
+
+                        let itemData = externalDrag?.item || null
+                        if (!itemData) {
+                          try {
+                            const raw = e.dataTransfer.getData("application/viralmint-clip") || e.dataTransfer.getData("application/json")
+                            if (raw) itemData = JSON.parse(raw)
+                          } catch {}
+                        }
+
+                        const droppedItem = itemData || externalDrag?.item
+                        const targetDropTime = externalDrag?.dropTime != null ? externalDrag.dropTime : 0.0
+
+                        setExternalDrag(null)
+
+                        if (!droppedItem) return
+                        if (track.locked) return
+                        if (!isExternalItemValidForTrack(droppedItem, track)) return
+
+                        if (onDropExternalClip) {
+                          onDropExternalClip({
+                            item: droppedItem,
+                            targetTrackId: track.id,
+                            startSeconds: targetDropTime,
+                          })
+                        }
+                      }}
                       sx={{
                         width: `${contentWidth}px`,
                         position: "relative",
                         bgcolor: isCollapsed
                           ? "#f8fafc"
+                          : isExtHover
+                          ? isExtValid
+                            ? "rgba(139, 92, 246, 0.08)"
+                            : "rgba(239, 68, 68, 0.08)"
                           : isDragHover && !isDragSource
                           ? isTargetValid
                             ? "rgba(139, 92, 246, 0.06)"
                             : "rgba(239, 68, 68, 0.06)"
                           : "#ffffff",
-                        border: isDragHover && !isDragSource
+                        border: isExtHover
+                          ? isExtValid
+                            ? "2px dashed #8b5cf6"
+                            : "2px dashed #ef4444"
+                          : isDragHover && !isDragSource
                           ? isTargetValid
                             ? "2px dashed #8b5cf6"
                             : "2px dashed #ef4444"
@@ -1433,6 +1571,53 @@ export default function StudioTimelineWorkspace({
                         transition: "background-color 0.1s ease",
                       }}
                     >
+                      {/* External Drag Placement Ghost Indicator */}
+                      {isExtHover && (
+                        <Box
+                          data-testid="external-drag-ghost"
+                          sx={{
+                            position: "absolute",
+                            left: `${(externalDrag?.dropTime || 0) * pixelsPerSecond}px`,
+                            width: `${Math.max(36, (externalDrag?.duration || 3) * pixelsPerSecond)}px`,
+                            top: 4,
+                            bottom: 4,
+                            borderRadius: 1,
+                            bgcolor: isExtValid ? "rgba(139, 92, 246, 0.22)" : "rgba(239, 68, 68, 0.22)",
+                            border: isExtValid ? "2px dashed #8b5cf6" : "2px dashed #ef4444",
+                            zIndex: 25,
+                            pointerEvents: "none",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            px: 1,
+                            boxShadow: isExtValid ? "0 0 10px rgba(139, 92, 246, 0.3)" : "none",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: "0.68rem",
+                              fontWeight: 800,
+                              color: isExtValid ? "#5b21b6" : "#991b1b",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {externalDrag?.title || "Drop Clip"}
+                          </Typography>
+                          <Chip
+                            size="small"
+                            label={`${(externalDrag?.dropTime || 0).toFixed(2)}s`}
+                            sx={{
+                              height: 16,
+                              fontSize: "0.58rem",
+                              fontWeight: 700,
+                              bgcolor: isExtValid ? "#7c3aed" : "#dc2626",
+                              color: "#ffffff",
+                            }}
+                          />
+                        </Box>
+                      )}
                       {!isCollapsed && clips.map((clip) => {
                         const isDraggingThis = dragState?.clipId === clip.id
                         const clipStart = isDraggingThis && dragState.currentStart != null

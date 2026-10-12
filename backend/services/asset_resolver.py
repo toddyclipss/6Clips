@@ -69,6 +69,14 @@ def normalize_asset_id(raw_id: str) -> Tuple[Optional[str], str]:
         return "gv", s[3:]
     if s.startswith("generated:"):
         return "gv", s[10:]
+    if s.startswith("trk:"):
+        return "trk", s[4:]
+    if s.startswith("track:"):
+        return "trk", s[6:]
+    if s.startswith("music:"):
+        return "trk", s[6:]
+    if s.startswith("sfx:"):
+        return "sfx", s[4:]
     return None, s
 
 
@@ -116,10 +124,65 @@ async def resolve_asset_record_and_path(
         dv = None
         gv = None
         
+        from backend.config import settings
+        music_dir = settings.STORAGE_ROOT / "music"
+        sfx_dir = settings.STORAGE_ROOT / "sfx"
+
+        if prefix in ("trk", "sfx"):
+            base_dir = music_dir if prefix == "trk" else sfx_dir
+            target_path = (base_dir / clean_id).resolve()
+            if not target_path.exists():
+                for ext in (".mp3", ".wav", ".aac", ".m4a", ".ogg", ".flac"):
+                    alt = (base_dir / f"{clean_id}{ext}").resolve()
+                    if alt.exists():
+                        target_path = alt
+                        break
+
+            if target_path.exists() and target_path.is_file() and target_path.is_relative_to(base_dir.resolve()):
+                clean_title = target_path.stem.replace("_", " ").title()
+                from backend.services.video_utils import probe_duration
+                probed_dur = probe_duration(target_path, default=30.0 if prefix == "trk" else 1.0)
+                meta = {
+                    "id": clean_id,
+                    "canonical_key": f"{prefix}:{clean_id}",
+                    "type": "audio",
+                    "media_type": "audio",
+                    "title": clean_title,
+                    "duration": probed_dur,
+                    "user_id": user_id or "local",
+                }
+                return f"{prefix}:{clean_id}", target_path, meta
+            if must_exist:
+                raise AssetNotFoundError(f"Audio asset '{clean_id}' not found in {prefix} directory: {target_path}")
+
         if prefix == "dl":
             dv = (await session.execute(select(DownloadedVideo).where(DownloadedVideo.id == clean_id))).scalar_one_or_none()
         elif prefix == "gv":
             gv = (await session.execute(select(GeneratedVideo).where(GeneratedVideo.id == clean_id))).scalar_one_or_none()
+        elif prefix == "job":
+            from backend.models.job import Job
+            job = (await session.execute(select(Job).where(Job.id == clean_id))).scalar_one_or_none()
+            if job and job.output_json:
+                try:
+                    out = json.loads(job.output_json)
+                    file_str = (out or {}).get("file")
+                    if file_str:
+                        from backend.api.videos import _safe_resolve_path
+                        p = _safe_resolve_path(file_str)
+                        if p and (not must_exist or p.is_file()):
+                            m_type = determine_path_media_type(p) or "video"
+                            meta = {
+                                "id": job.id,
+                                "canonical_key": f"job:{job.id}",
+                                "type": "job",
+                                "media_type": m_type,
+                                "title": job.title or "Job Output",
+                                "duration": 0.0,
+                                "user_id": job.user_id,
+                            }
+                            return f"job:{job.id}", p, meta
+                except Exception:
+                    pass
         else:
             # No prefix: check DownloadedVideo first, then GeneratedVideo
             dv = (await session.execute(select(DownloadedVideo).where(DownloadedVideo.id == clean_id))).scalar_one_or_none()
@@ -213,8 +276,63 @@ async def resolve_asset_record_and_path(
                 "project_id": gv.project_id,
             }
             return f"gv:{gv.id}", p, meta
+
+        # Fallback for un-prefixed audio names (e.g. corporate_motivational.mp3)
+        m_path = (music_dir / clean_id).resolve()
+        if not m_path.exists() and not clean_id.endswith(".mp3"):
+            m_path = (music_dir / f"{clean_id}.mp3").resolve()
+        if m_path.exists() and m_path.is_file() and m_path.is_relative_to(music_dir.resolve()):
+            clean_title = m_path.stem.replace("_", " ").title()
+            meta = {
+                "id": clean_id,
+                "canonical_key": f"trk:{clean_id}",
+                "type": "audio",
+                "media_type": "audio",
+                "title": clean_title,
+                "duration": 30.0,
+                "user_id": user_id or "local",
+            }
+            return f"trk:{clean_id}", m_path, meta
+
+        s_path = (sfx_dir / clean_id).resolve()
+        if not s_path.exists() and not clean_id.endswith(".mp3"):
+            s_path = (sfx_dir / f"{clean_id}.mp3").resolve()
+        if s_path.exists() and s_path.is_file() and s_path.is_relative_to(sfx_dir.resolve()):
+            clean_title = s_path.stem.replace("_", " ").title()
+            meta = {
+                "id": clean_id,
+                "canonical_key": f"sfx:{clean_id}",
+                "type": "audio",
+                "media_type": "audio",
+                "title": clean_title,
+                "duration": 1.0,
+                "user_id": user_id or "local",
+            }
+            return f"sfx:{clean_id}", s_path, meta
+
+        # Fallback for storage-relative paths (e.g. videos/foo.mp4)
+        storage_bases = [settings.STORAGE_ROOT]
+        if hasattr(settings, "DATA_DIR") and settings.DATA_DIR:
+            storage_bases.append(settings.DATA_DIR / "storage")
+        for base in storage_bases:
+            direct_p = (base / clean_id).resolve()
+            if direct_p.exists() and direct_p.is_file() and direct_p.is_relative_to(base.resolve()):
+                clean_title = direct_p.stem.replace("_", " ").title()
+                m_type = determine_path_media_type(direct_p) or "video"
+                from backend.services.video_utils import probe_duration
+                probed = probe_duration(direct_p, default=0.0)
+                meta = {
+                    "id": clean_id,
+                    "canonical_key": f"file:{clean_id}",
+                    "type": m_type,
+                    "media_type": m_type,
+                    "title": clean_title,
+                    "duration": probed,
+                    "user_id": user_id or "local",
+                }
+                return f"file:{clean_id}", direct_p, meta
             
-        raise AssetNotFoundError(f"Media asset '{asset_id}' not found in database.")
+        raise AssetNotFoundError(f"Media asset '{asset_id}' not found in database or library audio.")
 
     if db is not None:
         return await _lookup(db)

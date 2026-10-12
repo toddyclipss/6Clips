@@ -19,18 +19,21 @@ const PROVIDER_LABEL = {
   anthropic: "Anthropic (Claude)",
   openai: "OpenAI (GPT)",
   openrouter: "OpenRouter (Claude / GPT / Gemini / Llama)",
+  ollama: "Ollama (Local)",
 }
 
 const KEY_PLACEHOLDER = {
   anthropic: "sk-ant-...",
   openai: "sk-...",
   openrouter: "sk-or-...",
+  ollama: "Not required (runs locally)",
 }
 
 const KEY_HINT = {
   anthropic: "Get yours at console.anthropic.com → API Keys",
   openai: "Get yours at platform.openai.com → API Keys",
   openrouter: "One key, every model — get yours at openrouter.ai/keys",
+  ollama: "Runs directly on your machine via 127.0.0.1:11434 — no API key needed",
 }
 
 export default function AIProviderSection({ settings, updateSettings }) {
@@ -42,7 +45,7 @@ export default function AIProviderSection({ settings, updateSettings }) {
   const [showKey, setShowKey] = useState(false)
   const [registry, setRegistry] = useState({})
   const [saving, setSaving] = useState(false)
-  const [editing, setEditing] = useState(!settings?.ai_api_key_set)
+  const [editing, setEditing] = useState(!settings?.ai_api_key_set && settings?.ai_provider !== "ollama")
   const [confirmRemove, setConfirmRemove] = useState(false)
 
   // Sync local state when settings change (e.g. after save).
@@ -52,7 +55,7 @@ export default function AIProviderSection({ settings, updateSettings }) {
     if (settings) {
       setProvider(settings.ai_provider || "openai")
       setModel(settings.ai_model || "")
-      if (!settings.ai_api_key_set) setEditing(true)
+      if (!settings.ai_api_key_set && settings.ai_provider !== "ollama") setEditing(true)
     }
   }, [settings?.ai_provider, settings?.ai_model, settings?.ai_api_key_set])
 
@@ -66,10 +69,11 @@ export default function AIProviderSection({ settings, updateSettings }) {
   const availableModels = registry[provider]?.models || []
   const defaultModel = registry[provider]?.default_model || ""
   const effectiveModel = model || defaultModel
+  const isLocalProvider = provider === "ollama"
 
   const handleSave = async () => {
     const hasNewKey = apiKey.trim().length > 0
-    if (!hasNewKey && !settings?.ai_api_key_set) {
+    if (!isLocalProvider && !hasNewKey && !settings?.ai_api_key_set) {
       showSnackbar("Paste your API key first", "warning")
       return
     }
@@ -88,7 +92,7 @@ export default function AIProviderSection({ settings, updateSettings }) {
       await updateSettings(updates)
       setApiKey("")
       setEditing(false)
-      showSnackbar(hasNewKey ? "API key saved" : "Provider updated", "success")
+      showSnackbar(isLocalProvider ? "Ollama configured" : (hasNewKey ? "API key saved" : "Provider updated"), "success")
     } catch (e) {
       // updateSettings already shows a snackbar on error
     } finally {
@@ -111,10 +115,62 @@ export default function AIProviderSection({ settings, updateSettings }) {
     }
   }
 
-  const keyIsSet = !!settings?.ai_api_key_set
+  const isOllamaProvider = settings?.ai_provider === "ollama"
+  const ollamaOnline = (registry?.ollama?.models || []).length > 0
+  const keyIsSet = isOllamaProvider ? true : !!settings?.ai_api_key_set
 
-  // ── Connected state: key already configured, not editing ────────────────────
+  // ── Connected state: key already configured or local provider active, not editing ─
   if (!editing && keyIsSet) {
+    if (isOllamaProvider) {
+      return (
+        <Stack spacing={2}>
+          <Alert
+            severity={ollamaOnline ? "success" : "warning"}
+            variant="outlined"
+            icon={ollamaOnline ? <IconCircleCheck size={18} stroke={2} /> : undefined}
+            sx={{ borderRadius: "14px" }}
+          >
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                {ollamaOnline ? "Local Ollama connected" : "Local Ollama offline"}
+              </Typography>
+              <Chip
+                size="small"
+                label="Ollama (Local)"
+                color={ollamaOnline ? "success" : "warning"}
+                variant="outlined"
+                sx={{ fontWeight: 500, borderRadius: "10px" }}
+              />
+              {settings.ai_model && (
+                <Chip
+                  size="small"
+                  label={`model: ${settings.ai_model}`}
+                  variant="outlined"
+                  sx={{ borderRadius: "10px" }}
+                />
+              )}
+            </Stack>
+            <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.75 }}>
+              {ollamaOnline
+                ? "Running locally on your workstation via 127.0.0.1:11434. No external API key required."
+                : "Cannot reach local Ollama daemon at 127.0.0.1:11434. Ensure Ollama is running."}
+            </Typography>
+          </Alert>
+          <Stack direction="row" spacing={1.5}>
+            <Button
+              variant="contained"
+              startIcon={<IconEdit size={16} stroke={1.8} />}
+              onClick={() => { setEditing(true); setApiKey("") }}
+              disabled={saving}
+              sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
+            >
+              Change Provider / Model
+            </Button>
+          </Stack>
+        </Stack>
+      )
+    }
+
     return (
       <Stack spacing={2}>
         <Alert
@@ -173,7 +229,7 @@ export default function AIProviderSection({ settings, updateSettings }) {
           <DialogTitle>Remove API key?</DialogTitle>
           <DialogContent>
             <Typography variant="body2">
-              This deletes the encrypted key from your local database. ViralMint will fall back to
+              This deletes the encrypted key from your local database. 6Clips will fall back to
               the {PROVIDER_LABEL[settings.ai_provider]} key in your <code>.env</code> file (if set).
               If neither is configured, AI features will stop working until you add a new key.
             </Typography>
@@ -193,9 +249,9 @@ export default function AIProviderSection({ settings, updateSettings }) {
   return (
     <Stack spacing={2}>
       <Typography variant="body2" color="text.secondary">
-        Bring your own Anthropic, OpenAI, or OpenRouter API key. Keys are encrypted (AES-256) before
-        storage and never leave your machine except when calling the provider directly. OpenRouter
-        is a unified gateway — one key, access to Claude / GPT / Gemini / Llama / Mistral.
+        Bring your own Anthropic, OpenAI, or OpenRouter API key, or run Ollama locally for zero-cost,
+        private inference. Cloud keys are encrypted (AES-256) before storage and never leave your machine
+        except when calling the provider directly.
       </Typography>
 
       <FormControl size="small" fullWidth>
@@ -209,6 +265,7 @@ export default function AIProviderSection({ settings, updateSettings }) {
           <MenuItem value="anthropic">Anthropic (Claude)</MenuItem>
           <MenuItem value="openai">OpenAI (GPT)</MenuItem>
           <MenuItem value="openrouter">OpenRouter (Claude / GPT / Gemini / Llama)</MenuItem>
+          <MenuItem value="ollama">Ollama (Local)</MenuItem>
         </Select>
       </FormControl>
 
@@ -240,9 +297,9 @@ export default function AIProviderSection({ settings, updateSettings }) {
         fullWidth
         value={apiKey}
         onChange={(e) => setApiKey(e.target.value)}
-        placeholder={keyIsSet ? "(leave empty to keep existing key)" : KEY_PLACEHOLDER[provider]}
+        placeholder={isLocalProvider ? KEY_PLACEHOLDER[provider] : (keyIsSet ? "(leave empty to keep existing key)" : KEY_PLACEHOLDER[provider])}
         helperText={KEY_HINT[provider]}
-        disabled={saving}
+        disabled={saving || isLocalProvider}
         autoComplete="off"
         sx={{
           "& .MuiOutlinedInput-root": {
@@ -250,13 +307,13 @@ export default function AIProviderSection({ settings, updateSettings }) {
           },
         }}
         InputProps={{
-          endAdornment: (
+          endAdornment: !isLocalProvider ? (
             <InputAdornment position="end">
               <IconButton size="small" onClick={() => setShowKey((v) => !v)} edge="end" tabIndex={-1}>
                 {showKey ? <IconEyeOff size={16} stroke={1.8} /> : <IconEye size={16} stroke={1.8} />}
               </IconButton>
             </InputAdornment>
-          ),
+          ) : null,
         }}
       />
 
@@ -265,7 +322,7 @@ export default function AIProviderSection({ settings, updateSettings }) {
           variant="contained"
           startIcon={<IconDeviceFloppy size={16} stroke={1.8} />}
           onClick={handleSave}
-          disabled={saving || (!apiKey.trim() && !keyIsSet)}
+          disabled={saving || (!isLocalProvider && !apiKey.trim() && !keyIsSet)}
           sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
         >
           {saving ? "Saving…" : "Save"}

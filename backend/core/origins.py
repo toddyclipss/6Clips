@@ -35,6 +35,14 @@ def allowed_origins() -> set[str]:
         f"http://localhost:{settings.PORT}",
         f"http://127.0.0.1:{settings.PORT}",
     }
+    if settings.FRONTEND_URL:
+        try:
+            p = urlparse(settings.FRONTEND_URL)
+            if p.port:
+                origins.add(f"http://127.0.0.1:{p.port}")
+                origins.add(f"http://localhost:{p.port}")
+        except Exception:
+            pass
     if settings.HOST not in ("0.0.0.0", "127.0.0.1", "localhost"):
         origins.add(f"http://{settings.HOST}:{settings.PORT}")
     return origins

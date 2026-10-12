@@ -10,6 +10,19 @@ from pathlib import Path
 
 from backend.core.executors import transcribe_pool
 
+# PyAV >= 14 compatibility bridge: faster-whisper passes metadata_errors='ignore' which newer av.open rejects
+try:
+    import av
+    _orig_av_open = av.open
+
+    def _safe_av_open(*args, **kwargs):
+        kwargs.pop("metadata_errors", None)
+        return _orig_av_open(*args, **kwargs)
+
+    av.open = _safe_av_open
+except Exception:
+    pass
+
 logger = logging.getLogger(__name__)
 
 WHISPER_QUALITY_MAP = {

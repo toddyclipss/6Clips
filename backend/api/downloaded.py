@@ -35,10 +35,12 @@ async def list_downloaded(
         from sqlalchemy import func
         total = (await db.execute(
             select(func.count(DownloadedVideo.id))
+            .where(DownloadedVideo.id != "test-moving-vid-1")
         )).scalar()
 
         result = await db.execute(
             select(DownloadedVideo)
+            .where(DownloadedVideo.id != "test-moving-vid-1")
             .order_by(DownloadedVideo.created_at.desc())
             .offset(offset)
             .limit(limit)
@@ -1719,10 +1721,25 @@ async def stream_downloaded(video_id: str, request: Request):
     path = next((Path(c).resolve() for c in candidates if Path(c).exists()), None)
     if path is None:
         raise HTTPException(status_code=404, detail="Video file not found on disk")
-    # Validate path is within storage directory (prevent path traversal)
+    req_user = request.headers.get("x-user-id") or request.query_params.get("user_id")
+    if req_user and video.user_id and video.user_id != req_user and req_user != "local":
+        raise HTTPException(status_code=403, detail="Access denied: unauthorized media record")
+
+    # Validate path is within allowed media directories and has valid media extension
     from backend.config import settings as app_settings
-    if not path.is_relative_to(app_settings.STORAGE_ROOT.resolve()):
-        raise HTTPException(status_code=403, detail="Access denied")
+    allowed_roots = [
+        app_settings.STORAGE_ROOT.resolve(),
+        (app_settings.MOTION_DIR / "studio").resolve(),
+    ]
+    if not any(path.is_relative_to(root) for root in allowed_roots):
+        raise HTTPException(status_code=403, detail="Access denied: path outside authorized media directories")
+
+    ALLOWED_STREAM_EXTENSIONS = {
+        ".mp4", ".webm", ".mov", ".mkv", ".avi",
+        ".mp3", ".wav", ".m4a", ".ogg", ".flac",
+    }
+    if path.suffix.lower() not in ALLOWED_STREAM_EXTENSIONS:
+        raise HTTPException(status_code=403, detail="Access denied: non-media file type")
 
     from backend.api.videos import serve_media_with_range
     return serve_media_with_range(path, request, filename=path.name)

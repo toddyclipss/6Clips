@@ -119,7 +119,7 @@ export default function GeneratedDetail({ video, onUpload, onDelete, onClose, on
       elevation={0}
       sx={{
         mx: -0.5, mb: 1.5, p: 0,
-        border: 2, borderColor: "secondary.main",
+        border: 1, borderColor: "divider",
         borderRadius: 3,
         overflow: "hidden",
         bgcolor: "background.paper",
@@ -198,7 +198,11 @@ export default function GeneratedDetail({ video, onUpload, onDelete, onClose, on
             </>
           )}
         </Stack>
-        <IconButton size="small" onClick={onClose} sx={{ ml: 1, borderRadius: "10px" }}><IconX size={18} stroke={1.8} /></IconButton>
+        {onClose && (
+          <IconButton size="small" onClick={onClose} sx={{ ml: 1, borderRadius: "10px" }} aria-label="Close">
+            <IconX size={18} stroke={1.8} />
+          </IconButton>
+        )}
       </Stack>
 
       {/* Main content */}

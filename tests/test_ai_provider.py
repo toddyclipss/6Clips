@@ -76,8 +76,14 @@ def test_resolve_decrypts_valid_settings():
 # ── get_ai_client resolution order ─────────────────────────────────────────
 
 def test_raises_when_nothing_configured():
-    with _no_env_keys(), pytest.raises(AIKeyMissingError):
+    with _no_env_keys(), patch("backend.core.ai_provider._is_ollama_available", return_value=False), pytest.raises(AIKeyMissingError):
         get_ai_client(None)
+
+
+def test_env_fallback_to_ollama_when_available():
+    with _no_env_keys(), patch("backend.core.ai_provider._is_ollama_available", return_value=True):
+        c = get_ai_client(None)
+    assert c.provider == AIProvider.OLLAMA and c.api_key == "ollama_local"
 
 
 def test_env_anthropic_wins_first():
