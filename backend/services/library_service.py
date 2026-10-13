@@ -281,3 +281,48 @@ class LibraryService:
         cls.validate_media_file(file_path)
         from backend.api.videos import serve_media_with_range
         return serve_media_with_range(file_path, request, filename=filename or file_path.name)
+
+    # ── Wave 3 Workflow Facades ───────────────────────────────────────────────
+
+    @classmethod
+    def probe_media(cls, file_path: Path):
+        """Perform deep byte inspection and stream probing via media_probe module."""
+        from backend.library_workflows.media_probe import probe_media_file
+        return probe_media_file(file_path)
+
+    @classmethod
+    async def create_motion_intent(
+        cls,
+        key: str,
+        db: AsyncSession,
+        intent_action: str = "add_track",
+        target_track: Optional[str] = None,
+        target_start_time_seconds: float = 0.0,
+    ):
+        """Construct verified MotionAssetIntent contract for Motion/DnD integration."""
+        from backend.library_workflows.motion_contract import MotionContractManager
+        return await MotionContractManager.create_motion_intent(
+            key=key,
+            db=db,
+            intent_action=intent_action,
+            target_track=target_track,
+            target_start_time_seconds=target_start_time_seconds,
+        )
+
+    @classmethod
+    async def move_to_trash(
+        cls,
+        key: str,
+        db: AsyncSession,
+        user_id: str = "local",
+        title: Optional[str] = None,
+    ):
+        """Soft-delete asset into trash registry."""
+        from backend.library_workflows.trash_and_lifecycle import TrashManager
+        return await TrashManager.move_to_trash(key, db, user_id=user_id, title=title)
+
+    @classmethod
+    async def restore_from_trash(cls, key: str, user_id: str = "local"):
+        """Restore asset from trash back to active library."""
+        from backend.library_workflows.trash_and_lifecycle import TrashManager
+        return await TrashManager.restore_from_trash(key, user_id=user_id)
