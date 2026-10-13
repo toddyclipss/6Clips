@@ -12,7 +12,7 @@
  */
 import { useCallback, useEffect, useState } from "react"
 import { Box, Stack, Button, Tooltip, Skeleton } from "@mui/material"
-import { IconTrendingUp, IconRefresh, IconSparkles } from "@tabler/icons-react"
+import { IconTrendingUp, IconRefresh, IconCompass } from "@tabler/icons-react"
 import { useNavigate } from "react-router-dom"
 import http from "../api/http"
 import PageHero from "../components/PageHero"
@@ -67,7 +67,7 @@ export default function Trends() {
               </Button>
             </Tooltip>
             <Button size="small" variant="contained"
-              startIcon={<IconSparkles size={16} stroke={1.8} />}
+              startIcon={<IconCompass size={16} stroke={1.8} />}
               sx={{ borderRadius: "20px", px: 2, textTransform: "none", fontWeight: 600 }}
               onClick={() => navigate("/")}>
               Explore trends

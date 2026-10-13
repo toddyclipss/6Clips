@@ -72,7 +72,7 @@ export default function HealthDashboard() {
     ...(pools ? [{
       label: "Background workers", key: "workers",
       description: "Downloads and transcription",
-      extra: stuck ? `${stuck} stuck — restart ViralMint to free ${stuck === 1 ? "it" : "them"}` : null,
+      extra: stuck ? `${stuck} stuck — restart 6Clips to free ${stuck === 1 ? "it" : "them"}` : null,
     }] : []),
     { label: "ImageMagick", key: "imagemagick", description: "Required for caption rendering" },
     { label: "yt-dlp", key: "ytdlp", description: "Video downloader", extra: health.ytdlp?.version ? `v${health.ytdlp.version}` : null },

@@ -124,7 +124,12 @@ async def split_scenes(body: SplitScenesRequest):
     from backend.core.ai_provider import get_ai_client
 
     async with AsyncSessionLocal() as db:
-        result = await db.execute(select(UserSettings).limit(1))
+        result = await db.execute(
+            select(UserSettings)
+            .where(UserSettings.user_id == "local")
+            .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+            .limit(1)
+        )
         user_settings = result.scalar_one_or_none()
 
     try:

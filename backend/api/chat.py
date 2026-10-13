@@ -145,9 +145,12 @@ async def chat_websocket(websocket: WebSocket):
         # Load user settings
         async with AsyncSessionLocal() as db:
             result = await db.execute(
-                select(UserSettings).where(UserSettings.user_id == user_id)
+                select(UserSettings)
+                .where(UserSettings.user_id == user_id)
+                .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+                .limit(1)
             )
-            user_settings = result.scalar_one_or_none()
+            user_settings = result.scalars().first()
 
         # Send smart suggestions on connect (for returning users)
         suggestions = await intelligence.get_smart_suggestions(user_id)
@@ -210,9 +213,12 @@ async def chat_websocket(websocket: WebSocket):
                 # Reload user settings (may have changed via Settings page)
                 async with AsyncSessionLocal() as db:
                     result = await db.execute(
-                        select(UserSettings).where(UserSettings.user_id == user_id)
+                        select(UserSettings)
+                        .where(UserSettings.user_id == user_id)
+                        .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+                        .limit(1)
                     )
-                    user_settings = result.scalar_one_or_none()
+                    user_settings = result.scalars().first()
 
                 # Load full session history from DB
                 history = await _load_session_history(current_session_id)
@@ -220,16 +226,37 @@ async def chat_websocket(websocket: WebSocket):
                 if history and history[-1]["role"] == "user" and history[-1]["content"] == content:
                     history = history[:-1]
 
-                # Load previous session context for continuity (only on first message of new session)
+                # Session isolation: A new conversation starts completely fresh and must NOT
+                # inherit old user-message history or language from prior sessions.
                 prev_context = []
-                if len(history) == 0:
-                    prev_context = await _load_previous_session_context(user_id, current_session_id)
 
                 # Extract project, provider, and model from payload or fallback to active project
                 project_id = msg.get("project_id")
                 pinned_provider = msg.get("provider")
                 pinned_model = msg.get("model")
                 pinned_think = msg.get("think")
+                reasoning_level = msg.get("reasoning_level") or msg.get("reasoning")
+
+                # Strict Explicit Selection — reject before calling inference if unselected
+                eff_prov = pinned_provider or (getattr(user_settings, "ai_provider", None) if user_settings else None)
+                eff_model = pinned_model or (getattr(user_settings, "ai_model", None) if user_settings else None)
+                if not eff_prov or not eff_model:
+                    await ws_manager.send({
+                        "type": "chat_error",
+                        "error": "No AI model selected. Choose a model in Global Chat to continue.",
+                    }, user_id)
+                    continue
+
+                eff_reasoning = reasoning_level or (getattr(user_settings, "ai_reasoning_level", None) if user_settings else None)
+                if not eff_reasoning:
+                    await ws_manager.send({
+                        "type": "chat_error",
+                        "error": "No reasoning effort selected. Choose Low, Medium, or High in Global Chat to continue.",
+                    }, user_id)
+                    continue
+                raw_norm = str(eff_reasoning).strip().lower()
+                reasoning_level = "high" if raw_norm in ("hard", "high") else raw_norm
+
                 if not project_id:
                     async with AsyncSessionLocal() as db:
                         from backend.models.project import Project
@@ -254,6 +281,7 @@ async def chat_websocket(websocket: WebSocket):
                         pinned_model=pinned_model,
                         project_id=project_id,
                         pinned_think=pinned_think,
+                        reasoning_level=reasoning_level,
                     )
                 except Exception as e:
                     logger.error(f"Planner error: {e}", exc_info=True)
@@ -264,10 +292,20 @@ async def chat_websocket(websocket: WebSocket):
 
                 # Persist assistant response
                 if assistant_response:
-                    await _persist_message(
-                        current_session_id, "assistant",
-                        content=assistant_response, user_id=user_id,
-                    )
+                    if isinstance(assistant_response, dict):
+                        resp_content = assistant_response.get("content", "")
+                        resp_timeline = assistant_response.get("execution_timeline")
+                    else:
+                        resp_content = str(assistant_response)
+                        resp_timeline = None
+
+                    if resp_content or resp_timeline:
+                        data_payload = json.dumps({"execution_timeline": resp_timeline}) if resp_timeline else None
+                        await _persist_message(
+                            current_session_id, "assistant",
+                            content=resp_content or "Operations completed.", user_id=user_id,
+                            data_json=data_payload,
+                        )
 
                 # Auto-update user profile in background if enough events accumulated
                 asyncio.create_task(

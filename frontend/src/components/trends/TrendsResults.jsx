@@ -144,6 +144,7 @@ export default function TrendsResults({ results, onSelect, onRefresh }) {
         </DialogActions>
       </Dialog>
 
+
       {/* Detail panel */}
       <Drawer
         anchor="right"

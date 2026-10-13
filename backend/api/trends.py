@@ -59,6 +59,25 @@ async def get_trends_results(
         result = await db.execute(query)
         results = result.scalars().all()
 
+        from backend.services.virality_scorer import calculate_viral_opportunity_score
+        changed = False
+        cohort_data = [{"views": r.views, "likes": r.likes, "upload_date": r.upload_date} for r in results]
+        for r in results:
+            if r.virality_score is None or r.virality_score == 0.0:
+                s_info = calculate_viral_opportunity_score({
+                    "views": r.views,
+                    "likes": r.likes,
+                    "comments": r.comments,
+                    "duration_seconds": r.duration_seconds,
+                    "upload_date": r.upload_date,
+                }, cohort=cohort_data)
+                r.virality_score = s_info["score"]
+                r.views_per_hour = s_info["views_per_hour"]
+                r.outlier_score = s_info["outlier_score"]
+                changed = True
+        if changed:
+            await db.commit()
+
         from sqlalchemy import func
         count_query = select(func.count(TrendsResult.id)).where(TrendsResult.user_id == "local")
         if job_id:

@@ -10,52 +10,55 @@ router = APIRouter()
 
 _DEFAULTS = {
     "model_registry": {
-        # Models verified May 2026. Anthropic / OpenAI defaults pick the
-        # best price/perf tier; OpenRouter defaults to a premium model
-        # because BYOK users routing through OpenRouter typically want
-        # access to the top tier without juggling multiple provider keys.
         "anthropic": {
-            "default_model": "claude-sonnet-4-6",
+            "default_model": None,
             "models": [
-                "claude-haiku-4-5",
-                "claude-sonnet-4-6",
-                "claude-opus-4-6",
-                "claude-opus-4-7",
+                "claude-fable-5-1",
+                "claude-opus-5-5",
+                "claude-sonnet-5-5",
+                "claude-haiku-5-5",
             ],
+            "reasoning_levels": ["low", "medium", "high"],
         },
         "openai": {
-            "default_model": "gpt-5.4-mini",
+            "default_model": None,
             "models": [
-                "gpt-5.4-nano",
-                "gpt-5.4-mini",
-                "gpt-5.4",
-                "gpt-5.5",
+                "gpt-6-astra",
+                "gpt-6.1-sol",
+                "gpt-6-luna",
             ],
+            "reasoning_levels": ["low", "medium", "high"],
         },
-        # OpenRouter slugs use the vendor/model format. Verified live
-        # against https://openrouter.ai/api/v1/models on 2026-05-07. If
-        # you want a model that isn't here, OpenRouter accepts any of its
-        # published slugs — but the dropdown only exposes this curated
-        # set so users don't have to guess.
-        "openrouter": {
-            "default_model": "anthropic/claude-opus-4.7",
+        "gemini": {
+            "default_model": None,
             "models": [
-                "anthropic/claude-opus-4.7",
-                "anthropic/claude-opus-4.6-fast",
-                "anthropic/claude-sonnet-4.6",
-                "openai/gpt-5.5",
-                "openai/gpt-5.4",
-                "openai/gpt-5.4-mini",
-                "google/gemini-3.1-pro-preview",
-                "google/gemini-3.1-flash-lite",
+                "gemini-3.8-flash",
+                "gemini-3.1-pro-preview",
             ],
+            "reasoning_levels": ["low", "medium", "high"],
+        },
+        "openrouter": {
+            "default_model": None,
+            "models": [
+                "anthropic/claude-fable-5.1",
+                "anthropic/claude-opus-5.5",
+                "anthropic/claude-sonnet-5.5",
+                "anthropic/claude-haiku-5.5",
+                "openai/gpt-6-astra",
+                "openai/gpt-6.1-sol",
+                "openai/gpt-6.1-luna",
+                "google/gemini-3.8-flash",
+                "google/gemini-3.1-pro-preview",
+            ],
+            "reasoning_levels": ["low", "medium", "high"],
         },
         # Local Ollama models — dynamically updated from local Ollama daemon
         "ollama": {
-            "default_model": "gemma4:e4b",
+            "default_model": None,
             "models": [
                 "gemma4:e4b",
             ],
+            "reasoning_levels": ["low", "medium", "high"],
         },
     },
     "tts_providers": {
@@ -169,9 +172,10 @@ async def get_config(key: str):
                             except Exception:
                                 pass
                         registry["ollama"] = {
-                            "default_model": models[0],
+                            "default_model": None,
                             "models": models,
                             "model_metadata": model_metadata,
+                            "reasoning_levels": ["low", "medium", "high"],
                         }
         except Exception as e:
             logger.debug("Ollama model discovery skipped: %s", e)

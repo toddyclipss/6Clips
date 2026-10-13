@@ -85,6 +85,7 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
     OPENROUTER_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
     OLLAMA_BASE_URL: str = "http://127.0.0.1:11434"
 
     # ── Service keys (BYOK) ───────────────────────────

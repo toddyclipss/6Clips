@@ -12,9 +12,15 @@ class UserSettings(Base, TimestampMixin):
     user_id = Column(String(36), default="local", index=True)  # SaaS-ready
 
     # ── AI Provider (BYOK) ─────────────────────────────
-    ai_provider = Column(String(20), default="openai")              # "anthropic" | "openai"
-    ai_model = Column(String(100), nullable=True)                   # Optional model override
-    ai_api_key_encrypted = Column(Text, nullable=True)              # Optional per-user key (overrides .env)
+    ai_provider = Column(String(20), nullable=True)                 # active provider selection
+    ai_model = Column(String(100), nullable=True)                   # active model override
+    ai_reasoning_level = Column(String(20), nullable=True)          # low | medium | high
+    ai_api_key_encrypted = Column(Text, nullable=True)              # legacy per-user key
+    openai_api_key_encrypted = Column(Text, nullable=True)          # OpenAI BYOK key
+    anthropic_api_key_encrypted = Column(Text, nullable=True)       # Anthropic BYOK key
+    gemini_api_key_encrypted = Column(Text, nullable=True)          # Google Gemini direct API key
+    openrouter_api_key_encrypted = Column(Text, nullable=True)      # OpenRouter BYOK key
+    ollama_base_url = Column(String(255), nullable=True)            # Ollama server endpoint (default: http://127.0.0.1:11434)
 
     # ── Service API keys (BYOK — override .env per-user) ──
     youtube_api_key_encrypted = Column(Text, nullable=True)         # YouTube Data API v3 key

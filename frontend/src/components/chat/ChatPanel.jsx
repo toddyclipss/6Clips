@@ -72,6 +72,8 @@ export default function ChatPanel() {
   const addMessage = useAppStore((s) => s.addMessage)
   const setStreaming = useAppStore((s) => s.setStreaming)
   const clearStreamingText = useAppStore((s) => s.clearStreamingText)
+  const streamingExecutionTimeline = useAppStore((s) => s.streamingExecutionTimeline)
+  const clearStreamingExecutionTimeline = useAppStore((s) => s.clearStreamingExecutionTimeline)
   const setMessages = useAppStore((s) => s.setMessages)
   const setActiveSessionId = useAppStore((s) => s.setActiveSessionId)
   const setSessions = useAppStore((s) => s.setSessions)
@@ -103,7 +105,15 @@ export default function ChatPanel() {
           if (m.role === "rich" || m.msg_type) {
             return { role: "rich", type: m.msg_type, data: m.data_json ? JSON.parse(m.data_json) : {} }
           }
-          return { role: m.role, content: m.content }
+          let extra = null
+          try {
+            if (m.data_json) extra = JSON.parse(m.data_json)
+          } catch {}
+          return {
+            role: m.role,
+            content: m.content,
+            executionTimeline: extra?.execution_timeline || null,
+          }
         })
         setMessages(loaded)
       }).catch((err) => {
@@ -136,7 +146,15 @@ export default function ChatPanel() {
         if (m.role === "rich" || m.msg_type) {
           return { role: "rich", type: m.msg_type, data: m.data_json ? JSON.parse(m.data_json) : {} }
         }
-        return { role: m.role, content: m.content }
+        let extra = null
+        try {
+          if (m.data_json) extra = JSON.parse(m.data_json)
+        } catch {}
+        return {
+          role: m.role,
+          content: m.content,
+          executionTimeline: extra?.execution_timeline || null,
+        }
       })
       setMessages(loaded)
     } catch (err) {
@@ -167,19 +185,25 @@ export default function ChatPanel() {
     })
   }
 
-  const handleSend = (text, files = [], think = undefined) => {
+  const handleSend = (text, files = [], options = {}) => {
     const trimmed = text.trim()
     if (!trimmed && files.length === 0) return
 
     addMessage({ role: "user", content: trimmed })
     setStreaming(true)
     clearStreamingText()
+    clearStreamingExecutionTimeline()
     if (activeSessionId) {
       ws.send({ type: "set_session", session_id: activeSessionId })
     }
     const payload = { type: "chat_message", content: trimmed }
-    if (think !== undefined) {
-      payload.think = think
+    if (options && typeof options === "object") {
+      if (options.provider) payload.provider = options.provider
+      if (options.model) payload.model = options.model
+      if (options.reasoning_level) payload.reasoning_level = options.reasoning_level
+      if (options.think !== undefined) payload.think = options.think
+    } else if (typeof options === "boolean") {
+      payload.think = options
     }
     ws.send(payload)
   }
@@ -370,14 +394,26 @@ export default function ChatPanel() {
           >
             {messages.map((msg, i) => {
               if (msg.role === "rich") return <RichMessage key={i} msg={msg} />
-              return <ChatMessage key={i} role={msg.role} content={msg.content} />
+              return (
+                <ChatMessage
+                  key={i}
+                  role={msg.role}
+                  content={msg.content}
+                  executionTimeline={msg.executionTimeline}
+                />
+              )
             })}
 
-            {isStreaming && streamingText && (
-              <ChatMessage role="assistant" content={streamingText} />
+            {isStreaming && (streamingText || (streamingExecutionTimeline && streamingExecutionTimeline.length > 0)) && (
+              <ChatMessage
+                role="assistant"
+                content={streamingText}
+                executionTimeline={streamingExecutionTimeline}
+                isStreaming={true}
+              />
             )}
 
-            {isStreaming && !streamingText && (
+            {isStreaming && !streamingText && (!streamingExecutionTimeline || streamingExecutionTimeline.length === 0) && (
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, py: 1.5, px: 1 }}>
                 <CircularProgress size={14} sx={{ color: "primary.main" }} />
                 <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.78rem" }}>

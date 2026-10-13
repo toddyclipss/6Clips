@@ -20,6 +20,8 @@ export default function useWebSocket() {
     completeJob,
     failJob,
     removeJob,
+    handleToolEvent,
+    clearStreamingExecutionTimeline,
   } = useAppStore()
 
   // Chat tokens arrive far faster than the screen refreshes. Writing each one
@@ -106,13 +108,17 @@ export default function useWebSocket() {
         }
       }),
 
+      ws.on("tool_event", (msg) => {
+        handleToolEvent(msg)
+      }),
+
       ws.on("chat_done", (msg) => {
         endStream()  // land buffered tokens before finalizeStream reads them
         // quick_replies is an optional list emitted when the AI included a
         // <quick_replies> block. Bundling it onto chat_done keeps the chips
         // attached atomically to the message that just finished — no race
         // where the bubble renders before its chips arrive.
-        finalizeStream(msg.full_response, msg.quick_replies)
+        finalizeStream(msg.full_response, msg.quick_replies, msg.execution_timeline)
       }),
 
       // Dispatch-time follow-up from the planner (a clarifying question, a
@@ -142,6 +148,7 @@ export default function useWebSocket() {
         endStream()
         setStreaming(false)
         clearStreamingText()
+        clearStreamingExecutionTimeline()
         addMessage({ role: "system", content: `Error: ${msg.error}` })
       }),
 

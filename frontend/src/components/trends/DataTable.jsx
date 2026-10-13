@@ -25,7 +25,13 @@ export default function DataTable({ results, onSelect, onDownload, onDelete, sel
         va = va ? new Date(va).getTime() : 0
         vb = vb ? new Date(vb).getTime() : 0
       }
-      return sortDir === "desc" ? vb - va : va - vb
+      if (va !== vb) {
+        return sortDir === "desc" ? vb - va : va - vb
+      }
+      // Stable tie-break by views desc, then id
+      const viewDiff = (b.views || 0) - (a.views || 0)
+      if (viewDiff !== 0) return viewDiff
+      return String(b.id || "").localeCompare(String(a.id || ""))
     })
   }, [results, sortKey, sortDir])
 
@@ -41,14 +47,15 @@ export default function DataTable({ results, onSelect, onDownload, onDelete, sel
   }
 
   const columns = [
-    { key: "title", label: "Title", width: "30%" },
+    { key: "title", label: "Title", width: "26%" },
     { key: "platform", label: "Platform", width: "8%" },
+    { key: "duration_seconds", label: "Duration", width: "10%" },
     { key: "views", label: "Views", width: "10%" },
     { key: "likes", label: "Likes", width: "8%" },
     { key: "comments", label: "Comments", width: "8%" },
     { key: "virality_score", label: "Score", width: "8%" },
     { key: "upload_date", label: "Uploaded", width: "10%" },
-    { key: "_actions", label: "Actions", width: "18%", sortable: false },
+    { key: "_actions", label: "Actions", width: "12%", sortable: false },
   ]
 
   return (
@@ -73,46 +80,58 @@ export default function DataTable({ results, onSelect, onDownload, onDelete, sel
           </TableRow>
         </TableHead>
         <TableBody>
-          {sorted.map(r => (
-            <TableRow
-              key={r.id}
-              hover
-              onClick={() => onSelect?.(r)}
-              selected={selectedIds?.has(r.id)}
-              sx={{ cursor: "pointer" }}
-            >
-              {onToggle && (
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedIds?.has(r.id) || false}
-                    onChange={(e) => onToggle(r.id, e)}
-                    onClick={(e) => e.stopPropagation()}
-                    size="small"
-                  />
+          {sorted.map(r => {
+            const hasScore = r.virality_score !== null && r.virality_score !== undefined
+            const numScore = hasScore ? Number(r.virality_score) : null
+            const durMin = r.duration_seconds ? Math.floor(r.duration_seconds / 60) : 0
+            const durSec = r.duration_seconds ? (r.duration_seconds % 60).toString().padStart(2, "0") : "00"
+            const durStr = r.duration_seconds ? `${durMin}:${durSec}` : "—"
+
+            return (
+              <TableRow
+                key={r.id}
+                hover
+                onClick={() => onSelect?.(r)}
+                selected={selectedIds?.has(r.id)}
+                sx={{ cursor: "pointer" }}
+              >
+                {onToggle && (
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedIds?.has(r.id) || false}
+                      onChange={(e) => onToggle(r.id, e)}
+                      onClick={(e) => e.stopPropagation()}
+                      size="small"
+                    />
+                  </TableCell>
+                )}
+                <TableCell sx={{ maxWidth: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {r.title}
                 </TableCell>
-              )}
-              <TableCell sx={{ maxWidth: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {r.title}
-              </TableCell>
-              <TableCell>
-                <Chip label={r.platform} size="small" variant="outlined" sx={{ textTransform: "uppercase", fontSize: "0.65rem", height: 22 }} />
-              </TableCell>
-              <TableCell>{formatViews(r.views)}</TableCell>
-              <TableCell>{formatViews(r.likes)}</TableCell>
-              <TableCell>{formatViews(r.comments)}</TableCell>
-              <TableCell>
-                <Chip
-                  label={(r.virality_score || 0).toFixed(1)}
-                  size="small"
-                  color={(r.virality_score || 0) >= 70 ? "success" : (r.virality_score || 0) >= 40 ? "warning" : "error"}
-                  sx={{ fontWeight: 700, fontSize: "0.75rem" }}
-                />
-              </TableCell>
-              <TableCell sx={{ fontSize: "0.8rem", color: "text.secondary", whiteSpace: "nowrap" }}>
-                {r.upload_date
-                  ? new Date(r.upload_date).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })
-                  : "—"}
-              </TableCell>
+                <TableCell>
+                  <Chip label={r.platform} size="small" variant="outlined" sx={{ textTransform: "uppercase", fontSize: "0.65rem", height: 22 }} />
+                </TableCell>
+                <TableCell sx={{ fontSize: "0.8rem", fontWeight: 600 }}>{durStr}</TableCell>
+                <TableCell>{formatViews(r.views)}</TableCell>
+                <TableCell>{formatViews(r.likes)}</TableCell>
+                <TableCell>{formatViews(r.comments)}</TableCell>
+                <TableCell>
+                  {hasScore && !isNaN(numScore) ? (
+                    <Chip
+                      label={numScore.toFixed(1)}
+                      size="small"
+                      color={numScore >= 70 ? "success" : numScore >= 40 ? "warning" : "error"}
+                      sx={{ fontWeight: 700, fontSize: "0.75rem" }}
+                    />
+                  ) : (
+                    <Chip label="Not scored" size="small" variant="outlined" sx={{ fontWeight: 600, fontSize: "0.75rem" }} />
+                  )}
+                </TableCell>
+                <TableCell sx={{ fontSize: "0.8rem", color: "text.secondary", whiteSpace: "nowrap" }}>
+                  {r.upload_date
+                    ? new Date(r.upload_date).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })
+                    : "—"}
+                </TableCell>
               <TableCell padding="none" sx={{ whiteSpace: "nowrap" }}>
                 {!r.is_downloaded && (
                   <Button
@@ -142,7 +161,7 @@ export default function DataTable({ results, onSelect, onDownload, onDelete, sel
                 </Tooltip>
               </TableCell>
             </TableRow>
-          ))}
+          )})}
         </TableBody>
       </Table>
     </TableContainer>

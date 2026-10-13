@@ -6,7 +6,7 @@ import {
   IconSettings,
   IconKey,
   IconRobot,
-  IconSparkles,
+  IconPuzzle,
   IconActivity,
 } from "@tabler/icons-react"
 import HealthDashboard from "../components/settings/HealthDashboard"
@@ -126,7 +126,7 @@ export default function Settings() {
 
         {/* Optional add-ons */}
         <Section
-          icon={<IconSparkles size={20} stroke={1.8} />}
+          icon={<IconPuzzle size={20} stroke={1.8} />}
           title="Add-ons"
           description="Optional engines that install on demand into your data folder"
           accentColor="#a78bfa"

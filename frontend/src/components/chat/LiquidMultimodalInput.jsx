@@ -7,7 +7,6 @@ import {
   IconX,
   IconRocket,
   IconBulb,
-  IconSparkles,
   IconCheck,
   IconChevronDown,
   IconFileDescription,
@@ -25,9 +24,10 @@ function cn(...inputs) {
 
 const LIQUID_MATTE_NOISE = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.65 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`
 
-const PROVIDER_NAMES = {
+export const PROVIDER_NAMES = {
   openai: "OpenAI",
   anthropic: "Anthropic",
+  gemini: "Gemini",
   openrouter: "OpenRouter",
   ollama: "Ollama",
 }
@@ -75,8 +75,10 @@ export function LiquidMultimodalInput({
     })
   }
 
-  const { settings } = useSettings()
+  const { settings, updateSettings } = useSettings()
+  const showSnackbar = useAppStore((s) => s.showSnackbar)
   const [registry, setRegistry] = React.useState({})
+  const [selectorOpen, setSelectorOpen] = React.useState(false)
 
   React.useEffect(() => {
     http
@@ -85,42 +87,71 @@ export function LiquidMultimodalInput({
       .catch(() => {})
   }, [])
 
-  const currentProvider = settings?.ai_provider || "openai"
-  const defaultModel = registry[currentProvider]?.default_model || ""
-  const effectiveModel = settings?.ai_model || defaultModel
-  const modelMetadata = registry[currentProvider]?.model_metadata?.[effectiveModel] || registry.ollama?.model_metadata?.[effectiveModel]
-  const thinkingCap = modelMetadata?.thinking
-  const hasThinkingCapability = Boolean(thinkingCap && Array.isArray(thinkingCap.values) && thinkingCap.values.length > 1)
-
-  const [thinking, setThinking] = React.useState(() => {
-    const stored = typeof window !== "undefined" ? localStorage.getItem("viralmint_thinking_" + effectiveModel) : null
-    if (stored !== null) return stored === "true"
-    return thinkingCap?.default ?? true
+  // Explicit Model Choice state — strict zero default:
+  const [localProvider, setLocalProvider] = React.useState(() => {
+    return (typeof window !== "undefined" ? localStorage.getItem("6clips_ai_provider") : null) || null
+  })
+  const [localModel, setLocalModel] = React.useState(() => {
+    return (typeof window !== "undefined" ? localStorage.getItem("6clips_ai_model") : null) || null
+  })
+  const [reasoningLevel, setReasoningLevel] = React.useState(() => {
+    const saved = typeof window !== "undefined" ? localStorage.getItem("6clips_ai_reasoning") : null
+    if (!saved) return null
+    const s = saved.toLowerCase()
+    return (s === "high" || s === "hard") ? "high" : s
   })
 
+  // Synchronize two-way with backend settings:
   React.useEffect(() => {
-    if (typeof window === "undefined") return
-    const stored = localStorage.getItem("viralmint_thinking_" + effectiveModel)
-    if (stored !== null) {
-      setThinking(stored === "true")
-    } else if (thinkingCap) {
-      setThinking(thinkingCap.default ?? true)
+    if (settings?.ai_provider && settings?.ai_model) {
+      setLocalProvider(settings.ai_provider)
+      setLocalModel(settings.ai_model)
     }
-  }, [effectiveModel, thinkingCap])
+    if (settings?.ai_reasoning_level) {
+      const lvl = settings.ai_reasoning_level.toLowerCase()
+      setReasoningLevel((lvl === "high" || lvl === "hard") ? "high" : lvl)
+    }
+  }, [settings?.ai_provider, settings?.ai_model, settings?.ai_reasoning_level])
 
-  const toggleThinking = () => {
-    setThinking((prev) => {
-      const next = !prev
-      if (typeof window !== "undefined") {
-        localStorage.setItem("viralmint_thinking_" + effectiveModel, String(next))
-      }
-      return next
-    })
+  const isModelValid = Boolean(
+    localProvider &&
+    localModel &&
+    registry[localProvider]?.models?.includes(localModel)
+  )
+
+  const selectedProvider = isModelValid ? localProvider : null
+  const selectedModel = isModelValid ? localModel : null
+
+  const handleSelectReasoning = async (lvl) => {
+    const validLevel = (lvl === "high" || lvl === "hard") ? "high" : lvl
+    setReasoningLevel(validLevel)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("6clips_ai_reasoning", validLevel)
+    }
+    try {
+      await updateSettings({ ai_reasoning_level: validLevel })
+    } catch {}
+    const displayLabel = validLevel.charAt(0).toUpperCase() + validLevel.slice(1)
+    showSnackbar(`Reasoning set to ${displayLabel}`, "info")
   }
 
   function submit() {
     if ((!value.trim() && files.length === 0) || disabled) return
-    onSubmit?.(value, files.map((f) => f.file), hasThinkingCapability ? thinking : undefined)
+    if (!selectedProvider || !selectedModel) {
+      showSnackbar("No AI model selected. Choose a model in Global Chat to continue.", "warning")
+      setSelectorOpen(true)
+      return
+    }
+    if (!reasoningLevel) {
+      showSnackbar("No reasoning effort selected. Choose Low, Medium, or High to continue.", "warning")
+      setSelectorOpen(true)
+      return
+    }
+    onSubmit?.(value, files.map((f) => f.file), {
+      provider: selectedProvider,
+      model: selectedModel,
+      reasoning_level: reasoningLevel,
+    })
     setValue("")
     files.forEach((f) => f.preview && URL.revokeObjectURL(f.preview))
     setFiles([])
@@ -175,7 +206,7 @@ export function LiquidMultimodalInput({
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           style={{
             background:
-              "conic-gradient(from 0deg, #8b5cf6, #c084fc, #8b5cf6, #7c3aed, #8b5cf6)",
+              "conic-gradient(from 0deg, #64748b, #94a3b8, #64748b, #475569, #64748b)",
             willChange: "opacity",
           }}
         />
@@ -190,7 +221,7 @@ export function LiquidMultimodalInput({
             "dark:border-white/[0.06] dark:bg-[radial-gradient(ellipse_90%_70%_at_50%_-10%,#1a1918_0%,#121110_72%)]",
             "dark:shadow-[0_1px_2px_rgba(0,0,0,.4),0_8px_24px_-12px_rgba(0,0,0,.6)]",
             "dark:hover:border-white/[0.12] dark:focus-within:border-white/[0.16]",
-            dragOver && "border-purple-500/45 dark:border-purple-500/45"
+            dragOver && "border-slate-500/45 dark:border-slate-400/45"
           )}
           style={{
             padding: "14px 16px 12px 16px",
@@ -218,7 +249,7 @@ export function LiquidMultimodalInput({
           {/* Animated Gradient Thin Inner Edge (1px) */}
           <div
             aria-hidden
-            className="lmi-border pointer-events-none absolute inset-0 z-10 opacity-40 transition-opacity duration-500 group-focus-within:opacity-100 group-hover:opacity-100"
+            className="lmi-border pointer-events-none absolute inset-0 z-10 opacity-30 transition-opacity duration-500 group-focus-within:opacity-80 group-hover:opacity-80"
             style={{
               borderRadius: "22px",
               padding: "1px",
@@ -227,7 +258,7 @@ export function LiquidMultimodalInput({
               WebkitMaskComposite: "xor",
               maskComposite: "exclude",
               background:
-                "conic-gradient(from var(--lmi-angle, 0deg), transparent 65%, rgba(139,92,246,0.6) 80%, #c084fc 95%, transparent 100%)",
+                "conic-gradient(from var(--lmi-angle, 0deg), transparent 65%, rgba(100,116,139,0.5) 80%, #94a3b8 95%, transparent 100%)",
             }}
           />
           <style>{`
@@ -377,24 +408,20 @@ export function LiquidMultimodalInput({
                 }}
               />
 
-              <ModelSelector registry={registry} setRegistry={setRegistry} />
-
-              {hasThinkingCapability && (
-                <button
-                  type="button"
-                  onClick={toggleThinking}
-                  aria-label={`Thinking: ${thinking ? "On" : "Off"}`}
-                  className={cn(
-                    "inline-flex h-7 items-center gap-1 rounded-full px-2 text-[12px] font-medium transition-all duration-200 cursor-pointer select-none",
-                    thinking
-                      ? "bg-purple-500/15 text-purple-700 dark:bg-purple-400/20 dark:text-purple-300 border border-purple-500/30"
-                      : "bg-black/5 text-slate-500 dark:bg-white/5 dark:text-slate-400 border border-transparent hover:bg-black/10 dark:hover:bg-white/10"
-                  )}
-                >
-                  <IconBulb size={13} className={thinking ? "text-purple-600 dark:text-purple-400" : "text-slate-400"} />
-                  <span>Thinking: {thinking ? "On" : "Off"}</span>
-                </button>
-              )}
+              <ModelSelector
+                registry={registry}
+                setRegistry={setRegistry}
+                selectedProvider={selectedProvider}
+                selectedModel={selectedModel}
+                reasoningLevel={reasoningLevel}
+                onSelectReasoning={handleSelectReasoning}
+                onSelectModel={(p, m) => {
+                  setLocalProvider(p)
+                  setLocalModel(m)
+                }}
+                open={selectorOpen}
+                setOpen={setSelectorOpen}
+              />
             </div>
 
             {/* Right controls: Submit button */}
@@ -408,8 +435,8 @@ export function LiquidMultimodalInput({
                 transition={{ type: "spring", stiffness: 400, damping: 22 }}
                 className={cn(
                   "grid h-7 w-7 place-items-center rounded-full transition-all shrink-0 cursor-pointer",
-                  "bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] text-white shadow-[0_2px_8px_-2px_rgba(139,92,246,0.4)]",
-                  "hover:opacity-95 hover:shadow-[0_4px_12px_-2px_rgba(139,92,246,0.6)]",
+                  "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.3)]",
+                  "hover:opacity-90",
                   "disabled:bg-slate-200 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 disabled:shadow-none",
                   "dark:disabled:bg-white/10 dark:disabled:from-white/10 dark:disabled:to-white/10 dark:disabled:text-white/30"
                 )}
@@ -431,7 +458,7 @@ export function LiquidMultimodalInput({
                 className="pointer-events-none absolute inset-0 z-30 grid place-items-center rounded-[22px] bg-white/50 backdrop-blur-[2px] dark:bg-[#121212]/60"
                 style={{ willChange: "opacity" }}
               >
-                <div className="flex items-center gap-2 rounded-full border border-purple-500/20 bg-white px-4 py-2 text-xs font-semibold text-purple-700 shadow-xl dark:border-purple-500/30 dark:bg-[#1a1a1a] dark:text-purple-400">
+                <div className="flex items-center gap-2 rounded-full border border-slate-500/20 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xl dark:border-slate-500/30 dark:bg-[#1a1a1a] dark:text-slate-300">
                   <IconPaperclip size={14} />
                   Drop files here
                 </div>
@@ -446,8 +473,43 @@ export function LiquidMultimodalInput({
 
 /* ───────────────────────── Dynamic Model & Provider Selector ───────────────────────── */
 
-function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistry }) {
-  const [open, setOpen] = React.useState(false)
+export function formatModelName(modelId) {
+  if (!modelId) return "Model"
+  const m = String(modelId).toLowerCase().trim()
+  if (m === "gemma4:e4b") return "Gemma 4 E4B"
+  if (m.includes("gpt-6-astra")) return "GPT-6 Astra"
+  if (m.includes("gpt-6.1-sol")) return "GPT-6.1 Sol"
+  if (m.includes("gpt-6-luna") || m.includes("gpt-6.1-luna")) return "GPT-6 Luna"
+  if (m.includes("claude-fable-5-1") || m.includes("claude-fable-5.1")) return "Claude Fable 5.1"
+  if (m.includes("claude-opus-5-5") || m.includes("claude-opus-5.5")) return "Claude Opus 5.5"
+  if (m.includes("claude-sonnet-5-5") || m.includes("claude-sonnet-5.5")) return "Claude Sonnet 5.5"
+  if (m.includes("claude-haiku-5-5") || m.includes("claude-haiku-5.5")) return "Claude Haiku 5.5"
+  if (m.includes("gemini-3.8-flash")) return "Gemini 3.8 Flash"
+  if (m.includes("gemini-3.1-pro-preview")) return "Gemini 3.1 Pro Preview"
+  const parts = modelId.split("/")
+  const name = parts[parts.length - 1]
+  return name
+    .replace(/^claude-/, "Claude ")
+    .replace(/^gpt-/, "GPT-")
+    .replace(/^gemini-/, "Gemini ")
+    .replace(/^gemma4:/, "Gemma 4 ")
+}
+
+function ModelSelector({
+  registry: passedRegistry,
+  setRegistry: passedSetRegistry,
+  selectedProvider,
+  selectedModel,
+  reasoningLevel,
+  onSelectReasoning,
+  onSelectModel,
+  open: controlledOpen,
+  setOpen: controlledSetOpen,
+}) {
+  const [internalOpen, setInternalOpen] = React.useState(false)
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen
+  const setOpen = controlledSetOpen !== undefined ? controlledSetOpen : setInternalOpen
+
   const [localRegistry, setLocalRegistry] = React.useState({})
   const registry = passedRegistry && Object.keys(passedRegistry).length > 0 ? passedRegistry : localRegistry
   const setRegistry = passedSetRegistry || setLocalRegistry
@@ -460,8 +522,11 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
   const { settings, updateSettings } = useSettings()
   const showSnackbar = useAppStore((s) => s.showSnackbar)
 
-  const provider = settings?.ai_provider || "openai"
-  const model = settings?.ai_model || ""
+  const [activeTab, setActiveTab] = React.useState(selectedProvider || "ollama")
+
+  React.useEffect(() => {
+    if (selectedProvider) setActiveTab(selectedProvider)
+  }, [selectedProvider])
 
   // Load registry if not passed
   React.useEffect(() => {
@@ -474,31 +539,41 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
 
   const availableProviders = Object.keys(registry).length > 0
     ? Object.keys(registry)
-    : ["openai", "anthropic", "openrouter", "ollama"]
+    : ["gemini", "ollama", "openai", "anthropic", "openrouter"]
 
-  const currentModels = registry[provider]?.models || [
-    ...(provider === "openai"
-      ? ["gpt-5.4-mini", "gpt-5.4", "gpt-5.5"]
-      : provider === "anthropic"
-      ? ["claude-haiku-4-5", "claude-sonnet-4-6", "claude-opus-4-7"]
-      : provider === "ollama"
+  const currentModels = registry[activeTab]?.models || [
+    ...(activeTab === "openai"
+      ? ["gpt-6-astra", "gpt-6.1-sol", "gpt-6-luna"]
+      : activeTab === "anthropic"
+      ? ["claude-fable-5-1", "claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"]
+      : activeTab === "gemini"
+      ? ["gemini-3.8-flash", "gemini-3.1-pro-preview"]
+      : activeTab === "ollama"
       ? ["gemma4:e4b"]
-      : ["anthropic/claude-opus-4.7", "openai/gpt-5.5", "google/gemini-3.1-pro-preview"]),
+      : [
+          "anthropic/claude-fable-5.1",
+          "anthropic/claude-opus-5.5",
+          "anthropic/claude-sonnet-5.5",
+          "anthropic/claude-haiku-5.5",
+          "openai/gpt-6-astra",
+          "openai/gpt-6.1-sol",
+          "openai/gpt-6.1-luna",
+          "google/gemini-3.8-flash",
+          "google/gemini-3.1-pro-preview",
+        ]),
   ]
-  const defaultModel = registry[provider]?.default_model || currentModels[0] || ""
-  const effectiveModel = model || defaultModel
 
-  // Format a friendly display label for the button
+  const isModelChosen = Boolean(selectedModel && selectedProvider)
+
   const displayLabel = React.useMemo(() => {
-    if (!effectiveModel) return "Model"
-    const parts = effectiveModel.split("/")
-    const name = parts[parts.length - 1]
-    return name
-      .replace(/^claude-/, "Claude ")
-      .replace(/^gpt-/, "GPT-")
-      .replace(/^gemini-/, "Gemini ")
-      .replace(/^gemma4:/, "Gemma 4 ")
-  }, [effectiveModel])
+    if (!isModelChosen) return "Select Model"
+    const friendlyName = formatModelName(selectedModel)
+    if (!reasoningLevel) return `${friendlyName} · Select Effort`
+    const levelStr = (reasoningLevel === "hard" || reasoningLevel === "high")
+      ? "High"
+      : reasoningLevel.charAt(0).toUpperCase() + reasoningLevel.slice(1)
+    return `${friendlyName} · ${levelStr}`
+  }, [isModelChosen, selectedModel, reasoningLevel])
 
   const updateMenuPosition = React.useCallback(() => {
     const button = buttonRef.current
@@ -506,9 +581,8 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
 
     const rect = button.getBoundingClientRect()
     const viewportPadding = 12
-    const menuWidth = Math.min(330, window.innerWidth - viewportPadding * 2)
-    // Anchored directly ABOVE the button with comfortable clearance:
-    const maxHeight = Math.max(300, Math.min(460, rect.top - viewportPadding - 12))
+    const menuWidth = Math.min(340, window.innerWidth - viewportPadding * 2)
+    const maxHeight = Math.max(340, Math.min(500, rect.top - viewportPadding - 12))
     const bottom = window.innerHeight - rect.top + 10
 
     const left = Math.max(
@@ -564,28 +638,30 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
       window.removeEventListener("resize", onViewportChange)
       window.removeEventListener("scroll", onViewportChange, true)
     }
-  }, [open, updateMenuPosition])
+  }, [open, updateMenuPosition, setOpen])
 
   React.useLayoutEffect(() => {
     if (!open) return
     updateMenuPosition()
   }, [open, updateMenuPosition])
 
-  const handleSelectProvider = async (newProvider) => {
-    const def = registry[newProvider]?.default_model || ""
-    try {
-      await updateSettings({ ai_provider: newProvider, ai_model: def })
-      showSnackbar(`Provider set to ${PROVIDER_NAMES[newProvider] || newProvider}`, "info")
-    } catch {
-      // updateSettings handles error notification
-    }
+  const handleSelectProvider = (newProvider) => {
+    setActiveTab(newProvider)
   }
 
   const handleSelectModel = async (newModel) => {
     try {
-      await updateSettings({ ai_provider: provider, ai_model: newModel })
-      setOpen(false)
-      showSnackbar(`Model: ${newModel}`, "success")
+      if (typeof window !== "undefined") {
+        localStorage.setItem("6clips_ai_provider", activeTab)
+        localStorage.setItem("6clips_ai_model", newModel)
+      }
+      await updateSettings({
+        ai_provider: activeTab,
+        ai_model: newModel,
+        ai_reasoning_level: reasoningLevel || null,
+      })
+      onSelectModel?.(activeTab, newModel)
+      showSnackbar(`Selected: ${formatModelName(newModel)} (${PROVIDER_NAMES[activeTab] || activeTab})`, "success")
     } catch {
       // handled
     }
@@ -649,7 +725,7 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
                 </span>
                 <div className="flex items-center gap-1 p-0.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
                   {availableProviders.map((p) => {
-                    const isSelected = p === provider
+                    const isTabActive = p === activeTab
                     return (
                       <button
                         key={p}
@@ -657,7 +733,7 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
                         onClick={() => handleSelectProvider(p)}
                         className={cn(
                           "flex-1 py-1 px-1.5 text-[11px] font-medium rounded-md transition-all text-center truncate cursor-pointer",
-                          isSelected
+                          isTabActive
                             ? "bg-white dark:bg-white/10 text-[var(--foreground)] shadow-xs font-semibold"
                             : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                         )}
@@ -677,25 +753,25 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
                 <LayoutGroup id="liquid-model-menu">
                   <div
                     style={{
-                      maxHeight: Math.max(240, menuPosition.maxHeight - 110),
+                      maxHeight: Math.max(160, menuPosition.maxHeight - 170),
                       overflowY: "auto",
                       paddingBottom: "4px",
                     }}
                     className="overscroll-contain flex flex-col gap-1 pr-0.5"
                   >
                     {currentModels.map((m) => {
-                      const isSelected = m === effectiveModel
-                      const isDefault = m === defaultModel
+                      const isModelActive = activeTab === selectedProvider && m === selectedModel
+                      const friendlyTitle = formatModelName(m)
                       return (
                         <button
                           key={m}
                           role="option"
-                          aria-selected={isSelected}
+                          aria-selected={isModelActive}
                           onClick={() => handleSelectModel(m)}
                           className={cn(
                             "group/opt relative flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left outline-none transition-colors cursor-pointer",
-                            isSelected
-                              ? "bg-purple-500/10 text-purple-700 dark:bg-purple-400/10 dark:text-purple-400 font-medium"
+                            isModelActive
+                              ? "bg-black/10 dark:bg-white/10 text-[var(--foreground)] font-semibold"
                               : "text-[var(--foreground)] hover:bg-black/5 dark:hover:bg-white/5"
                           )}
                         >
@@ -703,8 +779,8 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
                             <span
                               className={cn(
                                 "grid h-7 w-7 shrink-0 place-items-center rounded-lg text-xs",
-                                isSelected
-                                  ? "bg-purple-500/20 text-purple-700 dark:text-purple-400"
+                                isModelActive
+                                  ? "bg-black/15 dark:bg-white/20 text-[var(--foreground)]"
                                   : "bg-black/5 dark:bg-white/5 text-[var(--muted-foreground)]"
                               )}
                             >
@@ -712,23 +788,21 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
                             </span>
                             <div className="min-w-0 flex flex-col">
                               <span className="text-[12.5px] truncate font-medium leading-tight">
+                                {friendlyTitle}
+                              </span>
+                              <span className="text-[9.5px] text-[var(--muted-foreground)] leading-tight mt-0.5 truncate">
                                 {m}
                               </span>
-                              {isDefault && (
-                                <span className="text-[9.5px] text-[var(--muted-foreground)] leading-tight mt-0.5">
-                                  Default
-                                </span>
-                              )}
                             </div>
                           </div>
 
-                          {isSelected && (
+                          {isModelActive && (
                             <motion.span
                               key="check"
                               initial={{ scale: 0, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               exit={{ scale: 0, opacity: 0 }}
-                              className="text-purple-600 dark:text-purple-400 shrink-0 mr-1"
+                              className="shrink-0 mr-1 text-[var(--foreground)]"
                             >
                               <IconCheck size={15} stroke={2.5} />
                             </motion.span>
@@ -738,6 +812,49 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
                     })}
                   </div>
                 </LayoutGroup>
+              </div>
+
+              {/* Reasoning Selection Inside Dropdown */}
+              <div className="relative z-10 mt-3 pt-2.5 border-t border-black/[0.08] dark:border-white/[0.08]">
+                <div className="flex items-center justify-between mb-1.5 px-0.5">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+                    Reasoning Effort
+                  </span>
+                  <span className="text-[10px] font-semibold capitalize text-slate-700 dark:text-slate-300">
+                    {reasoningLevel === "hard" || reasoningLevel === "high"
+                      ? "High"
+                      : reasoningLevel
+                        ? reasoningLevel.charAt(0).toUpperCase() + reasoningLevel.slice(1)
+                        : "Not set"}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-1 p-0.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
+                  {[
+                    { id: "low", label: "Low" },
+                    { id: "medium", label: "Medium" },
+                    { id: "high", label: "High" },
+                  ].map(({ id, label }) => {
+                    const isLvlSelected = reasoningLevel === id || (id === "high" && reasoningLevel === "hard")
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onSelectReasoning?.(id)
+                        }}
+                        className={cn(
+                          "py-1 px-2 text-[11px] font-medium rounded-md transition-all text-center cursor-pointer",
+                          isLvlSelected
+                            ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 font-semibold shadow-xs"
+                            : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                        )}
+                      >
+                        {label}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
             </motion.div>
           </AnimatePresence>,
@@ -753,19 +870,17 @@ function ModelSelector({ registry: passedRegistry, setRegistry: passedSetRegistr
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listboxId : undefined}
-        aria-label={`Model: ${displayLabel}`}
+        aria-label={isModelChosen ? `Model: ${displayLabel}` : "Select Model"}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex h-7 items-center gap-1 rounded-full px-2 text-[12px] font-medium transition-all duration-200",
-          "bg-transparent text-slate-600 hover:text-slate-900 hover:bg-black/5",
-          "dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10",
-          open && "bg-black/5 text-slate-900 dark:bg-white/10 dark:text-white"
+          "inline-flex h-7 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-medium transition-all duration-200 cursor-pointer select-none",
+          isModelChosen
+            ? "bg-black/5 text-slate-800 dark:bg-white/10 dark:text-slate-200 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/15"
+            : "bg-black/5 text-slate-700 dark:bg-white/5 dark:text-slate-300 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10",
+          open && "ring-2 ring-black/10 dark:ring-white/10"
         )}
       >
-        <span className="text-purple-600 dark:text-purple-400">
-          <IconSparkles size={14} />
-        </span>
-        <span className="max-w-[160px] truncate">{displayLabel}</span>
+        <span className="max-w-[180px] truncate">{displayLabel}</span>
         <motion.span
           aria-hidden
           animate={{ rotate: open ? 180 : 0 }}

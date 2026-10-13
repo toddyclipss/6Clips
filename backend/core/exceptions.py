@@ -122,6 +122,11 @@ class AIKeyMissingError(AIProviderError):
     pass
 
 
+class AIProviderUnselectedError(AIProviderError):
+    """Raised when no AI provider or model has been explicitly selected."""
+    pass
+
+
 # ── Motion Graphics ───────────────────────────────────────────────────────────
 
 class WhisperModelUnavailableError(ViralMintError):

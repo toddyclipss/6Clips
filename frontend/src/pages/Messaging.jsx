@@ -99,7 +99,7 @@ function PairCode({ code }) {
 function ReconnectingNote() {
   return (
     <Alert severity="warning" variant="outlined">
-      Paired, but the connection dropped. ViralMint is reconnecting on its own — there is
+      Paired, but the connection dropped. 6Clips is reconnecting on its own — there is
       nothing to redo. Messages sent meanwhile may arrive late.
     </Alert>
   )
@@ -540,7 +540,7 @@ export default function Messaging() {
               Messaging
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Connect a messaging app to control ViralMint from your phone and receive job notifications
+              Connect a messaging app to control 6Clips from your phone and receive job notifications
             </Typography>
           </Box>
         </Stack>
@@ -563,7 +563,7 @@ export default function Messaging() {
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" sx={{ fontWeight: 600 }}>Telegram</Typography>
               <Typography variant="caption" color="text.secondary">
-                Two-way chat with your ViralMint planner and job notifications
+                Two-way chat with your 6Clips planner and job notifications
               </Typography>
             </Box>
             {statusChip()}
@@ -740,7 +740,7 @@ export default function Messaging() {
           {(waState === WA_STATE.DISCONNECTED || waState === WA_STATE.PAIRING) && (
             <Stack spacing={2}>
               <Typography variant="body2" color="text.secondary">
-                Get trend, download, and upload alerts on WhatsApp — and chat with ViralMint
+                Get trend, download, and upload alerts on WhatsApp — and chat with 6Clips
                 straight from your phone. Pairs in seconds, just like WhatsApp Web.
               </Typography>
               <Typography variant="body2" color="text.secondary">

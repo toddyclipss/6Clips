@@ -206,3 +206,78 @@ def ff_filter_path(p) -> str:
     s = s.replace(":", "\\:").replace("=", "\\=")
     s = s.replace("'", "'\\\\\\''")
     return f"'{s}'"
+
+
+def probe_media_streams(file_path: Path | str) -> dict:
+    """Inspect all streams (video, audio, duration, codec, fps, aspect) via ffprobe JSON output."""
+    import json
+    p = Path(file_path)
+    if not p.exists():
+        return {"ok": False, "error": f"File not found: {file_path}"}
+
+    try:
+        res = subprocess.run(
+            [
+                "ffprobe", "-v", "quiet",
+                "-print_format", "json",
+                "-show_format",
+                "-show_streams",
+                str(p),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=20,
+        )
+        if res.returncode != 0:
+            return {"ok": False, "error": f"ffprobe failed: {res.stderr[:200]}"}
+        data = json.loads(res.stdout)
+    except Exception as e:
+        return {"ok": False, "error": f"Probe error: {e}"}
+
+    v_stream = next((s for s in data.get("streams", []) if s.get("codec_type") == "video"), None)
+    a_stream = next((s for s in data.get("streams", []) if s.get("codec_type") == "audio"), None)
+
+    fmt = data.get("format", {})
+    duration = float(fmt.get("duration") or 0.0)
+
+    video_info = None
+    if v_stream:
+        w = int(v_stream.get("width") or 0)
+        h = int(v_stream.get("height") or 0)
+        fps_str = v_stream.get("r_frame_rate", "0/1")
+        fps = 0.0
+        try:
+            num, den = fps_str.split("/")
+            fps = round(float(num) / float(den), 2) if float(den) > 0 else 0.0
+        except Exception:
+            pass
+        video_info = {
+            "codec": v_stream.get("codec_name"),
+            "width": w,
+            "height": h,
+            "fps": fps,
+            "aspect_ratio": aspect_from_dims(w, h),
+            "duration": float(v_stream.get("duration") or duration),
+            "bitrate": int(v_stream.get("bit_rate") or 0),
+        }
+
+    audio_info = None
+    if a_stream:
+        audio_info = {
+            "present": True,
+            "codec": a_stream.get("codec_name"),
+            "channels": int(a_stream.get("channels") or 0),
+            "sample_rate": int(a_stream.get("sample_rate") or 0),
+            "duration": float(a_stream.get("duration") or duration),
+            "bitrate": int(a_stream.get("bit_rate") or 0),
+        }
+
+    return {
+        "ok": bool(video_info),
+        "path": str(p),
+        "duration_seconds": duration,
+        "video": video_info,
+        "audio": audio_info,
+        "has_audio": audio_info is not None,
+    }
+

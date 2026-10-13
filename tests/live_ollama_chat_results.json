@@ -1,0 +1,41 @@
+{
+  "low": {
+    "level": "low",
+    "duration_sec": 12.5,
+    "prompt_eval_count": 118,
+    "eval_count": 658,
+    "num_predict": 1024,
+    "temperature": 0.2,
+    "top_p": 0.8,
+    "thinking_chars": 1675,
+    "has_native_thinking": true,
+    "content_chars": 473,
+    "done": true
+  },
+  "medium": {
+    "level": "medium",
+    "duration_sec": 21.65,
+    "prompt_eval_count": 115,
+    "eval_count": 1182,
+    "num_predict": 2048,
+    "temperature": 0.5,
+    "top_p": 0.9,
+    "thinking_chars": 2430,
+    "has_native_thinking": true,
+    "content_chars": 1903,
+    "done": true
+  },
+  "hard": {
+    "level": "hard",
+    "duration_sec": 23.5,
+    "prompt_eval_count": 133,
+    "eval_count": 1268,
+    "num_predict": 4096,
+    "temperature": 0.7,
+    "top_p": 0.95,
+    "thinking_chars": 2277,
+    "has_native_thinking": true,
+    "content_chars": 1937,
+    "done": true
+  }
+}

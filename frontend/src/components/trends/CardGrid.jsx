@@ -15,10 +15,24 @@ import {
 } from "@tabler/icons-react"
 
 function ViralityChip({ score }) {
-  const num = typeof score === "number" ? score : parseFloat(score) || 0
+  if (score === null || score === undefined) {
+    return (
+      <Tooltip title="Viral Opportunity Score not calculated" arrow>
+        <Chip label="Not scored" size="small" variant="outlined" sx={{ fontWeight: 600, fontSize: "0.7rem", height: 22 }} />
+      </Tooltip>
+    )
+  }
+  const num = typeof score === "number" ? score : parseFloat(score)
+  if (isNaN(num)) {
+    return (
+      <Tooltip title="Viral Opportunity Score not calculated" arrow>
+        <Chip label="Not scored" size="small" variant="outlined" sx={{ fontWeight: 600, fontSize: "0.7rem", height: 22 }} />
+      </Tooltip>
+    )
+  }
   const color = num >= 70 ? "success" : num >= 40 ? "warning" : "error"
   return (
-    <Tooltip title={`Virality Score: ${num.toFixed(1)} / 100`} arrow>
+    <Tooltip title={`Viral Opportunity Score: ${num.toFixed(1)} / 100`} arrow>
       <Chip label={`Score ${num.toFixed(1)}`} size="small" color={color} sx={{ fontWeight: 700, fontSize: "0.7rem", height: 22 }} />
     </Tooltip>
   )
@@ -39,6 +53,30 @@ function OutlierChip({ score }) {
   else if (score >= 5) { color = "warning"; label = `🚀 ${score}x STRONG` }
   else { color = "info"; label = `${score}x outlier` }
   return <Chip label={label} size="small" color={color} variant="outlined" sx={{ fontWeight: 700, fontSize: "0.65rem", height: 22 }} />
+}
+
+function RoleBadge({ suitability, duration }) {
+  if (!suitability && !duration) return null
+  const isEditable = suitability?.is_editable_source || (duration && duration >= 240)
+  const isTooShort = suitability?.is_suitable === false || (duration && duration < 180)
+  const label = isEditable ? "Editable Source" : "Creative Reference"
+  const color = isEditable ? "success" : "secondary"
+  const tooltip = isEditable
+    ? `Suitable footage (${duration || ""}s) for multi-clip extraction`
+    : isTooShort
+    ? `Reference Short (${duration || ""}s) — valuable for trending hooks & pacing, unsuitable for 3x 60s clips`
+    : `Creative reference for trends and style`
+  return (
+    <Tooltip title={tooltip} arrow>
+      <Chip
+        label={label}
+        size="small"
+        color={color}
+        variant={isEditable ? "filled" : "outlined"}
+        sx={{ fontWeight: 700, fontSize: "0.65rem", height: 22 }}
+      />
+    </Tooltip>
+  )
 }
 
 function formatViews(n) {
@@ -217,6 +255,16 @@ export default function CardGrid({ results, onSelect, onDownload, onDelete, sele
                     }} />
                   </Box>
                 )}
+                {r.duration_seconds > 0 && (
+                  <Box sx={{
+                    position: "absolute", bottom: 6, right: 6,
+                    bgcolor: "rgba(0,0,0,0.85)", color: "#fff",
+                    px: 0.8, py: 0.2, borderRadius: "4px",
+                    fontSize: "0.7rem", fontWeight: 700, letterSpacing: 0.5,
+                  }}>
+                    {Math.floor(r.duration_seconds / 60)}:{(r.duration_seconds % 60).toString().padStart(2, "0")}
+                  </Box>
+                )}
               </Box>
             )}
 
@@ -227,6 +275,7 @@ export default function CardGrid({ results, onSelect, onDownload, onDelete, sele
                     icon={isNews ? <IconNews size={13} stroke={1.8} /> : undefined}
                     sx={{ textTransform: "uppercase", fontSize: "0.65rem", height: 22,
                       ...(isNews && { borderColor: "warning.main", color: "warning.main" }) }} />
+                  {!isNews && <RoleBadge suitability={r.suitability_for_3x60s} duration={r.duration_seconds} />}
                   {!isNews && <VPHChip vph={r.views_per_hour} />}
                   {!isNews && <OutlierChip score={r.outlier_score} />}
                   {isNews && newsDesc?.word_count > 0 && (

@@ -100,7 +100,7 @@ class CapabilityRegistry:
                         "type": "object",
                         "description": "Operation payload dictionary",
                     }
-                elif param in ("limit", "max_clips", "max_videos", "start_seconds", "end_seconds", "speed", "days"):
+                elif param in ("limit", "max_clips", "max_videos", "start_seconds", "end_seconds", "speed", "days", "font_size"):
                     properties[param] = {
                         "type": "number",
                         "description": f"Numeric parameter for {param}",
@@ -119,12 +119,12 @@ class CapabilityRegistry:
 
             # Prefix description with mutation class
             desc = cap.description
-            if cap.name == "search_catalog":
-                desc = "Read-only: search normalized motion graphics catalog by query or category"
+            if cap.name in ("search_catalog", "inspect_media"):
+                desc = f"Read-only: {cap.description}"
             elif cap.name == "search_youtube_trends":
                 desc = "Read-only: search trending topics via YouTube Data API"
-            elif cap.name == "project_operation":
-                desc = "Mutating: apply versioned CAS edit to project document"
+            elif cap.name in ("project_operation", "create_project", "generate_captions"):
+                desc = f"Mutating: {cap.description}"
 
             tools.append({
                 "type": "function",
@@ -201,10 +201,10 @@ CapabilityRegistry.register(Capability(
 
 CapabilityRegistry.register(Capability(
     name="search_youtube_trends",
-    description="Search trending topics and channel metrics via YouTube API",
+    description="Search trending topics and channel metrics via YouTube API. Use purpose='trend_research' for general viral references/Shorts, or purpose='editable_source_search' with video_duration='medium' (4-20 min) or 'long' (>20 min) for editable footage.",
     surface="discover",
     required_params=["query"],
-    optional_params=["max_results"],
+    optional_params=["max_results", "video_duration", "purpose", "target_clips", "clip_duration_sec"],
     idempotent=True,
 ))
 
@@ -304,6 +304,33 @@ CapabilityRegistry.register(Capability(
     surface="create",
     required_params=[],
     optional_params=["query", "category", "limit"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="inspect_media",
+    description="Inspect video and audio properties (streams, duration, FPS, aspect ratio) of source media in the library",
+    surface="create",
+    required_params=[],
+    optional_params=["video_id"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="create_project",
+    description="Construct a new canonical video project through ProjectService",
+    surface="create",
+    required_params=["name"],
+    optional_params=["aspect_ratio"],
+    idempotent=True,
+))
+
+CapabilityRegistry.register(Capability(
+    name="generate_captions",
+    description="Generate synchronized captions on the project timeline from source speech transcription",
+    surface="create",
+    required_params=["project_id", "expected_revision"],
+    optional_params=["video_id", "style", "position", "color", "font_size"],
     idempotent=True,
 ))
 

@@ -98,7 +98,33 @@ class ProjectService:
         if not isinstance(code, dict):
             code = {"files": []}
             doc["code"] = code
-        code.setdefault("files", [])
+        files = code.setdefault("files", [])
+
+        # Auto-bind Catalog source files for blocks in tracks if not already present
+        for t in tracks:
+            for c in t.get("clips", []):
+                if (c.get("type") == "block" or c.get("block_id")) and c.get("id"):
+                    cid = c.get("id")
+                    bid = c.get("block_id")
+                    bver = c.get("block_version")
+                    cpath = f"compositions/{cid}.html"
+                    if not any(f.get("clip_id") == cid or f.get("path") == cpath for f in files):
+                        try:
+                            from backend.services.registry_adapter import RegistryAdapter
+                            src_data = RegistryAdapter.read_block_source(bid, version_hash=bver)
+                            files.append({
+                                "id": f"file_{cid}",
+                                "path": cpath,
+                                "name": f"{bid}.html",
+                                "content": src_data.get("content", ""),
+                                "clip_id": cid,
+                                "block_id": bid,
+                                "block_version": bver,
+                                "read_only": True,
+                                "provenance": "catalog_shared",
+                            })
+                        except Exception as e:
+                            logger.warning("Could not auto-bind code for block clip %s: %s", cid, e)
         doc.setdefault("metadata", {})
         return doc
 
@@ -632,6 +658,10 @@ class ProjectService:
                         if child.get("parent_id") == clip_id:
                             child["parent_id"] = parent_of_group
             track["clips"] = [item for item in track.get("clips", []) if item.get("id") != clip_id]
+            # Clean up associated code files if they belong to this clip
+            code_sec = doc.get("code") or {}
+            if isinstance(code_sec, dict) and "files" in code_sec:
+                code_sec["files"] = [f for f in code_sec["files"] if f.get("clip_id") != clip_id and f.get("path") != f"compositions/{clip_id}.html"]
 
         elif operation_type == "set_captions":
             captions_data = payload.get("captions", [])
@@ -742,6 +772,28 @@ class ProjectService:
                 "layer_order": max_lo + 1,
             }
             target_track.setdefault("clips", []).append(clip_data)
+
+            # Bind associated Catalog source code to Project Explorer / CodeMirror 6
+            code_sec = doc.setdefault("code", {})
+            files = code_sec.setdefault("files", [])
+            comp_path = f"compositions/{instance_id}.html"
+            if not any(f.get("clip_id") == instance_id or f.get("path") == comp_path for f in files):
+                try:
+                    from backend.services.registry_adapter import RegistryAdapter
+                    src_data = RegistryAdapter.read_block_source(block_id, version_hash=block_version)
+                    files.append({
+                        "id": f"file_{instance_id}",
+                        "path": comp_path,
+                        "name": f"{block_id}.html",
+                        "content": src_data.get("content", ""),
+                        "clip_id": instance_id,
+                        "block_id": block_id,
+                        "block_version": block_version,
+                        "read_only": True,
+                        "provenance": "catalog_shared",
+                    })
+                except Exception as e:
+                    logger.warning("Could not bind source code for block %s: %s", block_id, e)
 
         elif operation_type == "update_block_variables":
             clip_id = payload.get("clip_id")
@@ -1223,7 +1275,10 @@ class ProjectService:
             if not target:
                 raise ProjectError(f"File '{file_id or file_path}' not found in project.")
             if target.get("read_only"):
-                raise ProjectError(f"Cannot update read-only file '{target.get('path')}'.")
+                # Fork shared catalog code into an authorized project-owned editable version
+                target["read_only"] = False
+                target["provenance"] = "project_owned"
+                target["forked_from_version"] = target.get("block_version")
 
             cls._check_associated_clip_unlocked(tracks, target, "update_file")
             cls._validate_file_extension_and_content(target.get("path", ""), content)

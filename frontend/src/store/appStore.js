@@ -19,19 +19,83 @@ const useAppStore = create((set, get) => ({
   setMessages: (msgs) => set({ messages: msgs }),
   setStreaming: (v) => set({ isStreaming: v }),
   appendStreamToken: (token) => set((s) => ({ streamingText: s.streamingText + token })),
+  streamingExecutionTimeline: [],
+  setStreamingExecutionTimeline: (t) => set({ streamingExecutionTimeline: t }),
+  clearStreamingExecutionTimeline: () => set({ streamingExecutionTimeline: [] }),
+  handleToolEvent: (event) => set((s) => {
+    const { step_id, tool_call_id, tool_name, state, arguments: args, result, duration_ms, error } = event
+    const existingSteps = [...s.streamingExecutionTimeline]
+    let stepIndex = existingSteps.findIndex((st) => st.id === step_id)
+
+    const isErr = state === "output-error" || Boolean(error) || (result && result.status === "error")
+    const isDone = state === "output-available" && !isErr
+    const stepStatus = isErr ? "failed" : isDone ? "completed" : "executing"
+
+    if (stepIndex === -1) {
+      existingSteps.push({
+        id: step_id || `step_${Date.now()}`,
+        title: `Execute ${tool_name || "tool"}`,
+        status: stepStatus,
+        duration_ms: duration_ms || 0,
+        tool_calls: [
+          {
+            id: tool_call_id || `tc_${Date.now()}`,
+            name: tool_name,
+            state: state || "executing",
+            arguments: args,
+            result: result,
+            duration_ms: duration_ms,
+            error: error,
+          },
+        ],
+      })
+    } else {
+      const targetStep = { ...existingSteps[stepIndex] }
+      const tcList = [...(targetStep.tool_calls || [])]
+      let tcIndex = tcList.findIndex((tc) => tc.id === tool_call_id)
+      const newTc = {
+        id: tool_call_id,
+        name: tool_name || (tcIndex >= 0 ? tcList[tcIndex].name : "tool"),
+        state: state,
+        arguments: args !== undefined ? args : tcIndex >= 0 ? tcList[tcIndex].arguments : {},
+        result: result !== undefined ? result : tcIndex >= 0 ? tcList[tcIndex].result : undefined,
+        duration_ms: duration_ms !== undefined ? duration_ms : tcIndex >= 0 ? tcList[tcIndex].duration_ms : undefined,
+        error: error !== undefined ? error : tcIndex >= 0 ? tcList[tcIndex].error : undefined,
+      }
+      if (tcIndex === -1) {
+        tcList.push(newTc)
+      } else {
+        tcList[tcIndex] = newTc
+      }
+      targetStep.tool_calls = tcList
+      if (duration_ms) targetStep.duration_ms = duration_ms
+      targetStep.status = stepStatus
+      existingSteps[stepIndex] = targetStep
+    }
+    return { streamingExecutionTimeline: existingSteps }
+  }),
+
   // quickReplies is optional — when the planner emits a <quick_replies> block,
   // the chips render below the just-finished assistant bubble. They live only
   // in the in-memory message (not persisted), so they vanish on session reload
   // (intended — the conversation has moved on).
-  finalizeStream: (fullText, quickReplies) => {
+  finalizeStream: (fullText, quickReplies, executionTimeline) => {
     const cleaned = fullText || get().streamingText
-    const msg = { role: "assistant", content: cleaned }
+    const timeline = (executionTimeline && executionTimeline.length > 0)
+      ? executionTimeline
+      : get().streamingExecutionTimeline
+    const msg = {
+      role: "assistant",
+      content: cleaned,
+      executionTimeline: timeline && timeline.length > 0 ? timeline : null,
+    }
     if (Array.isArray(quickReplies) && quickReplies.length > 0) {
       msg.quickReplies = quickReplies
     }
     set((s) => ({
       messages: [...s.messages, msg],
       streamingText: "",
+      streamingExecutionTimeline: [],
       isStreaming: false,
     }))
   },

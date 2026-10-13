@@ -29,7 +29,82 @@ import {
   IconClock,
   IconLayersIntersect,
   IconFolderMinus,
+  IconCode,
 } from "@tabler/icons-react"
+
+/**
+ * Extract meaningful internal DOM elements from a block's associated source file.
+ */
+function extractBlockInternalNodes(clip, codeFiles = []) {
+  if (!clip || (clip.type !== "block" && !clip.block_id)) return []
+  const file = codeFiles.find(
+    (f) => f.clip_id === clip.id || f.path === `compositions/${clip.id}.html`
+  )
+  if (!file || !file.content) return []
+
+  try {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(file.content, "text/html")
+    const container = doc.body || doc.documentElement
+    if (!container) return []
+
+    const ignoredTags = new Set(["script", "style", "link", "meta", "title", "head", "html"])
+    const elements = Array.from(container.querySelectorAll("*")).filter((el) => {
+      const tag = el.tagName.toLowerCase()
+      if (ignoredTags.has(tag)) return false
+      return Boolean(
+        el.id ||
+        el.getAttribute("data-id") ||
+        ["h1", "h2", "h3", "h4", "p", "span", "img", "canvas", "svg", "video"].includes(tag) ||
+        (el.classList && el.classList.length > 0)
+      )
+    })
+
+    const seen = new Set()
+    const nodes = []
+
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i]
+      const tag = el.tagName.toLowerCase()
+      const nodeId = el.id || el.getAttribute("data-id") || null
+      const className = (typeof el.className === "string" ? el.className : "").trim()
+      const text = (el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 30)
+
+      const key = nodeId || `${tag}:${className}:${text.slice(0, 10)}`
+      if (seen.has(key)) continue
+      seen.add(key)
+
+      let type = "element"
+      if (["h1", "h2", "h3", "h4", "p", "span"].includes(tag)) {
+        type = "typography"
+      } else if (tag === "img") {
+        type = "image"
+      } else if (tag === "svg" || tag === "canvas") {
+        type = "graphics"
+      } else if (tag === "video") {
+        type = "video"
+      }
+
+      nodes.push({
+        id: `${clip.id}::${nodeId || (tag + "-" + nodes.length)}`,
+        nodeId,
+        tagName: tag,
+        className,
+        text,
+        type,
+        parentClip: clip,
+        sourceFile: file,
+      })
+
+      if (nodes.length >= 12) break
+    }
+
+    return nodes
+  } catch (err) {
+    console.warn("Error parsing block internal DOM:", err)
+    return []
+  }
+}
 
 /**
  * Professional Layers View (/motion).
@@ -38,6 +113,7 @@ import {
  */
 export default function StudioLayersPanel({
   tracks = [],
+  codeFiles = [],
   selectedElementId = null,
   onSelectElement,
   onToggleVisibility,
@@ -49,8 +125,10 @@ export default function StudioLayersPanel({
   onDuplicateClip,
   onDeleteClip,
   onSeek,
+  onNavigateToCode,
 }) {
   const [collapsedGroups, setCollapsedGroups] = useState({})
+  const [collapsedBlocks, setCollapsedBlocks] = useState({})
   const [contextMenu, setContextMenu] = useState(null)
   const [renamingId, setRenamingId] = useState(null)
   const [renameText, setRenameText] = useState("")
@@ -109,6 +187,17 @@ export default function StudioLayersPanel({
 
     return { rootElements: roots, childrenMap: cMap, groupMap: gMap }
   }, [visualClips])
+
+  // 4. Precompute internal DOM nodes for HyperFrames block clips
+  const blockNodesMap = useMemo(() => {
+    const map = {}
+    visualClips.forEach((c) => {
+      if (c.type === "block" || c.block_id) {
+        map[c.id] = extractBlockInternalNodes(c, codeFiles)
+      }
+    })
+    return map
+  }, [visualClips, codeFiles])
 
   // Helper: friendly name
   const getClipName = (c) => {
@@ -267,6 +356,10 @@ export default function StudioLayersPanel({
     const isSelected = selectedElementId === clip.id
     const isGroup = clip.type === "group"
     const isCollapsed = isGroup && !!collapsedGroups[clip.id]
+    const isBlock = clip.type === "block" || Boolean(clip.block_id)
+    const internalNodes = blockNodesMap[clip.id] || []
+    const hasInternalNodes = internalNodes.length > 0
+    const isBlockCollapsed = !!collapsedBlocks[clip.id]
     const children = childrenMap[clip.id] || []
     const isLocked = isElementLocked(clip)
     const isVisible = clip.visible !== false
@@ -330,7 +423,7 @@ export default function StudioLayersPanel({
             <IconGripVertical size={13} />
           </Box>
 
-          {/* Group Expand / Collapse Toggle */}
+          {/* Group or Block Expand / Collapse Toggle */}
           {isGroup ? (
             <IconButton
               size="small"
@@ -342,8 +435,20 @@ export default function StudioLayersPanel({
             >
               {isCollapsed ? <IconChevronRight size={14} /> : <IconChevronDown size={14} />}
             </IconButton>
+          ) : isBlock && hasInternalNodes ? (
+            <IconButton
+              size="small"
+              data-testid={`expand-block-btn-${clip.id}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                setCollapsedBlocks((prev) => ({ ...prev, [clip.id]: !prev[clip.id] }))
+              }}
+              sx={{ p: 0.25, mr: 0.5, width: 18, height: 18 }}
+            >
+              {isBlockCollapsed ? <IconChevronRight size={14} /> : <IconChevronDown size={14} />}
+            </IconButton>
           ) : (
-            <Box sx={{ width: isGroup ? 18 : 6 }} />
+            <Box sx={{ width: isGroup || (isBlock && hasInternalNodes) ? 18 : 6 }} />
           )}
 
           {/* Type Icon */}
@@ -394,6 +499,21 @@ export default function StudioLayersPanel({
                     sx={{ height: 15, fontSize: "0.62rem", px: 0.2, bgcolor: "rgba(0,0,0,0.06)" }}
                   />
                 )}
+                {isBlock && hasInternalNodes && (
+                  <Chip
+                    size="small"
+                    data-testid={`block-nodes-badge-${clip.id}`}
+                    label={`${internalNodes.length} nodes`}
+                    sx={{
+                      height: 15,
+                      fontSize: "0.62rem",
+                      px: 0.2,
+                      bgcolor: "rgba(139, 92, 246, 0.1)",
+                      color: "#7c3aed",
+                      fontWeight: 700,
+                    }}
+                  />
+                )}
                 {hasAnimation && (
                   <Tooltip title="Contains animated keyframes" arrow>
                     <Box component="span" sx={{ display: "inline-flex", color: "#8b5cf6" }}>
@@ -407,6 +527,32 @@ export default function StudioLayersPanel({
 
           {/* Quick Actions: Visibility, Lock, Menu */}
           <Stack direction="row" alignItems="center" spacing={0.25}>
+            {/* Open Block Code Button */}
+            {isBlock && (
+              <Tooltip title="Open block HTML in CodeMirror 6" arrow>
+                <IconButton
+                  size="small"
+                  data-testid={`block-code-btn-${clip.id}`}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    const matched = codeFiles.find(
+                      (f) => f.clip_id === clip.id || f.path === `compositions/${clip.id}.html`
+                    )
+                    onNavigateToCode && onNavigateToCode(matched, clip.id)
+                  }}
+                  sx={{
+                    p: 0.25,
+                    width: 22,
+                    height: 22,
+                    color: "text.disabled",
+                    "&:hover": { color: "primary.main" },
+                  }}
+                >
+                  <IconCode size={13} />
+                </IconButton>
+              </Tooltip>
+            )}
+
             {/* Lock Toggle */}
             <Tooltip title={isLocked ? "Unlock element (allows mutations)" : "Lock element (prevents changes)"} arrow>
               <IconButton
@@ -487,6 +633,111 @@ export default function StudioLayersPanel({
 
         {/* Children if Group is Expanded */}
         {isGroup && !isCollapsed && children.map((ch) => renderLayerRow(ch, depth + 1))}
+
+        {/* Render internal DOM element rows if Block is Expanded */}
+        {isBlock && !isBlockCollapsed && hasInternalNodes && internalNodes.map((node) => {
+          const isNodeSelected = selectedElementId === node.id
+          return (
+            <Box
+              key={node.id}
+              data-layer-id={node.id}
+              data-testid={`internal-layer-row-${node.id}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (onSelectElement) onSelectElement(node)
+              }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                px: 1,
+                py: 0.45,
+                pl: 1 + (depth + 1) * 2,
+                bgcolor: isNodeSelected
+                  ? "rgba(139, 92, 246, 0.12)"
+                  : "rgba(0, 0, 0, 0.015)",
+                borderLeft: isNodeSelected ? "3px solid #8b5cf6" : "3px solid transparent",
+                borderBottom: "1px dashed",
+                borderColor: "rgba(0,0,0,0.06)",
+                cursor: "pointer",
+                userSelect: "none",
+                transition: "background-color 0.15s ease",
+                "&:hover": {
+                  bgcolor: isNodeSelected ? "rgba(139, 92, 246, 0.18)" : "rgba(139, 92, 246, 0.05)",
+                },
+              }}
+            >
+              <Box sx={{ width: 14 }} />
+              <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
+                {node.type === "typography" && <IconTypography size={13} color="#06b6d4" />}
+                {node.type === "image" && <IconPhoto size={13} color="#10b981" />}
+                {node.type === "graphics" && <IconSparkles size={13} color="#8b5cf6" />}
+                {node.type === "video" && <IconVideo size={13} color="#3b82f6" />}
+                {node.type === "element" && <IconLayersIntersect size={13} color="#64748b" />}
+              </Box>
+              <Box sx={{ flex: 1, minWidth: 0, mr: 1, display: "flex", alignItems: "center", gap: 0.5 }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontFamily: "monospace",
+                    fontWeight: 700,
+                    fontSize: "0.72rem",
+                    color: isNodeSelected ? "primary.main" : "text.secondary",
+                  }}
+                >
+                  &lt;{node.tagName}&gt;
+                </Typography>
+                {node.nodeId && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontFamily: "monospace",
+                      fontSize: "0.68rem",
+                      color: "#6366f1",
+                      fontWeight: 600,
+                    }}
+                  >
+                    #{node.nodeId}
+                  </Typography>
+                )}
+                {node.text && (
+                  <Typography
+                    variant="caption"
+                    noWrap
+                    sx={{
+                      fontSize: "0.68rem",
+                      color: "text.disabled",
+                      fontStyle: "italic",
+                      maxWidth: 120,
+                    }}
+                  >
+                    "{node.text}"
+                  </Typography>
+                )}
+              </Box>
+              <Stack direction="row" alignItems="center" spacing={0.25}>
+                <Tooltip title="Jump to element in CodeMirror 6" arrow>
+                  <IconButton
+                    size="small"
+                    data-testid={`jump-code-${node.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onNavigateToCode && onNavigateToCode(node.sourceFile, clip.id)
+                    }}
+                    sx={{
+                      p: 0.25,
+                      width: 20,
+                      height: 20,
+                      color: "text.disabled",
+                      "&:hover": { color: "primary.main" },
+                    }}
+                  >
+                    <IconCode size={12} />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            </Box>
+          )
+        })}
       </React.Fragment>
     )
   }

@@ -15,7 +15,7 @@ import {
   IconUpload,
   IconTrendingUp,
   IconChartBar,
-  IconSparkles,
+  IconVideo,
   IconBroadcast,
   IconNews,
   IconCircleCheck,
@@ -171,7 +171,7 @@ const STARTER_SUGGESTIONS = [
     message: "Download and analyze a video",
   },
   {
-    icon: <IconSparkles size={28} stroke={1.8} color="#8b5cf6" />,
+    icon: <IconVideo size={28} stroke={1.8} color="#8b5cf6" />,
     title: "Generate AI video",
     description: "Create original videos with AI voice and visuals",
     message: "Generate an original video",
@@ -374,13 +374,13 @@ export default function Chat() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                ViralMint
+                6Clips
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ color: "text.secondary", mb: 5, maxWidth: 440, mx: "auto", lineHeight: 1.6, textAlign: "center" }}
+                sx={{ color: "text.secondary", mb: 5, maxWidth: 460, mx: "auto", lineHeight: 1.6, textAlign: "center" }}
               >
-                Your AI content strategy assistant. Discover trending videos, generate originals, and publish everywhere.
+                Your Outcomes-as-a-Service video assistant. Research trends, generate original compositions, and produce finished clips.
               </Typography>
 
               {suggestions.length > 0 && (

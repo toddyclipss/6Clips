@@ -7,7 +7,7 @@ import {
 } from "@mui/material"
 import {
   IconDeviceFloppy, IconRefresh, IconAlertCircle, IconCheck,
-  IconX, IconFileCode, IconEye, IconPlus, IconCode,
+  IconX, IconFileCode, IconEye, IconPlus, IconCode, IconEdit,
 } from "@tabler/icons-react"
 import StudioFileTree from "./StudioFileTree"
 import StudioCodeMirror from "./StudioCodeMirror"
@@ -25,6 +25,7 @@ export const StudioCodeWorkspace = memo(function StudioCodeWorkspace({
   const [activeTab, setActiveTab] = useState(null) // active file path/id
   const [localDrafts, setLocalDrafts] = useState({}) // { [fileId]: content }
   const [savingFileId, setSavingFileId] = useState(null)
+  const [editableOverride, setEditableOverride] = useState({}) // { [fileId]: boolean }
   const [errorBanner, setErrorBanner] = useState(null)
   const [successNotice, setSuccessNotice] = useState(null)
 
@@ -313,6 +314,37 @@ export const StudioCodeWorkspace = memo(function StudioCodeWorkspace({
 
           {/* Action Toolbar */}
           <Stack direction="row" alignItems="center" spacing={1}>
+            {activeFile && (
+              <>
+                {activeFile.provenance === "project_owned" || editableOverride[activeFile.id] || !activeFile.read_only ? (
+                  <Chip
+                    size="small"
+                    label="Project-Owned"
+                    sx={{ height: 18, fontSize: "0.65rem", bgcolor: "#ecfdf5", color: "#047857", fontWeight: 700 }}
+                  />
+                ) : (
+                  <>
+                    <Chip
+                      size="small"
+                      label="Shared Catalog (Read-Only)"
+                      sx={{ height: 18, fontSize: "0.65rem", bgcolor: "#f1f5f9", color: "#64748b", fontWeight: 700 }}
+                    />
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="secondary"
+                      data-testid="studio-code-customize-btn"
+                      onClick={() => setEditableOverride((prev) => ({ ...prev, [activeFile.id]: true }))}
+                      startIcon={<IconEdit size={12} />}
+                      sx={{ height: 24, px: 1, fontSize: "0.7rem", fontWeight: 700 }}
+                    >
+                      Customize Code
+                    </Button>
+                  </>
+                )}
+              </>
+            )}
+
             {isFileDirty && (
               <Chip
                 size="small"
@@ -324,7 +356,7 @@ export const StudioCodeWorkspace = memo(function StudioCodeWorkspace({
               size="small"
               variant="contained"
               data-testid="studio-code-save-btn"
-              disabled={!activeFile || !isFileDirty || savingFileId !== null || activeFile.read_only}
+              disabled={!activeFile || !isFileDirty || savingFileId !== null}
               onClick={handleSaveActiveFile}
               startIcon={savingFileId !== null ? <CircularProgress size={12} color="inherit" /> : <IconDeviceFloppy size={14} />}
               sx={{
@@ -364,7 +396,7 @@ export const StudioCodeWorkspace = memo(function StudioCodeWorkspace({
               content={activeContent}
               filePath={activeFile.path}
               onChange={handleDraftChange}
-              readOnly={activeFile.read_only}
+              readOnly={Boolean(activeFile.read_only && !editableOverride[activeFile.id])}
             />
           ) : (
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", flexDirection: "column" }}>

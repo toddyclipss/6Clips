@@ -27,7 +27,6 @@ import {
   IconUpload,
   IconFolder,
   IconArchive,
-  IconSparkles,
   IconTrash,
   IconDownload,
   IconBulb,
@@ -59,7 +58,7 @@ const IMPORT_ACCEPT = "video/*,audio/*,.mp4,.mov,.avi,.mkv,.webm,.mp3,.wav,.m4a,
 
 // Reads as a sentence in the empty state: "no audio files that were …".
 const ORIGIN_PHRASE = {
-  created: "made in ViralMint",
+  created: "made in 6Clips",
   edited: "made from something you already own",
   imported: "brought in from outside",
 }

@@ -35,7 +35,7 @@ class ConnectionManager:
     async def send(self, message: dict, user_id: str = "local"):
         """Send a JSON message to all connections for a user."""
         msg_type = message.get("type", "unknown")
-        logger.debug("WS send → %s | type=%s", user_id, msg_type)
+        logger.debug("WS send -> %s | type=%s", user_id, msg_type)
 
         # Backend is the single writer of rich cards + job rows into chat
         # history (attributed via the CHAT_SESSION ContextVar). on_ws_event

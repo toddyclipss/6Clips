@@ -13,33 +13,125 @@ import re
 import json
 import logging
 import contextvars
+import time
+from uuid import uuid4
+from datetime import datetime
 from backend.core.ai_provider import get_ai_client
+from backend.core.exceptions import AIProviderUnselectedError
 from backend.core.user_intelligence import UserIntelligence
 from backend.core.setup_wizard import WIZARDS
 from backend.core.ws_manager import ws_manager
 from backend.core.capabilities import CapabilityRegistry
+from backend.core.chat_history import CHAT_SESSION
 from backend.config import settings
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are 6Clips — a gaming-first Outcomes-as-a-Service video creation platform with one Main Agent, one Global Chat, trend discovery, a canonical video project system, and an editor that supports Create, Review, and optional Refine.
+SENSITIVE_KEY_SUBSTRINGS = (
+    "key", "secret", "password", "token", "auth", "cookie", "credential", "api_key", "bearer"
+)
+DB_URL_REGEX = re.compile(r'(?:sqlite|postgres|postgresql|mysql|mssql|mongodb)(?:\+[a-z0-9]+)?://[^\s\'"]+', re.IGNORECASE)
+BEARER_REGEX = re.compile(r'Bearer\s+[A-Za-z0-9_\-\.]+', re.IGNORECASE)
+API_KEY_REGEX = re.compile(r'(?:AIzaSy[A-Za-z0-9_\-]{33}|sk-[A-Za-z0-9_\-]{20,}|ghp_[A-Za-z0-9]{36})')
+THINK_TAG_REGEX = re.compile(r'<(?:thought|think)>.*?</(?:thought|think)>', re.IGNORECASE | re.DOTALL)
+LOCAL_USER_PATH_REGEX = re.compile(r'[a-zA-Z]:\\(?:Users|Documents and Settings)\\[^\\]+\\', re.IGNORECASE)
+
+
+def _sanitize_string(s: str) -> str:
+    s = THINK_TAG_REGEX.sub('[THOUGHT_INTERNAL]', s)
+    s = DB_URL_REGEX.sub('[REDACTED_DB_URL]', s)
+    s = BEARER_REGEX.sub('Bearer [REDACTED]', s)
+    s = API_KEY_REGEX.sub('[REDACTED_KEY]', s)
+    s = LOCAL_USER_PATH_REGEX.sub(lambda _: r'C:\Users\<user>\\', s)
+    if len(s) > 600:
+        return s[:600] + "... [truncated]"
+    return s
+
+
+def _sanitize_payload(obj, depth=0):
+    if depth > 6:
+        return "<truncated>"
+    if isinstance(obj, dict):
+        sanitized = {}
+        for k, v in obj.items():
+            k_lower = str(k).lower()
+            if any(s in k_lower for s in SENSITIVE_KEY_SUBSTRINGS):
+                sanitized[k] = "[REDACTED]"
+            else:
+                sanitized[k] = _sanitize_payload(v, depth + 1)
+        return sanitized
+    elif isinstance(obj, list):
+        return [_sanitize_payload(item, depth + 1) for item in obj[:25]]
+    elif isinstance(obj, str):
+        return _sanitize_string(obj)
+    return obj
+
+SYSTEM_PROMPT = """You are 6Clips — an Outcomes-as-a-Service video creation platform with one Main Agent, one Global Chat, reference trend discovery, a canonical video project system, and an editor that supports Create, Review, and optional Refine.
 Your objective is to help creators research, script, edit, review, and produce original videos through authorized integrated capabilities.
 You speak like a sharp, helpful colleague who is truthful, concise, and technically grounded.
 
 ## Absolute Priority: Tool Execution Results
-When a tool (such as search_catalog, project_operation, etc.) has been executed in the conversation, your response MUST directly present, summarize, and list the actual tool results (including found item titles and IDs) to answer the user's request.
+When a tool (such as search_catalog, project_operation, search_youtube_trends, etc.) has been executed in the conversation, your response MUST directly present, summarize, and list the actual tool results (including found item titles and IDs) to answer the user's request.
 NEVER replace or ignore tool results with an introductory greeting, a welcome pitch, or generic menu options.
+
+## Core Product Modalities (Preserve ONE Main Agent, ONE Global Chat, ONE Canonical /motion Editor)
+The Main Agent operates across three distinct workflow purposes:
+1. **Reference and Knowledge Discovery:** Researching what is trending across all formats (vertical Shorts, Reels, horizontal, long-form, news, discussions). Do NOT exclude vertical videos or Shorts from trend research. A viral Short provides valuable intelligence on trending topics, hooks, pacing, storytelling, visual techniques, captions, and audience interest. Clearly label these results as research references.
+2. **Editable Source Acquisition:** Obtaining suitable, authorized footage for editing. When repurposing (e.g. creating three 60-second clips), select substantial long-form source footage (>= 240s) rather than recycling previously edited vertical social clips into new clips. Citing viral Shorts as creative references for trends and hooks is encouraged, but editable source footage requires sufficient raw runtime and creator authorization.
+3. **Original Content Creation:** Developing a new video from research, an original script, storyboard, motion graphics composition, typography, captions, and authorized/procedural assets. Synthesize references for knowledge and inspiration without requiring pre-existing third-party video footage.
 
 ## Capabilities Status (Strict Truthfulness)
 - **Available & Active:**
-  * Motion Graphics Catalog: Search and discover normalized motion graphics templates, lower thirds, and titles (`search_catalog`).
+  * Media Inspection: Inspect video and audio streams, duration, FPS, aspect ratio (`inspect_media`).
+  * Project Lifecycle: Construct canonical versioned video projects through ProjectService (`create_project`).
+  * Clip Selection & Scoring: Whisper speech transcription and virality-scored highlight detection (`suggest_clips`).
+  * Motion Graphics Catalog: Search and discover normalized motion graphics templates, intros, lower thirds, and titles (`search_catalog`).
   * Video Editing & Timeline: Controlled versioned edits with CAS (`project_operation`), trimming (`tool_trim`), cropping (`tool_crop`), speed adjustments (`tool_speed`), and reframing (`tool_reframe`).
-  * Trend Discovery: YouTube trending discovery via authorized YouTube Data API (`search_youtube_trends`).
-  * AI Video Generation: Scripting, voice synthesis, captions, and rendering from frozen project revisions (`project_render`).
+  * Captions: Generate synchronized subtitles aligned with gameplay audio and speech (`generate_captions`).
+  * Trend Discovery: YouTube trending discovery across all formats (`search_youtube_trends`).
+  * Project Render: Multi-track render with audio muxing from frozen project revisions (`project_render`).
 - **External Publishing (YouTube Upload, TikTok, Instagram, X):**
   * NOT configured or validated by default.
   * NEVER claim you can upload or publish to TikTok or YouTube unless the user has verified and connected live credentials in Settings.
   * If the user asks to publish or upload to social platforms without configured credentials, truthfully explain that publishing accounts are not connected in Settings.
+
+## Video Repurposing Workflow: Trend Discovery & Editable Source Selection
+When a user asks to discover viral/trending videos and convert them into clips (for example: "Find a viral Fortnite video and turn it into three 60-second clips" or "procure um video viral e transforme em 3 clips de 60 segundos"):
+1. **Language Isolation & Matching**: Strictly match the language of the current user message. An English request MUST receive an English response. A Portuguese request MUST receive a Portuguese response. Never leak language from prior sessions.
+2. **Research & Long-Form Source Strategy**:
+   - Research trends across all formats (including viral Shorts for hooks, pacing, and topic patterns).
+   - Find suitable substantial LONG-FORM source candidates (at least 240s) for multi-clip editing.
+   - Do NOT recycle already-finished vertical Shorts as raw source footage for 3x 60s clips.
+   - Call `search_youtube_trends(query="...", video_duration="any")` or `"medium"`.
+3. **Separate Dimensions**:
+   - Trend Score: Observable popularity/trend signal [0-100].
+   - Source Suitability: Whether the candidate has sufficient continuous duration for the requested editing.
+   - Highlight Scores: Quality of individual moments after authorized footage analysis.
+4. **Autonomous Source Selection & Workflow Ownership**:
+   - You MUST rank, compare, and select the single best long-form editable source yourself based on duration, virality metrics, and topic fit.
+   - NEVER ask the user to choose between videos, compare candidate URLs, inspect candidate lists, supply a video ID, or supply an existing project ID.
+   - Present the chosen recommendation with grounded metrics (title, channel, duration, views, Trend Score) and explain why its continuous duration supports 3x 60s clips.
+   - Cite viral Shorts/clips as creative references for trending hooks, pacing, and audience interest.
+5. **Autonomous Execution & Operational Flow**:
+   - Do NOT display generic legal disclaimers or repetitive rights licensing notices.
+   - Do NOT automatically ask the user whether they authorize footage whenever an external video is discovered.
+   - Autonomously continue the requested workflow: discover references, identify suitable longer footage, select the best candidate, and verify media accessibility.
+   - Prefer existing authorized Library media or available licensed footage when suitable.
+   - If a source candidate cannot be accessed or downloaded through authorized supported methods, autonomously evaluate alternative candidates or existing Library assets before involving the user.
+   - If all options are blocked, communicate only the specific technical or operational blocker and the minimum action needed to resolve it. Never restart the conversation.
+6. **Goal Continuity & Zero Technical Interrogation Across Turns**:
+   - Retain the canonical objective across turns: Topic (e.g. Fortnite), Goal (create 3x 60s clips, 9:16 aspect ratio), selected source footage, and pending authorization.
+   - When the user confirms ("produce a video", "make it", "confirm", "proceed", "yes", "sim, pode produzir"):
+     * Continue the pending objective immediately. Do NOT reset into a generic conversation.
+     * NEVER ask the user for an existing project ID, revision ID, or video ID.
+     * Autonomously auto-create a canonical project via ProjectService (e.g. 'create_project' with title '<Topic> Highlights') if none exists, set 9:16 aspect ratio, and proceed with highlight extraction!
+
+## Original Video Creation Workflow
+When a user asks to create an original video (for example: "Create an original video explaining the latest Fortnite update"):
+1. Research relevant topic references, news, and trend signals using available tools (`search_youtube_trends`, `search_catalog`).
+2. Synthesize findings into an original concept brief, script, storyboard, and scene structure.
+3. Construct canonical /motion project with original motion graphics, typography, captions, and audio.
+4. Use references for knowledge and inspiration, not frame-for-frame copying. Report any unsupported external research tools honestly.
 
 ## CRITICAL Behavior Rules
 
@@ -117,7 +209,7 @@ Before sending your response, verify: "Did I include an <action> block?" If the 
 ### Proactively Prompt for Missing Credentials
 - Check the credential status above. If a key service is missing, proactively offer to set it up.
 - For AI provider: "I notice you haven't set up an AI provider yet. Want me to walk you through it? It takes 2 minutes and unlocks everything."
-- For YouTube API: "To discover YouTube trending videos, I need a YouTube API key. Want me to help you set one up? It's free."
+- For YouTube API: You can discover YouTube trends right away without an API key; an optional YouTube Data API v3 key in Settings increases quota.
 - For voice/video generation: "You're ready to generate videos! Edge TTS is set up by default — want to try OpenAI TTS for premium quality? You'll need an OpenAI key."
 - Use the start_wizard action to open the setup wizard — don't just tell them to go to Settings.
 - Frame missing credentials as opportunities, not blockers: "You could also search TikTok trends — want to set that up?"
@@ -393,6 +485,7 @@ class PlannerAgent:
         pinned_model: Optional[str] = None,
         project_id: Optional[str] = None,
         pinned_think: Optional[bool | str] = None,
+        reasoning_level: Optional[str] = None,
     ):
         """
         Main handler: stream AI response over WS, then dispatch any <action> blocks.
@@ -484,7 +577,13 @@ class PlannerAgent:
                 user_settings,
                 pinned_provider=pinned_provider,
                 pinned_model=pinned_model,
+                require_explicit=True,
             )
+        except AIProviderUnselectedError as exc:
+            err_msg = str(exc)
+            logger.warning("Planner rejected turn: %s", err_msg)
+            await ws_manager.send({"type": "chat_error", "error": err_msg}, user_id)
+            return
         except Exception:
             direct_actions = self._infer_missing_action(message, "")
             if direct_actions:
@@ -519,89 +618,169 @@ class PlannerAgent:
                 tool_called = status_name.split(":", 1)[1]
                 await ws_manager.send({"type": "chat_status", "status": f"Executing tool {tool_called}..."}, user_id)
 
+        timeline_steps = []
+
         if ai.provider.value == "ollama":
             tool_defs = CapabilityRegistry.to_tool_definitions(user_settings=user_settings)
+            active_project_id = project_id
+            active_revision = None
 
             async def _planner_tool_executor(fn_name: str, fn_args: dict) -> dict:
+                nonlocal active_project_id, active_revision
                 logger.info("PLANNER TOOL EXECUTOR called | tool=%s | args=%s", fn_name, fn_args)
+                step_idx = len(timeline_steps) + 1
+                step_id = f"step_{step_idx}_{uuid4().hex[:6]}"
+                tc_id = f"tc_{uuid4().hex[:8]}"
+                start_time = time.perf_counter()
+
+                current_sess_id = CHAT_SESSION.get()
+                safe_args = _sanitize_payload(fn_args)
+                await ws_manager.send({
+                    "type": "tool_event",
+                    "step_id": step_id,
+                    "tool_call_id": tc_id,
+                    "tool_name": fn_name,
+                    "state": "executing",
+                    "arguments": safe_args,
+                    "duration_ms": 0,
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "session_id": current_sess_id,
+                }, user_id)
+
                 await ws_manager.send({"type": "chat_status", "status": f"Running tool {fn_name}..."}, user_id)
 
                 cap = CapabilityRegistry.get(fn_name)
                 if not cap:
-                    return {"error": f"Unauthorized or unknown capability '{fn_name}'"}
-
-                # Guard unconfigured publishing tools
-                if fn_name in ("upload_youtube", "upload_tiktok"):
-                    return {"status": "error", "error": f"{fn_name} is not available: platform credentials are not configured in Settings."}
-
-                try:
-                    CapabilityRegistry.validate_input(fn_name, fn_args)
-                except Exception as ex:
-                    return {"error": f"Invalid arguments: {ex}"}
-
-                if not fn_args.get("project_id") and project_id:
-                    fn_args["project_id"] = project_id
-
-                if fn_name == "project_operation":
-                    from backend.services.project_service import ProjectService
-                    try:
-                        op_res = await ProjectService.apply_operation(
-                            project_id=fn_args["project_id"],
-                            expected_revision=fn_args["expected_revision"],
-                            operation_type=fn_args["operation_type"],
-                            payload=fn_args.get("payload", {}),
-                            idempotency_key=fn_args.get("idempotency_key"),
-                            author=fn_args.get("author", "agent"),
-                        )
-                        return {"status": "success", "result": op_res}
-                    except Exception as ex:
-                        return {"status": "error", "error": str(ex)}
-
-                elif fn_name == "search_catalog":
-                    from backend.services.registry_adapter import RegistryAdapter
-                    q = fn_args.get("query") or fn_args.get("search")
-                    cat = fn_args.get("category")
-                    lim = int(fn_args.get("limit") or 20)
-                    items = RegistryAdapter.list_catalog_items(category=cat, search=q, limit=lim)
-                    result_items = []
-                    for it in items[:10]:
-                        result_items.append({
-                            "id": it.get("id"),
-                            "title": it.get("title") or it.get("name"),
-                            "category": it.get("category"),
-                            "description": it.get("description", "")[:120],
-                        })
-                    return {"status": "success", "items": result_items, "count": len(items)}
-
+                    res = {"error": f"Unauthorized or unknown capability '{fn_name}'"}
+                elif fn_name in ("upload_youtube", "upload_tiktok"):
+                    res = {"status": "error", "error": f"{fn_name} is not available: platform credentials are not configured in Settings."}
                 else:
-                    from backend.services.executor_service import ExecutorService
-                    run = None
                     try:
-                        run = await ExecutorService.create_run(
-                            objective=f"Planner tool execution: {fn_name}",
-                            project_id=fn_args.get("project_id") or project_id,
-                            user_settings=user_settings,
-                            user_id=user_id,
-                            provider=pinned_provider,
-                            model=pinned_model,
-                        )
-                        step_res = await ExecutorService.execute_step(
-                            run_id=run.id,
-                            step_name=fn_name,
-                            capability_name=fn_name,
-                            payload=fn_args,
-                            user_id=user_id,
-                            authorized=True,
-                        )
-                        await ExecutorService.complete_run(run.id, status="completed")
-                        return {"status": "success", "output": step_res.get("output", {})}
-                    except Exception as ex:
-                        if run:
+                        # Auto-bind project and revision context
+                        if not fn_args.get("project_id") and active_project_id:
+                            fn_args["project_id"] = active_project_id
+                        if fn_args.get("expected_revision") is None and active_revision is not None and fn_name in ("project_operation", "generate_captions"):
+                            fn_args["expected_revision"] = active_revision
+
+                        CapabilityRegistry.validate_input(fn_name, fn_args)
+
+                        if fn_name == "project_operation":
+                            from backend.services.project_service import ProjectService
                             try:
-                                await ExecutorService.complete_run(run.id, status="failed", error_message=str(ex))
-                            except Exception:
-                                pass
-                        return {"status": "error", "error": str(ex)}
+                                op_res = await ProjectService.apply_operation(
+                                    project_id=fn_args["project_id"],
+                                    expected_revision=fn_args["expected_revision"],
+                                    operation_type=fn_args["operation_type"],
+                                    payload=fn_args.get("payload", {}),
+                                    idempotency_key=fn_args.get("idempotency_key"),
+                                    author=fn_args.get("author", "agent"),
+                                )
+                                res = {"status": "success", "result": op_res}
+                                if op_res.get("revision"):
+                                    active_revision = op_res["revision"]
+                            except Exception as ex:
+                                res = {"status": "error", "error": str(ex)}
+
+                        elif fn_name == "search_catalog":
+                            from backend.services.registry_adapter import RegistryAdapter
+                            q = fn_args.get("query") or fn_args.get("search")
+                            cat = fn_args.get("category")
+                            lim = int(fn_args.get("limit") or 20)
+                            items = RegistryAdapter.list_catalog_items(category=cat, search=q, limit=lim)
+                            result_items = []
+                            for it in items[:10]:
+                                result_items.append({
+                                    "id": it.get("id"),
+                                    "title": it.get("title") or it.get("name"),
+                                    "category": it.get("category"),
+                                    "description": it.get("description", "")[:120],
+                                })
+                            res = {"status": "success", "items": result_items, "count": len(items)}
+
+                        else:
+                            from backend.services.executor_service import ExecutorService
+                            run = None
+                            try:
+                                run = await ExecutorService.create_run(
+                                    objective=f"Planner tool execution: {fn_name}",
+                                    project_id=fn_args.get("project_id") or project_id,
+                                    user_settings=user_settings,
+                                    user_id=user_id,
+                                    provider=pinned_provider,
+                                    model=pinned_model,
+                                )
+                                step_res = await ExecutorService.execute_step(
+                                    run_id=run.id,
+                                    step_name=fn_name,
+                                    capability_name=fn_name,
+                                    payload=fn_args,
+                                    user_id=user_id,
+                                    authorized=True,
+                                )
+                                await ExecutorService.complete_run(run.id, status="completed")
+                                step_out = step_res.get("output", {})
+                                res = {"status": "success", "output": step_out}
+                                if step_out.get("project_id"):
+                                    active_project_id = step_out["project_id"]
+                                if step_out.get("revision"):
+                                    active_revision = step_out["revision"]
+                                elif isinstance(step_out.get("project_mutation"), dict) and step_out["project_mutation"].get("revision"):
+                                    active_revision = step_out["project_mutation"]["revision"]
+                            except Exception as ex:
+                                if run:
+                                    try:
+                                        await ExecutorService.complete_run(run.id, status="failed", error_message=str(ex))
+                                    except Exception:
+                                        pass
+                                res = {"status": "error", "error": str(ex)}
+                    except Exception as ex:
+                        res = {"error": f"Invalid arguments: {ex}"}
+
+                duration_ms = int((time.perf_counter() - start_time) * 1000)
+                is_err = "error" in res or (isinstance(res, dict) and res.get("status") == "error")
+                tool_state = "output-error" if is_err else "output-available"
+                safe_res = _sanitize_payload(res)
+
+                await ws_manager.send({
+                    "type": "tool_event",
+                    "step_id": step_id,
+                    "tool_call_id": tc_id,
+                    "tool_name": fn_name,
+                    "state": tool_state,
+                    "arguments": safe_args,
+                    "result": safe_res,
+                    "duration_ms": duration_ms,
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "session_id": current_sess_id,
+                }, user_id)
+
+                step_title_map = {
+                    "inspect_media": "Inspect Gameplay Media",
+                    "create_project": "Create Canonical Project",
+                    "suggest_clips": "Analyze & Select Gameplay Highlight",
+                    "search_catalog": "Search Motion Graphics Catalog",
+                    "project_operation": "Apply Timeline Operation",
+                    "generate_captions": "Generate Synchronized Captions",
+                    "project_render": "Render Frozen Revision MP4",
+                }
+                step_title = step_title_map.get(fn_name, f"Execute {fn_name}")
+
+                timeline_steps.append({
+                    "id": step_id,
+                    "title": step_title,
+                    "status": "failed" if is_err else "completed",
+                    "duration_ms": duration_ms,
+                    "tool_calls": [{
+                        "id": tc_id,
+                        "name": fn_name,
+                        "state": tool_state,
+                        "arguments": safe_args,
+                        "result": safe_res,
+                        "duration_ms": duration_ms,
+                    }],
+                })
+
+                return res
 
             async def _stream_token(tok: str):
                 await ws_manager.send({"type": "chat_token", "token": tok}, user_id)
@@ -613,6 +792,7 @@ class PlannerAgent:
                 tool_executor=_planner_tool_executor,
                 max_tokens=1024,
                 think=pinned_think,
+                reasoning_level=reasoning_level,
                 on_status=_on_status,
                 on_token=_stream_token,
             )
@@ -632,6 +812,7 @@ class PlannerAgent:
                 system=system,
                 max_tokens=1024,
                 think=pinned_think,
+                reasoning_level=reasoning_level,
                 on_status=_on_status,
             ):
                 full_response += token
@@ -650,6 +831,7 @@ class PlannerAgent:
             "type": "chat_done",
             "full_response": clean_response,
             "quick_replies": quick_replies,
+            "execution_timeline": timeline_steps if timeline_steps else None,
         }, user_id)
 
         # Parse and dispatch action blocks.
@@ -717,7 +899,10 @@ class PlannerAgent:
             "actions_triggered": [json.loads(a) for a in actions if self._is_valid_json(a)],
         }, user_id)
 
-        return clean_response
+        return {
+            "content": clean_response,
+            "execution_timeline": timeline_steps if timeline_steps else None,
+        }
 
     async def handle_message_text(
         self,

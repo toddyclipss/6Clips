@@ -93,15 +93,92 @@ def _parse_views_string(text: str) -> int:
     return 0
 
 
-def _search_youtube_public_recent(niche: str, max_results: int = 50) -> list[dict]:
-    """Search YouTube for recent videos (this month) via public endpoint without API key."""
+def classify_suitability_for_clips(
+    duration_seconds: Optional[int],
+    target_clips: int = 3,
+    clip_duration_sec: int = 60,
+) -> dict:
+    """Classify video duration suitability for multi-clip long-form extraction."""
+    min_needed = target_clips * clip_duration_sec
+    recommended_min = min_needed + 60
+    if duration_seconds is None:
+        return {
+            "status": "unknown_duration",
+            "is_suitable": False,
+            "is_editable_source": False,
+            "is_reference": True,
+            "trend_role": "creative_reference",
+            "role_label": "Research Reference (Duration Unverified)",
+            "format_category": "unknown",
+            "min_required_seconds": min_needed,
+            "recommended_seconds": recommended_min,
+            "reason": "Duration unverified until media probe; preserved as research reference.",
+        }
+    if duration_seconds < min_needed:
+        return {
+            "status": "unsuitable_too_short",
+            "is_suitable": False,
+            "is_editable_source": False,
+            "is_reference": True,
+            "trend_role": "creative_reference",
+            "role_label": "Research Reference (Trending Hooks & Pacing)",
+            "format_category": "short_form",
+            "min_required_seconds": min_needed,
+            "recommended_seconds": recommended_min,
+            "deficit_seconds": min_needed - duration_seconds,
+            "reason": f"Short-form content ({duration_seconds}s) serves as a valuable research reference for trending hooks and pacing, but is unsuitable as raw footage for {target_clips} distinct {clip_duration_sec}s clips.",
+        }
+    if duration_seconds < recommended_min:
+        return {
+            "status": "marginal",
+            "is_suitable": True,
+            "is_editable_source": True,
+            "is_reference": True,
+            "trend_role": "marginal_source",
+            "role_label": "Marginal Source Candidate",
+            "format_category": "marginal",
+            "min_required_seconds": min_needed,
+            "recommended_seconds": recommended_min,
+            "reason": f"Duration ({duration_seconds}s) allows {target_clips} clips with limited editorial margin.",
+        }
+    return {
+        "status": "suitable_longform",
+        "is_suitable": True,
+        "is_editable_source": True,
+        "is_reference": True,
+        "trend_role": "editable_source_candidate",
+        "role_label": "Substantial Editable Source Footage",
+        "format_category": "long_form",
+        "min_required_seconds": min_needed,
+        "recommended_seconds": recommended_min,
+        "surplus_seconds": duration_seconds - recommended_min,
+        "reason": f"Substantial footage ({duration_seconds}s) provides sufficient continuous material for {target_clips} distinct {clip_duration_sec}s clips.",
+    }
+
+
+def _search_youtube_public_recent(
+    niche: str,
+    max_results: int = 50,
+    video_duration: str = "any",
+    target_clips: int = 3,
+    clip_duration_sec: int = 60,
+) -> list[dict]:
+    """Search YouTube for recent videos via public endpoint without API key."""
     import json
     import urllib.parse
     import urllib.request
 
     query_encoded = urllib.parse.quote_plus(niche)
-    # sp=EgQIAxAB filters strictly for videos uploaded this month
-    url = f"https://www.youtube.com/results?search_query={query_encoded}&sp=EgQIAxAB"
+    # Use duration-specific sp parameter if requested, or upload this month (EgQIAxAB)
+    if video_duration == "medium":
+        sp_token = "EgIYAw%3D%3D"
+    elif video_duration == "long":
+        sp_token = "EgIYAg%3D%3D"
+    elif video_duration == "short":
+        sp_token = "EgIYAQ%3D%3D"
+    else:
+        sp_token = "EgQIAxAB"
+    url = f"https://www.youtube.com/results?search_query={query_encoded}&sp={sp_token}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.9",
@@ -123,6 +200,7 @@ def _search_youtube_public_recent(niche: str, max_results: int = 50) -> list[dic
             .get("contents", [])
         )
         trends = []
+        candidates = []
         for sec in contents:
             items = sec.get("itemSectionRenderer", {}).get("contents", [])
             for item in items:
@@ -155,7 +233,9 @@ def _search_youtube_public_recent(niche: str, max_results: int = 50) -> list[dic
                     elif len(parts) == 3:
                         duration_s = parts[0] * 3600 + parts[1] * 60 + parts[2]
 
-                trends.append({
+                suitability = classify_suitability_for_clips(duration_s, target_clips=target_clips, clip_duration_sec=clip_duration_sec)
+
+                candidates.append({
                     "platform": "youtube",
                     "requested_platform": "youtube",
                     "video_id": vid,
@@ -172,12 +252,26 @@ def _search_youtube_public_recent(niche: str, max_results: int = 50) -> list[dic
                     "shares": 0,
                     "duration_seconds": duration_s,
                     "upload_date": _parse_relative_time(pub_text),
+                    "aspect_ratio_status": "unverified_prior_to_ingest",
+                    "suitability_for_3x60s": suitability,
                 })
-                if len(trends) >= max_results:
-                    break
-            if len(trends) >= max_results:
-                break
-        return trends
+
+        # Apply video_duration filter strictly if requested (NEVER fallback to shorts on medium/long)
+        if video_duration == "medium":
+            matched = [c for c in candidates if c.get("duration_seconds") and 240 <= c["duration_seconds"] <= 1200]
+            if not matched:
+                matched = [c for c in candidates if c.get("duration_seconds") and c["duration_seconds"] >= 180]
+            trends = matched
+        elif video_duration == "long":
+            matched = [c for c in candidates if c.get("duration_seconds") and c["duration_seconds"] > 1200]
+            trends = matched
+        elif video_duration == "short":
+            matched = [c for c in candidates if c.get("duration_seconds") and c["duration_seconds"] < 240]
+            trends = matched
+        else:
+            trends = candidates
+
+        return trends[:max_results]
     except Exception as ex:
         logger.warning("YouTube public recency search failed: %s", ex)
         return []
@@ -187,11 +281,19 @@ async def search_youtube_trends(
     niche: str,
     api_key: Optional[str] = None,
     max_results: int = 50,
+    video_duration: str = "any",
+    purpose: str = "trend_research",
+    target_clips: int = 3,
+    clip_duration_sec: int = 60,
 ) -> list[dict]:
     """
     Search YouTube for high-velocity trending videos in a given niche.
     Ensures recency by filtering strictly for videos uploaded in the past 30 days.
+    Supports purpose: 'trend_research' (creative references) vs 'editable_source_search' (footage suitable for editing).
+    Supports video_duration: 'medium' (4-20m), 'long' (>20m), 'short' (<4m), or 'any'.
     """
+    if purpose == "editable_source_search" and video_duration == "any":
+        video_duration = "medium"
     if api_key:
         try:
             from googleapiclient.discovery import build
@@ -200,15 +302,19 @@ async def search_youtube_trends(
                 client = build("youtube", "v3", developerKey=api_key)
                 lang = _detect_query_language(niche)
 
-                search_query = client.search().list(
-                    q=niche,
-                    part="id,snippet",
-                    type="video",
-                    order="viewCount",
-                    maxResults=min(max_results, 50),
-                    publishedAfter=_format_search_cutoff(30),
-                    relevanceLanguage=lang,
-                )
+                kwargs = {
+                    "q": niche,
+                    "part": "id,snippet",
+                    "type": "video",
+                    "order": "viewCount",
+                    "maxResults": min(max_results, 50),
+                    "publishedAfter": _format_search_cutoff(30),
+                    "relevanceLanguage": lang,
+                }
+                if video_duration in ("medium", "long", "short"):
+                    kwargs["videoDuration"] = video_duration
+
+                search_query = client.search().list(**kwargs)
                 search_resp = search_query.execute()
 
                 video_ids = [
@@ -231,6 +337,8 @@ async def search_youtube_trends(
                     stats = item.get("statistics", {})
                     content = item.get("contentDetails", {})
                     vid = item.get("id", "")
+                    dur_s = _parse_iso_duration(content.get("duration", ""))
+                    suitability = classify_suitability_for_clips(dur_s, target_clips=target_clips, clip_duration_sec=clip_duration_sec)
 
                     trends.append({
                         "platform": "youtube",
@@ -251,8 +359,10 @@ async def search_youtube_trends(
                         "likes": int(stats.get("likeCount", 0)),
                         "comments": int(stats.get("commentCount", 0)),
                         "shares": 0,
-                        "duration_seconds": _parse_iso_duration(content.get("duration", "")),
+                        "duration_seconds": dur_s,
                         "upload_date": _parse_publish_date(snippet.get("publishedAt")),
+                        "aspect_ratio_status": "unverified_prior_to_ingest",
+                        "suitability_for_3x60s": suitability,
                     })
                 return trends
 
@@ -263,7 +373,7 @@ async def search_youtube_trends(
             logger.warning("YouTube Data API call error (%s) — falling back to public recency search", api_err)
 
     # Public recency search (no API key required, strictly recent this month)
-    return await asyncio.to_thread(_search_youtube_public_recent, niche, max_results)
+    return await asyncio.to_thread(_search_youtube_public_recent, niche, max_results, video_duration, target_clips, clip_duration_sec)
 
 
 # Compatibility aliases

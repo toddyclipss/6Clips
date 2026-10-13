@@ -261,7 +261,7 @@ class HyperFramesAdapter:
                     src_attr = f' src="./assets/{asset_file}"' if asset_file else ''
                     obj_pos = c.get("object_position") or c.get("crop_position") or "center center"
                     combined_style = f'style="z-index: {layer_order}; object-fit: {fit_mode}; object-position: {obj_pos}; {custom_style}"'.strip()
-                    muted_attr = ' muted' if (is_muted or True) else ''  # videos default to muted
+                    muted_attr = ' muted' if is_muted else ''
                     elements_html.append(
                         f'  <video data-hf-id="{cid}" id="{cid}" {combined_style}{src_attr} data-start="{c_start}" data-duration="{c_dur}" data-playback-start="{trim_start}" data-media-start="{trim_start}" data-trim-start="{trim_start}" data-trim-end="{trim_end}" playsinline webkit-playsinline{muted_attr} preload="auto"></video>'
                     )
@@ -326,8 +326,11 @@ class HyperFramesAdapter:
                 safe_js = re.sub(r'</script>', r'<\\/script>', c_content, flags=re.IGNORECASE)
                 custom_js_chunks.append(f"    // {c_path}\n{safe_js}")
             elif c_path.lower().endswith((".html", ".htm")):
-                # Injected custom HTML blocks
-                elements_html.append(f"  <!-- Custom HTML: {c_path} -->\n{c_content}")
+                # Do NOT inject standalone subcompositions or full HTML documents into #stage
+                norm_p = c_path.replace("\\", "/").lower()
+                is_subcomp = norm_p.startswith(("compositions/", "blocks/")) or ("<!doctype" in c_content.lower()[:100]) or ("<html" in c_content.lower()[:100])
+                if not is_subcomp:
+                    elements_html.append(f"  <!-- Custom HTML: {c_path} -->\n{c_content}")
             elif c_path.lower().endswith(".json"):
                 try:
                     project_configs[c_path] = json.loads(c_content)
@@ -977,5 +980,6 @@ class HyperFramesAdapter:
             "aspect_ratio": doc.get("aspect_ratio", "9:16"),
         }), encoding="utf-8")
         (work_dir / "assets_manifest.json").write_text(json.dumps(manifest_data), encoding="utf-8")
+        (work_dir / "project_doc.json").write_text(json.dumps(doc), encoding="utf-8")
         
         return rev, work_dir

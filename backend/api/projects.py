@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database import get_db, AsyncSessionLocal
 from backend.models.project import Project
+from backend.models.generated_video import GeneratedVideo
 from backend.services.project_service import ProjectService
 from backend.core.exceptions import RevisionConflictError, IdempotencyConflictError, ProjectNotFoundError, ProjectError
 
@@ -69,10 +70,29 @@ async def list_projects(user_id: str = "local", db: AsyncSession = Depends(get_d
 
 
 @router.get("/{project_id}")
-async def get_project(project_id: str):
-    """Get project document and revision."""
+async def get_project(project_id: str, db: AsyncSession = Depends(get_db)):
+    """Get project document, revision, and latest rendered video metadata."""
     try:
         p = await ProjectService.get_project(project_id)
+        res_v = await db.execute(
+            select(GeneratedVideo)
+            .where(GeneratedVideo.project_id == project_id)
+            .order_by(GeneratedVideo.created_at.desc())
+            .limit(1)
+        )
+        gv = res_v.scalars().first()
+        latest_render = None
+        if gv:
+            latest_render = {
+                "id": gv.id,
+                "title": gv.title,
+                "project_revision": gv.project_revision,
+                "video_url": f"/api/videos/{gv.id}/stream",
+                "duration_seconds": gv.duration_seconds,
+                "aspect_ratio": gv.aspect_ratio,
+                "status": gv.status,
+                "created_at": gv.created_at.isoformat() if gv.created_at else None,
+            }
         return {
             "id": p.id,
             "name": p.name,
@@ -80,11 +100,36 @@ async def get_project(project_id: str):
             "revision": p.revision,
             "document": json.loads(p.document_json),
             "is_frozen": p.is_frozen,
+            "latest_render": latest_render,
             "created_at": p.created_at.isoformat() if p.created_at else None,
             "updated_at": p.updated_at.isoformat() if p.updated_at else None,
         }
     except ProjectNotFoundError:
         raise HTTPException(status_code=404, detail="Project not found")
+
+
+@router.get("/{project_id}/renders")
+async def get_project_renders(project_id: str, db: AsyncSession = Depends(get_db)):
+    """Get all rendered video outputs for a project."""
+    res_v = await db.execute(
+        select(GeneratedVideo)
+        .where(GeneratedVideo.project_id == project_id)
+        .order_by(GeneratedVideo.created_at.desc())
+    )
+    renders = [
+        {
+            "id": gv.id,
+            "title": gv.title,
+            "project_revision": gv.project_revision,
+            "video_url": f"/api/videos/{gv.id}/stream",
+            "duration_seconds": gv.duration_seconds,
+            "aspect_ratio": gv.aspect_ratio,
+            "status": gv.status,
+            "created_at": gv.created_at.isoformat() if gv.created_at else None,
+        }
+        for gv in res_v.scalars().all()
+    ]
+    return {"project_id": project_id, "renders": renders, "count": len(renders)}
 
 
 @router.get("/{project_id}/revisions")

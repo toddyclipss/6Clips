@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown"
 import { Box, Typography, Avatar } from "@mui/material"
-import { IconSparkles, IconUser } from "@tabler/icons-react"
+import { IconUser } from "@tabler/icons-react"
+import ThoughtChain from "./ThoughtChain"
 
 const markdownComponents = {
   p: ({ children }) => (
@@ -68,12 +69,15 @@ const markdownComponents = {
   hr: () => <Box sx={{ borderTop: 1, borderColor: "divider", my: 1.5 }} />,
 }
 
-export default function ChatMessage({ role, content }) {
+export default function ChatMessage({ role, content, executionTimeline, isStreaming }) {
   const isUser = role === "user"
   const isSystem = role === "system"
 
   return (
     <Box
+      role="article"
+      aria-label={isUser ? "User message" : isSystem ? "System message" : "Assistant message"}
+      data-role={role}
       sx={{
         display: "flex",
         gap: 1.5,
@@ -90,23 +94,6 @@ export default function ChatMessage({ role, content }) {
         },
       }}
     >
-      {/* Avatar — left side for assistant/system */}
-      {!isUser && (
-        <Avatar
-          sx={{
-            width: 30,
-            height: 30,
-            mt: 0.5,
-            bgcolor: isSystem ? "action.hover" : "primary.main",
-            color: isSystem ? "text.secondary" : "#fff",
-            flexShrink: 0,
-            boxShadow: isSystem ? "none" : (theme) => theme.customShadows?.sm,
-          }}
-        >
-          <IconSparkles size={16} stroke={1.8} />
-        </Avatar>
-      )}
-
       {/* Message bubble */}
       <Box
         sx={{
@@ -115,21 +102,23 @@ export default function ChatMessage({ role, content }) {
           minWidth: 0,
         }}
       >
-        <Typography
-          variant="caption"
-          sx={{
-            fontWeight: 600,
-            color: "text.secondary",
-            fontSize: "0.7rem",
-            mb: 0.5,
-            display: "block",
-            textAlign: isUser ? "right" : "left",
-            letterSpacing: "0.02em",
-            textTransform: "uppercase",
-          }}
-        >
-          {isUser ? "You" : isSystem ? "System" : "6Clips"}
-        </Typography>
+        {(isUser || isSystem) && (
+          <Typography
+            variant="caption"
+            sx={{
+              fontWeight: 600,
+              color: "text.secondary",
+              fontSize: "0.7rem",
+              mb: 0.5,
+              display: "block",
+              textAlign: isUser ? "right" : "left",
+              letterSpacing: "0.02em",
+              textTransform: "uppercase",
+            }}
+          >
+            {isUser ? "You" : "System"}
+          </Typography>
+        )}
 
         <Box
           sx={{
@@ -160,9 +149,14 @@ export default function ChatMessage({ role, content }) {
             </Typography>
           ) : (
             <Box>
-              <ReactMarkdown components={markdownComponents}>
-                {content || ""}
-              </ReactMarkdown>
+              {executionTimeline && executionTimeline.length > 0 && (
+                <ThoughtChain steps={executionTimeline} isStreaming={isStreaming} />
+              )}
+              {content ? (
+                <ReactMarkdown components={markdownComponents}>
+                  {content}
+                </ReactMarkdown>
+              ) : null}
             </Box>
           )}
         </Box>

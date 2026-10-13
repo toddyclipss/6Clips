@@ -39,11 +39,17 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   ghostPreview = null,
   onDismissGhostPreview,
   onInsertGhostBlock,
+  workspaceMode = "create",
+  renderedVideo = null,
+  onProceedToRefine = null,
+  onDurationChange = null,
 }, ref) {
   const iframeRef = useRef(null)
+  const videoRef = useRef(null)
   const [muted, setMuted] = useState(false)
   const lastPostedPlayRef = useRef(null)
   const [ghostFrameLoaded, setGhostFrameLoaded] = useState(false)
+  const [videoDimensions, setVideoDimensions] = useState({ width: 0, height: 0 })
 
   // Listen to Escape key to dismiss temporary ghost preview immediately
   useEffect(() => {
@@ -82,23 +88,41 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   useImperativeHandle(ref, () => ({
     seek: (time) => {
       const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, time) : 0
-      postControl("seek", { time: validTime })
+      if (workspaceMode === "review" && videoRef.current) {
+        videoRef.current.currentTime = validTime
+      } else {
+        postControl("seek", { time: validTime })
+      }
     },
     play: () => {
-      postControl("play")
+      if (workspaceMode === "review" && videoRef.current) {
+        videoRef.current.play().catch(() => {})
+      } else {
+        postControl("play")
+      }
     },
     pause: () => {
-      postControl("pause")
+      if (workspaceMode === "review" && videoRef.current) {
+        videoRef.current.pause()
+      } else {
+        postControl("pause")
+      }
     },
   }))
 
-  // Synchronize external isPlaying state (e.g. from Timeline or Spacebar) to iframe runtime
+  // Synchronize external isPlaying state (e.g. from Timeline or Spacebar) to iframe/video runtime
   useEffect(() => {
-    if (isPlaying !== lastPostedPlayRef.current) {
+    if (workspaceMode === "review" && videoRef.current) {
+      if (isPlaying && videoRef.current.paused) {
+        videoRef.current.play().catch(() => {})
+      } else if (!isPlaying && !videoRef.current.paused) {
+        videoRef.current.pause()
+      }
+    } else if (isPlaying !== lastPostedPlayRef.current) {
       lastPostedPlayRef.current = isPlaying
       postControl(isPlaying ? "play" : "pause")
     }
-  }, [isPlaying])
+  }, [isPlaying, workspaceMode])
 
   // Listen to bidirectional playback events from composition runtime
   useEffect(() => {
@@ -150,19 +174,36 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   const handleTogglePlay = () => {
     const nextState = !isPlaying
     lastPostedPlayRef.current = nextState
-    postControl(nextState ? "play" : "pause")
+    if (workspaceMode === "review" && videoRef.current) {
+      if (nextState) {
+        videoRef.current.play().catch(() => {})
+      } else {
+        videoRef.current.pause()
+      }
+    } else {
+      postControl(nextState ? "play" : "pause")
+    }
     if (onTogglePlay) onTogglePlay()
   }
 
   const handleSeek = (time) => {
-    postControl("seek", { time })
-    if (onSeek) onSeek(time)
+    const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, time) : 0
+    if (workspaceMode === "review" && videoRef.current) {
+      videoRef.current.currentTime = validTime
+    } else {
+      postControl("seek", { time: validTime })
+    }
+    if (onSeek) onSeek(validTime)
   }
 
   const handleToggleMute = () => {
     const nextMuted = !muted
     setMuted(nextMuted)
-    postControl("mute", { muted: nextMuted })
+    if (workspaceMode === "review" && videoRef.current) {
+      videoRef.current.muted = nextMuted
+    } else {
+      postControl("mute", { muted: nextMuted })
+    }
   }
 
   // Aspect ratio styling
@@ -213,7 +254,83 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
             justifyContent: "center",
           }}
         >
-          {previewUrl ? (
+          {workspaceMode === "review" && renderedVideo?.video_url ? (
+            <>
+              <video
+                id="studio-rendered-video"
+                data-testid="studio-rendered-video"
+                ref={videoRef}
+                src={renderedVideo.video_url}
+                playsInline
+                preload="auto"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  display: "block",
+                  backgroundColor: "#000000",
+                }}
+                onLoadedMetadata={(e) => {
+                  setVideoDimensions({ width: e.target.videoWidth, height: e.target.videoHeight })
+                  if (e.target.duration && onDurationChange) onDurationChange(e.target.duration)
+                }}
+                onTimeUpdate={(e) => {
+                  if (onTimeUpdate) onTimeUpdate(e.target.currentTime)
+                }}
+                onPlay={() => {
+                  lastPostedPlayRef.current = true
+                  if (onPlaybackStateChange) onPlaybackStateChange(true)
+                }}
+                onPause={() => {
+                  lastPostedPlayRef.current = false
+                  if (onPlaybackStateChange) onPlaybackStateChange(false)
+                }}
+                onEnded={() => {
+                  lastPostedPlayRef.current = false
+                  if (onPlaybackStateChange) onPlaybackStateChange(false)
+                }}
+              />
+              <Box
+                data-testid="studio-review-header"
+                sx={{
+                  position: "absolute",
+                  top: 12,
+                  left: 14,
+                  right: 14,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  zIndex: 6,
+                  pointerEvents: "none",
+                }}
+              >
+                <Stack direction="row" spacing={0.8} alignItems="center" sx={{ bgcolor: "rgba(15,23,42,0.85)", px: 1.2, py: 0.4, borderRadius: 1.5, backdropFilter: "blur(4px)", pointerEvents: "auto" }}>
+                  <Chip label={`Render: Rev ${renderedVideo.project_revision || 5}`} color="success" size="small" sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }} />
+                  <Typography variant="caption" sx={{ color: "#e2e8f0", fontFamily: "monospace", fontSize: "0.72rem" }}>
+                    {videoDimensions.width ? `${videoDimensions.width}×${videoDimensions.height}` : "1080×1920"} • {Number(duration || 14.88).toFixed(2)}s
+                  </Typography>
+                </Stack>
+                {onProceedToRefine && (
+                  <Button
+                    data-testid="proceed-to-refine-btn"
+                    variant="contained"
+                    size="small"
+                    onClick={onProceedToRefine}
+                    sx={{
+                      pointerEvents: "auto",
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      textTransform: "none",
+                      bgcolor: "primary.main",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    Proceed to Refine →
+                  </Button>
+                )}
+              </Box>
+            </>
+          ) : previewUrl ? (
             <iframe
               id="studio-preview-iframe"
               ref={iframeRef}
@@ -229,11 +346,37 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                 backgroundColor: "#0b0f19",
               }}
             />
-          ) : (
+          ) : isLoading ? (
             <Stack alignItems="center" spacing={1} sx={{ color: "#94a3b8" }}>
               <CircularProgress size={24} color="inherit" />
               <Typography variant="caption">Loading composition…</Typography>
             </Stack>
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#475569",
+                userSelect: "none",
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#64748b",
+                  fontWeight: 500,
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                }}
+              >
+                No Project Loaded
+              </Typography>
+            </Box>
           )}
 
           {isLoading && (
@@ -345,6 +488,27 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
             </IconButton>
           </Tooltip>
         </Stack>
+
+        {/* Scrubbing slider */}
+        <Box sx={{ flex: 1, mx: 2, display: "flex", alignItems: "center" }}>
+          <Slider
+            size="small"
+            data-testid="studio-transport-scrubber"
+            min={0}
+            max={duration || 15}
+            step={0.05}
+            value={typeof currentTime === "number" ? Math.min(currentTime, duration || 15) : 0}
+            onChange={(_, val) => handleSeek(val)}
+            sx={{
+              color: "primary.main",
+              height: 4,
+              "& .MuiSlider-thumb": {
+                width: 10,
+                height: 10,
+              },
+            }}
+          />
+        </Box>
 
         {/* Timecode Readout */}
         <Typography variant="caption" sx={{ fontFamily: "monospace", fontWeight: 700, fontSize: "0.75rem", color: "text.primary" }}>

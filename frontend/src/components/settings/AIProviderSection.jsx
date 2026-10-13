@@ -1,342 +1,488 @@
 import { useState, useEffect } from "react"
 import {
   Box, Stack, Typography, Alert, TextField, Button, FormControl, InputLabel,
-  Select, MenuItem, IconButton, InputAdornment, Chip, Dialog, DialogTitle,
-  DialogContent, DialogActions,
+  Select, MenuItem, IconButton, InputAdornment, Chip, Card, CardContent, Divider,
+  ToggleButtonGroup, ToggleButton,
 } from "@mui/material"
 import {
   IconEye,
   IconEyeOff,
   IconDeviceFloppy,
-  IconEdit,
   IconTrash,
   IconCircleCheck,
+  IconAlertTriangle,
+  IconCpu,
+  IconRefresh,
 } from "@tabler/icons-react"
 import http from "../../api/http"
 import useAppStore from "../../store/appStore"
+import { formatModelName } from "../chat/LiquidMultimodalInput"
 
-const PROVIDER_LABEL = {
-  anthropic: "Anthropic (Claude)",
-  openai: "OpenAI (GPT)",
-  openrouter: "OpenRouter (Claude / GPT / Gemini / Llama)",
-  ollama: "Ollama (Local)",
-}
-
-const KEY_PLACEHOLDER = {
-  anthropic: "sk-ant-...",
-  openai: "sk-...",
-  openrouter: "sk-or-...",
-  ollama: "Not required (runs locally)",
-}
-
-const KEY_HINT = {
-  anthropic: "Get yours at console.anthropic.com → API Keys",
-  openai: "Get yours at platform.openai.com → API Keys",
-  openrouter: "One key, every model — get yours at openrouter.ai/keys",
-  ollama: "Runs directly on your machine via 127.0.0.1:11434 — no API key needed",
+const PROVIDER_METADATA = {
+  openai: {
+    id: "openai",
+    name: "OpenAI",
+    placeholder: "sk-...",
+    hint: "platform.openai.com → API Keys",
+    keyField: "openai_api_key",
+    flagField: "openai_api_key_set",
+  },
+  anthropic: {
+    id: "anthropic",
+    name: "Anthropic",
+    placeholder: "sk-ant-...",
+    hint: "console.anthropic.com → API Keys",
+    keyField: "anthropic_api_key",
+    flagField: "anthropic_api_key_set",
+  },
+  gemini: {
+    id: "gemini",
+    name: "Google Gemini",
+    placeholder: "AIzaSy...",
+    hint: "aistudio.google.com → Get API key (Gemini 3.8 Flash & Gemini 3.1 Pro Preview)",
+    keyField: "gemini_api_key",
+    flagField: "gemini_api_key_set",
+  },
+  openrouter: {
+    id: "openrouter",
+    name: "OpenRouter",
+    placeholder: "sk-or-...",
+    hint: "openrouter.ai/keys (Multi-provider gateway)",
+    keyField: "openrouter_api_key",
+    flagField: "openrouter_api_key_set",
+  },
+  ollama: {
+    id: "ollama",
+    name: "Ollama (Local Engine)",
+    placeholder: "http://127.0.0.1:11434",
+    hint: "Local or authorized remote Ollama daemon — zero API key required",
+    keyField: "ollama_base_url",
+    flagField: "ollama_connected",
+  },
 }
 
 export default function AIProviderSection({ settings, updateSettings }) {
   const showSnackbar = useAppStore((s) => s.showSnackbar)
 
-  const [provider, setProvider] = useState(settings?.ai_provider || "openai")
-  const [model, setModel] = useState(settings?.ai_model || "")
-  const [apiKey, setApiKey] = useState("")
-  const [showKey, setShowKey] = useState(false)
+  // Active Model Selection state (synchronized bidirectionally with Global Chat)
+  const [activeProvider, setActiveProvider] = useState(settings?.ai_provider || "")
+  const [activeModel, setActiveModel] = useState(settings?.ai_model || "")
+  const [activeReasoning, setActiveReasoning] = useState(() => {
+    const lvl = settings?.ai_reasoning_level?.toLowerCase()
+    if (!lvl) return ""
+    return (lvl === "high" || lvl === "hard") ? "hard" : lvl
+  })
+
   const [registry, setRegistry] = useState({})
-  const [saving, setSaving] = useState(false)
-  const [editing, setEditing] = useState(!settings?.ai_api_key_set && settings?.ai_provider !== "ollama")
-  const [confirmRemove, setConfirmRemove] = useState(false)
+  const [savingActive, setSavingActive] = useState(false)
 
-  // Sync local state when settings change (e.g. after save).
-  // If no key is set (cleared elsewhere or never set), force into edit mode
-  // so the form is visible. handleSave / handleRemove own toggling out.
-  useEffect(() => {
-    if (settings) {
-      setProvider(settings.ai_provider || "openai")
-      setModel(settings.ai_model || "")
-      if (!settings.ai_api_key_set && settings.ai_provider !== "ollama") setEditing(true)
-    }
-  }, [settings?.ai_provider, settings?.ai_model, settings?.ai_api_key_set])
+  // Independent API key input state
+  const [keysInput, setKeysInput] = useState({
+    openai: "",
+    anthropic: "",
+    gemini: "",
+    openrouter: "",
+    ollama: settings?.ollama_base_url || "http://127.0.0.1:11434",
+  })
 
-  // Fetch model registry once
-  useEffect(() => {
+  const [showKeys, setShowKeys] = useState({
+    openai: false,
+    anthropic: false,
+    gemini: false,
+    openrouter: false,
+  })
+
+  const [validating, setValidating] = useState({})
+  const [actionLoading, setActionLoading] = useState({})
+
+  // Fetch model registry
+  const fetchRegistry = () => {
     http.get("/api/config/model_registry")
       .then(({ data }) => setRegistry(data?.value || {}))
       .catch(() => {})
+  }
+
+  useEffect(() => {
+    fetchRegistry()
   }, [])
 
-  const availableModels = registry[provider]?.models || []
-  const defaultModel = registry[provider]?.default_model || ""
-  const effectiveModel = model || defaultModel
-  const isLocalProvider = provider === "ollama"
-
-  const handleSave = async () => {
-    const hasNewKey = apiKey.trim().length > 0
-    if (!isLocalProvider && !hasNewKey && !settings?.ai_api_key_set) {
-      showSnackbar("Paste your API key first", "warning")
-      return
-    }
-    setSaving(true)
-    try {
-      // Always send the model that's actually displayed in the dropdown.
-      // If the user switched providers, `model` was reset to "" and `effectiveModel`
-      // resolves to the new provider's default — that's what they saw and what we save.
-      const updates = {
-        ai_provider: provider,
-        ai_model: effectiveModel || "",  // empty string clears stale model
+  // Sync state when settings change
+  useEffect(() => {
+    if (settings) {
+      setActiveProvider(settings.ai_provider || "")
+      setActiveModel(settings.ai_model || "")
+      const lvl = settings.ai_reasoning_level?.toLowerCase()
+      setActiveReasoning(lvl ? ((lvl === "high" || lvl === "hard") ? "high" : lvl) : "")
+      if (settings.ollama_base_url) {
+        setKeysInput((prev) => ({ ...prev, ollama: settings.ollama_base_url }))
       }
-      if (hasNewKey) {
-        updates.ai_api_key = apiKey.trim()
-      }
-      await updateSettings(updates)
-      setApiKey("")
-      setEditing(false)
-      showSnackbar(isLocalProvider ? "Ollama configured" : (hasNewKey ? "API key saved" : "Provider updated"), "success")
-    } catch (e) {
-      // updateSettings already shows a snackbar on error
-    } finally {
-      setSaving(false)
     }
-  }
+  }, [settings?.ai_provider, settings?.ai_model, settings?.ai_reasoning_level, settings?.ollama_base_url])
 
-  const handleRemove = async () => {
-    setConfirmRemove(false)
-    setSaving(true)
+  // Handle active selection save
+  const handleSaveActiveSelection = async (newProv, newMod, newLvl) => {
+    const p = newProv !== undefined ? newProv : activeProvider
+    const m = newMod !== undefined ? newMod : activeModel
+    const r = newLvl !== undefined ? newLvl : activeReasoning
+
+    setSavingActive(true)
     try {
-      await updateSettings({ ai_api_key: "" })
-      setApiKey("")
-      setEditing(true)
-      showSnackbar("API key removed — falling back to .env (if configured)", "info")
-    } catch (e) {
+      await updateSettings({
+        ai_provider: p || null,
+        ai_model: m || null,
+        ai_reasoning_level: r || null,
+      })
+      if (typeof window !== "undefined") {
+        if (p) localStorage.setItem("6clips_ai_provider", p)
+        else localStorage.removeItem("6clips_ai_provider")
+        if (m) localStorage.setItem("6clips_ai_model", m)
+        else localStorage.removeItem("6clips_ai_model")
+        if (r) localStorage.setItem("6clips_ai_reasoning", r)
+        else localStorage.removeItem("6clips_ai_reasoning")
+      }
+      showSnackbar("Active AI model and reasoning synchronized", "success")
+    } catch {
       // handled in updateSettings
     } finally {
-      setSaving(false)
+      setSavingActive(false)
     }
   }
 
-  const isOllamaProvider = settings?.ai_provider === "ollama"
-  const ollamaOnline = (registry?.ollama?.models || []).length > 0
-  const keyIsSet = isOllamaProvider ? true : !!settings?.ai_api_key_set
+  // Handle key validation (zero paid inference calls)
+  const handleValidateCredential = async (providerId) => {
+    setValidating((prev) => ({ ...prev, [providerId]: true }))
+    try {
+      const isOllama = providerId === "ollama"
+      const payload = {
+        provider: providerId,
+        ...(isOllama
+          ? { base_url: keysInput.ollama.trim() || undefined }
+          : { api_key: keysInput[providerId].trim() || undefined }),
+      }
 
-  // ── Connected state: key already configured or local provider active, not editing ─
-  if (!editing && keyIsSet) {
-    if (isOllamaProvider) {
-      return (
-        <Stack spacing={2}>
-          <Alert
-            severity={ollamaOnline ? "success" : "warning"}
-            variant="outlined"
-            icon={ollamaOnline ? <IconCircleCheck size={18} stroke={2} /> : undefined}
-            sx={{ borderRadius: "14px" }}
-          >
-            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {ollamaOnline ? "Local Ollama connected" : "Local Ollama offline"}
-              </Typography>
-              <Chip
-                size="small"
-                label="Ollama (Local)"
-                color={ollamaOnline ? "success" : "warning"}
-                variant="outlined"
-                sx={{ fontWeight: 500, borderRadius: "10px" }}
-              />
-              {settings.ai_model && (
-                <Chip
-                  size="small"
-                  label={`model: ${settings.ai_model}`}
-                  variant="outlined"
-                  sx={{ borderRadius: "10px" }}
-                />
-              )}
-            </Stack>
-            <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.75 }}>
-              {ollamaOnline
-                ? "Running locally on your workstation via 127.0.0.1:11434. No external API key required."
-                : "Cannot reach local Ollama daemon at 127.0.0.1:11434. Ensure Ollama is running."}
-            </Typography>
-          </Alert>
-          <Stack direction="row" spacing={1.5}>
-            <Button
-              variant="contained"
-              startIcon={<IconEdit size={16} stroke={1.8} />}
-              onClick={() => { setEditing(true); setApiKey("") }}
-              disabled={saving}
-              sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
-            >
-              Change Provider / Model
-            </Button>
-          </Stack>
-        </Stack>
-      )
+      const { data } = await http.post("/api/settings/validate-key", payload)
+      if (data?.ok) {
+        showSnackbar(data.message || `${PROVIDER_METADATA[providerId].name} credentials valid`, "success")
+        if (isOllama) fetchRegistry()
+      } else {
+        showSnackbar(data?.error || `Validation failed for ${PROVIDER_METADATA[providerId].name}`, "error")
+      }
+    } catch (e) {
+      showSnackbar(`Validation error: ${e?.response?.data?.detail || e.message}`, "error")
+    } finally {
+      setValidating((prev) => ({ ...prev, [providerId]: false }))
     }
-
-    return (
-      <Stack spacing={2}>
-        <Alert
-          severity="success"
-          variant="outlined"
-          icon={<IconCircleCheck size={18} stroke={2} />}
-          sx={{ borderRadius: "14px" }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              Personal API key configured
-            </Typography>
-            <Chip
-              size="small"
-              label={PROVIDER_LABEL[settings.ai_provider] || settings.ai_provider}
-              color="primary"
-              variant="outlined"
-              sx={{ fontWeight: 500, borderRadius: "10px" }}
-            />
-            {settings.ai_model && (
-              <Chip
-                size="small"
-                label={`model: ${settings.ai_model}`}
-                variant="outlined"
-                sx={{ borderRadius: "10px" }}
-              />
-            )}
-          </Stack>
-          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.75 }}>
-            Stored encrypted on your machine. Sent only to the provider when chatting / generating.
-          </Typography>
-        </Alert>
-        <Stack direction="row" spacing={1.5}>
-          <Button
-            variant="contained"
-            startIcon={<IconEdit size={16} stroke={1.8} />}
-            onClick={() => { setEditing(true); setApiKey("") }}
-            disabled={saving}
-            sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
-          >
-            Update
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            startIcon={<IconTrash size={16} stroke={1.8} />}
-            onClick={() => setConfirmRemove(true)}
-            disabled={saving}
-            sx={{ borderRadius: "20px", textTransform: "none" }}
-          >
-            Remove
-          </Button>
-        </Stack>
-
-        <Dialog open={confirmRemove} onClose={() => setConfirmRemove(false)} maxWidth="xs" fullWidth>
-          <DialogTitle>Remove API key?</DialogTitle>
-          <DialogContent>
-            <Typography variant="body2">
-              This deletes the encrypted key from your local database. 6Clips will fall back to
-              the {PROVIDER_LABEL[settings.ai_provider]} key in your <code>.env</code> file (if set).
-              If neither is configured, AI features will stop working until you add a new key.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setConfirmRemove(false)}>Cancel</Button>
-            <Button color="error" variant="contained" onClick={handleRemove}>
-              Remove key
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Stack>
-    )
   }
 
-  // ── Editing state: form for provider/model/key ──────────────────────────────
+  // Handle saving independent key without altering active provider
+  const handleSaveCredential = async (providerId) => {
+    setActionLoading((prev) => ({ ...prev, [providerId]: true }))
+    try {
+      const meta = PROVIDER_METADATA[providerId]
+      const val = keysInput[providerId].trim()
+
+      if (providerId === "ollama") {
+        await updateSettings({ ollama_base_url: val || "http://127.0.0.1:11434" })
+        showSnackbar("Ollama endpoint URL saved", "success")
+      } else {
+        if (!val) {
+          showSnackbar("Enter an API key first", "warning")
+          return
+        }
+        await updateSettings({ [meta.keyField]: val })
+        setKeysInput((prev) => ({ ...prev, [providerId]: "" }))
+        showSnackbar(`${meta.name} API key saved independently (provider active state preserved)`, "success")
+      }
+    } catch {
+      // handled
+    } finally {
+      setActionLoading((prev) => ({ ...prev, [providerId]: false }))
+    }
+  }
+
+  // Handle revoking independent key
+  const handleRevokeCredential = async (providerId) => {
+    setActionLoading((prev) => ({ ...prev, [providerId]: true }))
+    try {
+      const meta = PROVIDER_METADATA[providerId]
+      await updateSettings({ [meta.keyField]: "" })
+      showSnackbar(`${meta.name} API key removed`, "info")
+    } catch {
+      // handled
+    } finally {
+      setActionLoading((prev) => ({ ...prev, [providerId]: false }))
+    }
+  }
+
+  const availableModelsForActiveProvider = registry[activeProvider]?.models || []
+
   return (
-    <Stack spacing={2}>
-      <Typography variant="body2" color="text.secondary">
-        Bring your own Anthropic, OpenAI, or OpenRouter API key, or run Ollama locally for zero-cost,
-        private inference. Cloud keys are encrypted (AES-256) before storage and never leave your machine
-        except when calling the provider directly.
-      </Typography>
-
-      <FormControl size="small" fullWidth>
-        <InputLabel>Provider</InputLabel>
-        <Select
-          value={provider}
-          label="Provider"
-          onChange={(e) => { setProvider(e.target.value); setModel("") }}
-          disabled={saving}
-        >
-          <MenuItem value="anthropic">Anthropic (Claude)</MenuItem>
-          <MenuItem value="openai">OpenAI (GPT)</MenuItem>
-          <MenuItem value="openrouter">OpenRouter (Claude / GPT / Gemini / Llama)</MenuItem>
-          <MenuItem value="ollama">Ollama (Local)</MenuItem>
-        </Select>
-      </FormControl>
-
-      <FormControl size="small" fullWidth>
-        <InputLabel>Model</InputLabel>
-        <Select
-          value={effectiveModel}
-          label="Model"
-          onChange={(e) => setModel(e.target.value)}
-          disabled={saving || availableModels.length === 0}
-        >
-          {availableModels.map((m) => (
-            <MenuItem key={m} value={m}>
-              {m}
-              {m === defaultModel && (
-                <Typography component="span" variant="caption" sx={{ ml: 1, color: "text.secondary" }}>
-                  (default)
-                </Typography>
-              )}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <TextField
-        label="API key"
-        type={showKey ? "text" : "password"}
-        size="small"
-        fullWidth
-        value={apiKey}
-        onChange={(e) => setApiKey(e.target.value)}
-        placeholder={isLocalProvider ? KEY_PLACEHOLDER[provider] : (keyIsSet ? "(leave empty to keep existing key)" : KEY_PLACEHOLDER[provider])}
-        helperText={KEY_HINT[provider]}
-        disabled={saving || isLocalProvider}
-        autoComplete="off"
+    <Stack spacing={3}>
+      {/* ── Active Selection Card (Synchronized with Global Chat) ── */}
+      <Card
+        variant="outlined"
         sx={{
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "14px",
-          },
+          borderRadius: "18px",
+          bgcolor: "background.paper",
+          borderColor: "divider",
+          boxShadow: "0 2px 12px -2px rgba(0,0,0,0.05)",
         }}
-        InputProps={{
-          endAdornment: !isLocalProvider ? (
-            <InputAdornment position="end">
-              <IconButton size="small" onClick={() => setShowKey((v) => !v)} edge="end" tabIndex={-1}>
-                {showKey ? <IconEyeOff size={16} stroke={1.8} /> : <IconEye size={16} stroke={1.8} />}
-              </IconButton>
-            </InputAdornment>
-          ) : null,
-        }}
-      />
+      >
+        <CardContent sx={{ p: 2.5 }}>
+          <Stack spacing={2}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={1}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Box
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: "8px",
+                    display: "grid",
+                    placeItems: "center",
+                    bgcolor: "action.hover",
+                    color: "text.primary",
+                  }}
+                >
+                  <IconCpu size={16} />
+                </Box>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  Active Model & Reasoning Selection
+                </Typography>
+              </Stack>
 
-      <Stack direction="row" spacing={1.5}>
-        <Button
-          variant="contained"
-          startIcon={<IconDeviceFloppy size={16} stroke={1.8} />}
-          onClick={handleSave}
-          disabled={saving || (!isLocalProvider && !apiKey.trim() && !keyIsSet)}
-          sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
-        >
-          {saving ? "Saving…" : "Save"}
-        </Button>
-        {keyIsSet && (
-          <Button
-            variant="outlined"
-            onClick={() => { setEditing(false); setApiKey("") }}
-            disabled={saving}
-            sx={{ borderRadius: "20px", textTransform: "none" }}
-          >
-            Cancel
-          </Button>
-        )}
+              <Chip
+                size="small"
+                label={activeProvider && activeModel ? "Active Selection Ready" : "No Active Model Selected"}
+                color={activeProvider && activeModel ? "success" : "default"}
+                variant="outlined"
+                sx={{ borderRadius: "8px", fontWeight: 500 }}
+              />
+            </Stack>
+
+            <Typography variant="body2" color="text.secondary">
+              Synchronized two-way with the Global Chat selector. There is zero default model or silent fallback.
+            </Typography>
+
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
+              {/* Provider Selection */}
+              <FormControl size="small" sx={{ minWidth: 160, flex: 1 }}>
+                <InputLabel id="active-provider-label">AI Provider</InputLabel>
+                <Select
+                  labelId="active-provider-label"
+                  label="AI Provider"
+                  value={activeProvider}
+                  onChange={(e) => {
+                    const p = e.target.value
+                    setActiveProvider(p)
+                    const firstModel = registry[p]?.models?.[0] || ""
+                    setActiveModel(firstModel)
+                    handleSaveActiveSelection(p, firstModel, activeReasoning)
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Provider</em>
+                  </MenuItem>
+                  {Object.values(PROVIDER_METADATA).map((meta) => (
+                    <MenuItem key={meta.id} value={meta.id}>
+                      {meta.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {/* Model Selection */}
+              <FormControl size="small" sx={{ minWidth: 200, flex: 1.5 }} disabled={!activeProvider}>
+                <InputLabel id="active-model-label">Model</InputLabel>
+                <Select
+                  labelId="active-model-label"
+                  label="Model"
+                  value={activeModel}
+                  onChange={(e) => {
+                    const m = e.target.value
+                    setActiveModel(m)
+                    handleSaveActiveSelection(activeProvider, m, activeReasoning)
+                  }}
+                >
+                  {availableModelsForActiveProvider.map((m) => (
+                    <MenuItem key={m} value={m}>
+                      {formatModelName(m)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {/* Reasoning Level: strictly low, medium, high */}
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "text.secondary" }}>
+                  Reasoning Effort
+                </Typography>
+                <ToggleButtonGroup
+                  size="small"
+                  exclusive
+                  value={activeReasoning}
+                  onChange={(_, val) => {
+                    if (val) {
+                      setActiveReasoning(val)
+                      handleSaveActiveSelection(activeProvider, activeModel, val)
+                    }
+                  }}
+                >
+                  <ToggleButton value="low" sx={{ textTransform: "none", px: 1.5, py: 0.5, fontWeight: 500 }}>
+                    Low
+                  </ToggleButton>
+                  <ToggleButton value="medium" sx={{ textTransform: "none", px: 1.5, py: 0.5, fontWeight: 500 }}>
+                    Medium
+                  </ToggleButton>
+                  <ToggleButton value="high" sx={{ textTransform: "none", px: 1.5, py: 0.5, fontWeight: 500 }}>
+                    High
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
+            </Stack>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      {/* ── Section Header ── */}
+      <Box>
+        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          Bring Your Own Key (BYOK) Credentials
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Configure API keys independently. Storing credentials does not automatically switch or activate that provider.
+        </Typography>
+      </Box>
+
+      {/* ── Independent Provider Cards ── */}
+      <Stack spacing={2}>
+        {Object.values(PROVIDER_METADATA).map((meta) => {
+          const isOllama = meta.id === "ollama"
+          const isConfigured = Boolean(settings?.[meta.flagField])
+          const showKey = showKeys[meta.id]
+          const isVal = validating[meta.id]
+          const isAct = actionLoading[meta.id]
+
+          return (
+            <Card
+              key={meta.id}
+              variant="outlined"
+              sx={{
+                borderRadius: "16px",
+                borderColor: "divider",
+                bgcolor: "background.paper",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <CardContent sx={{ p: 2 }}>
+                <Stack spacing={2}>
+                  {/* Top row: Icon, Name, Status Badge */}
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={1}>
+                    <Stack direction="row" alignItems="center" spacing={1.2}>
+                      <Box
+                        sx={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: "10px",
+                          display: "grid",
+                          placeItems: "center",
+                          bgcolor: "action.hover",
+                          color: "text.primary",
+                        }}
+                      >
+                        <IconCpu size={18} />
+                      </Box>
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                          {meta.name}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {meta.hint}
+                        </Typography>
+                      </Box>
+                    </Stack>
+
+                    <Chip
+                      size="small"
+                      icon={isConfigured ? <IconCircleCheck size={14} /> : undefined}
+                      label={
+                        isOllama
+                          ? (isConfigured ? "Daemon Reachable" : "Unreachable")
+                          : (isConfigured ? "Configured" : "Not configured")
+                      }
+                      color={isConfigured ? "success" : "default"}
+                      variant="outlined"
+                      sx={{ borderRadius: "8px", fontWeight: 500 }}
+                    />
+                  </Stack>
+
+                  {/* Input and Action Buttons */}
+                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems="center">
+                    <TextField
+                      size="small"
+                      fullWidth
+                      type={isOllama || showKey ? "text" : "password"}
+                      placeholder={isConfigured ? (isOllama ? meta.placeholder : "••••••••••••••••") : meta.placeholder}
+                      value={keysInput[meta.id]}
+                      onChange={(e) => setKeysInput({ ...keysInput, [meta.id]: e.target.value })}
+                      InputProps={{
+                        endAdornment: !isOllama ? (
+                          <InputAdornment position="end">
+                            <IconButton
+                              size="small"
+                              onClick={() => setShowKeys({ ...showKeys, [meta.id]: !showKey })}
+                            >
+                              {showKey ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+                            </IconButton>
+                          </InputAdornment>
+                        ) : null,
+                      }}
+                    />
+
+                    <Stack direction="row" spacing={1} sx={{ shrink: 0 }}>
+                      {/* Validate Button (Zero Cost) */}
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        disabled={isVal || (!isConfigured && !keysInput[meta.id].trim() && !isOllama)}
+                        onClick={() => handleValidateCredential(meta.id)}
+                        sx={{ borderRadius: "10px", textTransform: "none", minWidth: 80 }}
+                      >
+                        {isVal ? "Testing..." : (isOllama ? "Test" : "Validate")}
+                      </Button>
+
+                      {/* Save Key Button */}
+                      <Button
+                        size="small"
+                        variant="contained"
+                        disabled={isAct || (!keysInput[meta.id].trim() && !isOllama)}
+                        onClick={() => handleSaveCredential(meta.id)}
+                        sx={{
+                          borderRadius: "10px",
+                          textTransform: "none",
+                        }}
+                      >
+                        {isAct ? "Saving..." : (isOllama ? "Save" : "Save Key")}
+                      </Button>
+
+                      {/* Revoke Key Button */}
+                      {isConfigured && !isOllama && (
+                        <IconButton
+                          size="small"
+                          color="error"
+                          disabled={isAct}
+                          onClick={() => handleRevokeCredential(meta.id)}
+                          aria-label={`Remove ${meta.name} key`}
+                        >
+                          <IconTrash size={16} />
+                        </IconButton>
+                      )}
+                    </Stack>
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
+          )
+        })}
       </Stack>
     </Stack>
   )

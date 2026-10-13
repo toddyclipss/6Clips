@@ -63,10 +63,22 @@ export default function MotionGraphics() {
   const [extractTarget, setExtractTarget] = useState(null)
   const [isExtracting, setIsExtracting] = useState(false)
 
-  // Workspace exposure mode (Create / Review / Refine) — P0 spec: default to Create
-  const [workspaceMode, setWorkspaceMode] = useState("create")
-  const [activeContext, setActiveContext] = useState("hyperframes") // hyperframes | clip | tools
-  const [leftNav, setLeftNav] = useState("resources") // layers | resources
+  // Workspace exposure mode (Create / Review / Refine) — respect URL query on initial load
+  const [workspaceMode, setWorkspaceMode] = useState(() => {
+    const qp = new URLSearchParams(window.location.search)
+    const m = qp.get("mode")
+    if (m && ["create", "review", "refine"].includes(m.toLowerCase())) {
+      return m.toLowerCase()
+    }
+    return "create"
+  })
+  const [renderedVideo, setRenderedVideo] = useState(null)
+  const [activeContext, setActiveContext] = useState("hyperframes") // hyperframes | clip | tools | code
+  const [leftNav, setLeftNav] = useState(() => {
+    const qp = new URLSearchParams(window.location.search)
+    const m = qp.get("mode")
+    return m?.toLowerCase() === "refine" ? "layers" : "resources"
+  })
   const [rightNav, setRightNav] = useState("properties") // properties | variables
 
   // Pinned panels control
@@ -235,13 +247,71 @@ export default function MotionGraphics() {
     }
   }, [project, revision, isDirty, showSnackbar])
 
-  // 1. Initial Load: Ensure HyperFrames server is running and load/create active project
+  // Synchronize workspaceMode changes with URL query string
+  const handleWorkspaceModeChange = useCallback((mode) => {
+    setWorkspaceMode(mode)
+    if (mode === "refine") {
+      setLeftNav("layers")
+    }
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.set("mode", mode)
+      window.history.replaceState({}, "", url.toString())
+    } catch {}
+  }, [])
+
+  // 1a. Immediate Project Load from URL query (independent of studio startup)
   useEffect(() => {
     let cancelled = false
-    const init = async () => {
+    const queryParams = new URLSearchParams(window.location.search)
+    const requestedId = queryParams.get("projectId") || queryParams.get("project_id")
+    const requestedMode = queryParams.get("mode")
+    if (requestedMode && ["create", "review", "refine"].includes(requestedMode.toLowerCase())) {
+      setWorkspaceMode(requestedMode.toLowerCase())
+      if (requestedMode.toLowerCase() === "refine") {
+        setLeftNav("layers")
+      }
+    }
+
+    if (!requestedId) {
+      setProject(null)
+      setDocument(null)
+      setRenderedVideo(null)
+      return
+    }
+
+    const loadProject = async () => {
+      try {
+        const detail = await http.get(`/api/projects/${requestedId}`)
+        if (cancelled) return
+        setProject(detail.data)
+        setRevision(detail.data.revision)
+        setAspectRatio(detail.data.aspect_ratio || "9:16")
+        setDocument(detail.data.document)
+        if (detail.data.latest_render) {
+          setRenderedVideo(detail.data.latest_render)
+        }
+      } catch (fetchErr) {
+        if (!cancelled) {
+          console.warn(`Requested project ${requestedId} not found`, fetchErr)
+          setProject(null)
+          setDocument(null)
+          setRenderedVideo(null)
+          showSnackbar(`Requested project "${requestedId}" not found`, "warning")
+        }
+      }
+    }
+
+    loadProject()
+    return () => { cancelled = true }
+  }, [showSnackbar])
+
+  // 1b. Ensure HyperFrames studio is running
+  useEffect(() => {
+    let cancelled = false
+    const initStudio = async () => {
       setStarting(true)
       try {
-        // Start studio
         const studioRes = await http.post(`/api/generate/motion/studio/start?mode=${theme.palette.mode}`)
         if (cancelled) return
         if (studioRes.data?.error_code === "hyperframes_not_installed") {
@@ -251,46 +321,6 @@ export default function MotionGraphics() {
         }
         setInstalled(true)
         if (studioRes.data?.port) setPreviewPort(studioRes.data.port)
-
-        // Load requested project from URL query or create clean new project
-        const queryParams = new URLSearchParams(window.location.search)
-        const requestedId = queryParams.get("projectId") || queryParams.get("project_id")
-        
-        if (requestedId) {
-          try {
-            const detail = await http.get(`/api/projects/${requestedId}`)
-            setProject(detail.data)
-            setRevision(detail.data.revision)
-            setAspectRatio(detail.data.aspect_ratio || "9:16")
-            setDocument(detail.data.document)
-          } catch (fetchErr) {
-            console.warn(`Requested project ${requestedId} not found, initializing clean project`, fetchErr)
-            const created = await http.post("/api/projects", {
-              name: "New Motion Project",
-              aspect_ratio: "9:16",
-            })
-            setProject(created.data)
-            setRevision(created.data.revision)
-            setAspectRatio(created.data.aspect_ratio || "9:16")
-            setDocument(created.data.document)
-            const newUrl = new URL(window.location.href)
-            newUrl.searchParams.set("projectId", created.data.id)
-            window.history.replaceState({ projectId: created.data.id }, "", newUrl.toString())
-          }
-        } else {
-          // Fresh navigation to /motion always creates an isolated, clean new project
-          const created = await http.post("/api/projects", {
-            name: "New Motion Project",
-            aspect_ratio: "9:16",
-          })
-          setProject(created.data)
-          setRevision(created.data.revision)
-          setAspectRatio(created.data.aspect_ratio || "9:16")
-          setDocument(created.data.document)
-          const newUrl = new URL(window.location.href)
-          newUrl.searchParams.set("projectId", created.data.id)
-          window.history.replaceState({ projectId: created.data.id }, "", newUrl.toString())
-        }
       } catch (err) {
         if (!cancelled) setStartError(err.message)
       } finally {
@@ -298,7 +328,7 @@ export default function MotionGraphics() {
       }
     }
 
-    init()
+    initStudio()
     return () => { cancelled = true }
   }, [theme.palette.mode])
 
@@ -984,6 +1014,15 @@ export default function MotionGraphics() {
     }
   }, [document])
 
+  const handleNavigateToCode = useCallback((file, clipId) => {
+    setActiveContext("code")
+    if (clipId) {
+      handleSelectElementId(clipId)
+    } else if (file) {
+      setSelectedElement(file)
+    }
+  }, [handleSelectElementId])
+
   // 8. Extract clips (Manual & Auto-cut)
   const handleExtract = async (videoId, opts) => {
     setIsExtracting(true)
@@ -1104,7 +1143,7 @@ export default function MotionGraphics() {
           }
         }}
         workspaceMode={workspaceMode}
-        onWorkspaceModeChange={setWorkspaceMode}
+        onWorkspaceModeChange={handleWorkspaceModeChange}
         isDirty={isDirty}
         isSaving={isSaving}
         onSave={handleSave}
@@ -1208,6 +1247,7 @@ export default function MotionGraphics() {
               {leftNav === "layers" ? (
                 <StudioLayersPanel
                   tracks={document?.timeline?.tracks || []}
+                  codeFiles={document?.code?.files || []}
                   selectedElementId={selectedElement?.id}
                   onSelectElement={setSelectedElement}
                   onToggleVisibility={handleToggleVisibility}
@@ -1219,6 +1259,7 @@ export default function MotionGraphics() {
                   onDuplicateClip={handleDuplicateClip}
                   onDeleteClip={handleDeleteClip}
                   onSeek={handleUserSeek}
+                  onNavigateToCode={handleNavigateToCode}
                 />
               ) : (
                 <StudioResourcePanel
@@ -1250,7 +1291,7 @@ export default function MotionGraphics() {
             aspectRatio={aspectRatio}
             isLoading={starting}
             currentTime={currentTime}
-            duration={document?.timeline?.duration_seconds || 15}
+            duration={renderedVideo?.duration_seconds || document?.timeline?.duration_seconds || 15}
             isPlaying={isPlaying}
             onTogglePlay={() => setIsPlaying(!isPlaying)}
             onPlaybackStateChange={setIsPlaying}
@@ -1261,6 +1302,9 @@ export default function MotionGraphics() {
             ghostPreview={ghostPreview}
             onDismissGhostPreview={handleEndGhostPreview}
             onInsertGhostBlock={handleAddBlock}
+            workspaceMode={workspaceMode}
+            renderedVideo={renderedVideo}
+            onProceedToRefine={() => handleWorkspaceModeChange("refine")}
           />
         </Box>
 
@@ -1316,6 +1360,7 @@ export default function MotionGraphics() {
                   tracks={document?.timeline?.tracks || []}
                   isPinned={pinnedRight}
                   onTogglePin={() => setPinnedRight(!pinnedRight)}
+                  onNavigateToCode={handleNavigateToCode}
                 />
               ) : (
                 <StudioVariablesPanel

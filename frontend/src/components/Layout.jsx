@@ -16,7 +16,7 @@ import {
   IconBroadcast,
   IconScissors,
   IconFolder,
-  IconSparkles,
+  IconMovie,
   IconTool,
   IconDeviceMobile,
   IconSettings,
@@ -35,7 +35,7 @@ const navItems = [
   { to: "/channels",  icon: <IconBroadcast size={20} stroke={1.8} />,     label: "My Channels" },
   { to: "/clips",     icon: <IconScissors size={20} stroke={1.8} />,      label: "Clip Studio" },
   { to: "/videos",    icon: <IconFolder size={20} stroke={1.8} />,        label: "Library" },
-  { to: "/motion",    icon: <IconSparkles size={20} stroke={1.8} />,      label: "Motion Graphics" },
+  { to: "/motion",    icon: <IconMovie size={20} stroke={1.8} />,         label: "Motion Graphics" },
   { to: "/tools",     icon: <IconTool size={20} stroke={1.8} />,          label: "Tools" },
   { to: "/messaging", icon: <IconDeviceMobile size={20} stroke={1.8} />,  label: "Messaging" },
   ...pluginNavItems.filter(i => (i.position || "top") === "top"),
@@ -169,7 +169,7 @@ export default function Layout() {
           <Box
             component="img"
             src="/icon-192.png"
-            alt="ViralMint"
+            alt="6Clips"
             sx={{ width: 32, height: 32, borderRadius: "10px", flexShrink: 0 }}
           />
           {(!collapsed || isNarrow) && (
@@ -185,7 +185,7 @@ export default function Layout() {
                 whiteSpace: "nowrap",
               }}
             >
-              ViralMint
+              6Clips
             </Typography>
           )}
         </Box>
@@ -324,7 +324,7 @@ export default function Layout() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              ViralMint
+              6Clips
             </Typography>
           </Box>
         )}

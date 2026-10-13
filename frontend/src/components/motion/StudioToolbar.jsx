@@ -102,24 +102,26 @@ export default function StudioToolbar({
               whiteSpace: "nowrap",
             }}
           >
-            {project?.name || "Active Project"}
+            {project?.name || (project ? "Active Project" : "No Project Loaded")}
           </Typography>
         </Stack>
 
-        <Chip
-          size="small"
-          label={`r${revision || 1}`}
-          variant="outlined"
-          sx={{
-            height: 18,
-            fontSize: "0.6rem",
-            fontWeight: 700,
-            bgcolor: "#f8fafc",
-            borderColor: "divider",
-            color: "text.secondary",
-            px: 0.2,
-          }}
-        />
+        {project && (
+          <Chip
+            size="small"
+            label={`r${revision || 1}`}
+            variant="outlined"
+            sx={{
+              height: 18,
+              fontSize: "0.6rem",
+              fontWeight: 700,
+              bgcolor: "#f8fafc",
+              borderColor: "divider",
+              color: "text.secondary",
+              px: 0.2,
+            }}
+          />
+        )}
 
         {project?.is_frozen && (
           <Tooltip title="Revision is frozen for rendering" arrow>
@@ -200,17 +202,19 @@ export default function StudioToolbar({
           { id: "refine", label: "Refine" },
         ].map((lvl) => {
           const active = workspaceMode === lvl.id
+          const disabled = !project && lvl.id !== "create"
           return (
             <Button
               key={lvl.id}
               size="small"
+              disabled={disabled}
               onClick={() => onWorkspaceModeChange(lvl.id)}
               sx={{
                 height: 22,
                 px: { xs: 0.8, sm: 1 },
                 fontSize: "0.68rem",
                 fontWeight: active ? 700 : 500,
-                color: active ? "#ffffff" : "text.secondary",
+                color: active ? "#ffffff" : disabled ? "text.disabled" : "text.secondary",
                 bgcolor: active ? "primary.main" : "transparent",
                 borderRadius: 1.2,
                 boxShadow: active ? "0 1px 4px rgba(139, 92, 246, 0.3)" : "none",
@@ -353,12 +357,12 @@ export default function StudioToolbar({
         )}
 
         {/* Save button */}
-        <Tooltip title={isSaving ? "Saving..." : isDirty ? "Save Draft" : "Saved"} arrow>
+        <Tooltip title={!project ? "No project loaded" : isSaving ? "Saving..." : isDirty ? "Save Draft" : "Saved"} arrow>
           <Button
             size="small"
             variant="outlined"
             data-testid="studio-toolbar-save-btn"
-            disabled={!isDirty || isSaving}
+            disabled={!project || !isDirty || isSaving}
             startIcon={isSaving ? <CircularProgress size={12} color="inherit" /> : <IconDeviceFloppy size={13} stroke={2} />}
             onClick={onSave}
             sx={{
@@ -385,12 +389,12 @@ export default function StudioToolbar({
         </Tooltip>
 
         {/* Export / Render */}
-        <Tooltip title={isRendering ? "Rendering..." : "Export Video"} arrow>
+        <Tooltip title={!project ? "No project loaded" : isRendering ? "Rendering..." : "Export Video"} arrow>
           <Button
             size="small"
             variant="contained"
             data-testid="studio-toolbar-export-btn"
-            disabled={isRendering}
+            disabled={!project || isRendering}
             startIcon={isRendering ? <CircularProgress size={12} color="inherit" /> : <IconPlayerPlay size={13} stroke={2} />}
             onClick={onRender}
             sx={{

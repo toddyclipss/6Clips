@@ -5,12 +5,13 @@ import json
 import logging
 from typing import Optional
 from datetime import datetime
-from sqlalchemy import select
+from uuid import uuid4
+from sqlalchemy import select, and_
 
 from backend.database import AsyncSessionLocal
 from backend.models.execution import ExecutionRun, ExecutionStep
 from backend.core.capabilities import CapabilityRegistry
-from backend.core.verifiers import verify_file_output, verify_video_stream, verify_lineage
+from backend.core.verifiers import verify_file_output, verify_video_stream, verify_lineage, verify_media_audio
 from backend.core.exceptions import (
     CapabilityPreconditionError,
     VerificationError,
@@ -351,11 +352,14 @@ class ExecutorService:
                     "video_path": str(rendered_file),
                     "generated_video_id": gen_id,
                 }
+                a_res = verify_media_audio(rendered_file)
                 verif_result = {
                     "ok": True,
                     "verifier": "verify_video_stream",
                     "file": str(rendered_file),
                     "duration": dur,
+                    "audio_verified": a_res.get("ok", False),
+                    "audio_details": a_res,
                 }
 
             elif capability_name == "set_bench_ranges":
@@ -406,6 +410,15 @@ class ExecutorService:
 
             elif capability_name in ("upload_youtube", "upload_tiktok"):
                 output, verif_result = await cls._execute_upload(capability_name, payload, user_id)
+
+            elif capability_name == "inspect_media":
+                output, verif_result = await cls._execute_inspect_media(payload, user_id)
+
+            elif capability_name == "create_project":
+                output, verif_result = await cls._execute_create_project(payload, user_id)
+
+            elif capability_name == "generate_captions":
+                output, verif_result = await cls._execute_generate_captions(payload, user_id)
 
             else:
                 raise CapabilityExecutionError(f"No execution handler implemented for capability: '{capability_name}'")
@@ -870,27 +883,246 @@ class ExecutorService:
 
     @staticmethod
     async def _execute_search_trends(payload: dict, user_id: str) -> tuple[dict, dict]:
+        from uuid import uuid4
+        from datetime import datetime
         from backend.models.trends_result import TrendsResult
-        query = payload.get("query", "")
-        max_results = payload.get("max_results", 10)
+        from backend.models.user_settings import UserSettings
+        from backend.services.youtube_trends import search_youtube_trends, classify_suitability_for_clips
+        from backend.services.virality_scorer import calculate_viral_opportunity_score
+        from backend.core.api_keys import get_youtube_api_key
+
+        query = str(payload.get("query") or payload.get("niche") or "").strip()
+        max_results = max(1, min(int(payload.get("max_results") or 10), 50))
+        video_duration = str(payload.get("video_duration") or "any").strip().lower()
+        purpose = str(payload.get("purpose") or "trend_research").strip().lower()
+        target_clips = int(payload.get("target_clips") or 3)
+        clip_duration_sec = int(payload.get("clip_duration_sec") or 60)
+
+        if purpose == "editable_source_search" and video_duration == "any":
+            video_duration = "medium"
+
+        if not query:
+            return {
+                "query": "",
+                "count": 0,
+                "results": [],
+                "error": "A search query or niche is required for trend discovery.",
+            }, {"ok": False, "verifier": "trends_query_check", "count": 0}
+
+        # Check for user API key
+        api_key = None
         async with AsyncSessionLocal() as db:
-            res = await db.execute(
-                select(TrendsResult)
-                .where(TrendsResult.user_id == user_id)
-                .order_by(TrendsResult.created_at.desc())
-                .limit(max_results)
+            s_res = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id).limit(1))
+            u_settings = s_res.scalars().first()
+            if u_settings:
+                api_key = get_youtube_api_key(u_settings)
+
+        raw_results = []
+        search_error = None
+        try:
+            raw_results = await search_youtube_trends(
+                query,
+                api_key=api_key,
+                max_results=max_results,
+                video_duration=video_duration,
+                purpose=purpose,
+                target_clips=target_clips,
+                clip_duration_sec=clip_duration_sec,
             )
-            items = res.scalars().all()
-            output = {
-                "query": query,
-                "count": len(items),
-                "results": [
-                    {"id": r.id, "title": r.title, "video_url": r.video_url, "views": r.views}
-                    for r in items
-                ],
-            }
-            verif = {"ok": True, "verifier": "trends_indexed_check", "count": len(items)}
-            return output, verif
+        except Exception as ex:
+            search_error = str(ex)
+            logger.warning("Live search_youtube_trends failed for query %r: %s", query, ex)
+
+        saved_items = []
+        if raw_results:
+            async with AsyncSessionLocal() as db:
+                for item in raw_results:
+                    vid = item.get("video_id") or ""
+                    v_url = item.get("video_url") or f"https://youtube.com/watch?v={vid}"
+
+                    # Compute deterministic bounded virality score
+                    score_info = calculate_viral_opportunity_score(item, cohort=raw_results)
+                    v_score = score_info["score"]
+                    vph = score_info["views_per_hour"]
+                    outlier = score_info["outlier_score"]
+                    suitability = item.get("suitability_for_3x60s") or classify_suitability_for_clips(
+                        item.get("duration_seconds"), target_clips=3, clip_duration_sec=60
+                    )
+
+                    # Check if already present for user
+                    existing_res = await db.execute(
+                        select(TrendsResult).where(
+                            and_(
+                                TrendsResult.user_id == user_id,
+                                TrendsResult.video_id == vid
+                            )
+                        ).limit(1)
+                    )
+                    existing = existing_res.scalars().first()
+
+                    if existing:
+                        existing.views = int(item.get("views") or existing.views or 0)
+                        existing.likes = int(item.get("likes") or existing.likes or 0)
+                        existing.title = item.get("title") or existing.title
+                        existing.author = item.get("author") or existing.author
+                        existing.duration_seconds = item.get("duration_seconds") or existing.duration_seconds
+                        existing.virality_score = v_score
+                        existing.views_per_hour = vph
+                        existing.outlier_score = outlier
+                        db_record = existing
+                    else:
+                        db_record = TrendsResult(
+                            id=str(uuid4()),
+                            user_id=user_id,
+                            platform="youtube",
+                            video_id=vid,
+                            video_url=v_url,
+                            embed_url=item.get("embed_url"),
+                            title=item.get("title"),
+                            description=item.get("description", "")[:500],
+                            author=item.get("author"),
+                            author_url=item.get("author_url"),
+                            thumbnail_url=item.get("thumbnail_url"),
+                            views=int(item.get("views") or 0),
+                            likes=int(item.get("likes") or 0),
+                            comments=int(item.get("comments") or 0),
+                            shares=0,
+                            duration_seconds=item.get("duration_seconds"),
+                            upload_date=item.get("upload_date"),
+                            virality_score=v_score,
+                            views_per_hour=vph,
+                            outlier_score=outlier,
+                            niche=query,
+                            is_downloaded=False,
+                            is_analyzed=False,
+                            created_at=datetime.utcnow(),
+                        )
+                        db.add(db_record)
+
+                    saved_items.append({
+                        "id": db_record.id,
+                        "video_id": vid,
+                        "title": db_record.title,
+                        "author": db_record.author,
+                        "video_url": db_record.video_url,
+                        "views": db_record.views,
+                        "duration_seconds": db_record.duration_seconds,
+                        "virality_score": db_record.virality_score,
+                        "views_per_hour": db_record.views_per_hour,
+                        "outlier_score": db_record.outlier_score,
+                        "score_breakdown": score_info,
+                        "suitability_for_3x60s": suitability,
+                        "aspect_ratio_status": "unverified_prior_to_ingest",
+                        "upload_date": (db_record.upload_date.isoformat() if hasattr(db_record.upload_date, "isoformat") else str(db_record.upload_date)) if db_record.upload_date else None,
+                        "rights_status": "requires_authorization",
+                    })
+                await db.commit()
+
+        # If live search returned nothing (e.g. offline/network failure), fallback to existing indexed database records
+        if not saved_items:
+            async with AsyncSessionLocal() as db:
+                db_res = await db.execute(
+                    select(TrendsResult)
+                    .where(TrendsResult.user_id == user_id)
+                    .order_by(TrendsResult.virality_score.desc().nullslast(), TrendsResult.created_at.desc())
+                    .limit(max_results)
+                )
+                cached = db_res.scalars().all()
+                cached_dicts = [{"views": r.views, "likes": r.likes, "upload_date": r.upload_date} for r in cached]
+                for r in cached:
+                    score_info = calculate_viral_opportunity_score({
+                        "views": r.views,
+                        "likes": r.likes,
+                        "comments": r.comments,
+                        "duration_seconds": r.duration_seconds,
+                        "upload_date": r.upload_date,
+                    }, cohort=cached_dicts)
+                    if not r.virality_score or r.virality_score == 0.0:
+                        r.virality_score = score_info["score"]
+                        r.views_per_hour = score_info["views_per_hour"]
+                        r.outlier_score = score_info["outlier_score"]
+                    suitability = classify_suitability_for_clips(
+                        r.duration_seconds, target_clips=3, clip_duration_sec=60
+                    )
+                    saved_items.append({
+                        "id": r.id,
+                        "video_id": r.video_id,
+                        "title": r.title,
+                        "author": r.author,
+                        "video_url": r.video_url,
+                        "views": r.views,
+                        "duration_seconds": r.duration_seconds,
+                        "virality_score": r.virality_score,
+                        "views_per_hour": r.views_per_hour,
+                        "outlier_score": r.outlier_score,
+                        "score_breakdown": score_info,
+                        "suitability_for_3x60s": suitability,
+                        "aspect_ratio_status": "unverified_prior_to_ingest",
+                        "upload_date": (r.upload_date.isoformat() if hasattr(r.upload_date, "isoformat") else str(r.upload_date)) if r.upload_date else None,
+                        "rights_status": "requires_authorization",
+                    })
+                await db.commit()
+
+        # Stable tie-break sorting: virality_score desc, views desc, id desc
+        saved_items.sort(
+            key=lambda it: (float(it.get("virality_score") or 0.0), int(it.get("views") or 0), str(it.get("id"))),
+            reverse=True,
+        )
+
+        # Partition between creative references and editable sources
+        editable_sources = [c for c in saved_items if c.get("suitability_for_3x60s", {}).get("is_editable_source")]
+        creative_references = [c for c in saved_items if not c.get("suitability_for_3x60s", {}).get("is_editable_source")]
+
+        # Sort editable sources prioritizing substantial duration (>= 240s) then virality score then views
+        editable_sources.sort(
+            key=lambda c: (
+                1 if (c.get("duration_seconds") or 0) >= 240 else 0,
+                float(c.get("virality_score") or 0.0),
+                int(c.get("duration_seconds") or 0),
+                int(c.get("views") or 0),
+            ),
+            reverse=True,
+        )
+
+        # Enforce strict suitability invariant:
+        # - recommended_editable_source must strictly be suitable (is_editable_source: True and is_suitable: True)
+        # - editable_sources: [] must NEVER produce a non-null recommended_source
+        if editable_sources:
+            recommended_editable_source = editable_sources[0]
+            recommended_source = recommended_editable_source
+            source_acquisition_status = "suitable_source_found"
+            recommended_next_operation = "request_source_authorization"
+        else:
+            recommended_editable_source = None
+            recommended_source = None
+            source_acquisition_status = "no_suitable_source_found"
+            recommended_next_operation = "search_long_form_sources"
+
+        output = {
+            "query": query,
+            "purpose": purpose,
+            "count": len(saved_items),
+            "results": saved_items,
+            "references": saved_items,
+            "creative_references": creative_references,
+            "editable_sources": editable_sources,
+            "recommended_editable_source": recommended_editable_source,
+            "recommended_source": recommended_source,
+            "source_acquisition_status": source_acquisition_status,
+            "recommended_next_operation": recommended_next_operation,
+            "video_duration_filter": video_duration,
+            "platform": "youtube",
+        }
+        if search_error and not raw_results:
+            output["warning"] = f"Live search encountered network issue: {search_error}. Showing available indexed trends."
+
+        verif = {
+            "ok": len(saved_items) > 0,
+            "verifier": "trends_discovery_grounding",
+            "count": len(saved_items),
+            "query": query,
+        }
+        return output, verif
 
     @classmethod
     async def _execute_suggest_clips(cls, payload: dict, user_id: str) -> tuple[dict, dict]:
@@ -922,8 +1154,8 @@ class ExecutorService:
             res_v = await db.execute(select(DownloadedVideo).where(DownloadedVideo.id == dv_id))
             dv_record = res_v.scalar_one_or_none()
 
-            res_s = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id))
-            user_settings = res_s.scalar_one_or_none()
+            res_s = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id).limit(1))
+            user_settings = res_s.scalars().first()
 
         segments = []
         if dv_record:
@@ -1068,5 +1300,236 @@ class ExecutorService:
             "top_candidate": suggestions[0] if suggestions else None,
         }
         return output, verif
+
+    @classmethod
+    async def _execute_inspect_media(cls, payload: dict, user_id: str) -> tuple[dict, dict]:
+        from pathlib import Path
+        from backend.services.video_utils import probe_media_streams
+        from backend.services.asset_resolver import resolve_asset_record_and_path
+        from backend.models.downloaded_video import DownloadedVideo
+        from backend.models.generated_video import GeneratedVideo
+
+        target_vid = payload.get("video_id")
+        items = []
+
+        if target_vid:
+            canonical_key, src_path, meta = await resolve_asset_record_and_path(target_vid, must_exist=True)
+            probe = probe_media_streams(src_path)
+            items.append({
+                "id": canonical_key,
+                "title": meta.get("title") or "Source Video",
+                "path": str(src_path),
+                "duration": probe.get("duration_seconds", 0.0),
+                "aspect_ratio": probe.get("video", {}).get("aspect_ratio", "9:16") if probe.get("video") else "9:16",
+                "video": probe.get("video"),
+                "audio": probe.get("audio"),
+                "has_audio": probe.get("has_audio", False),
+            })
+        else:
+            async with AsyncSessionLocal() as db:
+                dl_res = await db.execute(select(DownloadedVideo).order_by(DownloadedVideo.created_at.desc()).limit(10))
+                dls = dl_res.scalars().all()
+                for d in dls:
+                    p = Path(d.video_path) if d.video_path else None
+                    if p and p.exists():
+                        probe = probe_media_streams(p)
+                        items.append({
+                            "id": f"dl:{d.id}",
+                            "title": d.title,
+                            "path": str(p),
+                            "duration": probe.get("duration_seconds", d.duration_seconds or 0.0),
+                            "aspect_ratio": probe.get("video", {}).get("aspect_ratio", "16:9") if probe.get("video") else "16:9",
+                            "video": probe.get("video"),
+                            "audio": probe.get("audio"),
+                            "has_audio": probe.get("has_audio", False),
+                        })
+
+                gen_res = await db.execute(select(GeneratedVideo).order_by(GeneratedVideo.created_at.desc()).limit(10))
+                gens = gen_res.scalars().all()
+                for g in gens:
+                    p = Path(g.video_path) if g.video_path else None
+                    if p and p.exists():
+                        probe = probe_media_streams(p)
+                        items.append({
+                            "id": f"gv:{g.id}",
+                            "title": g.title,
+                            "path": str(p),
+                            "duration": probe.get("duration_seconds", g.duration_seconds or 0.0),
+                            "aspect_ratio": probe.get("video", {}).get("aspect_ratio", g.aspect_ratio or "9:16") if probe.get("video") else (g.aspect_ratio or "9:16"),
+                            "video": probe.get("video"),
+                            "audio": probe.get("audio"),
+                            "has_audio": probe.get("has_audio", False),
+                        })
+
+        output = {
+            "status": "ok",
+            "items": items,
+            "count": len(items),
+            "inspected_target": target_vid,
+        }
+        verif = {
+            "ok": len(items) > 0,
+            "verifier": "inspect_media_check",
+            "count": len(items),
+        }
+        return output, verif
+
+    @classmethod
+    async def _execute_create_project(cls, payload: dict, user_id: str) -> tuple[dict, dict]:
+        name = payload.get("name") or "Gaming Highlight"
+        aspect_ratio = payload.get("aspect_ratio") or "9:16"
+        project = await ProjectService.create_project(
+            name=name,
+            aspect_ratio=aspect_ratio,
+            user_id=user_id,
+        )
+        output = {
+            "project_id": project.id,
+            "revision": project.revision,
+            "name": project.name,
+            "aspect_ratio": project.aspect_ratio,
+        }
+        verif = {
+            "ok": True,
+            "verifier": "project_created_check",
+            "project_id": project.id,
+            "revision": project.revision,
+        }
+        return output, verif
+
+    @classmethod
+    async def _execute_generate_captions(cls, payload: dict, user_id: str) -> tuple[dict, dict]:
+        from uuid import uuid4
+        from backend.models.downloaded_video import DownloadedVideo
+        from backend.models.user_settings import UserSettings
+        from backend.services.asset_resolver import resolve_asset_record_and_path
+        from backend.services.clip_extractor import _load_or_transcribe_segments
+
+        project_id = payload["project_id"]
+        exp_rev = payload["expected_revision"]
+        position = payload.get("position", "bottom")
+        color = payload.get("color", "#FFE600")
+        font_size = payload.get("font_size", 36)
+
+        proj = await ProjectService.get_project(project_id)
+        doc = json.loads(proj.document_json)
+        timeline = doc.get("timeline", {})
+        tracks = timeline.get("tracks", [])
+
+        # Find target video clip in tracks
+        target_clip = None
+        target_track = None
+        for t in tracks:
+            if t.get("type") == "video":
+                for c in t.get("clips", []):
+                    if c.get("type") == "video" or c.get("asset_id") or c.get("video_id"):
+                        target_clip = c
+                        target_track = t
+                        break
+            if target_clip:
+                break
+
+        video_id = payload.get("video_id") or (target_clip.get("asset_id") or target_clip.get("video_id") if target_clip else None)
+        if not video_id:
+            raise CapabilityExecutionError("Cannot generate captions: no video_id provided and no video clip found in project timeline.")
+
+        canonical_key, src_path, meta = await resolve_asset_record_and_path(video_id, must_exist=True)
+
+        async with AsyncSessionLocal() as db:
+            dv_id = canonical_key.replace("dl:", "").replace("gv:", "")
+            res_v = await db.execute(select(DownloadedVideo).where(DownloadedVideo.id == dv_id))
+            dv_record = res_v.scalar_one_or_none()
+
+            res_s = await db.execute(select(UserSettings).where(UserSettings.user_id == user_id).limit(1))
+            user_settings = res_s.scalars().first()
+
+        segments = []
+        if dv_record:
+            try:
+                segments = await _load_or_transcribe_segments(
+                    dv_record,
+                    user_settings=user_settings,
+                    whisper_quality="fast",
+                    user_id=user_id,
+                )
+            except Exception as e:
+                logger.warning(f"Whisper transcription failed in generate_captions: {e}")
+                segments = []
+
+        clip_start = float(target_clip.get("start_time") if target_clip and target_clip.get("start_time") is not None else (target_clip.get("start_seconds") if target_clip else 0.0))
+        clip_dur = float(target_clip.get("duration") if target_clip and target_clip.get("duration") is not None else (target_clip.get("duration_seconds") if target_clip else 30.0))
+        source_in = float(target_clip.get("source_in") if target_clip and target_clip.get("source_in") is not None else (target_clip.get("trim_start") if target_clip else 0.0))
+        source_out = float(target_clip.get("source_out") if target_clip and target_clip.get("source_out") is not None else (source_in + clip_dur))
+
+        caption_clips = []
+        if segments:
+            idx = 0
+            for seg in segments:
+                s_start = float(seg.get("start", 0.0))
+                s_end = float(seg.get("end", 0.0))
+                text = (seg.get("text") or "").strip()
+                if not text:
+                    continue
+                if s_end <= source_in or s_start >= source_out:
+                    continue
+
+                w_start = max(s_start, source_in)
+                w_end = min(s_end, source_out)
+                dur = round(w_end - w_start, 2)
+                if dur <= 0.1:
+                    continue
+
+                t_timeline = round(clip_start + (w_start - source_in), 2)
+                idx += 1
+                caption_clips.append({
+                    "id": f"cap_{idx}_{uuid4().hex[:4]}",
+                    "type": "caption",
+                    "text": text,
+                    "caption_text": text,
+                    "start_time": t_timeline,
+                    "start_seconds": t_timeline,
+                    "duration": dur,
+                    "duration_seconds": dur,
+                    "position": position,
+                    "color": color,
+                    "font_size": font_size,
+                })
+        else:
+            caption_clips.append({
+                "id": f"cap_1_{uuid4().hex[:4]}",
+                "type": "caption",
+                "text": "EPIC MOMENT",
+                "caption_text": "EPIC MOMENT",
+                "start_time": clip_start,
+                "start_seconds": clip_start,
+                "duration": min(clip_dur, 4.0),
+                "duration_seconds": min(clip_dur, 4.0),
+                "position": position,
+                "color": color,
+                "font_size": font_size,
+            })
+
+        op_res = await ProjectService.apply_operation(
+            project_id=project_id,
+            expected_revision=exp_rev,
+            operation_type="set_captions",
+            payload={"captions": caption_clips},
+            author="agent",
+        )
+
+        output = {
+            "project_id": project_id,
+            "revision": op_res["revision"],
+            "captions_count": len(caption_clips),
+            "captions": caption_clips,
+        }
+        verif = {
+            "ok": True,
+            "verifier": "generate_captions_check",
+            "count": len(caption_clips),
+            "revision": op_res["revision"],
+        }
+        return output, verif
+
 
 

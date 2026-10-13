@@ -22,10 +22,19 @@ router = APIRouter()
 # ── Pydantic schemas ──────────────────────────────────────────────────────────
 
 class SettingsResponse(BaseModel):
-    # AI provider preference (BYOK)
-    ai_provider: str = "openai"
+    # Active AI selection (BYOK)
+    ai_provider: Optional[str] = None
     ai_model: Optional[str] = None
-    ai_api_key_set: bool = False  # masked — never returns the actual key
+    ai_reasoning_level: Optional[str] = None
+    ai_api_key_set: bool = False  # masked legacy flag
+
+    # Independent BYOK credentials status (masked flags only, never secrets)
+    openai_api_key_set: bool = False
+    anthropic_api_key_set: bool = False
+    gemini_api_key_set: bool = False
+    openrouter_api_key_set: bool = False
+    ollama_base_url: str = "http://127.0.0.1:11434"
+    ollama_connected: bool = False
 
     # Service API keys (BYOK) — booleans only, never the plaintext key
     youtube_api_key_set: bool = False
@@ -55,10 +64,18 @@ class SettingsResponse(BaseModel):
 
 
 class SettingsUpdate(BaseModel):
-    # AI provider preference (BYOK)
+    # Active AI selection
     ai_provider: Optional[str] = None
     ai_model: Optional[str] = None
-    ai_api_key: Optional[str] = None  # plaintext on input — encrypted before storage
+    ai_reasoning_level: Optional[str] = None
+    ai_api_key: Optional[str] = None  # legacy plaintext input
+
+    # Independent BYOK API keys (plaintext on input — encrypted before storage)
+    openai_api_key: Optional[str] = None
+    anthropic_api_key: Optional[str] = None
+    gemini_api_key: Optional[str] = None
+    openrouter_api_key: Optional[str] = None
+    ollama_base_url: Optional[str] = None
 
     # Service API keys (BYOK) — plaintext on input, encrypted before storage.
     # Send empty string to clear a stored key.
@@ -78,6 +95,12 @@ class SettingsUpdate(BaseModel):
     tiktok_default_privacy: Optional[str] = None
 
 
+class ValidateKeyRequest(BaseModel):
+    provider: str
+    api_key: Optional[str] = None
+    base_url: Optional[str] = None
+
+
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @router.get("/settings", response_model=SettingsResponse)
@@ -85,17 +108,45 @@ async def get_settings():
     """Return user settings with secrets masked."""
     async with AsyncSessionLocal() as db:
         result = await db.execute(
-            select(UserSettings).where(UserSettings.user_id == "local")
+            select(UserSettings)
+            .where(UserSettings.user_id == "local")
+            .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+            .limit(1)
         )
-        s = result.scalar_one_or_none()
+        s = result.scalars().first()
 
     if not s:
         return SettingsResponse()
 
+    # Filter out legacy models that are not in the authoritative model registry
+    ai_model = s.ai_model
+    ai_provider = s.ai_provider
+    if ai_model and ai_provider:
+        from backend.api.config import _DEFAULTS
+        valid_models = _DEFAULTS.get("model_registry", {}).get(ai_provider, {}).get("models", [])
+        if ai_model not in valid_models:
+            ai_model = None
+
+    from backend.core.ai_provider import _is_ollama_available
+    ollama_conn = _is_ollama_available()
+
+    # Masked credential status (booleans only — never the plaintext keys)
+    openai_set = bool(s.openai_api_key_encrypted) or (s.ai_provider == "openai" and bool(s.ai_api_key_encrypted))
+    anthropic_set = bool(s.anthropic_api_key_encrypted) or (s.ai_provider == "anthropic" and bool(s.ai_api_key_encrypted))
+    gemini_set = bool(s.gemini_api_key_encrypted) or (s.ai_provider == "gemini" and bool(s.ai_api_key_encrypted))
+    openrouter_set = bool(s.openrouter_api_key_encrypted) or (s.ai_provider == "openrouter" and bool(s.ai_api_key_encrypted))
+
     return SettingsResponse(
-        ai_provider=s.ai_provider or "openai",
-        ai_model=s.ai_model,
-        ai_api_key_set=bool(s.ai_api_key_encrypted) or (s.ai_provider == "ollama"),
+        ai_provider=ai_provider,
+        ai_model=ai_model,
+        ai_reasoning_level="high" if (s.ai_reasoning_level or "").lower() in ("hard", "high") else (s.ai_reasoning_level or None),
+        ai_api_key_set=bool(s.ai_api_key_encrypted or openai_set or anthropic_set or gemini_set or openrouter_set or ai_provider == "ollama"),
+        openai_api_key_set=openai_set,
+        anthropic_api_key_set=anthropic_set,
+        gemini_api_key_set=gemini_set,
+        openrouter_api_key_set=openrouter_set,
+        ollama_base_url=s.ollama_base_url or "http://127.0.0.1:11434",
+        ollama_connected=ollama_conn,
         youtube_api_key_set=bool(s.youtube_api_key_encrypted),
         douyin_cookie_set=bool(s.douyin_cookie_encrypted),
         tiktok_cookie_set=bool(s.tiktok_cookie_encrypted),
@@ -118,24 +169,49 @@ async def get_settings():
 
 @router.post("/settings", response_model=SettingsResponse)
 async def update_settings(update: SettingsUpdate):
-    """Update user settings. Keys are encrypted before saving."""
+    """Update user settings. Keys are encrypted before saving.
+    
+    A saved API key never silently activates or changes the active provider.
+    """
     async with AsyncSessionLocal() as db:
         result = await db.execute(
-            select(UserSettings).where(UserSettings.user_id == "local")
+            select(UserSettings)
+            .where(UserSettings.user_id == "local")
+            .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+            .limit(1)
         )
-        s = result.scalar_one_or_none()
+        s = result.scalars().first()
         if not s:
             s = UserSettings(user_id="local")
             db.add(s)
 
-        # AI provider preference (BYOK)
+        # Active AI selection
         if update.ai_provider is not None:
-            s.ai_provider = update.ai_provider
+            s.ai_provider = update.ai_provider or None
         if update.ai_model is not None:
             s.ai_model = update.ai_model or None
+        if update.ai_reasoning_level is not None:
+            raw_lvl = (update.ai_reasoning_level or "").strip().lower()
+            if raw_lvl:
+                s.ai_reasoning_level = "high" if raw_lvl in ("hard", "high") else raw_lvl
+            else:
+                s.ai_reasoning_level = None
+
+        # Independent credentials - saving a key does NOT activate or select its provider
+        if update.openai_api_key is not None:
+            s.openai_api_key_encrypted = encrypt(update.openai_api_key.strip()) if update.openai_api_key.strip() else None
+        if update.anthropic_api_key is not None:
+            s.anthropic_api_key_encrypted = encrypt(update.anthropic_api_key.strip()) if update.anthropic_api_key.strip() else None
+        if update.gemini_api_key is not None:
+            s.gemini_api_key_encrypted = encrypt(update.gemini_api_key.strip()) if update.gemini_api_key.strip() else None
+        if update.openrouter_api_key is not None:
+            s.openrouter_api_key_encrypted = encrypt(update.openrouter_api_key.strip()) if update.openrouter_api_key.strip() else None
+        if update.ollama_base_url is not None:
+            s.ollama_base_url = update.ollama_base_url.strip() or None
+
+        # Legacy compatibility
         if update.ai_api_key is not None:
-            # Empty string clears the stored key; otherwise encrypt + store
-            s.ai_api_key_encrypted = encrypt(update.ai_api_key) if update.ai_api_key else None
+            s.ai_api_key_encrypted = encrypt(update.ai_api_key.strip()) if update.ai_api_key.strip() else None
 
         # Service API keys (BYOK) — empty string clears, populated value encrypts
         if update.youtube_api_key is not None:
@@ -170,6 +246,91 @@ async def update_settings(update: SettingsUpdate):
     return await get_settings()
 
 
+@router.post("/settings/validate-key")
+async def validate_ai_credential(req: ValidateKeyRequest):
+    """Validate AI provider credentials without making paid inference calls."""
+    import httpx
+    provider = req.provider.strip().lower()
+    if provider in ("google_gemini", "google"):
+        provider = "gemini"
+
+    api_key = req.api_key.strip() if req.api_key else None
+    if not api_key and provider != "ollama":
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(
+                select(UserSettings).where(UserSettings.user_id == "local")
+            )
+            s = result.scalar_one_or_none()
+            if s:
+                from backend.core.crypto import decrypt_safe
+                enc = getattr(s, f"{provider}_api_key_encrypted", None)
+                if enc:
+                    api_key = decrypt_safe(enc)
+                elif s.ai_provider == provider and s.ai_api_key_encrypted:
+                    api_key = decrypt_safe(s.ai_api_key_encrypted)
+
+    if provider != "ollama" and not api_key:
+        return {"ok": False, "provider": provider, "error": "No API key configured to validate."}
+
+    timeout = httpx.Timeout(connect=5.0, read=10.0, write=5.0, pool=5.0)
+
+    try:
+        if provider == "openai":
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                res = await client.get(
+                    "https://api.openai.com/v1/models",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                )
+                if res.status_code == 200:
+                    return {"ok": True, "provider": "openai", "message": "OpenAI API key is valid."}
+                return {"ok": False, "provider": "openai", "error": f"OpenAI validation failed ({res.status_code}): {res.text[:120]}"}
+
+        elif provider == "anthropic":
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                res = await client.get(
+                    "https://api.anthropic.com/v1/models",
+                    headers={"x-api-key": api_key, "anthropic-version": "2023-06-01"},
+                )
+                if res.status_code == 200:
+                    return {"ok": True, "provider": "anthropic", "message": "Anthropic API key is valid."}
+                return {"ok": False, "provider": "anthropic", "error": f"Anthropic validation failed ({res.status_code}): {res.text[:120]}"}
+
+        elif provider == "gemini":
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                res = await client.get(
+                    f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
+                )
+                if res.status_code == 200:
+                    return {"ok": True, "provider": "gemini", "message": "Google Gemini API key is valid."}
+                return {"ok": False, "provider": "gemini", "error": f"Gemini validation failed ({res.status_code}): {res.text[:120]}"}
+
+        elif provider == "openrouter":
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                res = await client.get(
+                    "https://openrouter.ai/api/v1/auth/key",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                )
+                if res.status_code == 200:
+                    data = res.json().get("data", {})
+                    label = data.get("label") or "Key valid"
+                    return {"ok": True, "provider": "openrouter", "message": f"OpenRouter API key is valid ({label})."}
+                return {"ok": False, "provider": "openrouter", "error": f"OpenRouter validation failed ({res.status_code}): {res.text[:120]}"}
+
+        elif provider == "ollama":
+            base_url = (req.base_url or getattr(app_settings, "OLLAMA_BASE_URL", "http://127.0.0.1:11434")).rstrip("/")
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                res = await client.get(f"{base_url}/api/tags")
+                if res.status_code == 200:
+                    models = [m.get("name") for m in res.json().get("models", [])]
+                    return {"ok": True, "provider": "ollama", "message": f"Ollama daemon reachable ({len(models)} model(s) available).", "models": models}
+                return {"ok": False, "provider": "ollama", "error": f"Ollama unreachable ({res.status_code})."}
+
+        return {"ok": False, "provider": provider, "error": f"Unknown provider: {provider}"}
+
+    except Exception as e:
+        return {"ok": False, "provider": provider, "error": f"Connection error: {str(e)[:150]}"}
+
+
 # ── OAuth endpoints ──────────────────────────────────────────────────────────
 
 
@@ -194,9 +355,12 @@ async def youtube_callback(code: str = Query(...), state: str = Query(None)):
 
         async with AsyncSessionLocal() as db:
             res = await db.execute(
-                select(UserSettings).where(UserSettings.user_id == "local")
+                select(UserSettings)
+                .where(UserSettings.user_id == "local")
+                .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+                .limit(1)
             )
-            s = res.scalar_one_or_none()
+            s = res.scalars().first()
             if not s:
                 s = UserSettings(user_id="local")
                 db.add(s)
@@ -230,9 +394,12 @@ async def tiktok_upload_callback(code: str = Query(...), state: str = Query(None
 
         async with AsyncSessionLocal() as db:
             res = await db.execute(
-                select(UserSettings).where(UserSettings.user_id == "local")
+                select(UserSettings)
+                .where(UserSettings.user_id == "local")
+                .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+                .limit(1)
             )
-            s = res.scalar_one_or_none()
+            s = res.scalars().first()
             if not s:
                 s = UserSettings(user_id="local")
                 db.add(s)
@@ -302,9 +469,12 @@ async def get_health():
     # Cookie health
     async with AsyncSessionLocal() as db:
         res = await db.execute(
-            select(UserSettings).where(UserSettings.user_id == "local")
+            select(UserSettings)
+            .where(UserSettings.user_id == "local")
+            .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+            .limit(1)
         )
-        s = res.scalar_one_or_none()
+        s = res.scalars().first()
 
     if s:
         for platform, cookie_field, set_at_field in [

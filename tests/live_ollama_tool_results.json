@@ -1,0 +1,14 @@
+{
+  "low": {
+    "duration_sec": 11.45,
+    "rounds": 2,
+    "tool_calls_count": 1,
+    "content_chars": 70
+  },
+  "hard": {
+    "duration_sec": 9.43,
+    "rounds": 2,
+    "tool_calls_count": 1,
+    "content_chars": 289
+  }
+}

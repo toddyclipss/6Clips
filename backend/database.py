@@ -107,7 +107,13 @@ async def init_db():
         # BYOK: per-user encrypted keys (override .env at runtime)
         await _add_column_if_missing(conn, "user_settings", "ai_provider", "VARCHAR(20)", existing=_cols)
         await _add_column_if_missing(conn, "user_settings", "ai_model", "VARCHAR(100)", existing=_cols)
+        await _add_column_if_missing(conn, "user_settings", "ai_reasoning_level", "VARCHAR(20)", existing=_cols)
         await _add_column_if_missing(conn, "user_settings", "ai_api_key_encrypted", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "user_settings", "openai_api_key_encrypted", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "user_settings", "anthropic_api_key_encrypted", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "user_settings", "gemini_api_key_encrypted", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "user_settings", "openrouter_api_key_encrypted", "TEXT", existing=_cols)
+        await _add_column_if_missing(conn, "user_settings", "ollama_base_url", "VARCHAR(255)", existing=_cols)
         await _add_column_if_missing(conn, "user_settings", "youtube_api_key_encrypted", "TEXT", existing=_cols)
 
         # Project revision fingerprint and idempotency

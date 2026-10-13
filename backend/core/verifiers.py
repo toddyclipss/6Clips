@@ -73,6 +73,39 @@ def verify_video_stream(file_path: str | Path, min_duration: float = 0.5) -> dic
         }
 
 
+def verify_media_audio(file_path: str | Path, min_duration: float = 0.5) -> dict:
+    """Verify that a media file contains a readable audio stream."""
+    p = Path(file_path) if file_path else None
+    if not p or not p.exists():
+        return {"ok": False, "verifier": "verify_media_audio", "error": f"File does not exist: {file_path}"}
+
+    try:
+        from backend.services.video_utils import probe_media_streams
+        probe = probe_media_streams(p)
+        if not probe.get("ok"):
+            return {"ok": False, "verifier": "verify_media_audio", "error": probe.get("error", "Probe failed")}
+
+        audio = probe.get("audio")
+        if not audio or not audio.get("present"):
+            return {
+                "ok": False,
+                "verifier": "verify_media_audio",
+                "error": f"No audio stream found in {file_path}",
+                "video": probe.get("video"),
+            }
+
+        return {
+            "ok": True,
+            "verifier": "verify_media_audio",
+            "audio": audio,
+            "duration_seconds": probe.get("duration_seconds"),
+            "path": str(p),
+        }
+    except Exception as e:
+        return {"ok": False, "verifier": "verify_media_audio", "error": f"Audio verification failed: {e}"}
+
+
+
 def verify_lineage(child_data: dict | str = None, expected_parents: list[str] = None, parent_ids: list[str] = None, child_id: str = None, operation: str = None) -> dict:
     """Verify that child artifact properly points back to its source parent(s)."""
     parents = expected_parents or parent_ids or []

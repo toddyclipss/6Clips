@@ -206,8 +206,9 @@ class MotionRenderService:
         if not (project_dir / "index.html").exists():
             raise MotionRenderError("Project has no index.html to render")
         await asyncio.to_thread(cls._stage_gsap, project_dir)
-        return await cls._finish_render(project_dir, {}, aspect, fps, quality, out_path,
-                                        keep=keep, supersample=supersample)
+        rendered_mp4 = await cls._finish_render(project_dir, {}, aspect, fps, quality, out_path,
+                                                keep=keep, supersample=supersample)
+        return await cls._mux_project_audio(rendered_mp4, project_dir)
 
     @classmethod
     async def _finish_render(cls, work: Path, variables: dict, aspect: str,
@@ -267,6 +268,145 @@ class MotionRenderService:
         finally:
             if not keep:
                 await asyncio.to_thread(shutil.rmtree, work, ignore_errors=True)
+
+    @classmethod
+    async def _mux_project_audio(cls, video_path: Path, project_dir: Path) -> Path:
+        """Mux timeline audio streams (from gameplay/video clips or audio tracks) onto rendered MP4."""
+        doc_path = project_dir / "project_doc.json"
+        if not doc_path.exists():
+            return video_path
+
+        try:
+            doc = json.loads(doc_path.read_text(encoding="utf-8"))
+        except Exception as e:
+            logger.warning("Could not read project_doc.json for audio muxing: %s", e)
+            return video_path
+
+        tracks = doc.get("timeline", {}).get("tracks", [])
+        assets_dir = project_dir / "assets"
+        import subprocess
+
+        # Check which clips have valid audio
+        audio_inputs = []
+        for t in tracks:
+            if t.get("muted"):
+                continue
+            t_type = t.get("type", "video")
+            if t_type not in ("video", "audio"):
+                continue
+            t_vol = float(t.get("volume", 1.0) if t.get("volume") is not None else 1.0)
+            for c in t.get("clips", []):
+                if c.get("muted") or not c.get("visible", True):
+                    continue
+                c_vol = float(c.get("volume", 1.0) if c.get("volume") is not None else 1.0)
+                eff_vol = max(0.0, min(2.0, t_vol * c_vol))
+                if eff_vol <= 0.0:
+                    continue
+
+                asset_file = c.get("file") or c.get("asset_file") or c.get("filename") or ""
+                src_path = None
+                if asset_file and (assets_dir / asset_file).is_file():
+                    src_path = assets_dir / asset_file
+                else:
+                    aid = c.get("asset_id") or c.get("video_id")
+                    if aid:
+                        from backend.services.asset_resolver import resolve_asset_record_and_path
+                        try:
+                            _, resolved_p, _ = await resolve_asset_record_and_path(aid, must_exist=False)
+                            if resolved_p and resolved_p.is_file():
+                                src_path = resolved_p
+                        except Exception:
+                            pass
+
+                if not src_path or not src_path.is_file():
+                    continue
+
+                has_audio = False
+                try:
+                    probe_cmd = [
+                        "ffprobe", "-v", "error",
+                        "-select_streams", "a:0",
+                        "-show_entries", "stream=codec_name",
+                        "-of", "csv=p=0", str(src_path)
+                    ]
+                    probe_res = subprocess.check_output(probe_cmd, stderr=subprocess.DEVNULL)
+                    if probe_res.decode("utf-8").strip():
+                        has_audio = True
+                except Exception:
+                    pass
+
+                if not has_audio:
+                    continue
+
+                c_start = float(c.get("start_seconds") if c.get("start_seconds") is not None else (c.get("start_time") if c.get("start_time") is not None else 0.0))
+                c_dur = float(c.get("duration_seconds") if c.get("duration_seconds") is not None else (c.get("duration") if c.get("duration") is not None else 5.0))
+                trim_start = float(c.get("trim_start") if c.get("trim_start") is not None else (c.get("trim_in") if c.get("trim_in") is not None else (c.get("source_in") if c.get("source_in") is not None else 0.0)))
+
+                audio_inputs.append({
+                    "path": str(src_path),
+                    "start": max(0.0, c_start),
+                    "duration": max(0.1, c_dur),
+                    "source_in": max(0.0, trim_start),
+                    "volume": eff_vol,
+                })
+
+        if not audio_inputs:
+            logger.info("Motion render: no timeline clips have audio streams — video-only output.")
+            return video_path
+
+        logger.info("Motion render: muxing %d timeline audio stream(s) into %s", len(audio_inputs), video_path.name)
+        tmp_muxed = video_path.with_name(f"{video_path.stem}_muxed_{uuid.uuid4().hex[:6]}.mp4")
+
+        cmd = ["ffmpeg", "-y", "-i", str(video_path)]
+        for item in audio_inputs:
+            cmd.extend(["-ss", f"{item['source_in']:.3f}", "-t", f"{item['duration']:.3f}", "-i", item["path"]])
+
+        filter_parts = []
+        mix_inputs = []
+        for idx, item in enumerate(audio_inputs, start=1):
+            delay_ms = int(round(item["start"] * 1000))
+            f_chain = f"[{idx}:a]volume={item['volume']:.2f}"
+            if delay_ms > 0:
+                f_chain += f",adelay={delay_ms}|{delay_ms}"
+            f_label = f"[a{idx}]"
+            f_chain += f_label
+            filter_parts.append(f_chain)
+            mix_inputs.append(f_label)
+
+        if len(mix_inputs) > 1:
+            all_labels = "".join(mix_inputs)
+            filter_parts.append(f"{all_labels}amix=inputs={len(mix_inputs)}:duration=longest:dropout_transition=0,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[aout]")
+        else:
+            filter_parts.append(f"{mix_inputs[0]}aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[aout]")
+
+        filter_str = ";".join(filter_parts)
+        cmd.extend([
+            "-filter_complex", filter_str,
+            "-map", "0:v:0",
+            "-map", "[aout]",
+            "-c:v", "copy",
+            "-c:a", "aac",
+            "-b:a", "192k",
+            "-shortest",
+            str(tmp_muxed)
+        ])
+
+        try:
+            res = await asyncio.to_thread(subprocess.run, cmd, capture_output=True, timeout=120)
+            if res.returncode == 0 and tmp_muxed.exists() and tmp_muxed.stat().st_size > 1024:
+                shutil.move(str(tmp_muxed), str(video_path))
+                logger.info("Motion render: timeline audio successfully muxed into %s", video_path.name)
+            else:
+                err_msg = res.stderr.decode("utf-8", errors="replace")[-300:] if res.stderr else "unknown error"
+                logger.warning("Motion render: audio muxing failed (%d): %s; keeping video as-is", res.returncode, err_msg)
+                if tmp_muxed.exists():
+                    tmp_muxed.unlink(missing_ok=True)
+        except Exception as ex:
+            logger.warning("Motion render: audio muxing exception: %s; keeping video as-is", ex)
+            if tmp_muxed.exists():
+                tmp_muxed.unlink(missing_ok=True)
+
+        return video_path
 
     @classmethod
     async def _run(cls, cmd: list[str]) -> None:
