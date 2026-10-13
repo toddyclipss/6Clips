@@ -806,6 +806,109 @@ class PlannerAgent:
                     "status": "success" if "error" not in tc.get("result", {}) else "failed",
                     "output": tc.get("result"),
                 }, user_id)
+
+            # Outcome Orchestration: create_project is an intermediate step, not the end of the Run
+            create_proj_call = next((tc for tc in native_tool_calls_executed if tc.get("name") == "create_project"), None)
+            if create_proj_call:
+                from backend.outcome_orchestration import (
+                    OutcomeOrchestrator,
+                    OutcomeState,
+                    SourceAsset,
+                )
+                p_res = create_proj_call.get("result", {})
+                p_out = p_res.get("output", {}) if isinstance(p_res, dict) else {}
+                created_pid = p_out.get("project_id") or active_project_id
+
+                contract, intent = OutcomeOrchestrator.get_or_create_contract_for_turn(
+                    message,
+                    session_id=current_sess_id,
+                    user_id=user_id,
+                    project_id=created_pid,
+                )
+
+                if not contract.source_assets:
+                    candidate_title = None
+                    for m in messages:
+                        c = m.get("content", "")
+                        if "Recommended Editable Source" in c or "Fonte Editável Recomendada" in c:
+                            m_match = re.search(r'(?:Recommended Editable Source|Fonte Editável Recomendada):\s*\[?([^\]\n]+)', c)
+                            if m_match:
+                                candidate_title = m_match.group(1).split("—")[0].split("-")[0].strip()
+
+                    if candidate_title:
+                        # Candidate from open YouTube trends (Scenario DISC)
+                        # We distinguish candidate from physically accessible / authorized bytes
+                        contract.source_assets = [
+                            SourceAsset(
+                                asset_id=f"yt_cand_{uuid4().hex[:8]}",
+                                editorial_role="primary_footage",
+                                permitted_uses=["clip_extraction", "motion_review"],
+                                acquisition_route="trend_candidate",
+                                is_accessible=False,      # Not downloaded locally
+                                rights_verified=False,    # Unverified external copyright
+                            )
+                        ]
+
+                async def _on_orch_event(evt):
+                    st = evt.get("step")
+                    status = evt.get("status")
+                    det = evt.get("detail", "")
+                    await ws_manager.send({
+                        "type": "outcome_state_transition",
+                        "step": st,
+                        "status": status,
+                        "detail": det,
+                        "contract_id": contract.contract_id,
+                        "project_id": created_pid,
+                    }, user_id)
+
+                prod_report = await OutcomeOrchestrator.execute_batch_outcome(
+                    contract,
+                    on_event=_on_orch_event,
+                )
+
+                # Add real step events to timeline
+                for se in prod_report.step_events:
+                    timeline_steps.append({
+                        "id": f"step_{uuid4().hex[:8]}",
+                        "title": se.step_name.replace("_", " ").title(),
+                        "status": "completed" if se.status in ("PASS", "COMPLETE", "SUCCEEDED") else ("failed" if se.status in ("BLOCKED", "FAIL") else "running"),
+                        "duration_ms": 150,
+                        "tool_calls": [],
+                    })
+
+                # Reflect truthful state in response
+                sm = OutcomeOrchestrator.get_state_machine(contract)
+                is_pt = any(w in message.lower() for w in ("vídeo", "clipe", "produzir", "sim", "pode", "projeto", "extrair"))
+                if sm.current_state == OutcomeState.BLOCKED and sm.blocker:
+                    b_msg = (
+                        f"\n\n**Status da Operação:** {sm.current_state.value}\n"
+                        f"⚠️ **Bloqueio identificado:** {sm.blocker.precise_reason}\n"
+                        f"👉 **Próxima ação:** {sm.blocker.next_action}"
+                        if is_pt else
+                        f"\n\n**Operational Status:** {sm.current_state.value}\n"
+                        f"⚠️ **Blocker identified:** {sm.blocker.precise_reason}\n"
+                        f"👉 **Next action:** {sm.blocker.next_action}"
+                    )
+                    full_response += b_msg
+                elif sm.current_state == OutcomeState.READY_FOR_REVIEW:
+                    succ_msg = (
+                        f"\n\n**Status da Operação:** READY_FOR_REVIEW\n"
+                        f"✅ Os {contract.output_count} clipes de 60 segundos foram gerados com sucesso e estão prontos para revisão em `/motion`."
+                        if is_pt else
+                        f"\n\n**Operational Status:** READY_FOR_REVIEW\n"
+                        f"✅ All {contract.output_count} 60-second clips have been verified and are ready for creative review in `/motion`."
+                    )
+                    full_response += succ_msg
+                elif sm.current_state == OutcomeState.PARTIAL:
+                    part_msg = (
+                        f"\n\n**Status da Operação:** PARTIAL\n"
+                        f"⚠️ Entrega parcial: alguns clipes foram gerados com sucesso, mas outros precisam de nova tentativa. Verifique em `/motion`."
+                        if is_pt else
+                        f"\n\n**Operational Status:** PARTIAL\n"
+                        f"⚠️ Partial delivery: verified clips are preserved, while failed clips remain queued for retry. Check `/motion`."
+                    )
+                    full_response += part_msg
         else:
             async for token in ai.chat_stream(
                 messages=messages,
