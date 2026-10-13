@@ -19,10 +19,61 @@ from backend.catalog.project_intent_contract import (
     CatalogProjectIntentAdapter,
 )
 from backend.catalog.render_probe import CatalogRenderProbe, CatalogRenderProbeError
+from backend.catalog.vetted_capabilities import VettedCapabilityRegistry
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
+
+
+@router.get("/wave5-audit")
+async def get_wave5_audit():
+    """Return Wave 5 whole-tree audit, donor vs 6Clips separation, and rigorous verification gates."""
+    return CatalogManifestService.get_wave5_factual_audit()
+
+
+@router.get("/vetted-capabilities")
+async def get_vetted_capabilities():
+    """Return vetted creative motion doctrines, continuous camera laws, and caption models."""
+    items = VettedCapabilityRegistry.get_all_vetted_doctrines()
+    for it in items:
+        it["id"] = it.get("doctrine_id")
+    return {"count": len(items), "capabilities": items}
+
+
+@router.get("/vetted-capabilities/{capability_id}")
+async def get_vetted_capability_by_id(capability_id: str):
+    """Return single vetted creative capability by ID."""
+    try:
+        return VettedCapabilityRegistry.get_vetted_doctrine(capability_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Vetted capability '{capability_id}' not found.")
+
+
+@router.get("/source-audit/summary")
+async def get_source_audit_summary():
+    """Return the machine-readable summary of the 9,059 audited source files in the donor tree."""
+    import json
+    sum_path = Path(__file__).parent / "hyperframes_source_tree_audit_summary.json"
+    if not sum_path.exists():
+        raise HTTPException(status_code=404, detail="Audit summary not generated.")
+    return json.loads(sum_path.read_text(encoding="utf-8"))
+
+
+@router.get("/source-audit/records")
+async def query_source_audit_records(
+    category: Optional[str] = Query(None, description="Filter by category (registry-block, monorepo-package, skill, etc.)"),
+    query: Optional[str] = Query(None, description="Search query over file path or intended utility"),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+):
+    """Query paginated records from the 9,059-file whole-tree audit inventory."""
+    return CatalogManifestService.query_source_audit_records(
+        category=category,
+        query=query,
+        limit=limit,
+        offset=offset,
+    )
 
 
 @router.get("/factual-counts")
