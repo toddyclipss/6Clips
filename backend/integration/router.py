@@ -10,6 +10,7 @@ Provides authorized, owner-scoped, revision-checked pathways:
 """
 from __future__ import annotations
 
+import copy
 import json
 import logging
 from pathlib import Path
@@ -510,6 +511,150 @@ async def reconcile_receipt_to_analytics(req: ReconcileReceiptRequest):
         "status": "reconciled",
         "receipt": saved.model_dump(),
         "eligible_for_polling": saved.is_eligible_for_polling(),
+    }
+
+
+# =========================================================================
+# Domain F: Motion Capability Dispatcher & Canonical ProjectService Bridge
+# =========================================================================
+
+class MotionDispatchCapabilityRequest(BaseModel):
+    capability_id: str
+    project_id: Optional[str] = None
+    expected_revision: Optional[int] = None
+    asset_id: Optional[str] = None
+    input_path: Optional[str] = None
+    params: Dict[str, Any] = Field(default_factory=dict)
+    user_id: str = "local"
+    idempotency_key: Optional[str] = None
+
+
+@router.post("/motion/dispatch-capability")
+async def dispatch_motion_capability(req: MotionDispatchCapabilityRequest):
+    """
+    Bridges MotionCapabilityDispatcher into canonical ProjectService and execution workflows:
+    1. Enforces user identity and project ownership.
+    2. Performs optimistic concurrency (CAS) check against expected_revision.
+    3. Resolves and validates input asset / file paths without path traversal.
+    4. Executes native Clip Studio mutations or deterministic tool operations.
+    5. Applies project mutations canonically via ProjectService.apply_operation.
+    """
+    from backend.motion_capabilities.dispatcher import MotionCapabilityDispatcher
+    from backend.motion_capabilities.registry import MotionCapabilitiesRegistry
+    from backend.services.asset_resolver import resolve_asset_record_and_path, AssetNotFoundError
+
+    # 1. Verify capability exists
+    spec = MotionCapabilitiesRegistry.get(req.capability_id)
+    if not spec:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Motion capability '{req.capability_id}' not found in registry.",
+        )
+
+    # 2. Check project ownership and CAS if project_id is provided
+    project = None
+    doc = None
+    if req.project_id:
+        try:
+            project = await ProjectService.verify_project_ownership(req.project_id, user_id=req.user_id)
+        except ProjectNotFoundError:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Project '{req.project_id}' not found.")
+        except AssetAccessError as aae:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(aae))
+
+        if req.expected_revision is not None and project.revision != req.expected_revision:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Revision conflict: expected revision {req.expected_revision}, but project is currently at revision {project.revision}.",
+            )
+        doc = json.loads(project.document_json)
+
+    # 3. Resolve media input if asset_id or input_path provided
+    resolved_in_path: Optional[Path] = None
+    if req.asset_id:
+        try:
+            _, src_path, _ = await resolve_asset_record_and_path(req.asset_id, must_exist=True)
+            resolved_in_path = src_path
+        except AssetNotFoundError as ae:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(ae))
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Asset resolution failed: {e}")
+    elif req.input_path:
+        p = Path(req.input_path)
+        if ".." in str(req.input_path):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Path traversal characters ('..') prohibited.")
+        if not p.exists():
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Input file not found: {req.input_path}")
+        resolved_in_path = p
+
+    # 4. Dispatch capability
+    # If document has timeline wrapper, extract tracks or adapt doc for dispatcher
+    dispatch_doc = copy.deepcopy(doc) if doc else None
+    if dispatch_doc and "timeline" in dispatch_doc and "tracks" not in dispatch_doc:
+        dispatch_doc["tracks"] = dispatch_doc.get("timeline", {}).get("tracks", [])
+
+    res = await MotionCapabilityDispatcher.dispatch(
+        capability_id=req.capability_id,
+        input_path=resolved_in_path,
+        params=req.params,
+        project_doc=dispatch_doc,
+    )
+
+    if res.status != "SUCCESS":
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Motion capability execution failed: {res.message} ({res.error_detail or 'UNKNOWN_ERROR'})",
+        )
+
+    # 5. Apply mutation through ProjectService CAS if project was modified
+    new_rev = project.revision if project else None
+    if project:
+        mutation_payload = None
+        op_type = f"motion_{req.capability_id}"
+        if getattr(res, "project_mutation", None):
+            mutation_payload = res.project_mutation
+        elif res.output_data and "project_doc" in res.output_data:
+            # Dispatcher produced an updated project doc
+            updated_doc = res.output_data["project_doc"]
+            if "timeline" in doc and "tracks" in updated_doc:
+                # Synchronize back to canonical timeline structure
+                doc["timeline"]["tracks"] = updated_doc["tracks"]
+                if "bench_ranges" in updated_doc:
+                    doc["bench_ranges"] = updated_doc["bench_ranges"]
+                if "caption_overrides" in updated_doc:
+                    doc["caption_overrides"] = updated_doc["caption_overrides"]
+                mutation_payload = {"document": doc}
+                op_type = "update_document"
+            else:
+                mutation_payload = {"document": updated_doc}
+                op_type = "update_document"
+
+        if mutation_payload:
+            try:
+                op_result = await ProjectService.apply_operation(
+                    project_id=project.id,
+                    expected_revision=project.revision,
+                    operation_type=op_type,
+                    payload=mutation_payload,
+                    idempotency_key=req.idempotency_key,
+                    author=req.user_id,
+                )
+                new_rev = op_result["revision"]
+            except RevisionConflictError as rce:
+                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"CAS revision conflict: {rce}")
+            except IdempotencyConflictError as ice:
+                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Idempotency conflict: {ice}")
+
+    return {
+        "ok": True,
+        "capability_id": req.capability_id,
+        "project_id": project.id if project else None,
+        "revision": new_rev,
+        "output_path": str(res.output_path) if res.output_path else None,
+        "message": res.message,
+        "execution_time_seconds": res.execution_time_seconds,
+        "output_data": res.output_data,
+        "warnings": res.warnings,
     }
 
 

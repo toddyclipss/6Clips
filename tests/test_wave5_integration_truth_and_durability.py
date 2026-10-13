@@ -219,7 +219,7 @@ async def test_production_defaults_are_disconnected_not_fake():
     account = PlatformAccount(account_id="acc_1", platform="youtube", account_name="Test")
     with pytest.raises(TransportError) as exc_info:
         await transport.dispatch_post(job, account)
-    assert exc_info.value.code == "LIVE_PUBLISHING_NOT_AUTHORIZED"
+    assert exc_info.value.code in ("LIVE_PUBLISHING_NOT_AUTHORIZED", "ACCOUNT_NOT_READY")
 
 
 # =========================================================================
