@@ -119,8 +119,8 @@ export default function Catalog() {
       {/* Page Header */}
       <PageHero
         title="Motion Graphics Catalog"
-        subtitle="196 evidence-backed HyperFrames blocks with truthful previews, 9:16 vertical and 16:9 landscape aspect parity, and legal attribution."
-        badge="Wave 2 Production Catalog"
+        subtitle="196 HyperFrames blocks: 6 internalized & ready for runtime rendering, truthful previews in 9:16 vertical and 16:9 landscape, and validated Add-to-Project timeline intents."
+        badge="Wave 3 Production Catalog"
         action={
           <Button
             variant="outlined"
