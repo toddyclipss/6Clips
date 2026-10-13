@@ -83,6 +83,9 @@ const ALL_TOOLS = [
 
 export default function StudioToolsWorkspace({
   activeAsset,
+  selectedElement,
+  project,
+  revision,
   onToolSuccess,
   onApplyOperation,
   currentTime = 0,
@@ -112,16 +115,81 @@ export default function StudioToolsWorkspace({
   const currentToolDef = ALL_TOOLS.find((t) => t.id === activeTool) || ALL_TOOLS[0]
 
   const handleExecute = async () => {
-    // Some tools don't require an active asset (like voiceover)
-    if (!activeAsset && !["voiceover"].includes(activeTool)) {
-      showSnackbar("Please select an active media asset first from Library or Timeline", "warning")
+    const targetMedia = selectedElement || activeAsset
+    if (!targetMedia && !["voiceover"].includes(activeTool)) {
+      showSnackbar("Please select an active media asset or timeline clip first", "warning")
       return
     }
 
     setRunning(true)
     try {
+      // Direct contextual mutation on selected timeline clip if present
+      if (selectedElement && onApplyOperation) {
+        if (activeTool === "trim") {
+          await onApplyOperation("update_clip", {
+            clip_id: selectedElement.id,
+            patch: {
+              source_trim_start: trimStart,
+              source_trim_end: trimEnd,
+              duration_seconds: Math.max(0.1, trimEnd - trimStart),
+            },
+          })
+          showSnackbar(`Trim applied contextually to timeline clip`, "success")
+          setRunning(false)
+          return
+        }
+        if (activeTool === "speed") {
+          const curDur = Number(selectedElement.duration_seconds || 1.0)
+          const curSpeed = Number(selectedElement.speed || 1.0)
+          const newDur = Math.max(0.1, Number(((curDur * curSpeed) / speedVal).toFixed(2)))
+          await onApplyOperation("update_clip", {
+            clip_id: selectedElement.id,
+            patch: {
+              speed: speedVal,
+              speed_multiplier: speedVal,
+              duration_seconds: newDur,
+            },
+          })
+          showSnackbar(`Speed ${speedVal}x applied to timeline clip`, "success")
+          setRunning(false)
+          return
+        }
+        if (activeTool === "transform") {
+          const curTransform = selectedElement.transform || {}
+          let nextTransform = { ...curTransform }
+          if (transformOp === "flip_h") nextTransform.flip_h = !curTransform.flip_h
+          else if (transformOp === "flip_v") nextTransform.flip_v = !curTransform.flip_v
+          else if (transformOp === "rotate_90") nextTransform.rotation = ((curTransform.rotation || 0) + 90) % 360
+          await onApplyOperation("update_clip", {
+            clip_id: selectedElement.id,
+            patch: { transform: nextTransform },
+          })
+          showSnackbar(`Transform applied contextually to timeline clip`, "success")
+          setRunning(false)
+          return
+        }
+        if (activeTool === "remove-audio") {
+          await onApplyOperation("update_clip", {
+            clip_id: selectedElement.id,
+            patch: { muted: true },
+          })
+          showSnackbar(`Audio muted/stripped on timeline clip`, "success")
+          setRunning(false)
+          return
+        }
+        if (activeTool === "reframe") {
+          await onApplyOperation("update_clip", {
+            clip_id: selectedElement.id,
+            patch: { framing_preset: aspect === "9:16" ? "center_crop" : "none" },
+          })
+          showSnackbar(`Framing preset updated to ${aspect} on timeline clip`, "success")
+          setRunning(false)
+          return
+        }
+      }
+
       let endpoint = ""
-      let payload = { video_id: activeAsset?.id }
+      let payload = { video_id: targetMedia?.asset_id || targetMedia?.id }
 
       if (activeTool === "trim") {
         endpoint = "/api/tools/trim/from-asset"
@@ -167,13 +235,14 @@ export default function StudioToolsWorkspace({
       // If user requested timeline insertion and we have timeline mutation handler
       if (insertToTimeline && onApplyOperation && res.data?.output_path) {
         const isAudio = ["extract-audio", "voiceover"].includes(activeTool)
-        const targetTrack = projectDocument?.tracks?.find((t) => t.type === (isAudio ? "audio" : "video"))
+        const tracksList = projectDocument?.timeline?.tracks || projectDocument?.tracks || []
+        const targetTrack = tracksList.find((t) => t.type === (isAudio ? "audio" : "video"))
         if (targetTrack) {
           await onApplyOperation("add_clip", {
             track_id: targetTrack.id,
             clip: {
               name: `${currentToolDef.label} Output`,
-              source: res.data.output_path,
+              source_path: res.data.output_path,
               start: currentTime,
               duration: 5.0,
             },
@@ -189,6 +258,7 @@ export default function StudioToolsWorkspace({
       setRunning(false)
     }
   }
+
 
   return (
     <Box

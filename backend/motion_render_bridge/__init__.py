@@ -6,6 +6,7 @@ Connects Motion Studio timeline editing (frame mapping, speed retime, mute/solo 
 multiline captions, framing presets) to deterministic render manifests for worker consumption.
 """
 
+from .catalog_consumer import CatalogExportConsumer, CatalogExportConsumptionResult
 from .manifest import (
     FramingPreset,
     FramingFilterConfig,
@@ -19,6 +20,8 @@ from .manifest import (
 )
 
 __all__ = [
+    "CatalogExportConsumer",
+    "CatalogExportConsumptionResult",
     "FramingPreset",
     "FramingFilterConfig",
     "RenderClip",

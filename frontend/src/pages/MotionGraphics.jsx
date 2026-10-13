@@ -2036,6 +2036,9 @@ export default function MotionGraphics() {
           {activeContext === "tools" && (
             <StudioToolsWorkspace
               activeAsset={activeAsset}
+              selectedElement={selectedElement}
+              project={project}
+              revision={revision}
               onApplyOperation={handleApplyOperation}
               currentTime={currentTime}
               projectDocument={document}

@@ -113,3 +113,29 @@ class MotionToolRunnerAdapter:
             "current_revision": new_revision,
         }
 
+
+async def execute_motion_capability(
+    project_id: str,
+    expected_revision: int,
+    capability_id: str,
+    params: Optional[Dict[str, Any]] = None,
+    input_path: Optional[Union[str, Path]] = None,
+    author: str = "main_agent",
+    user_id: str = "local",
+) -> Dict[str, Any]:
+    """Universal Main Agent and Planner entrypoint for executing capabilities with CAS revisions.
+
+    Guarantees:
+    - Same capability IDs and parameter schemas as interactive Refine surfaces.
+    - Atomic CAS revision bumps on success (raising HTTPException 409 on stale revision).
+    - Consistent artifact timeline attachments and error details.
+    """
+    return await MotionToolRunnerAdapter.execute_tool_with_cas_revision(
+        project_id=project_id,
+        expected_revision=expected_revision,
+        tool_name=capability_id,
+        params=params,
+        input_path=input_path,
+        author=author,
+        user_id=user_id,
+    )

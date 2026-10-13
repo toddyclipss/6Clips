@@ -389,6 +389,115 @@ export default function StudioInspectorPanel({
                 </Box>
               )}
 
+              {/* Audio & Volume Controls */}
+              {isVideoOrAudio && (
+                <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "divider", bgcolor: "#f8fafc" }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.75 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 0.5 }}>
+                      <IconVolume size={14} /> Audio & Gain
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: "monospace", fontSize: "0.7rem", fontWeight: 700 }}>
+                      {selectedElement.muted ? "MUTED" : `${Math.round((Number(selectedElement.volume !== undefined ? selectedElement.volume : 1.0)) * 100)}%`}
+                    </Typography>
+                  </Stack>
+                  <Stack spacing={1}>
+                    <Slider
+                      size="small"
+                      min={0}
+                      max={2.0}
+                      step={0.05}
+                      value={selectedElement.muted ? 0 : Number(selectedElement.volume !== undefined ? selectedElement.volume : 1.0)}
+                      disabled={Boolean(selectedElement.muted)}
+                      onChange={(_, val) => onUpdateElement && onUpdateElement({ ...selectedElement, volume: val })}
+                      onChangeCommitted={(_, val) => onCommitElement && onCommitElement({ ...selectedElement, volume: val })}
+                    />
+                    <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
+                      <Button
+                        size="small"
+                        variant={selectedElement.muted ? "contained" : "outlined"}
+                        color={selectedElement.muted ? "error" : "primary"}
+                        onClick={() => {
+                          const updated = { ...selectedElement, muted: !selectedElement.muted }
+                          if (onUpdateElement) onUpdateElement(updated)
+                          if (onCommitElement) onCommitElement(updated)
+                        }}
+                        sx={{ fontSize: "0.68rem", fontWeight: 700, py: 0.2 }}
+                      >
+                        {selectedElement.muted ? "Unmute Audio" : "Mute (-an)"}
+                      </Button>
+                      <Button
+                        size="small"
+                        variant={selectedElement.audio_enhance ? "contained" : "outlined"}
+                        color="secondary"
+                        onClick={() => {
+                          const updated = { ...selectedElement, audio_enhance: !selectedElement.audio_enhance }
+                          if (onUpdateElement) onUpdateElement(updated)
+                          if (onCommitElement) onCommitElement(updated)
+                        }}
+                        sx={{ fontSize: "0.68rem", fontWeight: 700, py: 0.2 }}
+                      >
+                        {selectedElement.audio_enhance ? "Enhanced (Active)" : "Enhance Voice"}
+                      </Button>
+                    </Stack>
+                  </Stack>
+                </Box>
+              )}
+
+              {/* Transform & Orientation Controls */}
+              {isVideo && (
+                <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "divider", bgcolor: "#f8fafc" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 0.5, mb: 0.75 }}>
+                    <IconAdjustments size={14} /> Transform & Orientation
+                  </Typography>
+                  <Stack direction="row" spacing={0.5}>
+                    <Button
+                      fullWidth
+                      size="small"
+                      variant={selectedElement.transform?.flip_h ? "contained" : "outlined"}
+                      onClick={() => {
+                        const cur = selectedElement.transform || {}
+                        const updated = { ...selectedElement, transform: { ...cur, flip_h: !cur.flip_h } }
+                        if (onUpdateElement) onUpdateElement(updated)
+                        if (onCommitElement) onCommitElement(updated)
+                      }}
+                      sx={{ fontSize: "0.65rem", fontWeight: 700, py: 0.25 }}
+                    >
+                      Flip H
+                    </Button>
+                    <Button
+                      fullWidth
+                      size="small"
+                      variant={selectedElement.transform?.flip_v ? "contained" : "outlined"}
+                      onClick={() => {
+                        const cur = selectedElement.transform || {}
+                        const updated = { ...selectedElement, transform: { ...cur, flip_v: !cur.flip_v } }
+                        if (onUpdateElement) onUpdateElement(updated)
+                        if (onCommitElement) onCommitElement(updated)
+                      }}
+                      sx={{ fontSize: "0.65rem", fontWeight: 700, py: 0.25 }}
+                    >
+                      Flip V
+                    </Button>
+                    <Button
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        const cur = selectedElement.transform || {}
+                        const nextRot = ((cur.rotation || 0) + 90) % 360
+                        const updated = { ...selectedElement, transform: { ...cur, rotation: nextRot } }
+                        if (onUpdateElement) onUpdateElement(updated)
+                        if (onCommitElement) onCommitElement(updated)
+                      }}
+                      sx={{ fontSize: "0.65rem", fontWeight: 700, py: 0.25 }}
+                    >
+                      Rot {selectedElement.transform?.rotation ? `${selectedElement.transform.rotation}°` : "90°"}
+                    </Button>
+                  </Stack>
+                </Box>
+              )}
+
+
               {/* Caption / Text Properties with Line Break Preservation */}
               {(selectedElement.type === "captions" || selectedElement.caption_text !== undefined) && (
                 <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "warning.light", bgcolor: "#fffbeb" }}>
