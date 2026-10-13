@@ -1,0 +1,50 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "glitch-transition",
+  "type": "hyperframes:block",
+  "title": "Glitch Transition Wipe",
+  "description": "Original high-impact chromatic glitch wipe with horizontal slice displacement and RGB channel splitting for creator transitions",
+  "tags": [
+    "transition",
+    "glitch",
+    "chromatic",
+    "wipe",
+    "creator",
+    "digital"
+  ],
+  "author": "6Clips Contributors",
+  "license": "Apache-2.0",
+  "category": "transitions",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 1.5,
+  "files": [
+    {
+      "path": "glitch-transition.html",
+      "target": "compositions/glitch-transition.html",
+      "type": "hyperframes:composition"
+    }
+  ],
+  "variables": [
+    {
+      "name": "glitch_intensity",
+      "type": "number",
+      "default": 1.0,
+      "description": "Multiplier for chromatic displacement offset (0.2 to 2.5)"
+    },
+    {
+      "name": "slice_count",
+      "type": "number",
+      "default": 12,
+      "description": "Number of horizontal displacement slices (4 to 32)"
+    },
+    {
+      "name": "flash_color",
+      "type": "string",
+      "default": "#00f0ff",
+      "description": "Accent tint for chromatic fringe"
+    }
+  ]
+}

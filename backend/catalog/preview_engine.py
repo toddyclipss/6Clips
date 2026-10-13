@@ -12,7 +12,7 @@ from backend.catalog.manifest_service import CatalogManifestService, CatalogMani
 logger = logging.getLogger(__name__)
 
 SHIPPED_BLOCKS_DIR = Path(__file__).parent / "shipped_blocks"
-DONOR_BLOCKS_DIR = Path(r"C:\Users\toddy\Desktop\hyperframes\registry\blocks")
+DONOR_BLOCKS_DIR = Path("C:/hyperframes_donor_placeholder")
 
 
 class CatalogPreviewEngine:
@@ -176,12 +176,12 @@ class CatalogPreviewEngine:
         </style>
         """
 
-        # Inject shim and styles into raw_html
+        base_tag = f'<base href="/api/catalog/blocks/{block_id}/">'
         if "</head>" in raw_html:
-            head_addon = f"{webgpu_shim}{contrast_fix}{wrapper_css}</head>"
+            head_addon = f"{base_tag}{webgpu_shim}{contrast_fix}{wrapper_css}</head>"
             page = raw_html.replace("</head>", head_addon)
         else:
-            page = f"<head>{webgpu_shim}{contrast_fix}{wrapper_css}</head>{raw_html}"
+            page = f"<head>{base_tag}{webgpu_shim}{contrast_fix}{wrapper_css}</head>{raw_html}"
 
         return page
 

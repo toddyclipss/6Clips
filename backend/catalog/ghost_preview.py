@@ -37,6 +37,7 @@ class GhostPreviewContract:
             "creates_revision": False,
             "persists_history": False,
             "debounce_ms": 220,
+            "read_only": True,
             "dismiss_on_escape": True,
             "dismiss_on_mouseout": True,
             "has_destructive_side_effects": False,

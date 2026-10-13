@@ -4,13 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
     <title>Data Chart</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Libre+Franklin:wght@300;400;600&display=block"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Offline font fallbacks */
+      body, [data-composition-id="data-chart"] {
+        font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      .headline {
+        font-family: "Libre Baskerville", Georgia, "Times New Roman", serif !important;
+      }
+    </style>
+    <script>
+      // Native offline lightweight GSAP timeline emulator
+      window.gsap = window.gsap || {
+        timeline: function(cfg) {
+          var actions = [];
+          var duration = 15;
+          var tl = {
+            to: function(target, props, time) {
+              actions.push({ target: target, props: props, time: time || 0 });
+              return tl;
+            },
+            set: function(target, props, time) {
+              actions.push({ target: target, props: props, time: time || 0 });
+              return tl;
+            },
+            duration: function() { return duration; },
+            seek: function(t) {
+              actions.forEach(function(a) {
+                var els = typeof a.target === "string" ? document.querySelectorAll(a.target) : [a.target];
+                els.forEach(function(el) {
+                  if (!el) return;
+                  var p = a.props;
+                  if (p.opacity !== undefined) el.style.opacity = p.opacity;
+                  if (p.clipPath) el.style.clipPath = p.clipPath;
+                  if (p.strokeDashoffset !== undefined) el.style.strokeDashoffset = p.strokeDashoffset;
+                  if (p.attr) {
+                    for (var k in p.attr) el.setAttribute(k, p.attr[k]);
+                  }
+                  if (p.onUpdate) p.onUpdate();
+                });
+              });
+            },
+            play: function() { tl.seek(duration); },
+            pause: function() {}
+          };
+          return tl;
+        }
+      };
+    </script>
     <style>
       * {
         margin: 0;
