@@ -89,7 +89,7 @@ async def list_published_receipts(creator_id: str = "local"):
 async def register_published_receipt(req: ReceiptCreateRequest):
     """
     Register a verified publication receipt from Phase 10 or testing.
-    Unconfirmed receipts are preserved but cannot poll metrics.
+    Unconfirmed receipts or fake receipts in production are rejected.
     """
     engine = get_analytics_engine()
     receipt = PublishedReceiptV1(
@@ -103,8 +103,13 @@ async def register_published_receipt(req: ReceiptCreateRequest):
         confirmation_status=req.confirmation_status,
         metadata=req.metadata,
     )
-    saved = engine.repo.save_receipt(receipt)
+    is_fixture = bool(req.metadata.get("is_test_fixture")) or req.confirmation_status == ReceiptConfirmationStatus.SIMULATED_TEST
+    try:
+        saved = engine.register_receipt(receipt, is_test_fixture=is_fixture)
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     return {"receipt": saved.model_dump()}
+
 
 
 @router.post("/poll/{receipt_id}")

@@ -25,11 +25,19 @@ class DistributionJobStore:
     """Thread-safe persistent store for distribution jobs and receipts."""
 
     def __init__(self, base_dir: Optional[Path] = None):
-        self._dir = base_dir or (settings.STORAGE_ROOT / "distribution")
+        if base_dir is not None:
+            self._dir = base_dir
+        elif "PYTEST_CURRENT_TEST" in os.environ:
+            import tempfile
+            self._dir = Path(tempfile.mkdtemp(prefix="test_distribution_"))
+        else:
+            self._dir = settings.STORAGE_ROOT / "distribution"
+
         self._dir.mkdir(parents=True, exist_ok=True)
         self._jobs_file = self._dir / "jobs.json"
         self._receipts_file = self._dir / "receipts.json"
         self._lock = Lock()
+
 
     def _atomic_write(self, target_file: Path, data: dict) -> None:
         """Write JSON data atomically using temporary file and atomic replace."""
