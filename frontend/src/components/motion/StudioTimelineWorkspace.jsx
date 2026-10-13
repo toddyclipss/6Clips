@@ -951,11 +951,17 @@ export default function StudioTimelineWorkspace({
   // External item compatibility checker for destination track
   const isExternalItemValidForTrack = useCallback((item, track) => {
     if (!track || track.locked) return false
+    // Validate rights and permitted uses contract
+    if (item?.permitted_uses && Array.isArray(item.permitted_uses)) {
+      if (!item.permitted_uses.includes("timeline_motion")) {
+        return false
+      }
+    }
     const destType = (track.type || "video").toLowerCase()
-    const mediaType = (item?.mediaType || item?.kind || "").toLowerCase()
-    const isAudio = mediaType === "audio" || item?.data?.media === "audio" || (item?.data?.ext && ["mp3", "wav", "aac", "ogg"].includes(item.data.ext.toLowerCase())) || item?.data?.source === "music"
-    const isBlock = mediaType === "block" || item?.kind === "catalog" || item?.type === "block"
-    const isCaption = mediaType === "caption" || mediaType === "captions"
+    const rawMediaType = (item?.media_type || item?.mediaType || item?.kind || "").toLowerCase()
+    const isAudio = rawMediaType === "audio" || item?.data?.media === "audio" || (item?.data?.ext && ["mp3", "wav", "aac", "ogg"].includes(item.data.ext.toLowerCase())) || item?.data?.source === "music"
+    const isBlock = rawMediaType === "block" || item?.kind === "catalog" || item?.type === "block"
+    const isCaption = rawMediaType === "caption" || rawMediaType === "captions"
 
     if (isAudio && destType !== "audio") return false
     if (!isAudio && destType === "audio") return false
@@ -1501,8 +1507,13 @@ export default function StudioTimelineWorkspace({
                         let itemData = externalDrag?.item || null
                         if (!itemData) {
                           try {
-                            const raw = e.dataTransfer.getData("application/viralmint-clip") || e.dataTransfer.getData("application/json")
-                            if (raw) itemData = JSON.parse(raw)
+                            const raw6Clips = e.dataTransfer.getData("application/x-6clips-asset")
+                            if (raw6Clips) {
+                              itemData = JSON.parse(raw6Clips)
+                            } else {
+                              const raw = e.dataTransfer.getData("application/viralmint-clip") || e.dataTransfer.getData("application/json")
+                              if (raw) itemData = JSON.parse(raw)
+                            }
                           } catch {}
                         }
 
@@ -1513,7 +1524,7 @@ export default function StudioTimelineWorkspace({
                           dropTime: Number(snappedTime.toFixed(2)),
                           isValid: valid,
                           title: itemData?.title || prev?.title || "New Clip",
-                          duration: itemData?.duration || prev?.duration || 3.0,
+                          duration: itemData?.duration_seconds || itemData?.duration || prev?.duration || 3.0,
                           item: itemData || prev?.item,
                         }))
                       }}
@@ -1534,13 +1545,20 @@ export default function StudioTimelineWorkspace({
                         let itemData = externalDrag?.item || null
                         if (!itemData) {
                           try {
-                            const raw = e.dataTransfer.getData("application/viralmint-clip") || e.dataTransfer.getData("application/json")
-                            if (raw) itemData = JSON.parse(raw)
+                            const raw6Clips = e.dataTransfer.getData("application/x-6clips-asset")
+                            if (raw6Clips) {
+                              itemData = JSON.parse(raw6Clips)
+                            } else {
+                              const raw = e.dataTransfer.getData("application/viralmint-clip") || e.dataTransfer.getData("application/json")
+                              if (raw) itemData = JSON.parse(raw)
+                            }
                           } catch {}
                         }
 
                         const droppedItem = itemData || externalDrag?.item
-                        const targetDropTime = externalDrag?.dropTime != null ? externalDrag.dropTime : 0.0
+                        const targetDropTime = externalDrag?.dropTime != null
+                          ? externalDrag.dropTime
+                          : (droppedItem?.target_start_time_seconds != null ? droppedItem.target_start_time_seconds : 0.0)
 
                         setExternalDrag(null)
 

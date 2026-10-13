@@ -61,6 +61,7 @@ export default function MotionGraphics() {
   const [undoStack, setUndoStack] = useState([])
   const [redoStack, setRedoStack] = useState([])
   const lastCommittedDocumentRef = useRef(null)
+  const handledDeepLinkAssetRef = useRef(null)
 
   // Extract dialog state
   const [extractDialogOpen, setExtractDialogOpen] = useState(false)
@@ -870,7 +871,7 @@ export default function MotionGraphics() {
   const handleDropExternalClip = async ({ item, targetTrackId, startSeconds }) => {
     if (!project) return
     const tracks = project.document?.timeline?.tracks || []
-    const targetTrack = tracks.find((t) => t.id === targetTrackId)
+    let targetTrack = tracks.find((t) => t.id === targetTrackId)
     if (targetTrack?.locked) {
       showSnackbar(`Track "${targetTrack.name || targetTrackId}" is locked.`, "error")
       return
@@ -914,26 +915,70 @@ export default function MotionGraphics() {
         showSnackbar(`Source "${trend.title || "Trend"}" placed at ${startSec.toFixed(2)}s (Rev ${res.revision})`, "success")
       }
     } else {
-      // Asset
+      // Asset / MotionAssetIntent
       const asset = item.data || item
-      const isAudio = asset.media === "audio" || item.mediaType === "audio" || (asset.ext && ["mp3", "wav", "aac", "ogg"].includes(asset.ext.toLowerCase())) || asset.source === "music"
-      const isImage = asset.media === "image" || item.mediaType === "image" || (asset.ext && ["png", "jpg", "jpeg", "webp", "gif"].includes(asset.ext.toLowerCase()))
+
+      // 1. Rights / permitted uses policy check
+      const permitted = Array.isArray(item.permitted_uses)
+        ? item.permitted_uses
+        : Array.isArray(asset.permitted_uses)
+        ? asset.permitted_uses
+        : ["timeline_motion"]
+
+      if (!permitted.includes("timeline_motion")) {
+        showSnackbar("Asset rights policy forbids timeline_motion use.", "error")
+        return
+      }
+
+      // 2. Asset ID shape check
+      const resolvedAssetId = item.asset_id || item.key || asset.key || asset.id
+      if (!resolvedAssetId) {
+        showSnackbar("Malformed asset drop payload: missing asset ID or key.", "error")
+        return
+      }
+
+      const rawMediaType = (item.media_type || item.mediaType || asset.media || asset.media_type || "").toLowerCase()
+      const isAudio = rawMediaType === "audio" || (asset.ext && ["mp3", "wav", "aac", "ogg"].includes(asset.ext.toLowerCase())) || asset.source === "music"
+      const isImage = rawMediaType === "image" || (asset.ext && ["png", "jpg", "jpeg", "webp", "gif"].includes(asset.ext.toLowerCase()))
       const mType = isAudio ? "audio" : isImage ? "image" : "video"
-      const resolvedAssetId = asset.key || asset.id
-      const resolvedAssetFile = asset.filename || (asset.id && asset.id.includes(".") ? asset.id : (isAudio ? `${asset.title || "audio"}.${asset.ext || "mp3"}` : isImage ? `${asset.id || "image"}.${asset.ext || "png"}` : asset.id ? `${asset.id}.mp4` : null))
+
+      // 3. Auto-route to compatible track if needed
+      let effectiveTrackId = targetTrackId
+      if (isAudio && targetTrack && targetTrack.type !== "audio") {
+        const audioTrack = tracks.find((t) => t.type === "audio")
+        if (audioTrack) {
+          effectiveTrackId = audioTrack.id
+        } else {
+          const addRes = await handleApplyOperation("add_track", { type: "audio", name: "Audio Track" })
+          if (addRes) {
+            effectiveTrackId = (addRes.document?.timeline?.tracks || []).find((t) => t.type === "audio")?.id
+          }
+        }
+      } else if (!isAudio && targetTrack && targetTrack.type === "audio") {
+        const videoTrack = tracks.find((t) => t.type === "video") || tracks[0]
+        if (videoTrack) effectiveTrackId = videoTrack.id
+      }
+
+      const resolvedAssetFile = item.asset_file || asset.filename || (String(resolvedAssetId).includes(".") ? resolvedAssetId : (isAudio ? `${asset.title || "audio"}.${asset.ext || "mp3"}` : isImage ? `${resolvedAssetId}.png` : `${resolvedAssetId}.mp4`))
 
       const newClip = {
         id: `clip_${Date.now()}`,
         type: mType,
         asset_id: resolvedAssetId,
         asset_file: resolvedAssetFile,
-        title: asset.title || asset.filename || (isAudio ? "Audio Clip" : isImage ? "Image Clip" : "Video Clip"),
+        stream_url: item.stream_url || asset.stream_url || null,
+        title: item.title || asset.title || asset.filename || (isAudio ? "Audio Clip" : isImage ? "Image Clip" : "Video Clip"),
         start_seconds: startSec,
-        duration_seconds: asset.duration_seconds ? Math.min(asset.duration_seconds, 10) : (asset.duration ? Math.min(asset.duration, 10) : (isImage ? 3 : 5)),
+        duration_seconds: item.duration_seconds
+          ? Math.min(item.duration_seconds, 60)
+          : (asset.duration_seconds ? Math.min(asset.duration_seconds, 60) : (asset.duration ? Math.min(asset.duration, 60) : (isImage ? 3 : 5))),
+        source_provenance: item.source_provenance || asset.source_provenance || "library_user_asset",
+        permitted_uses: permitted,
+        file_sha256: item.file_sha256 || asset.file_sha256 || asset.sha256 || null,
       }
 
       const res = await handleApplyOperation("add_clip", {
-        track_id: targetTrackId,
+        track_id: effectiveTrackId,
         clip: newClip,
       })
       if (res) {
@@ -941,6 +986,101 @@ export default function MotionGraphics() {
       }
     }
   }
+
+  // 5d. Resolve and consume /motion?asset={key} deep links
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search)
+    const assetKey = queryParams.get("asset")
+    if (!assetKey || handledDeepLinkAssetRef.current === assetKey) return
+    if (!project || !document) return
+
+    handledDeepLinkAssetRef.current = assetKey
+
+    const consumeDeepLink = async () => {
+      try {
+        let resolvedItem = null
+        try {
+          const itemRes = await http.get(`/api/library/asset/${encodeURIComponent(assetKey)}`)
+          resolvedItem = itemRes.data
+        } catch {
+          try {
+            const listRes = await http.get("/api/library/items")
+            const items = listRes.data?.items || listRes.data || []
+            resolvedItem = items.find((i) => i.key === assetKey || i.id === assetKey)
+          } catch {}
+        }
+
+        if (!resolvedItem) {
+          showSnackbar(`Deep-linked asset "${assetKey}" could not be resolved from Library.`, "warning")
+          return
+        }
+
+        const permitted = Array.isArray(resolvedItem.permitted_uses)
+          ? resolvedItem.permitted_uses
+          : ["timeline_motion"]
+        if (!permitted.includes("timeline_motion")) {
+          showSnackbar(`Asset "${assetKey}" rights policy forbids timeline_motion use.`, "error")
+          return
+        }
+
+        setSelectedAsset(resolvedItem)
+
+        const rawMediaType = (resolvedItem.media || resolvedItem.media_type || resolvedItem.mediaType || "video").toLowerCase()
+        const isAudio = rawMediaType === "audio" || (resolvedItem.ext && ["mp3", "wav", "aac", "ogg"].includes(resolvedItem.ext.toLowerCase()))
+        const isImage = rawMediaType === "image" || (resolvedItem.ext && ["png", "jpg", "jpeg", "webp", "gif"].includes(resolvedItem.ext.toLowerCase()))
+        const clipType = isAudio ? "audio" : isImage ? "image" : "video"
+
+        const tracks = document.timeline?.tracks || []
+        let targetTrack = isAudio ? tracks.find((t) => t.type === "audio") : tracks.find((t) => t.type === "video")
+
+        let targetTrackId = targetTrack?.id
+        if (isAudio && !targetTrack) {
+          const addTrackRes = await handleApplyOperation("add_track", { type: "audio", name: "Audio Track" })
+          if (addTrackRes) {
+            targetTrackId = (addTrackRes.document?.timeline?.tracks || []).find((t) => t.type === "audio")?.id
+          }
+        }
+
+        if (!targetTrackId && tracks.length > 0) {
+          targetTrackId = tracks[0].id
+        }
+
+        if (!targetTrackId) {
+          showSnackbar(`No suitable timeline track found for deep link asset "${assetKey}".`, "error")
+          return
+        }
+
+        const resolvedAssetId = resolvedItem.key || resolvedItem.id || assetKey
+        const resolvedAssetFile = resolvedItem.filename || (String(resolvedAssetId).includes(".") ? resolvedAssetId : (isAudio ? `${resolvedItem.title || "audio"}.${resolvedItem.ext || "mp3"}` : isImage ? `${resolvedAssetId}.png` : `${resolvedAssetId}.mp4`))
+
+        const newClip = {
+          id: `clip_${Date.now()}`,
+          type: clipType,
+          asset_id: resolvedAssetId,
+          asset_file: resolvedAssetFile,
+          stream_url: resolvedItem.stream_url || `/api/library/asset/${resolvedAssetId}`,
+          title: resolvedItem.title || resolvedItem.filename || (isAudio ? "Audio Clip" : "Media Clip"),
+          start_seconds: currentTime || 0.0,
+          duration_seconds: resolvedItem.duration_seconds ? Math.min(resolvedItem.duration_seconds, 60) : (isImage ? 3 : 5),
+          source_provenance: resolvedItem.source_provenance || "library_user_asset",
+          permitted_uses: permitted,
+          file_sha256: resolvedItem.file_sha256 || resolvedItem.sha256 || null,
+        }
+
+        const res = await handleApplyOperation("add_clip", {
+          track_id: targetTrackId,
+          clip: newClip,
+        })
+        if (res) {
+          showSnackbar(`Ingested deep link asset "${newClip.title}" into timeline (Rev ${res.revision})`, "success")
+        }
+      } catch (err) {
+        showSnackbar(`Failed to ingest deep link asset "${assetKey}": ${err.message}`, "error")
+      }
+    }
+
+    consumeDeepLink()
+  }, [project, document, currentTime, handleApplyOperation, showSnackbar])
 
   // 6. Delete Clip via atomic operation
   const handleDeleteClip = async (clipOrId) => {
@@ -1172,6 +1312,7 @@ export default function MotionGraphics() {
       handleApplyOperation("update_clip_timing", {
         clip_id: clipId,
         duration_seconds: updatedClip.duration_seconds,
+        speed: updatedClip.speed,
       })
     }
   }
