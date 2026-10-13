@@ -18,9 +18,10 @@ from backend.distribution.models import (
     PlatformSEOMetadata,
     PublishedReceiptV1,
 )
+from backend.distribution.platform_matrix import PlatformMatrixValidator, PublishTargetType
 from backend.distribution.scheduler import DistributionScheduler, TimeProvider
 from backend.distribution.seo_adapter import SEOAdapter
-from backend.distribution.transport import DistributionTransportPort
+from backend.distribution.transport import DistributionTransportPort, ProductionLiveTransport
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,11 @@ class DistributionService:
             transport=transport,
             time_provider=self.time_provider,
         )
+
+    @property
+    def is_production_transport(self) -> bool:
+        """Indicates whether service is running with real production transport."""
+        return isinstance(self.scheduler.transport, ProductionLiveTransport)
 
     def create_approval_receipt(
         self,
@@ -139,7 +145,12 @@ class DistributionService:
             timezone=timezone_str,
         )
 
-        # 4. Schedule via scheduler
+        # 4. Enforce official platform matrix constraints
+        matrix_errors = PlatformMatrixValidator.validate_job_against_matrix(job)
+        if matrix_errors:
+            raise ValueError(f"Platform matrix validation failed: {'; '.join(matrix_errors)}")
+
+        # 5. Schedule via scheduler
         return await self.scheduler.schedule_job(job, account)
 
     async def schedule_multi_platform_fan_out(

@@ -84,7 +84,16 @@ class AnalyticsRepository:
             with open(file_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            logger.warning("Error reading JSON from %s: %s", file_path, e)
+            logger.error("Corrupted JSON encountered in %s: %s. Quarantining file.", file_path, e)
+            try:
+                import time
+                quarantine_target = file_path.with_name(
+                    f"{file_path.stem}.corrupted.{int(time.time())}{file_path.suffix}"
+                )
+                file_path.rename(quarantine_target)
+                logger.info("Quarantined corrupted file to %s", quarantine_target)
+            except Exception as q_err:
+                logger.warning("Could not quarantine corrupted file %s: %s", file_path, q_err)
             return None
 
     def _load_from_disk(self) -> None:
