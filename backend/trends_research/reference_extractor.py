@@ -4,11 +4,12 @@
 Reference Video Style Extraction and Creative Hypothesis Engine.
 
 Extracts observable visual and narrative conventions (hook archetype, cut pacing,
-caption placement, audio energy) from authorized reference videos or metadata.
+caption placement, audio energy, typography, composition) from authorized reference videos.
 Strictly differentiates inspiration from recreation:
-- Extracts structural patterns, NOT protected copyrighted footage.
-- Requires explicit creator authorization for physical media reproduction.
-- Exposes verifiable analysis contract with honest 'rendering_pending' status.
+- Extracts structural patterns and composition recipes, NOT protected copyrighted footage.
+- Converts style hypotheses into original project composition recipes without copying pixels.
+- Preserves full licensing and fair-use metadata.
+- Exposes verifiable analysis contracts with honest status reporting.
 """
 from __future__ import annotations
 
@@ -49,6 +50,26 @@ class StyleHypothesis:
     extracted_at: str
 
 
+@dataclass
+class OriginalProjectRecipe:
+    """
+    Actionable composition recipe transformed from a StyleHypothesis.
+    Enables original video creation following abstract reference conventions
+    without touching third-party footage.
+    """
+    recipe_id: str
+    source_hypothesis_id: str
+    target_aspect_ratio: str
+    target_duration_sec: int
+    scene_cadence_seconds: float
+    typography_motion_preset: str
+    soundtrack_vibe: str
+    color_palette: Dict[str, str]
+    composition_rules: List[str]
+    licensing_terms: str
+    created_at: str
+
+
 def analyze_reference_style(
     reference_id: str,
     title: str,
@@ -74,7 +95,7 @@ def analyze_reference_style(
         pacing = "Snappy rhythmic cuts every 1.5 - 2.0s to maintain vertical retention."
         motion_style = "Dynamic kinetic text with bounce transitions."
         music_vibe = "Punchy high-tempo electronic / trap beat (120-130 BPM)."
-        palette = "High-contrast neon / saturated gamer aesthetic."
+        palette = "High-contrast neon / saturated aesthetic."
         hierarchy = "Central focal subject with top-header text and lower-third captions."
     else:
         hook_dur = 4.0
@@ -118,4 +139,49 @@ def analyze_reference_style(
         fair_use_and_rights_notice=rights_notice,
         rendering_status="analysis_complete_rendering_pending",
         extracted_at=datetime.now(timezone.utc).isoformat(),
+    )
+
+
+def convert_hypothesis_to_project_recipe(
+    hypothesis: StyleHypothesis,
+    custom_target_duration_sec: Optional[int] = None,
+) -> OriginalProjectRecipe:
+    """
+    Transforms an abstract style hypothesis into an executable original composition recipe.
+    Produces zero third-party video download dependencies.
+    """
+    target_dur = custom_target_duration_sec or (60 if hypothesis.observable_features.suggested_aspect_ratio == "9:16" else 120)
+    cadence = hypothesis.observable_features.average_cut_duration_sec
+
+    # Palette mapping
+    palette = {
+        "background": "#0F172A",
+        "primary_text": "#F8FAFC",
+        "accent": "#FF4B2B" if hypothesis.observable_features.motion_energy == "high" else "#3B82F6",
+        "subdued": "#64748B",
+    }
+
+    rules = [
+        f"Hook sequence must resolve within {hypothesis.observable_features.hook_duration_sec}s.",
+        f"Scene cut interval capped at approximately {cadence}s for optimal retention.",
+        f"Typography placement: {hypothesis.observable_features.caption_placement}.",
+        f"Motion energy: {hypothesis.observable_features.motion_energy}.",
+        "Strict rule: No third-party footage cloning. Use creator-owned assets or procedural visual cards.",
+    ]
+
+    return OriginalProjectRecipe(
+        recipe_id=f"recp-{uuid4().hex[:8]}",
+        source_hypothesis_id=hypothesis.hypothesis_id,
+        target_aspect_ratio=hypothesis.observable_features.suggested_aspect_ratio,
+        target_duration_sec=target_dur,
+        scene_cadence_seconds=cadence,
+        typography_motion_preset=hypothesis.motion_graphics_style,
+        soundtrack_vibe=hypothesis.music_vibe_suggestion,
+        color_palette=palette,
+        composition_rules=rules,
+        licensing_terms=(
+            "Original creation license: 100% creator owned. "
+            "Zero copyrighted reference audio or video clips included."
+        ),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )

@@ -9,6 +9,7 @@ Separates:
 - Scene-by-scene shot list with suggested camera angles and motion graphic overlays
 - Factcheck notes with provenance citations
 - Production status and honest input requirements (e.g. WAITING_FOR_INPUT for voice)
+- Rendered video output metadata and probe statistics
 - Adapter shape for canonical ProjectService / Production V1
 """
 from __future__ import annotations
@@ -31,7 +32,10 @@ class OriginalCreationStatus(str, Enum):
     PLANNING_ARTIFACT_DRAFT = "PLANNING_ARTIFACT_DRAFT"
     WAITING_FOR_INPUT = "WAITING_FOR_INPUT"
     READY_FOR_COMPOSITION = "READY_FOR_COMPOSITION"
+    RENDERING = "RENDERING"
+    RENDERED = "RENDERED"
     BLOCKED = "BLOCKED"
+    FAILED = "FAILED"
 
 
 class EvidenceLedgerEntry(BaseModel):
@@ -79,6 +83,7 @@ class ShotListEntry(BaseModel):
     broll_suggestion: str = ""
     motion_template_id: Optional[str] = None
     overlay_text: Optional[str] = None
+    asset_path: Optional[str] = None
 
 
 class FactcheckNote(BaseModel):
@@ -90,10 +95,35 @@ class FactcheckNote(BaseModel):
     explanation: str
 
 
+class VideoProbeStats(BaseModel):
+    """Physical MP4 probe metrics verified via ffprobe."""
+    width: int
+    height: int
+    duration_seconds: float
+    aspect_ratio: str
+    has_audio: bool
+    audio_loudness_lufs: Optional[float] = None
+    file_size_bytes: int = 0
+    codec_name: str = "h264"
+    probed_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+class RenderedVideoResult(BaseModel):
+    """Metadata for an authentic physically rendered MP4."""
+    video_path: str
+    duration_seconds: float
+    aspect_ratio: str
+    width: int
+    height: int
+    probe_stats: VideoProbeStats
+    motion_review_ready: bool = True
+    rendered_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
 class OriginalCompositionSpec(BaseModel):
     """
-    Complete planning artifact for an original creator video.
-    Represents an authorized production spec, NOT a finished MP4 render.
+    Complete planning and production artifact for an original creator video.
+    Represents an authorized production spec and tracks physical render when completed.
     """
     spec_id: str = Field(default_factory=lambda: f"orig-{uuid4().hex[:8]}")
     title: str
@@ -107,18 +137,20 @@ class OriginalCompositionSpec(BaseModel):
     factcheck_notes: List[FactcheckNote] = Field(default_factory=list)
     voice_requirement: VoiceInputRequirement = VoiceInputRequirement.WAITING_FOR_INPUT
     voice_asset_id: Optional[str] = None
+    voice_asset_path: Optional[str] = None
     facecam_asset_id: Optional[str] = None
     status: OriginalCreationStatus = OriginalCreationStatus.PLANNING_ARTIFACT_DRAFT
     status_reason: str = "Planning artifact generated. Pending voice recording from creator."
     blocked_reason: Optional[str] = None
+    rendered_result: Optional[RenderedVideoResult] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class ProductionV1Adapter:
     """
-    Adapter converting an OriginalCompositionSpec planning artifact into
-    the canonical ProjectService / Production V1 format for future rendering.
+    Adapter converting an OriginalCompositionSpec artifact into
+    the canonical ProjectService / Production V1 format for rendering and Motion Review.
     Preserves strict read-only boundary with existing pipeline code.
     """
 
@@ -142,6 +174,7 @@ class ProductionV1Adapter:
                         "asset_type": "broll_or_procedural",
                         "template_id": scene.motion_template_id,
                         "overlay_text": scene.overlay_text,
+                        "asset_path": scene.asset_path,
                     }
                     for scene in spec.shot_list
                 ],
@@ -157,11 +190,14 @@ class ProductionV1Adapter:
                         "start_time": 0.0,
                         "duration": spec.spoken_script.estimated_read_time_seconds,
                         "asset_id": spec.voice_asset_id,
-                        "status": "ready" if spec.voice_asset_id else "waiting_for_voice_upload",
+                        "asset_path": spec.voice_asset_path,
+                        "status": "ready" if (spec.voice_asset_id or spec.voice_asset_path) else "waiting_for_voice_upload",
                     }
                 ],
             },
         ]
+
+        is_rendered = spec.rendered_result is not None and spec.status == OriginalCreationStatus.RENDERED
 
         return {
             "title": spec.title,
@@ -175,7 +211,9 @@ class ProductionV1Adapter:
                 "evidence_claims_count": len(spec.evidence_ledger.entries),
                 "script_word_count": spec.spoken_script.word_count,
                 "script_clean_text": spec.spoken_script.spoken_text,
-                "production_stage": "PLANNING_ARTIFACT",
-                "rendered_mp4_ready": False,
+                "production_stage": "RENDERED" if is_rendered else "PLANNING_ARTIFACT",
+                "rendered_mp4_ready": is_rendered,
+                "rendered_video_path": spec.rendered_result.video_path if is_rendered else None,
+                "motion_review_ready": is_rendered,
             },
         }

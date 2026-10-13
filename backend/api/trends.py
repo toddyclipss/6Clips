@@ -506,3 +506,87 @@ async def create_original_brief_endpoint(req: OriginalBriefRequest):
         "spec": spec.model_dump(),
         "canonical_project_payload": project_payload,
     }
+
+
+class ReferenceRecipeRequest(BaseModel):
+    reference_id: str
+    title: str
+    duration_seconds: Optional[int] = None
+    channel: str = "Unknown"
+    custom_target_duration_sec: Optional[int] = None
+
+
+@router.post("/trends/reference-recipe")
+async def extract_reference_recipe_endpoint(req: ReferenceRecipeRequest):
+    """
+    Extract reference video style and convert into an original project recipe
+    without downloading or copying third-party footage.
+    """
+    from backend.trends_research.reference_extractor import (
+        analyze_reference_style,
+        convert_hypothesis_to_project_recipe,
+    )
+    hypo = analyze_reference_style(
+        reference_id=req.reference_id,
+        title=req.title,
+        duration_seconds=req.duration_seconds,
+        channel_or_author=req.channel,
+    )
+    recipe = convert_hypothesis_to_project_recipe(
+        hypothesis=hypo,
+        custom_target_duration_sec=req.custom_target_duration_sec,
+    )
+    return {
+        "hypothesis": {
+            "hypothesis_id": hypo.hypothesis_id,
+            "reference_source_id": hypo.reference_source_id,
+            "reference_title": hypo.reference_title,
+            "observable_features": hypo.observable_features.__dict__,
+            "fair_use_and_rights_notice": hypo.fair_use_and_rights_notice,
+        },
+        "project_recipe": recipe.__dict__,
+    }
+
+
+class OriginalRenderRequest(BaseModel):
+    spec: dict
+    custom_voice_path: Optional[str] = None
+    custom_scene_assets: Optional[dict[int, str]] = None
+
+
+@router.post("/original/render")
+async def render_original_video_endpoint(req: OriginalRenderRequest):
+    """
+    Physically render an OriginalCompositionSpec into an authentic MP4.
+    Updates spec with ffprobe metrics, video path, and Motion Review readiness.
+    Truthfully returns WAITING_FOR_INPUT if creator voice is missing without TTS consent.
+    """
+    from pathlib import Path
+    from backend.original_creation.models import OriginalCompositionSpec, ProductionV1Adapter
+    from backend.original_creation.workflow import OriginalCreatorWorkflow
+
+    try:
+        spec_obj = OriginalCompositionSpec.model_validate(req.spec)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Invalid OriginalCompositionSpec payload: {e}")
+
+    custom_voice = Path(req.custom_voice_path) if req.custom_voice_path else None
+    scene_assets = None
+    if req.custom_scene_assets:
+        scene_assets = {int(k): Path(v) for k, v in req.custom_scene_assets.items()}
+
+    rendered_spec = await OriginalCreatorWorkflow.render_spec(
+        spec=spec_obj,
+        custom_voice_path=custom_voice,
+        custom_scene_assets=scene_assets,
+    )
+
+    canonical_payload = ProductionV1Adapter.to_canonical_project_payload(rendered_spec)
+
+    return {
+        "status": rendered_spec.status.value,
+        "status_reason": rendered_spec.status_reason,
+        "spec": rendered_spec.model_dump(),
+        "canonical_project_payload": canonical_payload,
+        "is_rendered": rendered_spec.rendered_result is not None,
+    }
