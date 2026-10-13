@@ -176,12 +176,29 @@ class CatalogPreviewEngine:
         </style>
         """
 
+        import json
+        vars_script = ""
+        page = raw_html
+
+        if variables:
+            # Replace {{key}} mustache placeholders
+            for vk, vv in variables.items():
+                page = page.replace(f"{{{{{vk}}}}}", str(vv))
+
+            # Inject window.__VIRALMINT_VARIABLES__ script
+            safe_json = json.dumps(variables)
+            vars_script = f"""
+            <script id="viralmint-runtime-variables">
+            window.__VIRALMINT_VARIABLES__ = {safe_json};
+            </script>
+            """
+
         base_tag = f'<base href="/api/catalog/blocks/{block_id}/">'
-        if "</head>" in raw_html:
-            head_addon = f"{base_tag}{webgpu_shim}{contrast_fix}{wrapper_css}</head>"
-            page = raw_html.replace("</head>", head_addon)
+        if "</head>" in page:
+            head_addon = f"{base_tag}{webgpu_shim}{contrast_fix}{wrapper_css}{vars_script}</head>"
+            page = page.replace("</head>", head_addon)
         else:
-            page = f"<head>{base_tag}{webgpu_shim}{contrast_fix}{wrapper_css}</head>{raw_html}"
+            page = f"<head>{base_tag}{webgpu_shim}{contrast_fix}{wrapper_css}{vars_script}</head>{page}"
 
         return page
 
