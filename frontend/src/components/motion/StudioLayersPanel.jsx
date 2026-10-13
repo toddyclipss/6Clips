@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback } from "react"
 import {
   Box, Stack, Typography, IconButton, Tooltip, Menu, MenuItem,
-  ListItemIcon, ListItemText, TextField, Chip, Divider,
+  ListItemIcon, ListItemText, TextField, Chip, Divider, InputBase,
 } from "@mui/material"
 import {
   IconLock,
@@ -30,6 +30,8 @@ import {
   IconLayersIntersect,
   IconFolderMinus,
   IconCode,
+  IconSearch,
+  IconX,
 } from "@tabler/icons-react"
 
 /**
@@ -96,7 +98,7 @@ function extractBlockInternalNodes(clip, codeFiles = []) {
         sourceFile: file,
       })
 
-      if (nodes.length >= 12) break
+      if (nodes.length >= 100) break
     }
 
     return nodes
@@ -134,6 +136,7 @@ export default function StudioLayersPanel({
   const [renameText, setRenameText] = useState("")
   const [draggedClipId, setDraggedClipId] = useState(null)
   const [dragOverTargetId, setDragOverTargetId] = useState(null)
+  const [searchQuery, setSearchQuery] = useState("")
 
   // 1. Flatten all clips from tracks and normalize layer ordering
   const allClips = useMemo(() => {
@@ -159,19 +162,37 @@ export default function StudioLayersPanel({
     return allClips.filter((c) => c.track_type === "audio" || c.type === "audio")
   }, [allClips])
 
+  const activeVisualClips = useMemo(() => {
+    if (!searchQuery.trim()) return visualClips
+    const q = searchQuery.toLowerCase().trim()
+    return visualClips.filter((c) => {
+      const name = (c.title || c.name || c.block_id || c.caption_text || c.id || "").toLowerCase()
+      return name.includes(q)
+    })
+  }, [visualClips, searchQuery])
+
+  const activeAudioClips = useMemo(() => {
+    if (!searchQuery.trim()) return audioClips
+    const q = searchQuery.toLowerCase().trim()
+    return audioClips.filter((c) => {
+      const name = (c.title || c.name || c.file || c.id || "").toLowerCase()
+      return name.includes(q)
+    })
+  }, [audioClips, searchQuery])
+
   // 3. Build group hierarchy: root elements (parent_id == null) and children
   const { rootElements, childrenMap, groupMap } = useMemo(() => {
     const cMap = {}
     const gMap = {}
     const roots = []
 
-    visualClips.forEach((c) => {
+    activeVisualClips.forEach((c) => {
       if (c.type === "group") {
         gMap[c.id] = c
       }
     })
 
-    visualClips.forEach((c) => {
+    activeVisualClips.forEach((c) => {
       if (c.parent_id && gMap[c.parent_id]) {
         if (!cMap[c.parent_id]) cMap[c.parent_id] = []
         cMap[c.parent_id].push(c)
@@ -186,7 +207,7 @@ export default function StudioLayersPanel({
     Object.keys(cMap).forEach((k) => cMap[k].sort(sorter))
 
     return { rootElements: roots, childrenMap: cMap, groupMap: gMap }
-  }, [visualClips])
+  }, [activeVisualClips])
 
   // 4. Precompute internal DOM nodes for HyperFrames block clips
   const blockNodesMap = useMemo(() => {
@@ -773,15 +794,45 @@ export default function StudioLayersPanel({
         </Stack>
       </Box>
 
+      {/* Search Filter for large layer sets */}
+      {(allClips.length > 6 || searchQuery) && (
+        <Box sx={{ px: 1.5, py: 0.75, borderBottom: "1px solid", borderColor: "divider", bgcolor: "#ffffff" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              bgcolor: "#f1f5f9",
+              borderRadius: 1,
+              px: 1,
+              py: 0.25,
+            }}
+          >
+            <IconSearch size={14} color="#64748b" style={{ marginRight: 6 }} />
+            <InputBase
+              fullWidth
+              placeholder={`Filter ${allClips.length} layers...`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ fontSize: "0.75rem" }}
+            />
+            {searchQuery && (
+              <IconButton size="small" onClick={() => setSearchQuery("")} sx={{ p: 0.25 }}>
+                <IconX size={12} />
+              </IconButton>
+            )}
+          </Box>
+        </Box>
+      )}
+
       {/* Visual Hierarchy Tree */}
       <Box sx={{ flex: 1, overflowY: "auto", minHeight: 0 }}>
         {rootElements.length === 0 ? (
           <Box sx={{ p: 3, textAlign: "center", color: "text.secondary" }}>
             <Typography variant="caption" sx={{ display: "block", mb: 0.5, fontWeight: 600 }}>
-              No visual elements in timeline
+              {searchQuery ? `No layers matching "${searchQuery}"` : "No visual elements in timeline"}
             </Typography>
             <Typography variant="caption" sx={{ color: "text.disabled", fontSize: "0.7rem" }}>
-              Add blocks, videos, images, or captions to view and reorder layers.
+              {searchQuery ? "Try clearing search or checking other tracks." : "Add blocks, videos, images, or captions to view and reorder layers."}
             </Typography>
           </Box>
         ) : (
@@ -789,14 +840,14 @@ export default function StudioLayersPanel({
         )}
 
         {/* Audio Section (clearly demarcated without visual z-order confusion) */}
-        {audioClips.length > 0 && (
+        {activeAudioClips.length > 0 && (
           <Box sx={{ mt: 1, borderTop: "2px dashed", borderColor: "divider" }}>
             <Box sx={{ px: 1.5, py: 0.75, bgcolor: "#fff7ed" }}>
               <Typography variant="caption" sx={{ fontWeight: 800, color: "#ea580c", fontSize: "0.68rem" }}>
                 AUDIO TRACKS (NON-VISUAL)
               </Typography>
             </Box>
-            {audioClips.map((ac) => (
+            {activeAudioClips.map((ac) => (
               <Box
                 key={ac.id}
                 onClick={() => onSelectElement && onSelectElement(ac)}
