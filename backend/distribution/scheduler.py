@@ -260,6 +260,24 @@ class DistributionScheduler:
         self.store.save_job(job)
 
         try:
+            # GT-28: Uncertain remote send reconciliation.
+            # If a remote_post_id was already assigned during an earlier dispatch attempt,
+            # query remote platform for verified receipt first before attempting duplicate re-upload.
+            if job.remote_post_id:
+                logger.info(
+                    "Job %s has existing remote_post_id %s; verifying remote post before attempting re-dispatch (GT-28).",
+                    job.job_id,
+                    job.remote_post_id,
+                )
+                existing_rcpt = await self.transport.verify_post_receipt(job, account, job.remote_post_id)
+                if existing_rcpt:
+                    job.status = DistributionStatus.PUBLISHED_VERIFIED
+                    job.receipt_id = existing_rcpt.receipt_id
+                    self.store.save_receipt(existing_rcpt)
+                    job.updated_at = self.clock.now().isoformat()
+                    self.store.save_job(job)
+                    return
+
             success, post_id, post_url, err_msg = await self.transport.dispatch_post(job, account)
             if not success or not post_id:
                 raise TransportError("DISPATCH_FAILED", err_msg or "Remote provider rejected upload", is_retryable=True)
