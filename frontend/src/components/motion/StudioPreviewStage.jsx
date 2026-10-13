@@ -254,13 +254,13 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
             justifyContent: "center",
           }}
         >
-          {workspaceMode === "review" && renderedVideo?.video_url ? (
+          {workspaceMode === "review" && (renderedVideo?.video_url || renderedVideo?.preview_ref) ? (
             <>
               <video
                 id="studio-rendered-video"
                 data-testid="studio-rendered-video"
                 ref={videoRef}
-                src={renderedVideo.video_url}
+                src={renderedVideo.preview_ref || renderedVideo.video_url}
                 playsInline
                 preload="auto"
                 style={{
@@ -305,9 +305,14 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                 }}
               >
                 <Stack direction="row" spacing={0.8} alignItems="center" sx={{ bgcolor: "rgba(15,23,42,0.85)", px: 1.2, py: 0.4, borderRadius: 1.5, backdropFilter: "blur(4px)", pointerEvents: "auto" }}>
-                  <Chip label={`Render: Rev ${renderedVideo.project_revision || 5}`} color="success" size="small" sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }} />
+                  <Chip
+                    label={renderedVideo.output_id ? `Clip: ${renderedVideo.output_id}` : `Render: Rev ${renderedVideo.project_revision || 1}`}
+                    color="success"
+                    size="small"
+                    sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
+                  />
                   <Typography variant="caption" sx={{ color: "#e2e8f0", fontFamily: "monospace", fontSize: "0.72rem" }}>
-                    {videoDimensions.width ? `${videoDimensions.width}×${videoDimensions.height}` : "1080×1920"} • {Number(duration || 14.88).toFixed(2)}s
+                    {videoDimensions.width ? `${videoDimensions.width}×${videoDimensions.height}` : "1080×1920"} • {Number(duration || 10).toFixed(2)}s
                   </Typography>
                 </Stack>
                 {onProceedToRefine && (

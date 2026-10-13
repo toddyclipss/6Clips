@@ -57,12 +57,12 @@ function OutlierChip({ score }) {
 
 function RoleBadge({ suitability, duration }) {
   if (!suitability && !duration) return null
-  const isEditable = suitability?.is_editable_source || (duration && duration >= 240)
+  const isCandidate = suitability?.is_editable_source || (duration && duration >= 240)
   const isTooShort = suitability?.is_suitable === false || (duration && duration < 180)
-  const label = isEditable ? "Editable Source" : "Creative Reference"
-  const color = isEditable ? "success" : "secondary"
-  const tooltip = isEditable
-    ? `Suitable footage (${duration || ""}s) for multi-clip extraction`
+  const label = isCandidate ? "Duration Candidate" : "Creative Reference"
+  const color = isCandidate ? "success" : "secondary"
+  const tooltip = isCandidate
+    ? `Duration candidate (${duration || ""}s) for multi-clip extraction. Requires verified permitted route before byte acquisition.`
     : isTooShort
     ? `Reference Short (${duration || ""}s) — valuable for trending hooks & pacing, unsuitable for 3x 60s clips`
     : `Creative reference for trends and style`
@@ -72,7 +72,7 @@ function RoleBadge({ suitability, duration }) {
         label={label}
         size="small"
         color={color}
-        variant={isEditable ? "filled" : "outlined"}
+        variant={isCandidate ? "filled" : "outlined"}
         sx={{ fontWeight: 700, fontSize: "0.65rem", height: 22 }}
       />
     </Tooltip>
@@ -318,17 +318,19 @@ export default function CardGrid({ results, onSelect, onDownload, onDelete, sele
               {/* Actions */}
               <Stack direction="row" spacing={0.5} alignItems="center">
                 {!r.is_downloaded && (
-                  <Button
-                    size="small"
-                    variant="contained"
-                    startIcon={isNews ? <IconBookmarkPlus size={16} stroke={1.8} /> : <IconDownload size={16} stroke={1.8} />}
-                    onClick={(e) => handleDownload(e, r.id)}
-                    disabled={loadingId === r.id}
-                    color={isNews ? "warning" : "primary"}
-                    sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
-                  >
-                    {loadingId === r.id ? "Saving..." : isNews ? "Save to Library" : "Download & Analyze"}
-                  </Button>
+                  <Tooltip title={isNews ? "Save article" : "Ingest video if authorized route is verified"} arrow>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      startIcon={isNews ? <IconBookmarkPlus size={16} stroke={1.8} /> : <IconDownload size={16} stroke={1.8} />}
+                      onClick={(e) => handleDownload(e, r.id)}
+                      disabled={loadingId === r.id}
+                      color={isNews ? "warning" : "primary"}
+                      sx={{ borderRadius: "20px", textTransform: "none", fontWeight: 600 }}
+                    >
+                      {loadingId === r.id ? "Ingesting..." : isNews ? "Save to Library" : "Ingest & Analyze"}
+                    </Button>
+                  </Tooltip>
                 )}
                 <Box sx={{ flex: 1 }} />
                 {r.video_url && (

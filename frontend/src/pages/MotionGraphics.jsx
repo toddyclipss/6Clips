@@ -30,6 +30,7 @@ import ExtractDialog from "../components/clip/ExtractDialog"
 import useClipSettings from "../components/clip/useClipSettings"
 import useBenchRanges from "../components/clip/bench/useBenchRanges"
 import MotionInstallGate from "../components/MotionInstallGate"
+import MotionReviewPanel from "../components/motion/MotionReviewPanel"
 
 /**
  * Unified Motion Graphics Workspace (/motion).
@@ -73,6 +74,18 @@ export default function MotionGraphics() {
     return "create"
   })
   const [renderedVideo, setRenderedVideo] = useState(null)
+  const [productionBatch, setProductionBatch] = useState(null)
+  const [selectedOutputIndex, setSelectedOutputIndex] = useState(0)
+  const [approvedOutputs, setApprovedOutputs] = useState(() => new Set())
+
+  const reviewOutputs = useMemo(() => {
+    if (productionBatch?.outputs?.length) return productionBatch.outputs
+    if (renderedVideo?.outputs?.length) return renderedVideo.outputs
+    if (renderedVideo?.video_url || renderedVideo?.preview_ref) return [renderedVideo]
+    return []
+  }, [productionBatch, renderedVideo])
+
+  const activeReviewOutput = reviewOutputs[selectedOutputIndex] || reviewOutputs[0] || renderedVideo
   const [activeContext, setActiveContext] = useState("hyperframes") // hyperframes | clip | tools | code
   const [leftNav, setLeftNav] = useState(() => {
     const qp = new URLSearchParams(window.location.search)
@@ -305,6 +318,77 @@ export default function MotionGraphics() {
     loadProject()
     return () => { cancelled = true }
   }, [showSnackbar])
+
+  // 1a-2. Batch report load from URL query
+  useEffect(() => {
+    let cancelled = false
+    const qp = new URLSearchParams(window.location.search)
+    const jId = qp.get("jobId") || qp.get("job_id")
+    if (jId) {
+      http.get(`/api/media/production/batch/${jId}`)
+        .then((res) => {
+          if (!cancelled && res.data) {
+            setProductionBatch(res.data)
+            if (res.data.outputs?.length > 0) {
+              setWorkspaceMode("review")
+            }
+          }
+        })
+        .catch(() => {})
+    }
+    return () => { cancelled = true }
+  }, [])
+
+  const handleSelectOutput = useCallback((index) => {
+    setSelectedOutputIndex(index)
+  }, [])
+
+  const handleApproveOutput = useCallback((outputId) => {
+    setApprovedOutputs((prev) => {
+      const next = new Set(prev)
+      if (next.has(outputId)) {
+        next.delete(outputId)
+        showSnackbar(`Output "${outputId}" reverted to awaiting review`, "info")
+      } else {
+        next.add(outputId)
+        showSnackbar(`Output "${outputId}" creatively approved`, "success")
+      }
+      return next
+    })
+  }, [showSnackbar])
+
+  const handleExportOutput = useCallback((output) => {
+    if (!output) return
+    const url = output.preview_ref || output.video_url
+    if (url) {
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `${output.output_id || "clip"}.mp4`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      showSnackbar(`Exporting ${output.output_id || "clip"}.mp4...`, "success")
+    } else {
+      showSnackbar("Output artifact is not yet available for export", "warning")
+    }
+  }, [showSnackbar])
+
+  const handleRefineOutput = useCallback(async (output) => {
+    if (!output) return
+    if (output.project_revision_id && project?.id) {
+      try {
+        const revDetail = await http.get(`/api/projects/${project.id}/revisions/${output.project_revision_id}`)
+        if (revDetail.data?.document) {
+          setDocument(revDetail.data.document)
+          setRevision(Number(output.project_revision_id))
+        }
+      } catch {
+        // Fallback: keep current document
+      }
+    }
+    handleWorkspaceModeChange("refine")
+    showSnackbar(`Opened ${output.output_id || "output"} in Timeline Refine mode`, "info")
+  }, [project, handleWorkspaceModeChange, showSnackbar])
 
   // 1b. Ensure HyperFrames studio is running
   useEffect(() => {
@@ -1200,6 +1284,21 @@ export default function MotionGraphics() {
           </Box>
         )}
 
+        {/* Left: MotionReviewPanel (Review mode) */}
+        {workspaceMode === "review" && pinnedLeft && (
+          <Box sx={{ width: 320, minWidth: 280, maxWidth: 380, height: "100%", zIndex: 2, display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderRight: "1px solid", borderColor: "divider" }}>
+            <MotionReviewPanel
+              outputs={reviewOutputs}
+              selectedOutputIndex={selectedOutputIndex}
+              onSelectOutput={handleSelectOutput}
+              onApproveOutput={handleApproveOutput}
+              onExportOutput={handleExportOutput}
+              onRefineOutput={handleRefineOutput}
+              approvedOutputs={approvedOutputs}
+            />
+          </Box>
+        )}
+
         {/* Left: Layers or Sources / Assets / Catalog (Refine & Create modes) */}
         {(workspaceMode === "refine" || workspaceMode === "create") && pinnedLeft && (
           <Box sx={{ width: 280, minWidth: 260, maxWidth: 340, height: "100%", zIndex: 2, display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderRight: "1px solid", borderColor: "divider" }}>
@@ -1285,13 +1384,54 @@ export default function MotionGraphics() {
 
         {/* Center: Stage */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, height: "100%" }}>
+          {workspaceMode === "review" && reviewOutputs.length > 1 && (
+            <Box
+              sx={{
+                py: 0.75,
+                px: 2,
+                bgcolor: "#f1f5f9",
+                borderBottom: "1px solid",
+                borderColor: "divider",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                zIndex: 5,
+              }}
+            >
+              <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", textTransform: "uppercase", fontSize: "0.7rem" }}>
+                Outputs:
+              </Typography>
+              <Stack direction="row" spacing={0.8}>
+                {reviewOutputs.map((out, idx) => (
+                  <Button
+                    key={out.output_id || idx}
+                    size="small"
+                    variant={selectedOutputIndex === idx ? "contained" : "outlined"}
+                    color={approvedOutputs.has(out.output_id) ? "success" : "primary"}
+                    onClick={() => handleSelectOutput(idx)}
+                    sx={{
+                      fontSize: "0.72rem",
+                      py: 0.25,
+                      px: 1.25,
+                      borderRadius: 1.5,
+                      fontWeight: 700,
+                      textTransform: "none",
+                    }}
+                  >
+                    Clip {idx + 1}: {out.output_id || `Output ${idx + 1}`}
+                  </Button>
+                ))}
+              </Stack>
+            </Box>
+          )}
+
           <StudioPreviewStage
             ref={previewStageRef}
             previewUrl={previewUrl}
             aspectRatio={aspectRatio}
             isLoading={starting}
             currentTime={currentTime}
-            duration={renderedVideo?.duration_seconds || document?.timeline?.duration_seconds || 15}
+            duration={activeReviewOutput?.media_probe?.duration_seconds || renderedVideo?.duration_seconds || document?.timeline?.duration_seconds || 15}
             isPlaying={isPlaying}
             onTogglePlay={() => setIsPlaying(!isPlaying)}
             onPlaybackStateChange={setIsPlaying}
@@ -1303,8 +1443,8 @@ export default function MotionGraphics() {
             onDismissGhostPreview={handleEndGhostPreview}
             onInsertGhostBlock={handleAddBlock}
             workspaceMode={workspaceMode}
-            renderedVideo={renderedVideo}
-            onProceedToRefine={() => handleWorkspaceModeChange("refine")}
+            renderedVideo={activeReviewOutput}
+            onProceedToRefine={() => handleRefineOutput(activeReviewOutput)}
           />
         </Box>
 
