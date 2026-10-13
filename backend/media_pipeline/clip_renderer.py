@@ -26,20 +26,24 @@ from backend.services.project_service import ProjectService
 logger = logging.getLogger(__name__)
 
 
-def _build_reframe_filter(in_width: int, in_height: int, target_w: int = 1080, target_h: int = 1920) -> str:
+from backend.media_intelligence.caption_grounding import ground_and_remap_captions
+from backend.media_intelligence.reframing import ReframePreset, build_reframe_filter
+from backend.media_intelligence.scene_analyzer import detect_frozen_frames
+
+
+def _build_reframe_filter(
+    in_width: int,
+    in_height: int,
+    target_w: int = 1080,
+    target_h: int = 1920,
+    preset: str = ReframePreset.CENTER_CROP.value,
+) -> str:
     """Build FFmpeg video filter for 16:9 -> 9:16 reframing.
     
-    Scales to fill height/width while preserving aspect ratio, cropping to center.
+    Default preserves center crop geometry; supports safe-region presets.
     """
-    aspect_in = in_width / in_height if in_height > 0 else 1.0
-    aspect_target = target_w / target_h
-
-    if abs(aspect_in - aspect_target) < 0.05:
-        # Already 9:16
-        return f"scale={target_w}:{target_h}"
-    else:
-        # Scale to fill 1080x1920 and crop to 9:16
-        return f"scale={target_w}:{target_h}:force_original_aspect_ratio=increase,crop={target_w}:{target_h}"
+    vf, _ = build_reframe_filter(in_width, in_height, target_w, target_h, preset=preset)
+    return vf
 
 
 async def render_output_clip(
@@ -76,13 +80,15 @@ async def render_output_clip(
     if probe_in:
         in_w, in_h = probe_in.width, probe_in.height
 
-    vf = _build_reframe_filter(in_w, in_h, 1080, 1920)
-    warnings.append("Center crop 9:16 applied: verify HUD and reticle visibility in Motion Review.")
+    # 2. Select reframing filter and record disclosure
+    preset = spec.editorial_constraints.get("safe_region_preset", ReframePreset.GAMEPLAY_RETICLE.value)
+    vf, disclosure = build_reframe_filter(in_w, in_h, 1080, 1920, preset=preset)
+    warnings.append(disclosure)
 
     start_s = source_range.start_seconds
     dur_s = source_range.duration_seconds
 
-    # 2. FFmpeg render command
+    # 3. FFmpeg render command
     def _run_render():
         out_path.parent.mkdir(parents=True, exist_ok=True)
         cmd = [
@@ -93,8 +99,8 @@ async def render_output_clip(
             "-i", str(source_path),
             "-vf", vf,
             "-c:v", "libx264",
-            "-preset", "veryfast",
-            "-crf", "22",
+            "-preset", "ultrafast",
+            "-crf", "24",
             "-c:a", "aac",
             "-b:a", "192k",
             "-ar", "48000",
@@ -118,7 +124,7 @@ async def render_output_clip(
             warnings=warnings,
         )
 
-    # 3. Probe rendered artifact
+    # 4. Probe rendered artifact
     media_probe, blocker = await probe_physical_media(out_path)
     if blocker or not media_probe:
         return OutputResultV1(
@@ -128,6 +134,17 @@ async def render_output_clip(
             error_detail=blocker.precise_reason if blocker else "Failed to probe output artifact.",
             warnings=warnings,
         )
+
+    # Check for frozen frames (filler guard)
+    try:
+        frozen_intervals = await detect_frozen_frames(out_path, min_duration=3.0)
+        if frozen_intervals:
+            warnings.append(
+                f"Filler guard notice: {len(frozen_intervals)} frozen segment(s) detected in output. "
+                "Verify continuous gameplay motion in Motion Review."
+            )
+    except Exception as e:
+        logger.debug("Frozen frame probe notice for %s: %s", output_id, e)
 
     # 4. Check duration policy
     actual_dur = media_probe.duration_seconds
@@ -149,7 +166,14 @@ async def render_output_clip(
     # 5. Canonical ProjectRevision in ProjectService
     revision_id = None
     try:
-        # Create or update project document representing this output
+        # Ground and remap captions if provided in spec constraints
+        raw_transcript = spec.editorial_constraints.get("transcript") or []
+        remapped_captions = ground_and_remap_captions(
+            raw_transcript,
+            cut_start_seconds=start_s,
+            cut_end_seconds=start_s + actual_dur,
+        )
+
         clip_doc = {
             "schema_version": 2,
             "title": f"Clip Output {output_id}",
@@ -157,6 +181,7 @@ async def render_output_clip(
             "timeline": {
                 "fps": media_probe.fps or 30,
                 "duration_seconds": actual_dur,
+                "captions": remapped_captions,
                 "tracks": [
                     {
                         "id": f"track_video_{output_id}",
@@ -190,6 +215,7 @@ async def render_output_clip(
             },
             "output_id": output_id,
             "artifact_id": artifact_id,
+            "captions": remapped_captions,
         }
         
         # Check if project exists, or create new versioned project
