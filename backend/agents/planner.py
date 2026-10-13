@@ -16,6 +16,7 @@ import contextvars
 import time
 from uuid import uuid4
 from datetime import datetime
+from typing import Optional, Any, Union, Dict, List
 from backend.core.ai_provider import get_ai_client
 from backend.core.exceptions import AIProviderUnselectedError
 from backend.core.user_intelligence import UserIntelligence
@@ -1249,6 +1250,12 @@ class PlannerAgent:
         elif action_type == "save_news_to_library":
             await self._save_news_to_library(action, user_id)
 
+        elif action_type in ("create_original_brief", "original_creation_brief", "create_creator_brief"):
+            await self._create_original_brief(action, user_id)
+
+        elif action_type in ("extract_reference_style", "analyze_reference_style"):
+            await self._extract_reference_style(action, user_id)
+
         elif action_type == "project_operation":
             await self._dispatch_project_operation(
                 action,
@@ -1708,8 +1715,10 @@ class PlannerAgent:
             return
 
         # Group by platform and send
+        from backend.trends_research.ranking import classify_source_suitability
         platforms = {}
         for r in results:
+            suit = classify_source_suitability(r.duration_seconds)
             platforms.setdefault(r.platform, []).append({
                 "id": r.id,
                 "platform": r.platform,
@@ -1726,6 +1735,18 @@ class PlannerAgent:
                 "thumbnail_url": r.thumbnail_url,
                 "video_url": r.video_url,
                 "embed_url": r.embed_url,
+                "editorial_role": suit.trend_role.value,
+                "role_label": suit.role_label,
+                "is_editable_source": suit.is_editable_source,
+                "is_reference": suit.is_reference,
+                "permitted_use": "reference_only",
+                "bytes_availability": "available_local" if getattr(r, "is_downloaded", False) else "not_fetched",
+                "highlight_quality": {
+                    "status": "NOT_ASSESSED",
+                    "assessed": False,
+                    "score": None,
+                    "reason": "Highlight quality requires media ingestion and transcript scoring; not inferable from search metadata.",
+                },
             })
 
         for platform, items in platforms.items():
@@ -1738,6 +1759,94 @@ class PlannerAgent:
             }, user_id)
 
     _show_scout_results = _show_trend_results
+
+    async def _create_original_brief(self, action: dict, user_id: str):
+        """Create a grounded original video composition brief with teleprompter script and shot list."""
+        topic = action.get("topic") or action.get("niche") or "Trending Gaming Update"
+        creator_context = action.get("creator_context")
+        target_duration = int(action.get("target_duration_sec") or action.get("duration") or 60)
+        aspect_ratio = action.get("aspect_ratio") or "9:16"
+        language = action.get("language") or ("pt" if any(w in str(topic).lower() for w in ["jogo", "atualiz", "video", "noticia", "fortnite"]) else "en")
+        voice_asset_id = action.get("voice_asset_id")
+        facecam_asset_id = action.get("facecam_asset_id")
+        allow_procedural_tts = bool(action.get("allow_procedural_tts", False))
+
+        from backend.original_creation.workflow import OriginalCreatorWorkflow
+        spec = OriginalCreatorWorkflow.create_brief(
+            topic=topic,
+            creator_context=creator_context,
+            target_duration_sec=target_duration,
+            aspect_ratio=aspect_ratio,
+            language=language,
+            creator_voice_asset_id=voice_asset_id,
+            creator_facecam_asset_id=facecam_asset_id,
+            allow_procedural_tts=allow_procedural_tts,
+        )
+
+        await ws_manager.send({
+            "type": "original_brief_created",
+            "spec": spec.model_dump(),
+        }, user_id)
+
+        if spec.status == "WAITING_FOR_INPUT":
+            msg = (
+                f"Original brief for '{topic}' created with {len(spec.evidence_ledger.entries)} grounded claim(s) "
+                f"and clean teleprompter script ({spec.spoken_script.word_count} words). "
+                f"Status: WAITING_FOR_INPUT. Please upload or record your own voice narration track to proceed to timeline composition."
+            ) if language != "pt" else (
+                f"Briefing original para '{topic}' criado com {len(spec.evidence_ledger.entries)} fato(s) verificados "
+                f"e roteiro limpo para teleprompter ({spec.spoken_script.word_count} palavras). "
+                f"Status: WAITING_FOR_INPUT. Por favor, envie ou grave sua própria faixa de voz para prosseguir para a composição."
+            )
+        else:
+            msg = (
+                f"Original brief for '{topic}' created and ready for timeline composition."
+            ) if language != "pt" else (
+                f"Briefing original para '{topic}' criado e pronto para composição na timeline."
+            )
+
+        await self._followup(user_id, msg)
+        try:
+            await self.intelligence.record_event("original_brief_created", {"topic": topic, "spec_id": spec.spec_id}, user_id)
+        except Exception as ev_err:
+            logger.debug("Failed recording original_brief_created event: %s", ev_err)
+        return spec
+
+    async def _extract_reference_style(self, action: dict, user_id: str):
+        """Extract observable visual features and style hypotheses from an authorized reference video."""
+        ref_id = action.get("reference_id") or action.get("video_id") or "ref-1"
+        title = action.get("title") or "Reference Video"
+        duration = action.get("duration_seconds")
+        channel = action.get("channel") or action.get("author") or "Unknown"
+
+        from backend.trends_research.reference_extractor import analyze_reference_style
+        hypo = analyze_reference_style(
+            reference_id=ref_id,
+            title=title,
+            duration_seconds=duration,
+            channel_or_author=channel,
+        )
+
+        await ws_manager.send({
+            "type": "reference_style_extracted",
+            "hypothesis": {
+                "hypothesis_id": hypo.hypothesis_id,
+                "reference_title": hypo.reference_title,
+                "hook_archetype": hypo.narrative_hook_archetype,
+                "pacing_strategy": hypo.pacing_strategy,
+                "music_vibe": hypo.music_vibe_suggestion,
+                "rendering_status": hypo.rendering_status,
+                "rights_notice": hypo.fair_use_and_rights_notice,
+            },
+        }, user_id)
+
+        await self._followup(
+            user_id,
+            f"Extracted creative style hypothesis from reference '{title}': "
+            f"{hypo.narrative_hook_archetype} Pacing: {hypo.pacing_strategy} "
+            f"(Status: analysis complete, physical rendering pending authorized assets)."
+        )
+        return hypo
 
     async def _show_downloaded(self, user_id: str):
         """Fetch downloaded videos from DB and send them as a rich list in chat."""
@@ -2005,6 +2114,32 @@ class PlannerAgent:
         # 4. Detect news intent
         news_keywords = ["news", "article", "headlines", "notícias", "noticias", "新闻", "热点", "资讯"]
         has_news_intent = any(kw in msg_lower for kw in news_keywords)
+
+        # 4b. Detect original video creation intent
+        orig_keywords = [
+            "create an original video", "create original video", "make an original video",
+            "write an original script", "original script", "original brief",
+            "crie um vídeo original", "criar um vídeo original", "criar video original",
+            "roteiro original", "briefing original",
+        ]
+        if any(kw in msg_lower for kw in orig_keywords):
+            topic = user_message.strip()
+            for kw in orig_keywords:
+                if kw in topic.lower():
+                    parts = _re.split(_re.escape(kw), topic, flags=_re.IGNORECASE)
+                    if len(parts) > 1 and parts[-1].strip():
+                        topic = parts[-1].strip()
+            for filler in ["about the", "about", "explaining", "sobre a", "sobre o", "sobre"]:
+                if topic.lower().startswith(filler):
+                    topic = topic[len(filler):].strip()
+            clean_topic = topic.strip(": -.,") or "Trending Gaming Update"
+            lang = "pt" if any(w in msg_lower for w in ["crie", "criar", "vídeo", "video original", "sobre"]) else "en"
+            action = json.dumps({
+                "type": "create_original_brief",
+                "topic": clean_topic,
+                "language": lang,
+            })
+            return [action]
 
         # 5. Detect trend intent from user message
         trend_keywords = [

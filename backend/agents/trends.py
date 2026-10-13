@@ -15,6 +15,7 @@ from backend.core.ws_manager import ws_manager
 from backend.database import AsyncSessionLocal
 from backend.models.trends_result import TrendsResult
 from backend.models.user_settings import UserSettings
+from backend.trends_research.ranking import classify_source_suitability
 
 logger = logging.getLogger(__name__)
 
@@ -600,6 +601,7 @@ class TrendsAgent:
                 up_date = item.get("upload_date")
                 up_date_str = up_date.isoformat() if hasattr(up_date, "isoformat") else up_date
 
+                suitability = classify_source_suitability(item.get("duration_seconds"))
                 display_rows.append({
                     "id": rec_id,
                     "platform": item["platform"],
@@ -620,6 +622,20 @@ class TrendsAgent:
                     "virality_score": item.get("virality_score", 0),
                     "views_per_hour": item.get("views_per_hour"),
                     "outlier_score": item.get("outlier_score"),
+                    "editorial_role": suitability.trend_role.value,
+                    "role_label": suitability.role_label,
+                    "is_editable_source": suitability.is_editable_source,
+                    "is_reference": suitability.is_reference,
+                    "suitability_status": suitability.status,
+                    "suitability_reason": suitability.reason,
+                    "permitted_use": "reference_only",
+                    "bytes_availability": "not_fetched",
+                    "highlight_quality": {
+                        "status": "NOT_ASSESSED",
+                        "assessed": False,
+                        "score": None,
+                        "reason": "Highlight quality requires media ingestion and transcript scoring; not inferable from search metadata.",
+                    },
                 })
             await db.commit()
 
