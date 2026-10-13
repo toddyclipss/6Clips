@@ -235,8 +235,8 @@ def get_media_producer_port() -> MediaProducerPort:
         return _ACTIVE_PORT
 
     try:
-        from backend.media_pipeline.producer_adapter import MediaProducerPort as RealProducerPort
-        _ACTIVE_PORT = RealProducerPort()
+        from backend.media_pipeline.producer_adapter import get_media_producer
+        _ACTIVE_PORT = get_media_producer()
     except (ImportError, AttributeError):
         _ACTIVE_PORT = InProcessFakeProducerPort()
 
@@ -244,6 +244,11 @@ def get_media_producer_port() -> MediaProducerPort:
 
 
 def set_media_producer_port(port: MediaProducerPort) -> None:
-    """Override the active MediaProducerPort for testing."""
+    """Override the active MediaProducerPort for testing and runtime wiring."""
     global _ACTIVE_PORT
     _ACTIVE_PORT = port
+    try:
+        from backend.media_pipeline import producer_adapter
+        producer_adapter._global_producer = port
+    except Exception:
+        pass

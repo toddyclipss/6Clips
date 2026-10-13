@@ -424,7 +424,22 @@ class OutcomeOrchestrator:
             )
 
         job_id = submit_res["job_id"]
-        report: ProductionReport = await port.get_batch(job_id)
+        report = None
+        for _ in range(120):
+            res = port.get_batch(job_id)
+            if inspect.isawaitable(res):
+                report = await res
+            else:
+                report = res
+
+            st = report.status.value if hasattr(report.status, "value") else str(report.status)
+            if st in ("COMPLETE", "PARTIAL", "BLOCKED", "CANCELLED", "FAILED"):
+                break
+            await asyncio.sleep(0.5)
+
+        if report is None:
+            res = port.get_batch(job_id)
+            report = await res if inspect.isawaitable(res) else res
 
         # Update state machine based on actual report results and persist
         final_state = sm.update_from_production_report(report)
