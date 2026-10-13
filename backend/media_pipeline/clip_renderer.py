@@ -300,6 +300,26 @@ async def render_output_clip(
         proj = None
         try:
             proj = await ProjectService.get_project(project_id)
+            if proj:
+                existing_doc = json.loads(proj.document_json) if isinstance(proj.document_json, str) else (proj.document_json or {})
+                if existing_doc:
+                    import copy
+                    merged_doc = copy.deepcopy(existing_doc)
+                    merged_timeline = merged_doc.setdefault("timeline", {})
+                    merged_tracks = merged_timeline.setdefault("tracks", [])
+                    merged_tracks.extend(clip_doc["timeline"]["tracks"])
+                    outputs_map = merged_doc.setdefault("outputs", {})
+                    existing_entry = outputs_map.get(output_id, {})
+                    outputs_map[output_id] = {
+                        **existing_entry,
+                        "artifact_id": artifact_id,
+                        "output_path": str(out_path),
+                        "editorial_status": existing_entry.get("editorial_status", "NOT_ASSESSED"),
+                        "preset": framing_preset or "center_crop",
+                        "duration_seconds": actual_dur,
+                    }
+                    clip_doc = merged_doc
+
             updated = await ProjectService.apply_operation(
                 project_id=proj.id,
                 expected_revision=proj.revision,
@@ -449,6 +469,44 @@ async def render_manifest_to_mp4(
             track_audio_gain *= float(am.get("effective_gain", 1.0) if isinstance(am, dict) else getattr(am, "effective_gain", 1.0))
             break
 
+    # Audio enhance evaluation
+    c_audio = target_clip.get("audio") if isinstance(target_clip, dict) else getattr(target_clip, "audio", None)
+    clip_enhance = bool(target_clip.get("audio_enhance", False) if isinstance(target_clip, dict) else getattr(target_clip, "audio_enhance", False))
+    if isinstance(c_audio, dict) and c_audio.get("enhance_voice"):
+        clip_enhance = True
+
+    # Caption overrides and segments evaluation
+    caption_segments = manifest_data.get("caption_segments", []) if isinstance(manifest_data, dict) else getattr(manifest_data, "caption_segments", [])
+    clip_caption_lines = target_clip.get("caption_lines") if isinstance(target_clip, dict) else getattr(target_clip, "caption_lines", None)
+    clip_caption_text = target_clip.get("caption_text") if isinstance(target_clip, dict) else getattr(target_clip, "caption_text", None)
+
+    ass_path = None
+    caption_filter_str = None
+    segs_to_burn = []
+
+    if caption_segments:
+        for seg in caption_segments:
+            s_text = seg.get("text", "") if isinstance(seg, dict) else getattr(seg, "text", "")
+            s_start = float(seg.get("start_seconds", 0.0) if isinstance(seg, dict) else getattr(seg, "start_seconds", 0.0))
+            s_end = float(seg.get("end_seconds", c_dur) if isinstance(seg, dict) else getattr(seg, "end_seconds", c_dur))
+            s_words = seg.get("words", []) if isinstance(seg, dict) else getattr(seg, "words", [])
+            segs_to_burn.append({"text": s_text, "start": s_start, "end": s_end, "words": s_words})
+    elif clip_caption_lines or clip_caption_text:
+        c_text = "\n".join(clip_caption_lines) if clip_caption_lines else str(clip_caption_text)
+        words_list = []
+        words = c_text.replace("\n", " ").split()
+        if words:
+            step = c_dur / len(words)
+            for idx, w in enumerate(words):
+                words_list.append({"word": w, "start": round(idx * step, 3), "end": round((idx + 1) * step, 3)})
+        segs_to_burn.append({"text": c_text, "start": 0.0, "end": c_dur, "words": words_list})
+
+    if segs_to_burn:
+        from backend.services.caption_service import generate_captions_ass, ass_filter
+        ass_path = await generate_captions_ass(segs_to_burn, style="viral", aspect_ratio=f"{target_w}:{target_h}")
+        caption_filter_str = ass_filter(ass_path)
+        warnings.append("Burned caption overrides into render artifact using ASS subtitles.")
+
     # 5. Formulate FFmpeg command
     def _execute():
         cmd = [
@@ -473,22 +531,32 @@ async def render_manifest_to_mp4(
             warnings.extend(cons_res.warnings)
             cmd.extend(["-i", str(catalog_overlay_path)])
 
-            # Filter complex pipeline: Framing -> Overlay
+            # Filter complex pipeline: Framing -> Overlay -> (Optional Captions)
             if is_complex:
-                filter_complex = f"{framing_expr.replace('[v]', '[v_framed]')};{cons_res.overlay_filter_expression.replace('[out_v]', '[v]')}"
+                filter_complex = f"{framing_expr.replace('[v]', '[v_framed]')};{cons_res.overlay_filter_expression}"
             else:
-                filter_complex = f"[0:v]{framing_expr}[v_framed];{cons_res.overlay_filter_expression.replace('[out_v]', '[v]')}"
+                filter_complex = f"[0:v]{framing_expr}[v_framed];{cons_res.overlay_filter_expression}"
+
+            if caption_filter_str:
+                filter_complex = f"{filter_complex.replace('[out_v]', '[v_over]')};[v_over]{caption_filter_str}[v]"
+            else:
+                filter_complex = filter_complex.replace('[out_v]', '[v]')
 
             cmd.extend(["-filter_complex", filter_complex, "-map", "[v]"])
         else:
             if is_complex:
-                cmd.extend(["-filter_complex", framing_expr, "-map", "[v]"])
+                if caption_filter_str:
+                    cmd.extend(["-filter_complex", f"{framing_expr};[v]{caption_filter_str}[v_cap]", "-map", "[v_cap]"])
+                else:
+                    cmd.extend(["-filter_complex", framing_expr, "-map", "[v]"])
             else:
                 # Append speed PTS filter if speed != 1.0
                 vf = framing_expr
                 if abs(c_speed - 1.0) > 0.01:
                     pts_scale = 1.0 / c_speed
                     vf = f"{vf},setpts={pts_scale:.4f}*PTS"
+                if caption_filter_str:
+                    vf = f"{vf},{caption_filter_str}"
                 cmd.extend(["-vf", vf])
 
         # Audio stream handling
@@ -498,6 +566,9 @@ async def render_manifest_to_mp4(
                 af_filters.append(f"atempo={c_speed:.3f}")
             if abs(track_audio_gain - 1.0) > 0.01:
                 af_filters.append(f"volume={track_audio_gain:.3f}")
+            if clip_enhance:
+                af_filters.append("highpass=f=100,lowpass=f=8000,dynaudnorm")
+                warnings.append("Applied voice enhancement and dynamic audio normalization.")
 
             if af_filters:
                 cmd.extend(["-af", ",".join(af_filters)])
@@ -521,7 +592,14 @@ async def render_manifest_to_mp4(
             raise RuntimeError(f"FFmpeg manifest render failed: {res.stderr.strip()[:400]}")
         return output_path
 
-    await asyncio.to_thread(_execute)
+    try:
+        await asyncio.to_thread(_execute)
+    finally:
+        if ass_path and Path(ass_path).exists():
+            try:
+                Path(ass_path).unlink()
+            except Exception:
+                pass
 
     # 6. Probe rendered artifact with ffprobe
     media_probe, blocker = await probe_physical_media(output_path)
