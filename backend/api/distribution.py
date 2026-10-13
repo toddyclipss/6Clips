@@ -107,6 +107,20 @@ async def sign_editorial_approval(req: SignApprovalRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+def _handle_eligibility_error(ree: ReleaseEligibilityError) -> None:
+    """Map domain eligibility errors to accurate HTTP status codes."""
+    if ree.code in ("APPROVAL_STALE_REVISION", "APPROVAL_STALE_ARTIFACT"):
+        raise HTTPException(status_code=409, detail={"code": ree.code, "message": ree.message})
+    elif ree.code in ("CONSENT_MISSING", "INSUFFICIENT_RIGHTS"):
+        raise HTTPException(status_code=403, detail={"code": ree.code, "message": ree.message})
+    elif ree.code in ("USER_MISMATCH", "APPROVAL_SIGNATURE_INVALID"):
+        raise HTTPException(status_code=401, detail={"code": ree.code, "message": ree.message})
+    elif ree.code == "ARTIFACT_MISSING":
+        raise HTTPException(status_code=404, detail={"code": ree.code, "message": ree.message})
+    else:
+        raise HTTPException(status_code=422, detail={"code": ree.code, "message": ree.message})
+
+
 @router.post("/eligibility/check")
 async def check_release_eligibility(req: CheckEligibilityRequest):
     """Verify release eligibility of a render artifact before distribution."""
@@ -121,10 +135,7 @@ async def check_release_eligibility(req: CheckEligibilityRequest):
             target_platform=req.target_platform,
         )
     except ReleaseEligibilityError as ree:
-        raise HTTPException(
-            status_code=400,
-            detail={"code": ree.code, "message": ree.message},
-        )
+        _handle_eligibility_error(ree)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -182,7 +193,7 @@ async def schedule_job(req: ScheduleDistributionRequest):
             permitted_uses=req.permitted_uses,
         )
     except ReleaseEligibilityError as ree:
-        raise HTTPException(status_code=400, detail={"code": ree.code, "message": ree.message})
+        _handle_eligibility_error(ree)
     except SEOValidationError as sve:
         raise HTTPException(status_code=422, detail=sve.message)
     except Exception as e:
@@ -244,12 +255,19 @@ async def get_job(job_id: str):
 
 
 @router.post("/jobs/{job_id}/cancel", response_model=DistributionJob)
-async def cancel_job(job_id: str, reason: str = Query("Cancelled by user")):
+async def cancel_job(job_id: str, reason: str = Query("Cancelled by user"), user_id: Optional[str] = Query(None)):
     """Cancel a scheduled distribution job."""
     try:
-        return await _service.scheduler.cancel_job(job_id, reason=reason)
+        return await _service.scheduler.cancel_job(job_id, reason=reason, user_id=user_id)
     except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
+        err = str(ve)
+        if "not found" in err.lower():
+            raise HTTPException(status_code=404, detail=err)
+        if "unauthorized" in err.lower():
+            raise HTTPException(status_code=403, detail=err)
+        if "already" in err.lower():
+            raise HTTPException(status_code=409, detail=err)
+        raise HTTPException(status_code=400, detail=err)
 
 
 @router.post("/jobs/{job_id}/retry", response_model=DistributionJob)
@@ -258,7 +276,12 @@ async def retry_job(job_id: str):
     try:
         return await _service.scheduler.retry_job(job_id)
     except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
+        err = str(ve)
+        if "not found" in err.lower():
+            raise HTTPException(status_code=404, detail=err)
+        if "cannot retry" in err.lower() or "max retries" in err.lower():
+            raise HTTPException(status_code=409, detail=err)
+        raise HTTPException(status_code=400, detail=err)
 
 
 @router.get("/receipts/{receipt_id}", response_model=PublishedReceiptV1)

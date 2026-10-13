@@ -33,8 +33,8 @@ class AcceptanceGateStatus(str, Enum):
 
 
 class V2AcceptanceResult(BaseModel):
-    """Result structure for V2 (GT-06) Multi-Output acceptance check."""
-    gate_id: str = "GT-06"
+    """Result structure for V2 (GT-07) Multi-Output acceptance check."""
+    gate_id: str = "GT-07"
     status: AcceptanceGateStatus = AcceptanceGateStatus.NOT_TESTED
     source_assets_count: int = 0
     output_files_count: int = 0
@@ -48,8 +48,8 @@ class V2AcceptanceResult(BaseModel):
 
 
 class V3AcceptanceResult(BaseModel):
-    """Result structure for V3 (GT-07) Long-Form Narrative acceptance check."""
-    gate_id: str = "GT-07"
+    """Result structure for V3 (GT-06) Long-Form Narrative acceptance check."""
+    gate_id: str = "GT-06"
     status: AcceptanceGateStatus = AcceptanceGateStatus.NOT_TESTED
     source_duration_seconds: Optional[float] = None
     output_duration_seconds: Optional[float] = None
@@ -105,7 +105,7 @@ class V2MultiOutputValidator:
                 "Project revision lineage proving editorial origin without synthetic placeholders",
             ]
             result.notes = (
-                "Harness ready. GT-06 declared NOT_TESTED because real user media assets "
+                "Harness ready. GT-07 declared NOT_TESTED because real user media assets "
                 "have not been supplied in this environment. Synthetic test fixtures do not qualify as acceptance proof."
             )
             return result
@@ -173,7 +173,7 @@ class V2MultiOutputValidator:
         issues: List[str] = []
         if not is_real_user_media or not source_asset_paths or not output_specifications:
             return {
-                "gate_id": "GT-06",
+                "gate_id": "GT-07",
                 "status": "NOT_TESTED",
                 "notes": "Real user media not provided. Acceptance harness ready.",
                 "issues": ["Missing authentic creator source media."],
@@ -201,7 +201,7 @@ class V2MultiOutputValidator:
 
         status = "FAILED" if issues else "PASSED"
         return {
-            "gate_id": "GT-06",
+            "gate_id": "GT-07",
             "status": status,
             "issues": issues,
             "distinct_hashes": len(hashes),
@@ -248,7 +248,7 @@ class V3LongFormNarrativeValidator:
                 "Non-empty narrative cut list mapping source intervals to final timeline",
             ]
             result.notes = (
-                "Harness ready. GT-07 declared NOT_TESTED because authentic ~60-minute "
+                "Harness ready. GT-06 declared NOT_TESTED because authentic ~60-minute "
                 "user media has not been provided in this environment. Synthetic fixtures cannot prove long-form narrative quality."
             )
             return result
@@ -303,7 +303,7 @@ class V3LongFormNarrativeValidator:
         issues: List[str] = []
         if not is_real_user_media or not source_recording_path or not output_rendered_path:
             return {
-                "gate_id": "GT-07",
+                "gate_id": "GT-06",
                 "status": "NOT_TESTED",
                 "notes": "Authentic ~60-minute recording not provided. Acceptance harness ready.",
                 "issues": ["Missing authentic ~60-minute user recording."],
@@ -317,7 +317,7 @@ class V3LongFormNarrativeValidator:
 
         status = "FAILED" if issues else "PASSED"
         return {
-            "gate_id": "GT-07",
+            "gate_id": "GT-06",
             "status": status,
             "issues": issues,
             "notes": "Long-form acceptance evaluation completed.",
@@ -326,15 +326,19 @@ class V3LongFormNarrativeValidator:
 
 class ReleaseAcceptanceAuditor:
     """
-    Evaluates end-to-end readiness across Wave 5 and Wave 6 acceptance gates.
+    Evaluates end-to-end readiness across Wave 5, Wave 6, and Wave 7 acceptance gates.
     Truthfully preserves NOT_TESTED for unsupplied user media and NOT_CONNECTED for social APIs.
+    Canonical mapping:
+    - GT-05: 1 gameplay source -> 3 vertical shorts near ~60s (V1)
+    - GT-06: 1 authentic ~60-min recording -> 8-10 min 16:9 narrative result (V3)
+    - GT-07: multiple source inputs (5 sources) -> 10 editable/rendered clips (V2)
     """
 
     @classmethod
     def audit_all(cls) -> Dict[str, Any]:
         gate_data = cls.audit_all_gates()
         gates_list = []
-        for gid in ["GT-06", "GT-07", "GT-17", "GT-18", "GT-19", "GT-23", "GT-28"]:
+        for gid in ["GT-05", "GT-06", "GT-07", "GT-17", "GT-18", "GT-19", "GT-23", "GT-28"]:
             if gid in gate_data:
                 gates_list.append({"gate_id": gid, **gate_data[gid]})
         return {
@@ -348,16 +352,22 @@ class ReleaseAcceptanceAuditor:
     @classmethod
     def audit_all_gates(cls) -> Dict[str, Any]:
         return {
-            "GT-06": {
-                "name": "V2 Multi-Output Generation (5 sources -> 10 outputs)",
+            "GT-05": {
+                "name": "V1 Gameplay to 3 Vertical Shorts (1 source -> 3 clips)",
                 "status": AcceptanceGateStatus.NOT_TESTED.value,
-                "reason": "Authentic creator media assets not provided in local test environment.",
+                "reason": "Authentic creator gameplay footage not provided in local test environment.",
                 "harness_status": "READY",
             },
-            "GT-07": {
+            "GT-06": {
                 "name": "V3 Long-Form Narrative Condensation (60 min -> 8-10 min 16:9)",
                 "status": AcceptanceGateStatus.NOT_TESTED.value,
                 "reason": "Authentic ~60-minute user recording not provided in local test environment.",
+                "harness_status": "READY",
+            },
+            "GT-07": {
+                "name": "V2 Multi-Output Generation (5 sources -> 10 outputs)",
+                "status": AcceptanceGateStatus.NOT_TESTED.value,
+                "reason": "Authentic creator media assets not provided in local test environment.",
                 "harness_status": "READY",
             },
             "GT-17": {

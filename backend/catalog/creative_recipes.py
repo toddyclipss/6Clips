@@ -174,6 +174,41 @@ class CreativeRecipeEngine:
                 safe_margin_bottom_px=48,
                 safe_margin_top_px=48,
             ),
+            CreativeRecipe(
+                recipe_id="recipe_kinetic_hook_5s",
+                title="5s High-Energy Kinetic Hook",
+                category="kinetic-typography",
+                description="High-velocity 9:16 hook adhering to 3-second hook rule, causal motion, and 140ms stillness hold prior to energy climax.",
+                target_aspect_ratio="9:16",
+                total_duration_seconds=5.0,
+                status="RECIPE_READY_RENDER_PENDING",
+                doctrines_referenced=["motion-doctrine", "cut-the-curve", "seam-craft"],
+                timeline_steps=[
+                    CreativeRecipeStep(
+                        step_id="step_kinetic_bg",
+                        block_id="plasma",
+                        track_index=0,
+                        start_time_seconds=0.0,
+                        duration_seconds=5.0,
+                        end_time_seconds=5.0,
+                        doctrine_applied="motion-doctrine (vector law entry)",
+                        parameters={"speed": "1.5"},
+                    ),
+                    CreativeRecipeStep(
+                        step_id="step_kinetic_hud",
+                        block_id="creator-hud",
+                        track_index=1,
+                        start_time_seconds=0.0,
+                        duration_seconds=4.0,
+                        end_time_seconds=4.0,
+                        doctrine_applied="seam-craft (anti-flash overlay)",
+                        parameters={"creator_handle": "@speed_clips", "battery_pct": 99},
+                    ),
+                ],
+                anti_flash_enforced=True,
+                safe_margin_bottom_px=96,
+                safe_margin_top_px=80,
+            ),
         ]
         return recipes
 
@@ -183,6 +218,69 @@ class CreativeRecipeEngine:
             if r.recipe_id == recipe_id:
                 return r
         return None
+
+    @classmethod
+    def execute_recipe_to_timeline(
+        cls,
+        recipe_id: str,
+        project_id: str,
+        owning_user_id: str = "user_default",
+    ) -> Dict[str, Any]:
+        """
+        Translates a vetted recipe into concrete ValidatedTimelineItem payloads
+        ready for insertion into the canonical Project timeline.
+        Safe, typed operation without executing donor agent prompts or remote plugins.
+        """
+        recipe = cls.get_recipe_by_id(recipe_id)
+        if not recipe:
+            raise CatalogManifestError(f"Creative recipe '{recipe_id}' not found.")
+
+        from backend.catalog.project_intent_contract import (
+            AddToProjectIntentRequest,
+            CatalogProjectIntentAdapter,
+        )
+
+        timeline_items = []
+        revert_operations = []
+        for step in recipe.timeline_steps:
+            req = AddToProjectIntentRequest(
+                project_id=project_id,
+                timeline_track_index=step.track_index,
+                start_time_seconds=step.start_time_seconds,
+                aspect_ratio=recipe.target_aspect_ratio,
+                custom_variables=step.parameters,
+                owning_user_id=owning_user_id,
+            )
+            intent_res = CatalogProjectIntentAdapter.create_add_to_project_intent(step.block_id, req)
+            timeline_items.append(intent_res.timeline_item.model_dump())
+            if intent_res.revert_operation:
+                revert_operations.append(intent_res.revert_operation)
+
+        return {
+            "recipe_id": recipe.recipe_id,
+            "project_id": project_id,
+            "owning_user_id": owning_user_id,
+            "target_aspect_ratio": recipe.target_aspect_ratio,
+            "total_duration_seconds": recipe.total_duration_seconds,
+            "recipe_status": "RECIPE_READY_RENDER_PENDING",
+            "generated_timeline_items_count": len(timeline_items),
+            "timeline_items": timeline_items,
+            "revert_operations": revert_operations,
+            "anti_flash_enforced": recipe.anti_flash_enforced,
+            "safe_margins": {
+                "bottom_px": recipe.safe_margin_bottom_px,
+                "top_px": recipe.safe_margin_top_px,
+            },
+            "integration_request": {
+                "target_service": "backend.services.project_service.ProjectService",
+                "suggested_method": "insert_recipe_tracks",
+                "parameters": {
+                    "project_id": project_id,
+                    "items": timeline_items,
+                },
+                "coordinator_action_required": True,
+            },
+        }
 
     @classmethod
     def synthesize_custom_block(cls, spec: CustomBlockPromptSpec) -> Dict[str, Any]:

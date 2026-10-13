@@ -666,7 +666,8 @@ def test_release_acceptance_auditor_reports_truthful_unreleased_status():
 
     gate_statuses = {g["gate_id"]: g["status"] for g in report["gates"]}
 
-    # V2 and V3 media acceptance gates must be NOT_TESTED due to missing user media
+    # V1, V2, and V3 media acceptance gates must be NOT_TESTED due to missing user media
+    assert gate_statuses["GT-05"] == "NOT_TESTED"
     assert gate_statuses["GT-06"] == "NOT_TESTED"
     assert gate_statuses["GT-07"] == "NOT_TESTED"
 
