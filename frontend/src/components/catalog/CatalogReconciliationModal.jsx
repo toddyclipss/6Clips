@@ -111,13 +111,16 @@ export default function CatalogReconciliationModal({
 
       <DialogContent dividers sx={{ p: 3 }}>
         <Stack spacing={3}>
-          {/* Wave 5 Whole-Tree Audit & Runtime Parity */}
+          {/* Wave 6 Proof Ladder & Functional Blocks Audit */}
           <Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                Wave 5 Whole-Tree Donor Source Audit & Verification Matrix
+                Wave 6 Proof Ladder & Functional Blocks Verification Matrix
               </Typography>
-              <Chip label="Wave 5 Whole-Tree Audit Active" color="primary" size="small" sx={{ fontWeight: 700 }} />
+              <Stack direction="row" spacing={1}>
+                <Chip label="Wave 6 Proof Ladder Active" color="primary" size="small" sx={{ fontWeight: 700 }} />
+                <Chip label="HYPERFRAMES_FULLY_INTEGRATED: NO" color="warning" size="small" sx={{ fontWeight: 700 }} />
+              </Stack>
             </Stack>
             <Grid container spacing={2}>
               <Grid item xs={6} sm={3}>
@@ -137,7 +140,7 @@ export default function CatalogReconciliationModal({
                     10 + 2
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                    STRUCTURAL VERIFIED
+                    STRUCTURALLY TESTED
                   </Typography>
                 </Paper>
               </Grid>
@@ -159,7 +162,7 @@ export default function CatalogReconciliationModal({
                     NOT TESTED
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                    MP4 EXPORT (ROLE 4 DEFERRED)
+                    MP4 EXPORT (ROLE 2 DEFERRED)
                   </Typography>
                 </Paper>
               </Grid>
