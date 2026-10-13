@@ -1080,17 +1080,34 @@ class MotionCapabilityDispatcher:
 
         ai_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
 
+        if cap_id in ("translate", "dubbing") and params.get("dub_audio", False):
+            voice_key = os.environ.get("ELEVENLABS_API_KEY") or os.environ.get("AZURE_SPEECH_KEY")
+            if not voice_key:
+                return CapabilityExecutionResult(
+                    capability_id=cap_id,
+                    status="BLOCKED_PROVIDER",
+                    message="Multi-lingual voice dubbing requires external voice provider credentials (e.g. ElevenLabs, Azure Speech).",
+                    error_detail="BLOCKED_PROVIDER",
+                    execution_time_seconds=time.monotonic() - start_time,
+                )
+
         if not ollama_available and not ai_key:
-            err_detail = "AI_PROVIDER_UNAVAILABLE" if ollama_url else "BYOK_KEY_MISSING"
+            err_detail = "BLOCKED_PROVIDER" if cap_id in ("translate", "dubbing") else ("AI_PROVIDER_UNAVAILABLE" if ollama_url else "BYOK_KEY_MISSING")
             msg = (
-                f"Local Ollama provider and BYOK AI keys are unavailable (Ollama at '{ollama_url}' is unreachable)."
-                if ollama_url
-                else "User AI provider key not configured (OSS BYOK requirement). Set OPENAI_API_KEY or configure local OLLAMA_BASE_URL to enable."
+                f"Translation provider unavailable (Ollama at '{ollama_url}' unreachable and no BYOK API key configured)."
+                if cap_id in ("translate", "dubbing")
+                else (
+                    f"Local Ollama provider and BYOK AI keys are unavailable (Ollama at '{ollama_url}' is unreachable)."
+                    if ollama_url
+                    else "User AI provider key not configured (OSS BYOK requirement). Set OPENAI_API_KEY or configure local OLLAMA_BASE_URL to enable."
+                )
             )
             return CapabilityExecutionResult(
-                capability_id=cap_id, status="BLOCKED",
+                capability_id=cap_id,
+                status="BLOCKED_PROVIDER" if cap_id in ("translate", "dubbing") else "BLOCKED",
                 message=msg,
-                error_detail=err_detail, execution_time_seconds=time.monotonic() - start_time,
+                error_detail=err_detail,
+                execution_time_seconds=time.monotonic() - start_time,
             )
 
         provider_desc = "Local Ollama" if ollama_available else "BYOK Cloud API"
