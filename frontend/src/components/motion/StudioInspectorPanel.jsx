@@ -282,11 +282,22 @@ export default function StudioInspectorPanel({
               )}
 
               {/* Caption / Text Properties */}
-              {(selectedElement.type === "captions" || selectedElement.caption_text) && (
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 700, mb: 1, display: "flex", alignItems: "center", gap: 0.5 }}>
-                    <IconTypography size={14} /> Typography
-                  </Typography>
+              {(selectedElement.type === "captions" || selectedElement.caption_text !== undefined) && (
+                <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "warning.light", bgcolor: "#fffbeb" }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 0.5, color: "warning.dark" }}>
+                      <IconTypography size={14} /> Captions & Typography
+                    </Typography>
+                    {selectedElement.manual_transcript_override && (
+                      <Chip
+                        size="small"
+                        label="Manual Override (Saved)"
+                        color="warning"
+                        variant="filled"
+                        sx={{ height: 18, fontSize: "0.62rem", fontWeight: 700 }}
+                      />
+                    )}
+                  </Stack>
                   <TextField
                     fullWidth
                     multiline
@@ -294,10 +305,20 @@ export default function StudioInspectorPanel({
                     size="small"
                     label="Caption Content"
                     value={selectedElement.caption_text || ""}
-                    onChange={(e) => onUpdateElement && onUpdateElement({ ...selectedElement, caption_text: e.target.value })}
-                    onBlur={() => onCommitElement && onCommitElement(selectedElement)}
-                    sx={{ "& .MuiInputBase-input": { fontSize: "0.78rem" } }}
+                    onChange={(e) => onUpdateElement && onUpdateElement({
+                      ...selectedElement,
+                      caption_text: e.target.value,
+                      manual_transcript_override: true,
+                    })}
+                    onBlur={() => onCommitElement && onCommitElement({
+                      ...selectedElement,
+                      manual_transcript_override: true,
+                    })}
+                    sx={{ "& .MuiInputBase-input": { fontSize: "0.78rem" }, bgcolor: "#ffffff" }}
                   />
+                  <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.65rem", display: "block", mt: 0.5 }}>
+                    Manual corrections persist across reanalysis and override Whisper.
+                  </Typography>
                 </Box>
               )}
 
