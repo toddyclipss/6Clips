@@ -14,6 +14,7 @@ import json
 import logging
 import re
 import uuid
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
@@ -431,4 +432,140 @@ class CreativeRecipeEngine:
                 "sandbox_intact": True,
                 "license_cleared": True,
             },
+        }
+
+    @classmethod
+    def apply_recipe_to_project_document(
+        cls,
+        doc: Any,
+        recipe_id: str,
+        start_time: float = 0.0,
+    ) -> Dict[str, Any]:
+        """
+        Wave 8: Genuinely modifies canonical project document items according to the vetted recipe.
+        Adds timeline clips to tracks, associates source files in code.files,
+        records applied recipe in document metadata, and provides atomic undo tracking.
+        """
+        if isinstance(doc, str):
+            doc = json.loads(doc)
+
+        recipe = cls.get_recipe_by_id(recipe_id)
+        if not recipe:
+            raise CatalogManifestError(f"Recipe '{recipe_id}' not found.")
+
+        timeline = doc.setdefault("timeline", {})
+        tracks = timeline.setdefault("tracks", [])
+        code = doc.setdefault("code", {})
+        files = code.setdefault("files", [])
+        meta = doc.setdefault("metadata", {})
+
+        inserted_clip_ids = []
+        for step in recipe.timeline_steps:
+            track_id = f"track_{step.track_index}"
+            target_track = next((t for t in tracks if t.get("id") == track_id), None)
+            if not target_track:
+                target_track = {
+                    "id": track_id,
+                    "type": "video",
+                    "name": f"Track {step.track_index + 1}",
+                    "muted": False,
+                    "locked": False,
+                    "visible": True,
+                    "clips": [],
+                }
+                tracks.append(target_track)
+
+            inst_suffix = uuid.uuid4().hex[:8]
+            clip_id = f"clip_{step.block_id}_{inst_suffix}"
+            clip_item = {
+                "id": clip_id,
+                "type": "block",
+                "block_id": step.block_id,
+                "title": f"{recipe.title} - {step.step_id}",
+                "start_seconds": round(start_time + step.start_time_seconds, 3),
+                "duration_seconds": step.duration_seconds,
+                "end_seconds": round(start_time + step.end_time_seconds, 3),
+                "variables": step.parameters.copy(),
+                "recipe_step_id": step.step_id,
+                "recipe_id": recipe.recipe_id,
+                "visible": True,
+                "locked": False,
+            }
+            target_track.setdefault("clips", []).append(clip_item)
+            inserted_clip_ids.append(clip_id)
+
+            # Bind code file
+            cpath = f"compositions/{clip_id}.html"
+            shipped_html = (Path(__file__).parent / "shipped_blocks" / step.block_id / f"{step.block_id}.html")
+            content = shipped_html.read_text(encoding="utf-8") if shipped_html.exists() else f"<!-- {step.block_id} -->"
+            files.append({
+                "id": f"file_{clip_id}",
+                "path": cpath,
+                "name": f"{step.block_id}.html",
+                "content": content,
+                "clip_id": clip_id,
+                "block_id": step.block_id,
+                "read_only": False,
+                "provenance": "recipe_instantiated",
+            })
+
+        applied_recipes = meta.setdefault("applied_recipes", [])
+        recipe_record = {
+            "recipe_id": recipe.recipe_id,
+            "title": recipe.title,
+            "applied_at_seconds": start_time,
+            "inserted_clip_ids": inserted_clip_ids,
+            "applied_timestamp": str(uuid.uuid4().hex[:8]),
+        }
+        applied_recipes.append(recipe_record)
+
+        return {
+            "success": True,
+            "recipe_id": recipe.recipe_id,
+            "inserted_clips_count": len(inserted_clip_ids),
+            "inserted_clip_ids": inserted_clip_ids,
+            "document": doc,
+        }
+
+    @classmethod
+    def undo_recipe_from_project_document(
+        cls,
+        doc: Any,
+        recipe_id: str,
+    ) -> Dict[str, Any]:
+        """
+        Wave 8: Reversibly removes all timeline clips and associated code files
+        previously inserted by the specified recipe.
+        """
+        if isinstance(doc, str):
+            doc = json.loads(doc)
+
+        timeline = doc.get("timeline") or {}
+        tracks = timeline.get("tracks") or []
+        code = doc.get("code") or {}
+        files = code.get("files") or []
+        meta = doc.get("metadata") or {}
+
+        applied_recipes = meta.get("applied_recipes", [])
+        matching_record = next((r for r in reversed(applied_recipes) if r.get("recipe_id") == recipe_id), None)
+        if not matching_record:
+            raise CatalogManifestError(f"No applied record found for recipe '{recipe_id}'.")
+
+        clip_ids_to_remove = set(matching_record.get("inserted_clip_ids", []))
+
+        # Remove clips from tracks
+        for tr in tracks:
+            tr["clips"] = [c for c in tr.get("clips", []) if c.get("id") not in clip_ids_to_remove]
+
+        # Remove associated code files
+        if "files" in code:
+            code["files"] = [f for f in files if f.get("clip_id") not in clip_ids_to_remove]
+
+        meta["applied_recipes"] = [r for r in applied_recipes if r is not matching_record]
+
+        return {
+            "success": True,
+            "recipe_id": recipe_id,
+            "removed_clips_count": len(clip_ids_to_remove),
+            "document": doc,
         }
