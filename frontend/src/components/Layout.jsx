@@ -24,6 +24,7 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconActivity,
+  IconLayoutGrid,
 } from "@tabler/icons-react"
 import ChatPanel from "./chat/ChatPanel"
 
@@ -35,6 +36,7 @@ const navItems = [
   { to: "/channels",  icon: <IconBroadcast size={20} stroke={1.8} />,     label: "My Channels" },
   { to: "/clips",     icon: <IconScissors size={20} stroke={1.8} />,      label: "Clip Studio" },
   { to: "/videos",    icon: <IconFolder size={20} stroke={1.8} />,        label: "Library" },
+  { to: "/catalog",   icon: <IconLayoutGrid size={20} stroke={1.8} />,    label: "Catalog" },
   { to: "/motion",    icon: <IconMovie size={20} stroke={1.8} />,         label: "Motion Graphics" },
   { to: "/tools",     icon: <IconTool size={20} stroke={1.8} />,          label: "Tools" },
   { to: "/messaging", icon: <IconDeviceMobile size={20} stroke={1.8} />,  label: "Messaging" },
