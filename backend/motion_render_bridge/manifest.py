@@ -361,14 +361,14 @@ def build_render_manifest(
         for c_idx, raw_c in enumerate(raw_t.get("clips") or []):
             c_id = raw_c.get("id") or f"clip_{t_id}_{c_idx}"
             c_type = (raw_c.get("type") or t_type).lower()
-            start_s = max(0.0, float(raw_c.get("start_seconds", 0.0)))
-            dur_s = max(0.05, float(raw_c.get("duration_seconds", 3.0)))
+            start_s = max(0.0, float(raw_c.get("timeline_start_seconds", raw_c.get("start_seconds", 0.0))))
+            dur_s = max(0.05, float(raw_c.get("timeline_duration_seconds", raw_c.get("duration_seconds", raw_c.get("duration", 3.0)))))
             end_s = start_s + dur_s
             if end_s > max_end_seconds:
                 max_end_seconds = end_s
 
-            trim_start = max(0.0, float(raw_c.get("trim_start", 0.0)))
-            speed = float(raw_c.get("speed", 1.0))
+            trim_start = max(0.0, float(raw_c.get("source_trim_start", raw_c.get("trim_start", 0.0))))
+            speed = float(raw_c.get("speed_multiplier", raw_c.get("speed", 1.0)))
             if speed <= 0:
                 speed = 1.0
 
@@ -423,7 +423,7 @@ def build_render_manifest(
                 track_id=t_id,
                 type=c_type,
                 asset_id=raw_c.get("asset_id"),
-                asset_file=raw_c.get("asset_file"),
+                asset_file=raw_c.get("asset_file") or raw_c.get("source_path") or raw_c.get("source"),
                 stream_url=raw_c.get("stream_url"),
                 title=raw_c.get("title") or f"Clip {c_id}",
                 timeline_start_seconds=round(start_s, 4),

@@ -7,7 +7,7 @@ import json
 import logging
 import subprocess
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 from uuid import uuid4
 
 from backend.config import settings
@@ -275,11 +275,11 @@ async def render_output_clip(
         proj = None
         try:
             proj = await ProjectService.get_project(project_id)
-            updated = await ProjectService.update_project_document(
+            updated = await ProjectService.apply_operation(
                 project_id=proj.id,
                 expected_revision=proj.revision,
-                operation_type="render_output_clip",
-                payload={"output_id": output_id, "artifact_id": artifact_id, "duration": actual_dur, "document": clip_doc},
+                operation_type="update_document",
+                payload={"document": clip_doc},
                 idempotency_key=f"render_{output_id}_{artifact_id}",
                 author="media_producer",
             )
@@ -319,3 +319,188 @@ async def render_output_clip(
         warnings=warnings,
         state=OutputState.SUCCEEDED,
     )
+
+
+async def render_manifest_to_mp4(
+    manifest_data: Any,
+    output_path: Path,
+    source_media_map: Optional[dict[str, Path]] = None,
+    catalog_overlay_path: Optional[Path] = None,
+    catalog_overlay_manifest: Optional[dict] = None,
+) -> tuple[Path, Optional[MediaProbeV1], list[str]]:
+    """Render a deterministic multi-track timeline manifest into an authoritative MP4 video.
+
+    Features:
+    - Framing preset execution (center_crop, hud_aware_blur, gameplay_reticle, split_facecam_gameplay)
+    - Speed multiplier PTS and atempo retime
+    - Audio mix mute and gain isolation
+    - Optional Catalog alpha overlay compositing
+    - ffprobe validation of rendered media stream
+    """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    warnings: list[str] = []
+
+    # 1. Extract manifest parameters
+    is_dict = isinstance(manifest_data, dict)
+    target_w = int(manifest_data.get("width", 1080) if is_dict else getattr(manifest_data, "width", 1080))
+    target_h = int(manifest_data.get("height", 1920) if is_dict else getattr(manifest_data, "height", 1920))
+    fps = float(manifest_data.get("fps", 30.0) if is_dict else getattr(manifest_data, "fps", 30.0))
+
+    tracks = manifest_data.get("tracks", []) if is_dict else getattr(manifest_data, "tracks", [])
+    audio_mixes = manifest_data.get("audio_mix", []) if is_dict else getattr(manifest_data, "audio_mix", [])
+    source_media_map = source_media_map or {}
+
+    # Locate main video clip
+    target_clip = None
+    target_track = None
+    target_track_id = None
+    for tr in tracks:
+        tr_type = tr.get("type") if isinstance(tr, dict) else getattr(tr, "type", "")
+        tr_id = tr.get("id") if isinstance(tr, dict) else getattr(tr, "id", "")
+        if tr_type == "video":
+            clips = tr.get("clips", []) if isinstance(tr, dict) else getattr(tr, "clips", [])
+            if clips:
+                target_clip = clips[0]
+                target_track = tr
+                target_track_id = tr_id
+                break
+
+    if not target_clip:
+        raise ValueError("Cannot render manifest: No video clips present in manifest tracks.")
+
+    # Extract clip properties
+    if isinstance(target_clip, dict):
+        c_src = target_clip.get("source_path") or target_clip.get("asset_file") or target_clip.get("asset_id")
+        c_trim_start = float(target_clip.get("source_trim_start") or target_clip.get("source_start") or 0.0)
+        c_dur = float(target_clip.get("timeline_duration_seconds") or target_clip.get("duration") or 2.0)
+        c_speed = float(target_clip.get("speed_multiplier") or target_clip.get("speed") or 1.0)
+        framing_info = target_clip.get("framing") or target_clip.get("framing_preset") or "center_crop"
+        preset = framing_info.get("preset", "center_crop") if isinstance(framing_info, dict) else str(framing_info)
+    else:
+        c_src = getattr(target_clip, "asset_file", None) or getattr(target_clip, "asset_id", None)
+        c_trim_start = float(getattr(target_clip, "source_trim_start", 0.0))
+        c_dur = float(getattr(target_clip, "timeline_duration_seconds", 2.0))
+        c_speed = float(getattr(target_clip, "speed_multiplier", 1.0))
+        framing_obj = getattr(target_clip, "framing", None)
+        preset = framing_obj.preset if framing_obj else "center_crop"
+
+    # Resolve physical media file
+    physical_src = source_media_map.get(str(c_src)) or (Path(c_src) if c_src and Path(c_src).exists() else None)
+    if not physical_src or not physical_src.exists():
+        raise FileNotFoundError(f"Source media file not found for clip: {c_src}")
+
+    # 2. Probe source dimensions
+    src_probe, _ = await probe_physical_media(physical_src)
+    in_w = src_probe.width if src_probe and src_probe.width else 1920
+    in_h = src_probe.height if src_probe and src_probe.height else 1080
+
+    # 3. Build framing filter
+    framing_expr, filter_warns, is_complex = build_framing_filter(in_w, in_h, target_w, target_h, preset)
+    warnings.extend(filter_warns)
+
+    # 4. Check audio mix settings for track and clip
+    track_audio_active = True
+    track_audio_gain = 1.0
+
+    if target_track:
+        tr_muted = bool(target_track.get("muted", False) if isinstance(target_track, dict) else getattr(target_track, "muted", False))
+        tr_vol = float(target_track.get("volume", 1.0) if isinstance(target_track, dict) else getattr(target_track, "volume", 1.0))
+        if tr_muted:
+            track_audio_active = False
+        track_audio_gain *= tr_vol
+
+    c_muted = bool(target_clip.get("muted", False) if isinstance(target_clip, dict) else getattr(target_clip, "muted", False))
+    c_vol = float(target_clip.get("volume", 1.0) if isinstance(target_clip, dict) else getattr(target_clip, "volume", 1.0))
+    if c_muted:
+        track_audio_active = False
+    track_audio_gain *= c_vol
+
+    for am in audio_mixes:
+        am_tr_id = am.get("track_id") if isinstance(am, dict) else getattr(am, "track_id", "")
+        if am_tr_id == target_track_id or am_tr_id == "track_audio_main":
+            if not bool(am.get("effective_active", True) if isinstance(am, dict) else getattr(am, "effective_active", True)):
+                track_audio_active = False
+            track_audio_gain *= float(am.get("effective_gain", 1.0) if isinstance(am, dict) else getattr(am, "effective_gain", 1.0))
+            break
+
+    # 5. Formulate FFmpeg command
+    def _execute():
+        cmd = [
+            "ffmpeg", "-y",
+            "-ss", f"{c_trim_start:.3f}",
+            "-t", f"{c_dur:.3f}",
+            "-i", str(physical_src),
+        ]
+
+        # Handle optional Catalog overlay
+        if catalog_overlay_path and catalog_overlay_manifest and catalog_overlay_path.exists():
+            from backend.motion_render_bridge.catalog_consumer import CatalogExportConsumer
+            cons_res = CatalogExportConsumer.consume(
+                manifest=catalog_overlay_manifest,
+                background_pad="[v_framed]",
+                overlay_pad="[1:v]",
+                start_seconds=0.0,
+                end_seconds=c_dur,
+                canvas_width=target_w,
+                canvas_height=target_h,
+            )
+            warnings.extend(cons_res.warnings)
+            cmd.extend(["-i", str(catalog_overlay_path)])
+
+            # Filter complex pipeline: Framing -> Overlay
+            if is_complex:
+                filter_complex = f"{framing_expr.replace('[v]', '[v_framed]')};{cons_res.overlay_filter_expression.replace('[out_v]', '[v]')}"
+            else:
+                filter_complex = f"[0:v]{framing_expr}[v_framed];{cons_res.overlay_filter_expression.replace('[out_v]', '[v]')}"
+
+            cmd.extend(["-filter_complex", filter_complex, "-map", "[v]"])
+        else:
+            if is_complex:
+                cmd.extend(["-filter_complex", framing_expr, "-map", "[v]"])
+            else:
+                # Append speed PTS filter if speed != 1.0
+                vf = framing_expr
+                if abs(c_speed - 1.0) > 0.01:
+                    pts_scale = 1.0 / c_speed
+                    vf = f"{vf},setpts={pts_scale:.4f}*PTS"
+                cmd.extend(["-vf", vf])
+
+        # Audio stream handling
+        if track_audio_active and track_audio_gain > 0.001:
+            af_filters = []
+            if abs(c_speed - 1.0) > 0.01:
+                af_filters.append(f"atempo={c_speed:.3f}")
+            if abs(track_audio_gain - 1.0) > 0.01:
+                af_filters.append(f"volume={track_audio_gain:.3f}")
+
+            if af_filters:
+                cmd.extend(["-af", ",".join(af_filters)])
+            cmd.extend(["-c:a", "aac", "-b:a", "192k", "-ar", "48000"])
+            if is_complex or (catalog_overlay_path and catalog_overlay_manifest):
+                cmd.extend(["-map", "0:a?"])
+        else:
+            cmd.append("-an")
+
+        cmd.extend([
+            "-c:v", "libx264",
+            "-preset", "veryfast",
+            "-crf", "22",
+            "-r", str(int(fps)),
+            "-movflags", "+faststart",
+            str(output_path),
+        ])
+
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        if res.returncode != 0:
+            raise RuntimeError(f"FFmpeg manifest render failed: {res.stderr.strip()[:400]}")
+        return output_path
+
+    await asyncio.to_thread(_execute)
+
+    # 6. Probe rendered artifact with ffprobe
+    media_probe, blocker = await probe_physical_media(output_path)
+    if blocker or not media_probe:
+        raise RuntimeError(f"Failed to probe rendered MP4 artifact: {blocker.precise_reason if blocker else 'Unknown probe error'}")
+
+    return output_path, media_probe, warnings
