@@ -298,13 +298,14 @@ export default function StudioInspectorPanel({
                   </FormControl>
                   {(() => {
                     const preset = selectedElement.framing_preset || "none"
-                    const isNative = preset === "center_crop" || preset === "none"
+                    const knownPresets = ["center_crop", "none", "hud_aware_blur", "gameplay_reticle", "split_facecam_gameplay"]
+                    const isSupported = knownPresets.includes(preset)
                     return (
                       <Stack direction="row" spacing={0.6} alignItems="center" sx={{ mt: 0.75 }}>
                         <Chip
                           size="small"
-                          label={isNative ? "Worker Status: Native 9:16 Center Crop (Active)" : "Worker Status: PENDING (Filter Graph Staged for Worker Integration)"}
-                          color={isNative ? "success" : "warning"}
+                          label={isSupported ? `Worker Status: Active (${preset === "none" ? "center_crop" : preset})` : `Worker Status: PENDING (${preset})`}
+                          color={isSupported ? "success" : "warning"}
                           variant="outlined"
                           sx={{ height: 18, fontSize: "0.62rem", fontWeight: 700 }}
                         />

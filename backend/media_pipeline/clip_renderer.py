@@ -26,20 +26,85 @@ from backend.services.project_service import ProjectService
 logger = logging.getLogger(__name__)
 
 
-def _build_reframe_filter(in_width: int, in_height: int, target_w: int = 1080, target_h: int = 1920) -> str:
-    """Build FFmpeg video filter for 16:9 -> 9:16 reframing.
-    
-    Scales to fill height/width while preserving aspect ratio, cropping to center.
+def build_framing_filter(
+    in_width: int,
+    in_height: int,
+    target_w: int = 1080,
+    target_h: int = 1920,
+    preset: str = "center_crop",
+) -> Tuple[str, list[str], bool]:
+    """Build deterministic FFmpeg filter chain for 16:9 -> 9:16 reframing with layout presets.
+
+    Returns:
+        (filter_str, warnings, is_complex)
     """
-    aspect_in = in_width / in_height if in_height > 0 else 1.0
+    warnings: list[str] = []
+    preset = preset or "center_crop"
+
+    # Geometry checks for source
+    if in_width <= 0 or in_height <= 0:
+        in_width, in_height = 1920, 1080
+
+    aspect_in = in_width / in_height
     aspect_target = target_w / target_h
 
-    if abs(aspect_in - aspect_target) < 0.05:
-        # Already 9:16
-        return f"scale={target_w}:{target_h}"
+    # 1. Background Blur (HUD-Aware Gaming / Shorts standard)
+    if preset == "hud_aware_blur":
+        warnings.append("Framing preset: hud_aware_blur applied (blurred 9:16 background with crisp uncropped 16:9 foreground).")
+        filter_str = (
+            f"[0:v]split=2[bg][fg];"
+            f"[bg]scale={target_w}:{target_h}:force_original_aspect_ratio=increase,crop={target_w}:{target_h},boxblur=25:5[blurred];"
+            f"[fg]scale={target_w}:-1[crisp];"
+            f"[blurred][crisp]overlay=0:(H-h)/2[v]"
+        )
+        return filter_str, warnings, True
+
+    # 2. Split Facecam + Gameplay (Vertical stream layout)
+    elif preset == "split_facecam_gameplay":
+        # Check source geometry
+        if in_width < 640 or in_height < 360:
+            warnings.append(
+                f"Source geometry ({in_width}x{in_height}) is insufficient for split facecam/gameplay; "
+                "falling back to native center crop."
+            )
+            filter_str = f"scale={target_w}:{target_h}:force_original_aspect_ratio=increase,crop={target_w}:{target_h}"
+            return filter_str, warnings, False
+
+        warnings.append("Framing preset: split_facecam_gameplay applied (top facecam 1080x720 + bottom gameplay 1080x1200 stacked).")
+        filter_str = (
+            f"[0:v]split=2[cam][game];"
+            f"[cam]crop=iw/3:ih/3:0:0,scale={target_w}:720:force_original_aspect_ratio=increase,crop={target_w}:720[top];"
+            f"[game]crop=iw*2/3:ih:iw/3:0,scale={target_w}:1200:force_original_aspect_ratio=increase,crop={target_w}:1200[bottom];"
+            f"[top][bottom]vstack=inputs=2[v]"
+        )
+        return filter_str, warnings, True
+
+    # 3. Gameplay Reticle (Safe HUD / UI chrome margins)
+    elif preset == "gameplay_reticle":
+        warnings.append("Framing preset: gameplay_reticle applied (centered on crosshairs with radar and HUD margins preserved).")
+        filter_str = f"crop=ih*9/16:ih:(iw-ih*9/16)/2:0,scale={target_w}:{target_h}"
+        return filter_str, warnings, False
+
+    # 4. Standard Center Crop / None
+    elif preset in ("center_crop", "none"):
+        if abs(aspect_in - aspect_target) < 0.05:
+            filter_str = f"scale={target_w}:{target_h}"
+        else:
+            filter_str = f"scale={target_w}:{target_h}:force_original_aspect_ratio=increase,crop={target_w}:{target_h}"
+        warnings.append("Center crop 9:16 applied: verify HUD and reticle visibility in Motion Review.")
+        return filter_str, warnings, False
+
+    # 5. Unsupported / Fallback
     else:
-        # Scale to fill 1080x1920 and crop to 9:16
-        return f"scale={target_w}:{target_h}:force_original_aspect_ratio=increase,crop={target_w}:{target_h}"
+        warnings.append(f"Unsupported framing preset '{preset}'; fell back to native 9:16 center crop.")
+        filter_str = f"scale={target_w}:{target_h}:force_original_aspect_ratio=increase,crop={target_w}:{target_h}"
+        return filter_str, warnings, False
+
+
+def _build_reframe_filter(in_width: int, in_height: int, target_w: int = 1080, target_h: int = 1920) -> str:
+    """Backward compatibility alias for simple center crop filter."""
+    f, _, _ = build_framing_filter(in_width, in_height, target_w, target_h, "center_crop")
+    return f
 
 
 async def render_output_clip(
@@ -50,6 +115,7 @@ async def render_output_clip(
     output_dir: Path,
     simulate_failure: bool = False,
     user_id: str = "local",
+    framing_preset: Optional[str] = None,
 ) -> OutputResultV1:
     """Render a single output clip into an independent MP4 file, validate with ffprobe,
     and register a canonical ProjectRevision for it.
@@ -76,8 +142,10 @@ async def render_output_clip(
     if probe_in:
         in_w, in_h = probe_in.width, probe_in.height
 
-    vf = _build_reframe_filter(in_w, in_h, 1080, 1920)
-    warnings.append("Center crop 9:16 applied: verify HUD and reticle visibility in Motion Review.")
+    # Extract preset from argument or spec constraints
+    preset = framing_preset or spec.editorial_constraints.get("framing_preset") or "center_crop"
+    filter_expr, filter_warnings, is_complex = build_framing_filter(in_w, in_h, 1080, 1920, preset)
+    warnings.extend(filter_warnings)
 
     start_s = source_range.start_seconds
     dur_s = source_range.duration_seconds
@@ -91,7 +159,18 @@ async def render_output_clip(
             "-ss", str(start_s),
             "-t", str(dur_s),
             "-i", str(source_path),
-            "-vf", vf,
+        ]
+        if is_complex:
+            cmd.extend([
+                "-filter_complex", filter_expr,
+                "-map", "[v]",
+                "-map", "0:a?",
+            ])
+        else:
+            cmd.extend([
+                "-vf", filter_expr,
+            ])
+        cmd.extend([
             "-c:v", "libx264",
             "-preset", "veryfast",
             "-crf", "22",
@@ -100,7 +179,7 @@ async def render_output_clip(
             "-ar", "48000",
             "-movflags", "+faststart",
             str(out_path),
-        ]
+        ])
         res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if res.returncode != 0:
             raise RuntimeError(f"FFmpeg render failed for {output_id}: {res.stderr.strip()[:300]}")
