@@ -57,7 +57,7 @@ export default function TrendsResults({ results, onSelect, onRefresh }) {
     }
     try {
       await http.post("/api/trends/download", { trend_result_ids: [id] })
-      showSnackbar("Downloading & analyzing video...", "success")
+      showSnackbar("Ingesting & verifying video via authorized route...", "success")
     } catch (err) {
       showSnackbar(err.response?.data?.detail || err.message, "error")
     }

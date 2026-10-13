@@ -314,7 +314,8 @@ def create_app() -> FastAPI:
     app.include_router(settings_router.router, prefix="/api")
     app.include_router(videos.router, prefix="/api")
     app.include_router(downloaded.router, prefix="/api")
-    app.include_router(chat_sessions.router, prefix="/api")
+    from backend.media_pipeline.api_router import router as media_production_router
+    app.include_router(media_production_router)
     app.include_router(media.router, prefix="/api")
     app.include_router(config_router.router, prefix="/api")
     app.include_router(channels.router, prefix="/api")
