@@ -25,7 +25,6 @@
         src: url("assets/fonts/Recursive-wght-slnt-latin.woff2") format("woff2");
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       *,
       *::before,
@@ -214,8 +213,25 @@
             }
           }
 
-          var tl = gsap.timeline({ paused: true });
-          tl.to(state, { p: 1, duration: duration, ease: "none", onUpdate: paint }, 0);
+          var tl = {
+            duration: function() { return duration; },
+            seek: function(t) {
+              state.p = Math.max(0, Math.min(1, t / duration));
+              paint();
+            },
+            play: function() {
+              var start = performance.now();
+              function step() {
+                var elapsed = (performance.now() - start) / 1000;
+                tl.seek(elapsed % duration);
+                tl._raf = requestAnimationFrame(step);
+              }
+              tl._raf = requestAnimationFrame(step);
+            },
+            pause: function() {
+              if (tl._raf) cancelAnimationFrame(tl._raf);
+            }
+          };
           paint();
           window.__timelines["weight-wave"] = tl;
 

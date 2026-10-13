@@ -1,0 +1,242 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2025-2026 ViralMint Contributors
+"""Distribution Scheduler: bounded worker clock, injectable time, retry budgeting, and truth table transitions."""
+from __future__ import annotations
+
+import logging
+from datetime import datetime, timedelta, timezone
+from typing import Callable, Dict, List, Optional, Tuple
+
+from backend.distribution.account_boundary import AccountBoundaryManager
+from backend.distribution.job_store import DistributionJobStore
+from backend.distribution.models import (
+    DistributionJob,
+    DistributionStatus,
+    PlatformAccount,
+    PublishedReceiptV1,
+)
+from backend.distribution.transport import (
+    DistributionTransportPort,
+    ProductionLiveTransport,
+    TransportError,
+)
+
+logger = logging.getLogger(__name__)
+
+
+class TimeProvider:
+    """Injectable time provider enabling deterministic test execution."""
+    def __init__(self, fixed_time: Optional[datetime] = None):
+        self._fixed_time = fixed_time
+
+    def now(self) -> datetime:
+        if self._fixed_time is not None:
+            return self._fixed_time
+        return datetime.now(timezone.utc)
+
+    def set_time(self, t: datetime) -> None:
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=timezone.utc)
+        self._fixed_time = t
+
+    def advance(self, delta: timedelta) -> None:
+        current = self.now()
+        self._fixed_time = current + delta
+
+
+class DistributionScheduler:
+    """Orchestrates job execution, retry budgeting, and state transitions."""
+
+    def __init__(
+        self,
+        store: DistributionJobStore,
+        transport: Optional[DistributionTransportPort] = None,
+        time_provider: Optional[TimeProvider] = None,
+        account_resolver: Optional[Callable[[str, str], Optional[PlatformAccount]]] = None,
+    ):
+        self.store = store
+        self.transport = transport or ProductionLiveTransport()
+        self.clock = time_provider or TimeProvider()
+        self.account_resolver = account_resolver or self._default_account_resolver
+
+    @staticmethod
+    def _default_account_resolver(account_id: str, platform: str) -> Optional[PlatformAccount]:
+        """Default resolver returns a disconnected account structure."""
+        return AccountBoundaryManager.evaluate_account_readiness(
+            account_id=account_id,
+            platform=platform,
+            is_connected=False,
+        )
+
+    async def schedule_job(
+        self,
+        job: DistributionJob,
+        account: PlatformAccount,
+    ) -> DistributionJob:
+        """Validate readiness and enqueue job for scheduled release."""
+        # 1. Enforce account can publish
+        AccountBoundaryManager.assert_account_can_publish(account)
+
+        now = self.clock.now()
+        sched_dt = datetime.fromisoformat(job.scheduled_time_utc.replace("Z", "+00:00"))
+
+        if sched_dt <= now:
+            # Ready for immediate dispatch on next tick
+            job.status = DistributionStatus.READY_TO_SCHEDULE
+        else:
+            job.status = DistributionStatus.SCHEDULED
+
+        job.updated_at = now.isoformat()
+        self.store.save_job(job)
+        return job
+
+    async def cancel_job(self, job_id: str, reason: str = "User cancelled") -> DistributionJob:
+        """
+        Cancel a scheduled or pending job.
+        Note: Canceling a scheduled job does NOT imply a remote post was deleted if already published.
+        """
+        job = self.store.get_job(job_id)
+        if not job:
+            raise ValueError(f"Job '{job_id}' not found.")
+
+        if job.status == DistributionStatus.PUBLISHED_VERIFIED:
+            raise ValueError("Cannot cancel a job that has already been verified published.")
+
+        job.status = DistributionStatus.CANCELLED
+        job.error_message = f"Cancelled: {reason}"
+        job.updated_at = self.clock.now().isoformat()
+        self.store.save_job(job)
+        return job
+
+    async def retry_job(self, job_id: str) -> DistributionJob:
+        """Retry a failed or blocked job if allowed."""
+        job = self.store.get_job(job_id)
+        if not job:
+            raise ValueError(f"Job '{job_id}' not found.")
+
+        if job.status not in (DistributionStatus.FAILED_RETRYABLE, DistributionStatus.BLOCKED):
+            raise ValueError(f"Job in state {job.status.value} cannot be manually retried.")
+
+        job.status = DistributionStatus.READY_TO_SCHEDULE
+        job.retry_count = 0
+        job.error_code = None
+        job.error_message = None
+        job.updated_at = self.clock.now().isoformat()
+        self.store.save_job(job)
+        return job
+
+    async def process_tick(self) -> Dict[str, Any]:
+        """
+        Single bounded clock tick:
+        Evaluates scheduled jobs whose scheduled_time <= now and executes dispatch.
+        """
+        now = self.clock.now()
+        now_iso = now.isoformat()
+
+        all_jobs = self.store.list_jobs()
+        due_jobs = []
+
+        for j in all_jobs:
+            if j.status in (
+                DistributionStatus.READY_TO_SCHEDULE,
+                DistributionStatus.SCHEDULED,
+                DistributionStatus.FAILED_RETRYABLE,
+            ):
+                sched_dt = datetime.fromisoformat(j.scheduled_time_utc.replace("Z", "+00:00"))
+                if sched_dt <= now:
+                    due_jobs.append(j)
+
+        results = {
+            "tick_time": now_iso,
+            "due_count": len(due_jobs),
+            "dispatched": 0,
+            "published": 0,
+            "failed": 0,
+        }
+
+        for job in due_jobs:
+            await self._dispatch_single_job(job)
+            results["dispatched"] += 1
+            if job.status == DistributionStatus.PUBLISHED_VERIFIED:
+                results["published"] += 1
+            elif job.status in (DistributionStatus.FAILED_RETRYABLE, DistributionStatus.BLOCKED):
+                results["failed"] += 1
+
+        return results
+
+    async def _dispatch_single_job(self, job: DistributionJob) -> None:
+        """Dispatch a single due job through the transport with error classification."""
+        now = self.clock.now()
+
+        # Re-check account readiness
+        account = self.account_resolver(job.account_id, job.platform)
+        if not account or not account.can_publish:
+            job.status = DistributionStatus.BLOCKED
+            job.error_code = "ACCOUNT_NOT_READY"
+            job.error_message = (
+                f"Account '{job.account_id}' is not in READY state (state: {account.state.value if account else 'UNKNOWN'})."
+            )
+            job.updated_at = now.isoformat()
+            self.store.save_job(job)
+            return
+
+        # Transition to DISPATCHING
+        job.status = DistributionStatus.DISPATCHING
+        job.last_attempt_at = now.isoformat()
+        job.updated_at = now.isoformat()
+        self.store.save_job(job)
+
+        try:
+            success, post_id, post_url, err_msg = await self.transport.dispatch_post(job, account)
+            if not success or not post_id:
+                raise TransportError("DISPATCH_FAILED", err_msg or "Remote provider rejected upload", is_retryable=True)
+
+            job.remote_post_id = post_id
+            job.remote_post_url = post_url
+
+            # Crucial truth table step: A local accepted call or HTTP 202 is NOT a remote published post.
+            # Only verified provider receipt yields PUBLISHED_VERIFIED.
+            receipt = await self.transport.verify_post_receipt(job, account, post_id)
+            if receipt:
+                job.status = DistributionStatus.PUBLISHED_VERIFIED
+                job.receipt_id = receipt.receipt_id
+                self.store.save_receipt(receipt)
+            else:
+                # Still in unverified/processing stage remotely
+                logger.info("Job %s dispatched (post_id: %s) but not yet verified published.", job.job_id, post_id)
+                # Keep in DISPATCHING or marked as waiting verification
+                job.status = DistributionStatus.DISPATCHING
+                job.error_message = "Upload acknowledged by platform; awaiting final post verification."
+
+        except TransportError as te:
+            logger.warning("Transport error for job %s: %s (retryable=%s)", job.job_id, te.message, te.is_retryable)
+            self._handle_job_failure(job, te.code, te.message, te.is_retryable)
+        except Exception as e:
+            logger.exception("Unexpected error dispatching job %s: %s", job.job_id, e)
+            self._handle_job_failure(job, "INTERNAL_ERROR", str(e), is_retryable=False)
+
+        job.updated_at = self.clock.now().isoformat()
+        self.store.save_job(job)
+
+    def _handle_job_failure(
+        self,
+        job: DistributionJob,
+        code: str,
+        message: str,
+        is_retryable: bool,
+    ) -> None:
+        """Classify failure and apply retry backoff budget."""
+        job.error_code = code
+        job.error_message = message
+
+        if is_retryable and job.retry_count < job.max_retries:
+            job.retry_count += 1
+            job.status = DistributionStatus.FAILED_RETRYABLE
+            job.error_category = "RETRYABLE"
+            # Exponential backoff: 2^retry_count minutes
+            delay_minutes = 2 ** job.retry_count
+            next_sched = self.clock.now() + timedelta(minutes=delay_minutes)
+            job.scheduled_time_utc = next_sched.isoformat()
+        else:
+            job.status = DistributionStatus.BLOCKED
+            job.error_category = "FATAL"

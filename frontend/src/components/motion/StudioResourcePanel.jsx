@@ -327,13 +327,31 @@ export default function StudioResourcePanel({
                     data-testid="asset-card"
                     draggable
                     onDragStart={(e) => {
+                      const resolvedKey = asset.key || asset.id
+                      const motionIntent = {
+                        asset_id: String(asset.id || resolvedKey),
+                        key: String(resolvedKey),
+                        title: asset.title || (mediaType === "audio" ? "Audio Track" : "Media Clip"),
+                        media_type: mediaType,
+                        stream_url: asset.stream_url || (asset.id ? `/api/downloaded/${asset.id}/stream` : `/api/library/asset/${resolvedKey}`),
+                        duration_seconds: Number(asset.duration_seconds || asset.duration || 5),
+                        aspect_ratio: asset.aspect_ratio || aspectRatio || "9:16",
+                        source_provenance: asset.source_provenance || "library_user_asset",
+                        permitted_uses: Array.isArray(asset.permitted_uses) ? asset.permitted_uses : ["timeline_motion", "derivative_clips", "commercial_creator"],
+                        intent_action: "add_track",
+                        target_track: mediaType === "audio" ? "audio" : "video",
+                        target_start_time_seconds: 0.0,
+                        file_sha256: asset.sha256 || asset.file_sha256 || null,
+                      }
                       const payload = {
                         kind: "asset",
                         mediaType,
                         data: asset,
-                        title: asset.title || (mediaType === "audio" ? "Audio Track" : "Media Clip"),
-                        duration: asset.duration_seconds || asset.duration || 5,
+                        title: motionIntent.title,
+                        duration: motionIntent.duration_seconds,
+                        ...motionIntent,
                       }
+                      e.dataTransfer.setData("application/x-6clips-asset", JSON.stringify(motionIntent))
                       e.dataTransfer.setData("application/viralmint-clip", JSON.stringify(payload))
                       e.dataTransfer.setData("application/json", JSON.stringify(payload))
                       e.dataTransfer.effectAllowed = "copy"

@@ -4,10 +4,14 @@
 Catalog Project Intent Contract:
 Defines the validated integration interface for adding HyperFrames catalog blocks
 into video composition timelines without directly mutating the global ProjectService.
+Provides scoped instance IDs, CAS expected revision checks, input sanitization,
+and license provenance metadata.
 """
 from __future__ import annotations
 
+import html
 import logging
+import re
 import uuid
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
@@ -15,6 +19,19 @@ from pydantic import BaseModel, Field
 from backend.catalog.manifest_service import CatalogManifestService, CatalogManifestError
 
 logger = logging.getLogger(__name__)
+
+# Dangerous patterns to disallow in user variable inputs
+DANGEROUS_INPUT_PATTERNS = [
+    r"<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>",
+    r"javascript:",
+    r"data:text/html",
+    r"on\w+\s*=",  # onload=, onerror=, etc.
+    r"__proto__",
+    r"prototype",
+    r"constructor",
+    r"\.\./",
+    r"\.\.\\",
+]
 
 
 class BlockVariableInput(BaseModel):
@@ -29,11 +46,14 @@ class AddToProjectIntentRequest(BaseModel):
     start_time_seconds: float = Field(0.0, ge=0.0, description="Insertion timestamp on timeline in seconds")
     aspect_ratio: str = Field("9:16", description="Target aspect ratio: '9:16' or '16:9'")
     custom_variables: Dict[str, Any] = Field(default_factory=dict, description="User-configured block parameters")
+    instance_id: Optional[str] = Field(None, description="Optional client-specified instance ID or None to generate")
+    expected_revision: Optional[int] = Field(None, ge=0, description="Optimistic CAS concurrency revision for the project")
 
 
 class ValidatedTimelineItem(BaseModel):
     """Standardized timeline item structure ready for ProjectService insertion."""
     item_id: str
+    instance_id: str
     item_type: str = "motion_block"
     block_id: str
     title: str
@@ -48,6 +68,8 @@ class ValidatedTimelineItem(BaseModel):
     variables: Dict[str, Any]
     internalized: bool
     runtime_ready: bool
+    license_provenance: Dict[str, Any] = Field(default_factory=dict)
+    is_independently_editable: bool = True
 
 
 class AddToProjectIntentResult(BaseModel):
@@ -62,6 +84,40 @@ class AddToProjectIntentResult(BaseModel):
 
 class CatalogProjectIntentAdapter:
     """Validates block readiness and constructs the normalized timeline item payload."""
+
+    @classmethod
+    def sanitize_variable_value(cls, key: str, val: Any) -> Any:
+        """Sanitizes user-provided variable overrides to prevent injection attacks."""
+        # Reject prototype pollution keys
+        if key.lower() in ("__proto__", "prototype", "constructor"):
+            raise CatalogManifestError(f"Disallowed parameter key: '{key}'")
+
+        if isinstance(val, str):
+            # Check length limit
+            if len(val) > 2000:
+                val = val[:2000]
+
+            # Check dangerous injection patterns
+            for pat in DANGEROUS_INPUT_PATTERNS:
+                if re.search(pat, val, re.IGNORECASE):
+                    # Sanitize by escaping and stripping script fragments
+                    val = re.sub(pat, "", val, flags=re.IGNORECASE)
+
+            # Strip control characters except newline and tab
+            val = "".join(ch for ch in val if ch in ("\n", "\t") or ord(ch) >= 32)
+            return val.strip()
+
+        # Numeric and boolean types pass through
+        if isinstance(val, (int, float, bool)):
+            return val
+
+        if isinstance(val, list):
+            return [cls.sanitize_variable_value(key, v) for v in val[:50]]
+
+        if isinstance(val, dict):
+            return {cls.sanitize_variable_value(k, k): cls.sanitize_variable_value(k, v) for k, v in list(val.items())[:50]}
+
+        return str(val)
 
     @classmethod
     def create_add_to_project_intent(
@@ -79,27 +135,48 @@ class CatalogProjectIntentAdapter:
         aspect_key = "aspect_9_16" if aspect_norm == "9:16" else "aspect_16_9"
         aspect_support = item.get(aspect_key, "CONTAINED_ONLY")
 
-        # Determine readiness
-        is_internalized = item.get("internalized", False) or item.get("id") in [
-            "aurora", "data-chart", "instagram-follow", "tiktok-follow", "weight-wave", "yt-lower-third"
-        ]
+        # Determine readiness using Wave 4 internalized set
+        from backend.catalog.manifest_service import WAVE4_INTERNALIZED_BLOCKS, CORE_INTERNALIZED_BLOCKS
+        is_internalized = (
+            item.get("internalized", False)
+            or block_id in WAVE4_INTERNALIZED_BLOCKS
+            or block_id in CORE_INTERNALIZED_BLOCKS
+        )
         duration = float(item.get("duration", 5.0))
         end_time = round(request.start_time_seconds + duration, 3)
 
-        # Merge custom variables with defaults
+        # Merge and sanitize custom variables with defaults
         resolved_vars: Dict[str, Any] = {}
         for var_def in item.get("variables", []):
             v_name = var_def.get("name")
             if v_name:
-                resolved_vars[v_name] = request.custom_variables.get(v_name, var_def.get("default", ""))
+                raw_val = request.custom_variables.get(v_name, var_def.get("default", ""))
+                resolved_vars[v_name] = cls.sanitize_variable_value(v_name, raw_val)
 
+        # Allow extra sanitized variables that may not be in schema
+        for k, v in request.custom_variables.items():
+            if k not in resolved_vars:
+                resolved_vars[k] = cls.sanitize_variable_value(k, v)
+
+        # Generate unique scoped instance_id and stable item_id
         intent_id = f"intent_{uuid.uuid4().hex[:12]}"
-        item_id = f"block_{block_id}_{uuid.uuid4().hex[:8]}"
+        unique_suffix = uuid.uuid4().hex[:8]
+        instance_id = request.instance_id or f"inst_{block_id}_{unique_suffix}"
+        item_id = f"block_{block_id}_{unique_suffix}"
 
         status = "VALIDATED_INTENT" if is_internalized else "WARNING_UNVERIFIED"
 
+        license_provenance = {
+            "license": item.get("license", "Apache-2.0"),
+            "author": item.get("author", "HyperFrames"),
+            "license_status": "VERIFIED_DISTRIBUTABLE" if is_internalized else "UNVERIFIED_OR_CDN_BLOCKED",
+            "offline_capable": is_internalized,
+            "zero_external_cdn": is_internalized,
+        }
+
         timeline_item = ValidatedTimelineItem(
             item_id=item_id,
+            instance_id=instance_id,
             item_type="motion_block",
             block_id=block_id,
             title=item.get("title", block_id),
@@ -114,6 +191,8 @@ class CatalogProjectIntentAdapter:
             variables=resolved_vars,
             internalized=is_internalized,
             runtime_ready=is_internalized,
+            license_provenance=license_provenance,
+            is_independently_editable=True,
         )
 
         integration_request = {
@@ -122,6 +201,10 @@ class CatalogProjectIntentAdapter:
             "parameters": {
                 "project_id": request.project_id,
                 "timeline_item": timeline_item.model_dump(),
+            },
+            "cas_precondition": {
+                "expected_revision": request.expected_revision,
+                "optimistic_concurrency_required": request.expected_revision is not None,
             },
             "coordinator_action_required": True,
         }
