@@ -128,6 +128,7 @@ class OutcomeStateMachine:
         self.blocker: Optional[Blocker] = None
         self.evidence_refs: List[str] = []
         self.results: List[OutputResult] = []
+        self.job_id: Optional[str] = getattr(contract, "job_id", None)
 
     def can_transition_to(self, target: OutcomeState) -> bool:
         allowed = ALLOWED_TRANSITIONS.get(self.current_state, [])
@@ -246,6 +247,7 @@ class OutcomeStateMachine:
             "blocker": self.blocker.model_dump() if self.blocker else None,
             "evidence_refs": list(self.evidence_refs),
             "results": [r.model_dump() for r in self.results],
+            "job_id": self.job_id,
         }
 
     @classmethod
@@ -258,4 +260,5 @@ class OutcomeStateMachine:
             sm.blocker = Blocker.model_validate(data["blocker"])
         sm.evidence_refs = data.get("evidence_refs", [])
         sm.results = [OutputResult.model_validate(r) for r in data.get("results", [])]
+        sm.job_id = data.get("job_id") or getattr(contract, "job_id", None)
         return sm

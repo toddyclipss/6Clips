@@ -41,6 +41,16 @@ async def cancel_production_batch(job_id: str):
     return result
 
 
+@router.get("/jobs", response_model=list)
+async def list_production_jobs(user_id: Optional[str] = None):
+    """List production jobs from durable ledger, optionally filtered by user_id."""
+    producer = get_media_producer()
+    if hasattr(producer, "_ledger"):
+        records = producer._ledger.list_jobs(user_id=user_id)
+        return [r.model_dump() for r in records]
+    return []
+
+
 @router.get("/artifacts/{artifact_id}/stream")
 async def stream_artifact_video(artifact_id: str, request: Request):
     """HTTP Range streaming for rendered video artifacts.

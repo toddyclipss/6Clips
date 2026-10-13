@@ -90,6 +90,7 @@ class OutcomeContract(BaseModel):
     intent_kind: IntentKind = IntentKind.NEW_REQUEST
     user_id: str = "local"
     project_id: Optional[str] = None
+    job_id: Optional[str] = None
     objective: str
     output_count: int = 3
     outputs: List[OutputSpec] = Field(default_factory=list)
