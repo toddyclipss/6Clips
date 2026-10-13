@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Optional
-from fastapi import APIRouter, HTTPException, Query, Response
+from typing import Optional, Dict, Any
+from fastapi import APIRouter, HTTPException, Query, Response, Body
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 from backend.catalog.manifest_service import CatalogManifestService, CatalogManifestError
@@ -27,6 +27,72 @@ from backend.catalog.creative_recipes import CreativeRecipeEngine, CustomBlockPr
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
+
+
+@router.get("/wave8-audit")
+async def get_wave8_audit():
+    """Return Wave 8 12-block verification audit, proof ladder per block, and real browser/MP4 proofs."""
+    return CatalogManifestService.get_wave8_factual_audit()
+
+
+@router.get("/blocks/{block_id}/browser-proof")
+async def get_block_browser_proof(
+    block_id: str,
+    viewport_width: int = Query(1080, ge=320, le=3840),
+    viewport_height: int = Query(1920, ge=320, le=3840),
+):
+    """Run real local browser execution and capture timed visual proof with temporal variance."""
+    try:
+        import asyncio
+        return await asyncio.to_thread(
+            CatalogExportContract.verify_dynamic_browser_proof,
+            block_id=block_id,
+            viewport_width=viewport_width,
+            viewport_height=viewport_height,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating browser proof for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/mp4-proof")
+async def get_block_mp4_proof(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+):
+    """Run physical FFmpeg MP4 composition with ffprobe analysis and sampled video frames."""
+    try:
+        import asyncio
+        return await asyncio.to_thread(
+            CatalogExportContract.render_e2e_mp4_overlay_proof,
+            block_id=block_id,
+            aspect_ratio=aspect_ratio,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating MP4 proof for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/creative-recipes/{recipe_id}/apply-to-document")
+async def apply_recipe_to_document(
+    recipe_id: str,
+    payload: Dict[str, Any] = Body(...),
+):
+    """Apply vetted creative recipe to canonical project document, inserting real timeline clips and code files."""
+    try:
+        doc = payload.get("document") or {}
+        start_time = float(payload.get("start_time", 0.0))
+        return CreativeRecipeEngine.apply_recipe_to_project_document(
+            doc=doc,
+            recipe_id=recipe_id,
+            start_time=start_time,
+        )
+    except (CatalogManifestError, Exception) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/wave7-audit")
