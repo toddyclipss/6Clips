@@ -64,10 +64,23 @@ export default function CatalogDrawer({
   const [targetProjectId, setTargetProjectId] = useState("")
   const [trackIndex, setTrackIndex] = useState(0)
   const [startTime, setStartTime] = useState(0.0)
+  const [instanceId, setInstanceId] = useState("")
+  const [expectedRevision, setExpectedRevision] = useState("")
   const [customVars, setCustomVars] = useState({})
   const [intentLoading, setIntentLoading] = useState(false)
   const [intentResult, setIntentResult] = useState(null)
   const [intentError, setIntentError] = useState(null)
+
+  // Accessibility: close on Escape
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && open) {
+        onClose?.()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [open, onClose])
 
   if (!item) return null
 
@@ -75,7 +88,7 @@ export default function CatalogDrawer({
   const previewUrl = `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
   const posterUrl = `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspect}`
 
-  const isInternalized = Boolean(item.internalized)
+  const isInternalized = Boolean(item.internalized || item.runtime_ready)
   const readiness = item.readiness || (isInternalized ? "READY" : item.disposition === "FIX" ? "FIX" : "UNVERIFIED")
 
   const readinessColor =
@@ -107,6 +120,8 @@ export default function CatalogDrawer({
         start_time_seconds: Number(startTime) || 0.0,
         aspect_ratio: aspect,
         custom_variables: customVars,
+        instance_id: instanceId.trim() || undefined,
+        expected_revision: expectedRevision !== "" ? parseInt(expectedRevision, 10) : undefined,
       }
       const res = await http.post(`/api/catalog/blocks/${item.id}/intent/add-to-project`, payload)
       setIntentResult(res.data)
@@ -465,8 +480,13 @@ export default function CatalogDrawer({
               </Box>
 
               {!isInternalized && (
-                <Alert severity="warning">
-                  This block is <strong>UNVERIFIED</strong> for runtime deployment. Adding it will record a validated intent, but requires coordinator dependency clearance before live rendering.
+                <Alert severity={item.disposition === "FIX" ? "error" : "warning"}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                    {item.blocker_code || "LICENSE_REVIEW_REQUIRED_AMBIGUOUS_RIGHTS"}
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
+                    {item.blocker_reason || "This block is not verified for runtime distribution and requires dependency clearance before live rendering."}
+                  </Typography>
                 </Alert>
               )}
 
@@ -479,6 +499,28 @@ export default function CatalogDrawer({
                   value={targetProjectId}
                   onChange={(e) => setTargetProjectId(e.target.value)}
                 />
+
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    label="Instance ID (Scoped)"
+                    placeholder="Auto-generated if blank"
+                    size="small"
+                    value={instanceId}
+                    onChange={(e) => setInstanceId(e.target.value)}
+                    sx={{ flex: 1 }}
+                    helperText="Unique instance ID for independent editing"
+                  />
+                  <TextField
+                    label="Expected Revision (CAS)"
+                    type="number"
+                    size="small"
+                    placeholder="e.g. 1"
+                    value={expectedRevision}
+                    onChange={(e) => setExpectedRevision(e.target.value)}
+                    sx={{ width: 180 }}
+                    helperText="Optimistic concurrency control"
+                  />
+                </Stack>
 
                 <Stack direction="row" spacing={2}>
                   <TextField
@@ -502,7 +544,7 @@ export default function CatalogDrawer({
                 {item.variables && item.variables.length > 0 && (
                   <Box>
                     <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", mb: 1, display: "block" }}>
-                      Customize Variables
+                      Customize Variables (Independent Instance)
                     </Typography>
                     <Stack spacing={1.5}>
                       {item.variables.map((v) => (
@@ -544,10 +586,13 @@ export default function CatalogDrawer({
                     Intent Validated: {intentResult.intent_id}
                   </Typography>
                   <Typography variant="caption" sx={{ display: "block", mt: 0.5 }}>
-                    Target Track: Track #{intentResult.timeline_item?.track_index} · Duration: {intentResult.timeline_item?.duration}s
+                    Instance ID: <code>{intentResult.timeline_item?.instance_id}</code> · Track #{intentResult.timeline_item?.track_index} · Duration: {intentResult.timeline_item?.duration}s
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: "block", mt: 0.5 }}>
+                    License: <strong>{intentResult.timeline_item?.license_provenance?.license || "Apache-2.0"}</strong> ({intentResult.timeline_item?.license_provenance?.license_status})
                   </Typography>
                   <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.5 }}>
-                    Integration Status: <strong>{intentResult.integration_request?.parameters?.timeline_item ? "Payload Ready for Coordinator Wiring" : "Pending"}</strong>
+                    Integration Status: <strong>{intentResult.integration_request?.parameters?.timeline_item ? "Payload Ready for Coordinator Wiring (ProjectService)" : "Pending"}</strong>
                   </Typography>
                 </Alert>
               )}

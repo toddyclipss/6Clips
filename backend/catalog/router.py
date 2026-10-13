@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, Response
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
@@ -17,6 +18,7 @@ from backend.catalog.project_intent_contract import (
     AddToProjectIntentResult,
     CatalogProjectIntentAdapter,
 )
+from backend.catalog.render_probe import CatalogRenderProbe, CatalogRenderProbeError
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +26,48 @@ router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
 @router.get("/factual-counts")
-async def get_factual_counts():
-    """Return factual counts for Wave 3 Role 3 acceptance reporting."""
-    return CatalogManifestService.get_factual_counts()
+async def get_factual_counts(wave: int = Query(3, description="Wave version for factual counts: 3 or 4")):
+    """Return factual counts for acceptance reporting."""
+    return CatalogManifestService.get_factual_counts(wave=wave)
+
+
+@router.get("/wave4-factual-counts")
+async def get_wave4_factual_counts():
+    """Return factual counts for Wave 4 Role 3 acceptance reporting."""
+    return CatalogManifestService.get_wave4_factual_counts()
+
+
+@router.get("/factual-audit")
+async def get_factual_audit():
+    """Return before/after audit comparison between Wave 3 baseline and Wave 4 expanded counts."""
+    return CatalogManifestService.get_factual_audit()
+
+
+@router.get("/category-summary")
+async def get_category_summary():
+    """Return per-category breakdown of operational items and actionable blockers."""
+    return CatalogManifestService.get_category_summary()
+
+
+@router.get("/probes/all")
+async def probe_all_blocks():
+    """Run physical render probes across all internalized blocks."""
+    return CatalogRenderProbe.probe_all_internalized_blocks()
+
+
+@router.get("/blocks/{block_id}/probe")
+async def probe_single_block(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+):
+    """Run physical render probe for a specific block buffer."""
+    try:
+        return CatalogRenderProbe.probe_block_render(block_id=block_id, aspect_ratio=aspect_ratio)
+    except (CatalogManifestError, CatalogRenderProbeError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error probing block %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail="Could not execute render probe.")
 
 
 @router.get("/items")
@@ -84,7 +125,7 @@ async def get_catalog_item(block_id: str):
 
 @router.get("/manifest")
 async def get_full_manifest():
-    """Return the entire canonical runtime manifest with all 196 catalog blocks."""
+    """Return the entire canonical runtime manifest with all catalog blocks."""
     try:
         items = CatalogManifestService.get_all_items()
         summary = CatalogManifestService.get_reconciliation_summary()
@@ -117,6 +158,7 @@ async def get_catalog_audit():
         },
         "inventory": inventory,
         "summary": summary,
+        "factual_audit": CatalogManifestService.get_factual_audit(),
     }
 
 
@@ -174,6 +216,36 @@ async def get_block_preview(
         )
     except (CatalogManifestError, Exception) as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/assets/{asset_name:path}")
+async def get_block_asset(block_id: str, asset_name: str):
+    """Serve bundled local assets (images, fonts) for shipped blocks with strict boundary checks."""
+    CatalogManifestService.validate_block_id(block_id)
+    if any(bad in asset_name for bad in ["..", "\\", "%2e", "%2f", "\x00"]):
+        raise HTTPException(status_code=400, detail="Invalid asset name")
+    shipped_root = Path(__file__).parent / "shipped_blocks"
+    asset_file = (shipped_root / block_id / "assets" / asset_name).resolve()
+    base_assets_dir = (shipped_root / block_id / "assets").resolve()
+    if not str(asset_file).startswith(str(base_assets_dir)) or not asset_file.is_file():
+        raise HTTPException(status_code=404, detail="Asset not found")
+    media_type = "image/jpeg" if asset_name.endswith(".jpg") else "font/woff2" if asset_name.endswith(".woff2") else "application/octet-stream"
+    return FileResponse(asset_file, media_type=media_type)
+
+
+@router.get("/blocks/{block_id}/lib/{lib_name:path}")
+async def get_block_lib(block_id: str, lib_name: str):
+    """Serve bundled vendor scripts/shaders for shipped blocks with strict boundary checks."""
+    CatalogManifestService.validate_block_id(block_id)
+    if any(bad in lib_name for bad in ["..", "\\", "%2e", "%2f", "\x00"]):
+        raise HTTPException(status_code=400, detail="Invalid library name")
+    shipped_root = Path(__file__).parent / "shipped_blocks"
+    lib_file = (shipped_root / block_id / "lib" / lib_name).resolve()
+    base_lib_dir = (shipped_root / block_id / "lib").resolve()
+    if not str(lib_file).startswith(str(base_lib_dir)) or not lib_file.is_file():
+        raise HTTPException(status_code=404, detail="Library file not found")
+    media_type = "application/javascript" if lib_name.endswith(".js") else "text/plain"
+    return FileResponse(lib_file, media_type=media_type)
 
 
 @router.get("/blocks/{block_id}/ghost-config")

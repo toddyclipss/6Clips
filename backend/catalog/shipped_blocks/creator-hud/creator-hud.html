@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+      }
+
+      .hud-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        color: #ffffff;
+        pointer-events: none;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* Corner framing brackets */
+      .corner-brackets {
+        position: absolute;
+        inset: 32px;
+        pointer-events: none;
+      }
+      .bracket {
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        border: 2px solid rgba(255, 255, 255, 0.6);
+      }
+      .bracket.top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+      .bracket.top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+      .bracket.bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+      .bracket.bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+      /* Top HUD Bar */
+      .hud-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 2;
+      }
+
+      .rec-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+      .rec-dot {
+        width: 16px;
+        height: 16px;
+        background: #ef4444;
+        border-radius: 50%;
+        box-shadow: 0 0 12px #ef4444;
+        animation: recBlink 1s infinite;
+      }
+      @keyframes recBlink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0.2; }
+      }
+
+      .timecode {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      }
+
+      .battery-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .battery-icon {
+        width: 32px;
+        height: 16px;
+        border: 2px solid #ffffff;
+        border-radius: 3px;
+        padding: 1px;
+        position: relative;
+      }
+      .battery-icon::after {
+        content: "";
+        position: absolute;
+        right: -5px;
+        top: 3px;
+        width: 3px;
+        height: 6px;
+        background: #ffffff;
+        border-radius: 0 2px 2px 0;
+      }
+      .battery-level {
+        width: 85%;
+        height: 100%;
+        background: #22c55e;
+        border-radius: 1px;
+      }
+
+      /* Center Crosshair */
+      .center-crosshair {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 48px;
+        height: 48px;
+        opacity: 0.4;
+      }
+      .center-crosshair::before, .center-crosshair::after {
+        content: "";
+        position: absolute;
+        background: #ffffff;
+      }
+      .center-crosshair::before {
+        top: 50%; left: 0; right: 0; height: 1px;
+      }
+      .center-crosshair::after {
+        left: 50%; top: 0; bottom: 0; width: 1px;
+      }
+
+      /* Bottom HUD Bar */
+      .hud-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 2;
+        font-size: 16px;
+        color: #cbd5e1;
+      }
+
+      .audio-meter {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .audio-bar {
+        width: 6px;
+        background: #22c55e;
+        border-radius: 2px;
+        animation: meterBounce 0.4s ease infinite alternate;
+      }
+      .audio-bar:nth-child(1) { height: 12px; }
+      .audio-bar:nth-child(2) { height: 18px; }
+      .audio-bar:nth-child(3) { height: 24px; }
+      .audio-bar:nth-child(4) { height: 16px; background: #eab308; }
+      .audio-bar:nth-child(5) { height: 8px; background: #ef4444; }
+
+      @keyframes meterBounce {
+        from { transform: scaleY(0.7); }
+        to { transform: scaleY(1.3); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hud-stage">
+      <div class="corner-brackets">
+        <div class="bracket top-left"></div>
+        <div class="bracket top-right"></div>
+        <div class="bracket bottom-left"></div>
+        <div class="bracket bottom-right"></div>
+      </div>
+
+      <div class="hud-top">
+        <div class="rec-badge">
+          <div class="rec-dot"></div>
+          <span>REC</span>
+        </div>
+        <div class="timecode" id="tc-display">00:00:00:00</div>
+        <div class="battery-badge">
+          <span>94%</span>
+          <div class="battery-icon">
+            <div class="battery-level"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="center-crosshair"></div>
+
+      <div class="hud-bottom">
+        <div>RAW // 4K 60FPS // 10-BIT</div>
+        <div class="audio-meter">
+          <span>MIC</span>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+        </div>
+        <div>SAFE AREA 90%</div>
+      </div>
+    </div>
+    <script>
+      // Native timecode clock counter
+      var frameCount = 0;
+      setInterval(function() {
+        frameCount++;
+        var fps = 60;
+        var totalSec = Math.floor(frameCount / fps);
+        var ff = frameCount % fps;
+        var ss = totalSec % 60;
+        var mm = Math.floor(totalSec / 60) % 60;
+        var hh = Math.floor(totalSec / 3600);
+        function pad(n) { return (n < 10 ? "0" : "") + n; }
+        var el = document.getElementById("tc-display");
+        if (el) el.innerText = pad(hh) + ":" + pad(mm) + ":" + pad(ss) + ":" + pad(ff);
+      }, 1000 / 60);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["creator-hud"] = {
+        duration: function() { return 5.0; },
+        seek: function(t) {},
+        play: function() {},
+        pause: function() {}
+      };
+    </script>
+  </body>
+</html>

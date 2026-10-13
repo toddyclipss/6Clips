@@ -1,0 +1,50 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "creator-hud",
+  "type": "hyperframes:block",
+  "title": "Creator Camera HUD Overlay",
+  "description": "Original self-contained camcorder and creator camera treatment with live REC indicator, battery gauge, timecode counter, and safe area framing",
+  "tags": [
+    "overlay",
+    "hud",
+    "camera",
+    "camcorder",
+    "creator",
+    "safe-areas"
+  ],
+  "author": "6Clips Contributors",
+  "license": "Apache-2.0",
+  "category": "overlays",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 5.0,
+  "files": [
+    {
+      "path": "creator-hud.html",
+      "target": "compositions/creator-hud.html",
+      "type": "hyperframes:composition"
+    }
+  ],
+  "variables": [
+    {
+      "name": "creator_handle",
+      "type": "string",
+      "default": "@6clips",
+      "description": "Creator username or channel callsign"
+    },
+    {
+      "name": "battery_pct",
+      "type": "number",
+      "default": 94,
+      "description": "Battery charge percentage (0 to 100)"
+    },
+    {
+      "name": "show_crosshair",
+      "type": "boolean",
+      "default": true,
+      "description": "Toggle center rule-of-thirds crosshair"
+    }
+  ]
+}

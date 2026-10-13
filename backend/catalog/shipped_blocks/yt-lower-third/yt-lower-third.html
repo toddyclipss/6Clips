@@ -2,241 +2,130 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=block"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
       }
       html,
       body {
         background: transparent;
         overflow: hidden;
-      }
-      body {
         width: 1920px;
         height: 1080px;
-        font-family: "DM Sans", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
 
       [data-composition-id="yt-lower-third"] .lower-third {
         position: absolute;
         bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 80px;
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-left: 6px solid #ff0000;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 12px;
+        padding: 20px 32px;
         display: flex;
         align-items: center;
-        gap: 28px;
-        background: #ffffff;
-        border-radius: 60px;
-        padding: 20px 32px 20px 20px;
-        box-shadow: 0 6px 32px rgba(0, 0, 0, 0.14);
+        gap: 24px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        transform: translateY(80px);
+        animation: ytCardTimeline 5.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes ytCardTimeline {
+        0% {
+          opacity: 0;
+          transform: translateY(80px);
+        }
+        8% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        88% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(80px);
+        }
+      }
+
+      [data-composition-id="yt-lower-third"] .avatar-wrapper {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        flex-shrink: 0;
       }
 
       [data-composition-id="yt-lower-third"] .avatar {
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        flex-shrink: 0;
       }
 
-      [data-composition-id="yt-lower-third"] .channel-info {
+      [data-composition-id="yt-lower-third"] .content {
         display: flex;
         flex-direction: column;
-        gap: 2px;
-        margin-right: 20px;
       }
 
-      [data-composition-id="yt-lower-third"] .channel-name {
-        font-size: 34px;
-        font-weight: 700;
-        color: #0f0f0f;
-        line-height: 1.3;
-        letter-spacing: -0.01em;
-      }
-
-      [data-composition-id="yt-lower-third"] .subscriber-count {
-        font-size: 22px;
-        font-weight: 400;
-        color: #606060;
-        line-height: 1.3;
-      }
-
-      [data-composition-id="yt-lower-third"] .subscribe-btn {
-        position: relative;
-        width: 220px;
-        height: 68px;
-        border-radius: 34px;
-        background: #0f0f0f;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-      }
-
-      [data-composition-id="yt-lower-third"] .btn-text {
-        position: absolute;
-        font-family: "DM Sans", sans-serif;
-        font-size: 24px;
-        font-weight: 700;
+      [data-composition-id="yt-lower-third"] .title {
         color: #ffffff;
-        letter-spacing: 0.02em;
-        white-space: nowrap;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
       }
 
-      [data-composition-id="yt-lower-third"] .btn-text-subscribe {
-        opacity: 1;
-      }
-
-      [data-composition-id="yt-lower-third"] .btn-text-subscribed {
-        opacity: 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      [data-composition-id="yt-lower-third"] .check-icon {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-      }
-
-      [data-composition-id="yt-lower-third"] .check-icon svg {
-        width: 24px;
-        height: 24px;
-        display: block;
+      [data-composition-id="yt-lower-third"] .subtitle {
+        color: #e2e8f0;
+        font-size: 18px;
+        font-weight: 500;
+        margin-top: 4px;
       }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="yt-lower-third"
-      data-width="1920"
-      data-height="1080"
-      data-start="0"
-      data-duration="4.5"
-    >
-      <div
-        id="card"
-        class="clip lower-third"
-        data-start="0"
-        data-duration="4.5"
-        data-track-index="0"
-      >
-        <img class="avatar" src="assets/avatar.jpg" alt="HeyGen" crossorigin="anonymous" />
-        <div class="channel-info">
-          <div class="channel-name">HeyGen</div>
-          <div class="subscriber-count">82.2K subscribers</div>
+    <div data-composition-id="yt-lower-third">
+      <div class="lower-third lower-third-container" id="yt-card">
+        <div class="avatar-wrapper">
+          <img class="avatar" src="assets/avatar.jpg" alt="Channel Avatar" />
         </div>
-        <div id="subscribe-btn" class="subscribe-btn">
-          <span id="btn-subscribe" class="btn-text btn-text-subscribe">Subscribe</span>
-          <span id="btn-subscribed" class="btn-text btn-text-subscribed">
-            <span class="check-icon"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#fff"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline></svg
-            ></span>
-            Subscribed
-          </span>
+        <div class="content">
+          <span class="title lower-third-title">@6clips · Subscribe</span>
+          <span class="subtitle lower-third-subtitle">Daily Motion Graphics & AI Video Tools</span>
         </div>
       </div>
     </div>
-
     <script>
+      // Native timeline adapter for preview scrubber compatibility
       window.__timelines = window.__timelines || {};
-
-      var tl = gsap.timeline({ paused: true });
-
-      var card = document.getElementById("card");
-      var btn = document.getElementById("subscribe-btn");
-      var textSub = document.getElementById("btn-subscribe");
-      var textSubd = document.getElementById("btn-subscribed");
-
-      // Slide in from bottom
-      gsap.set(card, { y: 300, opacity: 0 });
-
-      tl.to(
-        card,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          ease: "power3.out",
+      window.__timelines["yt-lower-third"] = {
+        duration: function() { return 5.0; },
+        seek: function(t) {
+          var el = document.getElementById("yt-card");
+          if (!el) return;
+          var progress = Math.max(0, Math.min(1, t / 5.0));
+          el.style.animationPlayState = "paused";
+          el.style.animationDelay = (-progress * 5.0) + "s";
         },
-        0.1,
-      );
-
-      // Hold, then button press-in
-      tl.to(
-        btn,
-        {
-          scale: 0.92,
-          duration: 0.15,
-          ease: "power2.out",
+        play: function() {
+          var el = document.getElementById("yt-card");
+          if (el) el.style.animationPlayState = "running";
         },
-        1.0,
-      );
-
-      // Button release with spring bounce + text swap
-      tl.to(
-        btn,
-        {
-          scale: 1,
-          duration: 0.4,
-          ease: "elastic.out(1, 0.4)",
-        },
-        1.15,
-      );
-
-      // Fade out "Subscribe", fade in "Subscribed"
-      tl.to(
-        textSub,
-        {
-          opacity: 0,
-          duration: 0.08,
-          ease: "none",
-        },
-        1.15,
-      );
-
-      tl.to(
-        textSubd,
-        {
-          opacity: 1,
-          duration: 0.08,
-          ease: "none",
-        },
-        1.18,
-      );
-
-      // Slide out to bottom (inverse of entrance)
-      tl.to(
-        card,
-        {
-          y: 300,
-          opacity: 0,
-          duration: 0.25,
-          ease: "power3.in",
-        },
-        3.8,
-      );
-
-      window.__timelines["yt-lower-third"] = tl;
+        pause: function() {
+          var el = document.getElementById("yt-card");
+          if (el) el.style.animationPlayState = "paused";
+        }
+      };
     </script>
   </body>
 </html>
