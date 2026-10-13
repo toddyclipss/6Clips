@@ -86,8 +86,9 @@ class AddToProjectIntentResult(BaseModel):
     status: str  # "VALIDATED_INTENT", "WARNING_UNVERIFIED"
     block_id: str
     target_project_id: Optional[str]
-    timeline_item: ValidatedTimelineItem
+    timeline_item: Optional[ValidatedTimelineItem] = None
     integration_request: Dict[str, Any]
+    revert_operation: Dict[str, Any] = Field(default_factory=dict, description="Reversible document operation descriptor")
 
 
 class CatalogProjectIntentAdapter:
@@ -293,6 +294,16 @@ class CatalogProjectIntentAdapter:
             "coordinator_action_required": True,
         }
 
+        revert_operation = {
+            "action": "remove_timeline_item",
+            "item_id": item_id,
+            "instance_id": instance_id,
+            "track_index": request.timeline_track_index,
+            "target_project_id": request.project_id,
+            "expected_revision": (request.expected_revision + 1) if request.expected_revision is not None else None,
+            "reversible": True,
+        }
+
         return AddToProjectIntentResult(
             intent_id=intent_id,
             status=status,
@@ -300,4 +311,5 @@ class CatalogProjectIntentAdapter:
             target_project_id=request.project_id,
             timeline_item=timeline_item,
             integration_request=integration_request,
+            revert_operation=revert_operation,
         )
