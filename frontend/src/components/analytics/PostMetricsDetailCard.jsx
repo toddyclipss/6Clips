@@ -87,6 +87,9 @@ export function PostMetricsDetailCard({ receipt, aggregate }) {
             </Typography>
           </Box>
           <Stack direction="row" spacing={1} alignItems="center">
+            {aggregate.is_deleted_on_platform && (
+              <Chip label="DELETED_ON_PLATFORM" size="small" color="error" sx={{ fontWeight: 800 }} />
+            )}
             {aggregate.is_test_fixture && (
               <Chip label="TEST_DATA" size="small" color="warning" sx={{ fontWeight: 800 }} />
             )}

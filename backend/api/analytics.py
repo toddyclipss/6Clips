@@ -155,6 +155,26 @@ async def get_post_metrics(receipt_id: str):
     }
 
 
+@router.post("/post/{receipt_id}/mark-deleted")
+async def mark_post_deleted(receipt_id: str):
+    """Mark a published post as deleted on remote platform."""
+    engine = get_analytics_engine()
+    success = engine.mark_post_deleted(receipt_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Receipt not found")
+    return {"receipt_id": receipt_id, "status": "DELETED_ON_PLATFORM"}
+
+
+@router.get("/summary")
+async def get_multi_platform_summary(creator_id: str = "local"):
+    """
+    Get multi-platform analytics summary preserving native platform metrics
+    without lossy cross-platform summation.
+    """
+    engine = get_analytics_engine()
+    return engine.get_multi_platform_summary(creator_id=creator_id)
+
+
 @router.get("/feedback/{receipt_id}")
 async def get_creative_feedback(receipt_id: str):
     """
