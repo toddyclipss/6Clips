@@ -23,7 +23,93 @@ import {
   IconVideo,
   IconNotes,
   IconSparkles,
+  IconFlame,
 } from "@tabler/icons-react"
+
+const SCORE_FACTOR_META = {
+  hook: { label: "Hook", blurb: "Opening 2-3 seconds stop the scroll" },
+  flow: { label: "Flow", blurb: "Pacing and narrative transitions" },
+  value: { label: "Value", blurb: "Core idea density and retention" },
+  trend: { label: "Trend", blurb: "Topic and framing alignment" },
+  shareability: { label: "Share", blurb: "Relatability and send impulse" },
+}
+
+function parseScoreBreakdown(clip) {
+  const raw = clip?.clip_score_breakdown_json || clip?.score_breakdown_json || clip?.score_breakdown
+  if (!raw) return null
+  if (typeof raw === "object") return raw
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+function scoreFactorColor(score) {
+  if (score == null) return "text.disabled"
+  if (score >= 8) return "success.main"
+  if (score >= 6) return "warning.main"
+  return "error.main"
+}
+
+function ScoreBreakdownPanel({ clip }) {
+  const hook = clip.clip_hook_score ?? clip.hook_score
+  const breakdown = parseScoreBreakdown(clip)
+  if (hook == null && !breakdown) return null
+
+  const factors = [
+    { key: "hook", score: hook },
+    { key: "flow", score: breakdown?.flow },
+    { key: "value", score: breakdown?.value },
+    { key: "trend", score: breakdown?.trend },
+    { key: "shareability", score: breakdown?.shareability },
+  ].filter((f) => f.score != null)
+
+  if (factors.length === 0) return null
+  const overall = clip.clip_virality_score ?? clip.virality_score
+
+  return (
+    <Box sx={{ mb: 1, p: 1, bgcolor: "#f1f5f9", borderRadius: 1.5, border: "1px solid", borderColor: "divider" }}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 0.5 }}>
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <IconFlame size={13} color="#f97316" />
+          <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem" }}>
+            Virality Scoreboard
+          </Typography>
+        </Stack>
+        {overall != null && (
+          <Chip
+            size="small"
+            label={`${Number(overall).toFixed(1)}/10`}
+            color={overall >= 8 ? "success" : overall >= 6 ? "warning" : "default"}
+            sx={{ height: 16, fontSize: "0.62rem", fontWeight: 700 }}
+          />
+        )}
+      </Stack>
+      <Stack spacing={0.4}>
+        {factors.map(({ key, score }) => (
+          <Stack key={key} direction="row" alignItems="center" spacing={1}>
+            <Typography variant="caption" sx={{ width: 45, fontSize: "0.62rem", color: "text.secondary" }}>
+              {SCORE_FACTOR_META[key]?.label || key}
+            </Typography>
+            <Box sx={{ flex: 1, bgcolor: "grey.200", height: 5, borderRadius: 1, overflow: "hidden" }}>
+              <Box
+                sx={{
+                  width: `${Math.min(100, Math.max(0, score * 10))}%`,
+                  height: "100%",
+                  bgcolor: scoreFactorColor(score),
+                }}
+              />
+            </Box>
+            <Typography variant="caption" sx={{ width: 22, textAlign: "right", fontSize: "0.62rem", fontWeight: 700 }}>
+              {Number(score).toFixed(1)}
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </Box>
+  )
+}
 
 export default function MotionReviewPanel({
   outputs = [],
@@ -138,6 +224,9 @@ export default function MotionReviewPanel({
                     sx={{ height: 18, fontSize: "0.65rem", fontWeight: 600, mb: 0.8, bgcolor: "#ede9fe", color: "#6d28d9" }}
                   />
                 )}
+
+                {/* 5-factor Virality Scoreboard */}
+                <ScoreBreakdownPanel clip={out} />
 
                 {/* Editorial Reason if present */}
                 {out.source_ranges?.[0]?.editorial_reason && (
