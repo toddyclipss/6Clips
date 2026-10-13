@@ -640,7 +640,12 @@ export default function Library() {
                 <PendingTile key={job.id} job={job} dense={dense}
                   onCancel={() => cancelJob(job.id)} />
               ))}
-              {items.map((item) => (
+              {items
+                .filter((it) => {
+                  const s = ((it?.title || "") + " " + (it?.key || "")).toLowerCase()
+                  return !s.includes("synth_fixture") && !s.includes("synthetic_tone") && !s.includes("dummy_media")
+                })
+                .map((item) => (
                 <AssetTile
                   key={item.key}
                   item={item}
