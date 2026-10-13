@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (c) 2026 ViralMint Contributors
 """
-Production Path Orchestration Contracts (Wave 7).
+Production Path Orchestration Contracts (Wave 8).
 
 Defines typed specifications for:
-- GT-05 (V1): 1 authorized gameplay source -> 3 vertical shorts (~60s)
+- GT-05 (V1): 1 authorized gameplay source -> 3 vertical shorts (~60s) with independent projects & review
 - GT-06 (V3): 1 authentic ~60-minute recording -> 8-10 minute 16:9 narrative result
 - GT-07 (V2): 5 authorized source assets -> 10 distinct editable/rendered outputs
 - Source media rights verification, physical probe metadata, lineage tracking,
@@ -35,6 +35,7 @@ class OrchestrationContractStatus(str, Enum):
     AWAITING_RENDER = "AWAITING_RENDER"
     RENDERED = "RENDERED"
     MOTION_REVIEW_LINKED = "MOTION_REVIEW_LINKED"
+    WAITING_FOR_INPUT = "WAITING_FOR_INPUT"
     NOT_TESTED = "NOT_TESTED"
     REJECTED = "REJECTED"
     FAILED = "FAILED"
@@ -71,6 +72,50 @@ class SourceMediaAsset(BaseModel):
     probe: Optional[MediaProbeMetadata] = None
 
 
+class V1ExpectedOutputSpec(BaseModel):
+    """Specification of an expected output in a V1 (GT-05) 3-clip vertical batch."""
+    output_id: str
+    project_id: str  # Independent project reference for this short
+    target_aspect_ratio: str = "9:16"
+    target_duration_min_sec: float = 50.0
+    target_duration_max_sec: float = 70.0
+    primary_source_id: str
+    source_start_sec: float = 0.0
+    source_end_sec: float = 60.0
+    editorial_focus: str = "gameplay_highlight"
+    project_revision: int = 1
+    has_subtitles: bool = True
+    motion_review_url: str = ""
+    output_file_path: Optional[str] = None
+
+
+class V1ProductionContract(BaseModel):
+    """
+    Production path contract for V1 (GT-05):
+    1 licensed source -> THREE usable independent ~60s vertical clips with provenance,
+    subtitles/audio/Review, ffprobe, and independent projects.
+    """
+    contract_id: str
+    gate_id: str = "GT-05"
+    project_id: str
+    source_gameplay: Optional[SourceMediaAsset] = None
+    expected_outputs: List[V1ExpectedOutputSpec] = Field(default_factory=list)
+    independent_project_ids: List[str] = Field(default_factory=list)
+    status: OrchestrationContractStatus = OrchestrationContractStatus.CONTRACT_PREPARED
+    dedupe_policy: Dict[str, Any] = Field(
+        default_factory=lambda: {
+            "require_unique_hashes": True,
+            "prohibit_exact_time_overlap": True,
+            "max_allowed_overlap_fraction": 0.15,
+            "prohibit_synthetic_filler": True,
+        }
+    )
+    issues: List[str] = Field(default_factory=list)
+    required_file_instructions: List[str] = Field(default_factory=list)
+    is_real_user_media: bool = False
+    notes: str = ""
+
+
 class V2ExpectedOutputSpec(BaseModel):
     """Specification of an expected output in a V2 (GT-07) 10-clip batch."""
     output_id: str
@@ -105,6 +150,7 @@ class V2ProductionContract(BaseModel):
         }
     )
     issues: List[str] = Field(default_factory=list)
+    required_file_instructions: List[str] = Field(default_factory=list)
     is_real_user_media: bool = False
     notes: str = ""
 
@@ -136,6 +182,7 @@ class V3ProductionContract(BaseModel):
     status: OrchestrationContractStatus = OrchestrationContractStatus.CONTRACT_PREPARED
     motion_review_url: str = ""
     issues: List[str] = Field(default_factory=list)
+    required_file_instructions: List[str] = Field(default_factory=list)
     is_real_user_media: bool = False
     notes: str = ""
 
@@ -143,11 +190,13 @@ class V3ProductionContract(BaseModel):
 class OrchestrationResult(BaseModel):
     """Execution result of a production acceptance verification."""
     gate_id: str
-    status: str  # PASSED | FAILED | NOT_TESTED | BLOCKED
+    status: str  # PASSED | FAILED | NOT_TESTED | WAITING_FOR_INPUT | BLOCKED
     is_real_user_media: bool = False
     artifacts_verified_count: int = 0
     distinct_hashes_count: int = 0
     motion_review_urls: List[str] = Field(default_factory=list)
+    independent_project_ids: List[str] = Field(default_factory=list)
     issues: List[str] = Field(default_factory=list)
     missing_evidence: List[str] = Field(default_factory=list)
+    required_file_instructions: List[str] = Field(default_factory=list)
     notes: str = ""
