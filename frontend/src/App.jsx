@@ -95,6 +95,7 @@ export default function App() {
                   bookmarked, and every ?tab= link the old page published still
                   arrives here and is translated into the new filters. */}
               <Route path="videos" element={<Library />} />
+              <Route path="library" element={<Navigate to="/videos" replace />} />
               {/* Trends leads are not files you own, so they are not the
                   Library. */}
               <Route path="trends" element={<Trends />} />

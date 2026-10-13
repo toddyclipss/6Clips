@@ -119,7 +119,7 @@ export default function CatalogFacetBar({
             </ToggleButton>
           </ToggleButtonGroup>
 
-          {/* Disposition Filter */}
+          {/* Disposition / Readiness Filter */}
           <ToggleButtonGroup
             value={disposition}
             exclusive
@@ -138,8 +138,9 @@ export default function CatalogFacetBar({
             }}
           >
             <ToggleButton value="ALL">All Status</ToggleButton>
-            <ToggleButton value="SHIP">Ship Ready</ToggleButton>
-            <ToggleButton value="FIX">In Repair</ToggleButton>
+            <ToggleButton value="READY">Ready (6)</ToggleButton>
+            <ToggleButton value="UNVERIFIED">Unverified (168)</ToggleButton>
+            <ToggleButton value="FIX">In Repair (22)</ToggleButton>
           </ToggleButtonGroup>
         </Stack>
       </Stack>

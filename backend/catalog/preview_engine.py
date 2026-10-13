@@ -25,10 +25,13 @@ class CatalogPreviewEngine:
         version_hash: Optional[str] = None,
         aspect_ratio: str = "9:16",
         variables: Optional[Dict[str, str]] = None,
+        viewport_width: Optional[int] = None,
+        viewport_height: Optional[int] = None,
     ) -> str:
         """
         Generate standalone preview HTML for the requested catalog block.
         Aspect ratio: "9:16" (vertical short-form) or "16:9" (horizontal long-form).
+        Supports custom viewport inspection (e.g. 1366x768, 1440x900, 1920x1080).
         """
         CatalogManifestService.validate_block_id(block_id)
         item = CatalogManifestService.get_item(block_id)
@@ -36,9 +39,12 @@ class CatalogPreviewEngine:
             raise CatalogManifestError(f"Block '{block_id}' not found in catalog.")
 
         aspect_norm = "9:16" if aspect_ratio in ("9:16", "9x16", "vertical") else "16:9"
-        target_w, target_h = (1080, 1920) if aspect_norm == "9:16" else (1920, 1080)
+        if viewport_width and viewport_height:
+            target_w, target_h = int(viewport_width), int(viewport_height)
+        else:
+            target_w, target_h = (1080, 1920) if aspect_norm == "9:16" else (1920, 1080)
 
-        # 1. Resolve source HTML
+        # 1. Resolve source HTML strictly from vendored shipped_blocks
         source_html = cls._find_block_html(block_id)
 
         # 2. If source HTML not found, generate an authentic rendered preview card
@@ -51,7 +57,10 @@ class CatalogPreviewEngine:
 
     @classmethod
     def _find_block_html(cls, block_id: str) -> Optional[str]:
-        # Check shipped directory first
+        """
+        Locates the block HTML exclusively from locally vendored SHIPPED_BLOCKS_DIR.
+        Strictly zero runtime dependency on the donor directory (GT-20, AC-5).
+        """
         shipped = SHIPPED_BLOCKS_DIR / block_id
         if shipped.exists():
             for cand in [f"{block_id}.html", "index.html"]:
@@ -59,31 +68,14 @@ class CatalogPreviewEngine:
                 if p.is_file():
                     try:
                         return p.read_text(encoding="utf-8")
-                    except Exception:
-                        pass
-            # Any html
+                    except Exception as e:
+                        logger.warning("Failed reading block html for %s: %s", block_id, e)
+            # Any html file in shipped directory
             for p in shipped.glob("*.html"):
                 try:
                     return p.read_text(encoding="utf-8")
                 except Exception:
                     pass
-
-        # Check donor directory read-only if present
-        if DONOR_BLOCKS_DIR.exists():
-            donor = DONOR_BLOCKS_DIR / block_id
-            if donor.exists():
-                for cand in [f"{block_id}.html", "index.html"]:
-                    p = donor / cand
-                    if p.is_file():
-                        try:
-                            return p.read_text(encoding="utf-8", errors="ignore")
-                        except Exception:
-                            pass
-                for p in donor.glob("*.html"):
-                    try:
-                        return p.read_text(encoding="utf-8", errors="ignore")
-                    except Exception:
-                        pass
 
         return None
 
@@ -207,6 +199,8 @@ class CatalogPreviewEngine:
         author = item.get("author", "HyperFrames")
         license_id = item.get("license", "Apache-2.0")
         dur = item.get("duration", 5.0)
+        disp = item.get("disposition", "UNVERIFIED")
+        status_label = "UNVERIFIED — PENDING INTERNALIZATION" if disp != "FIX" else "FIX REQUIRED"
 
         return f"""<!DOCTYPE html>
 <html lang="en">
@@ -246,7 +240,7 @@ body {{
     position: absolute;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%);
     border-radius: 50%;
     animation: pulse 4s ease-in-out infinite alternate;
 }}
@@ -255,13 +249,13 @@ body {{
     100% {{ transform: scale(1.2) translate(20px, 20px); }}
 }}
 .badge {{
-    background: rgba(99, 102, 241, 0.2);
-    border: 1px solid rgba(99, 102, 241, 0.4);
-    color: #a5b4fc;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    color: #fcd34d;
     padding: 6px 14px;
     border-radius: 9999px;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 20px;
@@ -277,14 +271,22 @@ body {{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }}
-.meta {{
-    font-size: 14px;
+.desc {{
+    font-size: 13px;
     color: #94a3b8;
+    max-width: 460px;
+    line-height: 1.5;
     z-index: 2;
-    margin-top: 8px;
+    margin-bottom: 16px;
+}}
+.meta {{
+    font-size: 13px;
+    color: #64748b;
+    z-index: 2;
+    margin-top: 4px;
 }}
 .aspect-tag {{
-    margin-top: 24px;
+    margin-top: 20px;
     font-size: 12px;
     color: #64748b;
     border: 1px solid #334155;
@@ -297,8 +299,9 @@ body {{
 <body>
 <div class="stage">
     <div class="ambient-glow"></div>
-    <div class="badge">{cat}</div>
+    <div class="badge">{status_label} · {cat}</div>
     <h1 class="title">{title}</h1>
+    <p class="desc">This block requires offline dependency vendoring (GSAP/Three) and license clearance before runtime bundling. Only internalized blocks ship in production.</p>
     <p class="meta">{author} · {license_id} · {dur}s</p>
     <div class="aspect-tag">Aspect: {aspect_ratio} ({target_w}×{target_h})</div>
 </div>

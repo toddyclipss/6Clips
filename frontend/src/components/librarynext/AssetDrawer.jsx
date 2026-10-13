@@ -30,6 +30,7 @@ import {
   IconTrash,
   IconArrowUpRight,
   IconCornerDownRight,
+  IconMovie,
 } from "@tabler/icons-react"
 import http from "../../api/http"
 import useAppStore from "../../store/appStore"
@@ -372,6 +373,18 @@ export default function AssetDrawer({
               p: 1.5, flexShrink: 0, borderTop: 1, borderColor: "divider",
               bgcolor: "background.subtle",
             }}>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<IconMovie size={16} stroke={1.8} />}
+                sx={{ borderRadius: "20px" }}
+                onClick={() => {
+                  onClose?.()
+                  navigate(`/motion?asset=${encodeURIComponent(item.key)}`)
+                }}
+              >
+                Use in Motion
+              </Button>
               <Button variant="contained" size="small" startIcon={<IconDownload size={16} stroke={1.8} />}
                 sx={{ flex: 1, borderRadius: "20px" }} href={item.stream_url} download>
                 Save a copy
