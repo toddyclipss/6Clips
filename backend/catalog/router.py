@@ -29,6 +29,50 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
+@router.get("/wave7-audit")
+async def get_wave7_audit():
+    """Return Wave 7 renderability audit, proof ladder per block, and export contracts."""
+    return CatalogManifestService.get_wave7_factual_audit()
+
+
+@router.get("/blocks/{block_id}/overlay-contract")
+async def get_block_overlay_contract(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+):
+    """Return verifiable E2E overlay export contract with timing, safe margins, and alpha semantics."""
+    try:
+        return CatalogExportContract.generate_e2e_overlay_contract(block_id=block_id, aspect_ratio=aspect_ratio)
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/alpha-probe")
+async def get_block_alpha_probe(block_id: str):
+    """Verify physical RGBA frame with alpha transparency for overlay block."""
+    try:
+        return CatalogExportContract.verify_physical_alpha_frame(block_id=block_id)
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/creative-recipes/{recipe_id}/execute")
+async def execute_recipe_to_timeline(
+    recipe_id: str,
+    project_id: str = Query("proj_draft", description="Target composition project ID"),
+    owning_user_id: str = Query("user_default", description="Owning user ID"),
+):
+    """Translate vetted creative recipe into validated timeline items ready for ProjectService insertion."""
+    try:
+        return CreativeRecipeEngine.execute_recipe_to_timeline(
+            recipe_id=recipe_id,
+            project_id=project_id,
+            owning_user_id=owning_user_id,
+        )
+    except (CatalogManifestError, Exception) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @router.get("/wave6-audit")
 async def get_wave6_audit():
     """Return Wave 6 functional blocks, vetted recipes, and proof ladder verification status."""
