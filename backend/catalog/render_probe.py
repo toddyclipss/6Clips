@@ -167,6 +167,13 @@ class CatalogRenderProbe:
             "webgpu_fallback_present": has_webgpu_shim,
             "honest_gpu_statement": honest_gpu_statement,
             "gpu_hardware_claimed": False,
+            "structural_verification": "PASS" if probe_passed else "FAIL",
+            "browser_verification": "BROWSER_NOT_TESTED",
+            "mp4_render_verification": "RENDER_IN_MP4_NOT_TESTED",
+            "honest_statement": (
+                "Automated headless HTML/DOM structural inspection. "
+                "Real headful browser rendering and MP4 export deferred to Role 4 validation agent."
+            ),
             "local_files_verified": local_files_exist,
             "probe_passed": probe_passed,
         }
@@ -207,5 +214,8 @@ class CatalogRenderProbe:
             "total_probes_run": total_probes,
             "total_probes_passed": passed_count,
             "all_probes_passed": passed_count == total_probes,
+            "structural_verification_all": "PASS" if passed_count == total_probes else "FAIL",
+            "browser_verification_all": "BROWSER_NOT_TESTED",
+            "mp4_render_verification_all": "RENDER_IN_MP4_NOT_TESTED",
             "results": results,
         }

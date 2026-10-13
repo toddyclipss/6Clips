@@ -111,22 +111,22 @@ export default function CatalogReconciliationModal({
 
       <DialogContent dividers sx={{ p: 3 }}>
         <Stack spacing={3}>
-          {/* Wave 4 Expanded Runtime Audit */}
+          {/* Wave 5 Whole-Tree Audit & Runtime Parity */}
           <Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                Wave 4 Expanded Runtime Audit (Conservative Expansion)
+                Wave 5 Whole-Tree Donor Source Audit & Verification Matrix
               </Typography>
-              <Chip label="Wave 4 Active" color="primary" size="small" sx={{ fontWeight: 700 }} />
+              <Chip label="Wave 5 Whole-Tree Audit Active" color="primary" size="small" sx={{ fontWeight: 700 }} />
             </Stack>
             <Grid container spacing={2}>
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 2, borderRadius: "10px", textAlign: "center" }}>
                   <Typography variant="h4" sx={{ fontWeight: 800, color: "primary.main" }}>
-                    196
+                    9,059
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                    INVENTORIED
+                    FILES AUDITED (852 MB)
                   </Typography>
                 </Paper>
               </Grid>
@@ -134,51 +134,51 @@ export default function CatalogReconciliationModal({
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 2, borderRadius: "10px", textAlign: "center" }}>
                   <Typography variant="h4" sx={{ fontWeight: 800, color: "success.main" }}>
-                    10
+                    10 + 2
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                    READY (+4 Delta)
+                    STRUCTURAL VERIFIED
                   </Typography>
                 </Paper>
               </Grid>
 
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 2, borderRadius: "10px", textAlign: "center" }}>
-                  <Typography variant="h4" sx={{ fontWeight: 800, color: "warning.main" }}>
-                    168
+                  <Typography variant="h5" sx={{ fontWeight: 800, color: "warning.main", pt: 1 }}>
+                    NOT TESTED
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                    LICENSE REVIEW
+                    BROWSER (ROLE 4 DEFERRED)
                   </Typography>
                 </Paper>
               </Grid>
 
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 2, borderRadius: "10px", textAlign: "center" }}>
-                  <Typography variant="h4" sx={{ fontWeight: 800, color: "error.main" }}>
-                    18
+                  <Typography variant="h5" sx={{ fontWeight: 800, color: "info.main", pt: 1 }}>
+                    NOT TESTED
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>
-                    STRUCTURAL FIX
+                    MP4 EXPORT (ROLE 4 DEFERRED)
                   </Typography>
                 </Paper>
               </Grid>
             </Grid>
           </Box>
 
-          {/* Historical Reconciliation */}
+          {/* Historical Registry Breakdown */}
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
-              Historical Registry Breakdown
+              Donor Registry & Package Reconciliation
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: "10px", textAlign: "center" }}>
                   <Typography variant="h6" sx={{ fontWeight: 800, color: "text.primary" }}>
-                    {recon.historical_block_dirs}
+                    196
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Block Directories
+                    Historic Blocks (10 Shipped / 186 Withheld)
                   </Typography>
                 </Paper>
               </Grid>
@@ -186,10 +186,10 @@ export default function CatalogReconciliationModal({
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: "10px", textAlign: "center" }}>
                   <Typography variant="h6" sx={{ fontWeight: 800, color: "info.main" }}>
-                    {recon.aggregate_manifest_blocks}
+                    237 / 222
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    In Donor Registry.json
+                    Microcomponents (Disk / Manifest)
                   </Typography>
                 </Paper>
               </Grid>
@@ -197,10 +197,10 @@ export default function CatalogReconciliationModal({
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: "10px", textAlign: "center" }}>
                   <Typography variant="h6" sx={{ fontWeight: 800, color: "warning.main" }}>
-                    {recon.unbundled_block_dirs}
+                    21 Skills
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Unbundled Shaders
+                    AI Prompts (Untrusted Data Audited)
                   </Typography>
                 </Paper>
               </Grid>
@@ -208,10 +208,10 @@ export default function CatalogReconciliationModal({
               <Grid item xs={6} sm={3}>
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: "10px", textAlign: "center" }}>
                   <Typography variant="h6" sx={{ fontWeight: 800, color: "text.primary" }}>
-                    {recon.aggregate_components}
+                    14 Packages
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Microcomponents
+                    HyperFrames Monorepo Packages
                   </Typography>
                 </Paper>
               </Grid>
@@ -220,7 +220,7 @@ export default function CatalogReconciliationModal({
 
           {/* Audit Explanation */}
           <Alert severity="info" sx={{ lineHeight: 1.5 }}>
-            <strong>Wave 4 Runtime Parity & Audit:</strong> Expanded usable blocks conservatively to 10 verified blocks across backgrounds, charts, call-to-action, typography, lower-thirds, and transitions, plus 2 original 6Clips substitutes (<code>creator-hud</code> and <code>glitch-transition</code>) with 100% offline assets, zero CDN dependencies, and physical render probes. The remaining 186 items are withheld with explicit blocker reasons (168 license review required, 18 structural fix required).
+            <strong>Wave 5 Whole-Tree Audit & Zero-Donor Isolation:</strong> Audited 9,059 donor files (852 MB) with SHA-256 signatures in machine-readable JSONL. Shipped blocks operate with 100% offline assets, local variable fonts, and zero external donor checkout dependency. To prevent misleading availability claims: <code>ALL_196_RUNTIME_READY: NO</code> (10 donor blocks + 2 original substitutes are structurally verified; 186 donor items remain withheld with explicit blocker reasons; live headful browser validation and MP4 export are honestly recorded as NOT_TESTED in Role 3 isolation and deferred to Role 4).
           </Alert>
 
           <Divider />
@@ -228,7 +228,7 @@ export default function CatalogReconciliationModal({
           {/* Verified Shipped Blocks List */}
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-              Verified Offline-Capable Blocks & Original Substitutes (100% Zero-CDN)
+              Structurally Verified Shipped Blocks & 6Clips Substitutes (Zero-CDN, Zero-Donor)
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
               <Chip label="aurora (Backgrounds · Apache-2.0 & MIT)" color="success" size="small" />

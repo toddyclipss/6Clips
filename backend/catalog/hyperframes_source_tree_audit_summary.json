@@ -1,0 +1,148 @@
+{
+  "audit_version": "Wave 5 HyperFrames Whole-Tree Audit v1.0",
+  "audit_timestamp_iso": "2026-10-13T19:43:37Z",
+  "donor_root_path": "C:\\Users\\toddy\\Desktop\\hyperframes",
+  "total_source_files_audited": 9059,
+  "total_source_bytes_audited": 852720453,
+  "scan_duration_seconds": 74.58,
+  "audit_status": {
+    "HYPERFRAMES_WHOLE_TREE_AUDITED": "YES",
+    "ALL_196_RUNTIME_READY": "NO",
+    "RUNTIME_ZERO_DONOR_DEPENDENCY": "YES"
+  },
+  "breakdown_by_category": {
+    "root-metadata": 41,
+    "build-or-ci-script": 227,
+    "documentation-and-guides": 1618,
+    "donor-skill": 977,
+    "legal-and-governance": 1,
+    "agent-skill-or-prompt": 18,
+    "asset-media": 4,
+    "monorepo-package": 4565,
+    "roadmap-and-plans": 2,
+    "registry-manifest": 7,
+    "registry-block": 713,
+    "registry-component": 846,
+    "registry-example": 37,
+    "theme-and-styling": 3
+  },
+  "bytes_by_category": {
+    "root-metadata": 167179,
+    "build-or-ci-script": 2441193,
+    "documentation-and-guides": 76522837,
+    "donor-skill": 53957502,
+    "legal-and-governance": 10763,
+    "agent-skill-or-prompt": 182766,
+    "asset-media": 88078,
+    "monorepo-package": 633058659,
+    "roadmap-and-plans": 4719,
+    "registry-manifest": 678425,
+    "registry-block": 73661944,
+    "registry-component": 11756867,
+    "registry-example": 187750,
+    "theme-and-styling": 1771
+  },
+  "breakdown_by_license_confidence": {
+    "DONOR_MONOREPO_ROOT_APACHE_2_0": 8345,
+    "VERIFIED_APACHE_2_0": 12,
+    "LICENSE_UNVERIFIED_NO_EXPLICIT_GRANT": 605,
+    "VERIFIED_APACHE_2_0_AND_MIT": 93,
+    "VERIFIED_SIL_OFL_1_1": 4
+  },
+  "breakdown_by_adoption_decision": {
+    "REFERENCE_ONLY_METADATA": 41,
+    "REFERENCE_ONLY_BUILD_TOOL": 227,
+    "REFERENCE_ONLY_DOCUMENTATION": 1625,
+    "EXCLUDED_UNTRUSTED_PROMPT_EXECUTION": 977,
+    "REFERENCE_ONLY_LEGAL_NOTICE": 1,
+    "ADOPTED_CAPABILITY_PROMPT_TEMPLATE": 18,
+    "REFERENCE_ONLY_STATIC_ASSET": 4,
+    "REFERENCE_ONLY_MONOREPO_SOURCE": 4565,
+    "REFERENCE_ONLY_DESIGN_PLAN": 2,
+    "RETAINED_DONOR_UNREADY_LICENSE_REVIEW": 678,
+    "ADOPTED_SHIPPED_OFFLINE": 35,
+    "RETAINED_DONOR_COMPONENT_LIBRARY": 846,
+    "REFERENCE_ONLY_EXAMPLE": 37,
+    "RETAINED_DONOR_THEME_REFERENCE": 3
+  },
+  "top_extensions": {
+    ".ts": 3185,
+    ".html": 1165,
+    ".json": 1111,
+    ".md": 841,
+    ".tsx": 561,
+    ".mdx": 552,
+    ".mjs": 416,
+    ".png": 374,
+    ".woff2": 169,
+    ".jpg": 101,
+    ".mp4": 91,
+    ".svg": 66,
+    ".js": 61,
+    ".txt": 51,
+    ".bin": 42,
+    ".ttf": 41,
+    "no-ext": 34,
+    ".sh": 28,
+    ".yml": 26,
+    ".mp3": 21
+  },
+  "reconciliation_matrices": {
+    "registry_blocks_on_disk": 196,
+    "registry_components_on_disk": 237,
+    "registry_examples_on_disk": 8,
+    "aggregate_registry_json_items": 400,
+    "breakdown_in_aggregate_registry": {
+      "blocks": 170,
+      "components": 222,
+      "examples": 8
+    },
+    "unbundled_shader_blocks_on_disk": 26,
+    "internalized_donor_blocks_ready": 10,
+    "original_6clips_substitutes_ready": 2,
+    "total_6clips_shipped_blocks": 12,
+    "withheld_donor_blocks_not_ready": 186
+  },
+  "skills_and_prompts_audit": {
+    "skills_manifest_entries": 21,
+    "skills_dirs_on_disk": 21,
+    "agent_skills_on_disk": 6,
+    "claude_skills_on_disk": 6,
+    "vetted_motion_doctrines": [
+      "motion-doctrine (continuous camera vector law)",
+      "cut-the-curve (velocity-matched seams and waterfall cascades)",
+      "captions-overlay (drop/rail/embed model and safe margins)",
+      "seam-craft (white-flash guard and stage grounding)",
+      "oversized-cursor (pointer-led action ignition)"
+    ],
+    "untrusted_prompt_policy": "Untrusted data; zero direct execution; strictly ported as structured metadata templates."
+  },
+  "monorepo_packages_audit": {
+    "total_packages": 14,
+    "packages": [
+      "aws-lambda",
+      "cli",
+      "core",
+      "engine",
+      "gcp-cloud-run",
+      "lint",
+      "parsers",
+      "player",
+      "producer",
+      "sdk",
+      "sdk-playground",
+      "shader-transitions",
+      "studio",
+      "studio-server"
+    ]
+  },
+  "explicitly_verified_absent_paths": [
+    "cloud/renderer/private_engine",
+    "models/voice/neural_tts_weights.bin",
+    "auth/private_signing_keys.pem",
+    "credentials/production_api_tokens.env",
+    "native/darwin_arm64/metal_renderer.dylib",
+    "native/win_x64/directx12_shim.dll",
+    "proprietary_heygen_dataset/training_manifest.json"
+  ]
+}
