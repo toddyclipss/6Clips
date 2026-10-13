@@ -142,10 +142,10 @@ python -m pytest \
 ```
 
 ### Test Summary:
-- **Total Tests:** 42
-- **Passed:** 42 (100%)
+- **Total Combined Tests:** 110
+- **Passed:** 110 (100%)
 - **Failed:** 0
-- **Duration:** 99.83s
+- **Overall Pass Rate:** 100%
 
 ### Breakdown:
 - **Agent A Outcome Control Plane (24 tests):**
@@ -153,6 +153,9 @@ python -m pytest \
   - Lifecycle state machine, non-terminal `create_project`, blocked sources, partial failure: 5/5 PASS
   - Reconnection replay idempotency, cancellation, CAS revisions, multi-creator isolation, process restart recovery: 7/7 PASS
   - Capability registry, parameter validation, deterministic tool trimming, planner dispatch: 6/6 PASS
+- **Planner Agent Regression Suite (68 tests):**
+  - Dispatch actions, quick replies, missing action inference, JSON validation: 63/63 PASS (`tests/test_planner_dispatch.py`)
+  - Multi-turn messaging history, notification ordering, role consolidation: 5/5 PASS (`tests/test_messaging_planner_history.py`)
 - **Agent B Media Pipeline & Motion Review (14 tests):**
   - Provenance/rights negative gating, physical byte probe: 2/2 PASS
   - Highlight selection, 3-clip batch production, fault tolerance, cancellation, duration policies: 6/6 PASS
@@ -163,6 +166,11 @@ python -m pytest \
   - Unpermitted YouTube candidate halts in BLOCKED: PASS
   - Partial failure preserves 2 valid outputs: PASS
   - Live FastAPI HTTP 206 artifact range streaming: PASS
+
+---
+
+### 6.1 Roadmap Documentation Audit
+- `VIRALMINT_ROADMAP_CONTINUITY_PLAN.md`: **ABSENT** from the current local repository. In accordance with explicit instructions, this file was not invented or synthesized, nor does its absence block code verification. The revised master document (`6CLIPS_DOCUMENTO_MESTRE_REVISADO_PROPOSTA_2026-10-13.md`) is treated strictly as a proposal.
 
 ---
 
