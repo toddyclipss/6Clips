@@ -42,7 +42,7 @@ class ExecutorService:
         """Create a new execution run with pinned provider and model."""
         prov = provider or "none"
         resolved_model = model or "deterministic"
-        if not provider or not model:
+        if user_settings is not None and (not provider or not model):
             try:
                 client = get_ai_client(user_settings)
                 prov = provider or client.provider.value
