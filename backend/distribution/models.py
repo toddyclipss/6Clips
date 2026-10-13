@@ -141,8 +141,25 @@ class PublishedReceiptV1(BaseModel):
     platform: str
     account_id: str
     account_handle: Optional[str] = None
+    creator_id: str = "local"
     remote_post_id: str
     remote_post_url: str
     published_at_utc: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     verified_status: str = "CONFIRMED"
     provenance: Dict[str, Any] = Field(default_factory=dict)
+
+    @property
+    def output_video_id(self) -> str:
+        return self.output_id
+
+    @property
+    def provider(self) -> str:
+        return self.platform
+
+    @property
+    def account_reference(self) -> str:
+        return self.account_id
+
+    @property
+    def confirmation_status(self) -> str:
+        return self.verified_status

@@ -651,7 +651,50 @@ class PlannerAgent:
                 await ws_manager.send({"type": "chat_status", "status": f"Running tool {fn_name}..."}, user_id)
 
                 cap = CapabilityRegistry.get(fn_name)
-                if not cap:
+                from backend.motion_capabilities.registry import MotionCapabilitiesRegistry
+                motion_spec = MotionCapabilitiesRegistry.get(fn_name)
+
+                if not cap and motion_spec:
+                    try:
+                        proj_id = fn_args.get("project_id") or active_project_id
+                        p_doc = None
+                        p_obj = None
+                        if proj_id:
+                            from backend.services.project_service import ProjectService
+                            p_obj = await ProjectService.verify_project_ownership(proj_id, user_id=user_id)
+                            p_doc = json.loads(p_obj.document_json)
+                        from backend.motion_capabilities.dispatcher import MotionCapabilityDispatcher
+                        disp_res = await MotionCapabilityDispatcher.dispatch(
+                            capability_id=fn_name,
+                            input_path=fn_args.get("input_path") or fn_args.get("video_path"),
+                            params=fn_args.get("params") or fn_args,
+                            project_doc=p_doc,
+                        )
+                        if disp_res.status == "SUCCESS":
+                            if p_obj and disp_res.project_mutation:
+                                from backend.services.project_service import ProjectService
+                                op_res = await ProjectService.apply_operation(
+                                    project_id=proj_id,
+                                    expected_revision=p_obj.revision,
+                                    operation_type=f"motion_{fn_name}",
+                                    payload=disp_res.project_mutation,
+                                    author="agent",
+                                )
+                                active_revision = op_res["revision"]
+                            res = {
+                                "status": "success",
+                                "output": {
+                                    "message": disp_res.message,
+                                    "output_path": str(disp_res.output_path) if disp_res.output_path else None,
+                                    "project_id": proj_id,
+                                    "revision": active_revision,
+                                },
+                            }
+                        else:
+                            res = {"status": "error", "error": disp_res.message}
+                    except Exception as mex:
+                        res = {"status": "error", "error": str(mex)}
+                elif not cap:
                     res = {"error": f"Unauthorized or unknown capability '{fn_name}'"}
                 elif fn_name in ("upload_youtube", "upload_tiktok"):
                     res = {"status": "error", "error": f"{fn_name} is not available: platform credentials are not configured in Settings."}
@@ -1277,6 +1320,44 @@ class PlannerAgent:
                 pinned_provider=pinned_provider,
                 pinned_model=pinned_model,
             )
+
+        elif action_type in ("motion_capability", "dispatch_motion_capability"):
+            cap_id = action.get("capability_id") or action.get("capability")
+            from backend.motion_capabilities.dispatcher import MotionCapabilityDispatcher
+            from backend.services.project_service import ProjectService
+            proj_id = action.get("project_id") or default_project_id
+            p_doc = None
+            p_obj = None
+            if proj_id:
+                try:
+                    p_obj = await ProjectService.verify_project_ownership(proj_id, user_id=user_id)
+                    p_doc = json.loads(p_obj.document_json)
+                except Exception as pex:
+                    logger.warning("Project lookup for motion_capability failed: %s", pex)
+            res = await MotionCapabilityDispatcher.dispatch(
+                capability_id=cap_id,
+                input_path=action.get("input_path") or action.get("video_path"),
+                params=action.get("params") or action,
+                project_doc=p_doc,
+            )
+            if p_obj and res.project_mutation:
+                try:
+                    await ProjectService.apply_operation(
+                        project_id=p_obj.id,
+                        expected_revision=p_obj.revision,
+                        operation_type=f"motion_{cap_id}",
+                        payload=res.project_mutation,
+                        author="agent",
+                    )
+                except Exception as aex:
+                    logger.error("Failed applying motion capability mutation to project %s: %s", proj_id, aex)
+            await ws_manager.send({
+                "type": "motion_capability_executed",
+                "capability": cap_id,
+                "status": "success" if res.status == "SUCCESS" else "failed",
+                "message": res.message,
+                "output_path": str(res.output_path) if res.output_path else None,
+            }, user_id)
 
         else:
             from backend.core import plugins

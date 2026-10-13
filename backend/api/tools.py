@@ -187,8 +187,51 @@ async def tool_from_asset(tool_name: str, body: dict):
         res_val = str(body.get("resolution") or "original")
         lvl_val = str(body.get("level") or "high")
         dispatch(run_tool_compress(job.id, in_path, res_val, lvl_val))
+    elif tool_name == "crop":
+        from backend.core.tool_runners import run_tool_crop
+        x = float(body.get("x", 0))
+        y = float(body.get("y", 0))
+        w = float(body.get("w", 1))
+        h = float(body.get("h", 1))
+        dispatch(run_tool_crop(job.id, in_path, x, y, w, h))
+    elif tool_name in ("transform", "remove-audio"):
+        from backend.core.tool_runners import run_tool_transform
+        op = "mute" if tool_name == "remove-audio" else str(body.get("operation") or body.get("op") or "flip_h")
+        amount = float(body.get("amount") or body.get("volume") or 1.0)
+        dispatch(run_tool_transform(job.id, in_path, op, amount))
+    elif tool_name == "watermark":
+        from backend.core.tool_runners import run_tool_watermark
+        logo_path = Path(body.get("logo_path", in_path))
+        dispatch(run_tool_watermark(job.id, in_path, logo_path, pos=body.get("position", "bottom-right"), opacity=float(body.get("opacity", 0.8)), scale=float(body.get("scale", 0.15))))
+    elif tool_name == "captions":
+        from backend.core.tool_runners import run_tool_captions
+        dispatch(run_tool_captions(job.id, in_path, style=body.get("style", "viral"), emoji_style=body.get("emoji_style", "auto")))
+    elif tool_name == "remove-silence":
+        from backend.core.tool_runners import run_tool_remove_silence
+        dispatch(run_tool_remove_silence(job.id, in_path))
+    elif tool_name == "audio-enhance":
+        from backend.core.tool_runners import run_tool_audio_enhance
+        dispatch(run_tool_audio_enhance(job.id, in_path))
+    elif tool_name == "gif":
+        from backend.core.tool_runners import run_tool_gif
+        dispatch(run_tool_gif(job.id, in_path, start_sec=float(body.get("start_seconds", 0.0)), duration_sec=float(body.get("duration", 3.0)), fps=int(body.get("fps", 15)), width=int(body.get("width", 480))))
     else:
-        raise HTTPException(400, f"Unsupported tool: {tool_name}")
+        from backend.motion_capabilities.registry import MotionCapabilitiesRegistry
+        if MotionCapabilitiesRegistry.get(tool_name):
+            from backend.motion_capabilities.dispatcher import MotionCapabilityDispatcher
+            async def _run_motion_cap():
+                res = await MotionCapabilityDispatcher.dispatch(tool_name, input_path=in_path, params=body, output_dir=tools_out_dir())
+                from backend.database import AsyncSessionLocal
+                from backend.models.job import Job
+                async with AsyncSessionLocal() as db:
+                    j = await db.get(Job, job.id)
+                    if j:
+                        j.status = "success" if res.status == "SUCCESS" else "failed"
+                        j.error_message = res.error_detail if res.status != "SUCCESS" else None
+                        await db.commit()
+            dispatch(_run_motion_cap())
+        else:
+            raise HTTPException(400, f"Unsupported tool: {tool_name}")
 
     return {"job_id": job.id, "status": "queued", "tool": tool_name}
 

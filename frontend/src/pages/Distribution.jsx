@@ -117,10 +117,10 @@ export default function Distribution() {
   })
 
   const [accounts, setAccounts] = useState({
-    youtube: { account_id: "yt_01", platform: "youtube", account_name: "YouTube Channel", handle: "viralmint", state: "READY", required_scopes: ["https://www.googleapis.com/auth/youtube.upload"], granted_scopes: ["https://www.googleapis.com/auth/youtube.upload"], can_publish: true },
-    tiktok: { account_id: "tt_01", platform: "tiktok", account_name: "TikTok Creator", handle: "viralmint_official", state: "READY", required_scopes: ["video.upload", "video.publish"], granted_scopes: ["video.upload", "video.publish"], can_publish: true },
-    instagram: { account_id: "ig_01", platform: "instagram", account_name: "Instagram Page", handle: "viralmint.ai", state: "READY", required_scopes: ["instagram_content_publish"], granted_scopes: ["instagram_content_publish"], can_publish: true },
-    x: { account_id: "x_01", platform: "x", account_name: "X Account", handle: "viralmint", state: "READY", required_scopes: ["tweet.write"], granted_scopes: ["tweet.write"], can_publish: true },
+    youtube: { account_id: "yt_01", platform: "youtube", account_name: "YouTube Channel", handle: null, state: "NOT_CONNECTED", required_scopes: ["https://www.googleapis.com/auth/youtube.upload"], granted_scopes: [], can_publish: false },
+    tiktok: { account_id: "tt_01", platform: "tiktok", account_name: "TikTok Creator", handle: null, state: "NOT_CONNECTED", required_scopes: ["video.upload", "video.publish"], granted_scopes: [], can_publish: false },
+    instagram: { account_id: "ig_01", platform: "instagram", account_name: "Instagram Page", handle: null, state: "NOT_CONNECTED", required_scopes: ["instagram_content_publish"], granted_scopes: [], can_publish: false },
+    x: { account_id: "x_01", platform: "x", account_name: "X Account", handle: null, state: "NOT_CONNECTED", required_scopes: ["tweet.write"], granted_scopes: [], can_publish: false },
   })
 
   const [jobs, setJobs] = useState([])
@@ -134,7 +134,8 @@ export default function Distribution() {
       const { data } = await http.get("/api/distribution/jobs")
       setJobs(data || [])
     } catch {
-      // In standalone unmounted mode, load from state
+      // In standalone unmounted mode, default to empty list
+      setJobs([])
     }
   }, [])
 
@@ -183,15 +184,8 @@ export default function Distribution() {
       setStatusMessage({ type: "success", text: `Scheduled job ${data.job_id} for ${preview.platform}` })
       loadJobs()
     } catch (err) {
-      // Fallback local append for demo
-      const localJob = {
-        job_id: `dist_${Date.now()}`,
-        ...preview,
-        status: "SCHEDULED",
-        created_at: new Date().toISOString(),
-      }
-      setJobs((prev) => [localJob, ...prev])
-      setStatusMessage({ type: "info", text: `Job scheduled locally for ${preview.platform} (${preview.scheduled_time_utc})` })
+      const msg = err.response?.data?.detail?.message || err.response?.data?.detail || err.message || "Failed to schedule job."
+      setStatusMessage({ type: "error", text: `Scheduling rejected: ${msg}` })
     }
   }
 
@@ -215,20 +209,9 @@ export default function Distribution() {
       })
       setStatusMessage({ type: "success", text: `Fanned out to ${data.total_scheduled} platforms (${data.status})` })
       loadJobs()
-    } catch {
-      // Mock local fan out
-      const newJobs = PLATFORMS.map((p) => ({
-        job_id: `dist_fan_${p.id}_${Date.now()}`,
-        output_id: selectedOutput.output_id,
-        platform: p.id,
-        seo_metadata: seoState[p.id],
-        scheduled_time_utc: scheduleState.scheduled_time_utc,
-        timezone: scheduleState.timezone,
-        status: "SCHEDULED",
-        created_at: new Date().toISOString(),
-      }))
-      setJobs((prev) => [...newJobs, ...prev])
-      setStatusMessage({ type: "info", text: `Fanned out to all 4 platforms in test scheduler` })
+    } catch (err) {
+      const msg = err.response?.data?.detail?.message || err.response?.data?.detail || err.message || "Fan-out failed."
+      setStatusMessage({ type: "error", text: `Fan-out rejected: ${msg}` })
     }
   }
 
@@ -236,8 +219,9 @@ export default function Distribution() {
     try {
       await http.post(`/api/distribution/jobs/${jobId}/cancel`)
       loadJobs()
-    } catch {
-      setJobs((prev) => prev.map((j) => (j.job_id === jobId ? { ...j, status: "CANCELLED" } : j)))
+    } catch (err) {
+      const msg = err.response?.data?.detail || err.message
+      setStatusMessage({ type: "error", text: `Cancel failed: ${msg}` })
     }
   }
 
@@ -245,35 +229,25 @@ export default function Distribution() {
     try {
       await http.post(`/api/distribution/jobs/${jobId}/retry`)
       loadJobs()
-    } catch {
-      setJobs((prev) => prev.map((j) => (j.job_id === jobId ? { ...j, status: "READY_TO_SCHEDULE" } : j)))
+    } catch (err) {
+      const msg = err.response?.data?.detail || err.message
+      setStatusMessage({ type: "error", text: `Retry failed: ${msg}` })
     }
   }
 
   const handleWorkerTick = async () => {
     try {
       const { data } = await http.post("/api/distribution/worker/tick")
-      setStatusMessage({ type: "success", text: `Scheduler tick executed: ${data.published} published, ${data.failed} failed` })
+      setStatusMessage({ type: "success", text: `Scheduler tick executed: ${data.published} published, ${data.failed} failed, ${data.dispatched} dispatched` })
       loadJobs()
-    } catch {
-      // Simulate tick
-      setJobs((prev) =>
-        prev.map((j) => {
-          if (j.status === "SCHEDULED" || j.status === "READY_TO_SCHEDULE") {
-            return {
-              ...j,
-              status: "PUBLISHED_VERIFIED",
-              remote_post_url: `https://${j.platform}.com/post/demo_${j.job_id}`,
-              remote_post_id: `demo_${j.job_id}`,
-              receipt_id: `rcpt_${j.job_id}`,
-            }
-          }
-          return j
-        })
-      )
-      setStatusMessage({ type: "success", text: "Test worker tick executed: scheduled jobs transitioned to PUBLISHED_VERIFIED" })
+    } catch (err) {
+      setStatusMessage({
+        type: "warning",
+        text: "Worker tick error: Accounts are NOT_CONNECTED. Live publishing is disabled by default (LIVE_PUBLISHING_VERIFIED: NO).",
+      })
     }
   }
+
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -307,6 +281,10 @@ export default function Distribution() {
             {statusMessage.text}
           </Alert>
         )}
+
+        <Alert severity="info" sx={{ mb: 2.5, borderRadius: "12px" }}>
+          <strong>Truth Disclosure:</strong> Platforms are <code>NOT_CONNECTED</code> by default. Live external publishing is disabled until verified OAuth credentials are provided (<code>LIVE_PUBLISHING_VERIFIED: NO</code>). ViralMint operates locally: scheduled releases cannot dispatch when host computer is powered off or backend is stopped.
+        </Alert>
 
         {/* Output Selector Card */}
         <Card variant="outlined" sx={{ mb: 3, borderRadius: "16px" }}>

@@ -34,50 +34,9 @@ from backend.analytics.providers import (
     DisconnectedAnalyticsAdapter,
 )
 
+from backend.analytics.repository import AnalyticsRepository
+
 logger = logging.getLogger(__name__)
-
-
-class AnalyticsRepository:
-    """
-    Isolated storage repository for published receipts, observations, and aggregates.
-    Operates in isolated memory or temporary SQLite for tests to guarantee zero production db mutation.
-    """
-
-    def __init__(self):
-        self._receipts: Dict[str, PublishedReceiptV1] = {}
-        self._observations: List[MetricObservationV1] = []
-        self._notifications: List[AnalyticsEventNotification] = []
-
-    def save_receipt(self, receipt: PublishedReceiptV1) -> PublishedReceiptV1:
-        self._receipts[receipt.receipt_id] = receipt
-        return receipt
-
-    def get_receipt(self, receipt_id: str) -> Optional[PublishedReceiptV1]:
-        return self._receipts.get(receipt_id)
-
-    def list_receipts(self, creator_id: str = "local") -> List[PublishedReceiptV1]:
-        return [r for r in self._receipts.values() if r.creator_id == creator_id]
-
-    def record_observation(self, obs: MetricObservationV1) -> MetricObservationV1:
-        self._observations.append(obs)
-        return obs
-
-    def get_observations_for_receipt(self, receipt_id: str) -> List[MetricObservationV1]:
-        return [o for o in self._observations if o.receipt_id == receipt_id]
-
-    def record_notification(self, notification: AnalyticsEventNotification) -> AnalyticsEventNotification:
-        # Idempotency check: don't store exact duplicate event_type for same receipt within short window
-        existing = [
-            n for n in self._notifications
-            if n.event_type == notification.event_type and n.receipt_id == notification.receipt_id
-        ]
-        if existing:
-            return existing[-1]
-        self._notifications.append(notification)
-        return notification
-
-    def list_notifications(self) -> List[AnalyticsEventNotification]:
-        return list(self._notifications)
 
 
 class AnalyticsEngine:
@@ -94,10 +53,31 @@ class AnalyticsEngine:
         self.providers: Dict[AnalyticsProvider, AnalyticsProviderPort] = provider_adapters or {
             p: DisconnectedAnalyticsAdapter(p) for p in AnalyticsProvider
         }
-        self._rate_limit_backoff: Dict[AnalyticsProvider, datetime] = {}
 
     def register_provider(self, adapter: AnalyticsProviderPort) -> None:
         self.providers[adapter.provider] = adapter
+
+    def register_receipt(
+        self,
+        receipt: PublishedReceiptV1,
+        is_test_fixture: bool = False,
+    ) -> PublishedReceiptV1:
+        """
+        Register a verified publication receipt from Phase 10 or test fixtures.
+        Guards:
+        - In production (is_test_fixture=False), strictly rejects receipts with fake_ prefixes.
+        - In production, strictly rejects unconfirmed receipts (e.g. ACCEPTED, SCHEDULED, DISPATCHING).
+        - Persists receipt to durable repository.
+        """
+        if not is_test_fixture and not receipt.metadata.get("is_test_fixture"):
+            if receipt.remote_post_id.startswith("fake_") or receipt.receipt_id.startswith("fake_"):
+                raise ValueError("Production analytics ingest strictly rejects unverified fake receipts.")
+            if receipt.confirmation_status not in (ReceiptConfirmationStatus.CONFIRMED, ReceiptConfirmationStatus.SIMULATED_TEST):
+                raise ValueError(
+                    f"Unconfirmed receipt status '{receipt.confirmation_status.value}' cannot be ingested as published post."
+                )
+
+        return self.repo.save_receipt(receipt)
 
     async def poll_post_metrics(
         self,
@@ -120,9 +100,9 @@ class AnalyticsEngine:
         if not adapter:
             return None, "NO_ADAPTER_REGISTERED"
 
-        # Rate limit / backoff check
+        # Rate limit / backoff check from durable repository
         now = datetime.now(timezone.utc)
-        backoff_until = self._rate_limit_backoff.get(receipt.provider)
+        backoff_until = self.repo.get_rate_limit_backoff(receipt.provider)
         if backoff_until and now < backoff_until:
             wait_sec = int((backoff_until - now).total_seconds())
             return None, f"PROVIDER_RATE_LIMITED_BACKOFF_{wait_sec}S"
@@ -145,10 +125,11 @@ class AnalyticsEngine:
             )
             return None, "PROVIDER_AUTH_REQUIRED"
         if status == ProviderConnectionStatus.RATE_LIMITED:
-            self._rate_limit_backoff[receipt.provider] = now + timedelta(seconds=60)
+            self.repo.set_rate_limit_backoff(receipt.provider, now + timedelta(seconds=60))
             return None, "PROVIDER_RATE_LIMITED"
         if status == ProviderConnectionStatus.ERROR:
             return None, "PROVIDER_ERROR"
+
 
         # Execute metric fetch
         observation = await adapter.fetch_metrics(

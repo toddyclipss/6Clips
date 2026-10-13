@@ -171,7 +171,9 @@ class MockAnalyticsAdapter(AnalyticsProviderPort):
         if shares is None:
             missing.append("shares")
 
-        resp_hash = hashlib.sha256(f"{receipt.remote_post_id}:{now.isoformat()}".encode()).hexdigest()[:12]
+        resp_hash = hashlib.sha256(
+            f"{receipt.remote_post_id}:{views}:{likes}:{comments}:{shares}".encode()
+        ).hexdigest()[:12]
 
         return MetricObservationV1(
             receipt_id=receipt.receipt_id,
@@ -193,3 +195,51 @@ class MockAnalyticsAdapter(AnalyticsProviderPort):
             provider_response_hash=resp_hash,
             notes="Deterministic automated test fixture observation.",
         )
+
+
+class OfficialPlatformAnalyticsAdapter(AnalyticsProviderPort):
+    """
+    Real, disabled-by-default official platform adapter.
+    Implements official provider endpoint signatures (YouTube Data/Analytics API,
+    TikTok Content Posting & Insights, Meta Instagram Graph API, X API v2)
+    with strict authorization guards.
+    Truthfully returns NOT_CONNECTED when valid OAuth tokens are absent,
+    preventing any unapproved external network calls or fake metrics.
+    """
+
+    def __init__(self, provider_type: AnalyticsProvider):
+        self._provider = provider_type
+
+    @property
+    def provider(self) -> AnalyticsProvider:
+        return self._provider
+
+    async def get_connection_status(self, account_ref: str) -> ProviderConnectionStatus:
+        """
+        Truthfully evaluate connection status.
+        Without connected OAuth credentials, returns NOT_CONNECTED.
+        LIVE_ANALYTICS_VERIFIED: NO.
+        """
+        logger.info(
+            "OfficialPlatformAnalyticsAdapter(%s) | account=%s | status=NOT_CONNECTED (LIVE_ANALYTICS_VERIFIED: NO)",
+            self._provider.value,
+            account_ref,
+        )
+        return ProviderConnectionStatus.NOT_CONNECTED
+
+    async def fetch_metrics(
+        self,
+        receipt: PublishedReceiptV1,
+        window_start: Optional[datetime] = None,
+        window_end: Optional[datetime] = None,
+    ) -> Optional[MetricObservationV1]:
+        """
+        Refuses unauthenticated external network requests.
+        Never fabricates reach, views, or popularity metrics.
+        """
+        logger.warning(
+            "OfficialPlatformAnalyticsAdapter(%s) | Blocked metric fetch for receipt %s: no live OAuth credentials",
+            self._provider.value,
+            receipt.receipt_id,
+        )
+        return None
