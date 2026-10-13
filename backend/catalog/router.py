@@ -21,9 +21,73 @@ from backend.catalog.project_intent_contract import (
 from backend.catalog.render_probe import CatalogRenderProbe, CatalogRenderProbeError
 from backend.catalog.vetted_capabilities import VettedCapabilityRegistry
 
+from backend.catalog.export_contract import CatalogExportContract, CatalogExportContractError
+from backend.catalog.creative_recipes import CreativeRecipeEngine, CustomBlockPromptSpec
+
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
+
+
+@router.get("/wave6-audit")
+async def get_wave6_audit():
+    """Return Wave 6 functional blocks, vetted recipes, and proof ladder verification status."""
+    return CatalogManifestService.get_wave6_factual_audit()
+
+
+@router.get("/creative-recipes")
+async def get_creative_recipes():
+    """Return vetted creative editor/agent recipes adhering to motion doctrines."""
+    recipes = CreativeRecipeEngine.get_registered_recipes()
+    return {"count": len(recipes), "recipes": [r.model_dump() for r in recipes]}
+
+
+@router.get("/creative-recipes/{recipe_id}")
+async def get_creative_recipe_by_id(recipe_id: str):
+    """Return specific creative editor/agent recipe by ID."""
+    recipe = CreativeRecipeEngine.get_recipe_by_id(recipe_id)
+    if not recipe:
+        raise HTTPException(status_code=404, detail=f"Creative recipe '{recipe_id}' not found.")
+    return recipe.model_dump()
+
+
+@router.post("/synthesize-block")
+async def synthesize_custom_block(spec: CustomBlockPromptSpec):
+    """Synthesize a new legitimate, offline-capable, licensed custom block from prompt spec (GT-14)."""
+    try:
+        return CreativeRecipeEngine.synthesize_custom_block(spec)
+    except Exception as e:
+        logger.error("Failed to synthesize custom block: %s", e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/export-manifest")
+async def get_block_export_manifest(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+):
+    """Generate machine-readable export manifest consumable by Role 2 FFmpeg pipeline."""
+    try:
+        return CatalogExportContract.generate_export_manifest(block_id=block_id, aspect_ratio=aspect_ratio)
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/frame-proof")
+async def get_block_frame_proof(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+    sample_count: int = Query(5, ge=2, le=20),
+):
+    """Compute deterministic multi-timestamp frame proofs verifying dynamic temporal motion."""
+    try:
+        return CatalogExportContract.compute_dynamic_frame_proof(
+            block_id=block_id,
+            aspect_ratio=aspect_ratio,
+            sample_count=sample_count,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/wave5-audit")

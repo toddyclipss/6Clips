@@ -2,6 +2,7 @@
 # Copyright (c) 2025-2026 ViralMint Contributors
 """Motion Capabilities module providing typed access to migrated Clip Studio workflows and tools."""
 
+from .adapter import MotionToolRunnerAdapter
 from .dispatcher import MotionCapabilityDispatcher
 from .models import (
     CapabilityCategory,
@@ -22,6 +23,7 @@ __all__ = [
     "MotionCapabilitiesRegistry",
     "MotionCapabilityDispatcher",
     "MotionCapabilitySpec",
+    "MotionToolRunnerAdapter",
     "ParityTier",
     "audit_capabilities_registry",
     "scan_production_entrypoints_for_mocks",

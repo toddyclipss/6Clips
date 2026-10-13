@@ -93,6 +93,9 @@ class AnalyticsEngine:
         if not receipt:
             return None, "RECEIPT_NOT_FOUND"
 
+        if receipt.metadata.get("is_deleted_on_platform"):
+            return None, "POST_DELETED_ON_PLATFORM"
+
         if not receipt.is_eligible_for_polling():
             return None, f"UNCONFIRMED_RECEIPT_STATUS_{receipt.confirmation_status.value}"
 
@@ -129,7 +132,6 @@ class AnalyticsEngine:
             return None, "PROVIDER_RATE_LIMITED"
         if status == ProviderConnectionStatus.ERROR:
             return None, "PROVIDER_ERROR"
-
 
         # Execute metric fetch
         observation = await adapter.fetch_metrics(
@@ -170,6 +172,25 @@ class AnalyticsEngine:
 
         return observation, None
 
+    def mark_post_deleted(self, receipt_id: str) -> bool:
+        """Mark a published post as deleted on remote platform."""
+        receipt = self.repo.get_receipt(receipt_id)
+        if not receipt:
+            return False
+        receipt.metadata["is_deleted_on_platform"] = True
+        self.repo.save_receipt(receipt)
+        self.repo.record_notification(
+            AnalyticsEventNotification(
+                event_type=AnalyticsEventType.PUBLISH_FAILED,
+                receipt_id=receipt.receipt_id,
+                provider=receipt.provider,
+                remote_post_id=receipt.remote_post_id,
+                title="Post Deleted Remotely",
+                summary=f"Post '{receipt.remote_post_id}' on {receipt.provider.value} was deleted or removed remotely.",
+            )
+        )
+        return True
+
     def get_aggregated_metrics(self, receipt_id: str) -> Optional[AggregatedPostMetricsV1]:
         """
         Build an aggregated view of a post from all recorded metric snapshots.
@@ -198,6 +219,8 @@ class AnalyticsEngine:
         if views is not None and views > 0:
             eng_rate = round(((likes + comments + shares) / views) * 100.0, 2)
 
+        is_deleted = bool(receipt.metadata.get("is_deleted_on_platform"))
+
         return AggregatedPostMetricsV1(
             receipt_id=receipt.receipt_id,
             remote_post_id=receipt.remote_post_id,
@@ -207,6 +230,8 @@ class AnalyticsEngine:
             last_observed_at=latest.observed_at,
             observation_count=len(sorted_obs),
             is_test_fixture=latest.is_test_fixture,
+            is_deleted_on_platform=is_deleted,
+            post_status="DELETED_ON_PLATFORM" if is_deleted else "ACTIVE",
             latest_views=latest.views,
             latest_impressions=latest.impressions,
             latest_watch_time_seconds=latest.watch_time_seconds,
@@ -217,3 +242,60 @@ class AnalyticsEngine:
             engagement_rate=eng_rate,
             history_snapshots=sorted_obs,
         )
+
+    def get_multi_platform_summary(self, creator_id: str = "local") -> Dict[str, Any]:
+        """
+        Retrieve per-platform metric summaries for creator.
+        Strictly refuses to sum disparate platform metrics as equivalent scalars.
+        """
+        receipts = self.repo.list_receipts(creator_id=creator_id)
+        summary_by_provider: Dict[str, Dict[str, Any]] = {}
+
+        definitions = {
+            AnalyticsProvider.YOUTUBE: "30s playback or complete view",
+            AnalyticsProvider.TIKTOK: "video start",
+            AnalyticsProvider.INSTAGRAM: "reel playback",
+            AnalyticsProvider.X: "media view threshold",
+        }
+
+        for prov in AnalyticsProvider:
+            prov_receipts = [r for r in receipts if r.provider == prov]
+            prov_aggregates = []
+            for r in prov_receipts:
+                agg = self.get_aggregated_metrics(r.receipt_id)
+                if agg:
+                    prov_aggregates.append(agg)
+
+            views_sum = sum(a.latest_views for a in prov_aggregates if a.latest_views is not None)
+            likes_sum = sum(a.latest_likes for a in prov_aggregates if a.latest_likes is not None)
+            comments_sum = sum(a.latest_comments for a in prov_aggregates if a.latest_comments is not None)
+            shares_sum = sum(a.latest_shares for a in prov_aggregates if a.latest_shares is not None)
+
+            summary_by_provider[prov.value] = {
+                "total_posts": len(prov_receipts),
+                "active_posts": len([r for r in prov_receipts if not r.metadata.get("is_deleted_on_platform")]),
+                "observed_posts_count": len(prov_aggregates),
+                "metric_definition": definitions.get(prov, "platform native"),
+                "total_views": views_sum,
+                "total_likes": likes_sum,
+                "total_comments": comments_sum,
+                "total_shares": shares_sum,
+                "native_metrics": {
+                    "total_views": views_sum,
+                    "total_likes": likes_sum,
+                    "total_comments": comments_sum,
+                    "total_shares": shares_sum,
+                },
+            }
+
+        return {
+            "creator_id": creator_id,
+            "total_published_posts": len(receipts),
+            "providers": summary_by_provider,
+            "platforms": summary_by_provider,
+            "cross_platform_notice": (
+                "CROSS_PLATFORM_SUMMING_PROHIBITED: Metrics are not equivalent across providers "
+                "(e.g., YouTube views require 30s playback, TikTok counts on start). "
+                "Metrics are preserved in their native provider structures."
+            ),
+        }

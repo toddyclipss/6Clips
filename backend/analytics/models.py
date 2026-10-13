@@ -204,6 +204,8 @@ class AggregatedPostMetricsV1(BaseModel):
     last_observed_at: datetime
     observation_count: int = 0
     is_test_fixture: bool = False
+    is_deleted_on_platform: bool = False
+    post_status: str = "ACTIVE"  # "ACTIVE" | "DELETED_ON_PLATFORM" | "UNCONFIRMED"
 
     latest_views: Optional[int] = None
     latest_impressions: Optional[int] = None
@@ -215,6 +217,7 @@ class AggregatedPostMetricsV1(BaseModel):
     engagement_rate: Optional[float] = None  # (likes + comments + shares) / views
 
     history_snapshots: List[MetricObservationV1] = Field(default_factory=list)
+
 
 
 class OptimizationHypothesis(BaseModel):
