@@ -72,12 +72,19 @@ export default function CatalogCard({
   // Card dimensions based on selected aspect ratio
   const frameHeight = is9x16 ? 260 : 160
 
-  const dispositionColor =
-    item.disposition === "SHIP"
+  const isInternalized = Boolean(item.internalized)
+  const cardReadiness =
+    item.readiness ||
+    (isInternalized ? "READY" : item.disposition === "FIX" ? "FIX" : "UNVERIFIED")
+
+  const readinessChipColor =
+    cardReadiness === "READY"
       ? theme.palette.success.main
-      : item.disposition === "FIX"
-      ? theme.palette.warning.main
-      : theme.palette.error.main
+      : cardReadiness === "FIX"
+      ? theme.palette.error.main
+      : theme.palette.warning.main
+
+  const dispositionColor = readinessChipColor
 
   const aspectBadgeColor =
     aspectSupport === "NATIVE"
@@ -244,16 +251,16 @@ export default function CatalogCard({
           </Typography>
 
           <Chip
-            label={item.disposition}
+            label={cardReadiness}
             size="small"
             sx={{
               height: 18,
               fontSize: "0.65rem",
               fontWeight: 700,
-              bgcolor: alpha(dispositionColor, 0.15),
-              color: dispositionColor,
+              bgcolor: alpha(readinessChipColor, 0.15),
+              color: readinessChipColor,
               border: 1,
-              borderColor: alpha(dispositionColor, 0.3),
+              borderColor: alpha(readinessChipColor, 0.3),
             }}
           />
         </Stack>

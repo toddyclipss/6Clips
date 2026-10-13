@@ -3,7 +3,7 @@
 /**
  * CatalogDrawer: detailed inspector for a selected catalog block.
  * Provides interactive 9:16 vs 16:9 preview toggle, variable schema inspector,
- * and comprehensive license and legal provenance attribution.
+ * legal provenance attribution, and validated Add-to-Project intent generation.
  */
 import React, { useState } from "react"
 import {
@@ -26,6 +26,9 @@ import {
   TableHead,
   TableRow,
   Paper,
+  TextField,
+  Alert,
+  CircularProgress,
   alpha,
   useTheme,
 } from "@mui/material"
@@ -37,7 +40,13 @@ import {
   IconCopy,
   IconShieldCheck,
   IconSparkles,
+  IconPlus,
+  IconCheck,
+  IconAlertCircle,
+  IconSend,
+  IconMovie,
 } from "@tabler/icons-react"
+import http from "../../api/http"
 
 export default function CatalogDrawer({
   item,
@@ -51,11 +60,63 @@ export default function CatalogDrawer({
   const [tab, setTab] = useState(0)
   const [aspect, setAspect] = useState(initialAspect)
 
+  // Add-to-project state
+  const [targetProjectId, setTargetProjectId] = useState("")
+  const [trackIndex, setTrackIndex] = useState(0)
+  const [startTime, setStartTime] = useState(0.0)
+  const [customVars, setCustomVars] = useState({})
+  const [intentLoading, setIntentLoading] = useState(false)
+  const [intentResult, setIntentResult] = useState(null)
+  const [intentError, setIntentError] = useState(null)
+
   if (!item) return null
 
   const is9x16 = aspect === "9:16"
   const previewUrl = `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
   const posterUrl = `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspect}`
+
+  const isInternalized = Boolean(item.internalized)
+  const readiness = item.readiness || (isInternalized ? "READY" : item.disposition === "FIX" ? "FIX" : "UNVERIFIED")
+
+  const readinessColor =
+    readiness === "READY"
+      ? "success"
+      : readiness === "FIX"
+      ? "error"
+      : "warning"
+
+  const readinessLabel =
+    readiness === "READY"
+      ? "READY (Internalized)"
+      : readiness === "FIX"
+      ? "NEEDS STRUCTURAL FIX"
+      : "UNVERIFIED (Pending Internalization)"
+
+  const handleCustomVarChange = (name, val) => {
+    setCustomVars((prev) => ({ ...prev, [name]: val }))
+  }
+
+  const handleDispatchAddIntent = async () => {
+    setIntentLoading(true)
+    setIntentError(null)
+    setIntentResult(null)
+    try {
+      const payload = {
+        project_id: targetProjectId.trim() || null,
+        timeline_track_index: Number(trackIndex) || 0,
+        start_time_seconds: Number(startTime) || 0.0,
+        aspect_ratio: aspect,
+        custom_variables: customVars,
+      }
+      const res = await http.post(`/api/catalog/blocks/${item.id}/intent/add-to-project`, payload)
+      setIntentResult(res.data)
+    } catch (err) {
+      console.error("Add-to-project intent failed:", err)
+      setIntentError(err.response?.data?.detail || "Could not dispatch add-to-project intent.")
+    } finally {
+      setIntentLoading(false)
+    }
+  }
 
   return (
     <Drawer
@@ -65,7 +126,7 @@ export default function CatalogDrawer({
       slotProps={{
         paper: {
           sx: {
-            width: { xs: "100%", sm: 640 },
+            width: { xs: "100%", sm: 660 },
             maxWidth: "100vw",
             bgcolor: "background.paper",
             borderLeft: 1,
@@ -94,8 +155,9 @@ export default function CatalogDrawer({
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
                 />
                 <Chip
-                  label={item.disposition}
+                  label={readinessLabel}
                   size="small"
+                  color={readinessColor}
                   variant="outlined"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
                 />
@@ -168,7 +230,7 @@ export default function CatalogDrawer({
           <Box
             sx={{
               width: "100%",
-              height: is9x16 ? 380 : 240,
+              height: is9x16 ? 360 : 230,
               maxHeight: "45vh",
               borderRadius: "8px",
               overflow: "hidden",
@@ -213,6 +275,12 @@ export default function CatalogDrawer({
             <Tab label={`Variables (${item.variables_count || 0})`} />
             <Tab label="Provenance & Legal" />
             <Tab label="Aspect Parity" />
+            <Tab
+              label="Add to Project"
+              icon={<IconPlus size={14} />}
+              iconPosition="start"
+              sx={{ color: "primary.main" }}
+            />
           </Tabs>
         </Box>
 
@@ -249,15 +317,16 @@ export default function CatalogDrawer({
                     Duration: <strong>{item.duration || 5.0} seconds</strong>
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Native Resolution:{" "}
-                    <strong>
-                      {item.dimensions?.width || 1920} × {item.dimensions?.height || 1080}
-                    </strong>
+                    Category: <strong>{item.category}</strong>
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Dependencies:{" "}
+                    Runtime Packaging:{" "}
+                    <strong>{isInternalized ? "Internalized (Zero Donor Dependency)" : "Awaiting Internalization"}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                    Native Dimensions:{" "}
                     <strong>
-                      {(item.deps || []).length > 0 ? item.deps.join(", ") : "None (Pure CSS/HTML)"}
+                      {item.dimensions?.width || 1920}×{item.dimensions?.height || 1080}
                     </strong>
                   </Typography>
                 </Stack>
@@ -267,33 +336,39 @@ export default function CatalogDrawer({
 
           {tab === 1 && (
             <Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                Configurable Template Variables
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+                Configurable Variables Schema
               </Typography>
-              {(!item.variables || item.variables.length === 0) ? (
+              {!item.variables || item.variables.length === 0 ? (
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  This block has no external variables. It renders with static or responsive styles.
+                  No configurable variables exposed by this block.
                 </Typography>
               ) : (
-                <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: "8px" }}>
+                <TableContainer component={Paper} variant="outlined">
                   <Table size="small">
                     <TableHead>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 700 }}>Variable ID</TableCell>
+                        <TableCell sx={{ fontWeight: 700 }}>Variable</TableCell>
                         <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
-                        <TableCell sx={{ fontWeight: 700 }}>Label</TableCell>
-                        <TableCell sx={{ fontWeight: 700 }}>Role</TableCell>
+                        <TableCell sx={{ fontWeight: 700 }}>Default</TableCell>
+                        <TableCell sx={{ fontWeight: 700 }}>Description</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {item.variables.map((v) => (
-                        <TableRow key={v.id}>
-                          <TableCell sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
-                            {v.id}
+                        <TableRow key={v.name}>
+                          <TableCell sx={{ fontFamily: "monospace", fontSize: "0.78rem" }}>
+                            {v.name}
                           </TableCell>
-                          <TableCell>{v.type || "string"}</TableCell>
-                          <TableCell>{v.label || v.id}</TableCell>
-                          <TableCell>{v.role || "content"}</TableCell>
+                          <TableCell>
+                            <Chip label={v.type} size="small" sx={{ height: 18, fontSize: "0.68rem" }} />
+                          </TableCell>
+                          <TableCell sx={{ fontFamily: "monospace", fontSize: "0.78rem" }}>
+                            {String(v.default ?? "—")}
+                          </TableCell>
+                          <TableCell sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
+                            {v.description || "—"}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -307,44 +382,32 @@ export default function CatalogDrawer({
             <Stack spacing={2}>
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Software License
+                  Licensing & Legal Clearance
                 </Typography>
-                <Chip
-                  label={item.license || "Apache-2.0"}
-                  color="success"
-                  size="small"
-                  sx={{ fontWeight: 700 }}
-                />
-              </Box>
-
-              <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Legal Attribution & Provenance
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.5 }}>
-                  This component is distributed under the {item.license || "Apache 2.0 License"}.
-                  Authored by {item.author || "HyperFrames Authors"}. All trademarks, fonts, and
-                  upstream libraries retain their respective original notices.
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                  <IconShieldCheck size={20} style={{ color: theme.palette.success.main }} />
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {item.license || "Apache-2.0"}
+                  </Typography>
+                </Stack>
+                <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
+                  Redistributable under Apache-2.0 and compatible open-source terms. Derivative works retain original copyright and NOTICE files.
                 </Typography>
               </Box>
 
+              <Divider />
+
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Vendor Dependencies & Notices
+                  Donor Independence (GT-20)
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.5 }}>
-                  {(item.deps || []).includes("three.js") && (
-                    <div>• <strong>Three.js</strong>: Licensed under the MIT License.</div>
-                  )}
-                  {(item.deps || []).includes("gsap") && (
-                    <div>• <strong>GSAP</strong>: Licensed under GSAP Standard License.</div>
-                  )}
-                  {(item.deps || []).includes("shaders.iife.js") && (
-                    <div>• <strong>Shader Effects</strong>: Licensed under MIT License.</div>
-                  )}
-                  {(item.deps || []).length === 0 && (
-                    <div>• Zero external binary dependencies. Pure web standards.</div>
-                  )}
+                <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+                  {isInternalized
+                    ? "✓ This block has been completely internalized into backend/catalog/shipped_blocks with offline assets and pinned fonts. It functions without donor checkout."
+                    : "⚠ This block currently requires dependency vendoring and offline packaging before runtime shipment."}
+                </Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  Original Donor Directory: <code>{item.id}</code>
                 </Typography>
               </Box>
             </Stack>
@@ -389,6 +452,107 @@ export default function CatalogDrawer({
               </Box>
             </Stack>
           )}
+
+          {tab === 4 && (
+            <Stack spacing={2.5}>
+              <Box>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                  Add Block to Project Timeline
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  Configure insertion parameters and dispatch a validated timeline block intent.
+                </Typography>
+              </Box>
+
+              {!isInternalized && (
+                <Alert severity="warning">
+                  This block is <strong>UNVERIFIED</strong> for runtime deployment. Adding it will record a validated intent, but requires coordinator dependency clearance before live rendering.
+                </Alert>
+              )}
+
+              <Stack spacing={2}>
+                <TextField
+                  label="Target Project ID"
+                  placeholder="Optional: leave blank for active composition"
+                  size="small"
+                  fullWidth
+                  value={targetProjectId}
+                  onChange={(e) => setTargetProjectId(e.target.value)}
+                />
+
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    label="Timeline Track Index"
+                    type="number"
+                    size="small"
+                    value={trackIndex}
+                    onChange={(e) => setTrackIndex(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    sx={{ width: 180 }}
+                  />
+                  <TextField
+                    label="Start Time (seconds)"
+                    type="number"
+                    size="small"
+                    value={startTime}
+                    onChange={(e) => setStartTime(Math.max(0, parseFloat(e.target.value) || 0))}
+                    sx={{ width: 180 }}
+                  />
+                </Stack>
+
+                {item.variables && item.variables.length > 0 && (
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", mb: 1, display: "block" }}>
+                      Customize Variables
+                    </Typography>
+                    <Stack spacing={1.5}>
+                      {item.variables.map((v) => (
+                        <TextField
+                          key={v.name}
+                          label={v.name}
+                          size="small"
+                          defaultValue={v.default}
+                          helperText={v.description}
+                          fullWidth
+                          onChange={(e) => handleCustomVarChange(v.name, e.target.value)}
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleDispatchAddIntent}
+                  disabled={intentLoading}
+                  startIcon={intentLoading ? <CircularProgress size={16} /> : <IconSend size={16} />}
+                  sx={{ fontWeight: 700 }}
+                >
+                  {intentLoading ? "Validating Intent..." : "Dispatch Add-to-Project Intent"}
+                </Button>
+              </Stack>
+
+              {intentError && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {intentError}
+                </Alert>
+              )}
+
+              {intentResult && (
+                <Alert severity="success" sx={{ mt: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    Intent Validated: {intentResult.intent_id}
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: "block", mt: 0.5 }}>
+                    Target Track: Track #{intentResult.timeline_item?.track_index} · Duration: {intentResult.timeline_item?.duration}s
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.5 }}>
+                    Integration Status: <strong>{intentResult.integration_request?.parameters?.timeline_item ? "Payload Ready for Coordinator Wiring" : "Pending"}</strong>
+                  </Typography>
+                </Alert>
+              )}
+            </Stack>
+          )}
         </Box>
 
         {/* Footer Actions */}
@@ -404,13 +568,23 @@ export default function CatalogDrawer({
             >
               Open in New Window
             </Button>
+            {tab !== 4 && (
+              <Button
+                variant="contained"
+                size="small"
+                color="primary"
+                startIcon={<IconPlus size={16} />}
+                onClick={() => setTab(4)}
+              >
+                Add to Project
+              </Button>
+            )}
             <Button
-              variant="contained"
+              variant="text"
               size="small"
               onClick={onClose}
-              color="primary"
             >
-              Done
+              Close
             </Button>
           </Stack>
         </Box>

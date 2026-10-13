@@ -12,10 +12,21 @@ from backend.catalog.manifest_service import CatalogManifestService, CatalogMani
 from backend.catalog.poster_service import CatalogPosterService, CatalogPosterError
 from backend.catalog.preview_engine import CatalogPreviewEngine
 from backend.catalog.ghost_preview import GhostPreviewContract
+from backend.catalog.project_intent_contract import (
+    AddToProjectIntentRequest,
+    AddToProjectIntentResult,
+    CatalogProjectIntentAdapter,
+)
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
+
+
+@router.get("/factual-counts")
+async def get_factual_counts():
+    """Return factual counts for Wave 3 Role 3 acceptance reporting."""
+    return CatalogManifestService.get_factual_counts()
 
 
 @router.get("/items")
@@ -142,6 +153,8 @@ async def get_block_preview(
     block_id: str,
     aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
     version: Optional[str] = Query(None),
+    viewport_width: Optional[int] = Query(None, description="Custom viewport width for responsive inspection"),
+    viewport_height: Optional[int] = Query(None, description="Custom viewport height for responsive inspection"),
 ):
     """Serve standalone animated HTML preview for catalog block."""
     try:
@@ -149,6 +162,8 @@ async def get_block_preview(
             block_id,
             version_hash=version,
             aspect_ratio=aspect_ratio,
+            viewport_width=viewport_width,
+            viewport_height=viewport_height,
         )
         return HTMLResponse(
             html,
@@ -169,3 +184,38 @@ async def get_block_ghost_config(
     """Return non-destructive hover preview configuration."""
     CatalogManifestService.validate_block_id(block_id)
     return GhostPreviewContract.get_preview_config(block_id, aspect_ratio=aspect_ratio)
+
+
+@router.post("/blocks/{block_id}/intent/add-to-project", response_model=AddToProjectIntentResult)
+async def create_add_to_project_intent(
+    block_id: str,
+    payload: AddToProjectIntentRequest,
+):
+    """
+    Validate and produce a normalized timeline item insertion intent for coordinator wiring.
+    Does NOT mutate ProjectService directly (strictly respects component ownership boundaries).
+    """
+    try:
+        return CatalogProjectIntentAdapter.create_add_to_project_intent(block_id, payload)
+    except CatalogManifestError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error creating add-to-project intent for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail="Could not create add-to-project intent.")
+
+
+@router.post("/blocks/{block_id}/invalidate-poster")
+async def invalidate_block_poster(block_id: str):
+    """Invalidate cached poster images for this block when source or variables change."""
+    try:
+        deleted_count = CatalogPosterService.invalidate_block_poster(block_id)
+        return {
+            "block_id": block_id,
+            "status": "CACHE_INVALIDATED",
+            "deleted_posters_count": deleted_count,
+        }
+    except CatalogManifestError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error invalidating poster for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail="Could not invalidate poster.")

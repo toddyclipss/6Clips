@@ -5,9 +5,10 @@ from __future__ import annotations
 
 import hashlib
 import io
+import json
 import logging
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 from PIL import Image, ImageDraw, ImageFont
 
 from backend.config import DATA_DIR, settings
@@ -45,6 +46,14 @@ class CatalogPosterService:
         return POSTER_CACHE_DIR
 
     @classmethod
+    def compute_variable_fingerprint(cls, variables: Optional[Dict[str, Any]]) -> Optional[str]:
+        """Compute deterministic 8-char fingerprint from variable dictionary."""
+        if not variables:
+            return None
+        serialized = json.dumps(variables, sort_keys=True)
+        return hashlib.md5(serialized.encode("utf-8")).hexdigest()[:8]
+
+    @classmethod
     def get_poster_path(
         cls,
         block_id: str,
@@ -67,7 +76,11 @@ class CatalogPosterService:
         vfp = f"_{variable_fingerprint}" if variable_fingerprint else ""
         cache_key = f"{block_id}_{ver}_{aspect_tag}{vfp}.png"
 
-        target_file = cls.get_cache_dir() / cache_key
+        cache_dir = cls.get_cache_dir().resolve()
+        target_file = (cache_dir / cache_key).resolve()
+        if not str(target_file).startswith(str(cache_dir)):
+            raise CatalogPosterError("Path traversal violation in poster cache path.")
+
         if target_file.is_file() and target_file.stat().st_size > 0:
             return target_file
 
