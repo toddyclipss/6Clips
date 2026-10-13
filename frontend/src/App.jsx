@@ -15,6 +15,8 @@ const Messaging = lazy(() => import("./pages/Messaging"))
 const ClipStudio = lazy(() => import("./pages/ClipStudio"))
 const MotionGraphics = lazy(() => import("./pages/MotionGraphics"))
 const Catalog = lazy(() => import("./pages/Catalog"))
+const Distribution = lazy(() => import("./pages/Distribution"))
+const Analytics = lazy(() => import("./pages/Analytics"))
 const Tools = lazy(() => import("./pages/Tools"))
 
 // Tools — single-purpose utility pages. Each is a thin wrapper around the
@@ -81,6 +83,16 @@ function GlobalSnackbar() {
   )
 }
 
+function MotionRouteWrapper() {
+  const qp = new URLSearchParams(window.location.search)
+  const review = qp.get("review")
+  const jobId = qp.get("jobId") || qp.get("job_id")
+  if (review && !jobId) {
+    return <Navigate to={`/motion?jobId=${encodeURIComponent(review)}&mode=review`} replace />
+  }
+  return <MotionGraphics />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -106,7 +118,9 @@ export default function App() {
               <Route path="create" element={<Navigate to="/trends" replace />} />
               <Route path="cron" element={<Navigate to="/" />} />
               <Route path="clips" element={<ClipStudio />} />
-              <Route path="motion" element={<MotionGraphics />} />
+              <Route path="motion" element={<MotionRouteWrapper />} />
+              <Route path="distribution" element={<Distribution />} />
+              <Route path="analytics" element={<Analytics />} />
               <Route path="catalog" element={<Catalog />} />
               <Route path="tools" element={<Tools />} />
               <Route path="tools/captions" element={<ToolCaptions />} />

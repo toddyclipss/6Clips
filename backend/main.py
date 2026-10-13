@@ -332,6 +332,10 @@ def create_app() -> FastAPI:
     app.include_router(messaging_router.router, prefix="/api")
     app.include_router(tts_preview.router, prefix="/api")
     app.include_router(music_router.router, prefix="/api")
+    from backend.api.distribution import router as distribution_router
+    app.include_router(distribution_router)
+    from backend.api.analytics import router as analytics_router
+    app.include_router(analytics_router, prefix="/api")
     from backend.integration.router import router as integration_router
     app.include_router(integration_router, prefix="/api")
 

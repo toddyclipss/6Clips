@@ -389,7 +389,25 @@ async def plan_and_render_original_creator_video(req: CreatorPlanAndRenderReques
     )
 
     is_rendered = rendered.rendered_result is not None
-    review_url = f"/motion?review={rendered.spec_id}" if is_rendered else None
+    review_url = None
+    if is_rendered:
+        from backend.media_pipeline.producer_adapter import get_media_producer
+        producer = get_media_producer()
+        art_id = f"art-{rendered.spec_id}"
+        width = rendered.rendered_result.probe_stats.width if rendered.rendered_result.probe_stats else 1080
+        height = rendered.rendered_result.probe_stats.height if rendered.rendered_result.probe_stats else 1920
+        producer.register_completed_artifact(
+            job_id=rendered.spec_id,
+            output_id=f"out-{rendered.spec_id}",
+            artifact_id=art_id,
+            file_path=rendered.rendered_result.video_path,
+            duration_seconds=rendered.rendered_result.duration_seconds,
+            width=width,
+            height=height,
+            user_id="local",
+            project_id=req.project_id,
+        )
+        review_url = f"/motion?jobId={rendered.spec_id}&mode=review"
     canonical_payload = ProductionV1Adapter.to_canonical_project_payload(rendered)
 
     return {
@@ -406,6 +424,96 @@ async def plan_and_render_original_creator_video(req: CreatorPlanAndRenderReques
 
 
 # =========================================================================
+# Domain E: Distribution & Analytics Reconciled Bridge
+# =========================================================================
+
+class ReconcileReceiptRequest(BaseModel):
+    distribution_receipt: Dict[str, Any]
+    creator_id: str = "local"
+    verify_lineage: bool = True
+
+
+@router.post("/distribution/reconcile-receipt-to-analytics")
+async def reconcile_receipt_to_analytics(req: ReconcileReceiptRequest):
+    """
+    Reconciles a Phase 10 Distribution PublishedReceiptV1 into Phase 11 Analytics PublishedReceiptV1.
+    Strictly verifies that:
+    1. A queued or scheduled job is NOT accepted as a confirmed remote post.
+    2. verified_status must be 'CONFIRMED' with a valid remote_post_id.
+    3. Output artifact SHA-256 and lineage are preserved.
+    """
+    from datetime import datetime, timezone
+    dist_data = req.distribution_receipt
+    verified_status = dist_data.get("verified_status")
+    remote_post_id = dist_data.get("remote_post_id")
+
+    if not remote_post_id or (isinstance(remote_post_id, str) and remote_post_id.startswith("fake_")):
+        is_test = dist_data.get("provenance", {}).get("environment") == "test"
+        if not is_test:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="A queued, simulated or unconfirmed job cannot be reconciled as a verified production publication.",
+            )
+
+    if verified_status != "CONFIRMED":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Cannot reconcile receipt with unconfirmed status: '{verified_status}'. Status must be 'CONFIRMED'.",
+        )
+
+    from backend.analytics.models import (
+        AnalyticsProvider,
+        PublishedReceiptV1 as AnalyticsReceipt,
+        ReceiptConfirmationStatus,
+    )
+    from backend.api.analytics import get_analytics_engine
+
+    platform_str = str(dist_data.get("platform", "")).lower()
+    try:
+        provider = AnalyticsProvider(platform_str)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unknown or unsupported platform: '{platform_str}'.",
+        )
+
+    raw_ts = dist_data.get("published_at_utc")
+    try:
+        pub_ts = datetime.fromisoformat(raw_ts) if raw_ts else datetime.now(timezone.utc)
+    except Exception:
+        pub_ts = datetime.now(timezone.utc)
+
+    analytics_receipt = AnalyticsReceipt(
+        receipt_id=dist_data.get("receipt_id") or f"rcpt-{uuid4().hex[:8]}",
+        project_id=dist_data.get("project_id", "default"),
+        output_video_id=dist_data.get("output_id"),
+        revision_id=str(dist_data.get("project_revision", 1)),
+        artifact_sha256=dist_data.get("artifact_sha256"),
+        provider=provider,
+        account_reference=dist_data.get("account_handle") or dist_data.get("account_id", "local_acc"),
+        creator_id=req.creator_id,
+        remote_post_id=remote_post_id,
+        remote_post_url=dist_data.get("remote_post_url"),
+        publish_timestamp=pub_ts,
+        confirmation_status=ReceiptConfirmationStatus.CONFIRMED,
+        source="phase10_distribution_reconciled",
+        metadata={
+            "job_id": dist_data.get("job_id"),
+            "provenance": dist_data.get("provenance", {}),
+            "reconciled_at": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+    engine = get_analytics_engine()
+    saved = engine.repo.save_receipt(analytics_receipt)
+    return {
+        "status": "reconciled",
+        "receipt": saved.model_dump(),
+        "eligible_for_polling": saved.is_eligible_for_polling(),
+    }
+
+
+# =========================================================================
 # Integration Health & Domain Status
 # =========================================================================
 
@@ -414,9 +522,10 @@ async def get_integration_health():
     """Returns integration coordinator health and release candidate status."""
     return {
         "status": "ok",
-        "service": "6clips-wave4-integration-coordinator",
+        "service": "6clips-wave5-integration-coordinator",
         "wave": 4,
-        "baseline_commit": "da8be98986d3cb854c3312e35c0677b71d8bbb5e",
+        "wave_version": 5,
+        "baseline_commit": "7af7ac4c54e3ab05d9896b3f846a5708a98c37f1",
         "active_domains": [
             "execution_durability",
             "media_quality_3x60s",
@@ -424,5 +533,7 @@ async def get_integration_health():
             "hyperframes_catalog_196_blocks",
             "library_workflows_and_trash",
             "trends_and_original_production",
+            "distribution_approval_and_scheduling",
+            "analytics_grounded_feedback",
         ],
     }

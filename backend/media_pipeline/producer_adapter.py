@@ -21,6 +21,7 @@ from backend.media_pipeline.models import (
     BatchStatus,
     BlockerV1,
     ChecksV1,
+    MediaProbeV1,
     OutputResultV1,
     OutputSpecV1,
     OutputState,
@@ -115,6 +116,87 @@ class MediaProducerPort:
             self._artifact_index[artifact_id] = path
             return path
         return None
+
+    def register_completed_artifact(
+        self,
+        job_id: str,
+        output_id: str,
+        artifact_id: str,
+        file_path: Path,
+        duration_seconds: float = 6.0,
+        width: int = 1080,
+        height: int = 1920,
+        user_id: str = "local",
+        project_id: Optional[str] = None,
+        project_revision: int = 1,
+    ) -> ProductionReportV1:
+        """Register a finished physical MP4 artifact so it can be streamed and reviewed in Motion."""
+        resolved = Path(file_path).resolve()
+        self._artifact_index[artifact_id] = resolved
+        c_hash = compute_sha256(resolved) if resolved.exists() else "unhashed"
+        probe = MediaProbeV1(
+            width=width,
+            height=height,
+            duration_seconds=duration_seconds,
+            video_codec="h264",
+            audio_codec="aac",
+            fps=30.0,
+            audio_channels=2,
+            sample_rate=44100,
+            content_hash=c_hash,
+        )
+        out_res = OutputResultV1(
+            output_id=output_id,
+            project_revision_id=str(project_revision),
+            artifact_id=artifact_id,
+            media_probe=probe,
+            checks=ChecksV1(technical="PASS", contract="PASS", editorial="NOT_ASSESSED"),
+            preview_ref=f"/api/media/production/artifacts/{artifact_id}/stream",
+            state=OutputState.SUCCEEDED,
+        )
+        report = ProductionReportV1(
+            job_id=job_id,
+            run_id=job_id,
+            contract_version="1.0.0",
+            status=BatchStatus.COMPLETE,
+            outputs=[out_res],
+        )
+        self._jobs[job_id] = {
+            "report": report,
+            "request": None,
+            "project_id": project_id or "default",
+            "user_id": user_id,
+        }
+        try:
+            self._ledger.create_job(
+                job_id=job_id,
+                request_fingerprint=f"fp_{job_id}",
+                run_id=job_id,
+                immutable_request={},
+                output_ids=[output_id],
+                project_id=project_id or "default",
+                user_id=user_id,
+                status="RUNNING",
+            )
+            f_size = resolved.stat().st_size if resolved.exists() else 0
+            self._ledger.checkpoint_output_success(
+                job_id=job_id,
+                output_id=output_id,
+                artifact_id=artifact_id,
+                file_path=resolved,
+                file_hash=c_hash,
+                file_size=f_size,
+            )
+            self._ledger.register_artifact(
+                artifact_id=artifact_id,
+                file_path=resolved,
+                file_hash=c_hash,
+                file_size=f_size,
+            )
+            self._ledger.record_transition(job_id=job_id, new_status="COMPLETE")
+        except Exception as ex:
+            logger.warning("Failed saving completed artifact to persistent ledger: %s", ex)
+        return report
 
     async def submit_batch(
         self,

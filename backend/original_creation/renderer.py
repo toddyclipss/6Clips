@@ -241,12 +241,18 @@ async def synthesize_narration_audio(
     text: str,
     output_audio_path: Path,
     voice_name: str = "en-US-ChristopherNeural",
+    allow_test_fixture: bool = False,
 ) -> Path:
     """
     Synthesizes narration audio using approved edge-tts when procedural synthesis is authorized.
-    Falls back to a procedural silence/sine tone track if offline or synthesis fails.
+    For user-facing original creations, silently producing false voiced audio (via sine/anullsrc)
+    is strictly prohibited: raises an error if edge-tts is unavailable or synthesis fails.
+    Synthetic tone generation is allowed only when allow_test_fixture=True or VIRALMINT_TEST_AUDIO_FIXTURE=1
+    is explicitly set in test code.
     """
+    import os
     output_audio_path.parent.mkdir(parents=True, exist_ok=True)
+    tts_error: Optional[Exception] = None
     try:
         import edge_tts
         communicate = edge_tts.Communicate(text, voice_name)
@@ -254,17 +260,26 @@ async def synthesize_narration_audio(
         if output_audio_path.exists() and output_audio_path.stat().st_size > 500:
             return output_audio_path
     except Exception as e:
-        logger.warning("edge_tts synthesis failed or unavailable: %s. Generating procedural voice tone.", e)
+        tts_error = e
+        logger.warning("edge_tts synthesis failed or unavailable: %s", e)
 
-    # Procedural voice audio fallback: spoken words duration at 140 WPM with an aevalsrc tone
+    is_test_fixture_allowed = allow_test_fixture or os.environ.get("VIRALMINT_TEST_AUDIO_FIXTURE") == "1"
+    if not is_test_fixture_allowed:
+        raise RuntimeError(
+            f"TTS narration synthesis failed or unavailable: {tts_error or 'Insufficient audio output'}. "
+            "Silently producing false voiced audio or silent tracks is strictly prohibited for user-facing creations."
+        )
+
+    # Clearly labeled test fixture ONLY when explicitly authorized in test environments
     words = len(text.split())
     dur = max(2.0, (words / 140.0) * 60.0)
+    audio_codec = "libmp3lame" if output_audio_path.suffix.lower() == ".mp3" else "aac"
     cmd = [
         "ffmpeg", "-y",
         "-f", "lavfi",
         "-i", f"sine=frequency=220:duration={dur:.2f}",
         "-af", "volume=0.2",
-        "-c:a", "aac",
+        "-c:a", audio_codec,
         "-b:a", "128k",
         str(output_audio_path),
     ]
@@ -337,10 +352,19 @@ class OriginalVideoRenderer:
             if voice_file is None:
                 if spec.voice_requirement == VoiceInputRequirement.PROCEDURAL_SYNTHESIS_ALLOWED:
                     voice_file = tmp_dir / "synthesized_narration.mp3"
-                    await synthesize_narration_audio(
-                        text=spec.spoken_script.spoken_text,
-                        output_audio_path=voice_file,
-                    )
+                    try:
+                        await synthesize_narration_audio(
+                            text=spec.spoken_script.spoken_text,
+                            output_audio_path=voice_file,
+                        )
+                    except Exception as tts_err:
+                        logger.warning("Procedural narration synthesis failed or denied: %s", tts_err)
+                        spec.status = OriginalCreationStatus.WAITING_FOR_INPUT
+                        spec.status_reason = (
+                            f"Procedural TTS narration synthesis failed or was unavailable ({tts_err}). "
+                            "Awaiting authorized creator voice recording or working TTS service."
+                        )
+                        return spec
                 else:
                     spec.status = OriginalCreationStatus.WAITING_FOR_INPUT
                     spec.status_reason = "Narration voice track missing. Awaiting creator voice recording."

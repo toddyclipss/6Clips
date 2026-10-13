@@ -1836,11 +1836,28 @@ class PlannerAgent:
         rendered = await OriginalCreatorWorkflow.render_spec(spec_obj, custom_voice_path=custom_voice)
 
         if rendered.rendered_result:
-            review_url = f"/motion?review={rendered.spec_id}"
+            from backend.media_pipeline.producer_adapter import get_media_producer
+            producer = get_media_producer()
+            art_id = f"art-{rendered.spec_id}"
+            width = rendered.rendered_result.probe_stats.width if rendered.rendered_result.probe_stats else 1080
+            height = rendered.rendered_result.probe_stats.height if rendered.rendered_result.probe_stats else 1920
+            producer.register_completed_artifact(
+                job_id=rendered.spec_id,
+                output_id=f"out-{rendered.spec_id}",
+                artifact_id=art_id,
+                file_path=rendered.rendered_result.video_path,
+                duration_seconds=rendered.rendered_result.duration_seconds,
+                width=width,
+                height=height,
+                user_id=user_id,
+                project_id=action.get("project_id"),
+            )
+            review_url = f"/motion?jobId={rendered.spec_id}&mode=review"
             canonical_payload = ProductionV1Adapter.to_canonical_project_payload(rendered)
             await ws_manager.send({
                 "type": "original_video_rendered",
                 "spec_id": rendered.spec_id,
+                "job_id": rendered.spec_id,
                 "status": rendered.status.value,
                 "video_path": str(rendered.rendered_result.video_path),
                 "review_url": review_url,
