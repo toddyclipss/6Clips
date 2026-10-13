@@ -84,6 +84,17 @@ class DistributionJobStore:
                 return None
             return DistributionJob(**raw)
 
+    def get_job_by_idempotency_key(self, idempotency_key: str) -> Optional[DistributionJob]:
+        """Fetch a job by idempotency key to prevent duplicate job creation."""
+        if not idempotency_key:
+            return None
+        with self._lock:
+            data = self._read_json(self._jobs_file)
+            for item in data.values():
+                if item.get("idempotency_key") == idempotency_key:
+                    return DistributionJob(**item)
+            return None
+
     def list_jobs(
         self,
         user_id: Optional[str] = None,

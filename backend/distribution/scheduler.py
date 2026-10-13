@@ -124,6 +124,13 @@ class DistributionScheduler:
         account: PlatformAccount,
     ) -> DistributionJob:
         """Validate readiness and enqueue job for scheduled release."""
+        # 0. Check idempotency: if job with matching idempotency key already exists, return it
+        if job.idempotency_key:
+            existing = self.store.get_job_by_idempotency_key(job.idempotency_key)
+            if existing:
+                logger.info("DistributionScheduler | Reusing existing job for idempotency key: %s", job.idempotency_key)
+                return existing
+
         # 1. Enforce account can publish
         AccountBoundaryManager.assert_account_can_publish(account)
 

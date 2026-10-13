@@ -41,6 +41,13 @@ def get_analytics_engine() -> AnalyticsEngine:
     return _default_engine
 
 
+def reset_analytics_engine() -> AnalyticsEngine:
+    global _default_engine
+    _default_repo = AnalyticsRepository()
+    _default_engine = AnalyticsEngine(repository=_default_repo)
+    return _default_engine
+
+
 @router.get("/status")
 async def get_analytics_provider_status():
     """
@@ -107,7 +114,10 @@ async def register_published_receipt(req: ReceiptCreateRequest):
     try:
         saved = engine.register_receipt(receipt, is_test_fixture=is_fixture)
     except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
+        err = str(ve)
+        if "unconfirmed" in err.lower() or "cannot register fake" in err.lower():
+            raise HTTPException(status_code=409, detail=err)
+        raise HTTPException(status_code=422, detail=err)
     return {"receipt": saved.model_dump()}
 
 
@@ -116,6 +126,10 @@ async def register_published_receipt(req: ReceiptCreateRequest):
 async def poll_receipt_metrics(receipt_id: str):
     """Poll remote or mock metrics for a specific publication receipt."""
     engine = get_analytics_engine()
+    rcpt = engine.repo.get_receipt(receipt_id)
+    if not rcpt:
+        raise HTTPException(status_code=404, detail=f"Receipt '{receipt_id}' not found.")
+
     obs, err = await engine.poll_post_metrics(receipt_id=receipt_id)
     if err:
         return {
