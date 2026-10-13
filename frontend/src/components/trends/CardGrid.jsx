@@ -55,27 +55,49 @@ function OutlierChip({ score }) {
   return <Chip label={label} size="small" color={color} variant="outlined" sx={{ fontWeight: 700, fontSize: "0.65rem", height: 22 }} />
 }
 
-function RoleBadge({ suitability, duration }) {
-  if (!suitability && !duration) return null
-  const isCandidate = suitability?.is_editable_source || (duration && duration >= 240)
-  const isTooShort = suitability?.is_suitable === false || (duration && duration < 180)
-  const label = isCandidate ? "Duration Candidate" : "Creative Reference"
-  const color = isCandidate ? "success" : "secondary"
-  const tooltip = isCandidate
-    ? `Duration candidate (${duration || ""}s) for multi-clip extraction. Requires verified permitted route before byte acquisition.`
-    : isTooShort
-    ? `Reference Short (${duration || ""}s) — valuable for trending hooks & pacing, unsuitable for 3x 60s clips`
-    : `Creative reference for trends and style`
+function RoleBadge({ suitability, duration, editorialRole, bytesAvailability, isDownloaded }) {
+  const role = editorialRole || (suitability?.is_editable_source || (duration && duration >= 240) ? "editable_source_candidate" : (duration && duration < 180 ? "creative_reference" : "creative_reference"))
+  let label = "Creative Reference"
+  let color = "secondary"
+  let tooltip = "Creative reference for hooks & pacing. Unsuitable as raw footage for 3x60s clips."
+
+  if (role === "editable_source_candidate") {
+    label = "Editable Source Candidate"
+    color = "success"
+    tooltip = `Substantial footage (${duration || ""}s) candidate for multi-clip editing. Requires verified permitted route before byte acquisition.`
+  } else if (role === "marginal_source") {
+    label = "Marginal Source"
+    color = "info"
+    tooltip = `Duration (${duration || ""}s) satisfies minimum threshold with limited editorial margin.`
+  } else if (role === "topic_research_reference") {
+    label = "Topic Research"
+    color = "warning"
+    tooltip = "Authoritative news / patch notes research reference."
+  }
+
+  const hasBytes = bytesAvailability === "available_local" || isDownloaded
+
   return (
-    <Tooltip title={tooltip} arrow>
-      <Chip
-        label={label}
-        size="small"
-        color={color}
-        variant={isCandidate ? "filled" : "outlined"}
-        sx={{ fontWeight: 700, fontSize: "0.65rem", height: 22 }}
-      />
-    </Tooltip>
+    <Stack direction="row" spacing={0.5} alignItems="center">
+      <Tooltip title={tooltip} arrow>
+        <Chip
+          label={label}
+          size="small"
+          color={color}
+          variant={role === "editable_source_candidate" ? "filled" : "outlined"}
+          sx={{ fontWeight: 700, fontSize: "0.65rem", height: 22 }}
+        />
+      </Tooltip>
+      {hasBytes ? (
+        <Tooltip title="Physical media bytes verified in local storage." arrow>
+          <Chip label="Bytes Ingested" size="small" color="primary" sx={{ fontSize: "0.6rem", height: 20 }} />
+        </Tooltip>
+      ) : (
+        <Tooltip title="Metadata read from public search. Physical bytes not yet ingested." arrow>
+          <Chip label="Metadata Read" size="small" variant="outlined" sx={{ fontSize: "0.6rem", height: 20, color: "text.secondary" }} />
+        </Tooltip>
+      )}
+    </Stack>
   )
 }
 
@@ -275,7 +297,15 @@ export default function CardGrid({ results, onSelect, onDownload, onDelete, sele
                     icon={isNews ? <IconNews size={13} stroke={1.8} /> : undefined}
                     sx={{ textTransform: "uppercase", fontSize: "0.65rem", height: 22,
                       ...(isNews && { borderColor: "warning.main", color: "warning.main" }) }} />
-                  {!isNews && <RoleBadge suitability={r.suitability_for_3x60s} duration={r.duration_seconds} />}
+                  {!isNews && (
+                    <RoleBadge
+                      suitability={r.suitability_for_3x60s}
+                      duration={r.duration_seconds}
+                      editorialRole={r.editorial_role}
+                      bytesAvailability={r.bytes_availability}
+                      isDownloaded={r.is_downloaded}
+                    />
+                  )}
                   {!isNews && <VPHChip vph={r.views_per_hour} />}
                   {!isNews && <OutlierChip score={r.outlier_score} />}
                   {isNews && newsDesc?.word_count > 0 && (

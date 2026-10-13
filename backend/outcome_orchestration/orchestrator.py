@@ -140,6 +140,14 @@ class OutcomeOrchestrator:
         if is_retry and active_contract:
             return IntentKind.RETRY_SAME_OPERATION, {}
 
+        # If previous contract reached terminal state (READY_FOR_REVIEW, CANCELLED, FAILED),
+        # a fresh generation prompt is treated as a NEW_REQUEST even if prompt text is identical.
+        if active_contract is not None:
+            sm = cls.get_state_machine(active_contract)
+            if sm.current_state in (OutcomeState.READY_FOR_REVIEW, OutcomeState.CANCELLED, OutcomeState.FAILED):
+                if not is_confirmation:
+                    return IntentKind.NEW_REQUEST, {}
+
         if is_confirmation and active_contract:
             return IntentKind.CONTINUE, {}
 
@@ -264,6 +272,15 @@ class OutcomeOrchestrator:
                 active.outputs[0].seconds if active.outputs else 60.0,
                 active.outputs[0].aspect_ratio if active.outputs else "9:16",
             )
+            if project_id and not active.project_id:
+                active.project_id = project_id
+            if source_assets and not active.source_assets:
+                active.source_assets = source_assets
+            cls._save_contract(active)
+            return active, intent
+
+        elif intent == IntentKind.RETRY_SAME_OPERATION and active is not None:
+            logger.info("Goal Continuity: Retrying active contract %s", active.contract_id)
             if project_id and not active.project_id:
                 active.project_id = project_id
             if source_assets and not active.source_assets:
@@ -424,6 +441,11 @@ class OutcomeOrchestrator:
             )
 
         job_id = submit_res["job_id"]
+        contract.job_id = job_id
+        sm.job_id = job_id
+        cls._save_contract(contract)
+        cls._save_state_machine(sm)
+
         report = None
         for _ in range(120):
             res = port.get_batch(job_id)
@@ -444,6 +466,44 @@ class OutcomeOrchestrator:
         # Update state machine based on actual report results and persist
         final_state = sm.update_from_production_report(report)
         cls._save_state_machine(sm)
+        cls._save_contract(contract)
         await _emit_event("BATCH_COMPLETE", final_state.value, f"Finalized with state {final_state.value}")
 
         return report
+
+    @classmethod
+    async def reconcile_contract(cls, contract_id: str, producer_port=None) -> Optional[OutcomeStateMachine]:
+        """Reconcile an active or interrupted contract across process restarts and crashed workers."""
+        contract = cls._load_contract(contract_id)
+        if not contract:
+            return None
+        sm = cls.get_state_machine(contract)
+        job_id = sm.job_id or getattr(contract, "job_id", None)
+        if not job_id:
+            return sm
+        port = producer_port or get_media_producer_port()
+        try:
+            res = port.get_batch(job_id)
+            import inspect
+            report = await res if inspect.isawaitable(res) else res
+            if hasattr(report, "status"):
+                sm.update_from_production_report(report)
+                cls._save_state_machine(sm)
+                cls._save_contract(contract)
+        except Exception as ex:
+            logger.warning("Failed reconciling contract %s with job %s: %s", contract_id, job_id, ex)
+        return sm
+
+    @classmethod
+    async def reconcile_all_active_contracts(cls, producer_port=None) -> List[OutcomeStateMachine]:
+        """Reconcile all persisted contracts on disk against active or restored producer jobs."""
+        reconciled: List[OutcomeStateMachine] = []
+        contracts_dir = cls._storage_dir() / "contracts"
+        if not contracts_dir.exists():
+            return reconciled
+        for p in contracts_dir.glob("*.json"):
+            cid = p.stem
+            sm = await cls.reconcile_contract(cid, producer_port=producer_port)
+            if sm:
+                reconciled.append(sm)
+        return reconciled

@@ -10,6 +10,9 @@ import {
   IconPlayerPlay,
   IconDeviceFloppy,
   IconArrowBackUp,
+  IconArrowForwardUp,
+  IconRotate2,
+  IconPlus,
   IconLock,
   IconCheck,
   IconAlertCircle,
@@ -51,6 +54,13 @@ export default function StudioToolbar({
   onToggleExpandedPreview,
   activeContext,
   onSelectContext,
+  canUndo = false,
+  onUndo,
+  canRedo = false,
+  onRedo,
+  canCancel = false,
+  onCancelDraft,
+  onNewProject,
 }) {
   return (
     <Box
@@ -355,6 +365,93 @@ export default function StudioToolbar({
             </Tooltip>
           </Stack>
         )}
+
+        {/* Undo / Redo / Cancel Actions */}
+        <Stack direction="row" spacing={0.3} sx={{ mr: 0.5 }}>
+          {!project && onNewProject && (
+            <Tooltip title="Create New Composition Project" arrow>
+              <Button
+                size="small"
+                variant="contained"
+                data-testid="studio-toolbar-new-project-btn"
+                startIcon={<IconPlus size={13} stroke={2.5} />}
+                onClick={onNewProject}
+                sx={{
+                  height: 26,
+                  px: 1,
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  borderRadius: 1.5,
+                  bgcolor: "primary.main",
+                  textTransform: "none",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                New Composition
+              </Button>
+            </Tooltip>
+          )}
+
+          {project && (
+            <>
+              <Tooltip title={canUndo ? "Undo last change (Ctrl+Z)" : "Undo"} arrow>
+                <span>
+                  <IconButton
+                    size="small"
+                    data-testid="studio-toolbar-undo-btn"
+                    disabled={!canUndo}
+                    onClick={onUndo}
+                    sx={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: 1.5,
+                      color: canUndo ? "text.primary" : "text.disabled",
+                    }}
+                  >
+                    <IconArrowBackUp size={15} stroke={1.8} />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={canRedo ? "Redo change (Ctrl+Y)" : "Redo"} arrow>
+                <span>
+                  <IconButton
+                    size="small"
+                    data-testid="studio-toolbar-redo-btn"
+                    disabled={!canRedo}
+                    onClick={onRedo}
+                    sx={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: 1.5,
+                      color: canRedo ? "text.primary" : "text.disabled",
+                    }}
+                  >
+                    <IconArrowForwardUp size={15} stroke={1.8} />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              {isDirty && onCancelDraft && (
+                <Tooltip title="Discard unsaved draft changes" arrow>
+                  <IconButton
+                    size="small"
+                    data-testid="studio-toolbar-revert-btn"
+                    onClick={onCancelDraft}
+                    sx={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: 1.5,
+                      color: "warning.main",
+                    }}
+                  >
+                    <IconRotate2 size={15} stroke={1.8} />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </>
+          )}
+        </Stack>
 
         {/* Save button */}
         <Tooltip title={!project ? "No project loaded" : isSaving ? "Saving..." : isDirty ? "Save Draft" : "Saved"} arrow>

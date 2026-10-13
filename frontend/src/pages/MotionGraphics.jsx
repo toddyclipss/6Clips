@@ -58,6 +58,9 @@ export default function MotionGraphics() {
   const [isSaving, setIsSaving] = useState(false)
   const [isRendering, setIsRendering] = useState(false)
   const [conflictState, setConflictState] = useState(null)
+  const [undoStack, setUndoStack] = useState([])
+  const [redoStack, setRedoStack] = useState([])
+  const lastCommittedDocumentRef = useRef(null)
 
   // Extract dialog state
   const [extractDialogOpen, setExtractDialogOpen] = useState(false)
@@ -117,7 +120,7 @@ export default function MotionGraphics() {
   const [libraryVideos, setLibraryVideos] = useState([])
   const [trendItems, setTrendItems] = useState([])
   const [selectedAsset, setSelectedAsset] = useState(null)
-  const activeAsset = selectedAsset || libraryVideos[0] || null
+  const activeAsset = selectedAsset || null
 
   // Ghost Preview state for HyperFrames Catalog blocks (non-destructive hover preview)
   const [ghostPreview, setGhostPreview] = useState(null)
@@ -301,6 +304,9 @@ export default function MotionGraphics() {
         setRevision(detail.data.revision)
         setAspectRatio(detail.data.aspect_ratio || "9:16")
         setDocument(detail.data.document)
+        lastCommittedDocumentRef.current = detail.data.document
+        setUndoStack([])
+        setRedoStack([])
         if (detail.data.latest_render) {
           setRenderedVideo(detail.data.latest_render)
         }
@@ -309,6 +315,9 @@ export default function MotionGraphics() {
           console.warn(`Requested project ${requestedId} not found`, fetchErr)
           setProject(null)
           setDocument(null)
+          lastCommittedDocumentRef.current = null
+          setUndoStack([])
+          setRedoStack([])
           setRenderedVideo(null)
           showSnackbar(`Requested project "${requestedId}" not found`, "warning")
         }
@@ -318,6 +327,93 @@ export default function MotionGraphics() {
     loadProject()
     return () => { cancelled = true }
   }, [showSnackbar])
+
+  // Undo / Redo / Cancel Handlers
+  const pushUndo = useCallback((prevDoc) => {
+    if (!prevDoc) return
+    setUndoStack((prev) => [...prev.slice(-30), prevDoc])
+    setRedoStack([])
+  }, [])
+
+  const handleUndo = useCallback(() => {
+    if (undoStack.length === 0) return
+    const prevDoc = undoStack[undoStack.length - 1]
+    setUndoStack((prev) => prev.slice(0, prev.length - 1))
+    setRedoStack((prev) => [...prev, document])
+    setDocument(prevDoc)
+    setIsDirty(true)
+    showSnackbar("Undone last edit", "info")
+  }, [undoStack, document, showSnackbar])
+
+  const handleRedo = useCallback(() => {
+    if (redoStack.length === 0) return
+    const nextDoc = redoStack[redoStack.length - 1]
+    setRedoStack((prev) => prev.slice(0, prev.length - 1))
+    setUndoStack((prev) => [...prev, document])
+    setDocument(nextDoc)
+    setIsDirty(true)
+    showSnackbar("Redone edit", "info")
+  }, [redoStack, document, showSnackbar])
+
+  const handleCancelDraft = useCallback(() => {
+    if (lastCommittedDocumentRef.current) {
+      setDocument(lastCommittedDocumentRef.current)
+      setIsDirty(false)
+      setUndoStack([])
+      setRedoStack([])
+      showSnackbar("Draft changes discarded, reverted to committed revision", "info")
+    } else {
+      setIsDirty(false)
+    }
+  }, [showSnackbar])
+
+  const handleNewProject = useCallback(async () => {
+    try {
+      const res = await http.post("/api/projects", {
+        name: `Motion Project ${new Date().toISOString().slice(11, 19)}`,
+        aspect_ratio: aspectRatio || "9:16",
+      })
+      if (res.data?.id) {
+        setProject(res.data)
+        setRevision(res.data.revision || 1)
+        setDocument(res.data.document)
+        lastCommittedDocumentRef.current = res.data.document
+        setUndoStack([])
+        setRedoStack([])
+        setIsDirty(false)
+        showSnackbar(`Created project "${res.data.name}"`, "success")
+        try {
+          const url = new URL(window.location.href)
+          url.searchParams.set("projectId", res.data.id)
+          window.history.replaceState({}, "", url.toString())
+        } catch {}
+      }
+    } catch (err) {
+      showSnackbar(err.response?.data?.detail || err.message, "error")
+    }
+  }, [aspectRatio, showSnackbar])
+
+  // Global Undo/Redo keyboard shortcuts
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      const tag = e.target?.tagName?.toLowerCase()
+      if (tag === "input" || tag === "textarea" || e.target?.isContentEditable) return
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault()
+        if (e.shiftKey) {
+          handleRedo()
+        } else {
+          handleUndo()
+        }
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault()
+        handleRedo()
+      }
+    }
+    window.addEventListener("keydown", handleGlobalKeyDown)
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown)
+  }, [handleUndo, handleRedo])
 
   // 1a-2. Batch report load from URL query
   useEffect(() => {
@@ -456,6 +552,9 @@ export default function MotionGraphics() {
       })
       setRevision(res.data.revision)
       setDocument(res.data.document)
+      lastCommittedDocumentRef.current = res.data.document
+      setUndoStack([])
+      setRedoStack([])
       setIsDirty(false)
 
       // Sync to studio preview
@@ -682,6 +781,9 @@ export default function MotionGraphics() {
       if (res.data?.revision != null && res.data?.document) {
         setRevision(res.data.revision)
         setDocument(res.data.document)
+        lastCommittedDocumentRef.current = res.data.document
+        setUndoStack([])
+        setRedoStack([])
         setIsDirty(false)
         // Background sync to studio preview
         http.post(`/api/projects/${project.id}/sync-studio`, { revision: res.data.revision }).catch(() => {})
@@ -851,6 +953,7 @@ export default function MotionGraphics() {
   const handleUpdateElement = (updatedElem) => {
     setSelectedElement(updatedElem)
     if (!document) return
+    pushUndo(document)
     const tracks = (document.timeline?.tracks || []).map((t) => ({
       ...t,
       clips: (t.clips || []).map((c) => (c.id === updatedElem.id ? updatedElem : c)),
@@ -884,6 +987,9 @@ export default function MotionGraphics() {
       duration_seconds: Number(updatedElem.duration_seconds || 1),
     }
     if (updatedElem.caption_text !== undefined) patch.caption_text = updatedElem.caption_text
+    if (updatedElem.manual_transcript_override !== undefined) {
+      patch.manual_transcript_override = updatedElem.manual_transcript_override
+    }
     const res = await handleApplyOperation("update_clip", {
       clip_id: updatedElem.id,
       patch,
@@ -1222,6 +1328,7 @@ export default function MotionGraphics() {
         onAspectChange={(asp) => {
           setAspectRatio(asp)
           if (document) {
+            pushUndo(document)
             setDocument({ ...document, aspect_ratio: asp })
             setIsDirty(true)
           }
@@ -1241,6 +1348,13 @@ export default function MotionGraphics() {
         onToggleRight={() => setPinnedRight(!pinnedRight)}
         expandedPreview={expandedPreview}
         onToggleExpandedPreview={() => setExpandedPreview(!expandedPreview)}
+        canUndo={undoStack.length > 0}
+        onUndo={handleUndo}
+        canRedo={redoStack.length > 0}
+        onRedo={handleRedo}
+        canCancel={isDirty}
+        onCancelDraft={handleCancelDraft}
+        onNewProject={handleNewProject}
       />
 
       {/* 2. Main Studio Body: Vertical Split (Upper: Stage & Panels; Lower: Full-Width Contextual Workspace) */}

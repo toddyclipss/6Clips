@@ -175,6 +175,28 @@ async def probe_physical_media(file_path: Path) -> Tuple[MediaProbeV1, Optional[
                     except Exception:
                         pass
 
+        # Black frame detection
+        is_black = False
+        if duration > 0.5:
+            black_cmd = [
+                "ffmpeg",
+                "-v", "info",
+                "-i", str(file_path),
+                "-vf", "blackdetect=d=0.5:pic_th=0.98:pix_th=0.10",
+                "-an",
+                "-f", "null",
+                "NUL" if subprocess.os.name == "nt" else "/dev/null",
+            ]
+            try:
+                black_res = subprocess.run(black_cmd, capture_output=True, text=True, timeout=30)
+                for line in black_res.stderr.splitlines():
+                    if "black_duration:" in line:
+                        b_dur = float(line.split("black_duration:")[1].split()[0])
+                        if b_dur >= (duration * 0.9):
+                            is_black = True
+            except Exception:
+                pass
+
         content_hash = compute_file_sha256(file_path)
 
         return MediaProbeV1(
@@ -189,7 +211,7 @@ async def probe_physical_media(file_path: Path) -> Tuple[MediaProbeV1, Optional[
             content_hash=content_hash,
             mean_volume_db=mean_vol,
             is_silent=is_silent,
-            is_black=False,
+            is_black=is_black,
         )
 
     try:

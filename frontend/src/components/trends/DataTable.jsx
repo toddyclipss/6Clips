@@ -49,7 +49,8 @@ export default function DataTable({ results, onSelect, onDownload, onDelete, sel
   const columns = [
     { key: "title", label: "Title", width: "26%" },
     { key: "platform", label: "Platform", width: "8%" },
-    { key: "duration_seconds", label: "Duration", width: "10%" },
+    { key: "editorial_role", label: "Role", width: "12%" },
+    { key: "duration_seconds", label: "Duration", width: "8%" },
     { key: "views", label: "Views", width: "10%" },
     { key: "likes", label: "Likes", width: "8%" },
     { key: "comments", label: "Comments", width: "8%" },
@@ -110,6 +111,15 @@ export default function DataTable({ results, onSelect, onDownload, onDelete, sel
                 </TableCell>
                 <TableCell>
                   <Chip label={r.platform} size="small" variant="outlined" sx={{ textTransform: "uppercase", fontSize: "0.65rem", height: 22 }} />
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    label={r.editorial_role === "editable_source_candidate" ? "Source" : (r.editorial_role === "topic_research_reference" ? "News" : "Reference")}
+                    size="small"
+                    color={r.editorial_role === "editable_source_candidate" ? "success" : (r.editorial_role === "topic_research_reference" ? "warning" : "default")}
+                    variant={r.editorial_role === "editable_source_candidate" ? "filled" : "outlined"}
+                    sx={{ fontSize: "0.65rem", height: 20, fontWeight: 600 }}
+                  />
                 </TableCell>
                 <TableCell sx={{ fontSize: "0.8rem", fontWeight: 600 }}>{durStr}</TableCell>
                 <TableCell>{formatViews(r.views)}</TableCell>

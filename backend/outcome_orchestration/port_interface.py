@@ -59,9 +59,11 @@ class InProcessFakeProducerPort(MediaProducerPort):
     - Honors batch cancellation with recorded committed effects.
     """
 
-    def __init__(self):
+    def __init__(self, ledger=None):
         self._jobs: Dict[str, ProductionReport] = {}
         self._cancelled_jobs: set[str] = set()
+        from backend.production_jobs.ledger import PersistentJobLedger
+        self._ledger = ledger or PersistentJobLedger()
 
     async def submit_batch(self, request: Any, simulate_failure_index: Optional[int] = None) -> Dict[str, Any]:
         job_id = f"job_fake_{uuid4().hex[:12]}"
