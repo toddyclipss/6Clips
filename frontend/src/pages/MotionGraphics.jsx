@@ -2036,6 +2036,9 @@ export default function MotionGraphics() {
           {activeContext === "tools" && (
             <StudioToolsWorkspace
               activeAsset={activeAsset}
+              onApplyOperation={handleApplyOperation}
+              currentTime={currentTime}
+              projectDocument={document}
               onToolSuccess={() => showSnackbar("Tool executed successfully", "success")}
             />
           )}
