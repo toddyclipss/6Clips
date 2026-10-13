@@ -80,6 +80,11 @@ export default function MotionGraphics() {
   const [productionBatch, setProductionBatch] = useState(null)
   const [selectedOutputIndex, setSelectedOutputIndex] = useState(0)
   const [approvedOutputs, setApprovedOutputs] = useState(() => new Set())
+  const [reviewNotes, setReviewNotes] = useState({})
+
+  const handleReviewNotesChange = useCallback((outputId, notesText) => {
+    setReviewNotes((prev) => ({ ...prev, [outputId]: notesText }))
+  }, [])
 
   const reviewOutputs = useMemo(() => {
     if (productionBatch?.outputs?.length) return productionBatch.outputs
@@ -990,6 +995,10 @@ export default function MotionGraphics() {
     if (updatedElem.manual_transcript_override !== undefined) {
       patch.manual_transcript_override = updatedElem.manual_transcript_override
     }
+    if (updatedElem.framing_preset !== undefined) patch.framing_preset = updatedElem.framing_preset
+    if (updatedElem.speed !== undefined) patch.speed = updatedElem.speed
+    if (updatedElem.trim_start !== undefined) patch.trim_start = updatedElem.trim_start
+    if (updatedElem.trim_end !== undefined) patch.trim_end = updatedElem.trim_end
     const res = await handleApplyOperation("update_clip", {
       clip_id: updatedElem.id,
       patch,
@@ -1030,6 +1039,140 @@ export default function MotionGraphics() {
     })
     if (res) {
       showSnackbar(`Clip split at ${Number(targetTime).toFixed(2)}s (Rev ${res.revision})`, "success")
+    }
+  }
+
+  // 7e-2. Ripple delete clip: remove clip and shift subsequent clips on that track left
+  const handleRippleDeleteClip = async (clipOrId) => {
+    if (!document || !clipOrId) return
+    const clipId = typeof clipOrId === "string" ? clipOrId : clipOrId?.id
+    if (!clipId) return
+    if (selectedElement?.id === clipId) setSelectedElement(null)
+
+    pushUndo(document)
+    let delDur = 0
+    let delStart = 0
+    let targetTrackId = null
+
+    for (const t of (document.timeline?.tracks || [])) {
+      const found = (t.clips || []).find((c) => c.id === clipId)
+      if (found) {
+        delDur = Number(found.duration_seconds || 0)
+        delStart = Number(found.start_seconds || 0)
+        targetTrackId = t.id
+        break
+      }
+    }
+
+    const nextTracks = (document.timeline?.tracks || []).map((t) => {
+      if (t.id !== targetTrackId) return t
+      const remaining = (t.clips || []).filter((c) => c.id !== clipId)
+      const shifted = remaining.map((c) => {
+        const s = Number(c.start_seconds || 0)
+        if (s >= delStart) {
+          return { ...c, start_seconds: Math.max(0, Number((s - delDur).toFixed(2))) }
+        }
+        return c
+      })
+      return { ...t, clips: shifted }
+    })
+
+    const nextDoc = {
+      ...document,
+      timeline: { ...document.timeline, tracks: nextTracks },
+    }
+    setDocument(nextDoc)
+    setIsDirty(true)
+    showSnackbar("Ripple deleted clip and shifted subsequent clips", "info")
+
+    if (project) {
+      handleApplyOperation("update_document", { document: nextDoc })
+    }
+  }
+
+  // 7e-3. Slip edit clip: adjust source window (trim_start/trim_end) without changing start_seconds/duration
+  const handleSlipClip = async (clipOrId, deltaSeconds) => {
+    if (!document || !clipOrId) return
+    const clipId = typeof clipOrId === "string" ? clipOrId : clipOrId?.id
+    if (!clipId) return
+
+    pushUndo(document)
+    let updatedClip = null
+    const nextTracks = (document.timeline?.tracks || []).map((t) => ({
+      ...t,
+      clips: (t.clips || []).map((c) => {
+        if (c.id === clipId) {
+          const curTrim = Number(c.trim_start || 0)
+          const curDur = Number(c.duration_seconds || 1.0)
+          const nextTrim = Math.max(0, Number((curTrim + deltaSeconds).toFixed(2)))
+          const nextEnd = Number((nextTrim + curDur).toFixed(2))
+          updatedClip = { ...c, trim_start: nextTrim, trim_end: nextEnd }
+          return updatedClip
+        }
+        return c
+      }),
+    }))
+
+    if (updatedClip && selectedElement?.id === clipId) {
+      setSelectedElement(updatedClip)
+    }
+
+    const nextDoc = {
+      ...document,
+      timeline: { ...document.timeline, tracks: nextTracks },
+    }
+    setDocument(nextDoc)
+    setIsDirty(true)
+    showSnackbar(`Slipped clip by ${deltaSeconds > 0 ? "+" : ""}${deltaSeconds.toFixed(1)}s`, "info")
+
+    if (project && updatedClip) {
+      handleApplyOperation("update_clip_timing", {
+        clip_id: clipId,
+        trim_start: updatedClip.trim_start,
+        trim_end: updatedClip.trim_end,
+      })
+    }
+  }
+
+  // 7e-4. Retime clip speed multiplier
+  const handleSpeedChangeClip = async (clipOrId, newSpeed) => {
+    if (!document || !clipOrId || newSpeed <= 0) return
+    const clipId = typeof clipOrId === "string" ? clipOrId : clipOrId?.id
+    if (!clipId) return
+
+    pushUndo(document)
+    let updatedClip = null
+    const nextTracks = (document.timeline?.tracks || []).map((t) => ({
+      ...t,
+      clips: (t.clips || []).map((c) => {
+        if (c.id === clipId) {
+          const oldSpeed = Number(c.speed || 1.0)
+          const oldDur = Number(c.duration_seconds || 1.0)
+          const newDur = Math.max(0.1, Number(((oldDur * oldSpeed) / newSpeed).toFixed(2)))
+          updatedClip = { ...c, speed: newSpeed, duration_seconds: newDur }
+          return updatedClip
+        }
+        return c
+      }),
+    }))
+
+    if (updatedClip && selectedElement?.id === clipId) {
+      setSelectedElement(updatedClip)
+    }
+
+    const nextDoc = {
+      ...document,
+      timeline: { ...document.timeline, tracks: nextTracks },
+    }
+    setDocument(nextDoc)
+    setIsDirty(true)
+    showSnackbar(`Retime clip speed to ${newSpeed}x`, "info")
+
+    if (project && updatedClip) {
+      handleApplyOperation("update_clip_timing", {
+        clip_id: clipId,
+        duration_seconds: updatedClip.duration_seconds,
+      })
     }
   }
 
@@ -1409,6 +1552,8 @@ export default function MotionGraphics() {
               onExportOutput={handleExportOutput}
               onRefineOutput={handleRefineOutput}
               approvedOutputs={approvedOutputs}
+              reviewNotes={reviewNotes}
+              onChangeReviewNotes={handleReviewNotesChange}
             />
           </Box>
         )}
@@ -1615,6 +1760,8 @@ export default function MotionGraphics() {
                   isPinned={pinnedRight}
                   onTogglePin={() => setPinnedRight(!pinnedRight)}
                   onNavigateToCode={handleNavigateToCode}
+                  onSlipClip={handleSlipClip}
+                  onSpeedChangeClip={handleSpeedChangeClip}
                 />
               ) : (
                 <StudioVariablesPanel
@@ -1684,6 +1831,9 @@ export default function MotionGraphics() {
               selectedElementId={selectedElement?.id}
               onSelectElement={setSelectedElement}
               onDeleteClip={handleDeleteClip}
+              onRippleDeleteClip={handleRippleDeleteClip}
+              onSlipClip={handleSlipClip}
+              onSpeedChangeClip={handleSpeedChangeClip}
               onUpdateClipTiming={handleCommitClipTiming}
               onDuplicateClip={handleDuplicateClip}
               onSplitClip={handleSplitClip}

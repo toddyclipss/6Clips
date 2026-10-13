@@ -36,6 +36,8 @@ import {
   IconEdit,
   IconHeadphones,
   IconAlertTriangle,
+  IconGauge,
+  IconArrowsExchange,
 } from "@tabler/icons-react"
 
 const HEADER_WIDTH = 220
@@ -857,6 +859,9 @@ export default function StudioTimelineWorkspace({
   selectedElementId,
   onSelectElement,
   onDeleteClip,
+  onRippleDeleteClip,
+  onSlipClip,
+  onSpeedChangeClip,
   onUpdateClipTiming,
   onDuplicateClip,
   onSplitClip,
@@ -1118,7 +1123,14 @@ export default function StudioTimelineWorkspace({
       } else if (e.key === "Delete" || e.key === "Backspace") {
         if (selectedElementId) {
           const sel = tracks.flatMap((t) => t.clips || []).find((c) => c.id === selectedElementId)
-          if (sel && onDeleteClip) onDeleteClip(sel)
+          if (sel) {
+            if (e.shiftKey && onRippleDeleteClip) {
+              e.preventDefault()
+              onRippleDeleteClip(sel)
+            } else if (onDeleteClip) {
+              onDeleteClip(sel)
+            }
+          }
         }
       } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "d") {
         e.preventDefault()
@@ -1136,7 +1148,7 @@ export default function StudioTimelineWorkspace({
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [selectedElementId, tracks, currentTime, onTogglePlay, onDeleteClip, onDuplicateClip, onSplitClip])
+  }, [selectedElementId, tracks, currentTime, onTogglePlay, onDeleteClip, onRippleDeleteClip, onDuplicateClip, onSplitClip])
 
   // Context Menu handlers
   const handleContextMenu = (e, clip) => {
@@ -2005,6 +2017,57 @@ export default function StudioTimelineWorkspace({
         >
           <ListItemIcon><IconDiamonds size={16} /></ListItemIcon>
           <ListItemText primary="Toggle Animation Subtracks" />
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            if (contextMenu?.clip && onSlipClip) onSlipClip(contextMenu.clip, -0.5)
+            handleCloseContextMenu()
+          }}
+        >
+          <ListItemIcon><IconArrowsExchange size={16} /></ListItemIcon>
+          <ListItemText primary="Slip Earlier (-0.5s)" />
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            if (contextMenu?.clip && onSlipClip) onSlipClip(contextMenu.clip, 0.5)
+            handleCloseContextMenu()
+          }}
+        >
+          <ListItemIcon><IconArrowsExchange size={16} /></ListItemIcon>
+          <ListItemText primary="Slip Later (+0.5s)" />
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            if (contextMenu?.clip && onSpeedChangeClip) onSpeedChangeClip(contextMenu.clip, 2.0)
+            handleCloseContextMenu()
+          }}
+        >
+          <ListItemIcon><IconGauge size={16} /></ListItemIcon>
+          <ListItemText primary="Speed: 2x (Double)" />
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            if (contextMenu?.clip && onSpeedChangeClip) onSpeedChangeClip(contextMenu.clip, 0.5)
+            handleCloseContextMenu()
+          }}
+        >
+          <ListItemIcon><IconGauge size={16} /></ListItemIcon>
+          <ListItemText primary="Speed: 0.5x (Slow-mo)" />
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            if (contextMenu?.clip && onRippleDeleteClip) onRippleDeleteClip(contextMenu.clip)
+            handleCloseContextMenu()
+          }}
+          sx={{ color: "warning.main" }}
+        >
+          <ListItemIcon sx={{ color: "warning.main" }}><IconTrash size={16} /></ListItemIcon>
+          <ListItemText primary="Ripple Delete" secondary="Shift+Del" />
         </MenuItem>
 
         <MenuItem

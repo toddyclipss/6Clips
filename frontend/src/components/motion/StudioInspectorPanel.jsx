@@ -4,6 +4,7 @@ import React from "react"
 import {
   Box, Stack, Typography, TextField, Slider, Select, MenuItem,
   Switch, FormControlLabel, Divider, Tooltip, IconButton, Chip, Button,
+  FormControl, InputLabel,
 } from "@mui/material"
 import {
   IconAdjustments,
@@ -15,11 +16,26 @@ import {
   IconPinnedOff,
   IconSparkles,
   IconCode,
+  IconGauge,
+  IconArrowsExchange,
+  IconCrop,
+  IconInfoCircle,
 } from "@tabler/icons-react"
+
+const FRAMING_PRESETS_LIST = [
+  { id: "none", label: "Default (Full Frame)", desc: "Untouched original media framing" },
+  { id: "gameplay_reticle", label: "Gameplay Reticle (Safe HUD)", desc: "Safe margins for HUD radar, crosshair, and ammo counters" },
+  { id: "hud_aware_blur", label: "HUD-Aware Blur (Vertical 9:16)", desc: "Blurred wings masking HUD borders for clean vertical Shorts/Reels" },
+  { id: "split_facecam_gameplay", label: "Split Facecam + Gameplay", desc: "Reaction camera stacked above gameplay footage" },
+  { id: "center_crop", label: "Center Crop (9:16)", desc: "Standard centered 9:16 extraction" },
+]
+
+const SPEED_PRESETS = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 4.0]
 
 /**
  * Right Property & Layer Inspector.
- * Contextual properties for selected elements, typography, transform, timing, keyframes.
+ * Contextual properties for selected elements, typography, transform, timing, keyframes,
+ * framing presets, slip offsets, and speed retime.
  */
 export default function StudioInspectorPanel({
   selectedElement,
@@ -29,7 +45,49 @@ export default function StudioInspectorPanel({
   isPinned = false,
   onTogglePin,
   onNavigateToCode,
+  onSlipClip,
+  onSpeedChangeClip,
 }) {
+  const isVideoOrAudio = selectedElement && (selectedElement.type === "video" || selectedElement.type === "audio" || selectedElement.asset_file || selectedElement.asset_id)
+  const isVideo = selectedElement && (selectedElement.type === "video" || (!selectedElement.type && !selectedElement.isInternal))
+
+  const handleSpeedSelect = (newSpeed) => {
+    if (!selectedElement) return
+    const curSpeed = Number(selectedElement.speed || 1.0)
+    const curDur = Number(selectedElement.duration_seconds || 1.0)
+    const newDur = Math.max(0.1, Number(((curDur * curSpeed) / newSpeed).toFixed(2)))
+    const updated = {
+      ...selectedElement,
+      speed: newSpeed,
+      duration_seconds: newDur,
+    }
+    if (onSpeedChangeClip) {
+      onSpeedChangeClip(selectedElement, newSpeed)
+    } else {
+      if (onUpdateElement) onUpdateElement(updated)
+      if (onCommitElement) onCommitElement(updated)
+    }
+  }
+
+  const handleSlipStep = (deltaSec) => {
+    if (!selectedElement) return
+    const curTrimStart = Number(selectedElement.trim_start || 0)
+    const curDur = Number(selectedElement.duration_seconds || 1.0)
+    const nextTrimStart = Math.max(0, Number((curTrimStart + deltaSec).toFixed(2)))
+    const nextTrimEnd = Number((nextTrimStart + curDur).toFixed(2))
+    const updated = {
+      ...selectedElement,
+      trim_start: nextTrimStart,
+      trim_end: nextTrimEnd,
+    }
+    if (onSlipClip) {
+      onSlipClip(selectedElement, deltaSec)
+    } else {
+      if (onUpdateElement) onUpdateElement(updated)
+      if (onCommitElement) onCommitElement(updated)
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -194,94 +252,131 @@ export default function StudioInspectorPanel({
                 </Stack>
                 <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem" }}>
                   Start: {Number(selectedElement.start_seconds || 0).toFixed(1)}s • Duration: {Number(selectedElement.duration_seconds || 0).toFixed(1)}s
+                  {selectedElement.speed ? ` • ${selectedElement.speed}x` : ""}
                 </Typography>
               </Box>
 
-              {/* Block Identity & Dynamic Variables */}
-              {(selectedElement.type === "block" || selectedElement.block_id) && (
+              {/* Media Framing & Safe-Region Presets (for Video Clips) */}
+              {isVideo && (
                 <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "primary.light", bgcolor: "#fdf4ff" }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 800, color: "primary.main", display: "flex", alignItems: "center", gap: 0.5 }}>
-                      <IconSparkles size={14} /> HyperFrames Block
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.75 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 0.5, color: "primary.main" }}>
+                      <IconCrop size={14} /> Framing & Safe Region
                     </Typography>
-                    <Chip
-                      size="small"
-                      label={selectedElement.block_version ? selectedElement.block_version.slice(0, 8) : "v1"}
-                      sx={{ height: 16, fontSize: "0.62rem", fontWeight: 700, bgcolor: "#ede9fe", color: "#6d28d9" }}
-                    />
+                    <Tooltip title="Preset stored in clip metadata. Worker hardware pipeline applies corresponding crop/filter chain." arrow>
+                      <IconButton size="small" sx={{ p: 0.25, color: "primary.main" }}>
+                        <IconInfoCircle size={13} />
+                      </IconButton>
+                    </Tooltip>
                   </Stack>
 
-                  <Typography variant="caption" sx={{ fontWeight: 700, display: "block", mb: 1, color: "text.secondary" }}>
-                    Parameters & Variables
-                  </Typography>
-
-                  {Object.keys(selectedElement.variables || {}).length === 0 ? (
-                    <Typography variant="caption" sx={{ color: "text.disabled", fontSize: "0.7rem", fontStyle: "italic" }}>
-                      No configurable variables declared.
-                    </Typography>
-                  ) : (
-                    <Stack spacing={1}>
-                      {Object.entries(selectedElement.variables || {}).map(([varKey, varVal]) => (
-                        <Box key={varKey}>
-                          <Typography variant="caption" sx={{ fontSize: "0.68rem", fontWeight: 700, color: "text.secondary", display: "block", mb: 0.25 }}>
-                            {varKey}
-                          </Typography>
-                          {typeof varVal === "boolean" ? (
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  size="small"
-                                  checked={Boolean(varVal)}
-                                  onChange={(e) => {
-                                    const updated = {
-                                      ...selectedElement,
-                                      variables: { ...(selectedElement.variables || {}), [varKey]: e.target.checked },
-                                    }
-                                    onUpdateElement && onUpdateElement(updated)
-                                    onCommitElement && onCommitElement(updated)
-                                  }}
-                                />
-                              }
-                              label={<Typography variant="caption">{varKey}</Typography>}
-                            />
-                          ) : typeof varVal === "number" ? (
-                            <TextField
-                              fullWidth
-                              size="small"
-                              type="number"
-                              value={varVal}
-                              onChange={(e) => {
-                                onUpdateElement && onUpdateElement({
-                                  ...selectedElement,
-                                  variables: { ...(selectedElement.variables || {}), [varKey]: Number(e.target.value) },
-                                })
-                              }}
-                              onBlur={() => onCommitElement && onCommitElement(selectedElement)}
-                              sx={{ "& .MuiInputBase-input": { fontSize: "0.75rem", py: 0.5 } }}
-                            />
-                          ) : (
-                            <TextField
-                              fullWidth
-                              size="small"
-                              value={varVal ?? ""}
-                              onChange={(e) => {
-                                onUpdateElement && onUpdateElement({
-                                  ...selectedElement,
-                                  variables: { ...(selectedElement.variables || {}), [varKey]: e.target.value },
-                                })
-                              }}
-                              onBlur={() => onCommitElement && onCommitElement(selectedElement)}
-                              sx={{ "& .MuiInputBase-input": { fontSize: "0.75rem", py: 0.5 } }}
-                            />
-                          )}
-                        </Box>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="framing-preset-label" sx={{ fontSize: "0.75rem" }}>Preset</InputLabel>
+                    <Select
+                      labelId="framing-preset-label"
+                      label="Preset"
+                      value={selectedElement.framing_preset || "none"}
+                      onChange={(e) => {
+                        const updated = {
+                          ...selectedElement,
+                          framing_preset: e.target.value,
+                        }
+                        if (onUpdateElement) onUpdateElement(updated)
+                        if (onCommitElement) onCommitElement(updated)
+                      }}
+                      sx={{ fontSize: "0.75rem", bgcolor: "#ffffff" }}
+                    >
+                      {FRAMING_PRESETS_LIST.map((p) => (
+                        <MenuItem key={p.id} value={p.id} sx={{ fontSize: "0.75rem" }}>
+                          <Stack>
+                            <Typography variant="caption" sx={{ fontWeight: 700 }}>{p.label}</Typography>
+                            <Typography variant="caption" sx={{ fontSize: "0.65rem", color: "text.secondary" }}>{p.desc}</Typography>
+                          </Stack>
+                        </MenuItem>
                       ))}
-                    </Stack>
-                  )}
+                    </Select>
+                  </FormControl>
+                  <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.65rem", display: "block", mt: 0.5 }}>
+                    Status: Staged in clip metadata (Worker contract supported).
+                  </Typography>
                 </Box>
               )}
 
-              {/* Caption / Text Properties */}
+              {/* Speed & Retime Controls */}
+              {isVideoOrAudio && (
+                <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "divider", bgcolor: "#f8fafc" }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.75 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 0.5 }}>
+                      <IconGauge size={14} /> Speed / Retime Multiplier
+                    </Typography>
+                    <Chip
+                      size="small"
+                      label={`${Number(selectedElement.speed || 1.0)}x`}
+                      sx={{ height: 18, fontSize: "0.65rem", fontWeight: 700 }}
+                    />
+                  </Stack>
+                  <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                    {SPEED_PRESETS.map((spd) => {
+                      const isActive = Number(selectedElement.speed || 1.0) === spd
+                      return (
+                        <Button
+                          key={spd}
+                          size="small"
+                          variant={isActive ? "contained" : "outlined"}
+                          onClick={() => handleSpeedSelect(spd)}
+                          sx={{
+                            minWidth: 36,
+                            px: 0.75,
+                            py: 0.25,
+                            fontSize: "0.68rem",
+                            fontWeight: 700,
+                            borderRadius: 1,
+                            mb: 0.5,
+                          }}
+                        >
+                          {spd}x
+                        </Button>
+                      )
+                    })}
+                  </Stack>
+                </Box>
+              )}
+
+              {/* Slip Edit Control */}
+              {isVideoOrAudio && (
+                <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "divider", bgcolor: "#f8fafc" }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.75 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 0.5 }}>
+                      <IconArrowsExchange size={14} /> Slip Offset (Source Window)
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: "monospace", fontSize: "0.7rem", fontWeight: 700 }}>
+                      Trim: {Number(selectedElement.trim_start || 0).toFixed(2)}s
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      onClick={() => handleSlipStep(-0.5)}
+                      sx={{ fontSize: "0.68rem", fontWeight: 700, py: 0.25 }}
+                    >
+                      Slip Earlier (-0.5s)
+                    </Button>
+                    <Button
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      onClick={() => handleSlipStep(0.5)}
+                      sx={{ fontSize: "0.68rem", fontWeight: 700, py: 0.25 }}
+                    >
+                      Slip Later (+0.5s)
+                    </Button>
+                  </Stack>
+                </Box>
+              )}
+
+              {/* Caption / Text Properties with Line Break Preservation */}
               {(selectedElement.type === "captions" || selectedElement.caption_text !== undefined) && (
                 <Box sx={{ p: 1, borderRadius: 1.5, border: "1px solid", borderColor: "warning.light", bgcolor: "#fffbeb" }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
@@ -291,7 +386,7 @@ export default function StudioInspectorPanel({
                     {selectedElement.manual_transcript_override && (
                       <Chip
                         size="small"
-                        label="Manual Override (Saved)"
+                        label="Manual Override (Authoritative)"
                         color="warning"
                         variant="filled"
                         sx={{ height: 18, fontSize: "0.62rem", fontWeight: 700 }}
@@ -301,9 +396,10 @@ export default function StudioInspectorPanel({
                   <TextField
                     fullWidth
                     multiline
-                    rows={2}
+                    minRows={2}
+                    maxRows={6}
                     size="small"
-                    label="Caption Content"
+                    label="Caption Content (Preserves Line Breaks)"
                     value={selectedElement.caption_text || ""}
                     onChange={(e) => onUpdateElement && onUpdateElement({
                       ...selectedElement,
@@ -314,10 +410,13 @@ export default function StudioInspectorPanel({
                       ...selectedElement,
                       manual_transcript_override: true,
                     })}
-                    sx={{ "& .MuiInputBase-input": { fontSize: "0.78rem" }, bgcolor: "#ffffff" }}
+                    sx={{
+                      "& .MuiInputBase-input": { fontSize: "0.78rem", whiteSpace: "pre-wrap" },
+                      bgcolor: "#ffffff",
+                    }}
                   />
                   <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.65rem", display: "block", mt: 0.5 }}>
-                    Manual corrections persist across reanalysis and override Whisper.
+                    Manual corrections preserve line breaks and override Whisper reanalysis.
                   </Typography>
                 </Box>
               )}
@@ -354,7 +453,7 @@ export default function StudioInspectorPanel({
                     </Stack>
                     <Slider
                       size="small"
-                      min={0.5}
+                      min={0.2}
                       max={60}
                       step={0.1}
                       value={Number(selectedElement.duration_seconds || 1)}

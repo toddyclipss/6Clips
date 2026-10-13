@@ -12,6 +12,7 @@ import {
   IconButton,
   Tooltip,
   Divider,
+  TextField,
 } from "@mui/material"
 import {
   IconCheck,
@@ -20,6 +21,8 @@ import {
   IconAlertTriangle,
   IconPlayerPlay,
   IconVideo,
+  IconNotes,
+  IconSparkles,
 } from "@tabler/icons-react"
 
 export default function MotionReviewPanel({
@@ -30,6 +33,8 @@ export default function MotionReviewPanel({
   onExportOutput,
   onRefineOutput,
   approvedOutputs = new Set(),
+  reviewNotes = {},
+  onChangeReviewNotes,
 }) {
   if (!outputs || outputs.length === 0) {
     return (
@@ -48,20 +53,23 @@ export default function MotionReviewPanel({
         <Chip
           label={`${approvedOutputs.size}/${outputs.length} Approved`}
           size="small"
-          color={approvedOutputs.size === outputs.length ? "success" : "default"}
+          color={approvedOutputs.size === outputs.length && outputs.length > 0 ? "success" : "default"}
           sx={{ fontWeight: 700, fontSize: "0.7rem" }}
         />
       </Stack>
 
       <Stack spacing={1.5}>
         {outputs.map((out, idx) => {
+          const outId = out.output_id || `output_${idx + 1}`
           const isSelected = selectedOutputIndex === idx
-          const isApproved = approvedOutputs.has(out.output_id)
+          const isApproved = approvedOutputs.has(out.output_id) || approvedOutputs.has(outId)
           const probe = out.media_probe || {}
           const dur = probe.duration_seconds || out.duration_seconds || 0
           const resolution = probe.width && probe.height ? `${probe.width}×${probe.height}` : "1080×1920"
           const state = out.state || (out.video_url || out.preview_ref ? "SUCCEEDED" : "PENDING")
           const isFailed = state === "FAILED"
+          const noteText = reviewNotes[out.output_id] ?? reviewNotes[outId] ?? ""
+          const framingPreset = out.framing_preset || out.framingPreset
 
           return (
             <Card
@@ -108,18 +116,28 @@ export default function MotionReviewPanel({
 
                   <Stack direction="row" spacing={0.5}>
                     <Chip
-                      label={isFailed ? "FAILED" : isApproved ? "APPROVED" : "READY FOR REVIEW"}
+                      data-testid={`editorial-status-badge-${idx}`}
+                      label={isFailed ? "FAILED" : isApproved ? "EDITORIAL: APPROVED" : "EDITORIAL: NOT_ASSESSED"}
                       size="small"
-                      color={isFailed ? "error" : isApproved ? "success" : "info"}
+                      color={isFailed ? "error" : isApproved ? "success" : "default"}
                       sx={{ height: 20, fontSize: "0.65rem", fontWeight: 700 }}
                     />
                   </Stack>
                 </Stack>
 
-                {/* Technical Probe Specs */}
+                {/* Technical Probe Specs & Framing */}
                 <Typography variant="caption" sx={{ fontFamily: "monospace", color: "text.secondary", display: "block", mb: 0.8 }}>
                   9:16 ({resolution}) • {dur.toFixed(2)}s • {probe.video_codec || "h264"}/{probe.audio_codec || "aac"}
                 </Typography>
+
+                {framingPreset && (
+                  <Chip
+                    size="small"
+                    icon={<IconSparkles size={12} />}
+                    label={`Framing: ${framingPreset}`}
+                    sx={{ height: 18, fontSize: "0.65rem", fontWeight: 600, mb: 0.8, bgcolor: "#ede9fe", color: "#6d28d9" }}
+                  />
+                )}
 
                 {/* Editorial Reason if present */}
                 {out.source_ranges?.[0]?.editorial_reason && (
@@ -140,6 +158,35 @@ export default function MotionReviewPanel({
                   </Box>
                 )}
 
+                {/* Freeform Review Notes per Output */}
+                <Box sx={{ mt: 1, mb: 1 }} onClick={(e) => e.stopPropagation()}>
+                  <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 0.5 }}>
+                    <IconNotes size={13} color="#64748b" />
+                    <Typography variant="caption" sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.68rem" }}>
+                      Editorial Review Notes
+                    </Typography>
+                  </Stack>
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={1}
+                    maxRows={3}
+                    size="small"
+                    placeholder="Enter clip feedback or approval notes..."
+                    value={noteText}
+                    data-testid={`review-notes-input-${idx}`}
+                    onChange={(e) => {
+                      if (onChangeReviewNotes) {
+                        onChangeReviewNotes(out.output_id || outId, e.target.value)
+                      }
+                    }}
+                    sx={{
+                      bgcolor: "#f8fafc",
+                      "& .MuiInputBase-input": { fontSize: "0.72rem", py: 0.5 },
+                    }}
+                  />
+                </Box>
+
                 <Divider sx={{ my: 1 }} />
 
                 {/* Action buttons */}
@@ -149,9 +196,10 @@ export default function MotionReviewPanel({
                     variant={isApproved ? "outlined" : "contained"}
                     color={isApproved ? "success" : "primary"}
                     startIcon={isApproved ? <IconCheck size={14} /> : undefined}
+                    data-testid={`approve-output-btn-${idx}`}
                     onClick={(e) => {
                       e.stopPropagation()
-                      onApproveOutput && onApproveOutput(out.output_id)
+                      onApproveOutput && onApproveOutput(out.output_id || outId)
                     }}
                     sx={{ fontSize: "0.7rem", py: 0.3, px: 1, textTransform: "none", fontWeight: 700 }}
                   >
@@ -163,6 +211,7 @@ export default function MotionReviewPanel({
                       <IconButton
                         size="small"
                         color="primary"
+                        data-testid={`refine-output-btn-${idx}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           onRefineOutput && onRefineOutput(out)
@@ -176,6 +225,7 @@ export default function MotionReviewPanel({
                     <Tooltip title="Export MP4" arrow>
                       <IconButton
                         size="small"
+                        data-testid={`export-output-btn-${idx}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           onExportOutput && onExportOutput(out)

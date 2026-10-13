@@ -87,7 +87,8 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   // Expose imperative methods to parent (e.g. for scrubbing from timeline)
   useImperativeHandle(ref, () => ({
     seek: (time) => {
-      const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, time) : 0
+      const maxDur = typeof duration === "number" && duration > 0 ? duration : 3600
+      const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, Math.min(time, maxDur)) : 0
       if (workspaceMode === "review" && videoRef.current) {
         videoRef.current.currentTime = validTime
       } else {
@@ -187,7 +188,8 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   }
 
   const handleSeek = (time) => {
-    const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, time) : 0
+    const maxDur = typeof duration === "number" && duration > 0 ? duration : 3600
+    const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, Math.min(time, maxDur)) : 0
     if (workspaceMode === "review" && videoRef.current) {
       videoRef.current.currentTime = validTime
     } else {
