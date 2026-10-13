@@ -82,36 +82,53 @@ async def get_trends_results(
         count_query = select(func.count(TrendsResult.id)).where(TrendsResult.user_id == "local")
         if job_id:
             count_query = count_query.where(TrendsResult.job_id == job_id)
+        from backend.trends_research.ranking import classify_source_suitability
         total = (await db.execute(count_query)).scalar()
+
+    formatted_results = []
+    for r in results:
+        suit = classify_source_suitability(r.duration_seconds)
+        formatted_results.append({
+            "id": r.id,
+            "platform": r.platform,
+            "video_id": r.video_id,
+            "video_url": r.video_url,
+            "embed_url": r.embed_url,
+            "title": r.title,
+            "description": r.description,
+            "author": r.author,
+            "author_url": r.author_url,
+            "thumbnail_url": r.thumbnail_url,
+            "views": r.views,
+            "likes": r.likes,
+            "comments": r.comments,
+            "shares": r.shares,
+            "duration_seconds": r.duration_seconds,
+            "upload_date": r.upload_date.isoformat() if r.upload_date else None,
+            "virality_score": r.virality_score,
+            "niche": r.niche,
+            "is_downloaded": r.is_downloaded,
+            "is_analyzed": r.is_analyzed,
+            "created_at": r.created_at.isoformat() if r.created_at else None,
+            "editorial_role": suit.trend_role.value,
+            "role_label": suit.role_label,
+            "is_editable_source": suit.is_editable_source,
+            "is_reference": suit.is_reference,
+            "suitability_status": suit.status,
+            "suitability_reason": suit.reason,
+            "permitted_use": "reference_only",
+            "bytes_availability": "available_local" if r.is_downloaded else "not_fetched",
+            "highlight_quality": {
+                "status": "NOT_ASSESSED",
+                "assessed": False,
+                "score": None,
+                "reason": "Highlight quality requires media ingestion and transcript scoring; not inferable from search metadata.",
+            },
+        })
 
     return {
         "total": total,
-        "results": [
-            {
-                "id": r.id,
-                "platform": r.platform,
-                "video_id": r.video_id,
-                "video_url": r.video_url,
-                "embed_url": r.embed_url,
-                "title": r.title,
-                "description": r.description,
-                "author": r.author,
-                "author_url": r.author_url,
-                "thumbnail_url": r.thumbnail_url,
-                "views": r.views,
-                "likes": r.likes,
-                "comments": r.comments,
-                "shares": r.shares,
-                "duration_seconds": r.duration_seconds,
-                "upload_date": r.upload_date.isoformat() if r.upload_date else None,
-                "virality_score": r.virality_score,
-                "niche": r.niche,
-                "is_downloaded": r.is_downloaded,
-                "is_analyzed": r.is_analyzed,
-                "created_at": r.created_at.isoformat() if r.created_at else None,
-            }
-            for r in results
-        ],
+        "results": formatted_results,
     }
 
 
@@ -389,4 +406,103 @@ async def list_formulas(niche: str = None):
             }
             for f in formulas
         ]
+    }
+
+
+class TrendsRankRequest(BaseModel):
+    items: list[dict]
+    goal: str = "clip_repurposing"
+    count: int = 3
+    target_clips: int = 3
+    clip_duration_sec: int = 60
+
+
+@router.post("/trends/rank")
+async def rank_trends_candidates(req: TrendsRankRequest):
+    """
+    Rank discovery candidates with strict separation of TrendScore,
+    source suitability, and highlight quality.
+    Automatically selects editorial candidates based on goal.
+    """
+    from backend.trends_research.ranking import build_discovery_item, select_best_editorial_candidates
+
+    typed_items = [
+        build_discovery_item(it, target_clips=req.target_clips, clip_duration_sec=req.clip_duration_sec)
+        for it in req.items
+    ]
+    ranked = select_best_editorial_candidates(typed_items, goal=req.goal, count=req.count)
+    return {
+        "goal": req.goal,
+        "total_evaluated": len(typed_items),
+        "selected_count": len(ranked),
+        "results": [it.model_dump() for it in ranked],
+    }
+
+
+class ReferenceStyleRequest(BaseModel):
+    reference_id: str
+    title: str
+    duration_seconds: Optional[int] = None
+    channel: str = "Unknown"
+
+
+@router.post("/trends/reference-style")
+async def extract_reference_style_endpoint(req: ReferenceStyleRequest):
+    """Extract observable visual features and style hypotheses from an authorized reference video."""
+    from backend.trends_research.reference_extractor import analyze_reference_style
+    hypo = analyze_reference_style(
+        reference_id=req.reference_id,
+        title=req.title,
+        duration_seconds=req.duration_seconds,
+        channel_or_author=req.channel,
+    )
+    return {
+        "hypothesis_id": hypo.hypothesis_id,
+        "reference_source_id": hypo.reference_source_id,
+        "reference_title": hypo.reference_title,
+        "hook_archetype": hypo.narrative_hook_archetype,
+        "pacing_strategy": hypo.pacing_strategy,
+        "music_vibe": hypo.music_vibe_suggestion,
+        "motion_style": hypo.motion_graphics_style,
+        "observable_features": hypo.observable_features.__dict__,
+        "rights_notice": hypo.fair_use_and_rights_notice,
+        "rendering_status": hypo.rendering_status,
+        "extracted_at": hypo.extracted_at,
+    }
+
+
+class OriginalBriefRequest(BaseModel):
+    topic: str
+    creator_context: Optional[str] = None
+    target_duration_sec: int = 60
+    aspect_ratio: str = "9:16"
+    language: str = "en"
+    creator_voice_asset_id: Optional[str] = None
+    creator_facecam_asset_id: Optional[str] = None
+    allow_procedural_tts: bool = False
+
+
+@router.post("/original/brief")
+async def create_original_brief_endpoint(req: OriginalBriefRequest):
+    """
+    Generate an original video creator brief grounded in primary sources,
+    with clean teleprompter text, shot list, factcheck ledger, and truthful status.
+    """
+    from backend.original_creation.workflow import OriginalCreatorWorkflow
+    from backend.original_creation.models import ProductionV1Adapter
+
+    spec = OriginalCreatorWorkflow.create_brief(
+        topic=req.topic,
+        creator_context=req.creator_context,
+        target_duration_sec=req.target_duration_sec,
+        aspect_ratio=req.aspect_ratio,
+        language=req.language,
+        creator_voice_asset_id=req.creator_voice_asset_id,
+        creator_facecam_asset_id=req.creator_facecam_asset_id,
+        allow_procedural_tts=req.allow_procedural_tts,
+    )
+    project_payload = ProductionV1Adapter.to_canonical_project_payload(spec)
+    return {
+        "spec": spec.model_dump(),
+        "canonical_project_payload": project_payload,
     }
