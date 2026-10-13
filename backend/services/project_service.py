@@ -348,6 +348,14 @@ class ProjectService:
                 raise ProjectNotFoundError(f"Project '{project_id}' not found.")
             return proj
 
+    @classmethod
+    async def verify_project_ownership(cls, project_id: str, user_id: str = "local") -> Project:
+        """Retrieve project and verify user ownership, raising ProjectNotFoundError or AssetAccessError."""
+        proj = await cls.get_project(project_id)
+        if proj.user_id and user_id and proj.user_id != user_id:
+            raise AssetAccessError(f"Access denied: project '{project_id}' is not owned by user '{user_id}'.")
+        return proj
+
     @staticmethod
     async def get_revision_snapshot(project_id: str, revision: int) -> dict:
         """Retrieve frozen document snapshot for a specific revision."""

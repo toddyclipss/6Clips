@@ -332,6 +332,8 @@ def create_app() -> FastAPI:
     app.include_router(messaging_router.router, prefix="/api")
     app.include_router(tts_preview.router, prefix="/api")
     app.include_router(music_router.router, prefix="/api")
+    from backend.integration.router import router as integration_router
+    app.include_router(integration_router, prefix="/api")
 
     # Load proprietary overlay (no-op if not installed) and register plugin routers.
     # See docs/OVERLAY.md for the contract.

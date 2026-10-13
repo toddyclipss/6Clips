@@ -1253,6 +1253,9 @@ class PlannerAgent:
         elif action_type in ("create_original_brief", "original_creation_brief", "create_creator_brief"):
             await self._create_original_brief(action, user_id)
 
+        elif action_type in ("render_original_video", "render_original_brief"):
+            await self._render_original_video(action, user_id)
+
         elif action_type in ("extract_reference_style", "analyze_reference_style"):
             await self._extract_reference_style(action, user_id)
 
@@ -1811,6 +1814,53 @@ class PlannerAgent:
         except Exception as ev_err:
             logger.debug("Failed recording original_brief_created event: %s", ev_err)
         return spec
+
+    async def _render_original_video(self, action: dict, user_id: str):
+        """Render original video from specification, validating voice consent and reporting truthful review URL."""
+        from pathlib import Path
+        from backend.original_creation.models import OriginalCompositionSpec, ProductionV1Adapter
+        from backend.original_creation.workflow import OriginalCreatorWorkflow
+
+        raw_spec = action.get("spec")
+        if not raw_spec:
+            await ws_manager.send({"type": "original_render_error", "error": "Missing 'spec' payload"}, user_id)
+            return None
+
+        try:
+            spec_obj = OriginalCompositionSpec.model_validate(raw_spec)
+        except Exception as e:
+            await ws_manager.send({"type": "original_render_error", "error": f"Invalid spec: {e}"}, user_id)
+            return None
+
+        custom_voice = Path(action["custom_voice_path"]) if action.get("custom_voice_path") else None
+        rendered = await OriginalCreatorWorkflow.render_spec(spec_obj, custom_voice_path=custom_voice)
+
+        if rendered.rendered_result:
+            review_url = f"/motion?review={rendered.spec_id}"
+            canonical_payload = ProductionV1Adapter.to_canonical_project_payload(rendered)
+            await ws_manager.send({
+                "type": "original_video_rendered",
+                "spec_id": rendered.spec_id,
+                "status": rendered.status.value,
+                "video_path": str(rendered.rendered_result.video_path),
+                "review_url": review_url,
+                "duration_seconds": rendered.rendered_result.duration_seconds,
+                "canonical_project_payload": canonical_payload,
+            }, user_id)
+            await self._followup(
+                user_id,
+                f"Original video successfully rendered ({rendered.rendered_result.duration_seconds:.1f}s)! "
+                f"Ready for review at {review_url}."
+            )
+        else:
+            await ws_manager.send({
+                "type": "original_render_blocked",
+                "spec_id": rendered.spec_id,
+                "status": rendered.status.value,
+                "status_reason": rendered.status_reason,
+            }, user_id)
+            await self._followup(user_id, f"Rendering status: {rendered.status.value}. {rendered.status_reason}")
+        return rendered
 
     async def _extract_reference_style(self, action: dict, user_id: str):
         """Extract observable visual features and style hypotheses from an authorized reference video."""
