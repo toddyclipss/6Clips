@@ -23,7 +23,7 @@ import json
 import logging
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -73,10 +73,22 @@ async def list_items(
     lineage, plus title / thumb_url / stream_url / aspect / duration_seconds /
     size_mb / created_at.
     """
-    return await library_index.query(
+    res = await library_index.query(
         db, media=media, origin=origin, producer=producer,
         q=q, sort=sort, limit=limit, offset=offset,
     )
+    from backend.library_workflows.trash_and_lifecycle import TrashManager
+    from backend.services.library_service import LibraryService
+    # Filter out items that are in trash or match synthetic test fixtures
+    active_items = [
+        it for it in res.get("items", [])
+        if not TrashManager.is_trashed(it.get("key", ""))
+        and not LibraryService.is_synthetic_fixture(it.get("title", ""))
+        and not LibraryService.is_synthetic_fixture(it.get("key", ""))
+    ]
+    res["items"] = active_items
+    res["total"] = len(active_items)
+    return res
 
 
 @router.get("/families")
@@ -404,3 +416,128 @@ async def bulk_delete_assets(body: dict, db: AsyncSession = Depends(get_db)):
         deleted += 1
     await db.commit()
     return {"ok": True, "deleted": deleted}
+
+
+# ── Wave 3 Library Workflows: Upload, Quota, Trash Lifecycle, Motion Contract ─
+
+@router.post("/upload")
+async def upload_library_media(
+    file: UploadFile = File(...),
+    title: str = Form(""),
+    user_id: str = Form("local"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Direct validated upload with deep byte probe, container validation, and quota enforcement."""
+    from backend.library_workflows.upload_handler import UploadHandler
+    return await UploadHandler.process_single_upload(file, user_id=user_id, title=title, db=db)
+
+
+@router.post("/upload/init")
+async def init_chunked_upload(body: dict):
+    """Initialize a chunked/resumable upload session for large media."""
+    from backend.library_workflows.upload_handler import UploadHandler
+    filename = body.get("filename", "")
+    total_bytes = int(body.get("total_bytes", 0))
+    total_chunks = int(body.get("total_chunks", 0))
+    user_id = body.get("user_id", "local")
+    return UploadHandler.init_chunked_session(filename, total_bytes, total_chunks, user_id=user_id)
+
+
+@router.post("/upload/chunk")
+async def upload_chunk(
+    session_id: str = Form(...),
+    chunk_index: int = Form(...),
+    chunk: UploadFile = File(...),
+):
+    """Upload a single chunk in a resumable session."""
+    from backend.library_workflows.upload_handler import UploadHandler
+    content = await chunk.read()
+    return UploadHandler.write_chunk(session_id, chunk_index, content)
+
+
+@router.post("/upload/complete")
+async def complete_chunked_upload(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+):
+    """Complete and assemble chunked upload session."""
+    from backend.library_workflows.upload_handler import UploadHandler
+    session_id = body.get("session_id", "")
+    user_id = body.get("user_id", "local")
+    title = body.get("title")
+    return await UploadHandler.complete_chunked_session(session_id, user_id=user_id, title=title, db=db)
+
+
+@router.get("/storage/quota")
+async def get_storage_quota(user_id: str = "local"):
+    """Get current storage usage and disk capacity."""
+    from backend.library_workflows.quota_service import QuotaService
+    return QuotaService.get_quota_summary(user_id=user_id)
+
+
+@router.post("/item/trash")
+async def trash_item(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+):
+    """Soft-delete an asset into the trash."""
+    from backend.library_workflows.trash_and_lifecycle import TrashManager
+    key = body.get("key", "")
+    user_id = body.get("user_id", "local")
+    title = body.get("title")
+    return await TrashManager.move_to_trash(key, db, user_id=user_id, title=title)
+
+
+@router.post("/item/restore")
+async def restore_item(body: dict):
+    """Restore an asset from trash back to active library."""
+    from backend.library_workflows.trash_and_lifecycle import TrashManager
+    key = body.get("key", "")
+    user_id = body.get("user_id", "local")
+    return await TrashManager.restore_from_trash(key, user_id=user_id)
+
+
+@router.get("/trash")
+async def list_trash(user_id: str = "local"):
+    """List assets currently in the trash."""
+    from backend.library_workflows.trash_and_lifecycle import TrashManager
+    items = TrashManager.get_trash_items(user_id=user_id)
+    return {"items": items, "count": len(items)}
+
+
+@router.delete("/trash/purge")
+async def purge_trashed_item(
+    key: str = Query(...),
+    force: bool = Query(False),
+    user_id: str = Query("local"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Permanently delete an asset, enforcing active project reference guards."""
+    from backend.library_workflows.trash_and_lifecycle import TrashManager, AssetLockedByProjectError
+    try:
+        return await TrashManager.permanently_purge(key, db, user_id=user_id, force=force)
+    except AssetLockedByProjectError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+
+
+@router.post("/motion-intent")
+async def create_motion_intent(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+):
+    """Create and validate a MotionAssetIntent for 'Use in Motion' or Drag-and-Drop workflows."""
+    from backend.library_workflows.motion_contract import MotionContractManager, MotionContractError
+    key = body.get("key", "")
+    intent_action = body.get("intent_action", "add_track")
+    target_track = body.get("target_track")
+    target_start_time = float(body.get("target_start_time_seconds", 0.0))
+    try:
+        intent = await MotionContractManager.create_motion_intent(
+            key, db,
+            intent_action=intent_action,
+            target_track=target_track,
+            target_start_time_seconds=target_start_time,
+        )
+        return {"ok": True, "intent": intent.to_dict()}
+    except MotionContractError as e:
+        raise HTTPException(status_code=400, detail=str(e))

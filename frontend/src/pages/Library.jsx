@@ -32,6 +32,8 @@ import {
   IconBulb,
   IconBolt,
   IconAlertCircle,
+  IconRotate2,
+  IconDatabase,
 } from "@tabler/icons-react"
 import http from "../api/http"
 import PageHero from "../components/PageHero"
@@ -144,7 +146,79 @@ export default function Library() {
   const [moreMenu, setMoreMenu] = useState(null)
   const openActivity = useAppStore((s) => s.openActivity)
   const [importing, setImporting] = useState(false)
+  const [trashOpen, setTrashOpen] = useState(false)
+  const [trashItems, setTrashItems] = useState([])
+  const [quota, setQuota] = useState(null)
+  const [isDraggingFile, setIsDraggingFile] = useState(false)
   const { confirm: openConfirm, ConfirmDialog } = useConfirm()
+
+  const loadTrash = useCallback(async () => {
+    try {
+      const { data } = await http.get("/api/library/trash")
+      setTrashItems(data.items || [])
+    } catch {}
+  }, [])
+
+  const loadQuota = useCallback(async () => {
+    try {
+      const { data } = await http.get("/api/library/storage/quota")
+      setQuota(data)
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    loadQuota()
+    loadTrash()
+  }, [loadQuota, loadTrash])
+
+  const dragCounterRef = useRef(0)
+  const handleDragEnter = (e) => {
+    e.preventDefault()
+    if (e.dataTransfer?.types?.includes("Files")) {
+      dragCounterRef.current++
+      setIsDraggingFile(true)
+    }
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    if (e.dataTransfer?.types?.includes("Files")) {
+      dragCounterRef.current--
+      if (dragCounterRef.current <= 0) {
+        setIsDraggingFile(false)
+        dragCounterRef.current = 0
+      }
+    }
+  }
+
+  const handleDragOver = (e) => {
+    if (e.dataTransfer?.types?.includes("Files")) {
+      e.preventDefault()
+    }
+  }
+
+  const handleFileDrop = async (e) => {
+    e.preventDefault()
+    setIsDraggingFile(false)
+    dragCounterRef.current = 0
+    const files = e.dataTransfer?.files
+    if (!files || !files.length) return
+    const file = files[0]
+    setImporting(true)
+    try {
+      const form = new FormData()
+      form.append("file", file)
+      form.append("title", file.name.replace(/\.[^.]+$/, ""))
+      const { data } = await http.post("/api/library/upload", form)
+      showSnackbar(data.message || `Uploaded ${file.name}`, "success")
+      refresh()
+      loadQuota()
+    } catch (err) {
+      showSnackbar(err.response?.data?.detail || "Upload failed", "error")
+    } finally {
+      setImporting(false)
+    }
+  }
 
   const {
     items, total, libraryTotal, facets, loading, pageCount,
@@ -448,7 +522,31 @@ export default function Library() {
     media !== "all" || origins.length > 0 || producer !== "all" || Boolean(q.trim())
 
   return (
-    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <Box
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleFileDrop}
+      sx={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden", position: "relative" }}
+    >
+      {isDraggingFile && (
+        <Box sx={{
+          position: "absolute", inset: 0, zIndex: 99,
+          bgcolor: alpha(theme.palette.primary.main, 0.12),
+          border: 2, borderStyle: "dashed", borderColor: "primary.main",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          pointerEvents: "none",
+        }}>
+          <IconUpload size={48} stroke={1.5} color={theme.palette.primary.main} />
+          <Typography variant="h6" sx={{ mt: 1, fontWeight: 700, color: "primary.main" }}>
+            Drop media file to upload
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Validates container, codecs, and storage quota
+          </Typography>
+        </Box>
+      )}
+
       <PageHero
         icon={<IconFolder size={22} stroke={1.8} />}
         title="Library"
@@ -464,6 +562,17 @@ export default function Library() {
         accentColor="#8b5cf6"
         actions={
           <Stack direction="row" spacing={1} alignItems="center">
+            {quota && (
+              <Tooltip title={`Disk free: ${Math.round((quota.disk_free_mb || 0) / 1024)} GB`}>
+                <Chip
+                  size="small"
+                  icon={<IconDatabase size={14} />}
+                  label={`${quota.used_mb > 1024 ? (quota.used_mb / 1024).toFixed(1) + " GB" : quota.used_mb + " MB"} / 20 GB`}
+                  variant="outlined"
+                  sx={{ borderRadius: "14px", height: 32, fontSize: "0.75rem", display: { xs: "none", sm: "inline-flex" } }}
+                />
+              </Tooltip>
+            )}
             <TextField
               placeholder="Search library…"
               size="small"
@@ -474,7 +583,7 @@ export default function Library() {
                   startAdornment: <IconSearch size={18} stroke={1.8} style={{ marginRight: 6, color: "var(--text-secondary, #94a3b8)" }} />,
                 },
               }}
-              sx={{ width: { xs: 140, sm: 250 }, "& .MuiOutlinedInput-root": { borderRadius: "14px" } }}
+              sx={{ width: { xs: 140, sm: 220 }, "& .MuiOutlinedInput-root": { borderRadius: "14px" } }}
             />
             {/* A real file input behind the label — the first cut carried the
                 button over without one, so clicking it did nothing. */}
@@ -482,6 +591,23 @@ export default function Library() {
               disabled={importing} startIcon={<IconUpload size={18} stroke={1.8} />} sx={{ borderRadius: "20px" }}>
               {importing ? "Importing…" : "Import"}
               <input type="file" hidden accept={IMPORT_ACCEPT} onChange={handleImport} />
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => { setTrashOpen(true); loadTrash(); }}
+              startIcon={<IconTrash size={17} stroke={1.8} />}
+              sx={{ borderRadius: "20px" }}
+            >
+              Trash
+              {trashItems.length > 0 && (
+                <Box component="span" sx={{
+                  ml: 0.7, px: 0.6, borderRadius: "999px", fontSize: "0.68rem", fontWeight: 700,
+                  bgcolor: "action.selected", color: "text.primary"
+                }}>
+                  {trashItems.length}
+                </Box>
+              )}
             </Button>
             <Button size="small" variant="outlined" onClick={openActivity}
               startIcon={<IconBolt size={17} stroke={1.8} />} sx={{ borderRadius: "20px" }}>
@@ -789,6 +915,96 @@ export default function Library() {
             Cancel
           </Button>
           <Button variant="contained" onClick={doUpload}>Upload</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={trashOpen} maxWidth="sm" fullWidth onClose={() => setTrashOpen(false)}>
+        <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <IconTrash size={20} />
+            <Typography variant="h6">Library Trash</Typography>
+          </Stack>
+          <IconButton size="small" onClick={() => setTrashOpen(false)}>
+            <IconX size={18} />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          {trashItems.length === 0 ? (
+            <Typography sx={{ py: 4, textAlign: "center", color: "text.secondary" }}>
+              Trash is empty. Soft-deleted assets can be recovered here.
+            </Typography>
+          ) : (
+            <Stack spacing={1.5}>
+              {trashItems.map((ti) => (
+                <Box
+                  key={ti.key}
+                  sx={{
+                    p: 1.5,
+                    borderRadius: "12px",
+                    border: 1,
+                    borderColor: "divider",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ minWidth: 0, mr: 2 }}>
+                    <Typography variant="subtitle2" noWrap sx={{ fontWeight: 600 }}>
+                      {ti.title || ti.key}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      Deleted: {new Date((ti.trashed_at || 0) * 1000).toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<IconRotate2 size={16} />}
+                      onClick={async () => {
+                        try {
+                          await http.post("/api/library/item/restore", { key: ti.key })
+                          showSnackbar(`Restored ${ti.title}`, "success")
+                          loadTrash()
+                          refresh()
+                          loadQuota()
+                        } catch (err) {
+                          showSnackbar(err.response?.data?.detail || "Failed to restore", "error")
+                        }
+                      }}
+                    >
+                      Restore
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="error"
+                      onClick={() => openConfirm(
+                        `Permanently purge “${ti.title || ti.key}”?`,
+                        "This will permanently delete the media file and cannot be undone.",
+                        async () => {
+                          try {
+                            await http.delete(`/api/library/trash/purge?key=${encodeURIComponent(ti.key)}`)
+                            showSnackbar("Permanently deleted", "success")
+                            loadTrash()
+                            loadQuota()
+                          } catch (err) {
+                            showSnackbar(err.response?.data?.detail || "Failed to purge", "error")
+                          }
+                        },
+                        { confirmLabel: "Purge Permanently" }
+                      )}
+                    >
+                      Purge
+                    </Button>
+                  </Stack>
+                </Box>
+              ))}
+            </Stack>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setTrashOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
 

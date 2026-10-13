@@ -109,6 +109,23 @@ export default function AssetTile({
         if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false)
       }}
       onClick={() => (anySelected ? onToggleSelect?.(item) : onOpen?.(item))}
+      draggable={true}
+      onDragStart={(e) => {
+        const dndPayload = {
+          asset_id: item.id,
+          key: item.key,
+          title: item.title,
+          media_type: item.media,
+          stream_url: item.stream_url,
+          duration_seconds: item.duration_seconds || 0,
+          aspect_ratio: item.aspect || "9:16",
+          source_provenance: `${item.origin}:${item.producer}`,
+          permitted_uses: ["timeline_motion", "derivative_clips"],
+        }
+        e.dataTransfer.setData("application/x-6clips-asset", JSON.stringify(dndPayload))
+        e.dataTransfer.setData("text/plain", item.title)
+        e.dataTransfer.effectAllowed = "copy"
+      }}
       // Mirrors onClick exactly. It used to always open, so with a selection
       // live the keyboard and the mouse did DIFFERENT things from the same
       // control. Space is handled because this claims role="button", and a
