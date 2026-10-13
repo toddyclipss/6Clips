@@ -59,16 +59,23 @@ class AnalyticsEventType(str, Enum):
     PUBLISH_FAILED = "PUBLISH_FAILED"
 
 
+from pydantic import BaseModel, Field, model_validator
+
+
 class PublishedReceiptV1(BaseModel):
     """
     Contract representing a verified, confirmed post publication.
     Acts as the single source of truth for remote metric polling eligibility.
+    Reconciles with Phase 10 Distribution receipts.
     Unconfirmed receipts or draft posts are rejected by analytics pollers.
     """
     receipt_id: str = Field(default_factory=lambda: f"rcpt-{uuid4().hex[:8]}")
     project_id: str
     output_video_id: Optional[str] = None
+    output_id: Optional[str] = None
     revision_id: Optional[str] = None
+    project_revision: Optional[int] = None
+    job_id: Optional[str] = None
     artifact_sha256: Optional[str] = None
     provider: AnalyticsProvider
     account_reference: str
@@ -81,9 +88,72 @@ class PublishedReceiptV1(BaseModel):
     metadata: Dict[str, Any] = Field(default_factory=dict)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+    @model_validator(mode="before")
+    @classmethod
+    def reconcile_phase10_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # Output id mapping
+            if "output_id" in data and not data.get("output_video_id"):
+                data["output_video_id"] = data["output_id"]
+            elif "output_video_id" in data and not data.get("output_id"):
+                data["output_id"] = data["output_video_id"]
+
+            # Provider / platform mapping
+            if "platform" in data and not data.get("provider"):
+                data["provider"] = data["platform"]
+
+            # Account reference / account_id mapping
+            if "account_id" in data and not data.get("account_reference"):
+                data["account_reference"] = data["account_id"]
+
+            # Publish timestamp mapping
+            if "published_at_utc" in data and not data.get("publish_timestamp"):
+                data["publish_timestamp"] = data["published_at_utc"]
+
+            # Revision mapping
+            if "project_revision" in data and not data.get("revision_id"):
+                data["revision_id"] = str(data["project_revision"])
+            elif "revision_id" in data and "project_revision" not in data:
+                try:
+                    data["project_revision"] = int(data["revision_id"])
+                except Exception:
+                    pass
+
+            # Verified status mapping
+            if "verified_status" in data and "confirmation_status" not in data:
+                status_str = data["verified_status"].upper()
+                if status_str == "CONFIRMED":
+                    data["confirmation_status"] = ReceiptConfirmationStatus.CONFIRMED
+                else:
+                    data["confirmation_status"] = ReceiptConfirmationStatus.PENDING_VERIFICATION
+
+            # Provenance mapping
+            if "provenance" in data and "metadata" not in data:
+                data["metadata"] = data["provenance"]
+
+        return data
+
     def is_eligible_for_polling(self) -> bool:
-        """Only confirmed receipts can poll external or simulated metrics."""
-        return self.confirmation_status in (ReceiptConfirmationStatus.CONFIRMED, ReceiptConfirmationStatus.SIMULATED_TEST)
+        """
+        Only confirmed, authentic receipts can poll external metrics.
+        Fake post receipts with fake_ prefixes are rejected in production mode
+        and permitted ONLY within explicit test fixtures (is_test_fixture=True).
+        Unconfirmed statuses (PENDING_VERIFICATION, REJECTED, etc.) are strictly rejected.
+        """
+        if self.confirmation_status not in (
+            ReceiptConfirmationStatus.CONFIRMED,
+            ReceiptConfirmationStatus.SIMULATED_TEST,
+        ):
+            return False
+
+        # Guard against fake receipts in production
+        is_test = bool(self.metadata.get("is_test_fixture")) or self.confirmation_status == ReceiptConfirmationStatus.SIMULATED_TEST
+        if not is_test:
+            if self.remote_post_id.startswith("fake_") or self.receipt_id.startswith("fake_"):
+                return False
+
+        return True
+
 
 
 class MetricObservationV1(BaseModel):

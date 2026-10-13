@@ -60,6 +60,7 @@ class ProductionLiveTransport(DistributionTransportPort):
     """
     Production transport enforcing truthful remote publication.
     In the current offline/disconnected configuration, live publishing is strictly blocked.
+    Accurately reports LIVE_PUBLISHING_VERIFIED: NO and refuses unverified side effects.
     """
 
     async def dispatch_post(
@@ -67,11 +68,21 @@ class ProductionLiveTransport(DistributionTransportPort):
         job: DistributionJob,
         account: PlatformAccount,
     ) -> Tuple[bool, Optional[str], Optional[str], Optional[str]]:
+        # Enforce account readiness and connectivity
+        if not account.can_publish:
+            raise TransportError(
+                "ACCOUNT_NOT_READY",
+                f"Cannot dispatch post: Account '{account.account_id}' for platform '{job.platform}' "
+                f"is in state '{account.state.value}'. LIVE_PUBLISHING_VERIFIED: NO",
+                is_retryable=False,
+            )
+
         # Enforce that unauthorized live execution is blocked
         raise TransportError(
             "LIVE_PUBLISHING_NOT_AUTHORIZED",
-            f"Live external publishing to {job.platform} is disabled and unauthorized in this environment. "
-            f"External side effects are guarded until verified OAuth credentials are provided.",
+            f"Live external publishing to {job.platform} is disabled by default in this environment. "
+            f"Live OAuth credentials are not authorized for account '{account.account_id}'. "
+            f"LIVE_PUBLISHING_VERIFIED: NO",
             is_retryable=False,
         )
 
@@ -81,11 +92,15 @@ class ProductionLiveTransport(DistributionTransportPort):
         account: PlatformAccount,
         remote_post_id: str,
     ) -> Optional[PublishedReceiptV1]:
-        # Production path refuses fake receipts as proof of a real remote post
+        # Production path strictly refuses fake receipts as proof of a real remote post
         if remote_post_id.startswith("fake_"):
-            logger.warning("Production transport rejected fake post ID: %s", remote_post_id)
+            logger.warning(
+                "ProductionLiveTransport | Rejected fake post ID in production: %s (LIVE_PUBLISHING_VERIFIED: NO)",
+                remote_post_id,
+            )
             return None
         return None
+
 
 
 class InProcessFakeTransport(DistributionTransportPort):

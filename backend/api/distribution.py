@@ -280,3 +280,16 @@ async def list_published_receipts(project_id: Optional[str] = Query(None)):
 async def trigger_worker_tick():
     """Trigger a scheduler tick cycle."""
     return await _service.scheduler.process_tick()
+
+
+@router.get("/daemon/status")
+async def get_daemon_status():
+    """Get scheduler daemon status and offline limitation warning."""
+    return _service.get_daemon_status()
+
+
+@router.post("/worker/recover")
+async def recover_worker_jobs():
+    """Recover in-flight jobs following worker restart."""
+    count = _service.recover_in_flight_jobs()
+    return {"recovered_count": count, "status": "RECOVERED"}

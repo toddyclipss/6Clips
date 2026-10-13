@@ -203,3 +203,11 @@ class DistributionService:
     def list_published_receipts(self, project_id: Optional[str] = None) -> List[PublishedReceiptV1]:
         """List confirmed publishing receipts."""
         return self.store.list_receipts(project_id=project_id)
+
+    def get_daemon_status(self) -> Dict[str, Any]:
+        """Return daemon status and offline limitation warning."""
+        return self.scheduler.get_daemon_status()
+
+    def recover_in_flight_jobs(self) -> int:
+        """Trigger worker restart recovery for any in-flight dispatching jobs."""
+        return self.scheduler.recover_in_flight_jobs()

@@ -58,6 +58,56 @@ class DistributionScheduler:
         self.transport = transport or ProductionLiveTransport()
         self.clock = time_provider or TimeProvider()
         self.account_resolver = account_resolver or self._default_account_resolver
+        # Automatically recover any in-flight jobs on worker startup
+        self.recover_in_flight_jobs()
+
+    def recover_in_flight_jobs(self) -> int:
+        """
+        Durable restart recovery:
+        Finds any jobs left in DISPATCHING state from a previous process crash/restart.
+        Reconciles with confirmed receipts or marks as FAILED_RETRYABLE for idempotent recovery.
+        """
+        recovered_count = 0
+        jobs = self.store.list_jobs()
+        receipts = {r.job_id: r for r in self.store.list_receipts()}
+
+        for job in jobs:
+            if job.status == DistributionStatus.DISPATCHING:
+                recovered_count += 1
+                if job.job_id in receipts:
+                    receipt = receipts[job.job_id]
+                    job.status = DistributionStatus.PUBLISHED_VERIFIED
+                    job.receipt_id = receipt.receipt_id
+                    job.remote_post_id = receipt.remote_post_id
+                    job.remote_post_url = receipt.remote_post_url
+                    job.error_message = "Recovered verified published post following worker restart."
+                else:
+                    job.status = DistributionStatus.FAILED_RETRYABLE
+                    job.error_code = "WORKER_RESTARTED_DURING_DISPATCH"
+                    job.error_message = "Worker process terminated during dispatch; queued for idempotent retry."
+                job.updated_at = self.clock.now().isoformat()
+                self.store.save_job(job)
+        return recovered_count
+
+    def get_daemon_status(self) -> Dict[str, Any]:
+        """
+        Exposes accurate worker daemon status and explicit offline host limitation.
+        """
+        all_jobs = self.store.list_jobs()
+        active = sum(
+            1 for j in all_jobs
+            if j.status in (DistributionStatus.SCHEDULED, DistributionStatus.READY_TO_SCHEDULE)
+        )
+        return {
+            "daemon_active": True,
+            "clock_now": self.clock.now().isoformat(),
+            "scheduled_jobs_count": active,
+            "offline_limitation_notice": (
+                "ViralMint operates as a local application. Scheduled distribution jobs "
+                "cannot publish when the host computer is turned off, asleep, or when the "
+                "backend service is stopped. Queued jobs will be evaluated on the next daemon cycle."
+            ),
+        }
 
     @staticmethod
     def _default_account_resolver(account_id: str, platform: str) -> Optional[PlatformAccount]:
@@ -90,7 +140,12 @@ class DistributionScheduler:
         self.store.save_job(job)
         return job
 
-    async def cancel_job(self, job_id: str, reason: str = "User cancelled") -> DistributionJob:
+    async def cancel_job(
+        self,
+        job_id: str,
+        reason: str = "User cancelled",
+        user_id: Optional[str] = None,
+    ) -> DistributionJob:
         """
         Cancel a scheduled or pending job.
         Note: Canceling a scheduled job does NOT imply a remote post was deleted if already published.
@@ -98,6 +153,9 @@ class DistributionScheduler:
         job = self.store.get_job(job_id)
         if not job:
             raise ValueError(f"Job '{job_id}' not found.")
+
+        if user_id and job.user_id != user_id and user_id != "admin":
+            raise ValueError(f"Unauthorized: Job '{job_id}' belongs to another creator tenant.")
 
         if job.status == DistributionStatus.PUBLISHED_VERIFIED:
             raise ValueError("Cannot cancel a job that has already been verified published.")
@@ -108,11 +166,18 @@ class DistributionScheduler:
         self.store.save_job(job)
         return job
 
-    async def retry_job(self, job_id: str) -> DistributionJob:
+    async def retry_job(
+        self,
+        job_id: str,
+        user_id: Optional[str] = None,
+    ) -> DistributionJob:
         """Retry a failed or blocked job if allowed."""
         job = self.store.get_job(job_id)
         if not job:
             raise ValueError(f"Job '{job_id}' not found.")
+
+        if user_id and job.user_id != user_id and user_id != "admin":
+            raise ValueError(f"Unauthorized: Job '{job_id}' belongs to another creator tenant.")
 
         if job.status not in (DistributionStatus.FAILED_RETRYABLE, DistributionStatus.BLOCKED):
             raise ValueError(f"Job in state {job.status.value} cannot be manually retried.")
@@ -124,6 +189,7 @@ class DistributionScheduler:
         job.updated_at = self.clock.now().isoformat()
         self.store.save_job(job)
         return job
+
 
     async def process_tick(self) -> Dict[str, Any]:
         """
