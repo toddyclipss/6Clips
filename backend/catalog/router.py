@@ -29,6 +29,98 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
+@router.get("/wave10-audit")
+async def get_wave10_audit():
+    """Return Wave 10 12-block verification audit, 12-row proof ledger, canonical export contract v2.1.0, and quarantine status."""
+    return CatalogManifestService.get_wave10_factual_audit()
+
+
+@router.post("/blocks/{block_id}/edited-instance-sequence")
+async def post_block_edited_instance_sequence(
+    block_id: str,
+    payload: Dict[str, Any] = Body(default_factory=dict),
+):
+    """Capture Playwright browser frames across multiple timestamps for an EDITED instance with custom variables."""
+    try:
+        import asyncio
+        custom_vars = payload.get("custom_variables") or {}
+        timestamps = payload.get("timestamps") or [0.0, 1.0, 2.0]
+        aspect_ratio = payload.get("aspect_ratio") or "9:16"
+        instance_id = payload.get("instance_id")
+        return await asyncio.to_thread(
+            CatalogExportContract.capture_edited_instance_sequence,
+            block_id=block_id,
+            custom_variables=custom_vars,
+            timestamps=timestamps,
+            aspect_ratio=aspect_ratio,
+            instance_id=instance_id,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating edited instance sequence for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/blocks/{block_id}/canonical-instance-mp4-overlay")
+async def post_block_canonical_instance_mp4_overlay(
+    block_id: str,
+    payload: Dict[str, Any] = Body(default_factory=dict),
+):
+    """Render canonical transparent overlay video from an EDITED block instance with ffprobe analysis."""
+    try:
+        import asyncio
+        custom_vars = payload.get("custom_variables") or {}
+        aspect_ratio = payload.get("aspect_ratio") or "9:16"
+        duration_seconds = float(payload.get("duration_seconds", 2.0))
+        return await asyncio.to_thread(
+            CatalogExportContract.render_canonical_instance_mp4_overlay,
+            block_id=block_id,
+            custom_variables=custom_vars,
+            aspect_ratio=aspect_ratio,
+            duration_seconds=duration_seconds,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating canonical instance mp4 overlay for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/creative-recipes/{recipe_id}/modify-in-document")
+async def modify_recipe_in_document(
+    recipe_id: str,
+    payload: Dict[str, Any] = Body(...),
+):
+    """Modify parameters across all timeline clips inserted by the specified recipe."""
+    try:
+        doc = payload.get("document") or {}
+        variable_overrides = payload.get("variable_overrides") or {}
+        return CreativeRecipeEngine.modify_recipe_in_project_document(
+            doc=doc,
+            recipe_id=recipe_id,
+            variable_overrides=variable_overrides,
+        )
+    except (CatalogManifestError, Exception) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/creative-recipes/{recipe_id}/undo-from-document")
+async def undo_recipe_from_document(
+    recipe_id: str,
+    payload: Dict[str, Any] = Body(...),
+):
+    """Reversibly remove all timeline clips and code files inserted by the specified recipe."""
+    try:
+        doc = payload.get("document") or {}
+        return CreativeRecipeEngine.undo_recipe_from_project_document(
+            doc=doc,
+            recipe_id=recipe_id,
+        )
+    except (CatalogManifestError, Exception) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @router.get("/wave9-audit")
 async def get_wave9_audit():
     """Return Wave 9 12-block verification audit, 12-row proof ladder, canonical export contract v2.0.0, and quarantine status."""

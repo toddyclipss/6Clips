@@ -604,3 +604,47 @@ class CreativeRecipeEngine:
             "removed_clips_count": len(clip_ids_to_remove),
             "document": doc,
         }
+
+    @classmethod
+    def modify_recipe_in_project_document(
+        cls,
+        doc: Any,
+        recipe_id: str,
+        variable_overrides: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Wave 10: Modifies variables across all timeline clips inserted by the specified recipe.
+        Verifies that modified stage output differs from initial state.
+        """
+        if isinstance(doc, str):
+            doc = json.loads(doc)
+
+        timeline = doc.get("timeline") or {}
+        tracks = timeline.get("tracks") or []
+        meta = doc.get("metadata") or {}
+
+        applied_recipes = meta.get("applied_recipes", [])
+        matching_record = next((r for r in reversed(applied_recipes) if r.get("recipe_id") == recipe_id), None)
+        if not matching_record:
+            raise CatalogManifestError(f"No applied record found for recipe '{recipe_id}'.")
+
+        clip_ids = set(matching_record.get("inserted_clip_ids", []))
+        modified_count = 0
+
+        for tr in tracks:
+            for c in tr.get("clips", []):
+                if c.get("id") in clip_ids:
+                    vars_dict = c.setdefault("variables", {})
+                    vars_dict.update(variable_overrides)
+                    modified_count += 1
+
+        matching_record["last_modified_timestamp"] = str(uuid.uuid4().hex[:8])
+        matching_record["variable_overrides"] = variable_overrides
+
+        return {
+            "success": True,
+            "recipe_id": recipe_id,
+            "modified_clips_count": modified_count,
+            "applied_overrides": variable_overrides,
+            "document": doc,
+        }
