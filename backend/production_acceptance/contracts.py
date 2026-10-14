@@ -35,8 +35,14 @@ class OrchestrationContractStatus(str, Enum):
     AWAITING_RENDER = "AWAITING_RENDER"
     RENDERED = "RENDERED"
     MOTION_REVIEW_LINKED = "MOTION_REVIEW_LINKED"
+    READY_FOR_REVIEW = "READY_FOR_REVIEW"
+    PARTIAL = "PARTIAL"
+    PAUSED = "PAUSED"
+    CANCELLED = "CANCELLED"
     WAITING_FOR_INPUT = "WAITING_FOR_INPUT"
     NOT_TESTED = "NOT_TESTED"
+    BLOCKED = "BLOCKED"
+    BLOCKED_BUDGET_EXCEEDED = "BLOCKED_BUDGET_EXCEEDED"
     REJECTED = "REJECTED"
     FAILED = "FAILED"
 
@@ -190,12 +196,17 @@ class V3ProductionContract(BaseModel):
 class OrchestrationResult(BaseModel):
     """Execution result of a production acceptance verification."""
     gate_id: str
-    status: str  # PASSED | FAILED | NOT_TESTED | WAITING_FOR_INPUT | BLOCKED
+    status: str  # PASSED | READY_FOR_REVIEW | PARTIAL | FAILED | NOT_TESTED | WAITING_FOR_INPUT | BLOCKED | CANCELLED
     is_real_user_media: bool = False
     artifacts_verified_count: int = 0
     distinct_hashes_count: int = 0
+    preserved_outputs: List[str] = Field(default_factory=list)
+    preserved_project_ids: List[str] = Field(default_factory=list)
     motion_review_urls: List[str] = Field(default_factory=list)
     independent_project_ids: List[str] = Field(default_factory=list)
+    editorial_assessment: str = "EDITORIAL_NOT_ASSESSED"
+    human_approval_required: bool = True
+    budget_usage: Dict[str, Any] = Field(default_factory=dict)
     issues: List[str] = Field(default_factory=list)
     missing_evidence: List[str] = Field(default_factory=list)
     required_file_instructions: List[str] = Field(default_factory=list)
