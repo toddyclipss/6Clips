@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import {
   Box, Stack, Typography, Tabs, Tab, IconButton, InputBase,
   Button, Tooltip, CircularProgress, Chip, Dialog, DialogTitle,
@@ -54,6 +54,7 @@ export default function StudioResourcePanel({
   const [search, setSearch] = useState("")
   const [catalogItems, setCatalogItems] = useState([])
   const [catalogLoading, setCatalogLoading] = useState(false)
+  const [catalogError, setCatalogError] = useState(null)
   const [catalogCategory, setCatalogCategory] = useState("all")
 
   // Audio Pre-listening state
@@ -99,18 +100,25 @@ export default function StudioResourcePanel({
       return sB - sA
     })
 
+  const fetchCatalog = useCallback(() => {
+    setCatalogLoading(true)
+    setCatalogError(null)
+    http.get("/api/projects/catalog/items")
+      .then((res) => {
+        const items = res.data?.items || (Array.isArray(res.data) ? res.data : [])
+        setCatalogItems(items)
+      })
+      .catch((err) => {
+        setCatalogError(err.response?.data?.detail || err.message || "Failed to load catalog items")
+      })
+      .finally(() => setCatalogLoading(false))
+  }, [])
+
   useEffect(() => {
-    if (tab === 2 && catalogItems.length === 0) {
-      setCatalogLoading(true)
-      http.get("/api/projects/catalog/items")
-        .then((res) => {
-          const items = res.data?.items || (Array.isArray(res.data) ? res.data : [])
-          setCatalogItems(items)
-        })
-        .catch(() => {})
-        .finally(() => setCatalogLoading(false))
+    if (tab === 2 && catalogItems.length === 0 && !catalogError) {
+      fetchCatalog()
     }
-  }, [tab, catalogItems.length])
+  }, [tab, catalogItems.length, catalogError, fetchCatalog])
 
   const filteredCatalog = catalogItems.filter((item) => {
     const q = search.toLowerCase()
@@ -624,7 +632,18 @@ export default function StudioResourcePanel({
           // Tab 2: Real HyperFrames Catalog Blocks with Posters & Hover Preview
           <Box>
             {/* Category Filter Chips */}
-            <Stack direction="row" spacing={0.5} sx={{ mb: 1, overflowX: "auto", pb: 0.5 }}>
+            <Stack
+              direction="row"
+              spacing={0.5}
+              sx={{
+                mb: 1,
+                overflowX: "auto",
+                pb: 0.5,
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                "&::-webkit-scrollbar": { display: "none" },
+              }}
+            >
               {[
                 { id: "all", label: "All" },
                 { id: "typography", label: "Typography" },
@@ -649,13 +668,43 @@ export default function StudioResourcePanel({
             </Stack>
 
             {catalogLoading ? (
-              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-                <CircularProgress size={20} />
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", py: 4, gap: 1 }}>
+                <CircularProgress size={20} color="primary" />
+                <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.72rem" }}>
+                  Loading catalog blocks…
+                </Typography>
+              </Box>
+            ) : catalogError ? (
+              <Box sx={{ p: 2, textAlign: "center" }} data-testid="catalog-error-box">
+                <Typography variant="caption" color="error" sx={{ display: "block", mb: 1, fontSize: "0.72rem" }}>
+                  {catalogError}
+                </Typography>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  data-testid="catalog-retry-btn"
+                  onClick={fetchCatalog}
+                  sx={{ fontSize: "0.7rem", textTransform: "none", py: 0.25, px: 1.5 }}
+                >
+                  Retry
+                </Button>
               </Box>
             ) : filteredCatalog.length === 0 ? (
-              <Typography variant="caption" sx={{ color: "text.disabled", display: "block", textAlign: "center", mt: 4 }}>
-                No catalog blocks found.
-              </Typography>
+              <Box sx={{ py: 4, textAlign: "center", px: 2 }}>
+                <Typography variant="caption" sx={{ color: "text.disabled", display: "block", textAlign: "center", mt: 2 }}>
+                  No catalog blocks found.
+                </Typography>
+                {catalogCategory !== "all" && (
+                  <Button
+                    size="small"
+                    variant="text"
+                    onClick={() => setCatalogCategory("all")}
+                    sx={{ fontSize: "0.7rem", mt: 1, textTransform: "none" }}
+                  >
+                    Reset category filter
+                  </Button>
+                )}
+              </Box>
             ) : (
               <Stack spacing={1}>
                 {filteredCatalog.map((item) => {

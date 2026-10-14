@@ -51,6 +51,8 @@ export default function MotionGraphics() {
 
   // Project document state
   const [project, setProject] = useState(null)
+  const [isProjectLoading, setIsProjectLoading] = useState(false)
+  const [projectError, setProjectError] = useState(null)
   const [revision, setRevision] = useState(1)
   const [aspectRatio, setAspectRatio] = useState("9:16")
   const [document, setDocument] = useState(null)
@@ -299,10 +301,14 @@ export default function MotionGraphics() {
       setProject(null)
       setDocument(null)
       setRenderedVideo(null)
+      setIsProjectLoading(false)
+      setProjectError(null)
       return
     }
 
     const loadProject = async () => {
+      setIsProjectLoading(true)
+      setProjectError(null)
       try {
         const detail = await http.get(`/api/projects/${requestedId}`)
         if (cancelled) return
@@ -325,7 +331,12 @@ export default function MotionGraphics() {
           setUndoStack([])
           setRedoStack([])
           setRenderedVideo(null)
+          setProjectError(fetchErr.response?.data?.detail || fetchErr.message || `Project "${requestedId}" not found`)
           showSnackbar(`Requested project "${requestedId}" not found`, "warning")
+        }
+      } finally {
+        if (!cancelled) {
+          setIsProjectLoading(false)
         }
       }
     }
@@ -1827,9 +1838,13 @@ export default function MotionGraphics() {
 
           <StudioPreviewStage
             ref={previewStageRef}
+            project={project}
             previewUrl={previewUrl}
             aspectRatio={aspectRatio}
-            isLoading={starting}
+            isLoading={isProjectLoading || (starting && !!project)}
+            error={startError || projectError}
+            onRetry={() => window.location.reload()}
+            loadingMessage={isProjectLoading ? "Loading project document…" : "Starting preview server…"}
             currentTime={currentTime}
             duration={activeReviewOutput?.media_probe?.duration_seconds || renderedVideo?.duration_seconds || document?.timeline?.duration_seconds || 15}
             isPlaying={isPlaying}
