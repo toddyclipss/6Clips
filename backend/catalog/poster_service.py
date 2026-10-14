@@ -100,24 +100,10 @@ class CatalogPosterService:
                     except Exception as e:
                         logger.debug("Failed resizing shipped poster %s: %s", p, e)
 
-        # 2. Check upstream preview poster URL
-        prev_meta = item.get("preview_upstream") or {}
-        poster_url = prev_meta.get("poster")
-        if poster_url and isinstance(poster_url, str) and poster_url.startswith("http"):
-            try:
-                import urllib.request
-                req = urllib.request.Request(poster_url, headers={"User-Agent": "ViralMint-Catalog/1.0"})
-                with urllib.request.urlopen(req, timeout=3.0) as resp:
-                    if resp.status == 200:
-                        img_bytes = resp.read()
-                        with Image.open(io.BytesIO(img_bytes)) as im:
-                            resized = im.convert("RGB").resize((w, h), Image.Resampling.LANCZOS)
-                            resized.save(target_file, format="PNG")
-                            return target_file
-            except Exception as e:
-                logger.debug("Could not fetch remote poster %s: %s", poster_url, e)
+        # 2. Offline-only enforcement: zero external egress (P0 idle guardrail)
+        # Upstream remote downloads are strictly disabled to prevent network activity during catalog operations.
 
-        # 3. Generate high-quality truthful graphical representation card
+        # 3. Generate high-quality truthful graphical representation card offline
         cls._generate_card_poster(target_file, item, w, h, aspect_norm)
         return target_file
 

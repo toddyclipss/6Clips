@@ -217,6 +217,31 @@ class RegistryAdapter:
         return all_matching
 
     @classmethod
+    def list_inventory_reconciled(
+        cls,
+        filter_type: Optional[str] = None,
+        search: Optional[str] = None,
+        category: Optional[str] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> Dict[str, Any]:
+        """Wave 14 Stage 1: delegate to CatalogManifestService for unified v1 inventory reconciliation."""
+        from backend.catalog.manifest_service import CatalogManifestService
+        return CatalogManifestService.list_wave14_inventory_items(
+            filter_type=filter_type,
+            search=search,
+            category=category,
+            limit=limit,
+            offset=offset,
+        )
+
+    @classmethod
+    def get_wave14_inventory_audit(cls) -> Dict[str, Any]:
+        """Wave 14 Stage 1: delegate to CatalogManifestService for unified reconciliation metrics."""
+        from backend.catalog.manifest_service import CatalogManifestService
+        return CatalogManifestService.get_wave14_reconciliation()
+
+    @classmethod
     def get_catalog_item(cls, block_name: str) -> Optional[Dict[str, Any]]:
         """Retrieve single normalized catalog item by name."""
         reg_dir = get_registry_dir()
