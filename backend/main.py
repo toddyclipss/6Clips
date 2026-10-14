@@ -193,10 +193,37 @@ async def lifespan(app: FastAPI):
         import logging
         logging.getLogger(__name__).warning(f"SFX init failed: {e}")
 
-    # Check yt-dlp version (outdated versions get blocked by YouTube)
+    # Check yt-dlp version — strictly gated by opt-in to prevent unsolicited PyPI boot egress
     try:
-        from backend.services.ytdlp_service import check_ytdlp_version
-        check_ytdlp_version()
+        import os as _os
+        if _os.environ.get("ENABLE_YTDLP_AUTO_UPDATE", "0").strip() == "1":
+            from backend.services.ytdlp_service import check_ytdlp_version
+            check_ytdlp_version(user_authorized=True)
+        else:
+            import logging
+            logging.getLogger(__name__).debug(
+                "yt-dlp auto-update check at boot is disabled (ENABLE_YTDLP_AUTO_UPDATE != 1); skipping pypi.org egress probe"
+            )
+            try:
+                from backend.diagnostics import (
+                    record_activity,
+                    ENDPOINT_CLASS_NOT_OBSERVED,
+                    TRIGGER_STARTUP,
+                    OUTCOME_ZERO_REQUESTS,
+                )
+                record_activity(
+                    component="startup_bootstrap",
+                    destination_host="NONE_LOCAL",
+                    sanitized_path="/boot/ytdlp_version_check",
+                    method="CHECK",
+                    endpoint_class=ENDPOINT_CLASS_NOT_OBSERVED,
+                    trigger_authorization=TRIGGER_STARTUP,
+                    callsite="backend.main.lifespan",
+                    outcome_status=OUTCOME_ZERO_REQUESTS,
+                    extra_metadata={"reason": "ENABLE_YTDLP_AUTO_UPDATE_DISABLED"},
+                )
+            except Exception:
+                pass
     except Exception as e:
         import logging
         logging.getLogger(__name__).warning(f"yt-dlp version check failed: {e}")
