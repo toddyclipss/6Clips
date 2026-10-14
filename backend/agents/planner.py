@@ -423,6 +423,104 @@ class PlannerAgent:
     def __init__(self):
         self.intelligence = UserIntelligence()
 
+    async def execute_motion_tool(
+        self,
+        capability_id: str,
+        fn_args: dict,
+        user_id: str = "local",
+        active_project_id: Optional[str] = None,
+    ) -> dict:
+        """Direct execution of a motion capability with ProjectService CAS and revision checking."""
+        from backend.motion_capabilities.registry import MotionCapabilitiesRegistry
+        from backend.motion_capabilities.dispatcher import MotionCapabilityDispatcher
+        from backend.services.project_service import ProjectService
+
+        motion_spec = MotionCapabilitiesRegistry.get(capability_id)
+        if not motion_spec:
+            return {"status": "error", "code": 404, "error": f"Unknown capability '{capability_id}'"}
+
+        proj_id = fn_args.get("project_id") or active_project_id
+        p_obj = None
+        p_doc = None
+        if proj_id:
+            try:
+                p_obj = await ProjectService.verify_project_ownership(proj_id, user_id=user_id)
+                p_doc = json.loads(p_obj.document_json)
+            except Exception as pex:
+                return {"status": "error", "code": 403, "error": str(pex)}
+
+        idem_key = fn_args.get("idempotency_key")
+        if proj_id and idem_key:
+            existing_rev = await ProjectService.get_revision_by_idempotency_key(proj_id, idem_key)
+            if existing_rev:
+                return {
+                    "status": "success",
+                    "output": {
+                        "message": f"Idempotent replay for key '{idem_key}'",
+                        "output_path": None,
+                        "project_id": proj_id,
+                        "revision": existing_rev.revision,
+                        "motion_review_url": f"/motion?project_id={proj_id}&review={capability_id}",
+                    },
+                }
+
+        disp_res = await MotionCapabilityDispatcher.dispatch(
+            capability_id=capability_id,
+            input_path=fn_args.get("input_path") or fn_args.get("video_path"),
+            params=fn_args.get("params") or fn_args,
+            project_doc=p_doc,
+        )
+
+        if disp_res.status == "SUCCESS":
+            mutation = (disp_res.output_data.get("project_doc") if disp_res.output_data else None) or getattr(disp_res, "project_mutation", None)
+            if p_obj and mutation:
+                from backend.core.exceptions import RevisionConflictError, IdempotencyConflictError
+                exp_rev = fn_args.get("expected_revision")
+                try:
+                    op_res = await ProjectService.apply_operation(
+                        project_id=proj_id,
+                        expected_revision=exp_rev if exp_rev is not None else p_obj.revision,
+                        operation_type=f"motion_{capability_id}",
+                        payload=mutation,
+                        idempotency_key=fn_args.get("idempotency_key"),
+                        author="agent",
+                    )
+                    active_revision = op_res["revision"]
+                    return {
+                        "status": "success",
+                        "output": {
+                            "message": disp_res.message,
+                            "output_path": str(disp_res.output_path) if disp_res.output_path else None,
+                            "project_id": proj_id,
+                            "revision": active_revision,
+                            "motion_review_url": f"/motion?project_id={proj_id}&review={capability_id}",
+                        },
+                    }
+                except RevisionConflictError as rce:
+                    return {
+                        "status": "error",
+                        "code": 409,
+                        "error": f"Revision conflict: {rce}",
+                    }
+                except IdempotencyConflictError as ice:
+                    return {
+                        "status": "error",
+                        "code": 409,
+                        "error": f"Idempotency conflict: {ice}",
+                    }
+            else:
+                return {
+                    "status": "success",
+                    "output": {
+                        "message": disp_res.message,
+                        "output_path": str(disp_res.output_path) if disp_res.output_path else None,
+                        "project_id": proj_id,
+                        "revision": p_obj.revision if p_obj else 1,
+                    },
+                }
+        else:
+            return {"status": "error", "code": 400, "error": disp_res.message}
+
     async def _followup(self, user_id: str, text: str, quick_replies: list[str] | None = None):
         """Send a dispatch-time message to the user as a real assistant turn
         (never a bare chat_token — see the sink comment above). Also records it
@@ -655,45 +753,12 @@ class PlannerAgent:
                 motion_spec = MotionCapabilitiesRegistry.get(fn_name)
 
                 if not cap and motion_spec:
-                    try:
-                        proj_id = fn_args.get("project_id") or active_project_id
-                        p_doc = None
-                        p_obj = None
-                        if proj_id:
-                            from backend.services.project_service import ProjectService
-                            p_obj = await ProjectService.verify_project_ownership(proj_id, user_id=user_id)
-                            p_doc = json.loads(p_obj.document_json)
-                        from backend.motion_capabilities.dispatcher import MotionCapabilityDispatcher
-                        disp_res = await MotionCapabilityDispatcher.dispatch(
-                            capability_id=fn_name,
-                            input_path=fn_args.get("input_path") or fn_args.get("video_path"),
-                            params=fn_args.get("params") or fn_args,
-                            project_doc=p_doc,
-                        )
-                        if disp_res.status == "SUCCESS":
-                            if p_obj and disp_res.project_mutation:
-                                from backend.services.project_service import ProjectService
-                                op_res = await ProjectService.apply_operation(
-                                    project_id=proj_id,
-                                    expected_revision=p_obj.revision,
-                                    operation_type=f"motion_{fn_name}",
-                                    payload=disp_res.project_mutation,
-                                    author="agent",
-                                )
-                                active_revision = op_res["revision"]
-                            res = {
-                                "status": "success",
-                                "output": {
-                                    "message": disp_res.message,
-                                    "output_path": str(disp_res.output_path) if disp_res.output_path else None,
-                                    "project_id": proj_id,
-                                    "revision": active_revision,
-                                },
-                            }
-                        else:
-                            res = {"status": "error", "error": disp_res.message}
-                    except Exception as mex:
-                        res = {"status": "error", "error": str(mex)}
+                    res = await self.execute_motion_tool(
+                        capability_id=fn_name,
+                        fn_args=fn_args,
+                        user_id=user_id,
+                        active_project_id=active_project_id,
+                    )
                 elif not cap:
                     res = {"error": f"Unauthorized or unknown capability '{fn_name}'"}
                 elif fn_name in ("upload_youtube", "upload_tiktok"):
@@ -1342,13 +1407,18 @@ class PlannerAgent:
             )
             if p_obj and res.project_mutation:
                 try:
-                    await ProjectService.apply_operation(
-                        project_id=p_obj.id,
-                        expected_revision=p_obj.revision,
-                        operation_type=f"motion_{cap_id}",
-                        payload=res.project_mutation,
-                        author="agent",
-                    )
+                    exp_r = action.get("expected_revision")
+                    if exp_r is not None and exp_r != p_obj.revision:
+                        logger.warning("Revision conflict for motion capability %s: expected %d, got %d", cap_id, exp_r, p_obj.revision)
+                    else:
+                        await ProjectService.apply_operation(
+                            project_id=p_obj.id,
+                            expected_revision=p_obj.revision,
+                            operation_type=f"motion_{cap_id}",
+                            payload=res.project_mutation,
+                            idempotency_key=action.get("idempotency_key"),
+                            author="agent",
+                        )
                 except Exception as aex:
                     logger.error("Failed applying motion capability mutation to project %s: %s", proj_id, aex)
             await ws_manager.send({

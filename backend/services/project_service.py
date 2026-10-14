@@ -392,6 +392,17 @@ class ProjectService:
             ]
 
     @classmethod
+    async def get_revision_by_idempotency_key(cls, project_id: str, idempotency_key: str) -> Optional[ProjectRevision]:
+        """Lookup an existing revision by idempotency key."""
+        async with AsyncSessionLocal() as db:
+            res = await db.execute(
+                select(ProjectRevision)
+                .where(ProjectRevision.project_id == project_id)
+                .where(ProjectRevision.idempotency_key == idempotency_key)
+            )
+            return res.scalar_one_or_none()
+
+    @classmethod
     async def apply_operation(
         cls,
         project_id: str,
@@ -687,9 +698,9 @@ class ProjectService:
             patch = payload.get("patch", {})
             doc.update(patch)
 
-        elif operation_type == "update_document":
-            new_doc = payload.get("document")
-            if new_doc is None and ("timeline" in payload or "tracks" in payload):
+        elif operation_type in ("update_document", "motion_capability") or operation_type.startswith("motion_"):
+            new_doc = payload.get("document") if isinstance(payload, dict) else None
+            if new_doc is None and isinstance(payload, dict) and ("timeline" in payload or "tracks" in payload or "version" in payload):
                 new_doc = payload
             if not isinstance(new_doc, dict):
                 raise ProjectError("Payload must include a valid 'document' dictionary.")
