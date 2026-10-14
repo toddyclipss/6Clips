@@ -186,7 +186,7 @@ class DistributionScheduler:
         if user_id and job.user_id != user_id and user_id != "admin":
             raise ValueError(f"Unauthorized: Job '{job_id}' belongs to another creator tenant.")
 
-        if job.status not in (DistributionStatus.FAILED_RETRYABLE, DistributionStatus.BLOCKED):
+        if job.status not in (DistributionStatus.FAILED_RETRYABLE, DistributionStatus.BLOCKED, DistributionStatus.UNCERTAIN):
             raise ValueError(f"Job in state {job.status.value} cannot be manually retried.")
 
         job.status = DistributionStatus.READY_TO_SCHEDULE
@@ -274,6 +274,19 @@ class DistributionScheduler:
                     job.status = DistributionStatus.PUBLISHED_VERIFIED
                     job.receipt_id = existing_rcpt.receipt_id
                     self.store.save_receipt(existing_rcpt)
+                    job.updated_at = self.clock.now().isoformat()
+                    self.store.save_job(job)
+                    return
+                else:
+                    # GT-28: Remote send status is UNCERTAIN. An upload was attempted and remote_post_id was assigned,
+                    # but remote receipt verification is currently unconfirmed.
+                    # Transition to UNCERTAIN to prevent duplicate remote upload and wait for provider resolution.
+                    job.status = DistributionStatus.UNCERTAIN
+                    job.error_code = "REMOTE_SEND_UNCERTAIN"
+                    job.error_message = (
+                        f"Remote post confirmation uncertain for post_id '{job.remote_post_id}'. "
+                        "Awaiting provider receipt confirmation before retry to prevent duplicate posting (GT-28)."
+                    )
                     job.updated_at = self.clock.now().isoformat()
                     self.store.save_job(job)
                     return
