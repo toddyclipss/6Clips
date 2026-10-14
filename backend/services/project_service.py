@@ -1417,6 +1417,28 @@ class ProjectService:
                 })
             code["files"] = normalized_list
 
+        elif operation_type in ("apply_recipe", "catalog_apply_recipe", "insert_recipe_tracks"):
+            from backend.catalog.creative_recipes import CreativeRecipeEngine
+            recipe_id = payload.get("recipe_id")
+            start_time = float(payload.get("start_time", 0.0))
+            if recipe_id:
+                CreativeRecipeEngine.apply_recipe_to_project_document(doc, recipe_id=recipe_id, start_time=start_time)
+            elif "items" in payload:
+                for item in payload.get("items", []):
+                    trk_idx = item.get("timeline_track_index", 0)
+                    tr_id = f"track_{trk_idx}"
+                    tr = next((t for t in tracks if t.get("id") == tr_id), None)
+                    if not tr:
+                        tr = {"id": tr_id, "type": "graphics", "name": f"Track {trk_idx + 1}", "clips": []}
+                        tracks.append(tr)
+                    tr.setdefault("clips", []).append(item)
+
+        elif operation_type in ("undo_recipe", "catalog_undo_recipe"):
+            from backend.catalog.creative_recipes import CreativeRecipeEngine
+            recipe_id = payload.get("recipe_id")
+            if recipe_id:
+                CreativeRecipeEngine.undo_recipe_from_project_document(doc, recipe_id=recipe_id)
+
         else:
             raise ProjectError(f"Unsupported operation type: {operation_type}")
 
@@ -1446,3 +1468,57 @@ class ProjectService:
             target_rev = revision if revision is not None else project.revision
             snapshot = await cls.get_revision_snapshot(project_id, target_rev)
             return target_rev, snapshot
+
+    @classmethod
+    async def apply_creative_recipe(
+        cls,
+        project_id: str,
+        recipe_id: str,
+        expected_revision: int,
+        start_time: float = 0.0,
+        user_id: str = "local",
+        idempotency_key: Optional[str] = None,
+    ) -> dict:
+        """
+        Applies a vetted catalog creative recipe to the persistent project document
+        via optimistic concurrency (CAS) and durable ProjectRevision snapshotting.
+        Enforces tenant/instance separation via verify_project_ownership.
+        """
+        await cls.verify_project_ownership(project_id, user_id=user_id)
+        from backend.catalog.creative_recipes import CreativeRecipeEngine
+        recipe = CreativeRecipeEngine.get_recipe_by_id(recipe_id)
+        if not recipe:
+            raise ProjectError(f"Creative recipe '{recipe_id}' not found in vetted catalog.")
+
+        return await cls.apply_operation(
+            project_id=project_id,
+            expected_revision=expected_revision,
+            operation_type="apply_recipe",
+            payload={"recipe_id": recipe_id, "start_time": start_time},
+            idempotency_key=idempotency_key,
+            author=user_id,
+        )
+
+    @classmethod
+    async def undo_creative_recipe(
+        cls,
+        project_id: str,
+        recipe_id: str,
+        expected_revision: int,
+        user_id: str = "local",
+        idempotency_key: Optional[str] = None,
+    ) -> dict:
+        """
+        Reversibly undos an applied creative recipe from the persistent project document
+        via optimistic concurrency (CAS) and durable ProjectRevision snapshotting.
+        Enforces tenant/instance separation via verify_project_ownership.
+        """
+        await cls.verify_project_ownership(project_id, user_id=user_id)
+        return await cls.apply_operation(
+            project_id=project_id,
+            expected_revision=expected_revision,
+            operation_type="undo_recipe",
+            payload={"recipe_id": recipe_id},
+            idempotency_key=idempotency_key,
+            author=user_id,
+        )
