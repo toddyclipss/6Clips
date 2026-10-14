@@ -4,6 +4,7 @@
 import asyncio
 import glob
 import logging
+import os
 import platform
 import re
 import shutil
@@ -219,6 +220,32 @@ def _get_ytdlp_age_days() -> int:
         return -1
 
 
+def _sanitize_url_for_audit(url: str) -> tuple[str, str]:
+    """
+    Parse URL and return (destination_host, sanitized_path) stripping query tokens/secrets.
+    For example:
+      https://www.youtube.com/watch?v=dQw4w9WgXcQ&authuser=0&token=secret
+      -> host: "www.youtube.com", path: "/watch?v=dQw4w9WgXcQ"
+    """
+    try:
+        from urllib.parse import urlparse, parse_qs, urlencode
+        parsed = urlparse(url)
+        host = (parsed.netloc or "unknown").split(":")[0].lower()
+        path = parsed.path or "/"
+
+        qs = parse_qs(parsed.query)
+        safe_keys = {"v", "id", "list", "p", "channel_id"}
+        filtered_qs = {k: v for k, v in qs.items() if k.lower() in safe_keys}
+
+        if filtered_qs:
+            sanitized_path = f"{path}?{urlencode(filtered_qs, doseq=True)}"
+        else:
+            sanitized_path = path
+        return host, sanitized_path
+    except Exception:
+        return "unknown", "/unknown"
+
+
 # Track consecutive failures to trigger auto-update
 _consecutive_download_failures = 0
 _FAILURE_THRESHOLD_FOR_UPDATE = 3  # Auto-update after 3 consecutive failures
@@ -226,32 +253,109 @@ _last_update_attempt = 0.0
 _UPDATE_COOLDOWN = 3600  # Don't try updating more than once per hour
 
 
-def check_ytdlp_version():
-    """Log a warning if yt-dlp is more than 30 days old. Auto-update if stale."""
+def check_ytdlp_version(user_authorized: bool = False) -> dict:
+    """Log a warning if yt-dlp is more than 30 days old. Auto-update only if explicitly enabled and authorized."""
     import importlib.metadata
     from datetime import datetime
+
+    auto_update_enabled = os.environ.get("ENABLE_YTDLP_AUTO_UPDATE", "0").strip() == "1"
 
     try:
         version = importlib.metadata.version("yt-dlp")
         age_days = _get_ytdlp_age_days()
 
         if age_days > 30:
+            if not (auto_update_enabled and user_authorized):
+                logger.warning(
+                    "yt-dlp version %s is %d days old (> 30 days), but auto-update is disabled by default "
+                    "(requires ENABLE_YTDLP_AUTO_UPDATE=1 and explicit user authorization). "
+                    "Skipping update to prevent unsolicited pypi.org egress.",
+                    version, age_days,
+                )
+                try:
+                    from backend.distribution.egress_audit import record_egress_event
+                    record_egress_event(
+                        component="ytdlp_service",
+                        destination_host="pypi.org",
+                        sanitized_path="/simple/yt-dlp",
+                        method="GET",
+                        endpoint_class="BLOCKED_WITH_REASON",
+                        trigger_authorization="UNAUTHORIZED_OR_AUTO_UPDATE_DISABLED",
+                        outcome_status="BLOCKED_WITH_REASON",
+                        callsite="check_ytdlp_version",
+                        extra_metadata={"reason": "AUTO_UPDATE_DISABLED_BY_DEFAULT"},
+                    )
+                except Exception as audit_err:
+                    logger.debug("Failed recording ytdlp version check egress event: %s", audit_err)
+
+                return {
+                    "version": version,
+                    "age_days": age_days,
+                    "update_attempted": False,
+                    "blocked_reason": "AUTO_UPDATE_DISABLED_BY_DEFAULT",
+                }
+
             logger.warning(
-                "yt-dlp version %s is %d days old. Attempting auto-update...",
+                "yt-dlp version %s is %d days old. Attempting authorized auto-update...",
                 version, age_days,
             )
-            _try_update_ytdlp()
+            updated = _try_update_ytdlp(user_authorized=user_authorized)
+            return {
+                "version": version,
+                "age_days": age_days,
+                "update_attempted": True,
+                "updated": updated,
+            }
         else:
             logger.info("yt-dlp version %s (%d days old)", version, age_days)
+            return {
+                "version": version,
+                "age_days": age_days,
+                "update_attempted": False,
+            }
     except Exception as e:
         logger.warning("Could not determine yt-dlp version: %s", e)
+        return {
+            "version": "unknown",
+            "age_days": -1,
+            "error": str(e),
+            "update_attempted": False,
+        }
 
 
-def _try_update_ytdlp() -> bool:
-    """Attempt to update yt-dlp via pip. Returns True if updated successfully."""
+def _try_update_ytdlp(user_authorized: bool = False) -> bool:
+    """Attempt to update yt-dlp via pip. Returns True if updated successfully.
+
+    Fail-closed default: MUST NOT execute unless ENABLE_YTDLP_AUTO_UPDATE==1
+    and user_authorized=True.
+    """
     global _last_update_attempt
     import subprocess
     import sys
+
+    auto_update_enabled = os.environ.get("ENABLE_YTDLP_AUTO_UPDATE", "0").strip() == "1"
+    if not (auto_update_enabled and user_authorized):
+        logger.warning(
+            "yt-dlp update blocked: requires ENABLE_YTDLP_AUTO_UPDATE=1 and user_authorized=True "
+            "(got ENABLE_YTDLP_AUTO_UPDATE=%s, user_authorized=%s). Preventing unsolicited pypi.org egress.",
+            os.environ.get("ENABLE_YTDLP_AUTO_UPDATE", "0"), user_authorized,
+        )
+        try:
+            from backend.distribution.egress_audit import record_egress_event
+            record_egress_event(
+                component="ytdlp_service",
+                destination_host="pypi.org",
+                sanitized_path="/simple/yt-dlp",
+                method="POST",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="UNAUTHORIZED_OR_AUTO_UPDATE_DISABLED",
+                outcome_status="BLOCKED_WITH_REASON",
+                callsite="_try_update_ytdlp",
+                extra_metadata={"reason": "AUTO_UPDATE_DISABLED_BY_DEFAULT"},
+            )
+        except Exception as audit_err:
+            logger.debug("Failed recording ytdlp update egress event: %s", audit_err)
+        return False
 
     # In a frozen PyInstaller bundle, sys.executable points at our own
     # bundled binary, not Python — running `sys.executable -m pip install -U`
@@ -270,17 +374,27 @@ def _try_update_ytdlp() -> bool:
 
     try:
         logger.info("Auto-updating yt-dlp...")
-        # Version-bounded spec: on an environment whose Python is too old for
-        # current yt-dlp, an unbounded "-U yt-dlp" silently resolves to an
-        # ANCIENT release (macOS system python3 = 3.9 → a 2025.10 build that
-        # fails on modern YouTube). Bounded, pip errors loudly instead of
-        # installing a silently-broken downloader.
+        try:
+            from backend.distribution.egress_audit import record_egress_event
+            record_egress_event(
+                component="ytdlp_service",
+                destination_host="pypi.org",
+                sanitized_path="/simple/yt-dlp",
+                method="POST",
+                endpoint_class="AUTHORIZED_PACKAGE_UPDATE",
+                trigger_authorization="USER_ADMIN_AUTHORIZED",
+                outcome_status="DISPATCHED",
+                callsite="_try_update_ytdlp",
+                extra_metadata={"package": "yt-dlp"},
+            )
+        except Exception:
+            pass
+
         result = subprocess.run(
             [sys.executable, "-m", "pip", "install", "-U", "yt-dlp>=2026.7.4"],
             capture_output=True, text=True, timeout=120,
         )
         if result.returncode == 0:
-            # Reload the yt_dlp module to pick up the new version
             import importlib
             import yt_dlp
             importlib.reload(yt_dlp)
@@ -306,10 +420,11 @@ def _record_download_failure():
         age = _get_ytdlp_age_days()
         if age > 7:  # Only auto-update if at least a week old
             logger.warning(
-                "%d consecutive download failures with yt-dlp %d days old — triggering auto-update",
+                "%d consecutive download failures with yt-dlp %d days old — checking auto-update",
                 _consecutive_download_failures, age,
             )
-            if _try_update_ytdlp():
+            # Default to fail-closed: user_authorized=False prevents unsolicited pip egress
+            if _try_update_ytdlp(user_authorized=False):
                 _consecutive_download_failures = 0  # Reset on successful update
 
 # ── Rate-limit tracking ──────────────────────────────────────────────────────
@@ -924,6 +1039,7 @@ async def download_video(
     filename: str = None,
     extract_audio: bool = True,
     options: dict | None = None,
+    user_authorized: bool = True,
 ) -> dict:
     """
     Download a video using yt-dlp.
@@ -946,6 +1062,40 @@ async def download_video(
     than erroring). Surfacing it is what lets a UI say "you asked for 4K, this
     source only had 1080p" instead of implying the cap was honoured.
     """
+    host, clean_path = _sanitize_url_for_audit(url)
+    if not user_authorized:
+        try:
+            from backend.distribution.egress_audit import record_egress_event
+            record_egress_event(
+                component="ytdlp_service",
+                destination_host=host,
+                sanitized_path=clean_path,
+                method="GET",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="UNAUTHORIZED",
+                outcome_status="BLOCKED_WITH_REASON",
+                callsite="download_video",
+                extra_metadata={"reason": "UNAUTHORIZED_DOWNLOAD_OR_METADATA_EXTRACTION"},
+            )
+        except Exception:
+            pass
+        raise PermissionError("Outbound video download blocked: missing active user authorization.")
+
+    try:
+        from backend.distribution.egress_audit import record_egress_event
+        record_egress_event(
+            component="ytdlp_service",
+            destination_host=host,
+            sanitized_path=clean_path,
+            method="GET",
+            endpoint_class="USER_TOOL_DOWNLOAD",
+            trigger_authorization="USER_AUTHORIZED_RUN",
+            outcome_status="DISPATCHED",
+            callsite="download_video",
+        )
+    except Exception:
+        pass
+
     if output_dir is None:
         output_dir = settings.VIDEOS_DIR
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1480,9 +1630,43 @@ def _extract_chapters(info: dict) -> list[dict] | None:
     ]
 
 
-async def get_video_info(url: str, flat: bool = False) -> dict:
+async def get_video_info(url: str, flat: bool = False, user_authorized: bool = True) -> dict:
     """Get video/channel metadata without downloading.
     Use flat=True for channels/playlists to avoid resolving every video."""
+    host, clean_path = _sanitize_url_for_audit(url)
+    if not user_authorized:
+        try:
+            from backend.distribution.egress_audit import record_egress_event
+            record_egress_event(
+                component="ytdlp_service",
+                destination_host=host,
+                sanitized_path=clean_path,
+                method="GET",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="UNAUTHORIZED",
+                outcome_status="BLOCKED_WITH_REASON",
+                callsite="get_video_info",
+                extra_metadata={"reason": "UNAUTHORIZED_DOWNLOAD_OR_METADATA_EXTRACTION"},
+            )
+        except Exception:
+            pass
+        raise PermissionError("Outbound metadata extraction blocked: missing active user authorization.")
+
+    try:
+        from backend.distribution.egress_audit import record_egress_event
+        record_egress_event(
+            component="ytdlp_service",
+            destination_host=host,
+            sanitized_path=clean_path,
+            method="GET",
+            endpoint_class="USER_TOOL_METADATA",
+            trigger_authorization="USER_AUTHORIZED_RUN",
+            outcome_status="DISPATCHED",
+            callsite="get_video_info",
+        )
+    except Exception:
+        pass
+
     def _info():
         import yt_dlp
         opts = {**_yt_dlp_base_opts(), **_yt_dlp_js_opts(), "extract_flat": flat, "socket_timeout": 15,
@@ -1500,11 +1684,45 @@ async def get_video_info(url: str, flat: bool = False) -> dict:
         return {}
 
 
-async def list_channel_videos(url: str, max_videos: int = 5) -> list[dict]:
+async def list_channel_videos(url: str, max_videos: int = 5, user_authorized: bool = True) -> list[dict]:
     """
     Extract video list from a channel/playlist URL without downloading.
     Returns list of dicts with video metadata (url, title, duration, views, etc).
     """
+    host, clean_path = _sanitize_url_for_audit(url)
+    if not user_authorized:
+        try:
+            from backend.distribution.egress_audit import record_egress_event
+            record_egress_event(
+                component="ytdlp_service",
+                destination_host=host,
+                sanitized_path=clean_path,
+                method="GET",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="UNAUTHORIZED",
+                outcome_status="BLOCKED_WITH_REASON",
+                callsite="list_channel_videos",
+                extra_metadata={"reason": "UNAUTHORIZED_DOWNLOAD_OR_METADATA_EXTRACTION"},
+            )
+        except Exception:
+            pass
+        raise PermissionError("Outbound channel listing blocked: missing active user authorization.")
+
+    try:
+        from backend.distribution.egress_audit import record_egress_event
+        record_egress_event(
+            component="ytdlp_service",
+            destination_host=host,
+            sanitized_path=clean_path,
+            method="GET",
+            endpoint_class="USER_TOOL_CHANNEL_LIST",
+            trigger_authorization="USER_AUTHORIZED_RUN",
+            outcome_status="DISPATCHED",
+            callsite="list_channel_videos",
+        )
+    except Exception:
+        pass
+
     def _list():
         import yt_dlp
         opts = {
