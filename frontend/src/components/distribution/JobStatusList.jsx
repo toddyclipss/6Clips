@@ -29,6 +29,8 @@ export default function JobStatusList({ jobs, onCancelJob, onRetryJob, onViewRec
         return <Chip size="small" color="info" icon={<IconClock size={14} />} label="Scheduled" />
       case "DISPATCHING":
         return <Chip size="small" color="secondary" icon={<IconRotate2 size={14} />} label="Dispatching..." />
+      case "UNCERTAIN":
+        return <Chip size="small" color="warning" icon={<IconAlertTriangle size={14} />} label="Uncertain (Awaiting Receipt)" />
       case "FAILED_RETRYABLE":
         return <Chip size="small" color="warning" icon={<IconAlertTriangle size={14} />} label="Retryable Error" />
       case "BLOCKED":
@@ -128,7 +130,7 @@ export default function JobStatusList({ jobs, onCancelJob, onRetryJob, onViewRec
               </Button>
             )}
 
-            {(job.status === "FAILED_RETRYABLE" || job.status === "BLOCKED") && (
+            {(job.status === "FAILED_RETRYABLE" || job.status === "BLOCKED" || job.status === "UNCERTAIN") && (
               <Button
                 size="small"
                 variant="outlined"
