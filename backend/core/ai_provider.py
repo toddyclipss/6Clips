@@ -165,6 +165,14 @@ class AIClient:
     # ── Provider implementations ──────────────────────────────────────────────
 
     async def _anthropic_stream(self, messages, system, max_tokens, reasoning_level=None):
+        from backend.llm_trace.guard import check_outbound_authorization
+        check_outbound_authorization(
+            provider=self.provider.value,
+            model=self.model,
+            url="https://api.anthropic.com/v1/messages",
+            method="POST",
+            component="AIClient._anthropic_stream",
+        )
         import anthropic
         client = anthropic.AsyncAnthropic(api_key=self.api_key)
         extra_kwargs = {}
@@ -183,6 +191,14 @@ class AIClient:
                 yield text
 
     async def _openai_stream(self, messages, system, max_tokens, reasoning_level=None):
+        from backend.llm_trace.guard import check_outbound_authorization
+        check_outbound_authorization(
+            provider=self.provider.value,
+            model=self.model,
+            url="https://api.openai.com/v1/chat/completions",
+            method="POST",
+            component="AIClient._openai_stream",
+        )
         import openai
         client = openai.AsyncOpenAI(api_key=self.api_key, timeout=55.0)
 
@@ -241,6 +257,14 @@ class AIClient:
 
     async def _openrouter_stream(self, messages, system, max_tokens, reasoning_level=None):
         """OpenRouter is OpenAI-compatible — same client, different base URL."""
+        from backend.llm_trace.guard import check_outbound_authorization
+        check_outbound_authorization(
+            provider=self.provider.value,
+            model=self.model,
+            url="https://openrouter.ai/api/v1/chat/completions",
+            method="POST",
+            component="AIClient._openrouter_stream",
+        )
         import openai
         client = openai.AsyncOpenAI(
             api_key=self.api_key,
@@ -319,64 +343,109 @@ class AIClient:
 
         timeout = httpx.Timeout(connect=5.0, read=120.0, write=10.0, pool=5.0)
         has_signaled_thinking = False
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            url = f"{base_url.rstrip('/')}/api/chat"
-            async with client.stream("POST", url, json=payload) as resp:
-                if resp.status_code != 200:
-                    err_body = await resp.aread()
-                    logger.error(
-                        "Ollama stream error (%d): %s",
-                        resp.status_code,
-                        err_body.decode(errors="ignore")[:200],
-                    )
-                    yield f"Ollama error ({resp.status_code}): {err_body.decode(errors='ignore')[:120]}"
-                    return
+        url = f"{base_url.rstrip('/')}/api/chat"
 
-                async for line in resp.aiter_lines():
-                    if not line or not line.strip():
-                        continue
-                    try:
-                        chunk_data = json.loads(line)
-                    except Exception:
-                        continue
+        import hashlib
+        import asyncio
+        req_sig = hashlib.sha256(
+            f"{self.model}:{len(full_messages)}:{full_messages[-1].get('content', '') if full_messages else ''}".encode("utf-8")
+        ).hexdigest()[:16]
 
-                    msg = chunk_data.get("message", {})
-                    # If model is emitting reasoning tokens, signal thinking status once and suppress traces
-                    thinking_delta = msg.get("thinking")
-                    if thinking_delta and on_status and not has_signaled_thinking:
-                        has_signaled_thinking = True
+        from backend.llm_trace.guard import (
+            check_outbound_authorization,
+            debouncer,
+            UnauthorizedInferenceError,
+            DebouncedDuplicateError,
+        )
+
+        try:
+            event = check_outbound_authorization(
+                provider=self.provider.value,
+                model=self.model,
+                url=url,
+                method="POST",
+                component="AIClient._ollama_stream",
+                request_signature=req_sig,
+            )
+        except DebouncedDuplicateError as deb_err:
+            logger.warning("Ollama stream debounced: %s", deb_err)
+            return
+        except UnauthorizedInferenceError:
+            raise
+
+        sig_key = f"{event.user_id_hash}:{self.provider.value}:{self.model}:{req_sig}"
+
+        try:
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                async with client.stream("POST", url, json=payload) as resp:
+                    if resp.status_code != 200:
+                        err_body = await resp.aread()
+                        logger.error(
+                            "Ollama stream error (%d): %s",
+                            resp.status_code,
+                            err_body.decode(errors="ignore")[:200],
+                        )
+                        yield f"Ollama error ({resp.status_code}): {err_body.decode(errors='ignore')[:120]}"
+                        return
+
+                    async for line in resp.aiter_lines():
+                        if not line or not line.strip():
+                            continue
                         try:
-                            s_res = on_status("thinking")
-                            if inspect.isawaitable(s_res):
-                                await s_res
+                            chunk_data = json.loads(line)
                         except Exception:
-                            pass
+                            continue
 
-                    delta = msg.get("content", "")
-                    if delta:
-                        yield delta
+                        msg = chunk_data.get("message", {})
+                        # If model is emitting reasoning tokens, signal thinking status once and suppress traces
+                        thinking_delta = msg.get("thinking")
+                        if thinking_delta and on_status and not has_signaled_thinking:
+                            has_signaled_thinking = True
+                            try:
+                                s_res = on_status("thinking")
+                                if inspect.isawaitable(s_res):
+                                    await s_res
+                            except Exception:
+                                pass
 
-                    tool_calls = msg.get("tool_calls")
-                    if tool_calls and isinstance(tool_calls, list):
-                        for tc in tool_calls:
-                            fn = tc.get("function", {})
-                            fn_name = fn.get("name")
-                            fn_args = fn.get("arguments", {})
-                            if isinstance(fn_args, str):
-                                try:
-                                    fn_args = json.loads(fn_args)
-                                except Exception:
-                                    fn_args = {}
-                            if fn_name:
-                                action_dict = (
-                                    {"type": fn_name, **fn_args}
-                                    if isinstance(fn_args, dict)
-                                    else {"type": fn_name}
-                                )
-                                yield f"\n<action>{json.dumps(action_dict)}</action>\n"
+                        delta = msg.get("content", "")
+                        if delta:
+                            yield delta
+
+                        tool_calls = msg.get("tool_calls")
+                        if tool_calls and isinstance(tool_calls, list):
+                            for tc in tool_calls:
+                                fn = tc.get("function", {})
+                                fn_name = fn.get("name")
+                                fn_args = fn.get("arguments", {})
+                                if isinstance(fn_args, str):
+                                    try:
+                                        fn_args = json.loads(fn_args)
+                                    except Exception:
+                                        fn_args = {}
+                                if fn_name:
+                                    action_dict = (
+                                        {"type": fn_name, **fn_args}
+                                        if isinstance(fn_args, dict)
+                                        else {"type": fn_name}
+                                    )
+                                    yield f"\n<action>{json.dumps(action_dict)}</action>\n"
+        except asyncio.CancelledError:
+            logger.info("Ollama stream cancelled by caller; closing cleanly.")
+            raise
+        finally:
+            debouncer.release(sig_key)
 
     async def _gemini_stream(self, messages, system, max_tokens, reasoning_level=None):
         """Native Google Gemini chat streaming using official google.genai SDK."""
+        from backend.llm_trace.guard import check_outbound_authorization
+        check_outbound_authorization(
+            provider=self.provider.value,
+            model=self.model,
+            url="https://generativelanguage.googleapis.com/v1beta/models",
+            method="POST",
+            component="AIClient._gemini_stream",
+        )
         from google import genai
         from google.genai import types
 
@@ -495,7 +564,22 @@ class AIClient:
                         if inspect.isawaitable(stat_res):
                             await stat_res
 
-                    resp = await client.post(url, json=payload)
+                    from backend.llm_trace.guard import check_outbound_authorization, debouncer
+                    import hashlib
+                    req_sig = hashlib.sha256(f"{self.model}:{len(send_messages)}:{round_idx}".encode("utf-8")).hexdigest()[:16]
+                    event = check_outbound_authorization(
+                        provider=self.provider.value,
+                        model=self.model,
+                        url=url,
+                        method="POST",
+                        component="AIClient.chat_with_tools",
+                        request_signature=req_sig,
+                    )
+
+                    try:
+                        resp = await client.post(url, json=payload)
+                    finally:
+                        debouncer.release(f"{event.user_id_hash}:{self.provider.value}:{self.model}:{req_sig}")
                     if resp.status_code != 200:
                         err_text = resp.text[:200]
                         logger.error("Ollama tool round error (%d): %s", resp.status_code, err_text)
@@ -1400,7 +1484,8 @@ def get_ai_client(
         if target_prov:
             if target_prov == AIProvider.OLLAMA:
                 resolved_model = sanitize_model_for_provider(effective_model, target_prov)
-                base_url = getattr(user_settings, "ollama_base_url", None) if user_settings else None
+                raw_base_url = getattr(user_settings, "ollama_base_url", None) if user_settings else None
+                base_url = raw_base_url.strip() if isinstance(raw_base_url, str) and raw_base_url.strip() else None
                 return AIClient(provider=target_prov, api_key=base_url or "ollama_local", model=resolved_model)
 
             # Check independent user key for this specific provider first
@@ -1436,7 +1521,8 @@ def get_ai_client(
         if cfg_prov:
             if cfg_prov == AIProvider.OLLAMA:
                 resolved_model = sanitize_model_for_provider(effective_model, cfg_prov)
-                base_url = getattr(user_settings, "ollama_base_url", None) if user_settings else None
+                raw_base_url = getattr(user_settings, "ollama_base_url", None) if user_settings else None
+                base_url = raw_base_url.strip() if isinstance(raw_base_url, str) and raw_base_url.strip() else None
                 return AIClient(provider=cfg_prov, api_key=base_url or "ollama_local", model=resolved_model)
 
             # Cloud provider explicitly chosen in settings: must find valid key or fail
