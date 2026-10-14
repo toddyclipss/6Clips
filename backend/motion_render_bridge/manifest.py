@@ -77,6 +77,7 @@ class RenderClip:
     caption_text: Optional[str] = None
     caption_lines: List[str] = field(default_factory=list)
     manual_transcript_override: bool = False
+    audio_enhance: bool = False
     framing: Optional[FramingFilterConfig] = None
     z_index: int = 0
 
@@ -441,6 +442,7 @@ def build_render_manifest(
                 caption_text=caption_raw,
                 caption_lines=caption_lines,
                 manual_transcript_override=is_manual_override,
+                audio_enhance=bool(raw_c.get("audio_enhance", False) or (isinstance(raw_c.get("audio"), dict) and raw_c["audio"].get("enhance_voice"))),
                 framing=framing_cfg,
                 z_index=t_order,
             )

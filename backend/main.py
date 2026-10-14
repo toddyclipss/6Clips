@@ -336,8 +336,18 @@ def create_app() -> FastAPI:
     app.include_router(distribution_router)
     from backend.api.analytics import router as analytics_router
     app.include_router(analytics_router, prefix="/api")
-    from backend.integration.router import router as integration_router
+    from backend.integration.router import (
+        router as integration_router,
+        projects_router as integration_projects_router,
+    )
     app.include_router(integration_router, prefix="/api")
+    app.include_router(integration_projects_router, prefix="/api")
+    from backend.api.acceptance_routes import router as acceptance_router
+    app.include_router(acceptance_router, prefix="/api")
+
+    @app.get("/health")
+    async def root_health():
+        return {"status": "ok", "app": "viralmint"}
 
     # Load proprietary overlay (no-op if not installed) and register plugin routers.
     # See docs/OVERLAY.md for the contract.

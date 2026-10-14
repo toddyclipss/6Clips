@@ -658,6 +658,119 @@ async def dispatch_motion_capability(req: MotionDispatchCapabilityRequest):
     }
 
 
+class ProjectCapabilityExecutionRequest(BaseModel):
+    expected_revision: Optional[int] = None
+    asset_id: Optional[str] = None
+    input_path: Optional[str] = None
+    params: Dict[str, Any] = Field(default_factory=dict)
+    user_id: str = "local"
+    idempotency_key: Optional[str] = None
+
+
+projects_router = APIRouter(prefix="/projects", tags=["projects-capabilities"])
+
+
+@projects_router.post("/{project_id}/capabilities/{capability_id}")
+@router.post("/projects/{project_id}/capabilities/{capability_id}")
+async def execute_project_capability(
+    project_id: str,
+    capability_id: str,
+    req: Optional[ProjectCapabilityExecutionRequest] = None,
+):
+    """
+    Direct REST endpoint to execute a Motion capability against a persisted project.
+    Enforces tenant ownership (403), expected revision CAS (409), input validation (404/400),
+    and applies mutations via ProjectService.
+    """
+    req_body = req or ProjectCapabilityExecutionRequest()
+    dispatch_req = MotionDispatchCapabilityRequest(
+        capability_id=capability_id,
+        project_id=project_id,
+        expected_revision=req_body.expected_revision,
+        asset_id=req_body.asset_id,
+        input_path=req_body.input_path,
+        params=req_body.params,
+        user_id=req_body.user_id,
+        idempotency_key=req_body.idempotency_key,
+    )
+    return await dispatch_motion_capability(dispatch_req)
+
+
+class ProjectRecipeApplyRequest(BaseModel):
+    expected_revision: int
+    start_time: float = 0.0
+    user_id: str = "local"
+    idempotency_key: Optional[str] = None
+
+
+@projects_router.post("/{project_id}/recipes/{recipe_id}/apply")
+@router.post("/projects/{project_id}/recipes/{recipe_id}/apply")
+async def apply_catalog_recipe_to_project(
+    project_id: str,
+    recipe_id: str,
+    req: ProjectRecipeApplyRequest,
+):
+    """
+    Applies a vetted Catalog recipe to a persistent project timeline via ProjectService CAS.
+    Enforces user ownership, expected revision, and persists a durable ProjectRevision snapshot.
+    """
+    try:
+        return await ProjectService.apply_creative_recipe(
+            project_id=project_id,
+            recipe_id=recipe_id,
+            expected_revision=req.expected_revision,
+            start_time=req.start_time,
+            user_id=req.user_id,
+            idempotency_key=req.idempotency_key,
+        )
+    except ProjectNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Project '{project_id}' not found.")
+    except AssetAccessError as aae:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(aae))
+    except RevisionConflictError as rce:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Revision conflict: {rce}")
+    except IdempotencyConflictError as ice:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Idempotency conflict: {ice}")
+    except ProjectError as pe:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(pe))
+
+
+class ProjectRecipeUndoRequest(BaseModel):
+    expected_revision: int
+    user_id: str = "local"
+    idempotency_key: Optional[str] = None
+
+
+@projects_router.post("/{project_id}/recipes/{recipe_id}/undo")
+@router.post("/projects/{project_id}/recipes/{recipe_id}/undo")
+async def undo_catalog_recipe_from_project(
+    project_id: str,
+    recipe_id: str,
+    req: ProjectRecipeUndoRequest,
+):
+    """
+    Reversibly undoes an applied Catalog recipe from a persistent project timeline via ProjectService CAS.
+    """
+    try:
+        return await ProjectService.undo_creative_recipe(
+            project_id=project_id,
+            recipe_id=recipe_id,
+            expected_revision=req.expected_revision,
+            user_id=req.user_id,
+            idempotency_key=req.idempotency_key,
+        )
+    except ProjectNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Project '{project_id}' not found.")
+    except AssetAccessError as aae:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(aae))
+    except RevisionConflictError as rce:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Revision conflict: {rce}")
+    except IdempotencyConflictError as ice:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Idempotency conflict: {ice}")
+    except ProjectError as pe:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(pe))
+
+
 # =========================================================================
 # Integration Health & Domain Status
 # =========================================================================

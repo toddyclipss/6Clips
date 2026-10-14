@@ -51,6 +51,7 @@ class AddToProjectIntentRequest(BaseModel):
     keyframes: List[Dict[str, Any]] = Field(default_factory=list, description="Property keyframes over time (GT-09)")
     owning_user_id: Optional[str] = Field("user_default", description="Owning user ID for multi-tenant isolation")
     project_owned_source: Optional[str] = Field(None, description="Custom CodeMirror source code override for instance (GT-09)")
+    strict_quarantine: bool = Field(False, description="Enforce Wave 9 strict quarantine rejection for unready blocks")
 
 
 class ValidatedTimelineItem(BaseModel):
@@ -184,12 +185,22 @@ class CatalogProjectIntentAdapter:
         return cleaned
 
     @classmethod
+    def validate_block_for_project_insertion(cls, block_id: str) -> None:
+        """Wave 9 Negative Safety Gate: Enforces quarantine on all unready historical blocks."""
+        CatalogManifestService.validate_block_for_project_insertion(block_id)
+
+    @classmethod
     def create_add_to_project_intent(
         cls,
         block_id: str,
         request: AddToProjectIntentRequest,
+        strict_quarantine: Optional[bool] = None,
     ) -> AddToProjectIntentResult:
         CatalogManifestService.validate_block_id(block_id)
+        is_strict = strict_quarantine if strict_quarantine is not None else getattr(request, "strict_quarantine", False)
+        if is_strict:
+            cls.validate_block_for_project_insertion(block_id)
+
         item = CatalogManifestService.get_item(block_id)
         if not item:
             raise CatalogManifestError(f"Block '{block_id}' not found in catalog.")

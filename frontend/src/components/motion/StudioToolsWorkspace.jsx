@@ -230,6 +230,10 @@ export default function StudioToolsWorkspace({
       }
 
       const res = await http.post(endpoint, payload)
+      if (res.data?.status === "BLOCKED_PROVIDER" || res.data?.error_detail === "BLOCKED_PROVIDER") {
+        showSnackbar(`[BLOCKED_PROVIDER] ${res.data?.message || "External provider credentials required."}`, "warning")
+        return
+      }
       showSnackbar(`Tool queued successfully (Job: ${res.data?.job_id || "Active"})`, "success")
 
       // If user requested timeline insertion and we have timeline mutation handler
@@ -253,7 +257,12 @@ export default function StudioToolsWorkspace({
 
       if (onToolSuccess) onToolSuccess(res.data)
     } catch (err) {
-      showSnackbar(err.response?.data?.detail || err.message, "error")
+      const detail = err.response?.data?.detail || err.message
+      if (typeof detail === "string" && detail.includes("BLOCKED_PROVIDER")) {
+        showSnackbar(`[BLOCKED_PROVIDER] External provider credentials required: ${detail}`, "warning")
+      } else {
+        showSnackbar(detail, "error")
+      }
     } finally {
       setRunning(false)
     }

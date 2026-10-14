@@ -407,3 +407,111 @@ class ReleaseAcceptanceAuditor:
                 "PHASE10_11_RELEASE_READY": False,
             },
         }
+
+    @classmethod
+    def audit_wave9_truth(cls) -> Dict[str, Any]:
+        """
+        Wave 9 Strict Evidence and Truth Audit:
+        Maps each gate to its literal Master Proposal text, real-media requirement,
+        and honest status.
+        """
+        return {
+            "GT-05": {
+                "proposal_text": (
+                    "PROD: 1 gameplay autorizado e disponível, com áudio/facecam -> 3 Shorts "
+                    "(3 outputs independentes/MP4s distintos e úteis, duração conforme tolerância aprovada, "
+                    "9:16, áudio/legendas/enquadramento avaliados; Review e export)."
+                ),
+                "actual_implementation": "V1GameplayOrchestrator + V1ProductionContract + MediaProbeService + Input Manifest",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_production_manifest.py, test_wave9_production_orchestration.py",
+                "status": "NOT_TESTED",
+                "outstanding_needs": "Authentic licensed gameplay MP4 (>=180s) in data/acceptance/gt05_inputs/gameplay.mp4",
+            },
+            "GT-06": {
+                "proposal_text": "60 min source -> 8–10+min horizontal narrativo (16:9, contexto e audio/captions coerentes).",
+                "actual_implementation": "V3LongFormOrchestrator + V3ProductionContract + V3LongFormNarrativeValidator",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_production_orchestration.py, test_wave8_production_acceptance.py",
+                "status": "NOT_TESTED",
+                "outstanding_needs": "Authentic ~60-minute long-form recording (3000-4200s) in data/acceptance/gt06_inputs/longform_60m.mp4",
+            },
+            "GT-07": {
+                "proposal_text": "Multiple source inputs -> 10 clip batch (Dedupe, per-source lineage, clips editáveis e renderizados).",
+                "actual_implementation": "V2MultiSourceOrchestrator + V2ProductionContract + V2MultiOutputValidator",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_production_orchestration.py, test_wave8_production_acceptance.py",
+                "status": "NOT_TESTED",
+                "outstanding_needs": "5 distinct authorized creator source video assets in data/acceptance/gt07_inputs/",
+            },
+            "GT-17": {
+                "proposal_text": (
+                    "Review por output -> SEO -> consentimento por canal -> schedule. "
+                    "Cada aprovação fixa versão; metadados e privacidade editáveis, escopos válidos "
+                    "e fila persistente, sem pressupor publicação universal."
+                ),
+                "actual_implementation": "ApprovalReceipt (HMAC-SHA256) + SEOAdapter + ReleaseEligibilityVerifier + DistributionScheduler",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave4_distribution_*.py, test_wave9_release_gates_truth.py",
+                "status": "LOCAL_STAGES_VERIFIED",
+                "outstanding_needs": "Live user review in /motion and per-channel distribution consent.",
+            },
+            "GT-18": {
+                "proposal_text": "Publish confirmation (YT/TikTok/IG/X conforme conectado). Post remoto confirmado; Inbox != published.",
+                "actual_implementation": "ProductionLiveTransport safety gate + verify_post_receipt + PublishedReceiptV1",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_release_gates_truth.py, test_wave6_release_durability_and_truth.py",
+                "status": "BLOCKED_NO_AUTHORIZED_ACCOUNT",
+                "outstanding_needs": "Owner authorization and live OAuth accounts for YouTube/TikTok/Instagram/X.",
+            },
+            "GT-19": {
+                "proposal_text": "Messaging/analytics. Notificação evento real; métricas reais pós-publish.",
+                "actual_implementation": "AnalyticsEngine + AnalyticsRepository + MetricObservationV1 (missing != zero) + deleted post tracking",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_release_gates_truth.py, test_wave5_analytics_durability.py",
+                "status": "BLOCKED_NO_REMOTE_POST",
+                "outstanding_needs": "Live verified published posts to poll authentic analytics and event notifications.",
+            },
+            "GT-24": {
+                "proposal_text": (
+                    "Percurso PROD contínuo, sem exigir mensagem 'continue'. Pedido chega a READY_FOR_REVIEW "
+                    "integral, PARTIAL devidamente classificado, WAITING_FOR_INPUT legítimo ou BLOCKED especificado; "
+                    "nenhuma etapa intermediária é sucesso integral."
+                ),
+                "actual_implementation": "Orchestrator state transitions enforcing READY_FOR_REVIEW, PARTIAL, WAITING_FOR_INPUT, BLOCKED",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_production_orchestration.py",
+                "status": "IMPLEMENTED_ORCHESTRATOR_READY",
+                "outstanding_needs": "End-to-end integration run mounted by Agent 1 with Agent 2 renderer.",
+            },
+            "GT-26": {
+                "proposal_text": (
+                    "Falha em terceiro render, revisão concorrente, pausa/cancelamento e budget cap. "
+                    "Preserva dois válidos, marca terceiro faltante, não duplica efeitos, respeita CAS e limite de orçamento."
+                ),
+                "actual_implementation": "V1/V2 orchestrator partial output preservation, budget limit caps, and cancellation handlers",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_production_orchestration.py",
+                "status": "VERIFIED",
+                "outstanding_needs": "None for local contract; verified in automated tests.",
+            },
+            "GT-28": {
+                "proposal_text": (
+                    "Publicação com confirmação remota perdida e política específica da plataforma. "
+                    "Consulta e deduplica o efeito remoto, obtém consentimento/privacidade obrigatórios "
+                    "e não atribui PUBLISHED sem recibo."
+                ),
+                "actual_implementation": "DistributionScheduler._dispatch_single_job GT-28 check: queries verify_post_receipt before re-dispatch",
+                "real_human_inputs_present": False,
+                "test_evidence": "test_wave9_release_gates_truth.py, test_wave8_release_durability_truth.py",
+                "status": "VERIFIED_IDEMPOTENT_RECONCILIATION",
+                "outstanding_needs": "Live platform error injection testing with real accounts.",
+            },
+            "declaration": {
+                "REAL_V1_GT05_ACCEPTED": "NOT_TESTED",
+                "REAL_V2_GT07_ACCEPTED": "NOT_TESTED",
+                "REAL_V3_GT06_ACCEPTED": "NOT_TESTED",
+                "LIVE_PUBLISHING_VERIFIED": "NO",
+                "LIVE_ANALYTICS_VERIFIED": "NO",
+            },
+        }

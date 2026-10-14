@@ -37,6 +37,11 @@ class AnalyticsProviderPort(abc.ABC):
         """Provider identifier."""
         pass
 
+    @property
+    def is_real_production_adapter(self) -> bool:
+        """Indicates whether adapter connects to live production platform APIs."""
+        return False
+
     @abc.abstractmethod
     async def get_connection_status(self, account_ref: str) -> ProviderConnectionStatus:
         """Check whether provider is authenticated and operational."""
