@@ -109,9 +109,47 @@ async def get_voices(provider: str):
     return {"provider": provider, "voices": voices}
 
 
+import copy
+import os
+import time
+from typing import Optional, Dict, Any
+
+_MODEL_REGISTRY_CACHE: Optional[Dict[str, Any]] = None
+_MODEL_REGISTRY_CACHE_TIME: float = 0.0
+
+_OLLAMA_STATUS_CACHE: Optional[Dict[str, Any]] = None
+_OLLAMA_STATUS_CACHE_TIME: float = 0.0
+
+
+MODEL_REGISTRY_CACHE_TTL_DEFAULT_SEC: float = 60.0
+
+
+def _get_cache_ttl_sec() -> float:
+    try:
+        return float(os.getenv("SIXCLIPS_MODEL_REGISTRY_CACHE_TTL_SEC", str(MODEL_REGISTRY_CACHE_TTL_DEFAULT_SEC)))
+    except (ValueError, TypeError):
+        return MODEL_REGISTRY_CACHE_TTL_DEFAULT_SEC
+
+
+def clear_model_registry_cache() -> None:
+    """Clear in-memory cache for model registry and Ollama status (for unit tests / forced invalidation)."""
+    global _MODEL_REGISTRY_CACHE, _MODEL_REGISTRY_CACHE_TIME, _OLLAMA_STATUS_CACHE, _OLLAMA_STATUS_CACHE_TIME
+    _MODEL_REGISTRY_CACHE = None
+    _MODEL_REGISTRY_CACHE_TIME = 0.0
+    _OLLAMA_STATUS_CACHE = None
+    _OLLAMA_STATUS_CACHE_TIME = 0.0
+
+
 @router.get("/config/ollama/status")
-async def get_ollama_status():
-    """Discover local Ollama service health, loaded models, and installed tags."""
+async def get_ollama_status(refresh: bool = False):
+    """Discover local Ollama service health, loaded models, and installed tags with TTL caching."""
+    global _OLLAMA_STATUS_CACHE, _OLLAMA_STATUS_CACHE_TIME
+    now = time.monotonic()
+    ttl = _get_cache_ttl_sec()
+
+    if not refresh and _OLLAMA_STATUS_CACHE is not None and (now - _OLLAMA_STATUS_CACHE_TIME < ttl):
+        return copy.deepcopy(_OLLAMA_STATUS_CACHE)
+
     import httpx
     base_url = getattr(app_settings, "OLLAMA_BASE_URL", "http://127.0.0.1:11434")
     try:
@@ -122,15 +160,18 @@ async def get_ollama_status():
             ps_data = ps_resp.json() if ps_resp.status_code == 200 else {}
             models = [m["name"] for m in tags_data.get("models", []) if "name" in m]
             running = ps_data.get("models", [])
-            return {
+            result = {
                 "ok": True,
                 "status": "online",
                 "base_url": base_url,
                 "models": models,
                 "running": running,
             }
+            _OLLAMA_STATUS_CACHE = copy.deepcopy(result)
+            _OLLAMA_STATUS_CACHE_TIME = now
+            return result
     except Exception as e:
-        return {
+        err_res = {
             "ok": False,
             "status": "offline",
             "base_url": base_url,
@@ -138,13 +179,23 @@ async def get_ollama_status():
             "models": [],
             "running": [],
         }
+        _OLLAMA_STATUS_CACHE = copy.deepcopy(err_res)
+        _OLLAMA_STATUS_CACHE_TIME = now
+        return err_res
 
 
 @router.get("/config/{key}")
-async def get_config(key: str):
-    """Return config for a given key."""
+async def get_config(key: str, refresh: bool = False):
+    """Return config for a given key with TTL caching for model_registry."""
+    global _MODEL_REGISTRY_CACHE, _MODEL_REGISTRY_CACHE_TIME
+
     if key == "model_registry":
-        import copy
+        now = time.monotonic()
+        ttl = _get_cache_ttl_sec()
+
+        if not refresh and _MODEL_REGISTRY_CACHE is not None and (now - _MODEL_REGISTRY_CACHE_TIME < ttl):
+            return {"key": key, "value": copy.deepcopy(_MODEL_REGISTRY_CACHE)}
+
         registry = copy.deepcopy(_DEFAULTS["model_registry"])
         try:
             import httpx
@@ -179,6 +230,9 @@ async def get_config(key: str):
                         }
         except Exception as e:
             logger.debug("Ollama model discovery skipped: %s", e)
+
+        _MODEL_REGISTRY_CACHE = copy.deepcopy(registry)
+        _MODEL_REGISTRY_CACHE_TIME = now
         return {"key": key, "value": registry}
 
     value = _DEFAULTS.get(key)
