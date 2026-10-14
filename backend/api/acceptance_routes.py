@@ -208,9 +208,13 @@ async def get_motion_bootstrap_state(project_id: Optional[str] = None):
                 project_status = "READY"
                 msg = f"Project '{project_id}' ready at revision {rev}"
     except Exception as pe:
-        logger.error("Project lookup error for %s: %s", project_id, pe)
-        project_status = "FAILED"
-        msg = str(pe)
+        if "not found" in str(pe).lower():
+            project_status = "NO_PROJECT"
+            msg = f"Project '{project_id}' not found"
+        else:
+            logger.error("Project lookup error for %s: %s", project_id, pe)
+            project_status = "FAILED"
+            msg = str(pe)
 
     return MotionBootstrapStateResponse(
         project_status=project_status,
