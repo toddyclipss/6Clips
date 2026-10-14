@@ -24,9 +24,14 @@ import {
  * Supports temporary non-destructive Ghost Preview for HyperFrames Catalog blocks.
  */
 const StudioPreviewStage = forwardRef(function StudioPreviewStage({
+  project = null,
   previewUrl,
   aspectRatio = "9:16",
   isLoading = false,
+  error = null,
+  onRetry = null,
+  stageState = null,
+  loadingMessage = "Loading composition…",
   currentTime = 0,
   duration = 15,
   isPlaying = false,
@@ -44,6 +49,34 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   onProceedToRefine = null,
   onDurationChange = null,
 }, ref) {
+  // Determine Stage Finite State Machine (FSM) state
+  // Supported states: NO_PROJECT, LOADING_EXISTING_PROJECT, EMPTY_PROJECT, READY, FAILED, CANCELLED
+  const resolvedState = (() => {
+    if (stageState) return stageState
+    if (error) return "FAILED"
+    if (workspaceMode === "review" && (renderedVideo?.video_url || renderedVideo?.preview_ref)) {
+      return "READY"
+    }
+    if (previewUrl) {
+      return "READY"
+    }
+    if (isLoading) {
+      if (project) {
+        return "LOADING_EXISTING_PROJECT"
+      }
+      return "NO_PROJECT"
+    }
+    if (project) {
+      const tracks = project.document?.timeline?.tracks || []
+      const hasClips = tracks.some((t) => t.clips && t.clips.length > 0) || (project.document?.clips && project.document?.clips?.length > 0)
+      if (!hasClips) {
+        return "EMPTY_PROJECT"
+      }
+      return "READY"
+    }
+    return "NO_PROJECT"
+  })()
+
   const iframeRef = useRef(null)
   const videoRef = useRef(null)
   const [muted, setMuted] = useState(false)
@@ -256,7 +289,8 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
             justifyContent: "center",
           }}
         >
-          {workspaceMode === "review" && (renderedVideo?.video_url || renderedVideo?.preview_ref) ? (
+          {/* Stage FSM Rendering */}
+          {resolvedState === "READY" && workspaceMode === "review" && (renderedVideo?.video_url || renderedVideo?.preview_ref) ? (
             <>
               <video
                 id="studio-rendered-video"
@@ -337,9 +371,10 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                 )}
               </Box>
             </>
-          ) : previewUrl ? (
+          ) : resolvedState === "READY" && previewUrl ? (
             <iframe
               id="studio-preview-iframe"
+              data-testid="studio-preview-iframe"
               ref={iframeRef}
               src={previewUrl}
               title="Composition Stage"
@@ -353,13 +388,22 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                 backgroundColor: "#0b0f19",
               }}
             />
-          ) : isLoading ? (
-            <Stack alignItems="center" spacing={1} sx={{ color: "#94a3b8" }}>
-              <CircularProgress size={24} color="inherit" />
-              <Typography variant="caption">Loading composition…</Typography>
+          ) : resolvedState === "LOADING_EXISTING_PROJECT" ? (
+            <Stack
+              data-testid="studio-stage-loading"
+              alignItems="center"
+              justifyContent="center"
+              spacing={1.5}
+              sx={{ color: "#94a3b8", height: "100%", width: "100%", p: 2, textAlign: "center" }}
+            >
+              <CircularProgress size={28} sx={{ color: "primary.main" }} />
+              <Typography variant="caption" sx={{ color: "#cbd5e1", fontSize: "0.75rem", fontWeight: 500 }}>
+                {loadingMessage || "Loading composition…"}
+              </Typography>
             </Stack>
-          ) : (
+          ) : resolvedState === "EMPTY_PROJECT" ? (
             <Box
+              data-testid="studio-stage-empty-project"
               sx={{
                 width: "100%",
                 height: "100%",
@@ -369,36 +413,114 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                 justifyContent: "center",
                 color: "#475569",
                 userSelect: "none",
+                p: 3,
+                textAlign: "center",
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#94a3b8",
+                  fontWeight: 600,
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  mb: 0.5,
+                }}
+              >
+                Empty Timeline
+              </Typography>
+              <Typography variant="caption" sx={{ color: "#64748b", fontSize: "0.72rem", maxWidth: 220 }}>
+                Drop media clips or catalog blocks to start composing
+              </Typography>
+            </Box>
+          ) : resolvedState === "FAILED" ? (
+            <Box
+              data-testid="studio-stage-failed"
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 3,
+                textAlign: "center",
+                gap: 1.5,
+              }}
+            >
+              <Typography variant="caption" sx={{ color: "#f87171", fontSize: "0.75rem", fontWeight: 600 }}>
+                {typeof error === "string" ? error : (error?.message || "Failed to load composition")}
+              </Typography>
+              {onRetry && (
+                <Button
+                  data-testid="studio-player-retry-btn"
+                  variant="outlined"
+                  size="small"
+                  onClick={onRetry}
+                  sx={{
+                    fontSize: "0.72rem",
+                    color: "#f87171",
+                    borderColor: "rgba(248,113,113,0.5)",
+                    textTransform: "none",
+                    "&:hover": { borderColor: "#f87171" },
+                  }}
+                >
+                  Retry
+                </Button>
+              )}
+            </Box>
+          ) : resolvedState === "CANCELLED" ? (
+            <Box
+              data-testid="studio-stage-cancelled"
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 3,
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="caption" sx={{ color: "#94a3b8", fontSize: "0.75rem" }}>
+                Operation Cancelled
+              </Typography>
+            </Box>
+          ) : (
+            // Default: NO_PROJECT (Zero loading spinner, zero circular arcs)
+            <Box
+              data-testid="studio-stage-no-project"
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#475569",
+                userSelect: "none",
+                p: 3,
+                textAlign: "center",
               }}
             >
               <Typography
                 variant="caption"
                 sx={{
                   color: "#64748b",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   fontSize: "0.75rem",
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
+                  mb: 0.5,
                 }}
               >
                 No Project Loaded
               </Typography>
-            </Box>
-          )}
-
-          {isLoading && (
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                bgcolor: "rgba(15,23,42,0.4)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 2,
-              }}
-            >
-              <CircularProgress size={28} sx={{ color: "#ffffff" }} />
+              <Typography variant="caption" sx={{ color: "#475569", fontSize: "0.7rem", maxWidth: 220 }}>
+                Create or select a project in Timeline or Library
+              </Typography>
             </Box>
           )}
 
@@ -470,23 +592,24 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
       >
         {/* Transport Buttons */}
         <Stack direction="row" alignItems="center" spacing={0.5}>
-          <IconButton size="small" onClick={() => handleSeek(0)}>
+          <IconButton size="small" onClick={() => handleSeek(0)} disabled={resolvedState !== "READY"}>
             <IconPlayerSkipBack size={16} />
           </IconButton>
           <IconButton
             size="small"
             onClick={handleTogglePlay}
+            disabled={resolvedState !== "READY"}
             sx={{
-              bgcolor: "primary.main",
-              color: "#ffffff",
+              bgcolor: resolvedState === "READY" ? "primary.main" : "action.disabledBackground",
+              color: resolvedState === "READY" ? "#ffffff" : "action.disabled",
               width: 30,
               height: 30,
-              "&:hover": { bgcolor: "primary.dark" },
+              "&:hover": { bgcolor: resolvedState === "READY" ? "primary.dark" : "action.disabledBackground" },
             }}
           >
             {isPlaying ? <IconPlayerPause size={16} stroke={2.5} /> : <IconPlayerPlay size={16} stroke={2.5} />}
           </IconButton>
-          <IconButton size="small" onClick={() => handleSeek(duration)}>
+          <IconButton size="small" onClick={() => handleSeek(duration)} disabled={resolvedState !== "READY"}>
             <IconPlayerSkipForward size={16} />
           </IconButton>
           <Tooltip title="Refresh stage" arrow>
@@ -501,6 +624,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
           <Slider
             size="small"
             data-testid="studio-transport-scrubber"
+            disabled={resolvedState !== "READY"}
             min={0}
             max={duration || 15}
             step={0.05}
