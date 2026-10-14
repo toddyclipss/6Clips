@@ -338,7 +338,7 @@ class ReleaseAcceptanceAuditor:
     def audit_all(cls) -> Dict[str, Any]:
         gate_data = cls.audit_all_gates()
         gates_list = []
-        for gid in ["GT-05", "GT-06", "GT-07", "GT-17", "GT-18", "GT-19", "GT-23", "GT-28"]:
+        for gid in ["GT-05", "GT-06", "GT-07", "GT-17", "GT-18", "GT-19", "GT-23", "GT-24", "GT-26", "GT-28"]:
             if gid in gate_data:
                 gates_list.append({"gate_id": gid, **gate_data[gid]})
         return {
@@ -392,6 +392,18 @@ class ReleaseAcceptanceAuditor:
                 "name": "Algorithmic Creative Feedback and Confidence Guards",
                 "status": "LOCAL_PIPELINE_READY",
                 "reason": "Sample-size confidence scaling (0.35 on small vs 0.85 on solid) and opt-in required.",
+                "live_verified": False,
+            },
+            "GT-24": {
+                "name": "Uninterrupted PROD Execution to Terminal State",
+                "status": "LOCAL_PIPELINE_READY",
+                "reason": "Single continuous execution reaches READY_FOR_REVIEW, PARTIAL, WAITING_FOR_INPUT, or BLOCKED terminal state without requiring 'continue'.",
+                "live_verified": False,
+            },
+            "GT-26": {
+                "name": "Partial Batch Preservation & Resilience",
+                "status": "LOCAL_PIPELINE_READY",
+                "reason": "Third output failure preserves first two valid outputs, retries only incomplete output, respects CAS.",
                 "live_verified": False,
             },
             "GT-28": {

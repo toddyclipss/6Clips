@@ -158,11 +158,35 @@ class ProductionMediaPipelineRunner(MediaPipelineRunnerProtocol):
             return False
 
     @classmethod
-    def verify_existing_output(cls, file_path: Path) -> Optional[RenderedOutputResult]:
-        """Check if output already exists, is non-empty, and probe is valid (idempotent resume)."""
+    def verify_existing_output(
+        cls,
+        file_path: Path,
+        expected_source_hash: Optional[str] = None,
+        expected_project_revision: Optional[int] = None,
+    ) -> Optional[RenderedOutputResult]:
+        """
+        Check if output already exists, is non-empty, and probe is valid (idempotent resume).
+        If metadata sidecar exists (.meta.json), verifies that the source hash and project revision
+        have not changed, invalidating reuse if source media or revision was altered.
+        """
         if not file_path.is_file() or file_path.stat().st_size == 0:
             return None
         try:
+            meta_path = file_path.with_suffix(".meta.json")
+            if meta_path.is_file():
+                try:
+                    import json
+                    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+                    if expected_source_hash and meta.get("source_hash") and meta.get("source_hash") != expected_source_hash:
+                        logger.info("Invalidating existing render %s: source hash changed", file_path.name)
+                        return None
+                    if expected_project_revision is not None and meta.get("project_revision") is not None:
+                        if meta.get("project_revision") != expected_project_revision:
+                            logger.info("Invalidating existing render %s: revision changed (%s != %s)", file_path.name, meta.get("project_revision"), expected_project_revision)
+                            return None
+                except Exception as meta_err:
+                    logger.warning("Could not read sidecar metadata for %s: %s", file_path, meta_err)
+
             probe = MediaProbeService.probe_file(file_path)
             if probe.magic_bytes_valid and probe.has_audio_stream and not probe.synthetic_filler_detected:
                 decoded_ok = cls.verify_decoded_frames(file_path)
@@ -276,8 +300,13 @@ class ProductionMediaPipelineRunner(MediaPipelineRunnerProtocol):
                 )
                 continue
 
+            source_hash = contract.source_gameplay.probe.sha256_hash if (contract.source_gameplay and contract.source_gameplay.probe) else None
             # Idempotency check: if output already exists and verifies, reuse it
-            existing = self.verify_existing_output(out_file)
+            existing = self.verify_existing_output(
+                out_file,
+                expected_source_hash=source_hash,
+                expected_project_revision=spec.project_revision,
+            )
             if existing:
                 logger.info("Output %s already exists and passed verification; skipping transcode (idempotent resume).", spec.output_id)
                 existing.project_id = spec.project_id
@@ -313,6 +342,24 @@ class ProductionMediaPipelineRunner(MediaPipelineRunnerProtocol):
 
             probe = MediaProbeService.probe_file(out_file)
             decoded_ok = self.verify_decoded_frames(out_file)
+
+            # Write sidecar metadata for revision and source tracking
+            try:
+                import json
+                meta_file = out_file.with_suffix(".meta.json")
+                meta_payload = {
+                    "output_id": spec.output_id,
+                    "project_id": spec.project_id,
+                    "project_revision": spec.project_revision,
+                    "source_id": spec.primary_source_id,
+                    "source_hash": source_hash,
+                    "duration_seconds": probe.duration_seconds,
+                    "aspect_ratio": probe.aspect_ratio,
+                    "sha256_hash": probe.sha256_hash,
+                }
+                meta_file.write_text(json.dumps(meta_payload, indent=2), encoding="utf-8")
+            except Exception as meta_w_err:
+                logger.warning("Could not write sidecar metadata for %s: %s", out_file, meta_w_err)
 
             results.append(
                 RenderedOutputResult(
