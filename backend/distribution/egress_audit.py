@@ -47,6 +47,19 @@ OFFICIAL_OUTBOUND_ALLOWLIST: Dict[str, List[str]] = {
     "ollama": ["127.0.0.1", "localhost"],
 }
 
+# External package registries strictly blocked by default during idle and runtime
+BLOCKED_PACKAGE_REGISTRIES: List[str] = [
+    "pypi.org",
+    "files.pythonhosted.org",
+    "pypi.python.org",
+]
+
+
+def is_package_registry_blocked(host: str) -> bool:
+    """Check if destination host is an external package registry strictly blocked by default."""
+    norm_host = host.lower().strip()
+    return any(norm_host == reg or norm_host.endswith("." + reg) for reg in BLOCKED_PACKAGE_REGISTRIES)
+
 
 def is_audit_enabled() -> bool:
     """Return True strictly if opt-in audit flag is active."""
@@ -93,6 +106,8 @@ def check_outbound_allowlist(platform: str, host: str) -> bool:
     """Validate whether an outbound destination host is in the official platform allowlist."""
     norm_plat = platform.lower().strip()
     norm_host = host.lower().strip()
+    if is_package_registry_blocked(norm_host):
+        return False
     allowed = OFFICIAL_OUTBOUND_ALLOWLIST.get(norm_plat, [])
     return norm_host in allowed
 
@@ -144,9 +159,21 @@ def record_egress_event(
 
     if extra_metadata:
         # Only copy whitelisted safe keys
-        safe_keys = {"job_id", "platform", "provider", "account_id", "error_code", "is_retryable"}
+        safe_keys = {
+            "job_id",
+            "platform",
+            "provider",
+            "account_id",
+            "error_code",
+            "is_retryable",
+            "reason",
+            "blocked_reason",
+            "package",
+        }
         filtered = {k: v for k, v in extra_metadata.items() if k in safe_keys}
         event["extra"] = filtered
+        if "reason" in filtered:
+            event["reason"] = filtered["reason"]
 
     with _lock:
         _in_memory_records.append(event)
