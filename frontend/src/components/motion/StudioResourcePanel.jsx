@@ -928,6 +928,17 @@ export default function StudioResourcePanel({
                           <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.25, flexWrap: "wrap", gap: 0.5 }}>
                             <Chip
                               size="small"
+                              label={["creator-hud", "glitch-transition"].includes(bName) ? "6Clips" : "Donor"}
+                              sx={{
+                                height: 16,
+                                fontSize: "0.58rem",
+                                fontWeight: 800,
+                                bgcolor: ["creator-hud", "glitch-transition"].includes(bName) ? "#f3e8ff" : "#e2e8f0",
+                                color: ["creator-hud", "glitch-transition"].includes(bName) ? "#7e22ce" : "#475569",
+                              }}
+                            />
+                            <Chip
+                              size="small"
                               label={item.category || "Motion"}
                               sx={{ height: 16, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#f1f5f9" }}
                             />
