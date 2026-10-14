@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   Box,
   Stack,
@@ -19,6 +19,8 @@ import {
   Switch,
   FormControlLabel,
   Tooltip,
+  Slider,
+  Alert,
 } from "@mui/material"
 import {
   IconScissors,
@@ -38,6 +40,10 @@ import {
   IconWaveSine,
   IconLayersIntersect,
   IconPhoto,
+  IconZoomIn,
+  IconGif,
+  IconCheck,
+  IconDownload,
 } from "@tabler/icons-react"
 import http from "../../api/http"
 import useAppStore from "../../store/appStore"
@@ -49,7 +55,7 @@ const TOOL_CATEGORIES = [
   { id: "captions", label: "Subtitles & AI" },
 ]
 
-const ALL_TOOLS = [
+export const ALL_TOOLS = [
   // Video category
   { id: "trim", label: "Trim", category: "video", icon: <IconScissors size={14} />, desc: "Bounded subclip extraction with in/out timestamps" },
   { id: "crop", label: "Crop", category: "video", icon: <IconCrop size={14} />, desc: "Spatial box coordinate cropping" },
@@ -58,6 +64,8 @@ const ALL_TOOLS = [
   { id: "compress", label: "Compress", category: "video", icon: <IconArrowsMinimize size={14} />, desc: "CRF rate-controlled size reduction" },
   { id: "transform", label: "Transform", category: "video", icon: <IconAdjustments size={14} />, desc: "Flip horizontal/vertical and 90° rotation" },
   { id: "watermark", label: "Watermark", category: "video", icon: <IconPhoto size={14} />, desc: "Overlay image watermark onto video" },
+  { id: "auto-zoom", label: "Auto-Zoom", category: "video", icon: <IconZoomIn size={14} />, desc: "Dynamic punch-in and scale keyframing" },
+  { id: "gif", label: "Video → GIF", category: "video", icon: <IconGif size={14} />, desc: "Two-pass palette animated GIF generation" },
   { id: "resize", label: "Resize", category: "video", icon: <IconCrop size={14} />, desc: "Resolution scaling" },
   { id: "merge-clips", label: "Merge", category: "video", icon: <IconLayersIntersect size={14} />, desc: "Sequential concatenation of media clips" },
 
@@ -67,6 +75,7 @@ const ALL_TOOLS = [
   { id: "enhance-audio", label: "Enhance Voice", category: "audio", icon: <IconVolume size={14} />, desc: "Dynamic compression and highpass clarity filter" },
   { id: "silence-remover", label: "Silence Remover", category: "audio", icon: <IconWaveSine size={14} />, desc: "Trim dead silence automatically" },
   { id: "split-silence", label: "Split Silence", category: "audio", icon: <IconScissors size={14} />, desc: "Segment media on silence boundaries" },
+  { id: "music-visualizer", label: "Music Visualizer", category: "audio", icon: <IconWaveSine size={14} />, desc: "Dynamic audio waveform and frequency spectrum" },
 
   // Voice category
   { id: "voiceover", label: "Voiceover (TTS)", category: "voice", icon: <IconMicrophone size={14} />, desc: "Neural text-to-speech synthesis via local Edge TTS" },
@@ -74,6 +83,7 @@ const ALL_TOOLS = [
 
   // Captions & AI category
   { id: "captions", label: "Captions", category: "captions", icon: <IconSubtitles size={14} />, desc: "Burn animated subtitles with styling" },
+  { id: "subtitles", label: "Export Subtitles", category: "captions", icon: <IconSubtitles size={14} />, desc: "Export SRT / VTT subtitle files" },
   { id: "transcribe", label: "Transcribe", category: "captions", icon: <IconSubtitles size={14} />, desc: "Whisper ASR word-level transcription" },
   { id: "translate", label: "Translate", category: "captions", icon: <IconSparkles size={14} />, desc: "Multi-language subtitle translation" },
   { id: "auto-chapters", label: "Auto Chapters", category: "captions", icon: <IconSparkles size={14} />, desc: "AI video segmentation and chapter timestamps" },
@@ -104,15 +114,48 @@ export default function StudioToolsWorkspace({
   const [aspect, setAspect] = useState("9:16")
   const [transformOp, setTransformOp] = useState("flip_h")
   const [compressLevel, setCompressLevel] = useState("high")
+  const [zoomFactor, setZoomFactor] = useState(1.25)
+  const [wordsPerGroup, setWordsPerGroup] = useState(3)
+  const [gifFps, setGifFps] = useState(15)
+  const [gifWidth, setGifWidth] = useState(480)
+  const [vizStyle, setVizStyle] = useState("bars")
+  const [subFormat, setSubFormat] = useState("srt")
+  const [noiseThresholdDb, setNoiseThresholdDb] = useState(-30)
+  const [minSilenceDuration, setMinSilenceDuration] = useState(0.5)
+  const [targetChapters, setTargetChapters] = useState(5)
   const [ttsText, setTtsText] = useState("")
   const [ttsVoice, setTtsVoice] = useState("en-US-ChristopherNeural")
   const [captionStyle, setCaptionStyle] = useState("viral")
   const [targetLang, setTargetLang] = useState("Spanish")
-  const [resizeW, setResizeW] = useState(720)
-  const [resizeH, setResizeH] = useState(1280)
+
+  // Result display state
+  const [toolResult, setToolResult] = useState(null)
+  const [copied, setCopied] = useState(false)
+
+  // In-flight abort controller
+  const abortRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      if (abortRef.current) {
+        abortRef.current.abort()
+      }
+    }
+  }, [])
 
   const toolsInCategory = ALL_TOOLS.filter((t) => t.category === activeCategory)
   const currentToolDef = ALL_TOOLS.find((t) => t.id === activeTool) || ALL_TOOLS[0]
+
+  const handleCopyResult = (text) => {
+    if (!text) return
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      showSnackbar("Copied to clipboard", "success")
+      setTimeout(() => setCopied(false), 2000)
+    }).catch(() => {
+      showSnackbar("Failed to copy", "warning")
+    })
+  }
 
   const handleExecute = async () => {
     const targetMedia = selectedElement || activeAsset
@@ -122,8 +165,19 @@ export default function StudioToolsWorkspace({
     }
 
     setRunning(true)
+    setToolResult(null)
+    if (abortRef.current) abortRef.current.abort()
+    abortRef.current = new AbortController()
+
+    const userIntentId = `tool_intent_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`
+    const reqHeaders = {
+      "X-Component-Origin": "StudioToolsWorkspace",
+      "X-User-Intent-ID": userIntentId,
+      "X-Effect-Name": `run_${activeTool}`,
+    }
+
     try {
-      // Direct contextual mutation on selected timeline clip if present
+      // 1. Direct contextual CAS mutation on selected timeline clip if present
       if (selectedElement && onApplyOperation) {
         if (activeTool === "trim") {
           await onApplyOperation("update_clip", {
@@ -186,8 +240,25 @@ export default function StudioToolsWorkspace({
           setRunning(false)
           return
         }
+        if (activeTool === "auto-zoom") {
+          const curTransform = selectedElement.transform || {}
+          await onApplyOperation("update_clip", {
+            clip_id: selectedElement.id,
+            patch: {
+              transform: {
+                ...curTransform,
+                scale: zoomFactor,
+                auto_zoom_factor: zoomFactor,
+              },
+            },
+          })
+          showSnackbar(`Auto-zoom ${zoomFactor}x applied contextually to timeline clip`, "success")
+          setRunning(false)
+          return
+        }
       }
 
+      // 2. Canonical Backend Tool Execution
       let endpoint = ""
       let payload = { video_id: targetMedia?.asset_id || targetMedia?.id }
 
@@ -212,11 +283,24 @@ export default function StudioToolsWorkspace({
         endpoint = "/api/tools/extract-audio/from-asset"
       } else if (activeTool === "enhance-audio") {
         endpoint = "/api/tools/enhance-audio/from-asset"
-      } else if (activeTool === "silence-remover") {
-        endpoint = "/api/tools/silence-remover/from-asset"
+      } else if (activeTool === "silence-remover" || activeTool === "remove-silence") {
+        endpoint = "/api/tools/remove-silence/from-asset"
+        payload = { ...payload, noise_threshold_db: noiseThresholdDb, min_silence_duration: minSilenceDuration }
+      } else if (activeTool === "auto-zoom") {
+        endpoint = "/api/tools/auto-zoom/from-asset"
+        payload = { ...payload, zoom_factor: zoomFactor, words_per_group: wordsPerGroup }
+      } else if (activeTool === "gif") {
+        endpoint = "/api/tools/gif/from-asset"
+        payload = { ...payload, fps: gifFps, width: gifWidth, start_seconds: trimStart, duration_seconds: Math.max(1, trimEnd - trimStart) }
+      } else if (activeTool === "music-visualizer") {
+        endpoint = "/api/tools/music-visualizer/from-asset"
+        payload = { ...payload, style: vizStyle }
+      } else if (activeTool === "subtitles") {
+        endpoint = "/api/tools/subtitles/from-asset"
+        payload = { ...payload, format: subFormat }
       } else if (activeTool === "voiceover") {
-        endpoint = "/api/tools/voiceover"
-        payload = { text: ttsText, voice: ttsVoice }
+        endpoint = "/api/tools/voiceover/from-asset"
+        payload = { ...payload, text: ttsText, voice: ttsVoice, provider: "edge_tts" }
       } else if (activeTool === "captions") {
         endpoint = "/api/tools/captions/from-asset"
         payload = { ...payload, style: captionStyle }
@@ -225,20 +309,53 @@ export default function StudioToolsWorkspace({
       } else if (activeTool === "translate") {
         endpoint = "/api/tools/translate/from-asset"
         payload = { ...payload, target_lang: targetLang }
+      } else if (activeTool === "auto-chapters") {
+        endpoint = "/api/tools/auto-chapters/from-asset"
+        payload = { ...payload, target_count: targetChapters }
+      } else if (activeTool === "hook-analysis") {
+        endpoint = "/api/tools/hook-analysis/from-asset"
+        payload = { ...payload }
       } else {
         endpoint = `/api/tools/${activeTool}/from-asset`
       }
 
-      const res = await http.post(endpoint, payload)
+      const res = await http.post(endpoint, payload, {
+        signal: abortRef.current?.signal,
+        headers: reqHeaders,
+      })
+
       if (res.data?.status === "BLOCKED_PROVIDER" || res.data?.error_detail === "BLOCKED_PROVIDER") {
         showSnackbar(`[BLOCKED_PROVIDER] ${res.data?.message || "External provider credentials required."}`, "warning")
         return
       }
-      showSnackbar(`Tool queued successfully (Job: ${res.data?.job_id || "Active"})`, "success")
 
-      // If user requested timeline insertion and we have timeline mutation handler
-      if (insertToTimeline && onApplyOperation && res.data?.output_path) {
-        const isAudio = ["extract-audio", "voiceover"].includes(activeTool)
+      const resultData = res.data || {}
+      setToolResult(resultData)
+      showSnackbar(`Tool queued successfully (Job: ${resultData?.job_id || "Active"})`, "success")
+
+      // 3. Persist document metadata with CAS if tool generated structural information
+      if (projectDocument && onApplyOperation) {
+        if (activeTool === "auto-chapters" && resultData?.chapters) {
+          const nextDoc = {
+            ...projectDocument,
+            chapters: resultData.chapters,
+          }
+          await onApplyOperation("update_document", { document: nextDoc })
+          showSnackbar("Generated chapters attached to project document", "success")
+        } else if (activeTool === "hook-analysis" && resultData?.hook_score != null) {
+          const nextDoc = {
+            ...projectDocument,
+            virality_score: resultData.hook_score,
+            hook_analysis: resultData,
+          }
+          await onApplyOperation("update_document", { document: nextDoc })
+          showSnackbar("Hook score persisted to project virality record", "success")
+        }
+      }
+
+      // 4. If user requested timeline insertion and we have a generated media output
+      if (insertToTimeline && onApplyOperation && resultData?.output_path) {
+        const isAudio = ["extract-audio", "voiceover", "music-visualizer"].includes(activeTool)
         const tracksList = projectDocument?.timeline?.tracks || projectDocument?.tracks || []
         const targetTrack = tracksList.find((t) => t.type === (isAudio ? "audio" : "video"))
         if (targetTrack) {
@@ -246,7 +363,7 @@ export default function StudioToolsWorkspace({
             track_id: targetTrack.id,
             clip: {
               name: `${currentToolDef.label} Output`,
-              source_path: res.data.output_path,
+              source_path: resultData.output_path,
               start: currentTime,
               duration: 5.0,
             },
@@ -255,8 +372,9 @@ export default function StudioToolsWorkspace({
         }
       }
 
-      if (onToolSuccess) onToolSuccess(res.data)
+      if (onToolSuccess) onToolSuccess(resultData)
     } catch (err) {
+      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") return
       const detail = err.response?.data?.detail || err.message
       if (typeof detail === "string" && detail.includes("BLOCKED_PROVIDER")) {
         showSnackbar(`[BLOCKED_PROVIDER] External provider credentials required: ${detail}`, "warning")
@@ -267,7 +385,6 @@ export default function StudioToolsWorkspace({
       setRunning(false)
     }
   }
-
 
   return (
     <Box
@@ -323,7 +440,10 @@ export default function StudioToolsWorkspace({
             size="small"
             variant={activeTool === tool.id ? "contained" : "outlined"}
             startIcon={tool.icon}
-            onClick={() => setActiveTool(tool.id)}
+            onClick={() => {
+              setActiveTool(tool.id)
+              setToolResult(null)
+            }}
             sx={{
               height: 26,
               fontSize: "0.72rem",
@@ -436,6 +556,138 @@ export default function StudioToolsWorkspace({
             </FormControl>
           )}
 
+          {/* Auto-Zoom */}
+          {activeTool === "auto-zoom" && (
+            <>
+              <Box sx={{ width: 160 }}>
+                <Typography variant="caption" sx={{ fontSize: "0.72rem", fontWeight: 600 }}>
+                  Zoom Factor ({zoomFactor}x)
+                </Typography>
+                <Slider
+                  size="small"
+                  min={1.1}
+                  max={2.5}
+                  step={0.05}
+                  value={zoomFactor}
+                  onChange={(_, val) => setZoomFactor(val)}
+                />
+              </Box>
+              <TextField
+                size="small"
+                type="number"
+                label="Words / Group"
+                value={wordsPerGroup}
+                onChange={(e) => setWordsPerGroup(Number(e.target.value))}
+                sx={{ width: 110, "& .MuiInputBase-input": { fontSize: "0.78rem" } }}
+              />
+            </>
+          )}
+
+          {/* GIF */}
+          {activeTool === "gif" && (
+            <>
+              <FormControl size="small" sx={{ width: 120 }}>
+                <InputLabel sx={{ fontSize: "0.75rem" }}>FPS</InputLabel>
+                <Select
+                  value={gifFps}
+                  label="FPS"
+                  onChange={(e) => setGifFps(e.target.value)}
+                  sx={{ fontSize: "0.78rem" }}
+                >
+                  <MenuItem value={10}>10 FPS</MenuItem>
+                  <MenuItem value={15}>15 FPS (Default)</MenuItem>
+                  <MenuItem value={24}>24 FPS</MenuItem>
+                  <MenuItem value={30}>30 FPS</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl size="small" sx={{ width: 130 }}>
+                <InputLabel sx={{ fontSize: "0.75rem" }}>Width</InputLabel>
+                <Select
+                  value={gifWidth}
+                  label="Width"
+                  onChange={(e) => setGifWidth(e.target.value)}
+                  sx={{ fontSize: "0.78rem" }}
+                >
+                  <MenuItem value={320}>320px</MenuItem>
+                  <MenuItem value={480}>480px (Optimal)</MenuItem>
+                  <MenuItem value={720}>720px (HD)</MenuItem>
+                </Select>
+              </FormControl>
+            </>
+          )}
+
+          {/* Silence Remover */}
+          {(activeTool === "silence-remover" || activeTool === "remove-silence") && (
+            <>
+              <TextField
+                size="small"
+                type="number"
+                label="Noise Floor (dB)"
+                value={noiseThresholdDb}
+                onChange={(e) => setNoiseThresholdDb(Number(e.target.value))}
+                sx={{ width: 130, "& .MuiInputBase-input": { fontSize: "0.78rem" } }}
+              />
+              <TextField
+                size="small"
+                type="number"
+                label="Min Silence (s)"
+                value={minSilenceDuration}
+                onChange={(e) => setMinSilenceDuration(Number(e.target.value))}
+                sx={{ width: 120, "& .MuiInputBase-input": { fontSize: "0.78rem" } }}
+              />
+            </>
+          )}
+
+          {/* Music Visualizer */}
+          {activeTool === "music-visualizer" && (
+            <FormControl size="small" sx={{ width: 160 }}>
+              <InputLabel sx={{ fontSize: "0.75rem" }}>Waveform Style</InputLabel>
+              <Select
+                value={vizStyle}
+                label="Waveform Style"
+                onChange={(e) => setVizStyle(e.target.value)}
+                sx={{ fontSize: "0.78rem" }}
+              >
+                <MenuItem value="bars">Dynamic Bars</MenuItem>
+                <MenuItem value="wave">Oscilloscope Wave</MenuItem>
+                <MenuItem value="spectrum">Frequency Spectrum</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+
+          {/* Subtitles */}
+          {activeTool === "subtitles" && (
+            <FormControl size="small" sx={{ width: 140 }}>
+              <InputLabel sx={{ fontSize: "0.75rem" }}>Subtitle Format</InputLabel>
+              <Select
+                value={subFormat}
+                label="Subtitle Format"
+                onChange={(e) => setSubFormat(e.target.value)}
+                sx={{ fontSize: "0.78rem" }}
+              >
+                <MenuItem value="srt">SRT (SubRip)</MenuItem>
+                <MenuItem value="vtt">VTT (WebVTT)</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+
+          {/* Auto Chapters */}
+          {activeTool === "auto-chapters" && (
+            <Box sx={{ width: 180 }}>
+              <Typography variant="caption" sx={{ fontSize: "0.72rem", fontWeight: 600 }}>
+                Target Chapters: {targetChapters === 0 ? "Auto" : targetChapters}
+              </Typography>
+              <Slider
+                size="small"
+                min={0}
+                max={20}
+                step={1}
+                value={targetChapters}
+                onChange={(_, val) => setTargetChapters(val)}
+              />
+            </Box>
+          )}
+
           {/* Voiceover */}
           {activeTool === "voiceover" && (
             <>
@@ -518,6 +770,60 @@ export default function StudioToolsWorkspace({
             {running ? "Processing…" : `Run ${currentToolDef.label}`}
           </Button>
         </Stack>
+
+        {/* Structured Results Display (e.g. Auto-Chapters, Hook-Analysis) */}
+        {toolResult && (
+          <Box sx={{ mt: 2, p: 1.5, bgcolor: "#ffffff", borderRadius: 1.5, border: "1px solid", borderColor: "divider" }}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+              <Typography variant="caption" sx={{ fontWeight: 700, color: "text.primary" }}>
+                Execution Result — {currentToolDef.label}
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                {toolResult.output_path && (
+                  <Chip
+                    size="small"
+                    label="Output File Ready"
+                    color="success"
+                    sx={{ height: 20, fontSize: "0.68rem" }}
+                  />
+                )}
+                {toolResult.chapters && (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+                    onClick={() => handleCopyResult(JSON.stringify(toolResult.chapters, null, 2))}
+                    sx={{ height: 22, fontSize: "0.68rem", textTransform: "none" }}
+                  >
+                    {copied ? "Copied" : "Copy Chapters"}
+                  </Button>
+                )}
+              </Stack>
+            </Stack>
+
+            {toolResult.chapters && Array.isArray(toolResult.chapters) && (
+              <Stack spacing={0.5} sx={{ maxHeight: 120, overflowY: "auto" }}>
+                {toolResult.chapters.map((ch, idx) => (
+                  <Typography key={idx} variant="caption" sx={{ fontFamily: "monospace", fontSize: "0.72rem" }}>
+                    {ch.start || ch.timestamp || `00:${String(idx * 30).padStart(2, "0")}`} — {ch.title || `Chapter ${idx + 1}`}
+                  </Typography>
+                ))}
+              </Stack>
+            )}
+
+            {toolResult.hook_score != null && (
+              <Typography variant="caption" sx={{ fontWeight: 600, color: "text.primary" }}>
+                Hook Effectiveness Score: {toolResult.hook_score}/10
+              </Typography>
+            )}
+
+            {toolResult.output_path && (
+              <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.5, wordBreak: "break-all" }}>
+                Saved to: {toolResult.output_path}
+              </Typography>
+            )}
+          </Box>
+        )}
       </Box>
     </Box>
   )
