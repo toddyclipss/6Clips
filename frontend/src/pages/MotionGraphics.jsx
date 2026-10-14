@@ -64,6 +64,7 @@ export default function MotionGraphics() {
   const [redoStack, setRedoStack] = useState([])
   const lastCommittedDocumentRef = useRef(null)
   const handledDeepLinkAssetRef = useRef(null)
+  const handledDeepLinkBlockRef = useRef(null)
 
   // Extract dialog state
   const [extractDialogOpen, setExtractDialogOpen] = useState(false)
@@ -1101,6 +1102,41 @@ export default function MotionGraphics() {
 
     consumeDeepLink()
   }, [project, document, currentTime, handleApplyOperation, showSnackbar])
+
+  // 5e. Resolve and consume /motion?insertBlock={id} deep links from Catalog
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search)
+    const blockId = queryParams.get("insertBlock") || queryParams.get("block")
+    if (!blockId || handledDeepLinkBlockRef.current === blockId) return
+    if (!project || !document) return
+
+    handledDeepLinkBlockRef.current = blockId
+
+    const consumeBlockDeepLink = async () => {
+      try {
+        let blockItem = null
+        try {
+          const res = await http.get(`/api/projects/catalog/items/${encodeURIComponent(blockId)}`)
+          blockItem = res.data
+        } catch {
+          const listRes = await http.get("/api/projects/catalog/items")
+          const items = listRes.data?.items || listRes.data || []
+          blockItem = items.find((i) => (i.name || i.id) === blockId)
+        }
+
+        if (!blockItem) {
+          showSnackbar(`Block "${blockId}" is not operational and cannot be inserted into timeline.`, "error")
+          return
+        }
+
+        await handleAddBlock(blockItem)
+      } catch (err) {
+        showSnackbar(`Failed to insert catalog block "${blockId}": ${err.message}`, "error")
+      }
+    }
+
+    consumeBlockDeepLink()
+  }, [project, document, handleAddBlock, showSnackbar])
 
   // 6. Delete Clip via atomic operation
   const handleDeleteClip = async (clipOrId) => {

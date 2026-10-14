@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
- * CatalogCard: individual motion block card with truthful posters,
- * aspect ratio badge, disposition status, and non-destructive hover Ghost Preview.
+ * CatalogCard: individual motion block card with truthful posters for operational blocks,
+ * authentic metadata/blocker blueprints for inventory-only blocks (without fake posters),
+ * aspect ratio badge, real disposition status, and non-destructive hover Ghost Preview.
  */
 import React, { useState, useRef, useEffect } from "react"
 import {
@@ -10,17 +11,18 @@ import {
   Typography,
   Stack,
   Chip,
-  IconButton,
   alpha,
   useTheme,
 } from "@mui/material"
 import {
-  IconEye,
-  IconSparkles,
-  IconCheck,
-  IconAlertTriangle,
   IconPlayerPlay,
+  IconShieldLock,
+  IconAlertTriangle,
+  IconClockHour4,
+  IconLock,
+  IconSparkles,
 } from "@tabler/icons-react"
+import { SIXCLIPS_ORIGINAL_IDS, INTERNALIZED_DONOR_IDS } from "../../utils/catalogInventory"
 
 export default function CatalogCard({
   item,
@@ -35,18 +37,28 @@ export default function CatalogCard({
   const hoverTimerRef = useRef(null)
 
   const is9x16 = aspectRatio === "9:16"
-  const aspectTag = is9x16 ? "9x16" : "16x9"
-  const aspectSupport = is9x16 ? item.aspect_9_16 : item.aspect_16_9
+  const is6ClipsOriginal = SIXCLIPS_ORIGINAL_IDS.has(item.id) || item.origin === "6CLIPS_ORIGINAL"
+  const isDonorInternalized = INTERNALIZED_DONOR_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
+  const isOperational = is6ClipsOriginal || isDonorInternalized || Boolean(item.isOperational)
 
-  const posterUrl = `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspectRatio}`
-  const previewUrl = `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspectRatio}`
+  const aspectSupport = is9x16 ? (item.aspect_9_16 || "CONTAINED_ONLY") : (item.aspect_16_9 || "CONTAINED_ONLY")
 
-  // Hover Ghost Preview: debounced 220ms, non-destructive, muted
+  // For operational blocks only: truthful poster & preview endpoints
+  const posterUrl = isOperational
+    ? `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspectRatio}`
+    : null
+  const previewUrl = isOperational
+    ? `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspectRatio}`
+    : null
+
+  // Hover Ghost Preview: debounced 220ms, ONLY active for operational blocks
   const handleMouseEnter = () => {
     setHovered(true)
-    hoverTimerRef.current = setTimeout(() => {
-      setGhostActive(true)
-    }, 220)
+    if (isOperational) {
+      hoverTimerRef.current = setTimeout(() => {
+        setGhostActive(true)
+      }, 220)
+    }
   }
 
   const handleMouseLeave = () => {
@@ -69,27 +81,35 @@ export default function CatalogCard({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [ghostActive])
 
-  // Card dimensions based on selected aspect ratio
+  // Card frame dimensions based on selected aspect ratio
   const frameHeight = is9x16 ? 260 : 160
 
-  const isOperational12 = [
-    "aurora", "data-chart", "instagram-follow", "tiktok-follow", "weight-wave", "yt-lower-third",
-    "flowing-gradient", "plasma", "stripes", "holographic", "glitch-transition", "creator-hud"
-  ].includes(item.id)
+  // Status computation based on real backend disposition
+  let statusLabel = "QUARANTINED"
+  let statusColor = theme.palette.warning.main
+  let statusIcon = <IconLock size={14} />
 
-  const cardReadiness = isOperational12
-    ? "OPERATIONAL"
-    : item.disposition === "FIX"
-    ? "STRUCTURAL FIX"
-    : "QUARANTINED"
-
-  const readinessChipColor = isOperational12
-    ? theme.palette.info.main
-    : item.disposition === "FIX"
-    ? theme.palette.error.main
-    : theme.palette.warning.main
-
-  const dispositionColor = readinessChipColor
+  if (isOperational) {
+    statusLabel = "OPERATIONAL"
+    statusColor = is6ClipsOriginal ? theme.palette.secondary.main : theme.palette.info.main
+    statusIcon = <IconPlayerPlay size={14} />
+  } else if (item.integration_status === "ELIGIBLE_NOT_PORTED") {
+    statusLabel = "VETTED (NOT PORTED)"
+    statusColor = theme.palette.warning.main
+    statusIcon = <IconClockHour4 size={14} />
+  } else if (item.integration_status === "NEEDS_ADAPTATION") {
+    statusLabel = "NEEDS ADAPTATION"
+    statusColor = theme.palette.warning.dark
+    statusIcon = <IconAlertTriangle size={14} />
+  } else if (item.integration_status === "BLOCKED_DEPENDENCY") {
+    statusLabel = "BLOCKED DEPENDENCY"
+    statusColor = theme.palette.error.main
+    statusIcon = <IconLock size={14} />
+  } else if (item.integration_status === "BLOCKED_LICENSE" || item.license_status === "RESTRICTED") {
+    statusLabel = "BLOCKED LICENSE"
+    statusColor = theme.palette.error.main
+    statusIcon = <IconShieldLock size={14} />
+  }
 
   const aspectBadgeColor =
     aspectSupport === "NATIVE"
@@ -100,11 +120,15 @@ export default function CatalogCard({
 
   return (
     <Box
+      data-testid={`catalog-card-${item.id}`}
+      data-operational={isOperational}
+      data-status={statusLabel}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={() => onSelect(item)}
       role="button"
       tabIndex={0}
+      aria-label={`${item.title || item.id} - ${statusLabel}`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault()
@@ -115,7 +139,7 @@ export default function CatalogCard({
         borderRadius: "14px",
         overflow: "hidden",
         border: 1,
-        borderColor: hovered ? "primary.main" : "divider",
+        borderColor: hovered ? (isOperational ? "primary.main" : "warning.main") : "divider",
         bgcolor: isDark ? alpha("#fff", 0.03) : "#ffffff",
         transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
         transform: hovered ? "translateY(-3px)" : "none",
@@ -132,47 +156,129 @@ export default function CatalogCard({
         },
       }}
     >
-      {/* Visual Frame: Poster or Live Ghost Preview */}
+      {/* Visual Frame: Real Poster / Live Ghost Preview OR Truthful Metadata Frame */}
       <Box
         sx={{
           height: frameHeight,
           position: "relative",
-          bgcolor: "#000",
+          bgcolor: isOperational ? "#000" : isDark ? "#0f172a" : "#f1f5f9",
           overflow: "hidden",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          borderBottom: 1,
+          borderColor: "divider",
         }}
       >
-        {ghostActive ? (
-          <Box
-            component="iframe"
-            src={previewUrl}
-            title={`${item.title} Preview`}
-            sx={{
-              width: "100%",
-              height: "100%",
-              border: 0,
-              pointerEvents: "none",
-            }}
-          />
+        {isOperational ? (
+          ghostActive ? (
+            <Box
+              component="iframe"
+              src={previewUrl}
+              title={`${item.title} Preview`}
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: 0,
+                pointerEvents: "none",
+              }}
+            />
+          ) : (
+            <Box
+              component="img"
+              src={posterUrl}
+              alt={item.title}
+              loading="lazy"
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: is9x16 ? "cover" : "contain",
+                display: "block",
+              }}
+            />
+          )
         ) : (
+          /* Honest Metadata Frame for Inventory-Only Blocks (NO fake posters) */
           <Box
-            component="img"
-            src={posterUrl}
-            alt={item.title}
-            loading="lazy"
             sx={{
+              p: 2,
               width: "100%",
               height: "100%",
-              objectFit: is9x16 ? "cover" : "contain",
-              display: "block",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxSizing: "border-box",
+              backgroundImage: isDark
+                ? "radial-gradient(ellipse at top, rgba(30, 41, 59, 0.6), transparent 70%)"
+                : "radial-gradient(ellipse at top, rgba(226, 232, 240, 0.8), transparent 70%)",
             }}
-          />
+          >
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Chip
+                label="INVENTORY ONLY"
+                size="small"
+                sx={{
+                  height: 18,
+                  fontSize: "0.62rem",
+                  fontWeight: 800,
+                  bgcolor: alpha(theme.palette.warning.main, 0.15),
+                  color: theme.palette.warning.main,
+                  border: 1,
+                  borderColor: alpha(theme.palette.warning.main, 0.3),
+                }}
+              />
+              <Box sx={{ color: statusColor, display: "flex", alignItems: "center" }}>
+                {statusIcon}
+              </Box>
+            </Stack>
+
+            <Box sx={{ my: "auto", textAlign: "center", px: 1 }}>
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "block",
+                  color: statusColor,
+                  fontWeight: 700,
+                  fontSize: "0.72rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.04em",
+                  mb: 0.5,
+                }}
+              >
+                {statusLabel}
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "text.secondary",
+                  fontSize: "0.7rem",
+                  lineHeight: 1.25,
+                  display: "-webkit-box",
+                  WebkitLineClamp: is9x16 ? 4 : 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
+              >
+                {item.blocker_reason || "Metadata-only block entry awaiting provenance clearance."}
+              </Typography>
+            </Box>
+
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.65rem",
+                color: "text.disabled",
+                textAlign: "center",
+                fontWeight: 600,
+              }}
+            >
+              Action disabled · Click to inspect
+            </Typography>
+          </Box>
         )}
 
-        {/* Ghost Preview Active Indicator */}
-        {ghostActive && (
+        {/* Ghost Preview Active Indicator (operational only) */}
+        {ghostActive && isOperational && (
           <Box
             sx={{
               position: "absolute",
@@ -252,22 +358,72 @@ export default function CatalogCard({
               WebkitBoxOrient: "vertical",
             }}
           >
-            {item.title}
+            {item.title || item.id}
           </Typography>
 
           <Chip
-            label={cardReadiness}
+            label={statusLabel}
             size="small"
             sx={{
               height: 18,
-              fontSize: "0.65rem",
+              fontSize: "0.62rem",
               fontWeight: 700,
-              bgcolor: alpha(readinessChipColor, 0.15),
-              color: readinessChipColor,
+              bgcolor: alpha(statusColor, 0.15),
+              color: statusColor,
               border: 1,
-              borderColor: alpha(readinessChipColor, 0.3),
+              borderColor: alpha(statusColor, 0.3),
+              whiteSpace: "nowrap",
             }}
           />
+        </Stack>
+
+        {/* Origin Badge */}
+        <Stack direction="row" spacing={0.75} sx={{ mt: 0.5, mb: 0.5 }}>
+          {is6ClipsOriginal ? (
+            <Chip
+              label="6Clips Original"
+              size="small"
+              sx={{
+                height: 16,
+                fontSize: "0.6rem",
+                fontWeight: 700,
+                bgcolor: alpha(theme.palette.secondary.main, 0.15),
+                color: theme.palette.secondary.main,
+              }}
+            />
+          ) : (
+            <Chip
+              label={isDonorInternalized ? "HyperFrames (Internalized)" : "HyperFrames Donor"}
+              size="small"
+              sx={{
+                height: 16,
+                fontSize: "0.6rem",
+                fontWeight: 600,
+                bgcolor: alpha(theme.palette.text.secondary, 0.12),
+                color: "text.secondary",
+              }}
+            />
+          )}
+          {item.license_status && (
+            <Chip
+              label={item.license_status.replace("VERIFIED_", "")}
+              size="small"
+              sx={{
+                height: 16,
+                fontSize: "0.6rem",
+                fontWeight: 600,
+                bgcolor: alpha(
+                  item.license_status.startsWith("VERIFIED")
+                    ? theme.palette.success.main
+                    : theme.palette.warning.main,
+                  0.12
+                ),
+                color: item.license_status.startsWith("VERIFIED")
+                  ? theme.palette.success.main
+                  : theme.palette.warning.main,
+              }}
+            />
+          )}
         </Stack>
 
         <Typography
@@ -294,7 +450,7 @@ export default function CatalogCard({
           sx={{ mt: 1.25, pt: 1, borderTop: 1, borderColor: "divider" }}
         >
           <Typography sx={{ fontSize: "0.7rem", color: "text.disabled", fontWeight: 500 }}>
-            {item.category} · {item.license}
+            {item.category || "general"} · {item.license || "Apache-2.0"}
           </Typography>
           <Typography sx={{ fontSize: "0.7rem", color: "text.disabled" }}>
             {item.variables_count || 0} vars
