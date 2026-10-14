@@ -15,6 +15,7 @@ import {
   IconRefresh,
 } from "@tabler/icons-react"
 import http from "../../api/http"
+import { fetchModelRegistry, invalidateModelRegistryCache } from "../../api/modelRegistry"
 import useAppStore from "../../store/appStore"
 import { formatModelName } from "../chat/LiquidMultimodalInput"
 
@@ -95,15 +96,25 @@ export default function AIProviderSection({ settings, updateSettings }) {
   const [validating, setValidating] = useState({})
   const [actionLoading, setActionLoading] = useState({})
 
-  // Fetch model registry
-  const fetchRegistry = () => {
-    http.get("/api/config/model_registry")
-      .then(({ data }) => setRegistry(data?.value || {}))
+  // Fetch model registry with caching and in-flight deduplication
+  const fetchRegistry = (force = false) => {
+    return fetchModelRegistry({ force })
+      .then((reg) => setRegistry(reg || {}))
       .catch(() => {})
   }
 
   useEffect(() => {
-    fetchRegistry()
+    let active = true
+    const controller = new AbortController()
+    fetchModelRegistry({ signal: controller.signal })
+      .then((reg) => {
+        if (active && reg) setRegistry(reg)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+      controller.abort()
+    }
   }, [])
 
   // Sync state when settings change
@@ -163,7 +174,10 @@ export default function AIProviderSection({ settings, updateSettings }) {
       const { data } = await http.post("/api/settings/validate-key", payload)
       if (data?.ok) {
         showSnackbar(data.message || `${PROVIDER_METADATA[providerId].name} credentials valid`, "success")
-        if (isOllama) fetchRegistry()
+        if (isOllama) {
+          invalidateModelRegistryCache()
+          fetchRegistry(true)
+        }
       } else {
         showSnackbar(data?.error || `Validation failed for ${PROVIDER_METADATA[providerId].name}`, "error")
       }
