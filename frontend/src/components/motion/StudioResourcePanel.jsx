@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react"
 import {
   Box, Stack, Typography, Tabs, Tab, IconButton, InputBase,
   Button, Tooltip, CircularProgress, Chip, Dialog, DialogTitle,
-  DialogContent, DialogActions,
+  DialogContent, DialogActions, Select, MenuItem, FormControl,
 } from "@mui/material"
 import http from "../../api/http"
 import {
@@ -25,6 +25,8 @@ import {
   IconBrandInstagram,
   IconWorld,
   IconX,
+  IconDownload,
+  IconLink,
 } from "@tabler/icons-react"
 
 /**
@@ -49,6 +51,7 @@ export default function StudioResourcePanel({
   onStartGhostPreview,
   onEndGhostPreview,
   onAskAiToInsert,
+  onRefreshLibrary,
 }) {
   const [tab, setTab] = useState(0) // 0 = Assets, 1 = Sources (Trends), 2 = Catalog
   const [search, setSearch] = useState("")
@@ -56,6 +59,63 @@ export default function StudioResourcePanel({
   const [catalogLoading, setCatalogLoading] = useState(false)
   const [catalogError, setCatalogError] = useState(null)
   const [catalogCategory, setCatalogCategory] = useState("all")
+
+  // Ingest URL state (yt-dlp Video Download)
+  const [ingestUrlOpen, setIngestUrlOpen] = useState(false)
+  const [ingestUrlInput, setIngestUrlInput] = useState("")
+  const [ingestQuality, setIngestQuality] = useState("best")
+  const [ingesting, setIngesting] = useState(false)
+  const ingestAbortRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      if (ingestAbortRef.current) ingestAbortRef.current.abort()
+    }
+  }, [])
+
+  const handleIngestUrl = async () => {
+    const raw = (ingestUrlInput || "").trim()
+    if (!raw) return
+    setIngesting(true)
+    if (ingestAbortRef.current) ingestAbortRef.current.abort()
+    ingestAbortRef.current = new AbortController()
+    const userIntentId = `ingest_intent_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`
+
+    try {
+      const res = await http.post("/api/downloaded/batch-download", {
+        urls: [{ url: raw }],
+        options: { quality: ingestQuality, container: "mp4" },
+        analyze: false,
+      }, {
+        signal: ingestAbortRef.current.signal,
+        headers: {
+          "X-Component-Origin": "StudioResourcePanel",
+          "X-User-Intent-ID": userIntentId,
+          "X-Effect-Name": "video-download",
+        },
+      })
+      if (res.data?.job_id) {
+        setIngestUrlInput("")
+        setIngestUrlOpen(false)
+        if (onRefreshLibrary) {
+          await onRefreshLibrary()
+        } else {
+          try {
+            const r = await http.get("/api/library/items")
+            const list = r.data?.items || r.data
+            if (Array.isArray(list) && list.length > 0 && onSelectSource) {
+              onSelectSource(list[0])
+            }
+          } catch {}
+        }
+      }
+    } catch (err) {
+      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") return
+      console.error("Ingest URL failed:", err)
+    } finally {
+      setIngesting(false)
+    }
+  }
 
   // Audio Pre-listening state
   const [playingAudioKey, setPlayingAudioKey] = useState(null)
@@ -292,28 +352,95 @@ export default function StudioResourcePanel({
           <Tab label="Catalog" />
         </Tabs>
 
-        {/* Search */}
-        <Box
-          sx={{
-            mt: 1,
-            display: "flex",
-            alignItems: "center",
-            bgcolor: "#f8fafc",
-            borderRadius: 1.5,
-            px: 1,
-            py: 0.25,
-            border: "1px solid",
-            borderColor: "divider",
-          }}
-        >
-          <IconSearch size={14} color="#94a3b8" />
-          <InputBase
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search items..."
-            sx={{ ml: 1, fontSize: "0.75rem", flex: 1 }}
-          />
-        </Box>
+        {/* Search & Ingest URL Row */}
+        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mt: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              bgcolor: "#f8fafc",
+              borderRadius: 1.5,
+              px: 1,
+              py: 0.25,
+              border: "1px solid",
+              borderColor: "divider",
+              flex: 1,
+            }}
+          >
+            <IconSearch size={14} color="#94a3b8" />
+            <InputBase
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search items..."
+              sx={{ ml: 1, fontSize: "0.75rem", flex: 1 }}
+            />
+          </Box>
+          <Tooltip title={ingestUrlOpen ? "Close URL Ingest" : "Ingest Remote Video URL (yt-dlp)"} arrow>
+            <IconButton
+              size="small"
+              className="IngestUrlButton"
+              data-testid="ingest-url-button"
+              onClick={() => setIngestUrlOpen(!ingestUrlOpen)}
+              sx={{
+                width: 26,
+                height: 26,
+                borderRadius: 1.5,
+                border: "1px solid",
+                borderColor: ingestUrlOpen ? "primary.main" : "divider",
+                color: ingestUrlOpen ? "primary.main" : "text.secondary",
+                bgcolor: ingestUrlOpen ? "action.selected" : "#f8fafc",
+              }}
+            >
+              <IconDownload size={14} />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+
+        {/* Collapsible Remote Video Ingest Bar */}
+        {ingestUrlOpen && (
+          <Box sx={{ mt: 1, p: 1, bgcolor: "#f1f5f9", borderRadius: 1.5, border: "1px solid", borderColor: "divider" }}>
+            <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem", color: "text.secondary", display: "block", mb: 0.5 }}>
+              Download Video Stream (yt-dlp)
+            </Typography>
+            <Stack direction="row" spacing={0.5} alignItems="center">
+              <InputBase
+                placeholder="Paste video URL (YouTube, TikTok, MP4)..."
+                value={ingestUrlInput}
+                onChange={(e) => setIngestUrlInput(e.target.value)}
+                sx={{
+                  flex: 1,
+                  fontSize: "0.72rem",
+                  bgcolor: "#ffffff",
+                  px: 1,
+                  py: 0.25,
+                  borderRadius: 1,
+                  border: "1px solid",
+                  borderColor: "divider",
+                }}
+              />
+              <FormControl size="small" sx={{ width: 80 }}>
+                <Select
+                  value={ingestQuality}
+                  onChange={(e) => setIngestQuality(e.target.value)}
+                  sx={{ height: 26, fontSize: "0.7rem", bgcolor: "#ffffff" }}
+                >
+                  <MenuItem value="best">Best</MenuItem>
+                  <MenuItem value="1080p">1080p</MenuItem>
+                  <MenuItem value="720p">720p</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+                size="small"
+                variant="contained"
+                disabled={ingesting || !ingestUrlInput.trim()}
+                onClick={handleIngestUrl}
+                sx={{ height: 26, fontSize: "0.68rem", px: 1, minWidth: "auto", textTransform: "none" }}
+              >
+                {ingesting ? <CircularProgress size={12} color="inherit" /> : "Ingest"}
+              </Button>
+            </Stack>
+          </Box>
+        )}
       </Box>
 
       {/* Content Area */}

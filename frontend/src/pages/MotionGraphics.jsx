@@ -1543,7 +1543,28 @@ export default function MotionGraphics() {
         if (opts.genre) payload.genre = opts.genre
       }
 
-      await http.post(`/api/downloaded/${videoId}/extract-clips`, payload)
+      if (project && document) {
+        const nextDoc = {
+          ...document,
+          auto_cut_settings: {
+            mode: opts.mode || "auto",
+            caption_style: opts.caption_style,
+            remove_silence: !!opts.remove_silence,
+            force_vertical: !!opts.force_vertical,
+            time_ranges: opts.time_ranges || null,
+            configured_at: Date.now(),
+          },
+        }
+        await handleApplyOperation("update_document", { document: nextDoc })
+      }
+
+      await http.post(`/api/downloaded/${videoId}/extract-clips`, payload, {
+        headers: {
+          "X-Component-Origin": "MotionGraphics",
+          "X-User-Intent-ID": `extract_intent_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+          "X-Effect-Name": "auto-cut-dialog",
+        },
+      })
       showSnackbar(
         isManual
           ? `Cutting ${opts.time_ranges?.length || ""} clip(s) from selected ranges.`
@@ -1561,6 +1582,22 @@ export default function MotionGraphics() {
       setIsExtracting(false)
     }
   }
+
+  const handleRefreshLibrary = useCallback(async () => {
+    try {
+      const res = await http.get("/api/library/items")
+      const list = res.data?.items || res.data
+      if (Array.isArray(list)) {
+        setLibraryVideos(list)
+        if (list.length > 0 && !activeAsset) {
+          setSelectedAsset(list[0])
+        }
+      }
+      return list
+    } catch {
+      return []
+    }
+  }, [activeAsset])
 
   const handleDoCut = async () => {
     if (!activeAsset || benchRanges.ranges.length === 0 || isExtracting) return
@@ -1794,6 +1831,7 @@ export default function MotionGraphics() {
                   onStartGhostPreview={handleStartGhostPreview}
                   onEndGhostPreview={handleEndGhostPreview}
                   onAskAiToInsert={handleAskAiToInsert}
+                  onRefreshLibrary={handleRefreshLibrary}
                   isPinned={pinnedLeft}
                   onTogglePin={() => setPinnedLeft(!pinnedLeft)}
                 />
