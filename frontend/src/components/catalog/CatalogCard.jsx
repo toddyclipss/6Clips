@@ -72,17 +72,22 @@ export default function CatalogCard({
   // Card dimensions based on selected aspect ratio
   const frameHeight = is9x16 ? 260 : 160
 
-  const isInternalized = Boolean(item.internalized)
-  const cardReadiness =
-    item.readiness ||
-    (isInternalized ? "READY" : item.disposition === "FIX" ? "FIX" : "UNVERIFIED")
+  const isOperational12 = [
+    "aurora", "data-chart", "instagram-follow", "tiktok-follow", "weight-wave", "yt-lower-third",
+    "flowing-gradient", "plasma", "stripes", "holographic", "glitch-transition", "creator-hud"
+  ].includes(item.id)
 
-  const readinessChipColor =
-    cardReadiness === "READY"
-      ? theme.palette.success.main
-      : cardReadiness === "FIX"
-      ? theme.palette.error.main
-      : theme.palette.warning.main
+  const cardReadiness = isOperational12
+    ? "OPERATIONAL"
+    : item.disposition === "FIX"
+    ? "STRUCTURAL FIX"
+    : "QUARANTINED"
+
+  const readinessChipColor = isOperational12
+    ? theme.palette.info.main
+    : item.disposition === "FIX"
+    ? theme.palette.error.main
+    : theme.palette.warning.main
 
   const dispositionColor = readinessChipColor
 

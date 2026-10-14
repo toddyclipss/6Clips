@@ -210,6 +210,41 @@ class CreativeRecipeEngine:
                 safe_margin_bottom_px=96,
                 safe_margin_top_px=80,
             ),
+            CreativeRecipe(
+                recipe_id="recipe_social_cta_burst_6s",
+                title="6s Social Follow & Conversion Burst",
+                category="social-conversion",
+                description="High-converting 9:16 engagement burst utilizing TikTok & Instagram follow cards with dynamic progress indicator and bottom safe zone clearance.",
+                target_aspect_ratio="9:16",
+                total_duration_seconds=6.0,
+                status="RECIPE_READY_RENDER_PENDING",
+                doctrines_referenced=["captions-overlay", "motion-doctrine", "seam-craft"],
+                timeline_steps=[
+                    CreativeRecipeStep(
+                        step_id="step_social_bg",
+                        block_id="flowing-gradient",
+                        track_index=0,
+                        start_time_seconds=0.0,
+                        duration_seconds=6.0,
+                        end_time_seconds=6.0,
+                        doctrine_applied="motion-doctrine (stage grounding)",
+                        parameters={"speed": "1.0"},
+                    ),
+                    CreativeRecipeStep(
+                        step_id="step_social_overlay",
+                        block_id="tiktok-follow",
+                        track_index=1,
+                        start_time_seconds=0.5,
+                        duration_seconds=5.0,
+                        end_time_seconds=5.5,
+                        doctrine_applied="captions-overlay (safe margin bounds)",
+                        parameters={"username": "@viralmint", "button_text": "Follow"},
+                    ),
+                ],
+                anti_flash_enforced=True,
+                safe_margin_bottom_px=96,
+                safe_margin_top_px=80,
+            ),
         ]
         return recipes
 
