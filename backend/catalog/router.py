@@ -29,6 +29,73 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
+@router.get("/wave9-audit")
+async def get_wave9_audit():
+    """Return Wave 9 12-block verification audit, 12-row proof ladder, canonical export contract v2.0.0, and quarantine status."""
+    return CatalogManifestService.get_wave9_factual_audit()
+
+
+@router.get("/blocks/{block_id}/multi-timestamp-sequence")
+async def get_block_multi_timestamp_sequence(
+    block_id: str,
+    timestamps: Optional[str] = Query(None, description="Comma-separated timestamps e.g. 0.0,1.0,2.0"),
+):
+    """Capture Playwright browser frames across multiple timestamps to verify physical animation and alpha transparency."""
+    try:
+        import asyncio
+        parsed_ts = [float(t.strip()) for t in timestamps.split(",")] if timestamps else [0.0, 1.0, 2.0]
+        return await asyncio.to_thread(
+            CatalogExportContract.capture_multi_timestamp_sequence,
+            block_id=block_id,
+            timestamps=parsed_ts,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating multi-timestamp sequence for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/canonical-export-contract")
+async def get_block_canonical_export_contract(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+):
+    """Return Wave 9 Version 2.0.0 Canonical Motion Export Contract with layout safe margins and FFmpeg recipes for Role 2."""
+    try:
+        return CatalogExportContract.generate_canonical_motion_export_contract(
+            block_id=block_id,
+            aspect_ratio=aspect_ratio,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating canonical export contract for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/blocks/{block_id}/transparent-overlay-video")
+async def get_block_transparent_overlay_video(
+    block_id: str,
+    aspect_ratio: str = Query("9:16", description="Target aspect ratio: '9:16' or '16:9'"),
+    duration_seconds: float = Query(2.0, ge=0.5, le=30.0),
+):
+    """Generate physical transparent overlay video with alpha channel verified by ffprobe."""
+    try:
+        import asyncio
+        return await asyncio.to_thread(
+            CatalogExportContract.generate_transparent_video_overlay,
+            block_id=block_id,
+            aspect_ratio=aspect_ratio,
+            duration_seconds=duration_seconds,
+        )
+    except (CatalogManifestError, CatalogExportContractError) as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating transparent overlay video for %s: %s", block_id, e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/wave8-audit")
 async def get_wave8_audit():
     """Return Wave 8 12-block verification audit, proof ladder per block, and real browser/MP4 proofs."""
