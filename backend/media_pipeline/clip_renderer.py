@@ -469,6 +469,84 @@ async def render_manifest_to_mp4(
             track_audio_gain *= float(am.get("effective_gain", 1.0) if isinstance(am, dict) else getattr(am, "effective_gain", 1.0))
             break
 
+    # Secondary audio track detection (e.g. BGM or VO)
+    secondary_audio_clip = None
+    secondary_audio_path = None
+    sec_audio_active = False
+    sec_audio_gain = 1.0
+
+    for tr in tracks:
+        tr_type = tr.get("type") if isinstance(tr, dict) else getattr(tr, "type", "")
+        tr_id = tr.get("id") if isinstance(tr, dict) else getattr(tr, "id", "")
+        if tr_type == "audio" and tr_id != target_track_id:
+            clips = tr.get("clips", []) if isinstance(tr, dict) else getattr(tr, "clips", [])
+            if clips:
+                secondary_audio_clip = clips[0]
+                sec_audio_active = not bool(tr.get("muted", False) if isinstance(tr, dict) else getattr(tr, "muted", False))
+                sec_audio_gain = float(tr.get("volume", 1.0) if isinstance(tr, dict) else getattr(tr, "volume", 1.0))
+
+                c_m = bool(secondary_audio_clip.get("muted", False) if isinstance(secondary_audio_clip, dict) else getattr(secondary_audio_clip, "muted", False))
+                c_v = float(secondary_audio_clip.get("volume", 1.0) if isinstance(secondary_audio_clip, dict) else getattr(secondary_audio_clip, "volume", 1.0))
+                if c_m:
+                    sec_audio_active = False
+                sec_audio_gain *= c_v
+
+                for am in audio_mixes:
+                    am_tr_id = am.get("track_id") if isinstance(am, dict) else getattr(am, "track_id", "")
+                    if am_tr_id == tr_id:
+                        if not bool(am.get("effective_active", True) if isinstance(am, dict) else getattr(am, "effective_active", True)):
+                            sec_audio_active = False
+                        sec_audio_gain *= float(am.get("effective_gain", 1.0) if isinstance(am, dict) else getattr(am, "effective_gain", 1.0))
+                        break
+
+                sec_src = (
+                    secondary_audio_clip.get("source_path")
+                    if isinstance(secondary_audio_clip, dict)
+                    else getattr(secondary_audio_clip, "source_path", None)
+                ) or (
+                    secondary_audio_clip.get("asset_file")
+                    if isinstance(secondary_audio_clip, dict)
+                    else getattr(secondary_audio_clip, "asset_file", None)
+                ) or (
+                    secondary_audio_clip.get("source")
+                    if isinstance(secondary_audio_clip, dict)
+                    else getattr(secondary_audio_clip, "source", None)
+                )
+                if sec_src:
+                    p = source_media_map.get(str(sec_src)) or (Path(sec_src) if Path(sec_src).exists() else None)
+                    if p and p.exists():
+                        secondary_audio_path = p
+                break
+
+    # Block overlay track detection if not explicitly passed
+    if not catalog_overlay_path or not catalog_overlay_manifest:
+        for tr in tracks:
+            tr_type = tr.get("type") if isinstance(tr, dict) else getattr(tr, "type", "")
+            if tr_type in ("block", "overlay"):
+                b_clips = tr.get("clips", []) if isinstance(tr, dict) else getattr(tr, "clips", [])
+                if b_clips:
+                    b_clip = b_clips[0]
+                    b_src = (
+                        b_clip.get("source_path")
+                        if isinstance(b_clip, dict)
+                        else getattr(b_clip, "source_path", None)
+                    ) or (
+                        b_clip.get("asset_file")
+                        if isinstance(b_clip, dict)
+                        else getattr(b_clip, "asset_file", None)
+                    )
+                    b_manifest = (
+                        b_clip.get("overlay_manifest")
+                        if isinstance(b_clip, dict)
+                        else getattr(b_clip, "overlay_manifest", None)
+                    )
+                    if b_src:
+                        bp = source_media_map.get(str(b_src)) or (Path(b_src) if Path(b_src).exists() else None)
+                        if bp and bp.exists():
+                            catalog_overlay_path = bp
+                            catalog_overlay_manifest = b_manifest
+                    break
+
     # Audio enhance evaluation
     c_audio = target_clip.get("audio") if isinstance(target_clip, dict) else getattr(target_clip, "audio", None)
     clip_enhance = bool(target_clip.get("audio_enhance", False) if isinstance(target_clip, dict) else getattr(target_clip, "audio_enhance", False))
@@ -515,68 +593,132 @@ async def render_manifest_to_mp4(
             "-t", f"{c_dur:.3f}",
             "-i", str(physical_src),
         ]
+        input_count = 1
 
-        # Handle optional Catalog overlay
+        ov_idx = None
         if catalog_overlay_path and catalog_overlay_manifest and catalog_overlay_path.exists():
+            ov_idx = input_count
+            input_count += 1
+            cmd.extend(["-i", str(catalog_overlay_path)])
+
+        sec_audio_idx = None
+        if secondary_audio_path and secondary_audio_path.exists():
+            sec_audio_idx = input_count
+            input_count += 1
+            cmd.extend(["-i", str(secondary_audio_path)])
+
+        # Construct Video Filter Graph
+        if ov_idx is not None:
             from backend.motion_render_bridge.catalog_consumer import CatalogExportConsumer
+            t_params = catalog_overlay_manifest.get("timeline_parameters", {})
+            ov_start = float(t_params.get("start_seconds", 0.0))
+            ov_dur = float(t_params.get("duration_seconds", c_dur))
+            ov_end = float(t_params.get("end_seconds", ov_start + ov_dur))
             cons_res = CatalogExportConsumer.consume(
                 manifest=catalog_overlay_manifest,
                 background_pad="[v_framed]",
-                overlay_pad="[1:v]",
-                start_seconds=0.0,
-                end_seconds=c_dur,
+                overlay_pad=f"[{ov_idx}:v]",
+                start_seconds=ov_start,
+                end_seconds=min(ov_end, c_dur),
                 canvas_width=target_w,
                 canvas_height=target_h,
+                for_render=True,
             )
             warnings.extend(cons_res.warnings)
-            cmd.extend(["-i", str(catalog_overlay_path)])
 
-            # Filter complex pipeline: Framing -> Overlay -> (Optional Captions)
             if is_complex:
-                filter_complex = f"{framing_expr.replace('[v]', '[v_framed]')};{cons_res.overlay_filter_expression}"
+                video_fc = f"{framing_expr.replace('[v]', '[v_framed]')};{cons_res.overlay_filter_expression}"
             else:
-                filter_complex = f"[0:v]{framing_expr}[v_framed];{cons_res.overlay_filter_expression}"
+                video_fc = f"[0:v]{framing_expr}[v_framed];{cons_res.overlay_filter_expression}"
 
             if caption_filter_str:
-                filter_complex = f"{filter_complex.replace('[out_v]', '[v_over]')};[v_over]{caption_filter_str}[v]"
+                video_fc = f"{video_fc.replace('[out_v]', '[v_over]')};[v_over]{caption_filter_str}[v_out]"
             else:
-                filter_complex = filter_complex.replace('[out_v]', '[v]')
-
-            cmd.extend(["-filter_complex", filter_complex, "-map", "[v]"])
+                video_fc = video_fc.replace('[out_v]', '[v_out]')
         else:
             if is_complex:
                 if caption_filter_str:
-                    cmd.extend(["-filter_complex", f"{framing_expr};[v]{caption_filter_str}[v_cap]", "-map", "[v_cap]"])
+                    video_fc = f"{framing_expr};[v]{caption_filter_str}[v_out]"
                 else:
-                    cmd.extend(["-filter_complex", framing_expr, "-map", "[v]"])
+                    video_fc = framing_expr.replace("[v]", "[v_out]")
             else:
-                # Append speed PTS filter if speed != 1.0
                 vf = framing_expr
                 if abs(c_speed - 1.0) > 0.01:
                     pts_scale = 1.0 / c_speed
                     vf = f"{vf},setpts={pts_scale:.4f}*PTS"
                 if caption_filter_str:
                     vf = f"{vf},{caption_filter_str}"
-                cmd.extend(["-vf", vf])
+                video_fc = f"[0:v]{vf}[v_out]"
 
-        # Audio stream handling
-        if track_audio_active and track_audio_gain > 0.001:
-            af_filters = []
+        # Construct Audio Filter Graph
+        src_has_audio = bool(src_probe and src_probe.audio_channels and src_probe.audio_channels > 0)
+        main_audio_usable = src_has_audio and track_audio_active and track_audio_gain > 0.001
+        sec_audio_usable = (secondary_audio_path is not None) and (sec_audio_idx is not None) and sec_audio_active and sec_audio_gain > 0.001
+
+        if main_audio_usable and sec_audio_usable:
+            main_af = []
             if abs(c_speed - 1.0) > 0.01:
-                af_filters.append(f"atempo={c_speed:.3f}")
+                main_af.append(f"atempo={c_speed:.3f}")
             if abs(track_audio_gain - 1.0) > 0.01:
-                af_filters.append(f"volume={track_audio_gain:.3f}")
+                main_af.append(f"volume={track_audio_gain:.3f}")
             if clip_enhance:
-                af_filters.append("highpass=f=100,lowpass=f=8000,dynaudnorm")
+                main_af.append("highpass=f=100,lowpass=f=8000,dynaudnorm")
                 warnings.append("Applied voice enhancement and dynamic audio normalization.")
+            f_main = ",".join(main_af) if main_af else "anull"
 
-            if af_filters:
-                cmd.extend(["-af", ",".join(af_filters)])
-            cmd.extend(["-c:a", "aac", "-b:a", "192k", "-ar", "48000"])
-            if is_complex or (catalog_overlay_path and catalog_overlay_manifest):
-                cmd.extend(["-map", "0:a?"])
+            sec_af = []
+            if abs(sec_audio_gain - 1.0) > 0.01:
+                sec_af.append(f"volume={sec_audio_gain:.3f}")
+            f_sec = ",".join(sec_af) if sec_af else "anull"
+
+            audio_fc = f"[0:a]{f_main}[a_main];[{sec_audio_idx}:a]{f_sec}[a_sec];[a_main][a_sec]amix=inputs=2:duration=first:dropout_transition=2[a_out]"
+            warnings.append("Dual-track audio mix applied: main video track + secondary audio track.")
+            has_audio = True
+
+        elif main_audio_usable:
+            main_af = []
+            if abs(c_speed - 1.0) > 0.01:
+                main_af.append(f"atempo={c_speed:.3f}")
+            if abs(track_audio_gain - 1.0) > 0.01:
+                main_af.append(f"volume={track_audio_gain:.3f}")
+            if clip_enhance:
+                main_af.append("highpass=f=100,lowpass=f=8000,dynaudnorm")
+                warnings.append("Applied voice enhancement and dynamic audio normalization.")
+            f_main = ",".join(main_af) if main_af else "anull"
+            audio_fc = f"[0:a]{f_main}[a_out]"
+            has_audio = True
+
+        elif sec_audio_usable:
+            sec_af = []
+            if abs(sec_audio_gain - 1.0) > 0.01:
+                sec_af.append(f"volume={sec_audio_gain:.3f}")
+            f_sec = ",".join(sec_af) if sec_af else "anull"
+            audio_fc = f"[{sec_audio_idx}:a]{f_sec}[a_out]"
+            warnings.append("Muted main audio; rendered secondary audio track.")
+            has_audio = True
+
         else:
-            cmd.append("-an")
+            audio_fc = None
+            has_audio = False
+            warnings.append("Audio muted in render output.")
+
+        # Assemble filter complex and map streams
+        if has_audio and audio_fc:
+            total_fc = f"{video_fc};{audio_fc}"
+            cmd.extend([
+                "-filter_complex", total_fc,
+                "-map", "[v_out]",
+                "-map", "[a_out]",
+                "-c:a", "aac",
+                "-b:a", "192k",
+                "-ar", "48000",
+            ])
+        else:
+            cmd.extend([
+                "-filter_complex", video_fc,
+                "-map", "[v_out]",
+                "-an",
+            ])
 
         cmd.extend([
             "-c:v", "libx264",

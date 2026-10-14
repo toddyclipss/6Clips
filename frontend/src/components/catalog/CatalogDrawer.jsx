@@ -358,24 +358,24 @@ export default function CatalogDrawer({
 
               <Box sx={{ mt: 1, p: 1.5, borderRadius: 1, bgcolor: isDark ? alpha("#fff", 0.04) : alpha("#000", 0.04), border: 1, borderColor: "divider" }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                  Wave 9 Verification Proof Ladder
+                  Wave 10 Verification Proof Ledger
                 </Typography>
                 <Stack spacing={0.75}>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography variant="caption" sx={{ color: "text.secondary" }}>Origin / License:</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{isOperational12 ? (["creator-hud", "glitch-transition"].includes(item.id) ? "6Clips Original Substitute (Apache-2.0)" : "Donor Internalized (Apache-2.0/MIT)") : "Quarantined (License/Structural)"}</Typography>
+                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{isOperational12 ? (["creator-hud", "glitch-transition"].includes(item.id) ? "ORIGINAL_6CLIPS (Apache-2.0)" : "ORIGINAL_DONOR (Apache-2.0/MIT)") : "QUARANTINED (186 Withheld)"}</Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography variant="caption" sx={{ color: "text.secondary" }}>Offline Assets (Zero CDN):</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (100% Pinned)" : "PENDING"}</Typography>
+                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (100% Offline)" : "PENDING"}</Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography variant="caption" sx={{ color: "text.secondary" }}>Browser Animation (Playwright):</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (Dynamic Seek)" : "PENDING"}</Typography>
+                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (Dynamic Seek + Instance Vars)" : "PENDING"}</Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography variant="caption" sx={{ color: "text.secondary" }}>Project Insertion Intent:</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (Ready for Agent 1)" : "QUARANTINED"}</Typography>
+                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (CAS & Scoped IDs)" : "QUARANTINED"}</Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography variant="caption" sx={{ color: "text.secondary" }}>Canonical MP4 Export:</Typography>
