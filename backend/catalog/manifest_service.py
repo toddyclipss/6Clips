@@ -38,6 +38,8 @@ WAVE4_INTERNALIZED_BLOCKS = CORE_INTERNALIZED_BLOCKS | {
 # Wave 14 canonical origin partitioning
 DONOR_INTERNALIZED_BLOCKS = WAVE4_INTERNALIZED_BLOCKS - {"glitch-transition", "creator-hud"}
 SIXCLIPS_ORIGINAL_BLOCKS = {"glitch-transition", "creator-hud"}
+RETIRED_6CLIPS_BLOCKS = SIXCLIPS_ORIGINAL_BLOCKS
+WAVE15_OPERABLE_DONOR_BLOCKS = DONOR_INTERNALIZED_BLOCKS
 
 
 class CatalogManifestError(Exception):
@@ -466,14 +468,18 @@ class CatalogManifestService:
         }
 
     @classmethod
-    def validate_block_for_project_insertion(cls, block_id: str) -> None:
+    def validate_block_for_project_insertion(cls, block_id: str, allow_retired: bool = False) -> None:
         """
-        Wave 9 Negative Safety Gate: Enforces quarantine on all 186 unready historical blocks.
-        Only the 12 verified operational blocks (10 donor + 2 original) may be inserted into project documents.
+        Wave 15 Negative Safety Gate: Enforces quarantine on all unready historical blocks
+        and blocks retired 6Clips-authored blocks from project insertion.
+        Only verified operable donor blocks may be inserted into project documents.
         """
         cls.validate_block_id(block_id)
-        operational_set = set(WAVE4_INTERNALIZED_BLOCKS) | set(CORE_INTERNALIZED_BLOCKS) | {"creator-hud", "glitch-transition"}
-        if block_id not in operational_set:
+        if block_id in RETIRED_6CLIPS_BLOCKS and not allow_retired:
+            raise CatalogManifestError(
+                f"Block '{block_id}' is a retired non-HyperFrames block and cannot be inserted into projects."
+            )
+        if block_id not in DONOR_INTERNALIZED_BLOCKS and not (allow_retired and block_id in SIXCLIPS_ORIGINAL_BLOCKS):
             raise CatalogManifestError(
                 f"Block '{block_id}' is quarantined: license review or structural fixes required before project insertion."
             )
@@ -831,9 +837,35 @@ class CatalogManifestService:
         b_id = enriched.get("id", "")
         disp = enriched.get("disposition", "SHIP")
 
-        is_internalized = b_id in WAVE4_INTERNALIZED_BLOCKS
+        is_retired = b_id in RETIRED_6CLIPS_BLOCKS
+        if is_retired:
+            enriched["origin"] = "RETIRED_6CLIPS_AUTHORED"
+            enriched["retired"] = True
+            enriched["requires_migration"] = True
+            enriched["is_public_catalog_item"] = False
+            enriched["internalized"] = False
+            enriched["runtime_ready"] = False
+            enriched["runtime_operable"] = False
+            enriched["readiness"] = "RETIRED"
+            enriched["license_status"] = "RETIRED_AUTHORED_SUBSTITUTE"
+            enriched["blocker_code"] = "RETIRED_6CLIPS_AUTHORED_BLOCK"
+            enriched["blocker_reason"] = "Retired 6Clips-authored block; excluded from public catalog and requires safe migration."
+            return enriched
+
+        enriched["origin"] = "DONOR_ORIGINAL"
+        enriched["retired"] = False
+        enriched["requires_migration"] = False
+        enriched["source_category"] = None
+        enriched["source_category_status"] = "SOURCE_CATEGORY_MISSING"
+        fallback_cat = enriched.get("category") or "general"
+        enriched["proposed_fallback_category"] = fallback_cat
+        enriched["is_original_category"] = False
+
+        is_internalized = b_id in DONOR_INTERNALIZED_BLOCKS
         enriched["internalized"] = is_internalized
         enriched["runtime_ready"] = is_internalized
+        enriched["runtime_operable"] = is_internalized
+        enriched["is_public_catalog_item"] = is_internalized
 
         if is_internalized:
             enriched["readiness"] = "READY"
@@ -911,15 +943,17 @@ class CatalogManifestService:
         disposition: Optional[str] = None,
         limit: int = 200,
         offset: int = 0,
-        wave: int = 3,
+        wave: int = 15,
     ) -> Dict[str, Any]:
         """Faceted listing over the catalog items."""
         items = cls.get_all_items()
+        # Strictly exclude retired 6Clips-authored blocks from public catalog listing
+        items = [it for it in items if not it.get("retired")]
 
         # Category filter
         if category and category.lower() != "all":
             c_lower = category.lower()
-            items = [it for it in items if it.get("category", "").lower() == c_lower]
+            items = [it for it in items if it.get("category", "").lower() == c_lower or it.get("proposed_fallback_category", "").lower() == c_lower]
 
         # Search filter
         if search:
@@ -943,8 +977,14 @@ class CatalogManifestService:
         # Disposition / Readiness filter
         if disposition and disposition.upper() != "ALL":
             d_upper = disposition.upper()
-            ready_set = WAVE4_INTERNALIZED_BLOCKS if (wave == 4 or d_upper == "WAVE4_READY") else CORE_INTERNALIZED_BLOCKS
-            if d_upper in ("READY", "INTERNALIZED", "WAVE4_READY"):
+            if wave >= 15 or d_upper == "WAVE15_READY":
+                ready_set = DONOR_INTERNALIZED_BLOCKS
+            elif wave == 4 or d_upper == "WAVE4_READY":
+                ready_set = WAVE4_INTERNALIZED_BLOCKS
+            else:
+                ready_set = CORE_INTERNALIZED_BLOCKS
+
+            if d_upper in ("READY", "INTERNALIZED", "WAVE4_READY", "WAVE15_READY"):
                 items = [it for it in items if it.get("id") in ready_set]
             elif d_upper == "UNVERIFIED":
                 items = [it for it in items if it.get("id") not in ready_set and it.get("disposition") != "FIX"]
@@ -955,11 +995,11 @@ class CatalogManifestService:
         paged = items[offset:offset + limit]
 
         # Facet counts
-        all_items = cls.get_all_items()
+        all_items = [it for it in cls.get_all_items() if not it.get("retired")]
         categories: Dict[str, int] = {}
         dispositions: Dict[str, int] = {}
         readiness_counts: Dict[str, int] = {"READY": 0, "UNVERIFIED": 0, "FIX": 0}
-        facet_ready_set = WAVE4_INTERNALIZED_BLOCKS if wave == 4 else CORE_INTERNALIZED_BLOCKS
+        facet_ready_set = DONOR_INTERNALIZED_BLOCKS if wave >= 15 else (WAVE4_INTERNALIZED_BLOCKS if wave == 4 else CORE_INTERNALIZED_BLOCKS)
         for it in all_items:
             cat = it.get("category", "general")
             categories[cat] = categories.get(cat, 0) + 1
@@ -1164,11 +1204,14 @@ class CatalogManifestService:
         return raw
 
     @classmethod
-    def validate_block_operable(cls, block_id: str) -> None:
-        """Enforces that only operable, rights-cleared, shipped blocks can be operated on."""
+    def validate_block_operable(cls, block_id: str, allow_retired: bool = False) -> None:
+        """Enforces that only operable, rights-cleared, shipped donor blocks can be operated on."""
         cls.validate_block_id(block_id)
-        operational_set = set(WAVE4_INTERNALIZED_BLOCKS) | set(CORE_INTERNALIZED_BLOCKS) | SIXCLIPS_ORIGINAL_BLOCKS
-        if block_id not in operational_set:
+        if block_id in RETIRED_6CLIPS_BLOCKS and not allow_retired:
+            raise CatalogManifestError(
+                f"Block '{block_id}' is a retired non-HyperFrames block and is disabled from public catalog operations."
+            )
+        if block_id not in DONOR_INTERNALIZED_BLOCKS and not (allow_retired and block_id in SIXCLIPS_ORIGINAL_BLOCKS):
             raise CatalogManifestError(
                 f"Block '{block_id}' is quarantined/uninternalized: runtime operation is disabled."
             )
@@ -1286,11 +1329,12 @@ class CatalogManifestService:
         category: Optional[str] = None,
         limit: int = 50,
         offset: int = 0,
+        snapshot: bool = False,
     ) -> Dict[str, Any]:
         """
         List catalog blocks with truthful inventory reconciliation.
         Reads packaged v1 metadata from backend/catalog_inventory/hyperframes_196_inventory.json when available.
-        When unavailable, serves the 12 operational blocks without fabricating fake 186 placeholders.
+        When unavailable, serves the operational blocks without fabricating fake 186 placeholders.
         """
         recon = cls.get_wave14_reconciliation()
         manifest_data = cls.load_inventory_v1()
@@ -1309,10 +1353,15 @@ class CatalogManifestService:
                 runtime_status = "INTERNALIZED_WORKING" if is_internalized else b.get("integration_status", "ELIGIBLE_NOT_PORTED")
                 runtime_operable = bool(is_internalized)
 
+                fallback_cat = raw_meta.get("category") or b.get("category") or "general"
                 item_entry = {
                     "id": bid,
                     "title": raw_meta.get("title") or b.get("title") or bid.replace("-", " ").title(),
-                    "category": raw_meta.get("category") or b.get("category") or "general",
+                    "category": fallback_cat,
+                    "source_category": None,
+                    "source_category_status": "SOURCE_CATEGORY_MISSING",
+                    "proposed_fallback_category": fallback_cat,
+                    "is_original_category": False,
                     "description": raw_meta.get("description") or b.get("description") or "",
                     "origin": "DONOR_ORIGINAL",
                     "relative_source_path": b.get("relative_source_path", f"registry/blocks/{bid}"),
@@ -1335,10 +1384,15 @@ class CatalogManifestService:
         else:
             for bid in donor_10:
                 raw_meta = raw_items_map.get(bid, {})
+                fallback_cat = raw_meta.get("category") or "general"
                 item_entry = {
                     "id": bid,
                     "title": raw_meta.get("title") or bid.replace("-", " ").title(),
-                    "category": raw_meta.get("category") or "general",
+                    "category": fallback_cat,
+                    "source_category": None,
+                    "source_category_status": "SOURCE_CATEGORY_MISSING",
+                    "proposed_fallback_category": fallback_cat,
+                    "is_original_category": False,
                     "description": raw_meta.get("description") or "",
                     "origin": "DONOR_ORIGINAL",
                     "relative_source_path": f"registry/blocks/{bid}",
@@ -1359,7 +1413,7 @@ class CatalogManifestService:
                 }
                 all_blocks.append(item_entry)
 
-        # 6Clips original blocks (kept strictly separate from 196 donor originals)
+        # 6Clips original blocks (kept strictly separate from 196 donor originals, flagged retired for Wave 15)
         sixclips_blocks = []
         for s_id in ("creator-hud", "glitch-transition"):
             raw_meta = raw_items_map.get(s_id, {})
@@ -1368,13 +1422,17 @@ class CatalogManifestService:
                 "title": raw_meta.get("title") or s_id.replace("-", " ").title(),
                 "category": raw_meta.get("category") or ("overlays" if s_id == "creator-hud" else "transitions"),
                 "description": raw_meta.get("description") or "",
-                "origin": "6CLIPS_ORIGINAL",
+                "origin": "RETIRED_6CLIPS_AUTHORED",
+                "retired": True,
+                "requires_migration": True,
+                "excluded_from_public_catalog": True,
                 "relative_source_path": f"backend/catalog/shipped_blocks/{s_id}",
                 "source_sha256": "6clips_authored",
                 "license_status": "VERIFIED_PERMISSIVE",
                 "license_evidence": "Authored directly by 6Clips Contributors under Apache-2.0",
                 "integration_status": "INTERNALIZED",
-                "blocker_reason": None,
+                "blocker_code": "RETIRED_6CLIPS_AUTHORED_BLOCK",
+                "blocker_reason": "Retired per Owner Decision (2026-10-14); migration required.",
                 "supported_aspects": ["9:16", "16:9"],
                 "evidence_refs": [f"backend/catalog/shipped_blocks/{s_id}/registry-item.json"],
                 "runtime_operable": True,
@@ -1404,7 +1462,7 @@ class CatalogManifestService:
 
         if category and category.lower() != "all":
             c_low = category.lower().strip()
-            filtered_blocks = [b for b in filtered_blocks if b.get("category", "").lower() == c_low]
+            filtered_blocks = [b for b in filtered_blocks if b.get("category", "").lower() == c_low or b.get("proposed_fallback_category", "").lower() == c_low]
 
         if search:
             q = search.lower().strip()
@@ -1417,7 +1475,15 @@ class CatalogManifestService:
             ]
 
         total_filtered = len(filtered_blocks)
-        paginated_blocks = filtered_blocks[offset:offset + limit]
+
+        if snapshot or limit >= total_filtered:
+            paginated_blocks = filtered_blocks
+            eff_limit = total_filtered
+            eff_offset = 0
+        else:
+            paginated_blocks = filtered_blocks[offset:offset + limit]
+            eff_limit = limit
+            eff_offset = offset
 
         return {
             "schema_version": 1,
@@ -1431,8 +1497,66 @@ class CatalogManifestService:
             "status_breakdown": recon["status_breakdown"],
             "license_breakdown": recon["license_breakdown"],
             "total": total_filtered,
-            "limit": limit,
-            "offset": offset,
+            "limit": eff_limit,
+            "offset": eff_offset,
+            "is_snapshot": bool(snapshot or limit >= total_filtered),
             "blocks": paginated_blocks,
             "sixclips_original_blocks": sixclips_blocks,
+        }
+
+    @classmethod
+    def get_wave15_reconciliation(cls) -> Dict[str, Any]:
+        """
+        Wave 15 Rigorous Reconciliation & Taxonomy Audit:
+        - 196 unique original donor IDs
+        - 170 aggregate items indexed in registry/registry.json
+        - 26 unindexed directories in registry/blocks
+        - 10 donor-origin internalized blocks verified
+        - 186 unported donor blocks quarantined
+        - 0 extra 6Clips-authored blocks in public catalog (creator-hud & glitch-transition retired)
+        - Source category status: SOURCE_CATEGORY_MISSING with proposed fallback taxonomy
+        - All 196 operational: False
+        - Zero donor dependency (GT-20): True
+        """
+        from backend.catalog_runtime.core import DonorTaxonomyReconciler
+        census = DonorTaxonomyReconciler.get_census_summary()
+        return {
+            "audit_scope": "Wave 15 HyperFrames 196 Canonical Catalog Engine & Native Taxonomy",
+            "wave": "WAVE_15",
+            "donor_inventory_total": 196,
+            "indexed_in_registry_json": 170,
+            "unindexed_block_directories": 26,
+            "unindexed_block_ids": census["unindexed_block_ids"],
+            "donor_operable_blocks": census["donor_operable_blocks"],
+            "donor_operable_count": census["donor_operable_count"],
+            "unported_donor_blocks_quarantined": census["unported_donor_blocks"],
+            "retired_6clips_blocks": census["retired_6clips_blocks"],
+            "retired_6clips_count": census["retired_6clips_count"],
+            "sixclips_authored_in_public_catalog": 0,
+            "source_category_status": "SOURCE_CATEGORY_MISSING",
+            "taxonomy_strategy": "PROPOSED_FALLBACK_WITH_ORIGINAL_TAGS",
+            "canonical_categories": census["canonical_categories"],
+            "terminal_declarations": {
+                "ORIGINAL_DONOR_INVENTORIED": 196,
+                "DONOR_OPERABLE_COUNT": 10,
+                "UNPORTED_DONOR_ORIGINALS": 186,
+                "SIXCLIPS_AUTHORED_IN_PUBLIC_CATALOG": 0,
+                "ALL_196_OPERATIONAL": False,
+                "HYPERFRAMES_FULLY_INTEGRATED": False,
+                "ZERO_DONOR_DEPENDENCY": True,
+            },
+        }
+
+    @classmethod
+    def get_wave15_factual_audit(cls) -> Dict[str, Any]:
+        """Return full Wave 15 proof ladder and factual metrics."""
+        from backend.catalog_runtime.core import list_runtime_block_specs, DonorTaxonomyReconciler
+        specs = list_runtime_block_specs(only_public=False)
+        proof_ladder_map = {s.original_id: s.readiness for s in specs}
+        census = DonorTaxonomyReconciler.get_census_summary()
+        return {
+            "wave": "WAVE_15",
+            "reconciliation": cls.get_wave15_reconciliation(),
+            "proof_ladder": proof_ladder_map,
+            "census": census,
         }

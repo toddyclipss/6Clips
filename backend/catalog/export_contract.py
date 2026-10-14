@@ -1007,6 +1007,7 @@ class CatalogExportContract:
         aspect_ratio: str = "9:16",
         instance_id: Optional[str] = None,
         temp_dir: Optional[Path] = None,
+        allow_retired: bool = False,
     ) -> Dict[str, Any]:
         """
         Wave 10: Deterministically renders a multi-timestamp frame sequence for a
@@ -1014,7 +1015,7 @@ class CatalogExportContract:
         verifies that frames reflect the edited instance values, not default screenshots.
         """
         CatalogManifestService.validate_block_id(block_id)
-        CatalogManifestService.validate_block_for_project_insertion(block_id)
+        CatalogManifestService.validate_block_for_project_insertion(block_id, allow_retired=allow_retired)
 
         from playwright.sync_api import sync_playwright
         from PIL import Image
@@ -1141,6 +1142,7 @@ class CatalogExportContract:
         aspect_ratio: str = "9:16",
         duration_seconds: float = 2.0,
         temp_dir: Optional[Path] = None,
+        allow_retired: bool = True,
     ) -> Dict[str, Any]:
         """
         Wave 11: Renders BOTH a canonical transparent overlay video (.mov, rgba)
@@ -1151,7 +1153,7 @@ class CatalogExportContract:
         import tempfile
 
         CatalogManifestService.validate_block_id(block_id)
-        CatalogManifestService.validate_block_for_project_insertion(block_id)
+        CatalogManifestService.validate_block_for_project_insertion(block_id, allow_retired=allow_retired)
 
         inst_id = f"inst_{block_id}_{uuid.uuid4().hex[:8]}"
         out_dir = temp_dir or Path(tempfile.gettempdir()) / "viralmint_canonical_overlays" / inst_id
@@ -1168,6 +1170,7 @@ class CatalogExportContract:
             aspect_ratio=aspect_ratio,
             instance_id=inst_id,
             temp_dir=out_dir,
+            allow_retired=allow_retired,
         )
         mid_frame = seq_res["frames"][1] if len(seq_res["frames"]) > 1 else seq_res["frames"][0]
         png_path = Path(mid_frame["file_path"])

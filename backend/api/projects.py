@@ -74,6 +74,9 @@ async def get_project(project_id: str, db: AsyncSession = Depends(get_db)):
     """Get project document, revision, and latest rendered video metadata."""
     try:
         p = await ProjectService.get_project(project_id)
+        doc = json.loads(p.document_json)
+        from backend.catalog_runtime.core import LegacyBlockMigrationManager
+        doc, requires_migration = LegacyBlockMigrationManager.inspect_and_mark_migration(doc)
         res_v = await db.execute(
             select(GeneratedVideo)
             .where(GeneratedVideo.project_id == project_id)
@@ -98,7 +101,8 @@ async def get_project(project_id: str, db: AsyncSession = Depends(get_db)):
             "name": p.name,
             "aspect_ratio": p.aspect_ratio,
             "revision": p.revision,
-            "document": json.loads(p.document_json),
+            "document": doc,
+            "requires_migration": requires_migration,
             "is_frozen": p.is_frozen,
             "latest_render": latest_render,
             "created_at": p.created_at.isoformat() if p.created_at else None,
@@ -163,6 +167,23 @@ async def apply_project_operation(
             status_code=400,
             detail="Missing required fields: 'expected_revision' and 'operation_type'."
         )
+
+    # Wave 15 Guard: prohibit new insertions of retired 6Clips blocks or uninternalized blocks
+    if operation_type in ("add_block", "insert_block"):
+        target_bid = payload.get("block_id") or payload.get("id")
+        if target_bid:
+            from backend.catalog_runtime.core import DonorTaxonomyReconciler
+            if DonorTaxonomyReconciler.is_retired_6clips_block(target_bid):
+                raise HTTPException(
+                    status_code=409,
+                    detail=f"Block '{target_bid}' is a retired non-HyperFrames block and cannot be added to projects."
+                )
+            from backend.catalog.manifest_service import DONOR_INTERNALIZED_BLOCKS
+            if target_bid not in DONOR_INTERNALIZED_BLOCKS:
+                raise HTTPException(
+                    status_code=403,
+                    detail=f"Block '{target_bid}' is quarantined/uninternalized."
+                )
 
     try:
         res = await ProjectService.apply_operation(
@@ -294,7 +315,13 @@ async def list_catalog_items(
 ):
     """List available normalized catalog blocks from registry."""
     from backend.services.registry_adapter import RegistryAdapter
-    items = RegistryAdapter.list_catalog_items(category=category, search=search, limit=limit, offset=offset)
+    items = RegistryAdapter.list_catalog_items(
+        category=category,
+        search=search,
+        limit=limit,
+        offset=offset,
+        include_retired=False,
+    )
     enriched = []
     for it in items:
         b_name = it.get("name") or it.get("id")
