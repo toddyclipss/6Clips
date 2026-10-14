@@ -390,6 +390,7 @@ class MotionCapabilitiesRegistry:
         "audio-framing-parity": "reframe",
         "multiline-caption-override": "manual-caption-override",
         "source-bench-ranges": "filmstrip-range-bench",
+        "metadata": "video-download",
     }
 
     @classmethod
