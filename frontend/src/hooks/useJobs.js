@@ -39,23 +39,34 @@ export default function useJobs(pollInterval = 5000, pageSize = 20) {
   const [jobTotal, setJobTotal] = useState(0)
   const timerRef = useRef(null)
   const tickRef = useRef(0)
+  const inFlightRef = useRef(false)
+  const abortCtrlRef = useRef(null)
 
-  const fetchJobs = async (limit = pageSize, offset = 0) => {
+  const fetchJobs = async (limit = pageSize, offset = 0, signal = null) => {
+    if (inFlightRef.current && !signal) return null
+    inFlightRef.current = true
     try {
-      const { data } = await http.get("/api/jobs", { params: { limit, offset } })
+      const { data } = await http.get("/api/jobs", { params: { limit, offset }, signal })
       const next = data.jobs || []
       const prev = useAppStore.getState().jobs
       if (!sameJobs(prev, next)) setJobs(next)
       setJobTotal(data.total || 0)
       return next
     } catch (err) {
-      console.error("Failed to fetch jobs:", err)
+      if (!signal?.aborted) {
+        console.error("Failed to fetch jobs:", err)
+      }
       return null
+    } finally {
+      inFlightRef.current = false
     }
   }
 
   useEffect(() => {
-    fetchJobs()
+    const controller = new AbortController()
+    abortCtrlRef.current = controller
+
+    fetchJobs(pageSize, 0, controller.signal)
 
     const tick = () => {
       if (document.visibilityState === "hidden") return
@@ -64,7 +75,7 @@ export default function useJobs(pollInterval = 5000, pageSize = 20) {
       tickRef.current = anyActive ? 0 : tickRef.current + 1
       if (anyActive || tickRef.current >= IDLE_MULTIPLIER) {
         tickRef.current = 0
-        fetchJobs()
+        fetchJobs(pageSize, 0, abortCtrlRef.current?.signal)
       }
     }
     timerRef.current = setInterval(tick, pollInterval)
@@ -73,7 +84,7 @@ export default function useJobs(pollInterval = 5000, pageSize = 20) {
     const onVisible = () => {
       if (document.visibilityState === "visible") {
         tickRef.current = 0
-        fetchJobs()
+        fetchJobs(pageSize, 0, abortCtrlRef.current?.signal)
       }
     }
     document.addEventListener("visibilitychange", onVisible)
@@ -81,8 +92,11 @@ export default function useJobs(pollInterval = 5000, pageSize = 20) {
     return () => {
       clearInterval(timerRef.current)
       document.removeEventListener("visibilitychange", onVisible)
+      if (abortCtrlRef.current) {
+        abortCtrlRef.current.abort()
+      }
     }
-  }, [pollInterval])
+  }, [pollInterval, pageSize])
 
   return { jobs, jobTotal, fetchJobs }
 }

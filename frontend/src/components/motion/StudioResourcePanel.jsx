@@ -100,23 +100,31 @@ export default function StudioResourcePanel({
       return sB - sA
     })
 
-  const fetchCatalog = useCallback(() => {
+  const fetchCatalog = useCallback((signal = null) => {
     setCatalogLoading(true)
     setCatalogError(null)
-    http.get("/api/projects/catalog/items")
+    http.get("/api/projects/catalog/items", { signal })
       .then((res) => {
         const items = res.data?.items || (Array.isArray(res.data) ? res.data : [])
         setCatalogItems(items)
       })
       .catch((err) => {
+        if (signal?.aborted) return
         setCatalogError(err.response?.data?.detail || err.message || "Failed to load catalog items")
       })
-      .finally(() => setCatalogLoading(false))
+      .finally(() => {
+        if (!signal?.aborted) setCatalogLoading(false)
+      })
   }, [])
 
   useEffect(() => {
+    let controller = null
     if (tab === 2 && catalogItems.length === 0 && !catalogError) {
-      fetchCatalog()
+      controller = new AbortController()
+      fetchCatalog(controller.signal)
+    }
+    return () => {
+      if (controller) controller.abort()
     }
   }, [tab, catalogItems.length, catalogError, fetchCatalog])
 

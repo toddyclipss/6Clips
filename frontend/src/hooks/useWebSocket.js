@@ -36,6 +36,9 @@ export default function useWebSocket() {
   useEffect(() => {
     ws.connect()
 
+    let cancelled = false
+    const controller = new AbortController()
+
     // Restore running/pending jobs from API so active jobs survive page refresh
     const restoreJobs = async () => {
       try {
@@ -45,7 +48,9 @@ export default function useWebSocket() {
         // what were two separate 20-row windows.
         const { data } = await http.get("/api/jobs", {
           params: { status: "running,pending", limit: 40 },
+          signal: controller.signal,
         })
+        if (cancelled) return
         const allJobs = data.jobs || []
         // Restore active jobs from API on reconnect
         allJobs.forEach(j => {
@@ -337,6 +342,8 @@ export default function useWebSocket() {
     ]
 
     return () => {
+      cancelled = true
+      controller.abort()
       unsubs.forEach(fn => fn())
       if (rafRef.current != null) {
         cancelAnimationFrame(rafRef.current)
