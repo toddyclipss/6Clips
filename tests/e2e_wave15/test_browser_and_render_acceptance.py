@@ -206,3 +206,75 @@ def test_physical_video_export_and_decode_audit(isolated_server):
     assert len(unique_hashes) == len(representative_blocks), (
         f"Hash collision detected among operational renders! Total: {len(representative_blocks)}, unique: {len(unique_hashes)}"
     )
+
+
+# =========================================================================
+# Task 5: Inventory Traversal & Motion Project Intent Lifecycle
+# =========================================================================
+
+def test_inventory_traversal_pagination_to_196(isolated_server):
+    """
+    Wave 15 Acceptance Contract:
+    Verify /api/catalog/inventory supports bounded 24-row pagination and
+    can be completely traversed without missing rows to reveal exactly 196 unique donor blocks.
+    Verify creator-hud and glitch-transition are not in the donor items list.
+    """
+    import httpx
+    base_url = isolated_server["base_url"]
+    limit = 24
+    offset = 0
+    all_retrieved_ids = set()
+    total_expected = 196
+
+    while True:
+        resp = httpx.get(f"{base_url}/api/catalog/inventory?limit={limit}&offset={offset}", timeout=10.0)
+        assert resp.status_code == 200, f"Inventory request failed at offset {offset}: {resp.text}"
+        data = resp.json()
+
+        page_blocks = data.get("blocks", [])
+        assert len(page_blocks) <= limit, f"Returned more than limit {limit} blocks: {len(page_blocks)}"
+
+        for b in page_blocks:
+            b_id = b["id"]
+            assert b_id not in all_retrieved_ids, f"Duplicate block ID returned across pagination: {b_id}"
+            all_retrieved_ids.add(b_id)
+
+        offset += limit
+        if offset >= data.get("total", total_expected) or len(page_blocks) == 0:
+            break
+
+    assert len(all_retrieved_ids) == 196, f"Expected exactly 196 unique donor blocks, retrieved {len(all_retrieved_ids)}"
+    assert "creator-hud" not in all_retrieved_ids, "creator-hud must not be present in donor inventory items"
+    assert "glitch-transition" not in all_retrieved_ids, "glitch-transition must not be present in donor inventory items"
+
+
+def test_motion_project_revision_cas_and_intent(isolated_server):
+    """
+    Wave 15 Acceptance Contract:
+    Verify operational block insertion intent creation succeeds with normalized timeline item,
+    and unready historical blocks are strictly rejected (negative safety gate).
+    """
+    import httpx
+    base_url = isolated_server["base_url"]
+
+    # 1. Operational block intent succeeds
+    intent_payload = {
+        "project_id": "proj_val_001",
+        "owning_user_id": "user_val",
+        "custom_variables": {"speed": "2.0", "color1": "#3b82f6"},
+        "in_point_seconds": 1.0,
+        "duration_seconds": 4.0,
+        "target_track": "motion_overlay_1",
+    }
+    resp = httpx.post(f"{base_url}/api/catalog/blocks/aurora/intent/add-to-project", json=intent_payload, timeout=10.0)
+    assert resp.status_code == 200, f"Add to project intent failed for operational block: {resp.text}"
+    intent_data = resp.json()
+    assert intent_data.get("status") in ("VALIDATED_INTENT", "INTENT_PRODUCED")
+    timeline_item = intent_data.get("timeline_item") or intent_data.get("normalized_timeline_item", {})
+    assert timeline_item.get("block_id") == "aurora"
+    assert timeline_item.get("duration", 0.0) > 0.0
+
+    # 2. Quarantined block intent rejected (Negative Safety Gate)
+    resp_quarantine = httpx.post(f"{base_url}/api/catalog/blocks/3d-carousel/intent/add-to-project", json=intent_payload, timeout=10.0)
+    assert resp_quarantine.status_code == 400, f"Expected 400 rejection for quarantined block, got {resp_quarantine.status_code}"
+    assert "quarantined" in resp_quarantine.text.lower() or "blocked" in resp_quarantine.text.lower()
