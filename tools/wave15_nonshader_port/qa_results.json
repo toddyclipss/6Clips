@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "base_sha": "e110d2923638eb32bc293dd96dcd464fab835fa5",
-  "started_at": "2026-10-14T22:18:10.969435+00:00",
-  "finished_at": "2026-10-14T22:18:31.060888+00:00",
+  "started_at": "2026-10-14T22:27:08.842986+00:00",
+  "finished_at": "2026-10-14T22:27:26.994074+00:00",
   "command": [
     "python",
     "-m",
@@ -14,10 +14,10 @@
     "tests/test_wave15_agent6_browser_contracts.py"
   ],
   "exit_code": 0,
-  "stdout": ".........................x...........                                    [100%]\n36 passed, 1 xfailed in 18.65s\n",
+  "stdout": ".........................x...........                                    [100%]\n36 passed, 1 xfailed in 17.17s\n",
   "stderr": "",
   "expected_pending_test": "AGENT1_RUNTIME_REGISTRATION_PENDING, canonical native adapter bridge/CAS integration",
-  "proof_file_sha256": "8c5f86ef05f0f278431e5dd6b5c0e7a1d88b74ba7d2506c47d97d3d54ffeecac",
+  "proof_file_sha256": "08dcb1d0958f81d9c9399fd8cca8b8c55f18ee9426412d4f7fb48627dd0760f9",
   "physical_command": [
     "python",
     "tools/wave15_nonshader_port/verify.py",
