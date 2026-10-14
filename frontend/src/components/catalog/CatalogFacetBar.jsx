@@ -1,9 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
- * CatalogFacetBar: truthful discovery, facet filters, search, and inventory views.
- * Exposes explicit view modes per Wave 14 Stage 1 specification:
- * - Available now (operational: 10 donor + 2 6Clips original)
+ * CatalogFacetBar: truthful discovery, authentic HyperFrames categories,
+ * aspect ratio controls, and inventory views.
+ *
+ * Upstream HyperFrames Categories (@hyperframes/core/registry):
+ * - Captions, Code Animations, VFX, Transitions, Effects, Text Effects, Social, Data, Scenes
+ * - Diagnostic: Source Category Missing
+ *
+ * Exposes explicit view modes per Wave 15 specification:
+ * - Available now (exact 10 verified internalized donor blocks)
  * - All original HyperFrames (196 verified original donor blocks)
  * - Needs work (adaptation / pending port)
  * - Blocked (license / dependency / security)
@@ -17,6 +23,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Typography,
+  Tooltip,
   alpha,
   useTheme,
 } from "@mui/material"
@@ -29,18 +36,9 @@ import {
   IconArchive,
   IconTool,
   IconShieldLock,
+  IconAlertCircle,
 } from "@tabler/icons-react"
-
-const CATEGORIES = [
-  { id: "all", label: "All Blocks" },
-  { id: "call-to-action", label: "Call to Action" },
-  { id: "typography", label: "Typography" },
-  { id: "lower-thirds", label: "Lower Thirds" },
-  { id: "charts", label: "Charts & Data" },
-  { id: "transitions", label: "Transitions" },
-  { id: "backgrounds", label: "Backgrounds" },
-  { id: "mock-ui", label: "Mock UI" },
-]
+import { HYPERFRAMES_CATEGORIES, CATEGORY_COLOR_MAP } from "../../utils/catalogOriginals"
 
 export default function CatalogFacetBar({
   search,
@@ -57,10 +55,11 @@ export default function CatalogFacetBar({
   const theme = useTheme()
   const isDark = theme.palette.mode === "dark"
 
-  const availCount = counts.AVAILABLE_NOW != null ? counts.AVAILABLE_NOW : 12
+  const availCount = counts.AVAILABLE_NOW != null ? counts.AVAILABLE_NOW : 10
   const origCount = counts.ALL_ORIGINAL_196 != null ? counts.ALL_ORIGINAL_196 : 196
   const needsWorkCount = counts.NEEDS_WORK != null ? counts.NEEDS_WORK : 0
   const blockedCount = counts.BLOCKED != null ? counts.BLOCKED : 0
+  const categoryCounts = counts.categories || {}
 
   return (
     <Box sx={{ mb: 3 }} role="search" aria-label="Catalog Filtering and Navigation">
@@ -74,7 +73,7 @@ export default function CatalogFacetBar({
       >
         <TextField
           size="small"
-          placeholder="Search catalog blocks, titles, tags, licenses, blocker reasons..."
+          placeholder="Search 196 original donor blocks, titles, tags, licenses, blocker reasons..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           inputProps={{
@@ -143,7 +142,7 @@ export default function CatalogFacetBar({
             </ToggleButton>
           </ToggleButtonGroup>
 
-          {/* Primary View Filters per Wave 14 Task 2 */}
+          {/* Primary View Filters per Wave 15 */}
           <ToggleButtonGroup
             value={viewMode}
             exclusive
@@ -204,7 +203,7 @@ export default function CatalogFacetBar({
         </Stack>
       </Stack>
 
-      {/* Category Chips Bar */}
+      {/* Upstream HyperFrames Category Chips Bar */}
       <Stack
         direction="row"
         spacing={1}
@@ -214,23 +213,53 @@ export default function CatalogFacetBar({
           "&::-webkit-scrollbar": { height: 4 },
         }}
       >
-        {CATEGORIES.map((cat) => {
+        {HYPERFRAMES_CATEGORIES.map((cat) => {
           const isSelected = category === cat.id
+          let catCount = 0
+          if (cat.id === "all") {
+            catCount = totalCount != null ? totalCount : origCount
+          } else if (cat.id === "source_missing") {
+            catCount = categoryCounts.source_missing || 0
+          } else {
+            catCount = categoryCounts[cat.id] || 0
+          }
+
+          const chipLabel = `${cat.label}${catCount > 0 ? ` (${catCount})` : ""}`
+          const isMissingDiagnostic = cat.id === "source_missing"
+
           return (
-            <Chip
+            <Tooltip
               key={cat.id}
-              label={cat.label}
-              onClick={() => onCategoryChange(cat.id)}
-              variant={isSelected ? "filled" : "outlined"}
-              color={isSelected ? "primary" : "default"}
-              size="small"
-              sx={{
-                fontWeight: isSelected ? 700 : 500,
-                fontSize: "0.8rem",
-                borderRadius: "8px",
-                cursor: "pointer",
-              }}
-            />
+              title={
+                isMissingDiagnostic
+                  ? "Diagnostic: Upstream HyperFrames registry-item.json metadata lacks an explicit 'category' field. Categorization is truthfully resolved via HyperFrames core tag classifier."
+                  : `Original HyperFrames category: ${cat.label}`
+              }
+              arrow
+            >
+              <Chip
+                label={chipLabel}
+                icon={isMissingDiagnostic ? <IconAlertCircle size={14} /> : undefined}
+                onClick={() => onCategoryChange(cat.id)}
+                variant={isSelected ? "filled" : "outlined"}
+                color={isSelected ? (isMissingDiagnostic ? "warning" : "primary") : "default"}
+                size="small"
+                data-testid={`category-filter-${cat.id}`}
+                sx={{
+                  fontWeight: isSelected ? 700 : 500,
+                  fontSize: "0.78rem",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  ...(isMissingDiagnostic && !isSelected
+                    ? {
+                        borderStyle: "dashed",
+                        borderColor: theme.palette.warning.main,
+                        color: theme.palette.warning.dark,
+                      }
+                    : {}),
+                }}
+              />
+            </Tooltip>
           )
         })}
       </Stack>

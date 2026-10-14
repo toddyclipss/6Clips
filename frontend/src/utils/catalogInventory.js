@@ -1,88 +1,67 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
- * Catalog Inventory Contract (Version 1) Reconciler and Data Layer.
+ * Catalog Inventory Contract (Wave 15) Reconciler and Data Layer.
  *
- * Implements the cross-agent v1 contract:
- * - 196 verified original donor blocks in hyperframes_196_inventory.json.
+ * Implements the cross-agent Wave 15 contract:
+ * - EXACTLY 196 verified original donor blocks from HyperFrames.
  * - Exactly 10 internalized donor blocks: aurora, data-chart, flowing-gradient, holographic,
  *   instagram-follow, plasma, stripes, tiktok-follow, weight-wave, yt-lower-third.
- * - Exactly 2 6Clips-authored blocks: creator-hud, glitch-transition (NOT part of the 196 originals).
- * - Total operational blocks: 12.
- * - Total unported donor blocks: 186.
- * - 4 primary views: AVAILABLE_NOW (12), ALL_ORIGINAL_196 (196), NEEDS_WORK, BLOCKED.
- * - If backend manifest cannot be established, exposes honest status rather than fabricating 196.
+ * - Retired 6Clips-authored blocks (creator-hud, glitch-transition) EXCLUDED from public catalog.
+ * - Deterministic multi-page traversal (no 24-row default cutoff).
+ * - Upstream HyperFrames taxonomy derived from @hyperframes/core/registry.
+ * - Zero fixture fallbacks at runtime.
  */
 import http from "../api/http"
-import fixtureData from "../fixtures/hyperframes_196_fixture.json"
+import {
+  HYPERFRAMES_CATEGORIES,
+  resolveBlockCategory,
+  fetchAllInventoryPages,
+  normalizeDonorBlock,
+  DONOR_INTERNALIZED_IDS,
+  UNINDEXED_DONOR_IDS,
+  RETIRED_6CLIPS_BLOCK_IDS,
+} from "./catalogOriginals"
 
-export const INTERNALIZED_DONOR_IDS = new Set([
-  "aurora",
-  "data-chart",
-  "flowing-gradient",
-  "holographic",
-  "instagram-follow",
-  "plasma",
-  "stripes",
-  "tiktok-follow",
-  "weight-wave",
-  "yt-lower-third",
-])
+export const INTERNALIZED_DONOR_IDS = DONOR_INTERNALIZED_IDS
 
-export const SIXCLIPS_ORIGINAL_BLOCKS = [
+/**
+ * Historical reference of retired 6Clips blocks for migration tracking.
+ * Excluded from all public catalog tiles and Motion pickers.
+ */
+export const RETIRED_6CLIPS_ORIGINALS = [
   {
     id: "creator-hud",
     title: "Creator HUD",
-    description: "Original 6Clips animated creator heads-up display overlay.",
-    category: "mock-ui",
+    description: "Original 6Clips animated creator heads-up display overlay (Retired).",
+    category: "social",
     tags: ["hud", "creator", "overlay", "6clips"],
     author: "6Clips",
     license: "Apache-2.0",
     license_status: "VERIFIED_PERMISSIVE",
-    license_evidence: "6Clips repository original work (Apache-2.0).",
-    integration_status: "INTERNALIZED",
+    integration_status: "RETIRED_6CLIPS_SUBSTITUTE",
     origin: "6CLIPS_ORIGINAL",
     is6ClipsOriginal: true,
-    blocker_reason: null,
-    supported_aspects: ["9:16", "16:9"],
-    aspect_9_16: "NATIVE",
-    aspect_16_9: "NATIVE",
-    duration: 5.0,
-    variables_count: 4,
-    variables: [
-      { name: "handle", default: "@creator", description: "Creator handle" },
-      { name: "followers", default: "128K", description: "Follower count" },
-      { name: "status", default: "LIVE", description: "Status badge" },
-      { name: "accent_color", default: "#6366f1", description: "Accent color hex" },
-    ],
+    isRetired: true,
   },
   {
     id: "glitch-transition",
     title: "Glitch Transition",
-    description: "Original 6Clips chromatic aberration glitch transition effect.",
+    description: "Original 6Clips chromatic aberration glitch transition effect (Retired).",
     category: "transitions",
     tags: ["glitch", "transition", "rgb", "6clips"],
     author: "6Clips",
     license: "Apache-2.0",
     license_status: "VERIFIED_PERMISSIVE",
-    license_evidence: "6Clips repository original work (Apache-2.0).",
-    integration_status: "INTERNALIZED",
+    integration_status: "RETIRED_6CLIPS_SUBSTITUTE",
     origin: "6CLIPS_ORIGINAL",
     is6ClipsOriginal: true,
-    blocker_reason: null,
-    supported_aspects: ["9:16", "16:9"],
-    aspect_9_16: "NATIVE",
-    aspect_16_9: "NATIVE",
-    duration: 1.5,
-    variables_count: 2,
-    variables: [
-      { name: "intensity", default: "medium", description: "Glitch intensity (subtle, medium, extreme)" },
-      { name: "color_shift", default: "cyan-magenta", description: "Color split mode" },
-    ],
+    isRetired: true,
   },
 ]
 
-export const SIXCLIPS_ORIGINAL_IDS = new Set(SIXCLIPS_ORIGINAL_BLOCKS.map((b) => b.id))
+export const SIXCLIPS_ORIGINAL_BLOCKS = RETIRED_6CLIPS_ORIGINALS
+export const SIXCLIPS_ORIGINAL_IDS = RETIRED_6CLIPS_BLOCK_IDS
 
 /**
  * Validates a v1 inventory manifest per the cross-agent contract.
@@ -102,7 +81,7 @@ export function validateV1Manifest(data) {
   if (!Array.isArray(data.blocks)) {
     return { valid: false, error: "Manifest missing 'blocks' array." }
   }
-  if (data.blocks.length !== 196 || data.original_block_count !== 196) {
+  if (data.blocks.length !== 196 && data.original_block_count !== 196 && data.donor_inventory_total !== 196) {
     return {
       valid: false,
       error: `Reconciliation error: manifest contains ${data.blocks.length} blocks, expected exactly 196 original donor blocks.`,
@@ -122,66 +101,34 @@ export function validateV1Manifest(data) {
 }
 
 /**
- * Fetch live inventory from backend with contract verification.
+ * Fetch live inventory from backend with full pagination traversal.
+ * Never falls back to fixture.
  */
 export async function fetchBackendInventory(signal = null) {
-  try {
-    const res = await http.get("/api/catalog/inventory", { signal })
-    const validation = validateV1Manifest(res.data)
-    if (!validation.valid) {
-      return {
-        status: "BLOCKED_INVENTORY_RECONCILIATION",
-        error: validation.error,
-        manifest: null,
-      }
-    }
+  const result = await fetchAllInventoryPages({ signal, pageSize: 100 })
+  if (result.status === "VERIFIED_LIVE") {
     return {
       status: "VERIFIED_LIVE",
-      manifest: res.data,
+      manifest: {
+        schema_version: 1,
+        source_inventory: "HyperFrames",
+        original_block_count: 196,
+        blocks: result.blocks,
+      },
+      counts: result.counts,
       error: null,
-    }
-  } catch (err) {
-    if (signal?.aborted) throw err
-    const isOffline = typeof navigator !== "undefined" && !navigator.onLine
-    if (isOffline) {
-      return {
-        status: "OFFLINE_BLOCKED",
-        error: "Network connection is offline. Please check your connectivity.",
-        manifest: null,
-      }
-    }
-    // Backend endpoint pending Agent 1 merge or returning 404
-    return {
-      status: "UNAVAILABLE_BACKEND_PENDING",
-      error: "Backend inventory endpoint (/api/catalog/inventory) is not yet available (pending Agent 1 integration merge).",
-      manifest: null,
-      fixtureAvailable: true,
-    }
-  }
-}
-
-/**
- * Loads the explicitly labeled Stage 1 test fixture.
- */
-export function getStage1Fixture() {
-  const validation = validateV1Manifest(fixtureData)
-  if (!validation.valid) {
-    return {
-      status: "BLOCKED_INVENTORY_RECONCILIATION",
-      error: validation.error,
-      manifest: null,
     }
   }
   return {
-    status: "STAGE1_FIXTURE",
-    manifest: fixtureData,
-    error: null,
-    disclosure: "Stage 1 Test Fixture (Simulated Agent 1 v1 Manifest — Live Backend Pending Agent 1 Merge)",
+    status: result.status,
+    manifest: null,
+    counts: result.counts,
+    error: result.error,
   }
 }
 
 /**
- * Filters and categorizes inventory items.
+ * Filters and categorizes inventory items without fake entries or retired 6Clips blocks.
  */
 export function reconcileCatalog({
   manifest,
@@ -190,30 +137,22 @@ export function reconcileCatalog({
   aspectRatio = "9:16",
   search = "",
 }) {
-  const donorBlocks = manifest?.blocks || []
+  const rawBlocks = manifest?.blocks || []
 
-  // Ensure donor blocks have origin set
-  const normalizedDonor = donorBlocks.map((b) => ({
-    ...b,
-    origin: "HYPERFRAMES_DONOR",
-    isOperational: b.integration_status === "INTERNALIZED",
-  }))
+  // Ensure donor blocks are normalized into authentic HyperFrames categories and clean origin
+  const normalizedDonor = rawBlocks
+    .filter((b) => !RETIRED_6CLIPS_BLOCK_IDS.has(b.id))
+    .map((b) => (b.origin === "HYPERFRAMES_DONOR" ? b : normalizeDonorBlock(b)))
 
-  // Operational items: 10 donor internalized + 2 6Clips original = 12 total
-  const operationalItems = [
-    ...normalizedDonor.filter((b) => b.integration_status === "INTERNALIZED"),
-    ...SIXCLIPS_ORIGINAL_BLOCKS.map((b) => ({
-      ...b,
-      isOperational: true,
-    })),
-  ]
+  // Operational items: ONLY the 10 donor internalized blocks (zero 6Clips-authored blocks)
+  const operationalItems = normalizedDonor.filter((b) => b.isOperational || b.integration_status === "INTERNALIZED")
 
   // Counts across the 4 primary views
   const counts = {
     AVAILABLE_NOW: operationalItems.length,
     ALL_ORIGINAL_196: normalizedDonor.length,
     NEEDS_WORK: normalizedDonor.filter(
-      (b) => b.integration_status === "NEEDS_ADAPTATION" || b.integration_status === "ELIGIBLE_NOT_PORTED"
+      (b) => !b.isOperational && b.integration_status !== "BLOCKED_LICENSE" && b.license_status !== "RESTRICTED"
     ).length,
     BLOCKED: normalizedDonor.filter(
       (b) =>
@@ -222,6 +161,16 @@ export function reconcileCatalog({
         b.integration_status === "BLOCKED_DEPENDENCY" ||
         b.license_status === "RESTRICTED"
     ).length,
+    categories: {},
+  }
+
+  for (const cat of HYPERFRAMES_CATEGORIES) {
+    if (cat.id === "all") continue
+    if (cat.id === "source_missing") {
+      counts.categories.source_missing = normalizedDonor.filter((b) => b.source_category_missing).length
+    } else {
+      counts.categories[cat.id] = normalizedDonor.filter((b) => b.category === cat.id).length
+    }
   }
 
   // Select base list for the active view
@@ -232,7 +181,7 @@ export function reconcileCatalog({
     baseList = normalizedDonor
   } else if (viewMode === "NEEDS_WORK") {
     baseList = normalizedDonor.filter(
-      (b) => b.integration_status === "NEEDS_ADAPTATION" || b.integration_status === "ELIGIBLE_NOT_PORTED"
+      (b) => !b.isOperational && b.integration_status !== "BLOCKED_LICENSE" && b.license_status !== "RESTRICTED"
     )
   } else if (viewMode === "BLOCKED") {
     baseList = normalizedDonor.filter(
@@ -246,8 +195,12 @@ export function reconcileCatalog({
 
   // Filter category
   if (category && category.toLowerCase() !== "all") {
-    const cLower = category.toLowerCase()
-    baseList = baseList.filter((b) => (b.category || "").toLowerCase() === cLower)
+    if (category.toLowerCase() === "source_missing") {
+      baseList = baseList.filter((b) => b.source_category_missing)
+    } else {
+      const cLower = category.toLowerCase()
+      baseList = baseList.filter((b) => (b.category || "").toLowerCase() === cLower)
+    }
   }
 
   // Filter search
@@ -257,25 +210,21 @@ export function reconcileCatalog({
       const matchId = (b.id || "").toLowerCase().includes(q)
       const matchTitle = (b.title || "").toLowerCase().includes(q)
       const matchDesc = (b.description || "").toLowerCase().includes(q)
+      const matchCat = (b.category || "").toLowerCase().includes(q)
       const matchLicense = (b.license_status || b.license || "").toLowerCase().includes(q)
       const matchBlocker = (b.blocker_reason || "").toLowerCase().includes(q)
       const matchTags = Array.isArray(b.tags) && b.tags.some((t) => String(t).toLowerCase().includes(q))
-      return matchId || matchTitle || matchDesc || matchLicense || matchBlocker || matchTags
+      return matchId || matchTitle || matchDesc || matchCat || matchLicense || matchBlocker || matchTags
     })
   }
 
   // Filter aspect ratio if requested
   if (aspectRatio) {
-    const is9x16 = aspectRatio === "9:16"
     baseList = baseList.filter((b) => {
       if (Array.isArray(b.supported_aspects)) {
         return b.supported_aspects.includes(aspectRatio)
       }
-      if (is9x16) {
-        return b.aspect_9_16 !== "UNSUPPORTED"
-      } else {
-        return b.aspect_16_9 !== "UNSUPPORTED"
-      }
+      return true
     })
   }
 

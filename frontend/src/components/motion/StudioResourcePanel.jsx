@@ -28,6 +28,13 @@ import {
   IconDownload,
   IconLink,
 } from "@tabler/icons-react"
+import {
+  HYPERFRAMES_CATEGORIES,
+  fetchAllInventoryPages,
+  DONOR_INTERNALIZED_IDS,
+  RETIRED_6CLIPS_BLOCK_IDS,
+  resolveBlockCategory,
+} from "../../utils/catalogOriginals"
 
 /**
  * Left Resource Panel: Sources, Assets, and Real HyperFrames Catalog.
@@ -163,10 +170,38 @@ export default function StudioResourcePanel({
   const fetchCatalog = useCallback((signal = null) => {
     setCatalogLoading(true)
     setCatalogError(null)
-    http.get("/api/projects/catalog/items", { signal })
+
+    fetchAllInventoryPages({ signal, pageSize: 100 })
       .then((res) => {
-        const items = res.data?.items || (Array.isArray(res.data) ? res.data : [])
-        setCatalogItems(items)
+        if (res.status === "VERIFIED_LIVE" && res.blocks && res.blocks.length > 0) {
+          const validDonorBlocks = res.blocks.filter(
+            (b) => !RETIRED_6CLIPS_BLOCK_IDS.has(b.id || b.name)
+          )
+          setCatalogItems(validDonorBlocks)
+        } else {
+          // Fallback to /api/projects/catalog/items, strictly filtering 6Clips blocks
+          return http.get("/api/projects/catalog/items", { signal }).then((fallbackRes) => {
+            const rawItems = fallbackRes.data?.items || (Array.isArray(fallbackRes.data) ? fallbackRes.data : [])
+            const filtered = rawItems
+              .filter((it) => !RETIRED_6CLIPS_BLOCK_IDS.has(it.name || it.id))
+              .map((it) => {
+                const bName = it.name || it.id
+                const isOp = DONOR_INTERNALIZED_IDS.has(bName)
+                const resCat = resolveBlockCategory(it.tags)
+                return {
+                  ...it,
+                  id: bName,
+                  category: resCat,
+                  origin: "HYPERFRAMES_DONOR",
+                  isOperational: isOp,
+                  runtime_operable: isOp,
+                  poster_url: isOp ? `/api/catalog/blocks/${bName}/poster` : null,
+                  preview_url: isOp ? `/api/catalog/blocks/${bName}/preview` : null,
+                }
+              })
+            setCatalogItems(filtered)
+          })
+        }
       })
       .catch((err) => {
         if (signal?.aborted) return
@@ -189,10 +224,19 @@ export default function StudioResourcePanel({
   }, [tab, catalogItems.length, catalogError, fetchCatalog])
 
   const filteredCatalog = catalogItems.filter((item) => {
-    const q = search.toLowerCase()
-    const matchesSearch = !q || (item.name || "").toLowerCase().includes(q) || (item.title || "").toLowerCase().includes(q)
+    const bName = item.name || item.id
+    if (RETIRED_6CLIPS_BLOCK_IDS.has(bName)) return false
+    const q = search.toLowerCase().trim()
+    const matchesSearch =
+      !q ||
+      (item.name || "").toLowerCase().includes(q) ||
+      (item.title || "").toLowerCase().includes(q) ||
+      (item.id || "").toLowerCase().includes(q) ||
+      (item.category || "").toLowerCase().includes(q) ||
+      (item.tags || []).some((t) => String(t).toLowerCase().includes(q))
     if (!matchesSearch) return false
     if (catalogCategory === "all") return true
+    if (catalogCategory === "source_missing") return Boolean(item.source_category_missing)
     const cat = (item.category || "").toLowerCase()
     return cat === catalogCategory.toLowerCase()
   })
@@ -779,23 +823,14 @@ export default function StudioResourcePanel({
                 "&::-webkit-scrollbar": { display: "none" },
               }}
             >
-              {[
-                { id: "all", label: "All" },
-                { id: "typography", label: "Typography" },
-                { id: "lower-thirds", label: "Lower Thirds" },
-                { id: "mock-ui", label: "Mock UI & Social" },
-                { id: "charts", label: "Charts" },
-                { id: "backgrounds", label: "Backgrounds & Shaders" },
-                { id: "transitions", label: "Transitions" },
-                { id: "call-to-action", label: "Call to Action" },
-              ].map((cat) => (
+              {HYPERFRAMES_CATEGORIES.map((cat) => (
                 <Chip
                   key={cat.id}
                   size="small"
                   label={cat.label}
                   clickable
                   variant={catalogCategory === cat.id ? "filled" : "outlined"}
-                  color={catalogCategory === cat.id ? "primary" : "default"}
+                  color={catalogCategory === cat.id ? (cat.id === "source_missing" ? "warning" : "primary") : "default"}
                   onClick={() => setCatalogCategory(cat.id)}
                   sx={{ height: 20, fontSize: "0.65rem", fontWeight: 700 }}
                 />
@@ -844,16 +879,23 @@ export default function StudioResourcePanel({
               <Stack spacing={1}>
                 {filteredCatalog.map((item) => {
                   const bName = item.name || item.id
-                  const posterUrl = item.poster_url || item.preview?.poster || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspectRatio}`
+                  const isOperational = DONOR_INTERNALIZED_IDS.has(bName) || Boolean(item.isOperational) || item.integration_status === "INTERNALIZED"
+                  const posterUrl = isOperational
+                    ? (item.poster_url || item.preview?.poster || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspectRatio}`)
+                    : null
 
                   return (
                     <Box
                       key={bName}
                       data-testid={`catalog-card-${bName}`}
-                      onMouseEnter={() => handleCatalogItemMouseEnter(item)}
+                      data-operational={isOperational}
+                      onMouseEnter={() => {
+                        if (isOperational) handleCatalogItemMouseEnter(item)
+                      }}
                       onMouseLeave={handleCatalogItemMouseLeave}
-                      draggable
+                      draggable={isOperational}
                       onDragStart={(e) => {
+                        if (!isOperational) return
                         const payload = {
                           kind: "catalog",
                           type: "block",
@@ -861,7 +903,7 @@ export default function StudioResourcePanel({
                           data: item,
                           item,
                           title: item.title || item.name || item.id,
-                          duration: item.duration_seconds || 3.0,
+                          duration: item.duration_seconds || item.duration || 3.0,
                         }
                         e.dataTransfer.setData("application/viralmint-clip", JSON.stringify(payload))
                         e.dataTransfer.setData("application/json", JSON.stringify(payload))
@@ -873,12 +915,13 @@ export default function StudioResourcePanel({
                         border: "1px solid",
                         borderColor: "divider",
                         bgcolor: "#ffffff",
-                        cursor: "grab",
+                        cursor: isOperational ? "grab" : "default",
+                        opacity: isOperational ? 1 : 0.85,
                         transition: "all 0.15s ease",
                         "&:hover": {
-                          borderColor: "#8b5cf6",
-                          bgcolor: "#f8fafc",
-                          boxShadow: "0 2px 8px rgba(139, 92, 246, 0.12)",
+                          borderColor: isOperational ? "#8b5cf6" : "warning.main",
+                          bgcolor: isOperational ? "#f8fafc" : "#fffbeb",
+                          boxShadow: isOperational ? "0 2px 8px rgba(139, 92, 246, 0.12)" : "none",
                         },
                       }}
                     >
@@ -889,24 +932,32 @@ export default function StudioResourcePanel({
                             width: 56,
                             height: 56,
                             borderRadius: 1,
-                            bgcolor: "#0f172a",
+                            bgcolor: isOperational ? "#0f172a" : "#f1f5f9",
                             overflow: "hidden",
                             flexShrink: 0,
                             position: "relative",
-                            border: "1px solid rgba(255, 255, 255, 0.08)",
+                            border: "1px solid rgba(0, 0, 0, 0.08)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          <Box
-                            component="img"
-                            src={posterUrl}
-                            alt={item.title || bName}
-                            loading="lazy"
-                            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-                            onError={(e) => {
-                              // If poster image fails to load, fallback to styled category icon box
-                              e.target.style.display = "none"
-                            }}
-                          />
+                          {isOperational && posterUrl ? (
+                            <Box
+                              component="img"
+                              src={posterUrl}
+                              alt={item.title || bName}
+                              loading="lazy"
+                              sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                              onError={(e) => {
+                                e.target.style.display = "none"
+                              }}
+                            />
+                          ) : (
+                            <Typography variant="caption" sx={{ fontSize: "0.55rem", fontWeight: 700, color: "text.disabled", textAlign: "center", px: 0.5 }}>
+                              INVENTORY ONLY
+                            </Typography>
+                          )}
                         </Box>
 
                         {/* Title & Metadata */}
@@ -928,18 +979,18 @@ export default function StudioResourcePanel({
                           <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.25, flexWrap: "wrap", gap: 0.5 }}>
                             <Chip
                               size="small"
-                              label={["creator-hud", "glitch-transition"].includes(bName) ? "6Clips" : "Donor"}
+                              label={isOperational ? "Operational" : "Unported"}
                               sx={{
                                 height: 16,
                                 fontSize: "0.58rem",
                                 fontWeight: 800,
-                                bgcolor: ["creator-hud", "glitch-transition"].includes(bName) ? "#f3e8ff" : "#e2e8f0",
-                                color: ["creator-hud", "glitch-transition"].includes(bName) ? "#7e22ce" : "#475569",
+                                bgcolor: isOperational ? "#ecfdf5" : "#fef3c7",
+                                color: isOperational ? "#047857" : "#b45309",
                               }}
                             />
                             <Chip
                               size="small"
-                              label={item.category || "Motion"}
+                              label={item.category || "scenes"}
                               sx={{ height: 16, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#f1f5f9" }}
                             />
                             {(() => {
@@ -967,22 +1018,43 @@ export default function StudioResourcePanel({
 
                         {/* Action Buttons: Ask AI & Insert */}
                         <Stack direction="column" spacing={0.5} alignItems="flex-end">
-                          <Button
-                            size="small"
-                            variant="contained"
-                            data-testid={`insert-block-${bName}`}
-                            sx={{ height: 22, fontSize: "0.68rem", px: 1, py: 0, bgcolor: "primary.main", textTransform: "none", fontWeight: 700 }}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              if (onAddBlock) {
-                                onAddBlock(item)
-                              } else if (onAddMediaToTimeline) {
-                                onAddMediaToTimeline({ type: "block", block_id: bName, item })
-                              }
-                            }}
+                          <Tooltip
+                            title={
+                              isOperational
+                                ? "Insert block into timeline at current playhead"
+                                : "Block pending porting & verification in Wave 15"
+                            }
+                            arrow
                           >
-                            Insert Block
-                          </Button>
+                            <span>
+                              <Button
+                                size="small"
+                                variant="contained"
+                                disabled={!isOperational}
+                                data-testid={`insert-block-${bName}`}
+                                sx={{
+                                  height: 22,
+                                  fontSize: "0.68rem",
+                                  px: 1,
+                                  py: 0,
+                                  bgcolor: isOperational ? "primary.main" : "action.disabledBackground",
+                                  textTransform: "none",
+                                  fontWeight: 700,
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (!isOperational) return
+                                  if (onAddBlock) {
+                                    onAddBlock(item)
+                                  } else if (onAddMediaToTimeline) {
+                                    onAddMediaToTimeline({ type: "block", block_id: bName, item })
+                                  }
+                                }}
+                              >
+                                Insert Block
+                              </Button>
+                            </span>
+                          </Tooltip>
                           {onAskAiToInsert && (
                             <Tooltip title="Ask AI to insert & style in Chat" arrow>
                               <IconButton
