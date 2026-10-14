@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
- * Catalog — HyperFrames feature catalog with evidence-backed previews,
- * aspect ratio parity (9:16 vs 16:9), and non-destructive hover Ghost Previews.
+ * Catalog — HyperFrames feature catalog with single source-of-truth state machine:
+ * LOADING, READY_ITEMS, EMPTY_FILTER, ERROR_RETRYABLE, OFFLINE_BLOCKED.
+ * Prevents perpetual skeletons, aborts superseded queries, and truthfully displays
+ * 196 inventoried (10 donor + 2 original = 12 operational, 186 withheld).
  */
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useRef } from "react"
 import {
   Box,
   Container,
@@ -24,6 +26,8 @@ import {
   IconDeviceMobile,
   IconDeviceTv,
   IconFilter,
+  IconRotateClockwise,
+  IconWifiOff,
 } from "@tabler/icons-react"
 import http from "../api/http"
 import useDocumentTitle from "../hooks/useDocumentTitle"
@@ -46,19 +50,39 @@ export default function Catalog() {
   const [disposition, setDisposition] = useState("ALL")
   const [page, setPage] = useState(1)
 
+  // Single source of truth Catalog state machine
+  const [status, setStatus] = useState("LOADING") // LOADING | READY_ITEMS | EMPTY_FILTER | ERROR_RETRYABLE | OFFLINE_BLOCKED
   const [items, setItems] = useState([])
   const [totalCount, setTotalCount] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const [selectedBlock, setSelectedBlock] = useState(null)
   const [showReconModal, setShowReconModal] = useState(false)
   const [reconciliationData, setReconciliationData] = useState(null)
 
-  // Fetch catalog items
+  const abortControllerRef = useRef(null)
+  const requestIdRef = useRef(0)
+
+  // Fetch catalog items with cancellation and race guard
   const fetchCatalog = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    // Offline pre-check
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setStatus("OFFLINE_BLOCKED")
+      setErrorMessage("Network connection is offline. Please check your connectivity.")
+      return
+    }
+
+    // Cancel any in-flight superseded request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
+    const currentReqId = ++requestIdRef.current
+    setStatus("LOADING")
+    setErrorMessage(null)
+
     try {
       const offset = (page - 1) * ITEMS_PER_PAGE
       const res = await http.get("/api/catalog/items", {
@@ -70,19 +94,45 @@ export default function Catalog() {
           limit: ITEMS_PER_PAGE,
           offset,
         },
+        signal: controller.signal,
       })
-      setItems(res.data?.items || [])
-      setTotalCount(res.data?.total || 0)
+
+      // Guard against stale response
+      if (currentReqId !== requestIdRef.current) return
+
+      const fetchedItems = res.data?.items || []
+      const total = res.data?.total || 0
+      setItems(fetchedItems)
+      setTotalCount(total)
+
+      if (fetchedItems.length === 0) {
+        setStatus("EMPTY_FILTER")
+      } else {
+        setStatus("READY_ITEMS")
+      }
     } catch (err) {
+      if (controller.signal.aborted) return
+      if (currentReqId !== requestIdRef.current) return
+
       console.error("Failed to load catalog items:", err)
-      setError("Could not load catalog blocks. Please verify backend service.")
-    } finally {
-      setLoading(false)
+      const isOffline = typeof navigator !== "undefined" && !navigator.onLine
+      if (isOffline) {
+        setStatus("OFFLINE_BLOCKED")
+        setErrorMessage("Network disconnected while loading catalog items.")
+      } else {
+        setStatus("ERROR_RETRYABLE")
+        setErrorMessage("Could not load catalog blocks. Please verify backend service and retry.")
+      }
     }
   }, [category, search, aspectRatio, disposition, page])
 
   useEffect(() => {
     fetchCatalog()
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
   }, [fetchCatalog])
 
   // Fetch reconciliation audit summary once
@@ -119,8 +169,8 @@ export default function Catalog() {
       {/* Page Header */}
       <PageHero
         title="Motion Graphics Catalog"
-        subtitle="196 HyperFrames blocks: 6 internalized & ready for runtime rendering, truthful previews in 9:16 vertical and 16:9 landscape, and validated Add-to-Project timeline intents."
-        badge="Wave 3 Production Catalog"
+        subtitle="196 donor originals inventoried: 10 donor internalized + 2 6Clips original substitutes (12 operational blocks), 186 unready donor originals strictly quarantined. Truthful 9:16 vertical and 16:9 landscape previews."
+        badge="Wave 11 Production Catalog (12 Operational / 186 Withheld)"
         action={
           <Button
             variant="outlined"
@@ -138,7 +188,13 @@ export default function Catalog() {
         }
       />
 
-      <Container maxWidth="xl" sx={{ mt: 3, px: { xs: 2, sm: 3, md: 4 } }}>
+      <Container
+        maxWidth="xl"
+        role="region"
+        aria-label="Catalog Block Directory"
+        aria-busy={status === "LOADING"}
+        sx={{ mt: 3, px: { xs: 2, sm: 3, md: 4 } }}
+      >
         {/* Facet and Filtering Bar */}
         <CatalogFacetBar
           search={search}
@@ -152,23 +208,66 @@ export default function Catalog() {
           totalCount={totalCount}
         />
 
-        {/* Error Alert */}
-        {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {error}
+        {/* State Machine: OFFLINE_BLOCKED */}
+        {status === "OFFLINE_BLOCKED" && (
+          <Alert
+            severity="warning"
+            icon={<IconWifiOff size={20} />}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={fetchCatalog}
+                startIcon={<IconRotateClockwise size={16} />}
+              >
+                Reconnect
+              </Button>
+            }
+            sx={{ mb: 3 }}
+          >
+            {errorMessage || "Network connection is offline. Reconnect and retry."}
           </Alert>
         )}
 
-        {/* Loading Indicator */}
-        {loading ? (
-          <Stack alignItems="center" justifyContent="center" sx={{ py: 12 }}>
+        {/* State Machine: ERROR_RETRYABLE */}
+        {status === "ERROR_RETRYABLE" && (
+          <Alert
+            severity="error"
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={fetchCatalog}
+                startIcon={<IconRotateClockwise size={16} />}
+              >
+                Retry
+              </Button>
+            }
+            sx={{ mb: 3 }}
+          >
+            {errorMessage || "Could not load catalog blocks."}
+          </Alert>
+        )}
+
+        {/* State Machine: LOADING */}
+        {status === "LOADING" && (
+          <Stack
+            data-testid="catalog-loading-indicator"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ py: 12 }}
+          >
             <CircularProgress size={36} thickness={4} />
-            <Typography variant="body2" sx={{ color: "text.secondary", mt: 2 }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", mt: 2, fontWeight: 600 }}>
               Loading catalog blocks and authentic posters...
             </Typography>
           </Stack>
-        ) : items.length === 0 ? (
+        )}
+
+        {/* State Machine: EMPTY_FILTER */}
+        {status === "EMPTY_FILTER" && (
           <Box
+            data-testid="catalog-empty-filter"
             sx={{
               textAlign: "center",
               py: 12,
@@ -184,7 +283,7 @@ export default function Catalog() {
               No catalog blocks match your filter
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.5, mb: 2 }}>
-              Try adjusting your search query, selecting another category, or toggling aspect ratio.
+              Try adjusting your search query, selecting another category, or resetting filters.
             </Typography>
             <Button
               variant="outlined"
@@ -198,10 +297,13 @@ export default function Catalog() {
               Reset Filters
             </Button>
           </Box>
-        ) : (
+        )}
+
+        {/* State Machine: READY_ITEMS */}
+        {status === "READY_ITEMS" && (
           <>
             {/* Catalog Grid */}
-            <Grid container spacing={2.5}>
+            <Grid container spacing={2.5} data-testid="catalog-grid">
               {items.map((item) => (
                 <Grid
                   item

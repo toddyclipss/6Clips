@@ -137,6 +137,10 @@ class CatalogPreviewEngine:
         # CSS Aspect Ratio Wrapper
         # If block is 16:9 and target is 9:16: center and fit width cleanly
         # If block is 9:16 and target is 16:9: center and pillarbox cleanly
+        is_transparent_overlay = block_id in ("yt-lower-third", "creator-hud", "glitch-transition", "instagram-follow", "tiktok-follow") or "overlay" in block_id
+        stage_bg = "transparent" if is_transparent_overlay else "#000000"
+        body_bg = "transparent" if is_transparent_overlay else "#090d16"
+
         wrapper_css = f"""
         <style>
         * {{ box-sizing: border-box; }}
@@ -146,7 +150,7 @@ class CatalogPreviewEngine:
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #090d16;
+            background: {body_bg};
             display: flex;
             align-items: center;
             justify-content: center;
@@ -163,7 +167,7 @@ class CatalogPreviewEngine:
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            background: #000000;
+            background: {stage_bg};
         }}
         #viralmint-block-container {{
             position: absolute;

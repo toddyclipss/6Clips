@@ -29,6 +29,29 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
+@router.get("/wave11-audit")
+async def get_wave11_audit():
+    """Return Wave 11 12-block verification audit, proof ledger, state machine status, and canonical export contract v2.2.0."""
+    return CatalogManifestService.get_wave11_factual_audit()
+
+
+@router.get("/state-machine")
+async def get_catalog_state_machine():
+    """Return single source-of-truth Catalog state machine definition and supported transitions."""
+    return {
+        "status": "ACTIVE",
+        "states": ["LOADING", "READY_ITEMS", "EMPTY_FILTER", "ERROR_RETRYABLE", "OFFLINE_BLOCKED"],
+        "initial_state": "LOADING",
+        "terminal_skeleton_guard": True,
+        "cancellation_semantics": "ABORT_SUPERSEDED_REQUESTS",
+        "stale_filter_guard": "ACTIVE_REQUEST_ID_MATCH",
+        "retry_action_enabled": True,
+        "working_blocks_count": 12,
+        "withheld_donor_blocks_count": 186,
+        "total_inventoried": 196,
+    }
+
+
 @router.get("/wave10-audit")
 async def get_wave10_audit():
     """Return Wave 10 12-block verification audit, 12-row proof ledger, canonical export contract v2.1.0, and quarantine status."""
