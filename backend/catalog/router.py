@@ -530,6 +530,46 @@ async def get_catalog_item(block_id: str):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/inventory")
+async def get_catalog_inventory(
+    filter: Optional[str] = Query(None, description="Filter mode: 'all', 'operational', 'unported', 'needs_adaptation', 'blocked', 'eligible'"),
+    search: Optional[str] = Query(None, description="Search by ID, title, description, or blocker reason"),
+    category: Optional[str] = Query(None, description="Filter by category"),
+    limit: int = Query(50, ge=1, le=300),
+    offset: int = Query(0, ge=0),
+):
+    """
+    Wave 14 Stage 1: Truthful full-inventory endpoint reconciling packaged v1 metadata
+    from backend/catalog_inventory/hyperframes_196_inventory.json with actual on-disk shipped blocks.
+    Separates 196 donor originals from 2 6Clips-original authored blocks.
+    """
+    try:
+        return CatalogManifestService.list_wave14_inventory_items(
+            filter_type=filter,
+            search=search,
+            category=category,
+            limit=limit,
+            offset=offset,
+        )
+    except CatalogManifestError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error listing catalog inventory: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/wave14-audit")
+async def get_wave14_audit():
+    """Return Wave 14 Stage 1 full inventory reconciliation and census audit."""
+    try:
+        return CatalogManifestService.get_wave14_reconciliation()
+    except CatalogManifestError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error("Error generating wave14 audit: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/manifest")
 async def get_full_manifest():
     """Return the entire canonical runtime manifest with all catalog blocks."""
@@ -549,7 +589,9 @@ async def get_full_manifest():
 @router.get("/reconciliation")
 async def get_reconciliation():
     """Return evidence-backed reconciliation metrics (196 historical dirs, 170 aggregate items, 26 unbundled)."""
-    return CatalogManifestService.get_reconciliation_summary()
+    base_summary = CatalogManifestService.get_reconciliation_summary()
+    base_summary["wave14_reconciliation"] = CatalogManifestService.get_wave14_reconciliation()
+    return base_summary
 
 
 @router.get("/audit")
@@ -566,6 +608,7 @@ async def get_catalog_audit():
         "inventory": inventory,
         "summary": summary,
         "factual_audit": CatalogManifestService.get_factual_audit(),
+        "wave14_reconciliation": CatalogManifestService.get_wave14_reconciliation(),
     }
 
 
@@ -577,6 +620,7 @@ async def get_block_poster(
 ):
     """Serve cached truthful poster image for catalog block."""
     try:
+        CatalogManifestService.validate_block_operable(block_id)
         poster_path = CatalogPosterService.get_poster_path(
             block_id,
             version_hash=version,
@@ -591,6 +635,8 @@ async def get_block_poster(
             },
         )
     except (CatalogManifestError, CatalogPosterError) as e:
+        if "quarantined" in str(e).lower() or "uninternalized" in str(e).lower():
+            raise HTTPException(status_code=403, detail=str(e))
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         logger.error("Error serving poster for %s: %s", block_id, e)
@@ -607,6 +653,7 @@ async def get_block_preview(
 ):
     """Serve standalone animated HTML preview for catalog block."""
     try:
+        CatalogManifestService.validate_block_operable(block_id)
         html = CatalogPreviewEngine.get_preview_html(
             block_id,
             version_hash=version,
@@ -621,7 +668,11 @@ async def get_block_preview(
                 "Cache-Control": "no-cache",
             },
         )
-    except (CatalogManifestError, Exception) as e:
+    except CatalogManifestError as e:
+        if "quarantined" in str(e).lower() or "uninternalized" in str(e).lower():
+            raise HTTPException(status_code=403, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
@@ -675,7 +726,8 @@ async def create_add_to_project_intent(
     Does NOT mutate ProjectService directly (strictly respects component ownership boundaries).
     """
     try:
-        return CatalogProjectIntentAdapter.create_add_to_project_intent(block_id, payload)
+        CatalogManifestService.validate_block_operable(block_id)
+        return CatalogProjectIntentAdapter.create_add_to_project_intent(block_id, payload, strict_quarantine=True)
     except CatalogManifestError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:

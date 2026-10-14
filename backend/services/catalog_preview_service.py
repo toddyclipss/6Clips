@@ -77,48 +77,8 @@ class CatalogPreviewService:
                 except Exception as e:
                     logger.debug("Failed resizing local poster %s: %s", cand, e)
 
-        # 2. Check if item has genuine upstream poster URL or video
-        preview_meta = item.get("preview") or {}
-        poster_url = preview_meta.get("poster")
-        if poster_url and isinstance(poster_url, str) and poster_url.startswith("http"):
-            try:
-                import urllib.request
-                import io
-                req = urllib.request.Request(poster_url, headers={"User-Agent": "ViralMint-Catalog/1.0"})
-                with urllib.request.urlopen(req, timeout=4.0) as resp:
-                    if resp.status == 200:
-                        img_bytes = resp.read()
-                        with Image.open(io.BytesIO(img_bytes)) as im:
-                            im_resized = im.convert("RGB").resize((w, h), Image.Resampling.LANCZOS)
-                            im_resized.save(target_file, format="PNG")
-                            return target_file
-            except Exception as e:
-                logger.debug("Failed downloading upstream poster from %s: %s", poster_url, e)
-
-        # Check genuine upstream video to extract frame if poster not provided (e.g. shader / aurora blocks)
-        video_url = preview_meta.get("video")
-        if video_url and isinstance(video_url, str) and video_url.startswith("http"):
-            try:
-                import urllib.request
-                import subprocess
-                from uuid import uuid4
-                tmp_video = POSTER_CACHE_DIR / f"_tmp_{uuid4().hex[:8]}.mp4"
-                urllib.request.urlretrieve(video_url, tmp_video)
-                if tmp_video.exists() and tmp_video.stat().st_size > 0:
-                    try:
-                        subprocess.run(
-                            ["ffmpeg", "-y", "-ss", "0.5", "-i", str(tmp_video), "-frames:v", "1", "-s", f"{w}x{h}", str(target_file)],
-                            capture_output=True,
-                            timeout=8,
-                            check=True
-                        )
-                        if target_file.exists() and target_file.stat().st_size > 0:
-                            return target_file
-                    finally:
-                        if tmp_video.exists():
-                            tmp_video.unlink()
-            except Exception as e:
-                logger.debug("Failed extracting frame from upstream video %s: %s", video_url, e)
+        # 2. Offline-only enforcement: zero external egress (P0 guardrail)
+        # Upstream HTTP downloading is strictly prohibited to guarantee 100% offline isolation.
 
         # 3. Render genuine component frame via headless runtime (Playwright)
         try:
