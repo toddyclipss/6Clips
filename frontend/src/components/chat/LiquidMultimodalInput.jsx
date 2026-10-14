@@ -15,6 +15,7 @@ import {
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import http from "../../api/http"
+import { fetchModelRegistry } from "../../api/modelRegistry"
 import useAppStore from "../../store/appStore"
 import useSettings from "../../hooks/useSettings"
 
@@ -81,10 +82,17 @@ export function LiquidMultimodalInput({
   const [selectorOpen, setSelectorOpen] = React.useState(false)
 
   React.useEffect(() => {
-    http
-      .get("/api/config/model_registry")
-      .then(({ data }) => setRegistry(data?.value || {}))
+    let active = true
+    const controller = new AbortController()
+    fetchModelRegistry({ signal: controller.signal })
+      .then((reg) => {
+        if (active && reg) setRegistry(reg)
+      })
       .catch(() => {})
+    return () => {
+      active = false
+      controller.abort()
+    }
   }, [])
 
   // Explicit Model Choice state — strict zero default:
@@ -147,10 +155,13 @@ export function LiquidMultimodalInput({
       setSelectorOpen(true)
       return
     }
+    const userIntentId = `user_submit_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
     onSubmit?.(value, files.map((f) => f.file), {
       provider: selectedProvider,
       model: selectedModel,
       reasoning_level: reasoningLevel,
+      user_intent_id: userIntentId,
+      authorized: true,
     })
     setValue("")
     files.forEach((f) => f.preview && URL.revokeObjectURL(f.preview))

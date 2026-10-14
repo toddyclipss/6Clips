@@ -14,8 +14,23 @@ from backend.distribution.models import (
     PlatformAccount,
     PublishedReceiptV1,
 )
+from backend.distribution.egress_audit import check_outbound_allowlist, record_egress_event
 
 logger = logging.getLogger(__name__)
+
+_PLATFORM_HOSTS: Dict[str, str] = {
+    "youtube": "www.googleapis.com",
+    "tiktok": "open.tiktokapis.com",
+    "instagram": "graph.facebook.com",
+    "x": "api.twitter.com",
+}
+
+_PLATFORM_PATHS: Dict[str, str] = {
+    "youtube": "/upload/youtube/v3/videos",
+    "tiktok": "/v2/post/publish/video/init/",
+    "instagram": "/v19.0/{ig_user_id}/media",
+    "x": "/2/tweets",
+}
 
 
 class TransportError(Exception):
@@ -68,8 +83,43 @@ class ProductionLiveTransport(DistributionTransportPort):
         job: DistributionJob,
         account: PlatformAccount,
     ) -> Tuple[bool, Optional[str], Optional[str], Optional[str]]:
+        target_host = _PLATFORM_HOSTS.get(job.platform.lower(), "unknown_platform")
+        target_path = _PLATFORM_PATHS.get(job.platform.lower(), "/publish/post")
+
+        # Check outbound allowlist
+        if not check_outbound_allowlist(job.platform, target_host):
+            record_egress_event(
+                component="distribution",
+                destination_host=target_host,
+                sanitized_path=target_path,
+                method="POST",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="ALLOWLIST_REJECTION",
+                outcome_status="BLOCKED",
+                correlation_id=job.job_id,
+                callsite="ProductionLiveTransport.dispatch_post",
+                extra_metadata={"error_code": "DESTINATION_HOST_NOT_ALLOWLISTED", "job_id": job.job_id, "platform": job.platform},
+            )
+            raise TransportError(
+                "DESTINATION_HOST_NOT_ALLOWLISTED",
+                f"Destination host '{target_host}' is not in the official outbound allowlist for platform '{job.platform}'.",
+                is_retryable=False,
+            )
+
         # Enforce account readiness and connectivity
         if not account.can_publish:
+            record_egress_event(
+                component="distribution",
+                destination_host=target_host,
+                sanitized_path=target_path,
+                method="POST",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="DISCONNECTED_ACCOUNT",
+                outcome_status="BLOCKED",
+                correlation_id=job.job_id,
+                callsite="ProductionLiveTransport.dispatch_post",
+                extra_metadata={"error_code": "ACCOUNT_NOT_READY", "job_id": job.job_id, "platform": job.platform},
+            )
             raise TransportError(
                 "ACCOUNT_NOT_READY",
                 f"Cannot dispatch post: Account '{account.account_id}' for platform '{job.platform}' "
@@ -78,6 +128,18 @@ class ProductionLiveTransport(DistributionTransportPort):
             )
 
         # Enforce that unauthorized live execution is blocked
+        record_egress_event(
+            component="distribution",
+            destination_host=target_host,
+            sanitized_path=target_path,
+            method="POST",
+            endpoint_class="BLOCKED_WITH_REASON",
+            trigger_authorization="UNAUTHORIZED_IDLE",
+            outcome_status="BLOCKED",
+            correlation_id=job.job_id,
+            callsite="ProductionLiveTransport.dispatch_post",
+            extra_metadata={"error_code": "LIVE_PUBLISHING_NOT_AUTHORIZED", "job_id": job.job_id, "platform": job.platform},
+        )
         raise TransportError(
             "LIVE_PUBLISHING_NOT_AUTHORIZED",
             f"Live external publishing to {job.platform} is disabled by default in this environment. "
@@ -92,13 +154,41 @@ class ProductionLiveTransport(DistributionTransportPort):
         account: PlatformAccount,
         remote_post_id: str,
     ) -> Optional[PublishedReceiptV1]:
+        target_host = _PLATFORM_HOSTS.get(job.platform.lower(), "unknown_platform")
+        target_path = f"/verify/{remote_post_id}"
+
         # Production path strictly refuses fake receipts as proof of a real remote post
         if remote_post_id.startswith("fake_"):
             logger.warning(
                 "ProductionLiveTransport | Rejected fake post ID in production: %s (LIVE_PUBLISHING_VERIFIED: NO)",
                 remote_post_id,
             )
+            record_egress_event(
+                component="distribution",
+                destination_host=target_host,
+                sanitized_path=target_path,
+                method="GET",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="FAKE_RECEIPT_REJECTION",
+                outcome_status="BLOCKED",
+                correlation_id=job.job_id,
+                callsite="ProductionLiveTransport.verify_post_receipt",
+                extra_metadata={"error_code": "FAKE_RECEIPT_REJECTED", "job_id": job.job_id, "platform": job.platform},
+            )
             return None
+
+        record_egress_event(
+            component="distribution",
+            destination_host=target_host,
+            sanitized_path=target_path,
+            method="GET",
+            endpoint_class="READ_ONLY_HEALTH_DISCOVERY",
+            trigger_authorization="DISCONNECTED_SAFEGUARD",
+            outcome_status="NOT_VERIFIED",
+            correlation_id=job.job_id,
+            callsite="ProductionLiveTransport.verify_post_receipt",
+            extra_metadata={"job_id": job.job_id, "platform": job.platform},
+        )
         return None
 
 

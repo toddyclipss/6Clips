@@ -531,13 +531,16 @@ export default function MotionGraphics() {
 
   // 2. Load Assets and Trends
   useEffect(() => {
+    let cancelled = false
+    const controller = new AbortController()
     const fetchData = async () => {
       setDataLoading(true)
       try {
         const [vids, trs] = await Promise.allSettled([
-          http.get("/api/library/items"),
-          http.get("/api/trends/results"),
+          http.get("/api/library/items", { signal: controller.signal }),
+          http.get("/api/trends/results", { signal: controller.signal }),
         ])
+        if (cancelled) return
         if (vids.status === "fulfilled") {
           const list = vids.value.data?.items || vids.value.data
           setLibraryVideos(Array.isArray(list) ? list : [])
@@ -549,10 +552,16 @@ export default function MotionGraphics() {
       } catch {
         // non-blocking
       } finally {
-        setDataLoading(false)
+        if (!cancelled) {
+          setDataLoading(false)
+        }
       }
     }
     fetchData()
+    return () => {
+      cancelled = true
+      controller.abort()
+    }
   }, [])
 
   // 3. Save draft / apply operation

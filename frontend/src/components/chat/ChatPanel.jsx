@@ -80,6 +80,7 @@ export default function ChatPanel() {
   const removeSession = useAppStore((s) => s.removeSession)
   const showSnackbar = useAppStore((s) => s.showSnackbar)
   const bottomRef = useRef(null)
+  const sessionRestoreRef = useRef(false)
 
   // View state: "chat" or "history" (rendered strictly inside ChatPanel)
   const [view, setView] = useState("chat")
@@ -88,19 +89,26 @@ export default function ChatPanel() {
   const openConfirm = (title, message, onConfirm) => setConfirmDialog({ open: true, title, message, onConfirm })
   const closeConfirm = () => setConfirmDialog((prev) => ({ ...prev, open: false }))
 
-  // Load chat sessions on mount
+  // Load chat sessions on mount with StrictMode double-mount guard and AbortController
   useEffect(() => {
-    http.get("/api/chat/sessions").then((res) => {
-      setSessions(res.data)
+    let cancelled = false
+    const controller = new AbortController()
+
+    http.get("/api/chat/sessions", { signal: controller.signal }).then((res) => {
+      if (!cancelled) setSessions(res.data)
     }).catch((err) => {
-      console.error("Failed to load chat sessions:", err)
+      if (!controller.signal.aborted) {
+        console.error("Failed to load chat sessions:", err)
+      }
     })
 
     const savedSessionId = sessionStorage.getItem("vm_active_session")
-    if (savedSessionId && !activeSessionId && messages.length === 0) {
+    if (savedSessionId && !activeSessionId && messages.length === 0 && !sessionRestoreRef.current) {
+      sessionRestoreRef.current = true
       setActiveSessionId(savedSessionId)
       ws.send({ type: "set_session", session_id: savedSessionId })
-      http.get(`/api/chat/sessions/${savedSessionId}/messages`).then((res) => {
+      http.get(`/api/chat/sessions/${savedSessionId}/messages`, { signal: controller.signal }).then((res) => {
+        if (cancelled) return
         const loaded = res.data.map((m) => {
           if (m.role === "rich" || m.msg_type) {
             return { role: "rich", type: m.msg_type, data: m.data_json ? JSON.parse(m.data_json) : {} }
@@ -117,10 +125,17 @@ export default function ChatPanel() {
         })
         setMessages(loaded)
       }).catch((err) => {
-        console.error("Failed to restore session messages:", err)
-        sessionStorage.removeItem("vm_active_session")
-        setActiveSessionId(null)
+        if (!cancelled && !controller.signal.aborted) {
+          console.error("Failed to restore session messages:", err)
+          sessionStorage.removeItem("vm_active_session")
+          setActiveSessionId(null)
+        }
       })
+    }
+
+    return () => {
+      cancelled = true
+      controller.abort()
     }
   }, [])
 
@@ -196,7 +211,13 @@ export default function ChatPanel() {
     if (activeSessionId) {
       ws.send({ type: "set_session", session_id: activeSessionId })
     }
-    const payload = { type: "chat_message", content: trimmed }
+    const userIntentId = options?.user_intent_id || `user_send_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    const payload = {
+      type: "chat_message",
+      content: trimmed,
+      user_intent_id: userIntentId,
+      authorized: true,
+    }
     if (options && typeof options === "object") {
       if (options.provider) payload.provider = options.provider
       if (options.model) payload.model = options.model

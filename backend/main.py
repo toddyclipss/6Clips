@@ -307,6 +307,9 @@ def create_app() -> FastAPI:
                 )
         return await call_next(request)
 
+    from backend.diagnostics import CorrelationAndAuditMiddleware, diagnostics_router
+    app.add_middleware(CorrelationAndAuditMiddleware)
+
     # Register API routers
     app.include_router(chat.router)
     app.include_router(jobs.router, prefix="/api")
@@ -344,6 +347,7 @@ def create_app() -> FastAPI:
     app.include_router(integration_projects_router, prefix="/api")
     from backend.api.acceptance_routes import router as acceptance_router
     app.include_router(acceptance_router, prefix="/api")
+    app.include_router(diagnostics_router, prefix="/api")
 
     @app.get("/health")
     async def root_health():

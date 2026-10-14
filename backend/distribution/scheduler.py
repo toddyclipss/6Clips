@@ -20,6 +20,7 @@ from backend.distribution.transport import (
     ProductionLiveTransport,
     TransportError,
 )
+from backend.distribution.egress_audit import record_egress_event
 
 logger = logging.getLogger(__name__)
 
@@ -219,6 +220,18 @@ class DistributionScheduler:
                 if sched_dt <= now:
                     due_jobs.append(j)
 
+        if not due_jobs:
+            record_egress_event(
+                component="distribution",
+                destination_host="NONE_LOCAL",
+                sanitized_path="/worker/tick",
+                method="TICK",
+                endpoint_class="NOT_OBSERVED",
+                trigger_authorization="IDLE_TICK",
+                outcome_status="ZERO_REQUESTS",
+                callsite="DistributionScheduler.process_tick",
+            )
+
         results = {
             "tick_time": now_iso,
             "due_count": len(due_jobs),
@@ -251,6 +264,18 @@ class DistributionScheduler:
             )
             job.updated_at = now.isoformat()
             self.store.save_job(job)
+            record_egress_event(
+                component="distribution",
+                destination_host="NONE_LOCAL",
+                sanitized_path="/worker/dispatch",
+                method="DISPATCH",
+                endpoint_class="BLOCKED_WITH_REASON",
+                trigger_authorization="DISCONNECTED_ACCOUNT",
+                outcome_status="BLOCKED",
+                correlation_id=job.job_id,
+                callsite="DistributionScheduler._dispatch_single_job",
+                extra_metadata={"error_code": "ACCOUNT_NOT_READY", "job_id": job.job_id, "platform": job.platform},
+            )
             return
 
         # Transition to DISPATCHING

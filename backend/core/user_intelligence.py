@@ -351,7 +351,11 @@ class UserIntelligence:
             + ctx.get("total_uploads", 0)
             + ctx.get("downloaded_not_generated", 0)
         )
-        if profile and activity_signal >= 3:
+        # Never trigger unprompted background AI inference on websocket connect or idle.
+        # AI suggestions require an explicit active user authorization context.
+        from backend.llm_trace.context import get_current_inference_context
+        active_ctx = get_current_inference_context()
+        if profile and activity_signal >= 3 and active_ctx is not None and active_ctx.trigger not in ("ws_connect", "startup", "unknown"):
             ai_suggestions = await self._get_ai_suggestions(user_id, ctx, profile)
             if ai_suggestions:
                 return ai_suggestions
