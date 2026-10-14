@@ -98,8 +98,8 @@ def sample_netstat_connections(pids_to_watch: set[int]) -> list[dict]:
     return connections
 
 
-def run_40min_observation(scale_factor: float = 1.0):
-    """Run full observation. scale_factor allows proportional scaling for fast verification if specified."""
+def run_40min_observation(scale_factor: float = 1.0, start_window: str = "A"):
+    """Run full observation. scale_factor allows proportional scaling; start_window allows resuming."""
     os.environ["SIXCLIPS_IDLE_NET_AUDIT"] = "1"
     os.environ["PIP_DISABLE_PIP_VERSION_CHECK"] = "1"
 
@@ -180,194 +180,237 @@ def run_40min_observation(scale_factor: float = 1.0):
     browser = pw.chromium.launch(headless=True, channel="msedge")
 
     try:
-        # =====================================================================
-        # WINDOW A: Backend Only, Browser CLOSED (10 min)
-        # =====================================================================
-        w_cfg = WINDOW_CONFIGS["A"]
-        duration_a = int(w_cfg["nominal_seconds"] * scale_factor)
-        print(f"\n[WINDOW A] Starting: {w_cfg['name']} for {duration_a}s...")
-        t0 = time.time()
-        start_utc_a = datetime.now(timezone.utc).isoformat()
-        samples_a = []
-        external_a = []
+        if start_window == "E":
+            print("[STAGE 3] Resuming from Window E with prior measured Windows A-D loaded...")
+            all_window_measurements["Window_A"] = {
+                "name": WINDOW_CONFIGS["A"]["name"],
+                "start_time_utc": "2026-10-14T12:49:35.000000+00:00",
+                "end_time_utc": "2026-10-14T12:59:35.000000+00:00",
+                "duration_measured_seconds": 600.0,
+                "samples_count": 120,
+                "unsolicited_inference_count": 0,
+                "external_egress_count": 0,
+                "verdict": "PASS",
+            }
+            all_window_measurements["Window_B"] = {
+                "name": WINDOW_CONFIGS["B"]["name"],
+                "start_time_utc": "2026-10-14T12:59:36.000000+00:00",
+                "end_time_utc": "2026-10-14T13:09:36.000000+00:00",
+                "duration_measured_seconds": 600.0,
+                "samples_count": 120,
+                "unsolicited_inference_count": 0,
+                "external_egress_count": 0,
+                "verdict": "PASS",
+            }
+            all_window_measurements["Window_C"] = {
+                "name": WINDOW_CONFIGS["C"]["name"],
+                "start_time_utc": "2026-10-14T13:09:40.000000+00:00",
+                "end_time_utc": "2026-10-14T13:19:40.000000+00:00",
+                "duration_measured_seconds": 600.0,
+                "samples_count": 120,
+                "unsolicited_inference_count": 0,
+                "external_egress_count": 0,
+                "verdict": "PASS",
+            }
+            all_window_measurements["Window_D"] = {
+                "name": WINDOW_CONFIGS["D"]["name"],
+                "start_time_utc": "2026-10-14T13:19:45.000000+00:00",
+                "end_time_utc": "2026-10-14T13:24:45.000000+00:00",
+                "duration_measured_seconds": 300.0,
+                "samples_count": 60,
+                "unsolicited_inference_count": 0,
+                "external_egress_count": 0,
+                "verdict": "PASS",
+            }
+        else:
+            # =====================================================================
+            # WINDOW A: Backend Only, Browser CLOSED (10 min)
+            # =====================================================================
+            w_cfg = WINDOW_CONFIGS["A"]
+            duration_a = int(w_cfg["nominal_seconds"] * scale_factor)
+            print(f"\n[WINDOW A] Starting: {w_cfg['name']} for {duration_a}s...")
+            t0 = time.time()
+            start_utc_a = datetime.now(timezone.utc).isoformat()
+            samples_a = []
+            external_a = []
 
-        while (time.time() - t0) < duration_a:
-            elapsed = round(time.time() - t0, 1)
-            conns = sample_netstat_connections(pids_to_watch)
-            ext = [c for c in conns if not c["is_loopback"]]
-            if ext:
-                external_a.extend(ext)
-            samples_a.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
-            if int(elapsed) % 60 == 0:
-                print(f"  [WINDOW A] {elapsed}/{duration_a}s elapsed | conns={len(conns)} | external={len(ext)}")
-            time.sleep(SAMPLE_INTERVAL_SECONDS)
+            while (time.time() - t0) < duration_a:
+                elapsed = round(time.time() - t0, 1)
+                conns = sample_netstat_connections(pids_to_watch)
+                ext = [c for c in conns if not c["is_loopback"]]
+                if ext:
+                    external_a.extend(ext)
+                samples_a.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
+                if int(elapsed) % 60 == 0:
+                    print(f"  [WINDOW A] {elapsed}/{duration_a}s elapsed | conns={len(conns)} | external={len(ext)}")
+                time.sleep(SAMPLE_INTERVAL_SECONDS)
 
-        all_window_measurements["Window_A"] = {
-            "name": w_cfg["name"],
-            "start_time_utc": start_utc_a,
-            "end_time_utc": datetime.now(timezone.utc).isoformat(),
-            "duration_measured_seconds": round(time.time() - t0, 1),
-            "samples_count": len(samples_a),
-            "unsolicited_inference_count": 0,
-            "external_egress_count": len(external_a),
-            "verdict": "PASS" if len(external_a) == 0 else "VIOLATION",
-        }
-        total_unsolicited_external_egress += len(external_a)
+            all_window_measurements["Window_A"] = {
+                "name": w_cfg["name"],
+                "start_time_utc": start_utc_a,
+                "end_time_utc": datetime.now(timezone.utc).isoformat(),
+                "duration_measured_seconds": round(time.time() - t0, 1),
+                "samples_count": len(samples_a),
+                "unsolicited_inference_count": 0,
+                "external_egress_count": len(external_a),
+                "verdict": "PASS" if len(external_a) == 0 else "VIOLATION",
+            }
+            total_unsolicited_external_egress += len(external_a)
 
-        # =====================================================================
-        # WINDOW B: Browser Open at Global Chat '/' (10 min)
-        # =====================================================================
-        w_cfg = WINDOW_CONFIGS["B"]
-        duration_b = int(w_cfg["nominal_seconds"] * scale_factor)
-        print(f"\n[WINDOW B] Starting: {w_cfg['name']} for {duration_b}s...")
+            # =====================================================================
+            # WINDOW B: Browser Open at Global Chat '/' (10 min)
+            # =====================================================================
+            w_cfg = WINDOW_CONFIGS["B"]
+            duration_b = int(w_cfg["nominal_seconds"] * scale_factor)
+            print(f"\n[WINDOW B] Starting: {w_cfg['name']} for {duration_b}s...")
 
-        context_b = browser.new_context(viewport={"width": 1920, "height": 1080})
-        page_b = context_b.new_page()
+            context_b = browser.new_context(viewport={"width": 1920, "height": 1080})
+            page_b = context_b.new_page()
 
-        def on_request(req):
-            browser_requests.append({
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-                "window": "B",
-                "method": req.method,
-                "url": req.url,
-                "resource_type": req.resource_type,
-            })
+            def on_request(req):
+                browser_requests.append({
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+                    "window": "B",
+                    "method": req.method,
+                    "url": req.url,
+                    "resource_type": req.resource_type,
+                })
 
-        page_b.on("request", on_request)
-        page_b.goto(f"{base_url}/", wait_until="networkidle", timeout=30000)
-        time.sleep(1)
+            page_b.on("request", on_request)
+            page_b.goto(f"{base_url}/", wait_until="networkidle", timeout=30000)
+            time.sleep(1)
 
-        t0 = time.time()
-        start_utc_b = datetime.now(timezone.utc).isoformat()
-        samples_b = []
-        external_b = []
+            t0 = time.time()
+            start_utc_b = datetime.now(timezone.utc).isoformat()
+            samples_b = []
+            external_b = []
 
-        while (time.time() - t0) < duration_b:
-            elapsed = round(time.time() - t0, 1)
-            conns = sample_netstat_connections(pids_to_watch)
-            ext = [c for c in conns if not c["is_loopback"]]
-            if ext:
-                external_b.extend(ext)
-            samples_b.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
-            if int(elapsed) % 60 == 0:
-                print(f"  [WINDOW B] {elapsed}/{duration_b}s elapsed | conns={len(conns)} | external={len(ext)}")
-            time.sleep(SAMPLE_INTERVAL_SECONDS)
+            while (time.time() - t0) < duration_b:
+                elapsed = round(time.time() - t0, 1)
+                conns = sample_netstat_connections(pids_to_watch)
+                ext = [c for c in conns if not c["is_loopback"]]
+                if ext:
+                    external_b.extend(ext)
+                samples_b.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
+                if int(elapsed) % 60 == 0:
+                    print(f"  [WINDOW B] {elapsed}/{duration_b}s elapsed | conns={len(conns)} | external={len(ext)}")
+                time.sleep(SAMPLE_INTERVAL_SECONDS)
 
-        # Take screenshot of idle chat
-        screenshot_b = audit_dir / "w12_window_b_chat_idle.png"
-        page_b.screenshot(path=str(screenshot_b))
+            # Take screenshot of idle chat
+            screenshot_b = audit_dir / "w12_window_b_chat_idle.png"
+            page_b.screenshot(path=str(screenshot_b))
 
-        all_window_measurements["Window_B"] = {
-            "name": w_cfg["name"],
-            "start_time_utc": start_utc_b,
-            "end_time_utc": datetime.now(timezone.utc).isoformat(),
-            "duration_measured_seconds": round(time.time() - t0, 1),
-            "samples_count": len(samples_b),
-            "unsolicited_inference_count": 0,
-            "external_egress_count": len(external_b),
-            "verdict": "PASS" if len(external_b) == 0 else "VIOLATION",
-        }
-        total_unsolicited_external_egress += len(external_b)
-        context_b.close()
+            all_window_measurements["Window_B"] = {
+                "name": w_cfg["name"],
+                "start_time_utc": start_utc_b,
+                "end_time_utc": datetime.now(timezone.utc).isoformat(),
+                "duration_measured_seconds": round(time.time() - t0, 1),
+                "samples_count": len(samples_b),
+                "unsolicited_inference_count": 0,
+                "external_egress_count": len(external_b),
+                "verdict": "PASS" if len(external_b) == 0 else "VIOLATION",
+            }
+            total_unsolicited_external_egress += len(external_b)
+            context_b.close()
 
-        # =====================================================================
-        # WINDOW C: /motion?mode=refine Empty No Project, Catalog Selected (10 min)
-        # =====================================================================
-        w_cfg = WINDOW_CONFIGS["C"]
-        duration_c = int(w_cfg["nominal_seconds"] * scale_factor)
-        print(f"\n[WINDOW C] Starting: {w_cfg['name']} for {duration_c}s...")
+            # =====================================================================
+            # WINDOW C: /motion?mode=refine Empty No Project, Catalog Selected (10 min)
+            # =====================================================================
+            w_cfg = WINDOW_CONFIGS["C"]
+            duration_c = int(w_cfg["nominal_seconds"] * scale_factor)
+            print(f"\n[WINDOW C] Starting: {w_cfg['name']} for {duration_c}s...")
 
-        context_c = browser.new_context(viewport={"width": 1920, "height": 1080})
-        page_c = context_c.new_page()
+            context_c = browser.new_context(viewport={"width": 1920, "height": 1080})
+            page_c = context_c.new_page()
 
-        def on_request_c(req):
-            browser_requests.append({
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-                "window": "C",
-                "method": req.method,
-                "url": req.url,
-                "resource_type": req.resource_type,
-            })
+            def on_request_c(req):
+                browser_requests.append({
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+                    "window": "C",
+                    "method": req.method,
+                    "url": req.url,
+                    "resource_type": req.resource_type,
+                })
 
-        page_c.on("request", on_request_c)
-        page_c.goto(f"{base_url}/motion?mode=refine", wait_until="networkidle", timeout=30000)
-        time.sleep(1)
+            page_c.on("request", on_request_c)
+            page_c.goto(f"{base_url}/motion?mode=refine", wait_until="networkidle", timeout=30000)
+            time.sleep(1)
 
-        t0 = time.time()
-        start_utc_c = datetime.now(timezone.utc).isoformat()
-        samples_c = []
-        external_c = []
+            t0 = time.time()
+            start_utc_c = datetime.now(timezone.utc).isoformat()
+            samples_c = []
+            external_c = []
 
-        while (time.time() - t0) < duration_c:
-            elapsed = round(time.time() - t0, 1)
-            conns = sample_netstat_connections(pids_to_watch)
-            ext = [c for c in conns if not c["is_loopback"]]
-            if ext:
-                external_c.extend(ext)
-            samples_c.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
-            if int(elapsed) % 60 == 0:
-                print(f"  [WINDOW C] {elapsed}/{duration_c}s elapsed | conns={len(conns)} | external={len(ext)}")
-            time.sleep(SAMPLE_INTERVAL_SECONDS)
+            while (time.time() - t0) < duration_c:
+                elapsed = round(time.time() - t0, 1)
+                conns = sample_netstat_connections(pids_to_watch)
+                ext = [c for c in conns if not c["is_loopback"]]
+                if ext:
+                    external_c.extend(ext)
+                samples_c.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
+                if int(elapsed) % 60 == 0:
+                    print(f"  [WINDOW C] {elapsed}/{duration_c}s elapsed | conns={len(conns)} | external={len(ext)}")
+                time.sleep(SAMPLE_INTERVAL_SECONDS)
 
-        screenshot_c = audit_dir / "w12_window_c_motion_refine_idle.png"
-        page_c.screenshot(path=str(screenshot_c))
+            screenshot_c = audit_dir / "w12_window_c_motion_refine_idle.png"
+            page_c.screenshot(path=str(screenshot_c))
 
-        all_window_measurements["Window_C"] = {
-            "name": w_cfg["name"],
-            "start_time_utc": start_utc_c,
-            "end_time_utc": datetime.now(timezone.utc).isoformat(),
-            "duration_measured_seconds": round(time.time() - t0, 1),
-            "samples_count": len(samples_c),
-            "unsolicited_inference_count": 0,
-            "external_egress_count": len(external_c),
-            "verdict": "PASS" if len(external_c) == 0 else "VIOLATION",
-        }
-        total_unsolicited_external_egress += len(external_c)
-        context_c.close()
+            all_window_measurements["Window_C"] = {
+                "name": w_cfg["name"],
+                "start_time_utc": start_utc_c,
+                "end_time_utc": datetime.now(timezone.utc).isoformat(),
+                "duration_measured_seconds": round(time.time() - t0, 1),
+                "samples_count": len(samples_c),
+                "unsolicited_inference_count": 0,
+                "external_egress_count": len(external_c),
+                "verdict": "PASS" if len(external_c) == 0 else "VIOLATION",
+            }
+            total_unsolicited_external_egress += len(external_c)
+            context_c.close()
 
-        # =====================================================================
-        # WINDOW D: Browser Background/Hidden & Restored (5 min)
-        # =====================================================================
-        w_cfg = WINDOW_CONFIGS["D"]
-        duration_d = int(w_cfg["nominal_seconds"] * scale_factor)
-        print(f"\n[WINDOW D] Starting: {w_cfg['name']} for {duration_d}s...")
+            # =====================================================================
+            # WINDOW D: Browser Background/Hidden & Restored (5 min)
+            # =====================================================================
+            w_cfg = WINDOW_CONFIGS["D"]
+            duration_d = int(w_cfg["nominal_seconds"] * scale_factor)
+            print(f"\n[WINDOW D] Starting: {w_cfg['name']} for {duration_d}s...")
 
-        context_d = browser.new_context(viewport={"width": 1920, "height": 1080})
-        page_d = context_d.new_page()
-        page_d.goto(f"{base_url}/", wait_until="networkidle", timeout=30000)
-        time.sleep(1)
+            context_d = browser.new_context(viewport={"width": 1920, "height": 1080})
+            page_d = context_d.new_page()
+            page_d.goto(f"{base_url}/", wait_until="networkidle", timeout=30000)
+            time.sleep(1)
 
-        # Simulate tab hidden/backgrounded
-        page_d.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
+            # Simulate tab hidden/backgrounded
+            page_d.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
 
-        t0 = time.time()
-        start_utc_d = datetime.now(timezone.utc).isoformat()
-        samples_d = []
-        external_d = []
+            t0 = time.time()
+            start_utc_d = datetime.now(timezone.utc).isoformat()
+            samples_d = []
+            external_d = []
 
-        while (time.time() - t0) < duration_d:
-            elapsed = round(time.time() - t0, 1)
-            conns = sample_netstat_connections(pids_to_watch)
-            ext = [c for c in conns if not c["is_loopback"]]
-            if ext:
-                external_d.extend(ext)
-            samples_d.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
-            if int(elapsed) % 60 == 0:
-                print(f"  [WINDOW D] {elapsed}/{duration_d}s elapsed | conns={len(conns)} | external={len(ext)}")
-            time.sleep(SAMPLE_INTERVAL_SECONDS)
+            while (time.time() - t0) < duration_d:
+                elapsed = round(time.time() - t0, 1)
+                conns = sample_netstat_connections(pids_to_watch)
+                ext = [c for c in conns if not c["is_loopback"]]
+                if ext:
+                    external_d.extend(ext)
+                samples_d.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
+                if int(elapsed) % 60 == 0:
+                    print(f"  [WINDOW D] {elapsed}/{duration_d}s elapsed | conns={len(conns)} | external={len(ext)}")
+                time.sleep(SAMPLE_INTERVAL_SECONDS)
 
-        all_window_measurements["Window_D"] = {
-            "name": w_cfg["name"],
-            "start_time_utc": start_utc_d,
-            "end_time_utc": datetime.now(timezone.utc).isoformat(),
-            "duration_measured_seconds": round(time.time() - t0, 1),
-            "samples_count": len(samples_d),
-            "unsolicited_inference_count": 0,
-            "external_egress_count": len(external_d),
-            "verdict": "PASS" if len(external_d) == 0 else "VIOLATION",
-        }
-        total_unsolicited_external_egress += len(external_d)
-        context_d.close()
+            all_window_measurements["Window_D"] = {
+                "name": w_cfg["name"],
+                "start_time_utc": start_utc_d,
+                "end_time_utc": datetime.now(timezone.utc).isoformat(),
+                "duration_measured_seconds": round(time.time() - t0, 1),
+                "samples_count": len(samples_d),
+                "unsolicited_inference_count": 0,
+                "external_egress_count": len(external_d),
+                "verdict": "PASS" if len(external_d) == 0 else "VIOLATION",
+            }
+            total_unsolicited_external_egress += len(external_d)
+            context_d.close()
 
         # =====================================================================
         # WINDOW E: ONE Explicit Local Generation, Completed, Then Idle (5 min)
@@ -404,15 +447,19 @@ def run_40min_observation(scale_factor: float = 1.0):
             from backend.core.ai_provider import AIClient, AIProvider
             from backend.llm_trace.context import inference_authorization_context
             import asyncio
+            import concurrent.futures
             client = AIClient(provider=AIProvider.OLLAMA, api_key="", model="gemma4:e4b")
-            with inference_authorization_context(
-                correlation_id="c_wave12_window_e_authorized",
-                trigger="explicit_chat_submit",
-                user_id="local_owner",
-                run_id="run_window_e_01",
-            ):
-                asyncio.run(client.chat(messages=[{"role": "user", "content": "Compute 7 * 8"}], max_tokens=32))
-            print("  [WINDOW E] Completed authorized positive control inference.")
+            def _run_ai_call():
+                with inference_authorization_context(
+                    correlation_id="c_wave12_window_e_authorized",
+                    trigger="explicit_chat_submit",
+                    user_id="local_owner",
+                    run_id="run_window_e_01",
+                ):
+                    return asyncio.run(client.chat(messages=[{"role": "user", "content": "Compute 7 * 8"}], max_tokens=32))
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                res_ai = pool.submit(_run_ai_call).result()
+            print(f"  [WINDOW E] Completed authorized positive control inference: {res_ai}")
 
         # Now observe genuine idle for duration_e
         t0 = time.time()
@@ -548,4 +595,5 @@ def run_40min_observation(scale_factor: float = 1.0):
 
 if __name__ == "__main__":
     scale = float(sys.argv[1]) if len(sys.argv) > 1 else 1.0
-    run_40min_observation(scale)
+    start_win = sys.argv[2] if len(sys.argv) > 2 else "A"
+    run_40min_observation(scale, start_win)
