@@ -1,0 +1,66 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-bold-block",
+  "type": "hyperframes:block",
+  "title": "Lower Third — Bold Block",
+  "description": "High-energy podcast lower third: solid dark block wipes in, uppercase name slams up, accent tag pops",
+  "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "bold"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 4.8,
+  "files": [
+    {
+      "path": "lt-bold-block.html",
+      "target": "compositions/lt-bold-block.html",
+      "type": "hyperframes:composition"
+    }
+  ],
+  "variables": [
+    {
+      "id": "name",
+      "type": "string",
+      "label": "Name",
+      "default": "Maya Chen",
+      "origin": "PORT_EXTENSION_EXPLICIT"
+    },
+    {
+      "id": "tag",
+      "type": "string",
+      "label": "Tag",
+      "default": "Host · Neuroscientist",
+      "origin": "PORT_EXTENSION_EXPLICIT"
+    }
+  ],
+  "wave15_port": {
+    "source_category": {
+      "category_id": "text-captions",
+      "category": "Text & captions",
+      "subcategory": "Lower Thirds",
+      "navigation_path": [
+        "Catalog",
+        "Text & captions",
+        "Lower Thirds"
+      ],
+      "doc_category": "Lower Thirds",
+      "status": "SOURCE_CATEGORY_VERIFIED",
+      "proposed_fallback": null,
+      "evidence": [
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "conflict": false
+    },
+    "runtime": "independent-static-timeline-v1",
+    "fidelity": "ORIGINAL_MARKUP_STYLES_TIMING_EASING_RETAINED; VISUAL_BASELINE_REVIEW_PENDING",
+    "variables_origin": "PORT_EXTENSION_EXPLICIT",
+    "native_aspect_policy": "contain",
+    "public_ready": false
+  }
+}

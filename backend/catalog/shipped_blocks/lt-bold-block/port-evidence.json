@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "id": "lt-bold-block",
+  "source_files": {
+    "lt-bold-block.html": "76a8470adf0bb1a8f3b2738efd206dfb151110b5fe65a3506a7d1852f804fce2",
+    "registry-item.json": "d0c18c6668a1ac08ee482400023a0c0b1bcabdc2b4564985d10d5bc8da210ba4"
+  },
+  "source_sha256": "77c29535cf821445977b60a1324610982aaecdce322e02105861c02d78e8194b",
+  "compiled_timeline": {
+    "id": "lt-bold-block",
+    "duration": 4.8,
+    "targets": [
+      "lt",
+      "lt-block",
+      "lt-name",
+      "lt-tag"
+    ],
+    "initial": [
+      {
+        "targets": [
+          "lt-block"
+        ],
+        "values": {
+          "clipPath": "inset(0 100% 0 0)"
+        }
+      },
+      {
+        "targets": [
+          "lt-name"
+        ],
+        "values": {
+          "y": 30.0,
+          "opacity": 0.0
+        }
+      },
+      {
+        "targets": [
+          "lt-tag"
+        ],
+        "values": {
+          "y": 40.0
+        }
+      }
+    ],
+    "operations": [
+      {
+        "targets": [
+          "lt-block"
+        ],
+        "values": {
+          "clipPath": "inset(0 0% 0 0)"
+        },
+        "start": 0.1,
+        "duration": 0.5,
+        "ease": "power4.out"
+      },
+      {
+        "targets": [
+          "lt-name"
+        ],
+        "values": {
+          "y": 0.0,
+          "opacity": 1.0
+        },
+        "start": 0.26,
+        "duration": 0.42,
+        "ease": "back.out(1.6)"
+      },
+      {
+        "targets": [
+          "lt-tag"
+        ],
+        "values": {
+          "y": 0.0
+        },
+        "start": 0.5,
+        "duration": 0.45,
+        "ease": "back.out(2)"
+      },
+      {
+        "targets": [
+          "lt-block"
+        ],
+        "values": {
+          "clipPath": "inset(0 0 0 100%)"
+        },
+        "start": 4.3,
+        "duration": 0.4,
+        "ease": "power3.in"
+      },
+      {
+        "targets": [
+          "lt"
+        ],
+        "values": {
+          "visibility": "hidden"
+        },
+        "start": 4.75,
+        "duration": 0,
+        "ease": "none"
+      }
+    ],
+    "textBindings": {
+      "name": "lt-name",
+      "tag": "lt-tag"
+    }
+  },
+  "source_html_sha256": "76a8470adf0bb1a8f3b2738efd206dfb151110b5fe65a3506a7d1852f804fce2",
+  "output_html_sha256": "86e20e2b6e163fb0e1508eac624fc6ee8b83f4b77b5a9b56bfd24cef97a778e0",
+  "runtime_sha256": "e84f19ea3865d33227a1376a4c22000e6fab0a9a74bb67b591c707f27e00e392",
+  "source_scripts_executed": false,
+  "rights": {
+    "composition": "Apache-2.0",
+    "runtime": "AGPL-3.0-only",
+    "gsap": "REMOVED_NOT_REDISTRIBUTED",
+    "assets": "NONE",
+    "trademark": "NONE_IDENTIFIED"
+  },
+  "fidelity_limits": [
+    "Visual comparison against an authorized original GSAP renderer not yet performed",
+    "Original fonts absent upstream; exact glyph metrics depend on system font fallback",
+    "Additional text controls are explicitly port extensions"
+  ]
+}
