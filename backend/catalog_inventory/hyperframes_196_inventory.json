@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 1,
   "source_inventory": "HyperFrames",
   "original_block_count": 196,
   "taxonomy_census": {
@@ -404,8 +404,8 @@
       "source_sha256": "04dec83305458117cc53df002976faeaa77d6c06a7ba48c1341f5fe54cb5a142",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -600,9 +600,9 @@
       "relative_source_path": "registry/blocks/canopy-part-title",
       "source_sha256": "2d1d69c6d6f46dbc3df5cf4d412c881de90c7a6a80b79376351e86b12f1faebd",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -2473,9 +2473,9 @@
       "relative_source_path": "registry/blocks/code-slice-hero",
       "source_sha256": "8eeaf224ea649f81b19303e6c9e14ff3991cab91f36b5a456b77332fd076b008",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -2814,9 +2814,9 @@
       "relative_source_path": "registry/blocks/cuboid-carousel",
       "source_sha256": "a938fa2ce48d6287b767058494bbb72f36d0e9d48fc4dcccd619e78db22a18a3",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3304,8 +3304,8 @@
       "source_sha256": "8bc84d804d1ae27b9619b111b3299edd15acf7110825cbb6e276a0d6de4b6367",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3405,8 +3405,8 @@
       "source_sha256": "70745674b99dc35905936919da55eefe800b17dfaf79dea1d10dc2aaad8a0acb",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3454,9 +3454,9 @@
       "relative_source_path": "registry/blocks/frost-sequence-camera-orbit",
       "source_sha256": "fd48f48b0c4e3df35a0c09748f7ea09713d0fd2756f693b3b460f0c216f8e566",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3607,9 +3607,9 @@
       "relative_source_path": "registry/blocks/glass-shard-title",
       "source_sha256": "48b765c0d6a519966b5b840652983f6110a5de6495775227efb0c6ed11a1da1e",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3705,8 +3705,8 @@
       "source_sha256": "b4ce5f7177c6fb582fdfb966cca25fd5dc44cb8a7f28cfa7e6585c2a4cd4e563",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3754,8 +3754,8 @@
       "source_sha256": "7c018d2c2ff3b25c3eaf6cda6cb1be17e847b6f10b1a5c3bf1e9d4e1c622f306",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -3949,9 +3949,9 @@
       "relative_source_path": "registry/blocks/heygen-avatar-promo-card",
       "source_sha256": "7a2f54cc7a82bb5a34a2777f0c685fa8ba6c0ac3deec8eb8e2778dd231655d3d",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -4481,8 +4481,8 @@
       "source_sha256": "e6680b82301a0c5358782323c80187cdf91c0a38ac8af93dcffffd053f15c9d1",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -4671,8 +4671,8 @@
       "source_sha256": "e2da321f55bff1cb3ca851afa9c4568e4b4ad5ef2c4f342aca9f3abf99827d99",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -4870,8 +4870,8 @@
       "source_sha256": "42461de71b047f64269db62c0fbd51fd3d77823f70392f4266528182a3ec1278",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -4919,8 +4919,8 @@
       "source_sha256": "5a4587bbb232524e7d6a8abf9836605604df5734e3a90a7360e7c18856a5a27d",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -4968,8 +4968,8 @@
       "source_sha256": "fe48b71b208c07838e030a14cdd50a9abebfa26df3b0d91eacf62f5b082c3e6d",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5016,8 +5016,8 @@
       "source_sha256": "0ed685707516e9de5b65fb43b661d97b1cc804df2053007b2ff0c031d01f59c0",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5065,8 +5065,8 @@
       "source_sha256": "776faa81d08c070c6bc1a7bebd2fa992f0bdc2ffefebab54d472ae83da242985",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5114,8 +5114,8 @@
       "source_sha256": "ddb73c9b5cae34d844548ca427e0bc22e60e1cb769a9913343efbd3da9025131",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5163,8 +5163,8 @@
       "source_sha256": "90d6ae6da64db547d8945e0f09581cf146ad8e126bd86ff394b9ea555eb867e8",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5260,8 +5260,8 @@
       "source_sha256": "8a261b19502f3a666b6013bb8f6ae9497366dab0a11ff733f2a9f582bf9ba8e1",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5309,8 +5309,8 @@
       "source_sha256": "57de11037d44ad59753cb4a26168be24a9484f3dac23ff06beb0189e7375bd58",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5358,8 +5358,8 @@
       "source_sha256": "9139625c90ebd002797c227a2a44ac7499a9ed4f947473b66c9033b4ec7c436b",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED",
-      "blocker_reason": "Pending final registry adapter routing and CAS integration",
+      "integration_status": "BLOCKED_DEPENDENCY",
+      "blocker_reason": "Compiled native timeline port; pending final registry adapter routing and CAS integration",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5503,8 +5503,8 @@
       "source_sha256": "cdf3c299ab4daa54997af7b10d551534845b22cefc306f194af2a760c94e33bd",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5552,8 +5552,8 @@
       "source_sha256": "4420d9f83c98d9e77947e3ded5332c06c63ab85b5e69ffec5b7bc95ee61a8e32",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -5985,8 +5985,8 @@
       "source_sha256": "55aa10f0e9b427fc2ef0d8e71fc43f723fa44eeb3fd03879b82f7d2395d5e22c",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -6279,9 +6279,9 @@
       "relative_source_path": "registry/blocks/orbit-card",
       "source_sha256": "07abc5129b0634e36c23d70aa8e0cf84d879b29aecc508eafb0dd4ca3d1d4d6f",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -6479,8 +6479,8 @@
       "source_sha256": "486140af80b2d8dda5df3146b4cda220208b32e6073cf298d0a3c29b2170681b",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -6864,8 +6864,8 @@
       "source_sha256": "57bc0644567ca02bb1f34783d25b56f5e7103bea72f2eb6a11ac537ea4aaba38",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -6913,9 +6913,9 @@
       "relative_source_path": "registry/blocks/slack-notification-ad",
       "source_sha256": "d5e298701f56829567030e2eeb0831b85e3ea67009578953ecd6e3cc787fdf5f",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -7165,9 +7165,9 @@
       "relative_source_path": "registry/blocks/spotify-card",
       "source_sha256": "b4bc38b27927b7f73ce233c702c82f5fe944ae3d78bf94225090709b07d7721c",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -7268,8 +7268,8 @@
       "source_sha256": "a4e0beb9b97c9f2c6defdfa94ef262e43581a77e33d88e69f76938dc5300f483",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -7368,8 +7368,8 @@
       "source_sha256": "c1ea3267c8e96b17ed1f02bc201eb55e719d4dd2820c13b28ded38660fb4c3ad",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -8831,8 +8831,8 @@
       "source_sha256": "f87954625169ccb13f4c80528a2cdd6324ccdbad1a06eed5bf991c18ad73ae3d",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -8880,9 +8880,9 @@
       "relative_source_path": "registry/blocks/vpn-youtube-spot",
       "source_sha256": "d8e745911561497cb93100cbca7a15cb9fe30ec6332439af9728a40981f5c1aa",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -8929,8 +8929,8 @@
       "source_sha256": "203d01a98ec3e6bb832917578ca8e8e8f2be49624c97b41a6352f61283c44737",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -8979,8 +8979,8 @@
       "source_sha256": "7c674ee550e80baa357313ccc397ca43253c58e5d5a8fb08c82addffd32a0d5a",
       "license_status": "VERIFIED_PERMISSIVE",
       "license_evidence": "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE",
-      "integration_status": "INTERNALIZED",
-      "blocker_reason": null,
+      "integration_status": "ELIGIBLE_NOT_PORTED",
+      "blocker_reason": "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -9171,9 +9171,9 @@
       "relative_source_path": "registry/blocks/wireframe-portal-title",
       "source_sha256": "68218f458cd15f1702dc8175b8a2bb8bb05739f0d66e9acc77803861f93cd881",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"
@@ -9272,9 +9272,9 @@
       "relative_source_path": "registry/blocks/x-post",
       "source_sha256": "a39bfd0513869866b6041f541eb6a4c85eaff8db27a4c6f017ed3e445a776df7",
       "license_status": "RESTRICTED",
-      "license_evidence": "Relies on unvendored remote GSAP scripts, Google Fonts, or Three.js CDN assets",
-      "integration_status": "BLOCKED_DEPENDENCY",
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring",
+      "license_evidence": "Contains proprietary brand trademark, third-party logo, or UI lookalike",
+      "integration_status": "BLOCKED_LICENSE",
+      "blocker_reason": "Proprietary third-party intellectual property requires explicit owner trademark clearance",
       "supported_aspects": [
         "9:16",
         "16:9"

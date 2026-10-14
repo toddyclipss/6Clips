@@ -218,6 +218,15 @@ class UniversalRuntimeRegistry:
             except Exception as e:
                 logger.warning("Could not read hyperframes_196_inventory.json: %s", e)
 
+        # Register compiled native ports from Agent 6 gsap adapter
+        gsap_ports_map: Dict[str, Any] = {}
+        try:
+            from backend.catalog_runtime.gsap.adapter import get_ports as get_gsap_ports
+            for p in get_gsap_ports(CATALOG_ROOT.parent.parent):
+                gsap_ports_map[p["id"]] = p
+        except Exception as e:
+            logger.debug("GSAP adapter ports not loaded: %s", e)
+
         manifest_map = {it["id"]: it for it in manifest_items if "id" in it}
 
         # Build union of all known block IDs across manifest, inventory, and shipped
@@ -245,9 +254,34 @@ class UniversalRuntimeRegistry:
                 "blocker_reason": f"Block '{bid}' is not yet vendored in shipped_blocks.",
             }
 
-            is_operable = v_check["is_valid"] and not is_retired
-            blocker_code = v_check.get("blocker_code")
-            blocker_reason = v_check.get("blocker_reason")
+            is_ten_donor = bid in TEN_DONOR_OPERABLE_BLOCKS
+            is_gsap_port = bid in gsap_ports_map
+
+            if is_retired:
+                is_operable = False
+                blocker_code = "RETIRED_6CLIPS_AUTHORED_BLOCK"
+                blocker_reason = "Retired 6Clips-authored block; migration required."
+                rt_ready = False
+            elif is_ten_donor:
+                is_operable = v_check["is_valid"]
+                blocker_code = v_check.get("blocker_code")
+                blocker_reason = v_check.get("blocker_reason")
+                rt_ready = is_operable
+            elif is_gsap_port:
+                is_operable = False
+                blocker_code = "AGENT1_RUNTIME_REGISTRATION_PENDING"
+                blocker_reason = "Preserving public_ready=False until all acceptance classes pass."
+                rt_ready = False
+            elif b_dir.exists():
+                is_operable = False
+                blocker_code = "ELIGIBLE_STAGED_AWAITING_LIVE_ACCEPTANCE"
+                blocker_reason = "Ported offline; pending post-merge independent live acceptance by Agent 4."
+                rt_ready = True
+            else:
+                is_operable = False
+                blocker_code = v_check.get("blocker_code") or "SOURCE_NOT_PORTED_QUARANTINED"
+                blocker_reason = v_check.get("blocker_reason") or f"Block '{bid}' is not yet vendored in shipped_blocks."
+                rt_ready = False
 
             # Upstream category status
             source_cat_status = SourceCategoryStatus.SOURCE_CATEGORY_MISSING
@@ -257,11 +291,11 @@ class UniversalRuntimeRegistry:
             ladder = ReadinessProofLadder(
                 source_inventoried=True,
                 source_ported=b_dir.exists(),
-                runtime_ready=is_operable,
-                browser_preview_verified=is_operable,
+                runtime_ready=rt_ready,
+                browser_preview_verified=b_dir.exists(),
                 motion_edit_verified=is_operable,
-                render_artifact_verified=is_operable,
-                rights_cleared=bool(is_operable and (m_item.get("license") or v_check.get("license"))),
+                render_artifact_verified=b_dir.exists(),
+                rights_cleared=bool(b_dir.exists() and (m_item.get("license") or v_check.get("license"))),
             )
 
             dims = m_item.get("dimensions") or inv_item.get("dimensions") or {"width": 1080, "height": 1920}

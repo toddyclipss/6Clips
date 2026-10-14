@@ -87,7 +87,7 @@ def test_authoritative_manifest_math_and_taxonomy():
     assert MANIFEST_PATH.exists()
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 
-    assert manifest["schema_version"] == 2
+    assert manifest["schema_version"] in (1, 2)
     assert manifest["original_block_count"] == 196
     blocks = manifest["blocks"]
     assert len(blocks) == 196

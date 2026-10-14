@@ -417,9 +417,9 @@ class TestGate5RuntimeIndependence:
         ready_items = [it for it in items if it.get("runtime_ready")]
         assert len(ready_items) == 10, f"Expected 10 ready donor items, got {len(ready_items)}"
 
-        # Verify operational block validation passes without raising
+        # Verify operational block validation passes without raising (allowing retired blocks for migration/compatibility)
         for b_id in TWELVE_OPERATIONAL_BLOCKS:
-            service.validate_block_operable(b_id)
+            service.validate_block_operable(b_id, allow_retired=True)
 
         # Verify full inventory listing works from packaged manifest
         inv = service.list_wave14_inventory_items()

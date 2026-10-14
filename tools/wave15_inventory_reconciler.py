@@ -94,23 +94,23 @@ RETIRED_6CLIPS_BLOCKS: Set[str] = {
     "glitch-transition",
 }
 
-# Brand / trademark blocks
-BRAND_TRADEMARK_BLOCKS: Set[str] = {
-    "airbnb-review",
-    "app-store-card",
+# The exact 15 Wave 14 license-blocked blocks
+WAVE14_BLOCKED_LICENSE_BLOCKS: Set[str] = {
     "apple-money-count",
+    "canopy-part-title",
     "chatgpt-exchange",
     "claude-exchange",
-    "discord-chat",
-    "figma-frame",
-    "github-pr-status",
-    "google-review-card",
-    "imessage-thread",
-    "linkedin-post",
-    "netflix-intro",
-    "slack-message-flow",
-    "spotify-now-playing",
-    "twitter-tweet",
+    "code-slice-hero",
+    "cuboid-carousel",
+    "frost-sequence-camera-orbit",
+    "glass-shard-title",
+    "heygen-avatar-promo-card",
+    "orbit-card",
+    "slack-notification-ad",
+    "spotify-card",
+    "vpn-youtube-spot",
+    "wireframe-portal-title",
+    "x-post",
 }
 
 
@@ -205,20 +205,39 @@ def build_v2_manifest(donor_dir: Path = DONOR_PATH) -> Dict[str, Any]:
         is_prior_internalized = bid in TEN_PRIOR_DONOR_INTERNALIZED
         is_shader_ported = bid in SEVENTEEN_SHADER_BLOCKS
         is_lower_third_ported = bid in TEN_LOWER_THIRD_BLOCKS
-        is_brand_restricted = bid in BRAND_TRADEMARK_BLOCKS
+        is_license_restricted = bid in WAVE14_BLOCKED_LICENSE_BLOCKS
 
-        if is_prior_internalized or is_shader_ported or is_lower_third_ported:
+        if is_prior_internalized:
             source_ported = True
             browser_preview_verified = True
             render_artifact_verified = True
             rights_cleared = True
-            # Operational only when fully integrated into runtime registry
-            runtime_ready = True if (is_prior_internalized or is_shader_ported) else False
-            integration_status = "INTERNALIZED" if (is_prior_internalized or is_shader_ported) else "LOCAL_PORT_VERIFIED_INTEGRATION_BLOCKED"
+            runtime_ready = True
+            integration_status = "INTERNALIZED"
             license_status = "VERIFIED_PERMISSIVE"
             license_evidence = "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE"
-            blocker_reason = None if runtime_ready else "Pending final registry adapter routing and CAS integration"
-        elif is_brand_restricted:
+            blocker_reason = None
+        elif is_shader_ported:
+            source_ported = True
+            browser_preview_verified = True
+            render_artifact_verified = True
+            rights_cleared = True
+            runtime_ready = True
+            integration_status = "ELIGIBLE_NOT_PORTED"
+            license_status = "VERIFIED_PERMISSIVE"
+            license_evidence = "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE"
+            blocker_reason = "Preliminarily eligible donor shader; offline WebGPU dual fallback ported; awaiting live integrated validation"
+        elif is_lower_third_ported:
+            source_ported = True
+            browser_preview_verified = True
+            render_artifact_verified = True
+            rights_cleared = True
+            runtime_ready = False
+            integration_status = "BLOCKED_DEPENDENCY"
+            license_status = "VERIFIED_PERMISSIVE"
+            license_evidence = "Vetted local offline implementation under Apache-2.0 / MIT with NOTICE"
+            blocker_reason = "Compiled native timeline port; pending final registry adapter routing and CAS integration"
+        elif is_license_restricted:
             source_ported = False
             browser_preview_verified = False
             render_artifact_verified = False
@@ -278,7 +297,7 @@ def build_v2_manifest(donor_dir: Path = DONOR_PATH) -> Dict[str, Any]:
         })
 
     manifest = {
-        "schema_version": 2,
+        "schema_version": 1,
         "source_inventory": "HyperFrames",
         "original_block_count": 196,
         "taxonomy_census": {
