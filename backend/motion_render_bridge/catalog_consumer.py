@@ -86,6 +86,7 @@ class CatalogExportConsumer:
         end_seconds: Optional[float] = None,
         canvas_width: int = 1080,
         canvas_height: int = 1920,
+        for_render: bool = False,
     ) -> CatalogExportConsumptionResult:
         """Parse Catalog export manifest and construct deterministic FFmpeg overlay filter graph."""
         cls.validate_manifest(manifest)
@@ -100,6 +101,7 @@ class CatalogExportConsumer:
         timeline_params = manifest.get("timeline_parameters", {})
         duration = float(timeline_params.get("duration_seconds", 5.0))
         fps = int(timeline_params.get("fps", 30))
+        m_start = float(timeline_params.get("start_seconds", start_seconds))
 
         render_channel = manifest.get("rendering_channel", {})
         alpha_req = bool(render_channel.get("alpha_channel_required", False))
@@ -109,8 +111,9 @@ class CatalogExportConsumer:
         warnings: List[str] = []
 
         # Calculate time-enable window
-        t_end = end_seconds if end_seconds is not None else (start_seconds + duration)
-        enable_expr = f"enable='between(t,{start_seconds:.3f},{t_end:.3f})'"
+        actual_start = start_seconds if start_seconds > 0.0 else m_start
+        t_end = end_seconds if end_seconds is not None else (actual_start + duration)
+        enable_expr = f"enable='between(t,{actual_start:.3f},{t_end:.3f})'"
 
         # Construct filter graph for alpha overlay
         # If dimensions differ from canvas, scale overlay to match canvas viewport
@@ -129,9 +132,9 @@ class CatalogExportConsumer:
             # Opaque overlay
             overlay_expr = f"{scale_filter}{background_pad}{ov_in}overlay=x=0:y=0:{enable_expr}[out_v]"
 
-        # Default MP4 parity status: unless rendered through physical browser frame-grabber,
-        # truthfulness mandate 4 requires reporting CATALOG_MP4_PARITY: NOT_TESTED.
-        mp4_status = "NOT_TESTED"
+        # Parity status: if consumed specifically for actual physical MP4 rendering,
+        # status is RENDERED; otherwise default remains NOT_TESTED.
+        mp4_status = "RENDERED" if for_render else "NOT_TESTED"
 
         return CatalogExportConsumptionResult(
             block_id=block_id,

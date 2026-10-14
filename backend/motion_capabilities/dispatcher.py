@@ -206,6 +206,17 @@ class MotionCapabilityDispatcher:
 
         return res
 
+    @classmethod
+    def _resolve_tracks_container(cls, doc: Optional[Dict[str, Any]]) -> Optional[List[Dict[str, Any]]]:
+        if not doc or not isinstance(doc, dict):
+            return None
+        if "tracks" in doc and isinstance(doc["tracks"], list):
+            return doc["tracks"]
+        if "timeline" in doc and isinstance(doc["timeline"], dict) and "tracks" in doc["timeline"]:
+            if isinstance(doc["timeline"]["tracks"], list):
+                return doc["timeline"]["tracks"]
+        return None
+
     # ───────────────────────────────────────────────────────────────────────
     # Native Clip Studio Timeline Mutations
     # ───────────────────────────────────────────────────────────────────────
@@ -214,7 +225,7 @@ class MotionCapabilityDispatcher:
     async def _execute_timeline_split(
         cls, cap_id: str, doc: Optional[Dict[str, Any]], params: Dict[str, Any], start_time: float
     ) -> CapabilityExecutionResult:
-        if not doc or "tracks" not in doc:
+        if not doc or cls._resolve_tracks_container(doc) is None:
             return CapabilityExecutionResult(
                 capability_id=cap_id, status="FAILED", message="Missing valid project_doc with tracks.",
                 error_detail="INVALID_PROJECT_DOC", execution_time_seconds=time.monotonic() - start_time,
@@ -232,7 +243,7 @@ class MotionCapabilityDispatcher:
         new_clip_a_id = f"{clip_id}_part1"
         new_clip_b_id = f"{clip_id}_part2"
 
-        for track in new_doc.get("tracks", []):
+        for track in cls._resolve_tracks_container(new_doc) or []:
             clips = track.get("clips", [])
             for i, c in enumerate(clips):
                 if c.get("id") == clip_id:
@@ -283,7 +294,7 @@ class MotionCapabilityDispatcher:
     async def _execute_timeline_slip(
         cls, cap_id: str, doc: Optional[Dict[str, Any]], params: Dict[str, Any], start_time: float
     ) -> CapabilityExecutionResult:
-        if not doc or "tracks" not in doc:
+        if not doc or cls._resolve_tracks_container(doc) is None:
             return CapabilityExecutionResult(
                 capability_id=cap_id, status="FAILED", message="Missing valid project_doc.",
                 error_detail="INVALID_PROJECT_DOC", execution_time_seconds=time.monotonic() - start_time,
@@ -293,7 +304,7 @@ class MotionCapabilityDispatcher:
 
         new_doc = copy.deepcopy(doc)
         found = False
-        for track in new_doc.get("tracks", []):
+        for track in cls._resolve_tracks_container(new_doc) or []:
             for c in track.get("clips", []):
                 if c.get("id") == clip_id:
                     in_p = max(0.0, float(c.get("in_point", 0)) + slip_delta)
@@ -322,7 +333,7 @@ class MotionCapabilityDispatcher:
     async def _execute_timeline_ripple_delete(
         cls, cap_id: str, doc: Optional[Dict[str, Any]], params: Dict[str, Any], start_time: float
     ) -> CapabilityExecutionResult:
-        if not doc or "tracks" not in doc:
+        if not doc or cls._resolve_tracks_container(doc) is None:
             return CapabilityExecutionResult(
                 capability_id=cap_id, status="FAILED", message="Missing valid project_doc.",
                 error_detail="INVALID_PROJECT_DOC", execution_time_seconds=time.monotonic() - start_time,
@@ -332,7 +343,7 @@ class MotionCapabilityDispatcher:
         deleted = False
         ripple_shift = 0.0
 
-        for track in new_doc.get("tracks", []):
+        for track in cls._resolve_tracks_container(new_doc) or []:
             clips = track.get("clips", [])
             target_idx = -1
             for i, c in enumerate(clips):
@@ -364,7 +375,7 @@ class MotionCapabilityDispatcher:
     async def _execute_timeline_retime(
         cls, cap_id: str, doc: Optional[Dict[str, Any]], params: Dict[str, Any], start_time: float
     ) -> CapabilityExecutionResult:
-        if not doc or "tracks" not in doc:
+        if not doc or cls._resolve_tracks_container(doc) is None:
             return CapabilityExecutionResult(
                 capability_id=cap_id, status="FAILED", message="Missing valid project_doc.",
                 error_detail="INVALID_PROJECT_DOC", execution_time_seconds=time.monotonic() - start_time,
@@ -379,7 +390,7 @@ class MotionCapabilityDispatcher:
 
         new_doc = copy.deepcopy(doc)
         found = False
-        for track in new_doc.get("tracks", []):
+        for track in cls._resolve_tracks_container(new_doc) or []:
             for c in track.get("clips", []):
                 if c.get("id") == clip_id:
                     c["speed"] = factor
@@ -1134,7 +1145,10 @@ class MotionCapabilityDispatcher:
     ) -> CapabilityExecutionResult:
         """Attach generated media output directly to canonical project document timeline."""
         new_doc = copy.deepcopy(doc)
-        tracks = new_doc.setdefault("tracks", [])
+        if "timeline" in new_doc and isinstance(new_doc["timeline"], dict):
+            tracks = new_doc["timeline"].setdefault("tracks", [])
+        else:
+            tracks = new_doc.setdefault("tracks", [])
         is_audio = capability_id in ("extract-audio", "voiceover", "dubbing")
         track_type = "audio" if is_audio else "video"
 

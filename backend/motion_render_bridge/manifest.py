@@ -309,7 +309,7 @@ def build_render_manifest(
     """
     options = options or {}
     timeline = document.get("timeline") or {}
-    raw_tracks = timeline.get("tracks") or []
+    raw_tracks = timeline.get("tracks") or document.get("tracks") or []
 
     # 1. Canvas & Framerate Resolution
     aspect_ratio = options.get("aspect_ratio") or document.get("aspect_ratio") or "9:16"
