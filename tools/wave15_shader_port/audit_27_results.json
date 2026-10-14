@@ -1,0 +1,809 @@
+{
+  "aurora": {
+    "slug": "aurora",
+    "is_existing_10": true,
+    "donor_hash": "2a96a0795cb7b8605b51737f2879409b714b2aa4db3c53a33162b61a06b7de70",
+    "shipped_hash": "a384c1a26ad38c56dbf28ae32e00d652796923e993d7c61b68818dff1a71bab8",
+    "title": "Aurora",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "light",
+      "aurora",
+      "sky"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "aurora.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": [
+      "aurora.html",
+      "lib",
+      "registry-item.json"
+    ]
+  },
+  "data-chart": {
+    "slug": "data-chart",
+    "is_existing_10": true,
+    "donor_hash": "a8b6441dc1dc39c53f6ed4ca8d597658c3658b1ad5597c2d32f5253fada23127",
+    "shipped_hash": "ce11615a7d19925b15ee842d90500b2db655f73eed9dc93589e79c413a4b0ba6",
+    "title": "Data Chart",
+    "raw_category": null,
+    "derived_category": "charts/data",
+    "tags": [
+      "data",
+      "chart",
+      "statistics"
+    ],
+    "license": "Apache-2.0",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 15,
+    "donor_files": [
+      "data-chart.html",
+      "registry-item.json"
+    ],
+    "shipped_files": [
+      "data-chart.html",
+      "registry-item.json"
+    ]
+  },
+  "flowing-gradient": {
+    "slug": "flowing-gradient",
+    "is_existing_10": true,
+    "donor_hash": "ca7220005c6de606a542ebc771f3c50d2d2fd2a8721e853bfa657d5f4683bdfa",
+    "shipped_hash": "c7dcea92058436d072d9f6d9f9a5cad30be282b922d2d7e949bd6866525d0ac1",
+    "title": "Flowing Gradient",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "gradient",
+      "color",
+      "flow"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "flowing-gradient.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": [
+      "flowing-gradient.html",
+      "lib",
+      "registry-item.json"
+    ]
+  },
+  "holographic": {
+    "slug": "holographic",
+    "is_existing_10": true,
+    "donor_hash": "acbb8793055d150a8cd5e4497572bbe33c45f46dedf379d8931709168a4eb403",
+    "shipped_hash": "2b79d2b63fbd73a34812b20e25f74ed1da4ab2aae718047da6e8efc387439fb6",
+    "title": "Holographic",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "holographic",
+      "iridescent",
+      "rainbow",
+      "orb"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "holographic.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": [
+      "holographic.html",
+      "lib",
+      "registry-item.json"
+    ]
+  },
+  "instagram-follow": {
+    "slug": "instagram-follow",
+    "is_existing_10": true,
+    "donor_hash": "e548db57e4b928998bd9168cc572c2a4fbfa91c0e92c4d80347828cc11661fe6",
+    "shipped_hash": "847612296624fa4d9c1f87022b90b23a1b46c8bdad41fb43bd3c8345c18aab9d",
+    "title": "Instagram Follow",
+    "raw_category": null,
+    "derived_category": "social/call-to-action",
+    "tags": [
+      "social",
+      "overlay",
+      "instagram"
+    ],
+    "license": "Apache-2.0",
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "duration": 4.5,
+    "donor_files": [
+      "assets",
+      "instagram-follow.html",
+      "registry-item.json"
+    ],
+    "shipped_files": [
+      "assets",
+      "instagram-follow.html",
+      "registry-item.json"
+    ]
+  },
+  "plasma": {
+    "slug": "plasma",
+    "is_existing_10": true,
+    "donor_hash": "1e6e44d94145e2b0dfa78b6adb4ebdc34256588cf8beddd3a2354ec898c677b0",
+    "shipped_hash": "bb84349cdb7e1b65e1455aa6a99b76a2518f8b9abbfc7381c9cb193653a50e31",
+    "title": "Plasma",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "texture",
+      "plasma",
+      "purple"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "plasma.html",
+      "registry-item.json"
+    ],
+    "shipped_files": [
+      "lib",
+      "plasma.html",
+      "registry-item.json"
+    ]
+  },
+  "stripes": {
+    "slug": "stripes",
+    "is_existing_10": true,
+    "donor_hash": "b52ed90cbb021bc82d9f3cc695f56486ccc29bb1dbd35264f3a1b5009deded3d",
+    "shipped_hash": "6bdf884ddee51a28190cb1599933959edd9e22502377a0f4e9f819b93f3534e6",
+    "title": "Stripes",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "pattern",
+      "stripes",
+      "monochrome"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "stripes.html"
+    ],
+    "shipped_files": [
+      "lib",
+      "registry-item.json",
+      "stripes.html"
+    ]
+  },
+  "tiktok-follow": {
+    "slug": "tiktok-follow",
+    "is_existing_10": true,
+    "donor_hash": "b46650c7944edfa9e1c51d46a8674ffe984f83f33391392769341f217f833564",
+    "shipped_hash": "a580cc665993e9e03242ee75c4a5b2a7b837a3014d591010430d9fd14dbd9c83",
+    "title": "TikTok Follow",
+    "raw_category": null,
+    "derived_category": "social/call-to-action",
+    "tags": [
+      "social",
+      "overlay",
+      "tiktok"
+    ],
+    "license": "Apache-2.0",
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "duration": 4.5,
+    "donor_files": [
+      "assets",
+      "registry-item.json",
+      "tiktok-follow.html"
+    ],
+    "shipped_files": [
+      "assets",
+      "registry-item.json",
+      "tiktok-follow.html"
+    ]
+  },
+  "weight-wave": {
+    "slug": "weight-wave",
+    "is_existing_10": true,
+    "donor_hash": "c7e1d443c713d24c68e1a3f9a39523d979a22c277ce0bfc3cdb61a705301bc7a",
+    "shipped_hash": "9390bdfbe3d0c659905089e7593241a97ea00cdd3068b4c2895daf712a555a58",
+    "title": "Weight Wave",
+    "raw_category": null,
+    "derived_category": "typography/kinetic",
+    "tags": [
+      "typography",
+      "kinetic-type",
+      "title",
+      "variable-font",
+      "text"
+    ],
+    "license": "OFL-1.1",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6,
+    "donor_files": [
+      "assets",
+      "registry-item.json",
+      "weight-wave.html"
+    ],
+    "shipped_files": [
+      "assets",
+      "registry-item.json",
+      "weight-wave.html"
+    ]
+  },
+  "yt-lower-third": {
+    "slug": "yt-lower-third",
+    "is_existing_10": true,
+    "donor_hash": "30646c68b916b8ebce5a7422838873edd0b90a05627681039f8075f21a91b955",
+    "shipped_hash": "74658cce78576f453e2ba88f66dd27c98d456445ee8519aa4a7cdf6d35a915d3",
+    "title": "YouTube Lower Third",
+    "raw_category": null,
+    "derived_category": "social/call-to-action",
+    "tags": [
+      "social",
+      "overlay",
+      "youtube"
+    ],
+    "license": "Apache-2.0",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.5,
+    "donor_files": [
+      "assets",
+      "registry-item.json",
+      "yt-lower-third.html"
+    ],
+    "shipped_files": [
+      "assets",
+      "registry-item.json",
+      "yt-lower-third.html"
+    ]
+  },
+  "blob": {
+    "slug": "blob",
+    "is_existing_10": false,
+    "donor_hash": "3ab67ad4e8340e76ee2fd478b853f8f48e0a4073b3616be7e794f8d316bab8eb",
+    "shipped_hash": "MISSING",
+    "title": "Blob",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "abstract",
+      "organic",
+      "gradient"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "blob.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "fractal-noise": {
+    "slug": "fractal-noise",
+    "is_existing_10": false,
+    "donor_hash": "e44bf95212caad14ee49f45712d55fcdff3407d4730d894d73339c133637bfd6",
+    "shipped_hash": "MISSING",
+    "title": "Fractal Noise",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "noise",
+      "texture",
+      "clouds"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "fractal-noise.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "frost": {
+    "slug": "frost",
+    "is_existing_10": false,
+    "donor_hash": "0f0d302ded31fc132d2dc36e3a80c12ce4ed806851e3cfd5b260400dda7b6c9b",
+    "shipped_hash": "MISSING",
+    "title": "Frost",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "orb",
+      "ice",
+      "frost",
+      "material"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "frost.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "godrays": {
+    "slug": "godrays",
+    "is_existing_10": false,
+    "donor_hash": "ed1d13f807f0826f29795950b7f53c42c9f1a1651b82704a19b0a1143aba09e1",
+    "shipped_hash": "MISSING",
+    "title": "Godrays",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "light",
+      "rays"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "godrays.html",
+      "lib",
+      "registry-item.json",
+      "source"
+    ],
+    "shipped_files": []
+  },
+  "goo": {
+    "slug": "goo",
+    "is_existing_10": false,
+    "donor_hash": "11d16de3cc3fc0b8a2ac71ffef71bd2b19b95fd8f937b08c8ca452d2cd312ba1",
+    "shipped_hash": "MISSING",
+    "title": "Goo",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "liquid",
+      "3d",
+      "organic",
+      "orb"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "goo.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "lens-flare": {
+    "slug": "lens-flare",
+    "is_existing_10": false,
+    "donor_hash": "20ce783ef3e4d5e9e98becaedf740467da949ea8191877fa054a17f97a010957",
+    "shipped_hash": "MISSING",
+    "title": "Lens Flare",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "light",
+      "flare",
+      "glow"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lens-flare.html",
+      "lib",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "liquid-metal": {
+    "slug": "liquid-metal",
+    "is_existing_10": false,
+    "donor_hash": "cff6c2574702389c9c3fc56614cf3fdafe5558d81244de99a61342d6b9fb0024",
+    "shipped_hash": "MISSING",
+    "title": "Liquid Metal",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "object",
+      "metal",
+      "chrome",
+      "liquid",
+      "sphere"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "liquid-metal.html",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "marble": {
+    "slug": "marble",
+    "is_existing_10": false,
+    "donor_hash": "8ce7f828790f95f35b61b51d64f4f6c3b7645254608690867a7ecf5aefca2e8c",
+    "shipped_hash": "MISSING",
+    "title": "Marble",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "marble",
+      "texture"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "marble.html",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "mesh-gradient": {
+    "slug": "mesh-gradient",
+    "is_existing_10": false,
+    "donor_hash": "ae3d5bd3316ae981480ce57c73851b5199a4ba1249b1dcb241cd759c2d23e0cc",
+    "shipped_hash": "MISSING",
+    "title": "Mesh Gradient",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "gradient",
+      "color"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "mesh-gradient.html",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "nebula": {
+    "slug": "nebula",
+    "is_existing_10": false,
+    "donor_hash": "efd17fff302982c8ddf4f1f010266ab526720f8e9392dac7c890740496156de1",
+    "shipped_hash": "MISSING",
+    "title": "Nebula",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "object",
+      "space",
+      "nebula",
+      "sphere"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "nebula.html",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "prism": {
+    "slug": "prism",
+    "is_existing_10": false,
+    "donor_hash": "e9e52c5ed7edeea48916121b38ec142e8efa6f4e10f965e1b125394cb017494b",
+    "shipped_hash": "MISSING",
+    "title": "Prism",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "light",
+      "prism",
+      "rainbow"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "prism.html",
+      "registry-item.json"
+    ],
+    "shipped_files": []
+  },
+  "sine-wave": {
+    "slug": "sine-wave",
+    "is_existing_10": false,
+    "donor_hash": "b3f94dc50b6b5c5cd8a6fd90c55677797d3232e0a296e88448d5d2364392414b",
+    "shipped_hash": "MISSING",
+    "title": "Sine Wave",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "wave",
+      "line",
+      "glow"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "sine-wave.html"
+    ],
+    "shipped_files": []
+  },
+  "strands": {
+    "slug": "strands",
+    "is_existing_10": false,
+    "donor_hash": "b585669bd2aa8cb723186ce678da0e31f5cb683322e681f6886ae4a4c0e93e19",
+    "shipped_hash": "MISSING",
+    "title": "Strands",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "light",
+      "lines",
+      "ribbons"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "strands.html"
+    ],
+    "shipped_files": []
+  },
+  "swirl": {
+    "slug": "swirl",
+    "is_existing_10": false,
+    "donor_hash": "0f80612baf76d6629332bd8320109e2ac2096b082ad63bb9dcabbff5fa0eaf2b",
+    "shipped_hash": "MISSING",
+    "title": "Swirl",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "gradient",
+      "flow",
+      "abstract"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "swirl.html"
+    ],
+    "shipped_files": []
+  },
+  "voronoi": {
+    "slug": "voronoi",
+    "is_existing_10": false,
+    "donor_hash": "a4fb63763f6c28939aa72b20a3a4018a66c5b37af7b27dcef0e3195b0ce75da9",
+    "shipped_hash": "MISSING",
+    "title": "Voronoi",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "background",
+      "pattern",
+      "cells",
+      "voronoi"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "voronoi.html"
+    ],
+    "shipped_files": []
+  },
+  "water": {
+    "slug": "water",
+    "is_existing_10": false,
+    "donor_hash": "acc228ea0efd9b33791feaad4290cfac022ae21e81bd713700ef2faa23cc681e",
+    "shipped_hash": "MISSING",
+    "title": "Water",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "orb",
+      "water",
+      "material",
+      "blue"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "water.html"
+    ],
+    "shipped_files": []
+  },
+  "waveform": {
+    "slug": "waveform",
+    "is_existing_10": false,
+    "donor_hash": "535db2c80aa2fa58557962353865834bf1afaed732129f3d3002164e1c01eb04",
+    "shipped_hash": "MISSING",
+    "title": "Waveform",
+    "raw_category": null,
+    "derived_category": "backgrounds/shaders",
+    "tags": [
+      "webgpu",
+      "webgpu-shader",
+      "audio",
+      "music",
+      "visualizer",
+      "bars"
+    ],
+    "license": "Apache-2.0 AND MIT",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2,
+    "donor_files": [
+      "lib",
+      "registry-item.json",
+      "waveform.html"
+    ],
+    "shipped_files": []
+  }
+}

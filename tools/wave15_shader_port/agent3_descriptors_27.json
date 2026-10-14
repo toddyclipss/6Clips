@@ -1,0 +1,1016 @@
+{
+  "schema_version": 1,
+  "blocks_count": 27,
+  "blocks": [
+    {
+      "id": "aurora",
+      "title": "Aurora",
+      "description": "Green and violet aurora curtains ripple across a night sky. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "aurora",
+        "sky"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "2a96a0795cb7b8605b51737f2879409b714b2aa4db3c53a33162b61a06b7de70",
+      "vendored_shipped_hash": "316b31972235edf0fac001448ff10e8d4db0ffde3aee1ecc5fd0ede01902d3c1",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\aurora.mp4",
+      "physical_mp4_sha256": "5a092281210d0fefc619bc603308daa7668dfa7534f769658cef16898bf09c0e",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "data-chart",
+      "title": "Data Chart",
+      "description": "Animated bar + line chart with staggered reveal, NYT-style typography, and value labels",
+      "native_category": "charts",
+      "native_subcategory": "data",
+      "tags": [
+        "data",
+        "chart",
+        "statistics"
+      ],
+      "license": "Apache-2.0",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 15.0,
+      "supported_aspects": [
+        "16:9"
+      ],
+      "variables": [],
+      "donor_source_hash": "a8b6441dc1dc39c53f6ed4ca8d597658c3658b1ad5597c2d32f5253fada23127",
+      "vendored_shipped_hash": "f22af6894760ac27790abcfcb8823b3c2e2ff1f0827532a59edf031f32156de1",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\data-chart.mp4",
+      "physical_mp4_sha256": "a71d37cffbca3f17ed368b1e3b8c9544de5b4ff26766db5642325f39b3b2f6a4",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "flowing-gradient",
+      "title": "Flowing Gradient",
+      "description": "Bands of orange and violet flow across the frame in a smooth gradient. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "gradient",
+        "color",
+        "flow"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "ca7220005c6de606a542ebc771f3c50d2d2fd2a8721e853bfa657d5f4683bdfa",
+      "vendored_shipped_hash": "d93e26b829671f4ddfde611907017bb65a8febedf6e95f619a926ae594086799",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\flowing-gradient.mp4",
+      "physical_mp4_sha256": "2f80995e80da98ba86941bc369a166a464e83d2a0fcee806abe6033cc1c18717",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "holographic",
+      "title": "Holographic",
+      "description": "An iridescent foil orb with a shifting rainbow sheen, centred on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "holographic",
+        "iridescent",
+        "rainbow",
+        "orb"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "acbb8793055d150a8cd5e4497572bbe33c45f46dedf379d8931709168a4eb403",
+      "vendored_shipped_hash": "d06766f4080ffc58dd61dcc96d237b3a705c85e290e1758fe81a8df131742d71",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\holographic.mp4",
+      "physical_mp4_sha256": "21906be18a0dd6f701e89c3ca7da22ad72ec214ae59163531bc28a8558bd1420",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "instagram-follow",
+      "title": "Instagram Follow",
+      "description": "Animated Instagram follow overlay with profile card and follow button",
+      "native_category": "social",
+      "native_subcategory": "call-to-action",
+      "tags": [
+        "social",
+        "overlay",
+        "instagram"
+      ],
+      "license": "Apache-2.0",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 4.5,
+      "supported_aspects": [
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "e548db57e4b928998bd9168cc572c2a4fbfa91c0e92c4d80347828cc11661fe6",
+      "vendored_shipped_hash": "fb467ef8ee37322ad9561e8168656c3dc4eca167a02dedecefda9fcc7f57c8cd",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\instagram-follow.mp4",
+      "physical_mp4_sha256": "058776c52c0cf55a36348a33f2fee0bb2ed3dc607f23a6497b8853b1ccd673c0",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "plasma",
+      "title": "Plasma",
+      "description": "Deep violet plasma folds and churns across the whole frame. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "texture",
+        "plasma",
+        "purple"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "1e6e44d94145e2b0dfa78b6adb4ebdc34256588cf8beddd3a2354ec898c677b0",
+      "vendored_shipped_hash": "8b481510a017ec335be1f3507ab9cf8754792b945fc6c30015043671b1cd62d5",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\plasma.mp4",
+      "physical_mp4_sha256": "9054761a6c751481091988829cc89d9cd70b9e9427ddff5455886b3930029bf9",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "stripes",
+      "title": "Stripes",
+      "description": "Bold black and white diagonal stripes slide across the frame. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "pattern",
+        "stripes",
+        "monochrome"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "b52ed90cbb021bc82d9f3cc695f56486ccc29bb1dbd35264f3a1b5009deded3d",
+      "vendored_shipped_hash": "5e0080e159142bdbd4e084efdf3be88222a9a6c49d37dca0bb456bbbe3f74a35",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\stripes.mp4",
+      "physical_mp4_sha256": "cf12ee473c8104afe2a37df63de2e18830581f076184213a9a02d38623a0ab53",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "tiktok-follow",
+      "title": "TikTok Follow",
+      "description": "Animated TikTok follow overlay with profile card and follow button",
+      "native_category": "social",
+      "native_subcategory": "call-to-action",
+      "tags": [
+        "social",
+        "overlay",
+        "tiktok"
+      ],
+      "license": "Apache-2.0",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 4.5,
+      "supported_aspects": [
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "b46650c7944edfa9e1c51d46a8674ffe984f83f33391392769341f217f833564",
+      "vendored_shipped_hash": "7bcbc4f47992e515a85c08d3cc2a1cd899857a83fe0f2b31158e7d33e3d1a530",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\tiktok-follow.mp4",
+      "physical_mp4_sha256": "058776c52c0cf55a36348a33f2fee0bb2ed3dc607f23a6497b8853b1ccd673c0",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "weight-wave",
+      "title": "Weight Wave",
+      "description": "A crest of thickness travels along a headline: each character swells from light to black and leans forward as the wave passes, driven by the wght and slnt variable-font axes rather than by transforms.",
+      "native_category": "typography",
+      "native_subcategory": "kinetic",
+      "tags": [
+        "typography",
+        "kinetic-type",
+        "title",
+        "variable-font",
+        "text"
+      ],
+      "license": "OFL-1.1",
+      "rights_clearance": "VERIFIED_OTHER_OBLIGATIONS",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 6.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [
+        {
+          "id": "text",
+          "type": "string",
+          "label": "Headline",
+          "default": "PRESSURE MOVES THROUGH TYPE",
+          "maxLength": 64
+        },
+        {
+          "id": "color",
+          "type": "color",
+          "label": "Text color",
+          "default": "#f5f5f7"
+        },
+        {
+          "id": "background",
+          "type": "color",
+          "label": "Background",
+          "default": "#0b0b0d"
+        },
+        {
+          "id": "weightFrom",
+          "type": "number",
+          "label": "Weight (rest)",
+          "default": 400,
+          "min": 300,
+          "max": 1000,
+          "step": 10
+        },
+        {
+          "id": "weightTo",
+          "type": "number",
+          "label": "Weight (crest)",
+          "default": 1000,
+          "min": 300,
+          "max": 1000,
+          "step": 10
+        },
+        {
+          "id": "crestWidth",
+          "type": "number",
+          "label": "Crest width",
+          "default": 4,
+          "min": 1,
+          "max": 24,
+          "step": 0.5,
+          "unit": "chars"
+        },
+        {
+          "id": "sweepSpeed",
+          "type": "number",
+          "label": "Sweep speed",
+          "default": 0.5,
+          "min": 0.05,
+          "max": 3,
+          "step": 0.05,
+          "unit": "passes/s"
+        },
+        {
+          "id": "slant",
+          "type": "number",
+          "label": "Slant at crest",
+          "default": -12,
+          "min": -15,
+          "max": 0,
+          "step": 0.5,
+          "unit": "deg"
+        },
+        {
+          "id": "direction",
+          "type": "enum",
+          "label": "Direction",
+          "default": "ltr",
+          "options": [
+            {
+              "value": "ltr",
+              "label": "Left to right"
+            },
+            {
+              "value": "rtl",
+              "label": "Right to left"
+            }
+          ]
+        }
+      ],
+      "donor_source_hash": "29c4c34791f474d56e5c804e28e5c5d9d7919a4bcf8418684f940b6aca3c5bfa",
+      "vendored_shipped_hash": "0dad53cab841f0381b29c07aefb847a8c61bdb75b8366d73f87ecdf8ef6720aa",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\weight-wave.mp4",
+      "physical_mp4_sha256": "42f424f9550283b8bdaffdbd618b71a6d312bf61520939616653de556dcc4a63",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "yt-lower-third",
+      "title": "YouTube Lower Third",
+      "description": "Animated YouTube subscribe lower third with avatar and channel info",
+      "native_category": "lower-thirds",
+      "native_subcategory": "broadcast",
+      "tags": [
+        "social",
+        "overlay",
+        "youtube"
+      ],
+      "license": "Apache-2.0",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 4.5,
+      "supported_aspects": [
+        "16:9"
+      ],
+      "variables": [],
+      "donor_source_hash": "30646c68b916b8ebce5a7422838873edd0b90a05627681039f8075f21a91b955",
+      "vendored_shipped_hash": "b48e7e91d7b90a2d2ff68d08c43e06c1bf30ab0877fd108d4061fe62740c4bab",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\yt-lower-third.mp4",
+      "physical_mp4_sha256": "d4919c019aad5eed5ae05c8af5b5f7b706d81bc9d950d40b5a430b277f1feab2",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "blob",
+      "title": "Blob",
+      "description": "A soft coral and pink blob with a warm highlight slowly changes shape on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "abstract",
+        "organic",
+        "gradient"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "3ab67ad4e8340e76ee2fd478b853f8f48e0a4073b3616be7e794f8d316bab8eb",
+      "vendored_shipped_hash": "a6ae690b6be2d69b19f01c7e1d864966e4fd0b59e727f02c935ab8facef73f1d",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\blob.mp4",
+      "physical_mp4_sha256": "e81532255cf9667e698199f098561e3b9a0d8145aba67b1a513d06218483a566",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "fractal-noise",
+      "title": "Fractal Noise",
+      "description": "Soft grey fractal noise drifts across the frame like slow clouds. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "noise",
+        "texture",
+        "clouds"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "e44bf95212caad14ee49f45712d55fcdff3407d4730d894d73339c133637bfd6",
+      "vendored_shipped_hash": "93a95361b4cc547984e55c4c7b87c6bdc7479126c30f1f15ad4a8b65bab63bcb",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\fractal-noise.mp4",
+      "physical_mp4_sha256": "5e29061ddd4e9649928b1cdc654117dada4ff7a255d7c18b3b74c1e90d7b4874",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "frost",
+      "title": "Frost",
+      "description": "A frozen blue orb with frost creeping in from its edge, on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "orb",
+        "ice",
+        "frost",
+        "material"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "0f0d302ded31fc132d2dc36e3a80c12ce4ed806851e3cfd5b260400dda7b6c9b",
+      "vendored_shipped_hash": "9fabc675f9afc4973972225f9834b97db4620d8f91db2ddcd36ee0ad60ab9bc3",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\frost.mp4",
+      "physical_mp4_sha256": "42762daecd9218e64f2ba69cdf0a6ab1bf2a1e77999f61a425a77d4055e7f65f",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "godrays",
+      "title": "Godrays",
+      "description": "Rays of light fan out from a corner and drift across a deep blue field. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "rays"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "ed1d13f807f0826f29795950b7f53c42c9f1a1651b82704a19b0a1143aba09e1",
+      "vendored_shipped_hash": "e06f1b91c5ffb0db5c5948e5fcc8781daf5f4cb83f931f0bf637ba984c6ba5fc",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\godrays.mp4",
+      "physical_mp4_sha256": "f1d5a2255c10d5da94e82e9e30a8cb671ea56f3c88168d16be5efc0720f2b282",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "goo",
+      "title": "Goo",
+      "description": "A glossy green liquid ball whose surface bulges and ripples like wet goo, centred on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "liquid",
+        "3d",
+        "organic",
+        "orb"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "11d16de3cc3fc0b8a2ac71ffef71bd2b19b95fd8f937b08c8ca452d2cd312ba1",
+      "vendored_shipped_hash": "e73a6c0e7dea95f702d9b3e87c74332feeeea6cca36e9f05b07d7853129dfad3",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\goo.mp4",
+      "physical_mp4_sha256": "c3c8704f3669101738251b59297338b9e6042afae4febf838c6efd2997cd2801",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "lens-flare",
+      "title": "Lens Flare",
+      "description": "A camera lens flare: a bright star burst and a faint rainbow halo that slowly shimmer on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "flare",
+        "glow"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "20ce783ef3e4d5e9e98becaedf740467da949ea8191877fa054a17f97a010957",
+      "vendored_shipped_hash": "607151737cdfc9384e6bd1833bc612c0e8fc3b3513da26581e2be20398110551",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\lens-flare.mp4",
+      "physical_mp4_sha256": "102559a73ef575a119fc3db64cf27743ea4b5ae70a28b73bc910f95be9c75f5a",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "liquid-metal",
+      "title": "Liquid Metal",
+      "description": "A chrome sphere ripples and flows like molten metal on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "object",
+        "metal",
+        "chrome",
+        "liquid",
+        "sphere"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "cff6c2574702389c9c3fc56614cf3fdafe5558d81244de99a61342d6b9fb0024",
+      "vendored_shipped_hash": "635dce2f8902c6b3da41f05b50bc1234ddce2b2931e73be1e364fb3e3bf23621",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\liquid-metal.mp4",
+      "physical_mp4_sha256": "3681d276cbf0151cfc606a2a41a7962ae6d6c669e7f522755215ac3023231741",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "marble",
+      "title": "Marble",
+      "description": "Ink-dark veins wind through white in a marbled pattern that slowly shifts. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "marble",
+        "texture"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "8ce7f828790f95f35b61b51d64f4f6c3b7645254608690867a7ecf5aefca2e8c",
+      "vendored_shipped_hash": "026bc5cd7e95e4f443aa45a720abff05c9151648db70785c0c9fe897ddc5e0f4",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\marble.mp4",
+      "physical_mp4_sha256": "16676ba83cd1a921fc45979645d56ac401f58bf550a874e0176dae71ece061b5",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "mesh-gradient",
+      "title": "Mesh Gradient",
+      "description": "Soft coral, orange and violet fields blend and drift in a mesh gradient. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "gradient",
+        "color"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "ae3d5bd3316ae981480ce57c73851b5199a4ba1249b1dcb241cd759c2d23e0cc",
+      "vendored_shipped_hash": "61233683efcbee84fe32ae7e3fa558dce12ae8e462ce9e2184b45a3015d18a74",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\mesh-gradient.mp4",
+      "physical_mp4_sha256": "edd36d6a854ec31a0846f8ad9437bac351716b19deca2a0f15f564453909c263",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "nebula",
+      "title": "Nebula",
+      "description": "A small world of pink and blue gas swirls inside a sphere on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "object",
+        "space",
+        "nebula",
+        "sphere"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "efd17fff302982c8ddf4f1f010266ab526720f8e9392dac7c890740496156de1",
+      "vendored_shipped_hash": "c96b29ba51c239be872d29638d92ed167511e68b61acd0bf748548209af203cc",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\nebula.mp4",
+      "physical_mp4_sha256": "8bdc520355b639a37dc5fc5a7671c6f2b28e9a159e99eb83ce0e33a4f31da782",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "prism",
+      "title": "Prism",
+      "description": "A white beam of light splits into a slowly turning rainbow. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "prism",
+        "rainbow"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "e9e52c5ed7edeea48916121b38ec142e8efa6f4e10f965e1b125394cb017494b",
+      "vendored_shipped_hash": "a0de4ff3e838290dbde2cb983fccc90d27ea0afc223b0d247989559cbf8d455f",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\prism.mp4",
+      "physical_mp4_sha256": "6dbab7cce9041c48de13b555ed1c65eacbf70c50f80750b4ebf24bd4109cc166",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "sine-wave",
+      "title": "Sine Wave",
+      "description": "A glowing white sine wave travels across a black frame. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "wave",
+        "line",
+        "glow"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "b3f94dc50b6b5c5cd8a6fd90c55677797d3232e0a296e88448d5d2364392414b",
+      "vendored_shipped_hash": "9e6818693730e3c95559b39cb2b91159b0403de571500e701b9c69dc78ec26d8",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\sine-wave.mp4",
+      "physical_mp4_sha256": "5693b91c7c1776de2257001eeb84c251b2be83a9dde7e185c850f5006baecd96",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "strands",
+      "title": "Strands",
+      "description": "Thin ribbons of pink and blue light weave across a black field. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "lines",
+        "ribbons"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "b585669bd2aa8cb723186ce678da0e31f5cb683322e681f6886ae4a4c0e93e19",
+      "vendored_shipped_hash": "362e43fb8d32811edcd9f466d77e92a74b327f98808b08a2e05543cd23afbeca",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\strands.mp4",
+      "physical_mp4_sha256": "e20da1b5e33216ca162963272674caedf645d70096c9f7a38c623c9d59bb7e37",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "swirl",
+      "title": "Swirl",
+      "description": "Orange and blue color fields swirl and flow into each other across the whole frame. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "gradient",
+        "flow",
+        "abstract"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "0f80612baf76d6629332bd8320109e2ac2096b082ad63bb9dcabbff5fa0eaf2b",
+      "vendored_shipped_hash": "36462ffd017663191c2ceb65461d000e0edec49b137fc53ed2f19c3cb648cf38",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\swirl.mp4",
+      "physical_mp4_sha256": "ad24e9b69dfd2ae23bdd4bc3d2c4f1b29e8f1b2773d79f1a706dcc589570431e",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "voronoi",
+      "title": "Voronoi",
+      "description": "Magenta cells with glowing blue centres shift and reshape across the frame. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "pattern",
+        "cells",
+        "voronoi"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "a4fb63763f6c28939aa72b20a3a4018a66c5b37af7b27dcef0e3195b0ce75da9",
+      "vendored_shipped_hash": "cc9327a39d6dea024ba98d89dd8c38e2458f1a6f65fc78249346aa20ad102afb",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\voronoi.mp4",
+      "physical_mp4_sha256": "4cd6c61b11aa7995b53eb4af68e0a338b4885fa3e32e29621825e544777ae8a8",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "water",
+      "title": "Water",
+      "description": "A sphere of wind-rippled water reflecting a blue sky, on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "orb",
+        "water",
+        "material",
+        "blue"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "acc228ea0efd9b33791feaad4290cfac022ae21e81bd713700ef2faa23cc681e",
+      "vendored_shipped_hash": "a4aabb250832cbcdf9c5405b0c8a1eb64b4b96656385c57d334a8712c90de7be",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\water.mp4",
+      "physical_mp4_sha256": "343bfea98490468ab1b252942c9bb79b5ff6d3b344bcc346e875759c5731258e",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    },
+    {
+      "id": "waveform",
+      "title": "Waveform",
+      "description": "Equalizer bars in a blue to pink gradient pulse across the middle of the frame, like an audio visualizer. A WebGPU shader from the Shaders library (shaders.com, MIT).",
+      "native_category": "backgrounds",
+      "native_subcategory": "shaders",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "audio",
+        "music",
+        "visualizer",
+        "bars"
+      ],
+      "license": "Apache-2.0 AND MIT",
+      "rights_clearance": "VERIFIED_PERMISSIVE",
+      "runtime_readiness": "RUNTIME_READY",
+      "is_newly_ported": true,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 2.0,
+      "supported_aspects": [
+        "16:9",
+        "9:16"
+      ],
+      "variables": [],
+      "donor_source_hash": "535db2c80aa2fa58557962353865834bf1afaed732129f3d3002164e1c01eb04",
+      "vendored_shipped_hash": "8e2e7061891c4b6a80733b3d90d3ac0602c10e367b4cf9778a74097b6dae7691",
+      "physical_mp4_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave15_renders\\waveform.mp4",
+      "physical_mp4_sha256": "59b08d64ba7a9d485d70012253b4e318bb45ee780cfea44ab5200512df037551",
+      "temporal_animation_verified": true,
+      "ffprobe_verified": true
+    }
+  ]
+}

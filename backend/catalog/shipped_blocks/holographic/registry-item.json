@@ -4,7 +4,14 @@
   "type": "hyperframes:block",
   "title": "Holographic",
   "description": "An iridescent foil orb with a shifting rainbow sheen, centred on black. A WebGPU shader from the Shaders library (shaders.com, MIT).",
-  "tags": ["webgpu", "webgpu-shader", "holographic", "iridescent", "rainbow", "orb"],
+  "tags": [
+    "webgpu",
+    "webgpu-shader",
+    "holographic",
+    "iridescent",
+    "rainbow",
+    "orb"
+  ],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {
     "width": 1920,
@@ -25,6 +32,11 @@
     {
       "path": "lib/shaders.THIRD-PARTY-LICENSES.txt",
       "target": "compositions/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "lib/shader_fallback.js",
+      "target": "compositions/lib/shader_fallback.js",
       "type": "hyperframes:asset"
     }
   ],
