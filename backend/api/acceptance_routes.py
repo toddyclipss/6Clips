@@ -134,3 +134,91 @@ async def verify_gt07_production_path(req: GT07VerificationRequest):
     contract = orch.build_contract(sources, is_real_user_media=req.is_real_user_media)
     result = orch.evaluate_acceptance(contract)
     return result.to_dict()
+
+
+class MotionBootstrapStateResponse(BaseModel):
+    """Precise bootstrap and loading status model per Wave 11 contract."""
+    project_status: str  # NO_PROJECT, LOADING, EMPTY_COMPOSITION, READY, FAILED
+    catalog_status: str  # CATALOG_LOADING, CATALOG_EMPTY, READY, CATALOG_FAILED
+    project_id: Optional[str] = None
+    revision: Optional[int] = None
+    tracks_count: int = 0
+    catalog_items_count: int = 0
+    message: str = ""
+
+
+@router.get("/motion-state", response_model=MotionBootstrapStateResponse)
+async def get_motion_bootstrap_state(project_id: Optional[str] = None):
+    """
+    Returns precise, truthful status for Motion Studio bootstrap and Catalog.
+    Distinguishes NO_PROJECT from EMPTY_COMPOSITION and READY without spurious endless loading.
+    """
+    import json
+    from backend.services.project_service import ProjectService
+    from backend.services.registry_adapter import RegistryAdapter
+
+    project_status = "NO_PROJECT"
+    catalog_status = "READY"
+    rev = None
+    tracks_count = 0
+    catalog_count = 0
+    msg = ""
+
+    # Evaluate catalog availability
+    try:
+        catalog_items = RegistryAdapter.list_catalog_items()
+        catalog_count = len(catalog_items)
+        if catalog_count == 0:
+            catalog_status = "CATALOG_EMPTY"
+        else:
+            catalog_status = "READY"
+    except Exception as ce:
+        logger.warning("Catalog lookup error during motion bootstrap: %s", ce)
+        catalog_status = "CATALOG_FAILED"
+
+    # Evaluate project state
+    if not project_id:
+        project_status = "NO_PROJECT"
+        msg = "No project selected or loaded"
+        return MotionBootstrapStateResponse(
+            project_status=project_status,
+            catalog_status=catalog_status,
+            project_id=None,
+            revision=None,
+            tracks_count=0,
+            catalog_items_count=catalog_count,
+            message=msg,
+        )
+
+    try:
+        p_obj = await ProjectService.get_project(project_id)
+        if not p_obj:
+            project_status = "NO_PROJECT"
+            msg = f"Project '{project_id}' not found"
+        else:
+            rev = p_obj.revision
+            doc = json.loads(p_obj.document_json) if p_obj.document_json else {}
+            tracks = doc.get("tracks") or (doc.get("timeline", {}).get("tracks") if isinstance(doc.get("timeline"), dict) else []) or []
+            tracks_count = len(tracks)
+            total_clips = sum(len(t.get("clips", [])) for t in tracks if isinstance(t, dict))
+            if tracks_count == 0 or total_clips == 0:
+                project_status = "EMPTY_COMPOSITION"
+                msg = "Project loaded with empty timeline composition"
+            else:
+                project_status = "READY"
+                msg = f"Project '{project_id}' ready at revision {rev}"
+    except Exception as pe:
+        logger.error("Project lookup error for %s: %s", project_id, pe)
+        project_status = "FAILED"
+        msg = str(pe)
+
+    return MotionBootstrapStateResponse(
+        project_status=project_status,
+        catalog_status=catalog_status,
+        project_id=project_id if project_status != "NO_PROJECT" else None,
+        revision=rev,
+        tracks_count=tracks_count,
+        catalog_items_count=catalog_count,
+        message=msg,
+    )
+
