@@ -537,11 +537,12 @@ async def get_catalog_inventory(
     category: Optional[str] = Query(None, description="Filter by category"),
     limit: int = Query(50, ge=1, le=300),
     offset: int = Query(0, ge=0),
+    snapshot: bool = Query(False, description="Return complete unpaginated 196-item snapshot"),
 ):
     """
-    Wave 14 Stage 1: Truthful full-inventory endpoint reconciling packaged v1 metadata
+    Wave 15 / Wave 14: Truthful full-inventory endpoint reconciling packaged v1 metadata
     from backend/catalog_inventory/hyperframes_196_inventory.json with actual on-disk shipped blocks.
-    Separates 196 donor originals from 2 6Clips-original authored blocks.
+    Supports complete snapshot traversal to avoid row truncation.
     """
     try:
         return CatalogManifestService.list_wave14_inventory_items(
@@ -550,11 +551,31 @@ async def get_catalog_inventory(
             category=category,
             limit=limit,
             offset=offset,
+            snapshot=snapshot,
         )
     except CatalogManifestError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error("Error listing catalog inventory: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/inventory/snapshot")
+async def get_catalog_inventory_snapshot():
+    """Return complete unpaginated 196-item donor inventory snapshot."""
+    try:
+        return CatalogManifestService.list_wave14_inventory_items(limit=300, offset=0, snapshot=True)
+    except CatalogManifestError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/wave15-audit")
+async def get_wave15_audit():
+    """Return Wave 15 canonical inventory reconciliation, proof ladder, and native category taxonomy."""
+    try:
+        return CatalogManifestService.get_wave15_factual_audit()
+    except Exception as e:
+        logger.error("Error generating wave15 audit: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -620,7 +641,7 @@ async def get_block_poster(
 ):
     """Serve cached truthful poster image for catalog block."""
     try:
-        CatalogManifestService.validate_block_operable(block_id)
+        CatalogManifestService.validate_block_operable(block_id, allow_retired=True)
         poster_path = CatalogPosterService.get_poster_path(
             block_id,
             version_hash=version,
@@ -635,7 +656,8 @@ async def get_block_poster(
             },
         )
     except (CatalogManifestError, CatalogPosterError) as e:
-        if "quarantined" in str(e).lower() or "uninternalized" in str(e).lower():
+        err_msg = str(e).lower()
+        if "quarantined" in err_msg or "uninternalized" in err_msg:
             raise HTTPException(status_code=403, detail=str(e))
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -669,7 +691,10 @@ async def get_block_preview(
             },
         )
     except CatalogManifestError as e:
-        if "quarantined" in str(e).lower() or "uninternalized" in str(e).lower():
+        err_msg = str(e).lower()
+        if "retired" in err_msg:
+            raise HTTPException(status_code=409, detail=str(e))
+        if "quarantined" in err_msg or "uninternalized" in err_msg:
             raise HTTPException(status_code=403, detail=str(e))
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -729,6 +754,9 @@ async def create_add_to_project_intent(
         CatalogManifestService.validate_block_operable(block_id)
         return CatalogProjectIntentAdapter.create_add_to_project_intent(block_id, payload, strict_quarantine=True)
     except CatalogManifestError as e:
+        err_msg = str(e).lower()
+        if "retired" in err_msg:
+            raise HTTPException(status_code=409, detail=str(e))
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error("Error creating add-to-project intent for %s: %s", block_id, e)
