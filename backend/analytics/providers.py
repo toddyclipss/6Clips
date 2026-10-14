@@ -24,6 +24,7 @@ from backend.analytics.models import (
     ProviderConnectionStatus,
     PublishedReceiptV1,
 )
+from backend.distribution.egress_audit import check_outbound_allowlist, record_egress_event
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +78,17 @@ class DisconnectedAnalyticsAdapter(AnalyticsProviderPort):
             self._provider.value,
             account_ref,
         )
+        record_egress_event(
+            component="analytics",
+            destination_host="NONE_LOCAL",
+            sanitized_path=f"/analytics/{self._provider.value}/status",
+            method="STATUS",
+            endpoint_class="READ_ONLY_HEALTH_DISCOVERY",
+            trigger_authorization="DISCONNECTED_ACCOUNT",
+            outcome_status="NOT_CONNECTED",
+            callsite="DisconnectedAnalyticsAdapter.get_connection_status",
+            extra_metadata={"provider": self._provider.value},
+        )
         return ProviderConnectionStatus.NOT_CONNECTED
 
     async def fetch_metrics(
@@ -89,6 +101,18 @@ class DisconnectedAnalyticsAdapter(AnalyticsProviderPort):
             "DisconnectedAnalyticsAdapter | refusing metric poll for disconnected provider=%s receipt=%s",
             self._provider.value,
             receipt.receipt_id,
+        )
+        record_egress_event(
+            component="analytics",
+            destination_host="NONE_LOCAL",
+            sanitized_path=f"/analytics/{self._provider.value}/metrics",
+            method="GET",
+            endpoint_class="BLOCKED_WITH_REASON",
+            trigger_authorization="DISCONNECTED_ACCOUNT",
+            outcome_status="REFUSED_DISCONNECTED",
+            correlation_id=receipt.receipt_id,
+            callsite="DisconnectedAnalyticsAdapter.fetch_metrics",
+            extra_metadata={"provider": self._provider.value, "receipt_id": receipt.receipt_id},
         )
         return None
 
@@ -230,6 +254,17 @@ class OfficialPlatformAnalyticsAdapter(AnalyticsProviderPort):
             self._provider.value,
             account_ref,
         )
+        record_egress_event(
+            component="analytics",
+            destination_host=f"{self._provider.value}.platform.api",
+            sanitized_path=f"/analytics/{self._provider.value}/status",
+            method="STATUS",
+            endpoint_class="READ_ONLY_HEALTH_DISCOVERY",
+            trigger_authorization="DISCONNECTED_ACCOUNT",
+            outcome_status="NOT_CONNECTED",
+            callsite="OfficialPlatformAnalyticsAdapter.get_connection_status",
+            extra_metadata={"provider": self._provider.value},
+        )
         return ProviderConnectionStatus.NOT_CONNECTED
 
     async def fetch_metrics(
@@ -246,5 +281,17 @@ class OfficialPlatformAnalyticsAdapter(AnalyticsProviderPort):
             "OfficialPlatformAnalyticsAdapter(%s) | Blocked metric fetch for receipt %s: no live OAuth credentials",
             self._provider.value,
             receipt.receipt_id,
+        )
+        record_egress_event(
+            component="analytics",
+            destination_host=f"{self._provider.value}.platform.api",
+            sanitized_path=f"/analytics/{self._provider.value}/metrics",
+            method="GET",
+            endpoint_class="BLOCKED_WITH_REASON",
+            trigger_authorization="DISCONNECTED_ACCOUNT",
+            outcome_status="BLOCKED",
+            correlation_id=receipt.receipt_id,
+            callsite="OfficialPlatformAnalyticsAdapter.fetch_metrics",
+            extra_metadata={"provider": self._provider.value, "receipt_id": receipt.receipt_id},
         )
         return None
