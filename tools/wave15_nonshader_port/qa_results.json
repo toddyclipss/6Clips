@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "base_sha": "e110d2923638eb32bc293dd96dcd464fab835fa5",
+  "started_at": "2026-10-14T22:18:10.969435+00:00",
+  "finished_at": "2026-10-14T22:18:31.060888+00:00",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_wave15_agent6_static_ports.py",
+    "tests/test_wave15_agent6_browser_contracts.py"
+  ],
+  "exit_code": 0,
+  "stdout": ".........................x...........                                    [100%]\n36 passed, 1 xfailed in 18.65s\n",
+  "stderr": "",
+  "expected_pending_test": "AGENT1_RUNTIME_REGISTRATION_PENDING, canonical native adapter bridge/CAS integration",
+  "proof_file_sha256": "8c5f86ef05f0f278431e5dd6b5c0e7a1d88b74ba7d2506c47d97d3d54ffeecac",
+  "physical_command": [
+    "python",
+    "tools/wave15_nonshader_port/verify.py",
+    "--output",
+    "%TEMP%/wave15-agent6-all-physical.json"
+  ],
+  "physical_status_output_reconstructed_from_verified_report": "{\"id\": \"lt-accent-underline\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-bold-block\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-clean-bar\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-color-block\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-dark-card\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-kicker-name\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-mask-reveal\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-side-rule\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-soft-pill\", \"status\": \"PASS\", \"error\": null}\n{\"id\": \"lt-stack-bars\", \"status\": \"PASS\", \"error\": null}\n{\"pass\": 10, \"fail\": 0}",
+  "counts": {
+    "source_inventoried": 169,
+    "source_ported": 10,
+    "runtime_ready": 0,
+    "browser_preview_verified": 10,
+    "motion_edit_verified": 0,
+    "render_artifact_verified": 10,
+    "rights_cleared": 10
+  },
+  "delivery_status": "PARTIAL/BLOCKED",
+  "outstanding": [
+    "159 source IDs not ported: explicit per-ID dependency/rights/adapter blockers in manifest",
+    "9 SOURCE_CATEGORY_MISSING IDs in manifest",
+    "Agent1 native_static_timeline registration and canonical ProjectRevision CAS",
+    "Agent5 integrated rights/taxonomy reconciliation",
+    "Agent4 final integrated-SHA live evidence",
+    "Authorized original visual baseline comparison"
+  ],
+  "new_physically_working_per_family": {
+    "Lower Thirds": 10
+  }
+}

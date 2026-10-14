@@ -1,0 +1,5 @@
+HyperFrames original composition: Apache-2.0; source registry/blocks/lt-stack-bars
+Source repository: https://github.com/heygen-com/hyperframes
+Modified: removed GSAP CDN and executable donor scripts; statically compiled original motion declarations.
+Independent native player: AGPL-3.0-only, ViralMint Contributors.
+No GSAP product/code is redistributed. Named fonts were not supplied by source; original system fallbacks retained.
