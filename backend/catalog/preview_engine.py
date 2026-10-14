@@ -185,11 +185,38 @@ class CatalogPreviewEngine:
             for vk, vv in variables.items():
                 page = page.replace(f"{{{{{vk}}}}}", str(vv))
 
-            # Inject window.__VIRALMINT_VARIABLES__ script
+            # Inject window.__VIRALMINT_VARIABLES__ script and dynamic variable DOM binder
             safe_json = json.dumps(variables)
             vars_script = f"""
             <script id="viralmint-runtime-variables">
             window.__VIRALMINT_VARIABLES__ = {safe_json};
+            (function() {{
+                function applyVars() {{
+                    var v = window.__VIRALMINT_VARIABLES__;
+                    if (!v) return;
+                    if (v.channel_name || v.title) {{
+                        var el = document.querySelector(".title, .lower-third-title, [data-variable='channel_name'], [data-variable='title']");
+                        if (el) el.textContent = v.channel_name || v.title;
+                    }}
+                    if (v.subscribe_prompt || v.subtitle) {{
+                        var sub = document.querySelector(".subtitle, .lower-third-subtitle, [data-variable='subscribe_prompt'], [data-variable='subtitle']");
+                        if (sub) sub.textContent = v.subscribe_prompt || v.subtitle;
+                    }}
+                    if (v.creator_handle) {{
+                        var h = document.querySelector(".creator-handle, [data-variable='creator_handle']");
+                        if (h) h.textContent = v.creator_handle;
+                    }}
+                    if (v.metric_value) {{
+                        var m = document.querySelector(".metric-value, [data-variable='metric_value']");
+                        if (m) m.textContent = v.metric_value;
+                    }}
+                }}
+                if (document.readyState === 'loading') {{
+                    document.addEventListener('DOMContentLoaded', applyVars);
+                }} else {{
+                    applyVars();
+                }}
+            }})();
             </script>
             """
 
