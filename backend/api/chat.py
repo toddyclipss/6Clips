@@ -153,12 +153,35 @@ async def chat_websocket(websocket: WebSocket):
             user_settings = result.scalars().first()
 
         # Send smart suggestions on connect (for returning users)
-        suggestions = await intelligence.get_smart_suggestions(user_id)
-        if suggestions:
-            await ws_manager.send({
-                "type": "smart_suggestions",
-                "suggestions": suggestions,
-            }, user_id)
+        # Explicit handshake cleanup: NEVER invoke any generative AI path on connect;
+        # Use deterministic/cached rule-based suggestions only.
+        # Send directly to THIS connecting websocket to avoid broadcasting to other/diagnostic sessions.
+        try:
+            ctx = await intelligence.get_context_summary(user_id)
+            if not ctx.get("is_first_session"):
+                profile = await intelligence.get_user_profile(user_id)
+                suggestions = None
+                from backend.models.user_profile import UserProfile
+                async with AsyncSessionLocal() as db:
+                    p_res = await db.execute(select(UserProfile).where(UserProfile.user_id == user_id))
+                    up = p_res.scalar_one_or_none()
+                    if up and up.suggestions_json:
+                        try:
+                            cached = json.loads(up.suggestions_json)
+                            cache_age = (datetime.utcnow() - (up.suggestions_updated_at or datetime.min)).total_seconds()
+                            if cache_age < 3600:
+                                suggestions = cached
+                        except (json.JSONDecodeError, TypeError):
+                            pass
+                if not suggestions:
+                    suggestions = await intelligence._get_rule_based_suggestions(user_id, ctx, profile)
+                if suggestions:
+                    await websocket.send_text(json.dumps({
+                        "type": "smart_suggestions",
+                        "suggestions": suggestions,
+                    }))
+        except Exception as e:
+            logger.debug("Non-critical onconnect suggestions failed: %s", e)
 
         # Current session ID — set by frontend via set_session message
         current_session_id = None
@@ -244,6 +267,7 @@ async def chat_websocket(websocket: WebSocket):
                     await ws_manager.send({
                         "type": "chat_error",
                         "error": "No AI model selected. Choose a model in Global Chat to continue.",
+                        "session_id": current_session_id,
                     }, user_id)
                     continue
 
@@ -252,6 +276,7 @@ async def chat_websocket(websocket: WebSocket):
                     await ws_manager.send({
                         "type": "chat_error",
                         "error": "No reasoning effort selected. Choose Low, Medium, or High in Global Chat to continue.",
+                        "session_id": current_session_id,
                     }, user_id)
                     continue
                 raw_norm = str(eff_reasoning).strip().lower()
@@ -288,6 +313,7 @@ async def chat_websocket(websocket: WebSocket):
                     await ws_manager.send({
                         "type": "chat_error",
                         "error": str(e),
+                        "session_id": current_session_id,
                     }, user_id)
 
                 # Persist assistant response
