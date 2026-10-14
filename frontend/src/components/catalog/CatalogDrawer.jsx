@@ -2,10 +2,12 @@
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
  * CatalogDrawer: detailed inspector for a selected catalog block.
- * Provides interactive 9:16 vs 16:9 preview toggle, variable schema inspector,
- * legal provenance attribution, and validated Add-to-Project intent generation.
+ * Enforces truthful inspection:
+ * - Operable blocks get interactive preview, variable customization, and Insert into Motion.
+ * - Inventory-only metadata entries have preview, insert, customize, and export disabled with real blocker reasons.
  */
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import {
   Drawer,
   Box,
@@ -29,6 +31,7 @@ import {
   TextField,
   Alert,
   CircularProgress,
+  Tooltip,
   alpha,
   useTheme,
 } from "@mui/material"
@@ -37,16 +40,16 @@ import {
   IconDeviceMobile,
   IconDeviceTv,
   IconExternalLink,
-  IconCopy,
-  IconShieldCheck,
-  IconSparkles,
   IconPlus,
-  IconCheck,
-  IconAlertCircle,
+  IconAlertTriangle,
+  IconShieldLock,
+  IconLock,
   IconSend,
   IconMovie,
+  IconClockHour4,
 } from "@tabler/icons-react"
 import http from "../../api/http"
+import { SIXCLIPS_ORIGINAL_IDS, INTERNALIZED_DONOR_IDS } from "../../utils/catalogInventory"
 
 export default function CatalogDrawer({
   item,
@@ -55,6 +58,7 @@ export default function CatalogDrawer({
   initialAspect = "9:16",
 }) {
   const theme = useTheme()
+  const navigate = useNavigate()
   const isDark = theme.palette.mode === "dark"
 
   const [tab, setTab] = useState(0)
@@ -85,40 +89,39 @@ export default function CatalogDrawer({
   if (!item) return null
 
   const is9x16 = aspect === "9:16"
-  const previewUrl = `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
-  const posterUrl = `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspect}`
+  const is6ClipsOriginal = SIXCLIPS_ORIGINAL_IDS.has(item.id) || item.origin === "6CLIPS_ORIGINAL"
+  const isDonorInternalized = INTERNALIZED_DONOR_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
+  const isOperational = is6ClipsOriginal || isDonorInternalized || Boolean(item.isOperational)
 
-  const isOperational12 = [
-    "aurora", "data-chart", "instagram-follow", "tiktok-follow", "weight-wave", "yt-lower-third",
-    "flowing-gradient", "plasma", "stripes", "holographic", "glitch-transition", "creator-hud"
-  ].includes(item.id)
+  const previewUrl = isOperational
+    ? `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
+    : null
 
-  const isInternalized = Boolean(item.internalized || item.runtime_ready || isOperational12)
-  const readiness = isOperational12
-    ? "OPERATIONAL"
-    : item.disposition === "FIX"
-    ? "FIX"
-    : "QUARANTINED"
-
-  const readinessColor =
-    readiness === "OPERATIONAL"
-      ? "info"
-      : readiness === "FIX"
-      ? "error"
-      : "warning"
-
-  const readinessLabel =
-    readiness === "OPERATIONAL"
-      ? "OPERATIONAL (ROLE 2 EXPORT PENDING)"
-      : readiness === "FIX"
-      ? "NEEDS STRUCTURAL FIX"
-      : "QUARANTINED (LICENSE REVIEW)"
+  let readinessLabel = "QUARANTINED"
+  let readinessColor = "warning"
+  if (isOperational) {
+    readinessLabel = "OPERATIONAL"
+    readinessColor = is6ClipsOriginal ? "secondary" : "info"
+  } else if (item.integration_status === "ELIGIBLE_NOT_PORTED") {
+    readinessLabel = "VETTED (NOT PORTED)"
+    readinessColor = "warning"
+  } else if (item.integration_status === "NEEDS_ADAPTATION") {
+    readinessLabel = "NEEDS ADAPTATION"
+    readinessColor = "warning"
+  } else if (item.integration_status === "BLOCKED_DEPENDENCY") {
+    readinessLabel = "BLOCKED DEPENDENCY"
+    readinessColor = "error"
+  } else if (item.integration_status === "BLOCKED_LICENSE" || item.license_status === "RESTRICTED") {
+    readinessLabel = "BLOCKED LICENSE"
+    readinessColor = "error"
+  }
 
   const handleCustomVarChange = (name, val) => {
     setCustomVars((prev) => ({ ...prev, [name]: val }))
   }
 
   const handleDispatchAddIntent = async () => {
+    if (!isOperational) return
     setIntentLoading(true)
     setIntentError(null)
     setIntentResult(null)
@@ -142,6 +145,11 @@ export default function CatalogDrawer({
     }
   }
 
+  const handleInsertIntoMotion = () => {
+    if (!isOperational) return
+    navigate(`/motion?insertBlock=${encodeURIComponent(item.id)}&aspect=${aspect}`)
+  }
+
   return (
     <Drawer
       anchor="right"
@@ -150,7 +158,7 @@ export default function CatalogDrawer({
       slotProps={{
         paper: {
           sx: {
-            width: { xs: "100%", sm: 660 },
+            width: { xs: "100%", sm: 680 },
             maxWidth: "100vw",
             bgcolor: "background.paper",
             borderLeft: 1,
@@ -171,9 +179,9 @@ export default function CatalogDrawer({
         >
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between">
             <Box sx={{ flex: 1, pr: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
                 <Chip
-                  label={item.category?.toUpperCase()}
+                  label={item.category?.toUpperCase() || "GENERAL"}
                   size="small"
                   color="primary"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
@@ -185,10 +193,25 @@ export default function CatalogDrawer({
                   variant="outlined"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
                 />
+                {is6ClipsOriginal ? (
+                  <Chip
+                    label="6Clips Original"
+                    size="small"
+                    color="secondary"
+                    sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
+                  />
+                ) : (
+                  <Chip
+                    label={isDonorInternalized ? "HyperFrames (Internalized)" : "HyperFrames Donor Original"}
+                    size="small"
+                    variant="outlined"
+                    sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
+                  />
+                )}
               </Stack>
 
               <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: "-0.02em" }}>
-                {item.title}
+                {item.title || item.id}
               </Typography>
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
                 ID: <code>{item.id}</code> · Author: {item.author || "HyperFrames"}
@@ -201,7 +224,7 @@ export default function CatalogDrawer({
           </Stack>
         </Box>
 
-        {/* Interactive Preview Stage */}
+        {/* Preview Stage: Operational iframe OR Truthful Quarantine Notice */}
         <Box
           sx={{
             p: 2,
@@ -220,7 +243,7 @@ export default function CatalogDrawer({
             sx={{ width: "100%", mb: 1.5 }}
           >
             <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 600 }}>
-              STANDALONE PREVIEW
+              {isOperational ? "STANDALONE PREVIEW" : "PREVIEW QUARANTINED (INVENTORY ONLY)"}
             </Typography>
 
             <ToggleButtonGroup
@@ -250,32 +273,50 @@ export default function CatalogDrawer({
             </ToggleButtonGroup>
           </Stack>
 
-          {/* Iframe stage container */}
+          {/* Stage Container */}
           <Box
             sx={{
               width: "100%",
-              height: is9x16 ? 360 : 230,
-              maxHeight: "45vh",
+              height: is9x16 ? 320 : 210,
+              maxHeight: "40vh",
               borderRadius: "8px",
               overflow: "hidden",
               border: 1,
               borderColor: alpha("#fff", 0.1),
-              bgcolor: "#090d16",
+              bgcolor: isOperational ? "#090d16" : "#0f172a",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Box
-              component="iframe"
-              src={previewUrl}
-              title={item.title}
-              sx={{
-                width: "100%",
-                height: "100%",
-                border: 0,
-              }}
-            />
+            {isOperational ? (
+              <Box
+                component="iframe"
+                src={previewUrl}
+                title={item.title || item.id}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  border: 0,
+                }}
+              />
+            ) : (
+              <Box sx={{ p: 3, textAlign: "center", maxWidth: 440 }}>
+                <IconShieldLock size={36} style={{ color: theme.palette.warning.main, marginBottom: 8 }} />
+                <Typography variant="subtitle2" sx={{ color: "#f8fafc", fontWeight: 700 }}>
+                  Live Preview Disabled
+                </Typography>
+                <Typography variant="caption" sx={{ color: "#94a3b8", display: "block", mt: 0.5, lineHeight: 1.4 }}>
+                  This block is an inventoried donor entry that has not passed offline internalization gates.
+                  No untrusted donor code is executed in the browser.
+                </Typography>
+                {item.blocker_reason && (
+                  <Alert severity="warning" sx={{ mt: 1.5, py: 0.5, textAlign: "left", fontSize: "0.75rem" }}>
+                    {item.blocker_reason}
+                  </Alert>
+                )}
+              </Box>
+            )}
           </Box>
         </Box>
 
@@ -300,10 +341,10 @@ export default function CatalogDrawer({
             <Tab label="Provenance & Legal" />
             <Tab label="Aspect Parity" />
             <Tab
-              label="Add to Project"
+              label="Insert into Motion"
               icon={<IconPlus size={14} />}
               iconPosition="start"
-              sx={{ color: "primary.main" }}
+              sx={{ color: isOperational ? "primary.main" : "text.disabled" }}
             />
           </Tabs>
         </Box>
@@ -312,6 +353,17 @@ export default function CatalogDrawer({
         <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>
           {tab === 0 && (
             <Stack spacing={2}>
+              {!isOperational && (
+                <Alert severity={item.integration_status?.includes("BLOCKED") ? "error" : "warning"}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                    {item.integration_status || "QUARANTINED"}
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
+                    {item.blocker_reason || "This block is retained as untrusted donor metadata and is withheld from production execution."}
+                  </Typography>
+                </Alert>
+              )}
+
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
                   Description
@@ -321,87 +373,81 @@ export default function CatalogDrawer({
                 </Typography>
               </Box>
 
-              <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Tags
-                </Typography>
-                <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
-                  {(item.tags || []).map((t) => (
-                    <Chip key={t} label={t} size="small" variant="outlined" sx={{ fontSize: "0.72rem" }} />
-                  ))}
-                </Stack>
-              </Box>
+              <Divider />
 
               <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Technical Specifications
-                </Typography>
-                <Stack spacing={0.5}>
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Duration: <strong>{item.duration || 5.0} seconds</strong>
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Category: <strong>{item.category}</strong>
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Runtime Packaging:{" "}
-                    <strong>{isInternalized ? "Internalized (Zero Donor Dependency)" : "Awaiting Internalization"}</strong>
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                    Native Dimensions:{" "}
-                    <strong>
-                      {item.dimensions?.width || 1920}×{item.dimensions?.height || 1080}
-                    </strong>
-                  </Typography>
-                </Stack>
-              </Box>
-
-              <Box sx={{ mt: 1, p: 1.5, borderRadius: 1, bgcolor: isDark ? alpha("#fff", 0.04) : alpha("#000", 0.04), border: 1, borderColor: "divider" }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                  Wave 10 Verification Proof Ledger
+                  Contract Disposition & Readiness
                 </Typography>
-                <Stack spacing={0.75}>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>Origin / License:</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{isOperational12 ? (["creator-hud", "glitch-transition"].includes(item.id) ? "ORIGINAL_6CLIPS (Apache-2.0)" : "ORIGINAL_DONOR (Apache-2.0/MIT)") : "QUARANTINED (186 Withheld)"}</Typography>
-                  </Stack>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>Offline Assets (Zero CDN):</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (100% Offline)" : "PENDING"}</Typography>
-                  </Stack>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>Browser Animation (Playwright):</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (Dynamic Seek + Instance Vars)" : "PENDING"}</Typography>
-                  </Stack>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>Project Insertion Intent:</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: isOperational12 ? "success.main" : "text.secondary" }}>{isOperational12 ? "PASS (CAS & Scoped IDs)" : "QUARANTINED"}</Typography>
-                  </Stack>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>Canonical MP4 Export:</Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: "warning.main" }}>{isOperational12 ? "ROLE2_RENDER_PIPELINE_PENDING" : "BLOCKED"}</Typography>
-                  </Stack>
-                </Stack>
+                <TableContainer component={Paper} variant="outlined">
+                  <Table size="small">
+                    <TableBody>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600, width: 200 }}>Block ID</TableCell>
+                        <TableCell><code>{item.id}</code></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>Origin</TableCell>
+                        <TableCell>
+                          {is6ClipsOriginal ? "6Clips Original Work" : "HyperFrames Donor Original"}
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>Integration Status</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={item.integration_status || (isOperational ? "INTERNALIZED" : "UNVERIFIED")}
+                            color={isOperational ? "success" : "warning"}
+                            size="small"
+                            sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>License Status</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={item.license_status || (isOperational ? "VERIFIED_PERMISSIVE" : "UNVERIFIED")}
+                            color={item.license_status?.startsWith("VERIFIED") ? "success" : "warning"}
+                            size="small"
+                            sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>Runtime Execution</TableCell>
+                        <TableCell>
+                          {isOperational
+                            ? "Enabled (100% Offline Shipped Package)"
+                            : "Disabled (Withheld from Client Execution)"}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Box>
             </Stack>
           )}
 
           {tab === 1 && (
-            <Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
-                Configurable Variables Schema
-              </Typography>
-              {!item.variables || item.variables.length === 0 ? (
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  No configurable variables exposed by this block.
+            <Stack spacing={2}>
+              <Box>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                  Composition Variables Schema
                 </Typography>
-              ) : (
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {isOperational
+                    ? "Declared variables configurable for independent timeline instances."
+                    : "Declared variables metadata from donor manifest (inspection only; binding disabled)."}
+                </Typography>
+              </Box>
+
+              {item.variables && item.variables.length > 0 ? (
                 <TableContainer component={Paper} variant="outlined">
                   <Table size="small">
                     <TableHead>
                       <TableRow>
                         <TableCell sx={{ fontWeight: 700 }}>Variable</TableCell>
-                        <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
                         <TableCell sx={{ fontWeight: 700 }}>Default</TableCell>
                         <TableCell sx={{ fontWeight: 700 }}>Description</TableCell>
                       </TableRow>
@@ -409,59 +455,61 @@ export default function CatalogDrawer({
                     <TableBody>
                       {item.variables.map((v) => (
                         <TableRow key={v.name}>
-                          <TableCell sx={{ fontFamily: "monospace", fontSize: "0.78rem" }}>
-                            {v.name}
-                          </TableCell>
-                          <TableCell>
-                            <Chip label={v.type} size="small" sx={{ height: 18, fontSize: "0.68rem" }} />
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: "monospace", fontSize: "0.78rem" }}>
-                            {String(v.default ?? "—")}
-                          </TableCell>
-                          <TableCell sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
-                            {v.description || "—"}
-                          </TableCell>
+                          <TableCell sx={{ fontWeight: 600 }}><code>{v.name}</code></TableCell>
+                          <TableCell>{String(v.default ?? "")}</TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>{v.description || "—"}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
+              ) : (
+                <Typography variant="body2" sx={{ color: "text.secondary", py: 2 }}>
+                  This block has no customizable variable parameters declared.
+                </Typography>
               )}
-            </Box>
+            </Stack>
           )}
 
           {tab === 2 && (
             <Stack spacing={2}>
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Licensing & Legal Clearance
+                  Legal Provenance & License Review
                 </Typography>
-                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                  <IconShieldCheck size={20} style={{ color: theme.palette.success.main }} />
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {item.license || "Apache-2.0"}
-                  </Typography>
-                </Stack>
-                <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-                  Redistributable under Apache-2.0 and compatible open-source terms. Derivative works retain original copyright and NOTICE files.
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  Audited license evidence and source provenance tracking.
                 </Typography>
               </Box>
 
-              <Divider />
-
-              <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Donor Independence (GT-20)
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
-                  {isInternalized
-                    ? "✓ This block has been completely internalized into backend/catalog/shipped_blocks with offline assets and pinned fonts. It functions without donor checkout."
-                    : "⚠ This block currently requires dependency vendoring and offline packaging before runtime shipment."}
-                </Typography>
-                <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                  Original Donor Directory: <code>{item.id}</code>
-                </Typography>
-              </Box>
+              <TableContainer component={Paper} variant="outlined">
+                <Table size="small">
+                  <TableBody>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600, width: 200 }}>Declared License</TableCell>
+                      <TableCell>{item.license || "Apache-2.0"}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600 }}>License Status</TableCell>
+                      <TableCell><code>{item.license_status || "UNVERIFIED"}</code></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600 }}>License Evidence</TableCell>
+                      <TableCell>{item.license_evidence || "Awaiting formal review."}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600 }}>Relative Source Path</TableCell>
+                      <TableCell><code>{item.relative_source_path || `registry/blocks/${item.id}`}</code></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600 }}>Source SHA-256</TableCell>
+                      <TableCell sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
+                        {item.source_sha256 || "—"}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Stack>
           )}
 
@@ -469,39 +517,41 @@ export default function CatalogDrawer({
             <Stack spacing={2}>
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  9:16 Vertical Compatibility
+                  Aspect Ratio Parity (GT-13)
                 </Typography>
-                <Chip
-                  label={item.aspect_9_16}
-                  color={item.aspect_9_16 === "NATIVE" ? "primary" : "info"}
-                  size="small"
-                  sx={{ fontWeight: 700, mb: 0.5 }}
-                />
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {item.aspect_9_16 === "NATIVE"
-                    ? "Native 1080×1920 layout authored specifically for vertical feeds."
-                    : item.aspect_9_16 === "ADAPTED"
-                    ? "Responsive adaptation with centering and scaling for vertical viewing."
-                    : "Contained within vertical bounds (letterboxed/pillarboxed)."}
+                  Layout compatibility for 9:16 vertical shorts and 16:9 landscape video.
                 </Typography>
               </Box>
 
-              <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  16:9 Horizontal Compatibility
-                </Typography>
-                <Chip
-                  label={item.aspect_16_9}
-                  color={item.aspect_16_9 === "NATIVE" ? "primary" : "info"}
-                  size="small"
-                  sx={{ fontWeight: 700, mb: 0.5 }}
-                />
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {item.aspect_16_9 === "NATIVE"
-                    ? "Native 1920×1080 layout authored for landscape video."
-                    : "Contained within landscape 16:9 frame."}
-                </Typography>
-              </Box>
+              <TableContainer component={Paper} variant="outlined">
+                <Table size="small">
+                  <TableBody>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600, width: 200 }}>9:16 Vertical</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={item.aspect_9_16 || "CONTAINED_ONLY"}
+                          size="small"
+                          color={item.aspect_9_16 === "NATIVE" ? "primary" : "default"}
+                          sx={{ fontWeight: 700 }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 600 }}>16:9 Landscape</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={item.aspect_16_9 || "CONTAINED_ONLY"}
+                          size="small"
+                          color={item.aspect_16_9 === "NATIVE" ? "primary" : "default"}
+                          sx={{ fontWeight: 700 }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Stack>
           )}
 
@@ -509,107 +559,120 @@ export default function CatalogDrawer({
             <Stack spacing={2.5}>
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                  Add Block to Project Timeline
+                  Insert Block into Motion Timeline
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Configure insertion parameters and dispatch a validated timeline block intent.
+                  Dispatches an atomic block insertion into the Motion Studio timeline via the canonical Project/CAS revision pipeline.
                 </Typography>
               </Box>
 
-              {!isInternalized && (
-                <Alert severity={item.disposition === "FIX" ? "error" : "warning"}>
+              {!isOperational ? (
+                <Alert severity="error" icon={<IconLock size={20} />}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                    {item.blocker_code || "LICENSE_REVIEW_REQUIRED_AMBIGUOUS_RIGHTS"}
+                    Insertion Disabled (Inventory Only Entry)
                   </Typography>
                   <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
-                    {item.blocker_reason || "This block is not verified for runtime distribution and requires dependency clearance before live rendering."}
+                    {item.blocker_reason || "This block is not verified for runtime distribution and cannot be inserted into project compositions."}
                   </Typography>
                 </Alert>
+              ) : (
+                <Stack spacing={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    startIcon={<IconMovie size={18} />}
+                    onClick={handleInsertIntoMotion}
+                    sx={{ fontWeight: 700 }}
+                  >
+                    Open and Insert in Motion Studio
+                  </Button>
+
+                  <Divider sx={{ my: 1 }}>OR DISPATCH CAS INTENT</Divider>
+
+                  <TextField
+                    label="Target Project ID"
+                    placeholder="Optional: leave blank for active composition"
+                    size="small"
+                    fullWidth
+                    value={targetProjectId}
+                    onChange={(e) => setTargetProjectId(e.target.value)}
+                  />
+
+                  <Stack direction="row" spacing={2}>
+                    <TextField
+                      label="Instance ID (Scoped)"
+                      placeholder="Auto-generated if blank"
+                      size="small"
+                      value={instanceId}
+                      onChange={(e) => setInstanceId(e.target.value)}
+                      sx={{ flex: 1 }}
+                      helperText="Unique instance ID for independent editing"
+                    />
+                    <TextField
+                      label="Expected Revision (CAS)"
+                      type="number"
+                      size="small"
+                      placeholder="e.g. 1"
+                      value={expectedRevision}
+                      onChange={(e) => setExpectedRevision(e.target.value)}
+                      sx={{ width: 180 }}
+                      helperText="Optimistic concurrency control"
+                    />
+                  </Stack>
+
+                  <Stack direction="row" spacing={2}>
+                    <TextField
+                      label="Timeline Track Index"
+                      type="number"
+                      size="small"
+                      value={trackIndex}
+                      onChange={(e) => setTrackIndex(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                      sx={{ width: 180 }}
+                    />
+                    <TextField
+                      label="Start Time (seconds)"
+                      type="number"
+                      size="small"
+                      value={startTime}
+                      onChange={(e) => setStartTime(Math.max(0, parseFloat(e.target.value) || 0))}
+                      sx={{ width: 180 }}
+                    />
+                  </Stack>
+
+                  {item.variables && item.variables.length > 0 && (
+                    <Box>
+                      <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", mb: 1, display: "block" }}>
+                        Customize Variables (Independent Instance)
+                      </Typography>
+                      <Stack spacing={1.5}>
+                        {item.variables.map((v) => (
+                          <TextField
+                            key={v.name}
+                            label={v.name}
+                            size="small"
+                            defaultValue={v.default}
+                            helperText={v.description}
+                            fullWidth
+                            onChange={(e) => handleCustomVarChange(v.name, e.target.value)}
+                          />
+                        ))}
+                      </Stack>
+                    </Box>
+                  )}
+
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleDispatchAddIntent}
+                    disabled={intentLoading}
+                    startIcon={intentLoading ? <CircularProgress size={16} /> : <IconSend size={16} />}
+                    sx={{ fontWeight: 700 }}
+                  >
+                    {intentLoading ? "Validating Intent..." : "Dispatch Add-to-Project Intent"}
+                  </Button>
+                </Stack>
               )}
-
-              <Stack spacing={2}>
-                <TextField
-                  label="Target Project ID"
-                  placeholder="Optional: leave blank for active composition"
-                  size="small"
-                  fullWidth
-                  value={targetProjectId}
-                  onChange={(e) => setTargetProjectId(e.target.value)}
-                />
-
-                <Stack direction="row" spacing={2}>
-                  <TextField
-                    label="Instance ID (Scoped)"
-                    placeholder="Auto-generated if blank"
-                    size="small"
-                    value={instanceId}
-                    onChange={(e) => setInstanceId(e.target.value)}
-                    sx={{ flex: 1 }}
-                    helperText="Unique instance ID for independent editing"
-                  />
-                  <TextField
-                    label="Expected Revision (CAS)"
-                    type="number"
-                    size="small"
-                    placeholder="e.g. 1"
-                    value={expectedRevision}
-                    onChange={(e) => setExpectedRevision(e.target.value)}
-                    sx={{ width: 180 }}
-                    helperText="Optimistic concurrency control"
-                  />
-                </Stack>
-
-                <Stack direction="row" spacing={2}>
-                  <TextField
-                    label="Timeline Track Index"
-                    type="number"
-                    size="small"
-                    value={trackIndex}
-                    onChange={(e) => setTrackIndex(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                    sx={{ width: 180 }}
-                  />
-                  <TextField
-                    label="Start Time (seconds)"
-                    type="number"
-                    size="small"
-                    value={startTime}
-                    onChange={(e) => setStartTime(Math.max(0, parseFloat(e.target.value) || 0))}
-                    sx={{ width: 180 }}
-                  />
-                </Stack>
-
-                {item.variables && item.variables.length > 0 && (
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", mb: 1, display: "block" }}>
-                      Customize Variables (Independent Instance)
-                    </Typography>
-                    <Stack spacing={1.5}>
-                      {item.variables.map((v) => (
-                        <TextField
-                          key={v.name}
-                          label={v.name}
-                          size="small"
-                          defaultValue={v.default}
-                          helperText={v.description}
-                          fullWidth
-                          onChange={(e) => handleCustomVarChange(v.name, e.target.value)}
-                        />
-                      ))}
-                    </Stack>
-                  </Box>
-                )}
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleDispatchAddIntent}
-                  disabled={intentLoading}
-                  startIcon={intentLoading ? <CircularProgress size={16} /> : <IconSend size={16} />}
-                  sx={{ fontWeight: 700 }}
-                >
-                  {intentLoading ? "Validating Intent..." : "Dispatch Add-to-Project Intent"}
-                </Button>
-              </Stack>
 
               {intentError && (
                 <Alert severity="error" sx={{ mt: 2 }}>
@@ -625,12 +688,6 @@ export default function CatalogDrawer({
                   <Typography variant="caption" sx={{ display: "block", mt: 0.5 }}>
                     Instance ID: <code>{intentResult.timeline_item?.instance_id}</code> · Track #{intentResult.timeline_item?.track_index} · Duration: {intentResult.timeline_item?.duration}s
                   </Typography>
-                  <Typography variant="caption" sx={{ display: "block", mt: 0.5 }}>
-                    License: <strong>{intentResult.timeline_item?.license_provenance?.license || "Apache-2.0"}</strong> ({intentResult.timeline_item?.license_provenance?.license_status})
-                  </Typography>
-                  <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.5 }}>
-                    Integration Status: <strong>{intentResult.integration_request?.parameters?.timeline_item ? "Payload Ready for Coordinator Wiring (ProjectService)" : "Pending"}</strong>
-                  </Typography>
                 </Alert>
               )}
             </Stack>
@@ -640,27 +697,46 @@ export default function CatalogDrawer({
         {/* Footer Actions */}
         <Box sx={{ p: 2, borderTop: 1, borderColor: "divider" }}>
           <Stack direction="row" spacing={1.5} justifyContent="flex-end">
-            <Button
-              variant="outlined"
-              size="small"
-              href={previewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              startIcon={<IconExternalLink size={16} />}
-            >
-              Open in New Window
-            </Button>
-            {tab !== 4 && (
+            {isOperational && previewUrl && (
               <Button
-                variant="contained"
+                variant="outlined"
                 size="small"
-                color="primary"
-                startIcon={<IconPlus size={16} />}
-                onClick={() => setTab(4)}
+                href={previewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<IconExternalLink size={16} />}
               >
-                Add to Project
+                Open in New Window
               </Button>
             )}
+
+            {isOperational ? (
+              tab !== 4 && (
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  startIcon={<IconPlus size={16} />}
+                  onClick={() => setTab(4)}
+                >
+                  Insert into Motion
+                </Button>
+              )
+            ) : (
+              <Tooltip title="Actions are disabled for inventory-only blocks until rights-cleared.">
+                <span>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    disabled
+                    startIcon={<IconLock size={16} />}
+                  >
+                    Insert Disabled
+                  </Button>
+                </span>
+              </Tooltip>
+            )}
+
             <Button
               variant="text"
               size="small"
