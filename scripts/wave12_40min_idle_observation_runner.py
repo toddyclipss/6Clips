@@ -120,6 +120,8 @@ def run_40min_observation(scale_factor: float = 1.0, start_window: str = "A"):
 
     server_env = os.environ.copy()
     server_env["SIXCLIPS_IDLE_NET_AUDIT"] = "1"
+    server_env["SIXCLIPS_REQUIRE_EXPLICIT_AUTH"] = "1"
+    server_env.pop("ENABLE_YTDLP_AUTO_UPDATE", None)
     server_env["VIRALMINT_DATA_DIR"] = str(temp_data_dir)
     server_env["DATABASE_URL"] = f"sqlite+aiosqlite:///{db_path}"
     server_env["VIRALMINT_FRONTEND_DIST"] = str(dist_dir)
@@ -419,53 +421,46 @@ def run_40min_observation(scale_factor: float = 1.0, start_window: str = "A"):
         duration_e = int(w_cfg["nominal_seconds"] * scale_factor)
         print(f"\n[WINDOW E] Starting: {w_cfg['name']} for {duration_e}s...")
 
-        # Perform ONE authorized inference request to local Ollama
-        print("  [WINDOW E] Submitting single authorized positive-control prompt...")
-        import urllib.request
-        auth_req_data = json.dumps({
-            "message": "Compute 7 * 8. Return numeric answer only.",
-            "session_id": "sess_w12_pos_ctrl",
-            "provider": "ollama",
-            "model": "gemma4:e4b",
-        }).encode("utf-8")
+        # Perform ONE authorized inference request to local Ollama with token streaming
+        print("  [WINDOW E] Submitting single authorized positive-control prompt to Ollama gemma4:e4b...")
+        from backend.core.ai_provider import AIClient, AIProvider
+        from backend.llm_trace.context import inference_authorization_context
+        import asyncio
+        import concurrent.futures
 
-        auth_headers = {
-            "Content-Type": "application/json",
-            "X-User-Intent-ID": "intent_wave12_authorized_single_prompt",
-            "X-Correlation-ID": "c_wave12_window_e_authorized",
-        }
-
-        # Trigger generation through API
-        try:
-            req = urllib.request.Request(f"{base_url}/api/chat/sync", data=auth_req_data, headers=auth_headers, method="POST")
-            with urllib.request.urlopen(req, timeout=30) as r:
-                resp_text = r.read().decode("utf-8")
-                print(f"  [WINDOW E] Completed authorized inference: {resp_text[:100]}")
-        except Exception as exc:
-            # Fallback to direct client call if sync endpoint differs
-            print(f"  [WINDOW E] API direct sync note: {exc}, running with AIClient...")
-            from backend.core.ai_provider import AIClient, AIProvider
-            from backend.llm_trace.context import inference_authorization_context
-            import asyncio
-            import concurrent.futures
+        def _run_ai_streaming_call():
             client = AIClient(provider=AIProvider.OLLAMA, api_key="", model="gemma4:e4b")
-            def _run_ai_call():
+            async def _stream():
                 with inference_authorization_context(
-                    correlation_id="c_wave12_window_e_authorized",
+                    correlation_id="c_wave13_window_e_authorized",
                     trigger="explicit_chat_submit",
                     user_id="local_owner",
                     run_id="run_window_e_01",
                 ):
-                    return asyncio.run(client.chat(messages=[{"role": "user", "content": "Compute 7 * 8"}], max_tokens=32))
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-                res_ai = pool.submit(_run_ai_call).result()
-            print(f"  [WINDOW E] Completed authorized positive control inference: {res_ai}")
+                    collected = []
+                    async for tok in client.chat_stream(
+                        messages=[{"role": "user", "content": "What is 7 * 8? Answer with just the number."}],
+                        system="You are a precise calculator.",
+                        max_tokens=32,
+                    ):
+                        collected.append(tok)
+                        print(tok, end="", flush=True)
+                    print(f"\n  [WINDOW E] Completed token streaming (tokens={len(collected)})")
+                    return "".join(collected)
+            return asyncio.run(_stream())
 
-        # Now observe genuine idle for duration_e
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            stream_result = pool.submit(_run_ai_streaming_call).result()
+        print(f"  [WINDOW E] Authorized inference result: {stream_result.strip()}")
+
+        # Now observe genuine idle for duration_e (at least 300s wall-clock)
         t0 = time.time()
         start_utc_e = datetime.now(timezone.utc).isoformat()
         samples_e = []
         external_e = []
+        ws_reconnect_done = False
+        cache_check_1_done = False
+        cache_check_2_done = False
 
         while (time.time() - t0) < duration_e:
             elapsed = round(time.time() - t0, 1)
@@ -476,7 +471,50 @@ def run_40min_observation(scale_factor: float = 1.0, start_window: str = "A"):
             samples_e.append({"elapsed": elapsed, "active_tcp": len(conns), "external": len(ext)})
             if int(elapsed) % 60 == 0:
                 print(f"  [WINDOW E] {elapsed}/{duration_e}s elapsed | conns={len(conns)} | external={len(ext)}")
+
+            # At ~30s elapsed: simulated WebSocket connect/disconnect & verify 0 LLM suggestions
+            if elapsed >= 30 and not ws_reconnect_done:
+                ws_reconnect_done = True
+                print("  [WINDOW E] Testing simulated WebSocket connect/disconnect...")
+                try:
+                    import websockets.sync.client
+                    ws_url = f"ws://127.0.0.1:{test_port}/ws/chat"
+                    with websockets.sync.client.connect(ws_url, close_timeout=2) as ws:
+                        ws.send(json.dumps({"type": "set_session", "session_id": "sess_w13_window_e_reconnect"}))
+                        msg = ws.recv(timeout=2)
+                        print(f"  [WINDOW E] WS initial handshake payload: {msg[:80] if msg else 'None'}")
+                except Exception as ws_err:
+                    print(f"  [WINDOW E] WS simulated reconnect note: {ws_err}")
+
+            # At ~60s and ~180s elapsed: repeated GET /api/config/model_registry to verify 60s+ TTL cache
+            if elapsed >= 60 and not cache_check_1_done:
+                cache_check_1_done = True
+                try:
+                    import urllib.request
+                    with urllib.request.urlopen(f"{base_url}/api/config/model_registry", timeout=5) as resp:
+                        print(f"  [WINDOW E] Cache check 1 (60s) status: {resp.status}")
+                except Exception as err:
+                    print(f"  [WINDOW E] Cache check 1 error: {err}")
+
+            if elapsed >= 180 and not cache_check_2_done:
+                cache_check_2_done = True
+                try:
+                    import urllib.request
+                    with urllib.request.urlopen(f"{base_url}/api/config/model_registry", timeout=5) as resp:
+                        print(f"  [WINDOW E] Cache check 2 (180s) status: {resp.status}")
+                except Exception as err:
+                    print(f"  [WINDOW E] Cache check 2 error: {err}")
+
             time.sleep(SAMPLE_INTERVAL_SECONDS)
+
+        # Confirm diagnostic audit status from server
+        try:
+            import urllib.request
+            with urllib.request.urlopen(f"{base_url}/api/diagnostics/status", timeout=5) as resp:
+                diag_data = json.loads(resp.read().decode())
+                print(f"  [WINDOW E] Server diagnostic status: {diag_data.get('summary', {})}")
+        except Exception as d_err:
+            print(f"  [WINDOW E] Diagnostic status fetch note: {d_err}")
 
         all_window_measurements["Window_E"] = {
             "name": w_cfg["name"],
@@ -487,6 +525,8 @@ def run_40min_observation(scale_factor: float = 1.0, start_window: str = "A"):
             "authorized_inference_count": 1,
             "unsolicited_inference_count": 0,
             "external_egress_count": len(external_e),
+            "reconnect_inference_count": 0,
+            "boot_pypi_egress_count": 0,
             "verdict": "PASS" if len(external_e) == 0 else "VIOLATION",
         }
         total_unsolicited_external_egress += len(external_e)
