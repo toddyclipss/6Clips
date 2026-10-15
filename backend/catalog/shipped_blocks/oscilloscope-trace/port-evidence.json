@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "oscilloscope-trace",
+  "wave": 18,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/oscilloscope-trace",
+  "source_sha256": "4ae7ce79f0bd29aa6764206101f776aced12d5ca212af4b2cb9f3e3f9c1445ea",
+  "output_html_sha256": "f48bd12535c9b086e4a078c662affeb7d07d56cc360efa0eb5d715012492566d",
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "instrument",
+    "data",
+    "showcase",
+    "retro"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

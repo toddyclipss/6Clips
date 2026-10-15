@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "nyc-paris-flight",
+  "wave": 18,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/nyc-paris-flight",
+  "source_sha256": "185fdae537f43f6cd3750d38ef23287c1a26c86108ebde9a90bda126acd3fa2c",
+  "output_html_sha256": "0105a5aedb4c6b307d6a2f5eb965580aff5f8591933efa2295b0d9645e6209ad",
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "showcase",
+    "travel",
+    "map",
+    "youtube",
+    "sfx"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

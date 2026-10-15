@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "notes-reveal",
+  "wave": 18,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/notes-reveal",
+  "source_sha256": "b607a8fb14db5da3eec3cebd455723338dbe52ccae5dffe0d9c0c71ae9b86622",
+  "output_html_sha256": "d0dec8b8f58c5948f45457004c24d5f1d09be014de0d129bb6a64147506844f5",
+  "duration": 24.85,
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "tags": [
+    "showcase",
+    "mock-ui",
+    "notes",
+    "typing",
+    "vertical",
+    "ad-template"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

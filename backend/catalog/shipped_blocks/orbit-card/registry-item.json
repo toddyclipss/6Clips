@@ -1,0 +1,35 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "orbit-card",
+  "type": "hyperframes:block",
+  "title": "Orbit Card",
+  "description": "A single feature card orbits a dot sphere on approved Blender camera motion.",
+  "tags": [
+    "3d-motion",
+    "cards",
+    "feature-reveal",
+    "dots",
+    "orbit",
+    "blender-motion",
+    "sphere"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 10,
+  "files": [
+    {
+      "path": "orbit-card.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "lib/gsap_offline.js",
+      "type": "hyperframes:library"
+    }
+  ],
+  "preview": {
+    "video": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/orbit-card.mp4",
+    "poster": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/orbit-card.png"
+  }
+}

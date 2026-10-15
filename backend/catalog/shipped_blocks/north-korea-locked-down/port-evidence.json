@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "north-korea-locked-down",
+  "wave": 18,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/north-korea-locked-down",
+  "source_sha256": "bc17c937c2cd8265d82bc1b0639c2ea890b90a318bdcef6fce61eadd36bd8125",
+  "output_html_sha256": "abe7fbd52056634e26c5d6ebfe4c47eed3c3c8cf7e58028157215827ae0f4330",
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "showcase",
+    "map",
+    "annotation",
+    "youtube",
+    "kinetic"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

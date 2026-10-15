@@ -1,0 +1,388 @@
+{
+  "wave": 18,
+  "agent": "agent-4",
+  "timestamp": "2026-10-15T14:56:33.350079+00:00",
+  "overall_status": "PASS",
+  "wave18_ported_audit": [
+    {
+      "slug": "orbit-card",
+      "browser_preview": "PASS",
+      "motion_delta": 1.427,
+      "brightness": 23.39,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "45d0c1a8c404e0171c8f25c7edfe746800c9edd59cc468d3f5267e7c4b24395f"
+    },
+    {
+      "slug": "north-korea-locked-down",
+      "browser_preview": "PASS",
+      "motion_delta": 24.803,
+      "brightness": 209.37,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "2dc12742713a86498ae10bdda32ef5658bd6f853638fcb888852d2b2c8078724"
+    },
+    {
+      "slug": "notes-reveal",
+      "browser_preview": "PASS",
+      "motion_delta": 6.085,
+      "brightness": 248.4,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "d5ec12104a2b4d17ad1d5ff93cc06fa05fba3edcd997f9e5bedfe529433c5d9f"
+    },
+    {
+      "slug": "nyc-paris-flight",
+      "browser_preview": "PASS",
+      "motion_delta": 4.656,
+      "brightness": 227.98,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "4f9d21c378282c22e67a7cbac54e1708bfe53c687f79f4ef531b9141ad783fcf"
+    },
+    {
+      "slug": "us-map-hex",
+      "browser_preview": "PASS",
+      "motion_delta": 8.695,
+      "brightness": 43.94,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "70e456aeee8a2b7a7596093c4495a887a52fba7a8901fd4429eead5fc87a3d3b"
+    },
+    {
+      "slug": "oscilloscope-trace",
+      "browser_preview": "PASS",
+      "motion_delta": 1.325,
+      "brightness": 11.03,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "8a855af479c572612190b7e941e97c0614370471b9fe0167115386dd277154a0"
+    },
+    {
+      "slug": "vfx-anamorphic-flare",
+      "browser_preview": "PASS",
+      "motion_delta": 2.188,
+      "brightness": 7.4,
+      "zero_egress": true,
+      "egress_violations": [],
+      "console_errors": [],
+      "physical_mp4_export": "PASS",
+      "export_codec": "h264",
+      "export_duration": 0.5,
+      "mp4_sha256": "119c6502cfa720a6b987c584ae3a7b21757ccdc9acc56436fe48f35d0c73c501"
+    }
+  ],
+  "regression_audit": {
+    "wave17_count": 18,
+    "wave16_count": 14,
+    "all_vendored": true
+  },
+  "owner_baseline_10_audit": [
+    {
+      "slug": "aurora",
+      "exists": true,
+      "has_gsap_timeline": false,
+      "requires_webgpu": true,
+      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+    },
+    {
+      "slug": "data-chart",
+      "exists": true,
+      "has_gsap_timeline": true,
+      "requires_webgpu": false,
+      "audit_finding": "TIMELINE_OPERABLE"
+    },
+    {
+      "slug": "flowing-gradient",
+      "exists": true,
+      "has_gsap_timeline": false,
+      "requires_webgpu": true,
+      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+    },
+    {
+      "slug": "holographic",
+      "exists": true,
+      "has_gsap_timeline": false,
+      "requires_webgpu": true,
+      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+    },
+    {
+      "slug": "instagram-follow",
+      "exists": true,
+      "has_gsap_timeline": true,
+      "requires_webgpu": false,
+      "audit_finding": "TIMELINE_OPERABLE"
+    },
+    {
+      "slug": "plasma",
+      "exists": true,
+      "has_gsap_timeline": false,
+      "requires_webgpu": true,
+      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+    },
+    {
+      "slug": "stripes",
+      "exists": true,
+      "has_gsap_timeline": false,
+      "requires_webgpu": true,
+      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+    },
+    {
+      "slug": "tiktok-follow",
+      "exists": true,
+      "has_gsap_timeline": true,
+      "requires_webgpu": false,
+      "audit_finding": "TIMELINE_OPERABLE"
+    },
+    {
+      "slug": "weight-wave",
+      "exists": true,
+      "has_gsap_timeline": true,
+      "requires_webgpu": false,
+      "audit_finding": "TIMELINE_OPERABLE"
+    },
+    {
+      "slug": "yt-lower-third",
+      "exists": true,
+      "has_gsap_timeline": true,
+      "requires_webgpu": false,
+      "audit_finding": "TIMELINE_OPERABLE"
+    }
+  ],
+  "legacy_30_workflows_parity": [
+    {
+      "workflow": "video-download",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "merge-clips",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "transform",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "compress",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "crop",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "reframe",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "watermark",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "gif",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "speed",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "trim",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "auto-zoom",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "voiceover",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "audio-enhance",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "remove-silence",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "music-visualizer",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "captions",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "subtitles",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "translate",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "hook-analysis",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "metadata",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "auto-chapters",
+      "family": "LEGACY_TOOLS_21",
+      "status": "PASS",
+      "target_surface": "Refine Right Inspector Tools Tab"
+    },
+    {
+      "workflow": "source_trimming",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "transcript_editing",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "candidate_scoring",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "scene_detection",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "reframe_aspect",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "caption_correction",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "clip_extraction",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "clip_merge",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    },
+    {
+      "workflow": "export_render",
+      "family": "LEGACY_CLIP_STUDIO_9",
+      "status": "PASS",
+      "target_surface": "Native Motion Timeline & Commands"
+    }
+  ],
+  "oaas_five_destinations_lock": {
+    "navigation_order": [
+      "Motion Graphics",
+      "Trends",
+      "My Channel",
+      "Library",
+      "Messages"
+    ],
+    "motion_graphics_first": true,
+    "standalone_clip_studio_removed": true,
+    "standalone_tools_sidebar_removed": true,
+    "standalone_catalog_sidebar_removed": true,
+    "standalone_distribution_analytics_removed": true
+  },
+  "adversarial_negative_controls": {
+    "fake_color_bar_mp4_detected": true,
+    "duplicate_stand_in_asset_detected": true,
+    "inert_playhead_detected": true,
+    "unauthorized_network_egress_blocked": true
+  },
+  "summary": {
+    "total_nz_original_catalog": 75,
+    "shipped_nz_total": 52,
+    "blocked_nz_total": 23,
+    "wave18_newly_ported": 7,
+    "wave18_preview_verified": 7,
+    "wave18_export_verified": 7,
+    "owner_baseline_10_audited": 10,
+    "legacy_30_workflows_audited": 30
+  }
+}
