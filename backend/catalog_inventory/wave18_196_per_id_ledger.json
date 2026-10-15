@@ -3,7 +3,7 @@
   "wave": 18,
   "total_inventoried": 196,
   "owner_observed_preview_count": 10,
-  "shipped_on_disk_count": 149,
+  "shipped_on_disk_count": 156,
   "trademark_sensitive_count": 15,
   "retired_blocks_in_donor_inventory": 0,
   "entries": {
@@ -1366,9 +1366,9 @@
       "category": "scenes-demos",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "a357cc75537edb9ab34e28910aa5ba2656988d1415789dcc45f31631fb5c3183"
     },
     "notes-reveal": {
@@ -1377,9 +1377,9 @@
       "category": "scenes-demos",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "cec05ddd1f2903495590ceeacd5ecd669bc414011e94f8e4868efee5881dc77e"
     },
     "notification-cascade": {
@@ -1399,9 +1399,9 @@
       "category": "scenes-demos",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "aeb353337de7314fa46b9336b72485608b79d4e108b8768c6b648e64b5ba7a33"
     },
     "orbit-card": {
@@ -1410,9 +1410,9 @@
       "category": "3d-motion",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": true,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "07abc5129b0634e36c23d70aa8e0cf84d879b29aecc508eafb0dd4ca3d1d4d6f"
     },
     "organic-light-leak-overlay": {
@@ -1432,9 +1432,9 @@
       "category": "scenes-demos",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "dd7882d5f10e81324fdd38ab13a216e46e19ef4b3b981b9b3a7088f2b04f9c1d"
     },
     "plasma": {
@@ -1894,9 +1894,9 @@
       "category": "data-charts",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "458bd84af85c60c23652d85fa8217e026755c75482893e94c8e6886926cf25c9"
     },
     "vfx-anamorphic-flare": {
@@ -1905,9 +1905,9 @@
       "category": "scenes-demos",
       "category_provenance": "gallery_confirmed",
       "is_trademark_sensitive": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "owner_observed_preview_baseline": false,
-      "runtime_status": "UNPORTED",
+      "runtime_status": "SHIPPED_AWAITING_LIVE_ACCEPTANCE",
       "source_sha256": "2c2b0dfda02b842fb432ac6eff770811d03649b43cade8de3ca35f71f042a913"
     },
     "vfx-iphone-device": {

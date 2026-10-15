@@ -1,0 +1,48 @@
+{
+  "wave": 18,
+  "integration_head_sha": "4d2278a6cf4a19c774ffdfb3db9712dbb2223f3c",
+  "five_agents_ancestors_verified": true,
+  "agents": {
+    "agent1": {
+      "name": "Agent 1 - Main Agent Native Motion Actions",
+      "tip_sha": "7fc01115a7df0492dd26370f17fe3553fe2691df",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent2": {
+      "name": "Agent 2 - Single Native Motion UI",
+      "tip_sha": "56a741e5ec408d5d85b37a052ce44b78da5c0ed4",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent3": {
+      "name": "Agent 3 - HyperFrames A-M Real Preview",
+      "tip_sha": "4aa8626ed9bf7ce45ee982d30b05826060a5c05d",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent4": {
+      "name": "Agent 4 - HyperFrames N-Z Backlog & Adversarial QA",
+      "tip_sha": "d2b44f3e4240dcf35c843016ab9b4abf20c2d7bb",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent5": {
+      "name": "Agent 5 - Native Tools Parity & Automerge",
+      "tip_sha": "4c4e10d4a899850fa705a05fc049150737d66ef4",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    }
+  },
+  "inventory_truth": {
+    "ledger_path": "backend\\catalog_inventory\\wave18_196_per_id_ledger.json",
+    "total_count": 196,
+    "owner_observed_preview_baseline": 10,
+    "shipped_on_disk": 156
+  },
+  "parity_docs": {
+    "legacy_30_csv": "docs\\wave18_native_parity\\legacy_30_capability_parity.csv",
+    "hyperframes_196_csv": "docs\\wave18_native_parity\\hyperframes_196_preview_truth.csv"
+  },
+  "status": "PASS"
+}
