@@ -328,3 +328,82 @@ async def test_real_end_to_end_local_outcome_delivery():
     assert job.distribution_handoff is not None
     assert job.distribution_handoff.fail_closed is True
     assert job.distribution_handoff.render_file_sha256 == job.media_verification.sha256_hash
+
+
+@pytest.mark.asyncio
+async def test_regression_failed_render():
+    """Regression: When video rendering fails, state machine must cleanly transition to FAILED with error truth."""
+    await init_db()
+
+    req = OutcomeRequestContract(
+        user_intent="Fail render test",
+        minimal_preferences={
+            "aspect_ratio": "invalid_aspect",
+            "duration_seconds": 0.0,
+        },
+    )
+    job = OutcomeJobRecord(request=req, state=OutcomeJobState.REQUESTED)
+    sm = OutcomeStateMachine(job)
+    sm.transition_to(OutcomeJobState.PLANNED)
+    sm.transition_to(OutcomeJobState.PRODUCING)
+    sm.transition_to(OutcomeJobState.FAILED, reason="Render failed", error_detail="Invalid aspect ratio dimensions")
+
+    assert job.state == OutcomeJobState.FAILED
+    assert job.error_truth == "Invalid aspect ratio dimensions"
+
+
+@pytest.mark.asyncio
+async def test_regression_missing_project_on_reconcile():
+    """Regression: Reconciling a job referencing a non-existent project transitions to FAILED."""
+    await init_db()
+
+    req = OutcomeRequestContract(user_intent="Missing project test")
+    job = OutcomeJobRecord(
+        request=req,
+        state=OutcomeJobState.PRODUCING,
+        project_id="non_existent_project_id_12345",
+        job_id=f"crash_proj_{uuid4().hex[:8]}",
+    )
+    OutcomeDeliveryEngine._save_job(job)
+
+    reconciled = await OutcomeDeliveryEngine.reconcile_job(job.job_id)
+    assert reconciled is not None
+    assert reconciled.state == OutcomeJobState.FAILED
+    assert "project record missing" in reconciled.error_truth.lower()
+
+
+@pytest.mark.asyncio
+async def test_regression_auth_permission_missing_read_only_channel():
+    """Regression: Connected channel with can_publish=False fails closed with PENDING_CREDENTIALS."""
+    await init_db()
+
+    ro_user_id = f"user_ro_{uuid4().hex[:6]}"
+    async with AsyncSessionLocal() as db:
+        ch = ConnectedChannel(
+            user_id=ro_user_id,
+            platform="youtube",
+            channel_url="https://youtube.com/@readonly_channel",
+            channel_name="Read-Only Channel",
+            auth_type="tracked_url",
+            can_publish=False,
+            credentials_ref=None,
+        )
+        db.add(ch)
+        await db.commit()
+
+    handoff = await DistributionHandoffManager.prepare_handoff_contract(
+        job_id="job_ro_test",
+        idempotency_token="idem_ro_test",
+        render_file_sha256="test_sha256",
+        media_path="C:/dummy/test.mp4",
+        project_id="proj_ro",
+        revision_id=1,
+        destination_channel="youtube_shorts",
+        user_id=ro_user_id,
+        user_authorized=True,
+    )
+    assert handoff.fail_closed is True
+    assert handoff.provider_status == "PENDING_CREDENTIALS"
+    assert "tracked_url" in (handoff.error_truth or "")
+    assert "publishing permissions" in (handoff.error_truth or "")
+

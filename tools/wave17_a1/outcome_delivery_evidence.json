@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-10-15T06:05:36.387927",
-  "job_id": "ojob-51356286cbda",
+  "timestamp": "2026-10-15T06:12:32.264412",
+  "job_id": "ojob-a5a5c818da5c",
   "final_state": "PENDING_CREDENTIALS",
-  "elapsed_seconds": 6.48,
+  "elapsed_seconds": 5.64,
   "operable_block": "holographic",
-  "project_id": "b257d463-d0b9-446a-82f7-0a925b8090b2",
+  "project_id": "b214b10a-4bc5-469d-97ac-34e9560d692d",
   "revision_id": 1,
-  "library_asset_id": "b0f9afbb-a7d6-4526-9f47-f892a87ba700",
+  "library_asset_id": "e86647bb-3b89-4250-8b44-450932f43d24",
   "media_verification": {
-    "file_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-01-outcome\\storage\\generated\\original_orig-853ab240\\original_orig-853ab240_final.mp4",
+    "file_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-01-outcome\\storage\\generated\\original_orig-f7661a24\\original_orig-f7661a24_final.mp4",
     "file_size_bytes": 323856,
     "sha256_hash": "19348cad3633855bb7a31f4779d2d015650e70882692b11a06c4714d12063fcf",
     "probe_width": 1080,
@@ -17,16 +17,16 @@
     "video_codec": "h264",
     "audio_codec": "aac",
     "is_verified": true,
-    "verification_timestamp": "2026-10-15T09:05:36.344560+00:00",
+    "verification_timestamp": "2026-10-15T09:12:32.231347+00:00",
     "error_detail": null
   },
   "distribution_handoff": {
-    "handoff_id": "hnd-3a264acb29",
-    "job_id": "ojob-51356286cbda",
-    "idempotency_token": "idem-c65d99ac4a2d4c61bf492aa8d65443d7",
+    "handoff_id": "hnd-ca5b28174e",
+    "job_id": "ojob-a5a5c818da5c",
+    "idempotency_token": "idem-804dd5b46e93411fa43190497bc4d783",
     "render_file_sha256": "19348cad3633855bb7a31f4779d2d015650e70882692b11a06c4714d12063fcf",
-    "media_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-01-outcome\\storage\\generated\\original_orig-853ab240\\original_orig-853ab240_final.mp4",
-    "project_id": "b257d463-d0b9-446a-82f7-0a925b8090b2",
+    "media_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-01-outcome\\storage\\generated\\original_orig-f7661a24\\original_orig-f7661a24_final.mp4",
+    "project_id": "b214b10a-4bc5-469d-97ac-34e9560d692d",
     "revision_id": 1,
     "destination_channel": "youtube_shorts",
     "schedule_window": null,
@@ -38,41 +38,41 @@
     "provider_status": "PENDING_CREDENTIALS",
     "fail_closed": true,
     "error_truth": "Publication blocked: No connected channel found for platform 'youtube'.",
-    "created_at": "2026-10-15T09:05:36.385963+00:00"
+    "created_at": "2026-10-15T09:12:32.263026+00:00"
   },
   "transitions": [
     {
       "from_state": "REQUESTED",
       "to_state": "PLANNED",
-      "timestamp": "2026-10-15T09:05:29.918720+00:00",
+      "timestamp": "2026-10-15T09:12:26.630610+00:00",
       "reason": "Selected 'holographic' for futuristic/tech visual backdrop.",
       "error_detail": null
     },
     {
       "from_state": "PLANNED",
       "to_state": "PRODUCING",
-      "timestamp": "2026-10-15T09:05:29.920393+00:00",
+      "timestamp": "2026-10-15T09:12:26.632432+00:00",
       "reason": "Constructing versioned project and timeline",
       "error_detail": null
     },
     {
       "from_state": "PRODUCING",
       "to_state": "RENDERED",
-      "timestamp": "2026-10-15T09:05:36.256147+00:00",
+      "timestamp": "2026-10-15T09:12:32.169124+00:00",
       "reason": "Physical MP4 render complete",
       "error_detail": null
     },
     {
       "from_state": "RENDERED",
       "to_state": "VERIFIED",
-      "timestamp": "2026-10-15T09:05:36.344633+00:00",
+      "timestamp": "2026-10-15T09:12:32.231416+00:00",
       "reason": "Physical media verified with ffprobe and SHA-256",
       "error_detail": null
     },
     {
       "from_state": "VERIFIED",
       "to_state": "PENDING_CREDENTIALS",
-      "timestamp": "2026-10-15T09:05:36.386037+00:00",
+      "timestamp": "2026-10-15T09:12:32.263075+00:00",
       "reason": "Target distribution provider credentials missing or not connected",
       "error_detail": "Publication blocked: No connected channel found for platform 'youtube'."
     }
