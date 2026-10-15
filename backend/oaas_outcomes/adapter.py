@@ -58,6 +58,8 @@ class OAASOutcomeAdapter:
         user_goal: str,
         channel_targets: Optional[List[str]] = None,
         preferences: Optional[Dict[str, Any]] = None,
+        project_id: Optional[str] = None,
+        editor_actions: Optional[List[Dict[str, Any]]] = None,
         standing_authorization: bool = False,
         session_id: str = "default_session",
         user_id: str = "local",
@@ -79,6 +81,8 @@ class OAASOutcomeAdapter:
             user_intent=user_goal,
             permitted_channel_targets=channel_targets or ["youtube_shorts"],
             minimal_preferences=pref,
+            project_id=project_id,
+            editor_actions=editor_actions or [],
             standing_authorization=standing_authorization,
             idempotency_token=token,
         )

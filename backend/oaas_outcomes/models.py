@@ -50,6 +50,14 @@ class OutcomeRequestContract(BaseModel):
         },
         description="Sensible minimal production preferences."
     )
+    project_id: Optional[str] = Field(
+        default=None,
+        description="Optional existing project ID to build upon or revise, preserving loaded project state."
+    )
+    editor_actions: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="Optional list of native motion editing actions (trim, split, reframe, captions, etc.) to apply."
+    )
     standing_authorization: bool = Field(
         default=False,
         description="Whether user explicitly gave standing authorization to finalize delivery without manual modal click."
