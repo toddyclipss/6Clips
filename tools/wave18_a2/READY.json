@@ -1,0 +1,65 @@
+{
+  "agent": "wave18_agent2",
+  "ready": true,
+  "role": "Single Native Motion Graphics UI + First-Run Default",
+  "git_base_sha": "d5ba68efa4757de09687cb6e1419575b1ce8f808",
+  "git_tip_sha": "835c1ad6bb246a9524717534f8fdffce9113a7de",
+  "git_branch": "wave18/02-one-player-native-motion-ui",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-02-native-ui",
+  "navigation": {
+    "total_destinations": 5,
+    "strict_order": [
+      { "label": "Motion Graphics", "path": "/motion" },
+      { "label": "Trends", "path": "/trends" },
+      { "label": "My Channel", "path": "/channels" },
+      { "label": "Library", "path": "/videos" },
+      { "label": "Messages", "path": "/messaging" }
+    ],
+    "default_routes": {
+      "/": "/motion",
+      "/chat": "/motion"
+    }
+  },
+  "player_architecture": {
+    "single_player": true,
+    "player_testid": "motion-player",
+    "nested_clip_studio_subapp": false,
+    "nested_source_bench": false,
+    "nested_ranger": false,
+    "refine_lower_workspace": "StudioTimelineWorkspace",
+    "main_agent_goal_composer_on_stage": true,
+    "main_agent_goal_input_testid": "main-agent-goal-input",
+    "main_agent_goal_submit_testid": "main-agent-goal-submit"
+  },
+  "right_inspector": {
+    "tabs": [
+      { "id": "properties", "label": "Properties", "testid": "tab-properties" },
+      { "id": "variables", "label": "Variables", "testid": "tab-variables" },
+      { "id": "tools", "label": "Tools", "testid": "tab-tools" }
+    ],
+    "tools_inspector_component": "frontend/src/components/motion/StudioToolsInspector.jsx",
+    "native_operations": [
+      "split_clip",
+      "trim_bounds",
+      "slip_media",
+      "speed_presets",
+      "crop_and_reframe",
+      "captions_sync",
+      "volume_control",
+      "duplicate_clip",
+      "delete_clip"
+    ]
+  },
+  "summary": {
+    "TOTAL_INVENTORY": 196,
+    "LIVE_PREVIEW_PASS": 149,
+    "STAGE2_AWAITING_PORT": 47,
+    "RETIRED_EXCLUDED": 2,
+    "FAIL": 0,
+    "aspect_9_16_pass": 149,
+    "aspect_16_9_pass": 149,
+    "owner_baseline_10_resolved": true
+  },
+  "evidence_file": "tools/wave18_a2/preview_evidence_table.json",
+  "test_suite": "tests/test_wave18_a2_native_motion_ui.py"
+}

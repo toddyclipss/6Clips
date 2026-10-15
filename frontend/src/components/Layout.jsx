@@ -34,10 +34,10 @@ const DRAWER_WIDTH = 240
 const COLLAPSED_WIDTH = 64
 
 const navItems = [
+  { to: "/motion",       icon: <IconMovie size={20} stroke={1.8} />,         label: "Motion Graphics" },
   { to: "/trends",       icon: <IconTrendingUp size={20} stroke={1.8} />,    label: "Trends" },
   { to: "/channels",     icon: <IconBroadcast size={20} stroke={1.8} />,     label: "My Channel" },
   { to: "/videos",       icon: <IconFolder size={20} stroke={1.8} />,        label: "Library" },
-  { to: "/motion",       icon: <IconMovie size={20} stroke={1.8} />,         label: "Motion Graphics" },
   { to: "/messaging",    icon: <IconDeviceMobile size={20} stroke={1.8} />,  label: "Messages" },
   ...pluginNavItems.filter(i => (i.position || "top") === "top"),
 ]

@@ -21,17 +21,16 @@ import StudioResourcePanel from "../components/motion/StudioResourcePanel"
 import StudioInspectorPanel from "../components/motion/StudioInspectorPanel"
 import StudioPreviewStage from "../components/motion/StudioPreviewStage"
 import StudioTimelineWorkspace from "../components/motion/StudioTimelineWorkspace"
-import StudioToolsWorkspace from "../components/motion/StudioToolsWorkspace"
+import StudioToolsInspector from "../components/motion/StudioToolsInspector"
 import StudioLayersPanel from "../components/motion/StudioLayersPanel"
 import StudioVariablesPanel from "../components/motion/StudioVariablesPanel"
 import StudioCodeWorkspace from "../components/motion/StudioCodeWorkspace"
-import SourceBench from "../components/clip/bench/SourceBench"
 import ExtractDialog from "../components/clip/ExtractDialog"
 import useClipSettings from "../components/clip/useClipSettings"
 import useBenchRanges from "../components/clip/bench/useBenchRanges"
 import MotionInstallGate from "../components/MotionInstallGate"
 import MotionReviewPanel from "../components/motion/MotionReviewPanel"
-import { inspectLegacyProjectBlocks, DONOR_INTERNALIZED_IDS } from "../utils/catalogOriginals"
+import { inspectLegacyProjectBlocks, DONOR_INTERNALIZED_IDS, SHIPPED_OPERATIONAL_IDS } from "../utils/catalogOriginals"
 
 /**
  * Unified Motion Graphics Workspace (/motion).
@@ -169,7 +168,7 @@ export default function MotionGraphics() {
   const handleStartGhostPreview = useCallback((catalogItem) => {
     if (!catalogItem) return
     const bName = catalogItem.name || catalogItem.id
-    const isOp = DONOR_INTERNALIZED_IDS.has(bName) || Boolean(catalogItem.isOperational)
+    const isOp = SHIPPED_OPERATIONAL_IDS.has(bName) || DONOR_INTERNALIZED_IDS.has(bName) || Boolean(catalogItem.isOperational) || Boolean(catalogItem.runtime_operable)
     if (!isOp) return
     const aspect = aspectRatio || "9:16"
     const previewUrl = `/api/projects/catalog/blocks/${bName}/preview?aspect_ratio=${aspect}`
@@ -332,8 +331,11 @@ export default function MotionGraphics() {
       }
     } else if (requestedMode && ["clip", "tools", "code"].includes(requestedMode)) {
       setWorkspaceMode("refine")
-      setActiveContext(requestedMode)
-      if (requestedMode === "clip" || requestedMode === "tools") {
+      if (requestedMode === "tools") {
+        setRightNav("tools")
+        setPinnedRight(true)
+      }
+      if (requestedMode === "clip") {
         setLeftNav("resources")
       }
     }
@@ -449,6 +451,47 @@ export default function MotionGraphics() {
           url.searchParams.set("projectId", res.data.id)
           window.history.replaceState({}, "", url.toString())
         } catch {}
+      }
+    } catch (err) {
+      showSnackbar(err.response?.data?.detail || err.message, "error")
+    }
+  }, [aspectRatio, showSnackbar])
+
+  const handleStartGoal = useCallback(async (goalText) => {
+    if (!goalText || !goalText.trim()) return
+    try {
+      showSnackbar("Creating project from goal...", "info")
+      const projName = goalText.length > 35 ? goalText.slice(0, 35) + "…" : goalText
+      const res = await http.post("/api/projects", {
+        name: projName,
+        aspect_ratio: aspectRatio || "9:16",
+      })
+      if (res.data?.id) {
+        setProject(res.data)
+        setRevision(res.data.revision || 1)
+        setDocument(res.data.document)
+        lastCommittedDocumentRef.current = res.data.document
+        setUndoStack([])
+        setRedoStack([])
+        setIsDirty(false)
+        showSnackbar(`Created project "${res.data.name}"`, "success")
+        try {
+          const url = new URL(window.location.href)
+          url.searchParams.set("projectId", res.data.id)
+          window.history.replaceState({}, "", url.toString())
+        } catch {}
+
+        try {
+          ws.send({
+            type: "chat_message",
+            content: goalText,
+            project_id: res.data.id,
+            user_intent_id: `goal_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+            authorized: true,
+          })
+        } catch {
+          // non-blocking
+        }
       }
     } catch (err) {
       showSnackbar(err.response?.data?.detail || err.message, "error")
@@ -2022,17 +2065,20 @@ export default function MotionGraphics() {
             workspaceMode={workspaceMode}
             renderedVideo={activeReviewOutput}
             onProceedToRefine={() => handleRefineOutput(activeReviewOutput)}
+            onStartGoal={handleStartGoal}
+            onNewProject={handleNewProject}
           />
         </Box>
 
         {/* Right: Properties / Variables Inspector (Refine & Review modes) */}
         {(workspaceMode === "refine" || workspaceMode === "review") && pinnedRight && (
           <Box sx={{ width: 280, minWidth: 260, maxWidth: 340, height: "100%", zIndex: 2, display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderLeft: "1px solid", borderColor: "divider" }}>
-            {/* Right Nav Header Tabs: Properties vs Variables */}
+            {/* Right Nav Header Tabs: Properties vs Variables vs Tools */}
             <Box sx={{ px: 1, py: 0.75, borderBottom: "1px solid", borderColor: "divider", bgcolor: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <Stack direction="row" spacing={0.5}>
                 <Button
                   size="small"
+                  data-testid="tab-properties"
                   variant={rightNav === "properties" ? "contained" : "text"}
                   onClick={() => setRightNav("properties")}
                   sx={{
@@ -2050,6 +2096,7 @@ export default function MotionGraphics() {
                 </Button>
                 <Button
                   size="small"
+                  data-testid="tab-variables"
                   variant={rightNav === "variables" ? "contained" : "text"}
                   onClick={() => setRightNav("variables")}
                   sx={{
@@ -2064,6 +2111,24 @@ export default function MotionGraphics() {
                   }}
                 >
                   Variables
+                </Button>
+                <Button
+                  size="small"
+                  data-testid="tab-tools"
+                  variant={rightNav === "tools" ? "contained" : "text"}
+                  onClick={() => setRightNav("tools")}
+                  sx={{
+                    py: 0.25,
+                    px: 1.25,
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    borderRadius: 1.5,
+                    minWidth: "auto",
+                    bgcolor: rightNav === "tools" ? "primary.main" : "transparent",
+                    color: rightNav === "tools" ? "#ffffff" : "text.secondary",
+                  }}
+                >
+                  Tools
                 </Button>
               </Stack>
             </Box>
@@ -2081,12 +2146,28 @@ export default function MotionGraphics() {
                   onSlipClip={handleSlipClip}
                   onSpeedChangeClip={handleSpeedChangeClip}
                 />
-              ) : (
+              ) : rightNav === "variables" ? (
                 <StudioVariablesPanel
                   selectedElement={selectedElement}
                   onUpdateVariables={handleUpdateVariables}
                   onCommitVariables={handleCommitVariables}
                   isLocked={selectedElement?.locked}
+                />
+              ) : (
+                <StudioToolsInspector
+                  selectedElement={selectedElement}
+                  tracks={document?.timeline?.tracks || []}
+                  currentTime={currentTime}
+                  project={project}
+                  revision={revision}
+                  projectDocument={document}
+                  onApplyOperation={handleApplyOperation}
+                  onSplitClip={handleSplitClip}
+                  onDeleteClip={handleDeleteClip}
+                  onDuplicateClip={handleDuplicateClip}
+                  onSlipClip={handleSlipClip}
+                  onSpeedChangeClip={handleSpeedChangeClip}
+                  showSnackbar={showSnackbar}
                 />
               )}
             </Box>
@@ -2137,7 +2218,19 @@ export default function MotionGraphics() {
             zIndex: 3,
           }}
         >
-          {activeContext === "hyperframes" && (
+          {activeContext === "code" ? (
+            <StudioCodeWorkspace
+              project={project}
+              revision={revision}
+              codeFiles={document?.code?.files || []}
+              selectedElement={selectedElement}
+              onApplyOperation={handleApplyOperation}
+              onDirtyChange={setIsDirty}
+              onFileSaved={async (savedFile, newRev) => {
+                showSnackbar(`File "${savedFile.path}" persisted (Rev ${newRev})`, "success")
+              }}
+            />
+          ) : (
             <StudioTimelineWorkspace
               tracks={document?.timeline?.tracks || []}
               currentTime={currentTime}
@@ -2165,75 +2258,6 @@ export default function MotionGraphics() {
               onRenameTrack={handleRenameTrack}
               onMoveClip={handleMoveClip}
               onDropExternalClip={handleDropExternalClip}
-            />
-          )}
-
-          {activeContext === "clip" && (
-            <Box sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderTop: "1px solid", borderColor: "divider" }}>
-              {benchRanges.ranges.length > 0 && (
-                <Box sx={{ px: 2, py: 0.75, bgcolor: "#f8fafc", borderBottom: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary" }}>
-                    {benchRanges.ranges.length} range(s) marked for extraction
-                  </Typography>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    disabled={isExtracting}
-                    onClick={handleDoCut}
-                    sx={{
-                      py: 0.25,
-                      px: 1.5,
-                      fontSize: "0.72rem",
-                      fontWeight: 700,
-                      bgcolor: "primary.main",
-                      borderRadius: 1.5,
-                    }}
-                  >
-                    {isExtracting ? <CircularProgress size={14} sx={{ color: "#ffffff", mr: 1 }} /> : null}
-                    Cut {benchRanges.ranges.length} clip{benchRanges.ranges.length !== 1 ? "s" : ""}
-                  </Button>
-                </Box>
-              )}
-              <Box sx={{ flex: 1, minHeight: 0 }}>
-                <SourceBench
-                  source={activeAsset}
-                  ranges={benchRanges}
-                  settings={clipSettings.settings}
-                  onSettings={clipSettings.update}
-                  existingClips={[]}
-                  onOpenDialog={() => {
-                    setExtractTarget(activeAsset)
-                    setExtractDialogOpen(true)
-                  }}
-                />
-              </Box>
-            </Box>
-          )}
-
-          {activeContext === "tools" && (
-            <StudioToolsWorkspace
-              activeAsset={activeAsset}
-              selectedElement={selectedElement}
-              project={project}
-              revision={revision}
-              onApplyOperation={handleApplyOperation}
-              currentTime={currentTime}
-              projectDocument={document}
-              onToolSuccess={() => showSnackbar("Tool executed successfully", "success")}
-            />
-          )}
-
-          {activeContext === "code" && (
-            <StudioCodeWorkspace
-              project={project}
-              revision={revision}
-              codeFiles={document?.code?.files || []}
-              selectedElement={selectedElement}
-              onApplyOperation={handleApplyOperation}
-              onDirtyChange={setIsDirty}
-              onFileSaved={async (savedFile, newRev) => {
-                showSnackbar(`File "${savedFile.path}" persisted (Rev ${newRev})`, "success")
-              }}
             />
           )}
         </Box>
