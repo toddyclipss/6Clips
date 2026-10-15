@@ -1,0 +1,115 @@
+{
+  "agent": "agent-4",
+  "wave": 18,
+  "role": "Original HyperFrames N-Z Backlog Porting & Independent Adversarial QA",
+  "branch": "wave18/04-nz-preview-adversarial-qa",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa",
+  "base_sha": "d5ba68efa4757de09687cb6e1419575b1ce8f808",
+  "status": "READY_FOR_INTEGRATION_REVIEW",
+  "timestamp": "2026-10-15T14:57:30Z",
+  "census_summary": {
+    "total_nz_donor_catalog": 75,
+    "total_shipped_nz": 52,
+    "shipped_pre_wave16": 13,
+    "shipped_wave16": 14,
+    "shipped_wave17": 18,
+    "shipped_wave18": 7,
+    "total_blocked_nz": 23,
+    "blocked_trademark_platform": 11,
+    "blocked_external_gis": 5,
+    "blocked_unvendored_3d": 7
+  },
+  "wave18_newly_ported_blocks": [
+    {
+      "slug": "orbit-card",
+      "category": "3d-motion",
+      "motion_delta": 1.427,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "Three.js (offline bundled with Three-LICENSE.txt)"
+    },
+    {
+      "slug": "north-korea-locked-down",
+      "category": "scenes-demos",
+      "motion_delta": 24.803,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "GSAP 3.14.2 (offline compatibility layer)"
+    },
+    {
+      "slug": "notes-reveal",
+      "category": "scenes-demos",
+      "motion_delta": 6.085,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "GSAP 3.14.2 (offline Courier Prime & Permanent Marker fonts)"
+    },
+    {
+      "slug": "nyc-paris-flight",
+      "category": "scenes-demos",
+      "motion_delta": 4.656,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "GSAP 3.14.2 (offline SVG motion path)"
+    },
+    {
+      "slug": "us-map-hex",
+      "category": "data-charts",
+      "motion_delta": 8.695,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "GSAP 3.14.2 (offline procedural hex grid)"
+    },
+    {
+      "slug": "oscilloscope-trace",
+      "category": "scenes-demos",
+      "motion_delta": 1.325,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "2D Canvas Phosphor Decay Simulation"
+    },
+    {
+      "slug": "vfx-anamorphic-flare",
+      "category": "surfaces",
+      "motion_delta": 2.188,
+      "preview": "PASS",
+      "export": "PASS",
+      "vendored_engine": "2D Canvas Closed-Form Streak Convolution"
+    }
+  ],
+  "owner_reality_baseline_audit": {
+    "audited_count": 10,
+    "timeline_operable": 5,
+    "webgpu_shader_dependent": 5,
+    "finding": "Audited the 10 owner-observed baseline blocks; identified that 5 (aurora, flowing-gradient, holographic, plasma, stripes) are WebGPU shaders without deterministic GSAP timelines, while 5 (data-chart, instagram-follow, tiktok-follow, weight-wave, yt-lower-third) are timeline-operable DOM blocks."
+  },
+  "legacy_30_workflows_audit": {
+    "audited_count": 30,
+    "tools_21_count": 21,
+    "clip_studio_9_count": 9,
+    "parity_status": "PASS"
+  },
+  "oaas_five_destinations_lock": {
+    "destinations": ["Motion Graphics", "Trends", "My Channel", "Library", "Messages"],
+    "motion_graphics_first": true,
+    "standalone_clip_studio_prohibited": true,
+    "standalone_tools_sidebar_prohibited": true,
+    "standalone_catalog_sidebar_prohibited": true,
+    "status": "LOCKED"
+  },
+  "test_execution": {
+    "pytest_command": "$env:PYTHONPATH='C:\\Users\\toddy\\AppData\\Roaming\\Python\\Python314\\site-packages;.'; python -m pytest tests/test_wave18_a4_nz_ports.py tests/test_wave18_a4_adversarial_reality.py -v",
+    "pytest_exit_code": 0,
+    "passed_tests": 13,
+    "failed_tests": 0,
+    "skipped_tests": 0,
+    "adversarial_harness_command": "$env:PYTHONPATH='C:\\Users\\toddy\\AppData\\Roaming\\Python\\Python314\\site-packages;.'; python scripts/qa_wave18/adversarial_qa_harness_w18.py",
+    "adversarial_harness_exit_code": 0,
+    "adversarial_harness_status": "PASS"
+  },
+  "integration_instructions_for_agent_5": {
+    "step_1": "Merge branch wave18/04-nz-preview-adversarial-qa into candidate integration branch.",
+    "step_2": "Run adversarial QA harness: $env:PYTHONPATH='C:\\Users\\toddy\\AppData\\Roaming\\Python\\Python314\\site-packages;.'; python scripts/qa_wave18/adversarial_qa_harness_w18.py --candidate-path <candidate_path>",
+    "step_3": "Verify overall_status == 'PASS' before gating promotion to local main."
+  }
+}

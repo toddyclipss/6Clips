@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "orbit-card",
+    "source_sha": "6e48fbb0f8ff9711725b2f9b17631a3b2e6aa17e254d6d2de6073919e070af8c",
+    "output_sha": "cdbfd5fcea8ac8b61978405c1685fc5924c3a04c42db8052487bec32f3d481e7",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\orbit-card"
+  },
+  {
+    "slug": "north-korea-locked-down",
+    "source_sha": "bc17c937c2cd8265d82bc1b0639c2ea890b90a318bdcef6fce61eadd36bd8125",
+    "output_sha": "abe7fbd52056634e26c5d6ebfe4c47eed3c3c8cf7e58028157215827ae0f4330",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\north-korea-locked-down"
+  },
+  {
+    "slug": "notes-reveal",
+    "source_sha": "b607a8fb14db5da3eec3cebd455723338dbe52ccae5dffe0d9c0c71ae9b86622",
+    "output_sha": "d0dec8b8f58c5948f45457004c24d5f1d09be014de0d129bb6a64147506844f5",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\notes-reveal"
+  },
+  {
+    "slug": "nyc-paris-flight",
+    "source_sha": "185fdae537f43f6cd3750d38ef23287c1a26c86108ebde9a90bda126acd3fa2c",
+    "output_sha": "0105a5aedb4c6b307d6a2f5eb965580aff5f8591933efa2295b0d9645e6209ad",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\nyc-paris-flight"
+  },
+  {
+    "slug": "us-map-hex",
+    "source_sha": "55825b6c64bdab3f4f54bda3e54bddbbc68f1cf73c7a93e94183be5ab10a1d7e",
+    "output_sha": "60fd7ba549c2d9005e0444395aeabc13560ee3ff8140001c8d8dff89d18afe25",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\us-map-hex"
+  },
+  {
+    "slug": "oscilloscope-trace",
+    "source_sha": "4ae7ce79f0bd29aa6764206101f776aced12d5ca212af4b2cb9f3e3f9c1445ea",
+    "output_sha": "f48bd12535c9b086e4a078c662affeb7d07d56cc360efa0eb5d715012492566d",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\oscilloscope-trace"
+  },
+  {
+    "slug": "vfx-anamorphic-flare",
+    "source_sha": "8a9f23c1e90fecfc28798c3710078e803307132e4dcd1b9647d4b10cb1a34c70",
+    "output_sha": "595be5b466155fa13dad35073d3962717b1730ef8117b4c0425a29072d3d2f9c",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-04-nz-qa\\backend\\catalog\\shipped_blocks\\vfx-anamorphic-flare"
+  }
+]

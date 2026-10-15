@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "orbit-card",
+  "wave": 18,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/orbit-card",
+  "source_sha256": "6e48fbb0f8ff9711725b2f9b17631a3b2e6aa17e254d6d2de6073919e070af8c",
+  "output_html_sha256": "cdbfd5fcea8ac8b61978405c1685fc5924c3a04c42db8052487bec32f3d481e7",
+  "duration": 10,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "3d-motion",
+    "cards",
+    "feature-reveal",
+    "dots",
+    "orbit",
+    "blender-motion",
+    "sphere"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "vfx-anamorphic-flare",
+  "wave": 18,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/vfx-anamorphic-flare",
+  "source_sha256": "8a9f23c1e90fecfc28798c3710078e803307132e4dcd1b9647d4b10cb1a34c70",
+  "output_html_sha256": "595be5b466155fa13dad35073d3962717b1730ef8117b4c0425a29072d3d2f9c",
+  "duration": 10,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "vfx",
+    "background",
+    "showcase",
+    "optical",
+    "canvas"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}
