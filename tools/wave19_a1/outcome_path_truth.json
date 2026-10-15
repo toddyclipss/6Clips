@@ -1,0 +1,112 @@
+{
+  "wave": 19,
+  "agent": 1,
+  "contract": "CHAT_FIRST_OAAS_ORCHESTRATION",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave19-01-outcomes",
+  "branch": "wave19/01-chat-first-outcomes",
+  "scenarios": {
+    "path_1_short_chat_goal": {
+      "description": "Short natural-language goal from chat without wizard to real MP4 and Library",
+      "input_chat_message": "Create a 3s vertical promo video for coffee brand with aurora motion design",
+      "status": "PENDING_CREDENTIALS",
+      "project_id": "475f1483-b266-40e9-b663-93dfef3e6d58",
+      "project_aspect_ratio": "9:16",
+      "final_revision": 1,
+      "physical_file_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave19-01-outcomes\\storage\\generated\\original_orig-d9126bd1\\original_orig-d9126bd1_final.mp4",
+      "file_size_bytes": 321217,
+      "sha256_hash": "e630048429ba46ef95c69a286b8eafc6adbc815b134d288f69a78cd0cf6f9273",
+      "ffprobe_metrics": {
+        "width": 1080,
+        "height": 1920,
+        "duration_sec": 11.133333,
+        "codec": "h264",
+        "verified": true
+      },
+      "publication_status": "PENDING_CREDENTIALS"
+    },
+    "path_2_multi_clip_repurposing": {
+      "description": "Owner-authorized remote video ingested into project and transformed into 3 distinct clips",
+      "input_chat_message": "Take this source https://test.authorized-creator.com/keynote_livestream.mp4 and create 3 vertical clips with distinct motion design",
+      "status": "PENDING_CREDENTIALS",
+      "project_id": "fec9cc74-abe8-43d2-b85b-403d8198e1d5",
+      "final_revision": 7,
+      "clips_count": 3,
+      "distinct_hashes_count": 3,
+      "editorial_uniqueness_verified": true,
+      "clips": [
+        {
+          "clip_number": "1",
+          "topic": "Hook & Problem",
+          "physical_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave19-01-outcomes\\storage\\generated\\original_orig-b56eb68e\\original_orig-b56eb68e_final.mp4",
+          "file_size_bytes": 198902,
+          "sha256_hash": "ab647f6bdd8a726ca3b2f8df879a445637f5baf08c2ce4801e3aabdfed2a46cd",
+          "ffprobe_metrics": {
+            "width": 1080,
+            "height": 1920,
+            "duration_sec": 7.7,
+            "codec": "h264"
+          }
+        },
+        {
+          "clip_number": "2",
+          "topic": "Key Insight & Evidence",
+          "physical_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave19-01-outcomes\\storage\\generated\\original_orig-273731f1\\original_orig-273731f1_final.mp4",
+          "file_size_bytes": 216708,
+          "sha256_hash": "6ed1e24b134d8e3d4a619411e2ac55c551418bf41300039e3cc13ab4e20b7554",
+          "ffprobe_metrics": {
+            "width": 1080,
+            "height": 1920,
+            "duration_sec": 8.133333,
+            "codec": "h264"
+          }
+        },
+        {
+          "clip_number": "3",
+          "topic": "Call to Action",
+          "physical_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave19-01-outcomes\\storage\\generated\\original_orig-e7d2b3db\\original_orig-e7d2b3db_final.mp4",
+          "file_size_bytes": 196582,
+          "sha256_hash": "ae2181c55d875052cc7b1f2614f13dc33e34d616c402352ba9662eb2982fafd0",
+          "ffprobe_metrics": {
+            "width": 1080,
+            "height": 1920,
+            "duration_sec": 7.7,
+            "codec": "h264"
+          }
+        }
+      ],
+      "publication_status": "NOT_CONNECTED"
+    },
+    "path_3_fail_closed_security_guards": {
+      "description": "Fail-closed security: SSRF private IP blocked, unauthorized URL blocked, retired block consent gating",
+      "ssrf_test": {
+        "input": "Clip video from http://192.168.1.100/internal_camera.mp4",
+        "status": "BLOCKED",
+        "blocker_code": "BLOCKED_SSRF_PRIVATE_IP",
+        "blocker_reason": "Resolved IP 192.168.1.100 belongs to a prohibited private or loopback range.",
+        "fail_closed_verified": true
+      },
+      "unauthorized_url_test": {
+        "input": "Clip video from https://test.authorized-creator.com/public_stream.mp4",
+        "status": "BLOCKED",
+        "blocker_code": "BLOCKED_UNAUTHORIZED_STREAM",
+        "blocker_reason": "Ingestion halted: User confirmation of rights or authorization to ingest this content is required.",
+        "fail_closed_verified": true
+      },
+      "retired_block_test": {
+        "input": "Create clip using creator-hud block",
+        "status": "BLOCKED",
+        "blocker_code": "BLOCKED_RETIRED_6CLIPS",
+        "reconciliation_consent_requested": true,
+        "fail_closed_verified": true
+      }
+    },
+    "path_4_disconnected_publication": {
+      "description": "External publication without credentials reports truthful PENDING_CREDENTIALS, never fake success",
+      "input_chat_message": "Produce a 3s vertical short and publish to youtube shorts and tiktok",
+      "status": "PENDING_CREDENTIALS",
+      "publication_status": "PENDING_CREDENTIALS",
+      "fabricated_credentials_detected": false,
+      "truthful_fail_closed_verified": true
+    }
+  }
+}
