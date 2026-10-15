@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-scale",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-scale",
+  "source_sha256": "6781bb145004f49ca83ad57bacdba3c32678bee568ac5583b88211eec24be143",
+  "output_html_sha256": "6caa64836fbdbae1de134989d9949fe3adffbeea3818ecc100e061ba7979e878",
+  "duration": 15,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

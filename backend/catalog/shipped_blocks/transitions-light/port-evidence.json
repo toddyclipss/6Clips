@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-light",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-light",
+  "source_sha256": "74b04f50a317191dc30ae8b849819bc51c24ec045b094fa553d9cc92d2a8ab74",
+  "output_html_sha256": "4cff785ab21ad961183605e9ace0a14679812c40157a1f4ade5155916922297e",
+  "duration": 21,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-grid",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-grid",
+  "source_sha256": "abb3c444c9d73e97973a93f4fa810babc2deb80f575ebefb9b628599f8c94211",
+  "output_html_sha256": "370a575e5cf2012116665bfc3e98ff888ac7ce8a43919236191e2f2e53c48f60",
+  "duration": 11,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

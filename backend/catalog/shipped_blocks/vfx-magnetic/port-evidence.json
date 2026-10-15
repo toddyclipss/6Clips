@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "vfx-magnetic",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/vfx-magnetic",
+  "source_sha256": "5d8cb92132690f681c0acd5ad9c9a326d79fc59e8904eba9e6d1542acd54c1dd",
+  "output_html_sha256": "355276a63cceeb98632f2d218fdb52e21937516548d0b9db00d445906f67dbf4",
+  "duration": 15,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "html-in-canvas",
+    "webgl"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

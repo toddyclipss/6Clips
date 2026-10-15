@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "starfield",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/starfield",
+  "source_sha256": "3465d75b46e12c5e770b4caaf65fa81e7fd0b88aefed9ff5c56a37d64ae6b199",
+  "output_html_sha256": "8af8402125a59782749686e61cd1dc61910612a0d1880b50a9e59bc51c2968e9",
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "starfield",
+    "night-sky",
+    "stars",
+    "twinkle",
+    "sky",
+    "weather",
+    "overlay",
+    "ambient",
+    "particles",
+    "media-treatment-overlay",
+    "loopable"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

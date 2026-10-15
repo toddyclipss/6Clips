@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "swirl-vortex",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/swirl-vortex",
+  "source_sha256": "d2ec8ec40dd47e584463b82f806dbc474aed8e1a94648e7637032ecb0f9f481b",
+  "output_html_sha256": "d21309dbc5d1da303ce4759cb43489d0a6feed0f4d00c37d71ed9700dff3ea16",
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

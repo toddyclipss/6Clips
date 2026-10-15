@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-blur",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-blur",
+  "source_sha256": "d493c347a9399f33cf02f7be887d67555681af48fe9f102c5247884d1c0518c3",
+  "output_html_sha256": "50a291670c937a64a27f159a3f04855dae88bb7b586ab6c25c8659bbe6f68e89",
+  "duration": 20,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

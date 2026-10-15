@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-3d",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-3d",
+  "source_sha256": "54b3034238d1383f334d6a4234d5f45e74b7f646b84558f3ffe2bcbecb3a677c",
+  "output_html_sha256": "4b6b721905837b1a23a4e05cc4e9838af1faa2d1b95d089822032ab4b91dae05",
+  "duration": 11,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}
