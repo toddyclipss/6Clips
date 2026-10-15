@@ -1,0 +1,51 @@
+{
+  "wave": 19,
+  "integration_head_sha": "d690ce8b334607877a511c644ed314044f839cdb",
+  "overall_status": "PASS",
+  "five_agents_ancestors_verified": true,
+  "agents": {
+    "agent1": {
+      "name": "Agent 1 - Chat-First OAAS Orchestration & Agent Ingestion",
+      "tip_sha": "dfc97149ad5c7afaff1e8895df07985c63af692f",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent2": {
+      "name": "Agent 2 - Clean Native Motion UI & Ephemeral Hover Stage",
+      "tip_sha": "bf39ff786f84e3e13b6b8e09301083e12bf6d6b5",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent3": {
+      "name": "Agent 3 - Legacy Clip Studio Native Parity in Motion",
+      "tip_sha": "0526f70443eeac388a6356e1e12898674eb32690",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent4": {
+      "name": "Agent 4 - HyperFrames True Preview, Source Categories & Anti-Fake QA",
+      "tip_sha": "07dbdc19c72d4afea0b364cba84791265917e805",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    },
+    "agent5": {
+      "name": "Agent 5 - Original 21 Tools Forensic Parity & Five-Branch Integrator",
+      "tip_sha": "d4822950ab158a8f99799d1e444607a278e6ce1d",
+      "is_ancestor_of_head": true,
+      "ready_exists": true
+    }
+  },
+  "donor_catalog_196": {
+    "total_inventoried": 196,
+    "owner_observed_baseline": 10,
+    "browser_animated_verified": 131,
+    "blocked_truthfully_classified": 40,
+    "ledger_path": "backend\\catalog_inventory\\196_REAL_RUNNING_UI_PREVIEW_LEDGER.json"
+  },
+  "tools_parity": {
+    "total_tools_audited": 22,
+    "matrix_csv": "docs\\wave19_tools_legacy_parity\\tools_parity_matrix.csv",
+    "ledger_json": "tools\\wave19_a5\\legacy_tools_truth.json"
+  },
+  "navigation_verified": true
+}
