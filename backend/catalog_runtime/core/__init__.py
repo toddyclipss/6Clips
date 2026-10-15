@@ -18,6 +18,10 @@ from backend.catalog_runtime.core.interface import (
 from backend.catalog_runtime.core.registry_engine import UniversalRuntimeRegistry
 from backend.catalog_runtime.core.migration import LegacyBlockMigrationManager
 from backend.catalog_runtime.core.render_verifier import DynamicFrameMotionVerifier
+from backend.catalog_runtime.core.onboarding import (
+    DeterministicDonorOnboardingPipeline,
+    OnboardingValidationResult,
+)
 
 __all__ = [
     "BlockOrigin",
@@ -33,4 +37,7 @@ __all__ = [
     "UniversalRuntimeRegistry",
     "LegacyBlockMigrationManager",
     "DynamicFrameMotionVerifier",
+    "DeterministicDonorOnboardingPipeline",
+    "OnboardingValidationResult",
 ]
+
