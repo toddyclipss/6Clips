@@ -1,19 +1,23 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (c) 2025-2026 ViralMint Contributors
 """
-Project Block Migrator for Wave 15 Catalog Replacement.
+Project Block Migrator for Wave 16 Catalog Replacement and Legacy Preservation.
 
 Implements safe, non-destructive migration contracts for user projects
 referencing retired 6Clips-authored blocks ('creator-hud', 'glitch-transition'):
 - Inspection & diagnostics without data loss
 - Safe migration marking clips with backward-compatibility metadata
 - Idempotency & Rollback contracts
-- Preservation of timeline integrity
+- Export-safe rendering adapter preserving timeline integrity
+- Revision-safe migration supporting canonical ProjectRevision and CAS tracking
+- Public catalog filtering guaranteeing retired blocks are never offered as donor choices
 """
 from __future__ import annotations
 
 import copy
 import enum
+import hashlib
+import json
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 
@@ -30,10 +34,10 @@ RETIRED_BLOCK_IDS: Set[str] = {
     "glitch-transition",
 }
 
-# Verified donor-origin replacement mapping (or fallback to compatible donor worklet)
-REPLACEMENT_RECOMMENDATIONS: Dict[str, str] = {
-    "creator-hud": "yt-lower-third",        # Compatible broadcast overlay
-    "glitch-transition": "transitions-wipe", # Donor transition
+# Verified donor-origin replacement mapping (compatible donor worklet for export)
+EXPORT_SAFE_SUBSTITUTIONS: Dict[str, str] = {
+    "creator-hud": "yt-lower-third",        # Compatible broadcast lower third
+    "glitch-transition": "transitions-push", # Clean donor transition
 }
 
 
@@ -46,6 +50,7 @@ class MigrationResult:
         details: List[Dict[str, Any]],
         rollback_snapshot: Optional[Dict[str, Any]] = None,
         error: Optional[str] = None,
+        cas_hash: Optional[str] = None,
     ):
         self.status = status
         self.document = document
@@ -53,6 +58,7 @@ class MigrationResult:
         self.details = details
         self.rollback_snapshot = rollback_snapshot
         self.error = error
+        self.cas_hash = cas_hash
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -60,12 +66,29 @@ class MigrationResult:
             "affected_count": self.affected_count,
             "details": self.details,
             "has_rollback_snapshot": self.rollback_snapshot is not None,
+            "cas_hash": self.cas_hash,
             "error": self.error,
         }
 
 
+def compute_document_cas(doc: Dict[str, Any]) -> str:
+    """Computes deterministic SHA-256 CAS hash of project document."""
+    raw = json.dumps(doc, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
 class ProjectBlockMigrator:
-    """Manages non-destructive migration of project documents referencing retired blocks."""
+    """Manages non-destructive migration and export compatibility for projects referencing retired blocks."""
+
+    @classmethod
+    def filter_public_donor_catalog(cls, block_ids: List[str]) -> List[str]:
+        """Filters out retired 6Clips blocks from public donor catalog offerings."""
+        return [bid for bid in block_ids if bid not in RETIRED_BLOCK_IDS]
+
+    @classmethod
+    def is_retired_block(cls, block_id: str) -> bool:
+        """Checks if a given block ID is a retired 6Clips-authored block."""
+        return block_id in RETIRED_BLOCK_IDS
 
     @classmethod
     def inspect_document(cls, doc: Dict[str, Any]) -> Dict[str, Any]:
@@ -114,7 +137,7 @@ class ProjectBlockMigrator:
     ) -> MigrationResult:
         """
         Executes a deterministic, non-destructive migration of the project document.
-        Creates a deep-copy rollback snapshot before applying changes.
+        Creates an exact deep-copy rollback snapshot before applying changes.
         """
         inspection = cls.inspect_document(doc)
         if not inspection["has_retired_blocks"]:
@@ -124,6 +147,7 @@ class ProjectBlockMigrator:
                 affected_count=0,
                 details=[],
                 rollback_snapshot=None,
+                cas_hash=compute_document_cas(doc),
             )
 
         # Create exact rollback snapshot
@@ -142,14 +166,16 @@ class ProjectBlockMigrator:
                     original_block = block_id
                     
                     if substitute_donor_counterparts:
-                        replacement_id = REPLACEMENT_RECOMMENDATIONS.get(block_id, "yt-lower-third")
+                        replacement_id = EXPORT_SAFE_SUBSTITUTIONS.get(block_id, "yt-lower-third")
                         clip["block_id"] = replacement_id
                         clip["migrated_from"] = original_block
                         clip["migration_policy"] = "SUBSTITUTE_DONOR_ORIGINAL"
                     else:
-                        # Non-destructive: mark clip as legacy-compatible without altering content
+                        # Non-destructive snapshot preservation
                         clip["is_legacy_retired"] = True
-                        clip["legacy_retirement_notice"] = f"6Clips authored block '{original_block}' was retired from public catalog in Wave 15"
+                        clip["legacy_retirement_notice"] = (
+                            f"6Clips authored block '{original_block}' was retired from public donor catalog in Wave 15/16"
+                        )
                         clip["migration_policy"] = "PRESERVE_SNAPSHOT"
 
                     details.append({
@@ -161,11 +187,14 @@ class ProjectBlockMigrator:
 
         # Record migration header in document metadata
         meta = migrated_doc.setdefault("metadata", {})
-        meta["wave15_migration"] = {
+        meta["wave16_migration"] = {
             "applied": True,
             "migrated_clips_count": len(details),
             "retired_blocks": inspection["retired_blocks_found"],
+            "policy": "SUBSTITUTE" if substitute_donor_counterparts else "PRESERVE_SNAPSHOT",
         }
+
+        cas = compute_document_cas(migrated_doc)
 
         return MigrationResult(
             status=MigrationStatus.MIGRATED_SUCCESS,
@@ -173,6 +202,7 @@ class ProjectBlockMigrator:
             affected_count=len(details),
             details=details,
             rollback_snapshot=rollback_snapshot,
+            cas_hash=cas,
         )
 
     @classmethod
@@ -191,10 +221,70 @@ class ProjectBlockMigrator:
             )
 
         restored_doc = copy.deepcopy(migrated_result.rollback_snapshot)
+        cas = compute_document_cas(restored_doc)
         return MigrationResult(
             status=MigrationStatus.ROLLBACK_SUCCESS,
             document=restored_doc,
             affected_count=migrated_result.affected_count,
             details=[{"action": "ROLLBACK_RESTORED"}],
             rollback_snapshot=None,
+            cas_hash=cas,
         )
+
+    @classmethod
+    def prepare_export_safe_document(cls, doc: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Creates an export-safe clone of a project document for physical FFmpeg rendering.
+        If a clip references a retired block ('creator-hud', 'glitch-transition'), this adapter
+        ensures the export pipeline has a valid offline renderable worklet without modifying
+        the user's canonical project database or revision history.
+        """
+        export_doc = copy.deepcopy(doc)
+        timeline = export_doc.get("timeline", {})
+        tracks = timeline.get("tracks", []) if isinstance(timeline, dict) else []
+
+        for track in tracks:
+            clips = track.get("clips", []) if isinstance(track, dict) else []
+            for clip in clips:
+                block_id = clip.get("block_id") or clip.get("blockName") or clip.get("type")
+                if block_id in RETIRED_BLOCK_IDS or clip.get("is_legacy_retired"):
+                    substitute_block = EXPORT_SAFE_SUBSTITUTIONS.get(block_id, "yt-lower-third")
+                    # Preserve all timing, transforms, cuts and user custom data
+                    clip["_export_adapter"] = {
+                        "original_block_id": block_id,
+                        "export_render_block_id": substitute_block,
+                        "is_legacy_fallback": True,
+                    }
+                    clip["block_id"] = substitute_block
+
+        meta = export_doc.setdefault("metadata", {})
+        meta["export_safe_adapted"] = True
+        return export_doc
+
+    @classmethod
+    def migrate_project_revision(
+        cls,
+        revision_record: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Migrates a canonical ProjectRevision record.
+        Preserves revision_id, parent_revision_id, version_counter, and updates cas_hash.
+        """
+        rev = copy.deepcopy(revision_record)
+        doc = rev.get("document", {})
+        migrated_res = cls.migrate_document(doc, substitute_donor_counterparts=False)
+
+        rev["document"] = migrated_res.document
+        rev["cas_hash"] = migrated_res.cas_hash
+        rev["previous_revision_id"] = rev.get("revision_id")
+        rev["version_counter"] = rev.get("version_counter", 1) + 1
+
+        history = rev.setdefault("revision_history", [])
+        history.append({
+            "action": "WAVE16_NON_DESTRUCTIVE_MIGRATION",
+            "status": migrated_res.status.value,
+            "affected_count": migrated_res.affected_count,
+            "cas_hash": migrated_res.cas_hash,
+        })
+
+        return rev
