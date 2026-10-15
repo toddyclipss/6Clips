@@ -1,0 +1,356 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2025-2026 ViralMint Contributors
+"""
+Authoritative Capability Registry for Wave 19 Native Tools.
+Provides 1:1 crosswalk for all 21 legacy tools from ViralMint-Legado.
+"""
+
+from __future__ import annotations
+
+from typing import Dict, List, Optional
+from .models import NativeToolType, ToolDescriptor, ToolExecutionMode
+
+
+class NativeToolRegistry:
+    """Registry of all 21 original tools recovered as native Motion editor capabilities."""
+
+    _TOOLS: Dict[NativeToolType, ToolDescriptor] = {
+        NativeToolType.CAPTIONS: ToolDescriptor(
+            slug=NativeToolType.CAPTIONS,
+            title="Captions Engine",
+            category="Text & Subtitles",
+            description="Sync and style animated word-level captions directly on the project text track.",
+            legacy_endpoint="/api/tools/captions",
+            legacy_frontend="frontend/src/pages/tools/Captions.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="captions",
+            required_params=[],
+            default_params={"style": "viral", "font_size": 36, "color": "#FFFFFF", "uppercase": True},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.REFRAME: ToolDescriptor(
+            slug=NativeToolType.REFRAME,
+            title="Smart Reframe",
+            category="Geometry & Layout",
+            description="Dynamically adjust canvas aspect ratio (9:16, 16:9, 1:1, 4:5, 21:9) and focal reframing.",
+            legacy_endpoint="/api/tools/reframe",
+            legacy_frontend="frontend/src/pages/tools/Reframe.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="aspect_ratio",
+            required_params=["aspect_ratio"],
+            default_params={"aspect_ratio": "9:16", "focal_mode": "auto_face"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.AUDIO_ENHANCE: ToolDescriptor(
+            slug=NativeToolType.AUDIO_ENHANCE,
+            title="Audio Enhance & Denoise",
+            category="Audio Processing",
+            description="Apply loudness normalization, noise suppression, and EQ to project audio tracks.",
+            legacy_endpoint="/api/tools/audio-enhance",
+            legacy_frontend="frontend/src/pages/tools/AudioEnhance.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="audio_filters",
+            required_params=[],
+            default_params={"normalize_loudness": True, "target_lufs": -14.0, "denoise": True, "denoise_strength": 0.5},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.WATERMARK: ToolDescriptor(
+            slug=NativeToolType.WATERMARK,
+            title="Watermark & Brand Overlay",
+            category="Overlays & Branding",
+            description="Apply brand watermark, logo overlay, or channel badge to timeline overlay tracks.",
+            legacy_endpoint="/api/tools/watermark",
+            legacy_frontend="frontend/src/pages/tools/Watermark.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="watermark",
+            required_params=[],
+            default_params={"position": "top_right", "opacity": 0.85, "scale": 0.15, "margin": 24},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.MERGE_CLIPS: ToolDescriptor(
+            slug=NativeToolType.MERGE_CLIPS,
+            title="Merge Clips & Transitions",
+            category="Timeline Composition",
+            description="Sequence and join multiple media clips with crossfade, whip pan, or dissolve transitions.",
+            legacy_endpoint="/api/tools/merge-clips",
+            legacy_frontend="frontend/src/pages/tools/MergeClips.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=[],
+            default_params={"transition_type": "crossfade", "transition_duration": 0.5},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.REMOVE_SILENCE: ToolDescriptor(
+            slug=NativeToolType.REMOVE_SILENCE,
+            title="Remove Silence & Auto-Cut",
+            category="Audio & Pacing",
+            description="Detect dead pauses below threshold and ripple delete gaps from the timeline.",
+            legacy_endpoint="/api/tools/remove-silence",
+            legacy_frontend="frontend/src/pages/tools/RemoveSilence.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=[],
+            default_params={"threshold_db": -35.0, "min_silence_duration": 0.4, "padding": 0.08},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.TRANSLATE: ToolDescriptor(
+            slug=NativeToolType.TRANSLATE,
+            title="Translate & Multilingual Captions",
+            category="Localization",
+            description="Translate speech transcript and timeline captions into target global languages.",
+            legacy_endpoint="/api/tools/translate",
+            legacy_frontend="frontend/src/pages/tools/Translate.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="captions",
+            required_params=["target_language"],
+            default_params={"target_language": "es", "source_language": "auto"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.HOOK_ANALYSIS: ToolDescriptor(
+            slug=NativeToolType.HOOK_ANALYSIS,
+            title="Hook Analysis & Retention Score",
+            category="Virality & Intelligence",
+            description="Analyze first 3-5 seconds of project timeline for pacing, hook power, and drop-off risks.",
+            legacy_endpoint="/api/tools/hook-analysis",
+            legacy_frontend="frontend/src/pages/tools/HookAnalysis.jsx",
+            primary_mode=ToolExecutionMode.AGENT_COMMAND,
+            cas_mutation_key="metadata",
+            required_params=[],
+            default_params={"sample_window_sec": 3.5, "target_platform": "tiktok"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.ENHANCE_PROMPT: ToolDescriptor(
+            slug=NativeToolType.ENHANCE_PROMPT,
+            title="Enhance Creative Prompt",
+            category="AI Production",
+            description="Optimize and expand natural language user intent into cinematic motion prompts.",
+            legacy_endpoint="/api/tools/enhance-prompt",
+            legacy_frontend="frontend/src/pages/tools/PromptField.jsx",
+            primary_mode=ToolExecutionMode.AGENT_COMMAND,
+            cas_mutation_key="metadata",
+            required_params=["prompt"],
+            default_params={"target_style": "cinematic_viral"},
+            is_agent_callable=True,
+            is_inspector_exposed=False,
+        ),
+        NativeToolType.VOICEOVER: ToolDescriptor(
+            slug=NativeToolType.VOICEOVER,
+            title="AI Voiceover & Narration",
+            category="Audio Processing",
+            description="Generate synthetic voiceover audio from text script and insert into audio timeline track.",
+            legacy_endpoint="/api/tools/voiceover",
+            legacy_frontend="frontend/src/pages/tools/Voiceover.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=["script"],
+            default_params={"voice_id": "en-US-ChristopherNeural", "rate": "+0%", "pitch": "+0Hz"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.TRANSFORM: ToolDescriptor(
+            slug=NativeToolType.TRANSFORM,
+            title="Spatial Transform & Layout",
+            category="Geometry & Layout",
+            description="Adjust scale, rotation, horizontal/vertical flip, and position coordinates of selected layers.",
+            legacy_endpoint="/api/tools/transform",
+            legacy_frontend="frontend/src/pages/tools/Transform.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=[],
+            default_params={"scale": 1.0, "rotation": 0.0, "flip_x": False, "flip_y": False, "x": 0, "y": 0},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.MUSIC_VISUALIZER: ToolDescriptor(
+            slug=NativeToolType.MUSIC_VISUALIZER,
+            title="Music Visualizer & Spectrum",
+            category="Visual Effects",
+            description="Procedural frequency spectrum or waveform visualizer synchronized with timeline audio.",
+            legacy_endpoint="/api/tools/music-visualizer",
+            legacy_frontend="frontend/src/pages/tools/MusicVisualizer.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=[],
+            default_params={"style": "bars", "bars_count": 64, "color": "#00F0FF", "glow": True},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.GIF: ToolDescriptor(
+            slug=NativeToolType.GIF,
+            title="Animated GIF Export",
+            category="Export & Output",
+            description="Configure animated looping GIF output parameters (fps, resolution scale, loop count).",
+            legacy_endpoint="/api/tools/gif",
+            legacy_frontend="frontend/src/pages/tools/Gif.jsx",
+            primary_mode=ToolExecutionMode.EXPORT_PIPE,
+            cas_mutation_key="export_settings",
+            required_params=[],
+            default_params={"fps": 15, "scale_width": 480, "loop_count": 0, "dither": "sierra2_4a"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.SPEED: ToolDescriptor(
+            slug=NativeToolType.SPEED,
+            title="Clip Speed & Duration Scaling",
+            category="Timeline Composition",
+            description="Scale playback speed (0.25x to 4.0x) with optional audio pitch preservation.",
+            legacy_endpoint="/api/tools/speed",
+            legacy_frontend="frontend/src/pages/tools/Speed.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=["speed_factor"],
+            default_params={"speed_factor": 1.0, "preserve_pitch": True},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.METADATA: ToolDescriptor(
+            slug=NativeToolType.METADATA,
+            title="Project Metadata & Tags",
+            category="Project Settings",
+            description="Set video container title, description, creator attribution, and publication tags.",
+            legacy_endpoint="/api/tools/metadata",
+            legacy_frontend="frontend/src/pages/tools/Metadata.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="metadata",
+            required_params=[],
+            default_params={"title": "", "description": "", "tags": [], "author": "ViralMint"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.AUTO_CHAPTERS: ToolDescriptor(
+            slug=NativeToolType.AUTO_CHAPTERS,
+            title="Auto Chapters & Markers",
+            category="Timeline Composition",
+            description="Extract scene change timestamps and generate chapter markers with titles along timeline.",
+            legacy_endpoint="/api/tools/auto-chapters",
+            legacy_frontend="frontend/src/pages/tools/AutoChapters.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="markers",
+            required_params=[],
+            default_params={"min_chapter_duration_sec": 15.0, "include_timestamps": True},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.TRIM: ToolDescriptor(
+            slug=NativeToolType.TRIM,
+            title="Trim In/Out Boundaries",
+            category="Timeline Composition",
+            description="Set precise in-point and out-point timestamps for timeline clips without re-encoding.",
+            legacy_endpoint="/api/tools/trim",
+            legacy_frontend="frontend/src/pages/tools/Trim.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=["start_time", "end_time"],
+            default_params={"start_time": 0.0, "end_time": 10.0},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.SUBTITLES: ToolDescriptor(
+            slug=NativeToolType.SUBTITLES,
+            title="Subtitles & SRT/VTT Engine",
+            category="Text & Subtitles",
+            description="Manage external subtitle tracks, export SRT/VTT files, and customize typography presets.",
+            legacy_endpoint="/api/tools/subtitles",
+            legacy_frontend="frontend/src/pages/tools/Subtitles.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="captions",
+            required_params=[],
+            default_params={"format": "srt", "max_chars_per_line": 32, "max_lines": 2},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.COMPRESS: ToolDescriptor(
+            slug=NativeToolType.COMPRESS,
+            title="Video Compression & Preset",
+            category="Export & Output",
+            description="Configure CRF, video bitrate, audio bitrate, and target file size constraints for export.",
+            legacy_endpoint="/api/tools/compress",
+            legacy_frontend="frontend/src/pages/tools/Compress.jsx",
+            primary_mode=ToolExecutionMode.EXPORT_PIPE,
+            cas_mutation_key="export_settings",
+            required_params=[],
+            default_params={"crf": 23, "target_size_mb": None, "codec": "libx264", "preset": "medium"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.CROP: ToolDescriptor(
+            slug=NativeToolType.CROP,
+            title="Spatial Crop Rectangle",
+            category="Geometry & Layout",
+            description="Define spatial viewport sub-rectangle (x, y, width, height) to crop clip or canvas.",
+            legacy_endpoint="/api/tools/crop",
+            legacy_frontend="frontend/src/pages/tools/Crop.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=[],
+            default_params={"x": 0, "y": 0, "width": 1080, "height": 1920},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.AUTO_ZOOM: ToolDescriptor(
+            slug=NativeToolType.AUTO_ZOOM,
+            title="Auto Zoom & Dynamic Punch-in",
+            category="Visual Effects",
+            description="Generate smooth camera punch-in and zoom keyframes timed to sentence emphasis.",
+            legacy_endpoint="/api/tools/auto-zoom",
+            legacy_frontend="frontend/src/pages/tools/AutoZoom.jsx",
+            primary_mode=ToolExecutionMode.CAS_MUTATION,
+            cas_mutation_key="tracks",
+            required_params=[],
+            default_params={"zoom_factor": 1.25, "duration_sec": 1.5, "easing": "power2.inOut"},
+            is_agent_callable=True,
+            is_inspector_exposed=True,
+        ),
+        NativeToolType.VIDEO_DOWNLOAD: ToolDescriptor(
+            slug=NativeToolType.VIDEO_DOWNLOAD,
+            title="Secure Agent URL Ingestion",
+            category="Input & Ingestion",
+            description="Secure server-side URL download requested via chat with SSRF and rights verification (no UI form).",
+            legacy_endpoint="/api/downloaded/batch-download",
+            legacy_frontend="frontend/src/pages/tools/VideoDownload.jsx",
+            primary_mode=ToolExecutionMode.AGENT_COMMAND,
+            cas_mutation_key="assets",
+            required_params=["source_url"],
+            default_params={"quality": "best"},
+            is_agent_callable=True,
+            is_inspector_exposed=False,
+        ),
+    }
+
+    @classmethod
+    def get(cls, tool_type: NativeToolType | str) -> Optional[ToolDescriptor]:
+        """Lookup descriptor by enum or slug string."""
+        if isinstance(tool_type, str):
+            try:
+                tool_type = NativeToolType(tool_type)
+            except ValueError:
+                return None
+        return cls._TOOLS.get(tool_type)
+
+    @classmethod
+    def list_all(cls) -> List[ToolDescriptor]:
+        """Return all registered native tools."""
+        return list(cls._TOOLS.values())
+
+    @classmethod
+    def list_agent_callable(cls) -> List[ToolDescriptor]:
+        """Return all tools that can be invoked autonomously by the Main Agent."""
+        return [t for t in cls._TOOLS.values() if t.is_agent_callable]
+
+    @classmethod
+    def list_inspector_tools(cls) -> List[ToolDescriptor]:
+        """Return tools exposed as contextual affordances in Refine Right Inspector."""
+        return [t for t in cls._TOOLS.values() if t.is_inspector_exposed]
+
+    @classmethod
+    def count(cls) -> int:
+        """Total count of native tools."""
+        return len(cls._TOOLS)

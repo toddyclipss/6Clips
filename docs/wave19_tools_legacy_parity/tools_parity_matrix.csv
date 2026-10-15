@@ -1,0 +1,23 @@
+id,title,category,legacy_file,legacy_route,legacy_api,legacy_api_line,native_action,cas_mutation,status
+captions,Captions,Text & Subtitles,frontend/src/pages/tools/Captions.jsx,/tools/captions,/api/tools/captions,227,captions,document.captions,PASS
+reframe,Reframe,Geometry & Layout,frontend/src/pages/tools/Reframe.jsx,/tools/reframe,/api/tools/reframe,242,reframe,document.aspect_ratio,PASS
+audio-enhance,Audio Enhance,Audio Processing,frontend/src/pages/tools/AudioEnhance.jsx,/tools/audio-enhance,/api/tools/audio-enhance,255,audio-enhance,document.audio_filters,PASS
+watermark,Watermark,Overlays & Branding,frontend/src/pages/tools/Watermark.jsx,/tools/watermark,/api/tools/watermark,268,watermark,document.watermark,PASS
+merge-clips,Merge Clips,Timeline Composition,frontend/src/pages/tools/MergeClips.jsx,/tools/merge-clips,/api/tools/merge-clips,295,merge-clips,document.tracks,PASS
+remove-silence,Remove Silence,Audio & Pacing,frontend/src/pages/tools/RemoveSilence.jsx,/tools/remove-silence,/api/tools/remove-silence,323,remove-silence,document.silence_removal,PASS
+translate,Translate,Localization,frontend/src/pages/tools/Translate.jsx,/tools/translate,/api/tools/translate,336,translate,document.captions.target_language,PASS
+hook-analysis,Hook Analysis,Virality & Intelligence,frontend/src/pages/tools/HookAnalysis.jsx,/tools/hook-analysis,/api/tools/hook-analysis,374,hook-analysis,document.metadata.hook_analysis,PASS
+enhance-prompt,Enhance Prompt,AI Production,frontend/src/components/tools/PromptField.jsx,/tools/enhance-prompt,/api/tools/enhance-prompt,441,enhance-prompt,document.metadata.enhanced_prompt,PASS
+voiceover,Voiceover,Audio Processing,frontend/src/pages/tools/Voiceover.jsx,/tools/voiceover,/api/tools/voiceover,497,voiceover,document.tracks (audio),PASS
+transform,Transform,Geometry & Layout,frontend/src/pages/tools/Transform.jsx,/tools/transform,/api/tools/transform,537,transform,document.tracks[].clips[].transform,PASS
+music-visualizer,Music Visualizer,Visual Effects,frontend/src/pages/tools/MusicVisualizer.jsx,/tools/music-visualizer,/api/tools/music-visualizer,558,music-visualizer,document.tracks (overlay),PASS
+gif,GIF Export,Export & Output,frontend/src/pages/tools/Gif.jsx,/tools/gif,/api/tools/gif,583,gif,document.export_settings.gif,PASS
+speed,Speed,Timeline Composition,frontend/src/pages/tools/Speed.jsx,/tools/speed,/api/tools/speed,620,speed,document.tracks[].clips[].speed,PASS
+metadata,Metadata,Project Settings,frontend/src/pages/tools/Metadata.jsx,/tools/metadata,/api/tools/metadata,648,metadata,document.metadata,PASS
+auto-chapters,Auto Chapters,Timeline Composition,frontend/src/pages/tools/AutoChapters.jsx,/tools/auto-chapters,/api/tools/auto-chapters,687,auto-chapters,document.markers,PASS
+trim,Trim,Timeline Composition,frontend/src/pages/tools/Trim.jsx,/tools/trim,/api/tools/trim,708,trim,document.tracks[].clips[].start_time,PASS
+subtitles,Subtitles,Text & Subtitles,frontend/src/pages/tools/Subtitles.jsx,/tools/subtitles,/api/tools/subtitles,743,subtitles,document.captions.subtitles,PASS
+compress,Compress,Export & Output,frontend/src/pages/tools/Compress.jsx,/tools/compress,/api/tools/compress,759,compress,document.export_settings.compression,PASS
+crop,Crop,Geometry & Layout,frontend/src/pages/tools/Crop.jsx,/tools/crop,/api/tools/crop,785,crop,document.tracks[].clips[].crop,PASS
+auto-zoom,Auto Zoom,Visual Effects,frontend/src/pages/tools/AutoZoom.jsx,/tools/auto-zoom,/api/tools/auto-zoom,817,auto-zoom,document.tracks[].clips[].auto_zoom,PASS
+video-download,Video Download (Secure Agent URL Ingestion),Input & Ingestion,frontend/src/pages/tools/VideoDownload.jsx,/tools/video-download,/api/downloaded/batch-download,1,video-download,document.assets,PASS
