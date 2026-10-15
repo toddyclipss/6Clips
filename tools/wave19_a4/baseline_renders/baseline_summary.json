@@ -1,0 +1,82 @@
+{
+  "aurora": {
+    "slug": "aurora",
+    "motion_delta": 45.2288,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\aurora_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\aurora_t1.png"
+  },
+  "data-chart": {
+    "slug": "data-chart",
+    "motion_delta": 0.0,
+    "is_solid_black": false,
+    "has_motion": false,
+    "f0": "tools\\wave19_a4\\baseline_renders\\data-chart_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\data-chart_t1.png"
+  },
+  "flowing-gradient": {
+    "slug": "flowing-gradient",
+    "motion_delta": 19.4771,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\flowing-gradient_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\flowing-gradient_t1.png"
+  },
+  "holographic": {
+    "slug": "holographic",
+    "motion_delta": 36.8627,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\holographic_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\holographic_t1.png"
+  },
+  "instagram-follow": {
+    "slug": "instagram-follow",
+    "motion_delta": 88.2353,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\instagram-follow_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\instagram-follow_t1.png"
+  },
+  "plasma": {
+    "slug": "plasma",
+    "motion_delta": 35.817,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\plasma_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\plasma_t1.png"
+  },
+  "stripes": {
+    "slug": "stripes",
+    "motion_delta": 92.2876,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\stripes_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\stripes_t1.png"
+  },
+  "tiktok-follow": {
+    "slug": "tiktok-follow",
+    "motion_delta": 88.2353,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\tiktok-follow_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\tiktok-follow_t1.png"
+  },
+  "weight-wave": {
+    "slug": "weight-wave",
+    "motion_delta": 0.0,
+    "is_solid_black": false,
+    "has_motion": false,
+    "f0": "tools\\wave19_a4\\baseline_renders\\weight-wave_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\weight-wave_t1.png"
+  },
+  "yt-lower-third": {
+    "slug": "yt-lower-third",
+    "motion_delta": 5.8824,
+    "is_solid_black": false,
+    "has_motion": true,
+    "f0": "tools\\wave19_a4\\baseline_renders\\yt-lower-third_t0.png",
+    "f1": "tools\\wave19_a4\\baseline_renders\\yt-lower-third_t1.png"
+  }
+}

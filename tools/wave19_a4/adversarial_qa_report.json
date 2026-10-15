@@ -1,0 +1,43 @@
+{
+  "wave": 19,
+  "role": "Agent 4 Adversarial QA & Anti-Fake Harness",
+  "all_passed": true,
+  "results": {
+    "reject_zero_motion": {
+      "passed": true,
+      "message": "PASS: Correctly rejected stationary preview with motion_delta=0.0"
+    },
+    "reject_solid_black": {
+      "passed": true,
+      "message": "PASS: Correctly rejected solid black frame ((0,0) extrema)"
+    },
+    "reject_cdn_egress": {
+      "passed": true,
+      "message": "PASS: Correctly detected and rejected external CDN egress"
+    },
+    "reject_fake_category": {
+      "passed": true,
+      "message": "PASS: Correctly rejected invented fake category"
+    },
+    "reject_premature_196": {
+      "passed": true,
+      "message": "PASS: Negative gate correctly forbids premature 196/196 claim"
+    },
+    "crosswalk_196_census": {
+      "passed": true,
+      "message": "PASS: Crosswalk has exactly 196 donor blocks (171 gallery + 25 unspecified), 0 retired 6Clips"
+    },
+    "owner_10_baseline": {
+      "passed": true,
+      "message": "PASS: All 10 owner-observed baseline blocks are faithfully tracked"
+    },
+    "legacy_30_workflows": {
+      "passed": true,
+      "message": "PASS: 30 legacy workflows audited (21 Tools + 9 Clip Studio) with native parity"
+    },
+    "oaas_five_destinations": {
+      "passed": true,
+      "message": "PASS: Exact 5 destinations locked in order: Motion Graphics first"
+    }
+  }
+}

@@ -31,20 +31,51 @@
   
     <script>
       (function() {
+        var key = 'aurora';
         window.__timelines = window.__timelines || {};
+        var existing = window.__timelines[key];
         var shaderTl = {
           currentTime: 0,
+          _raf: null,
           duration: function() { return 10.0; },
           seek: function(t) {
             this.currentTime = Number(t) || 0;
             window.__shaderTime = this.currentTime;
+            if (existing && typeof existing.seek === 'function') {
+              existing.seek(this.currentTime);
+            }
             window.dispatchEvent(new CustomEvent('hf-seek', { detail: { time: this.currentTime } }));
           },
-          play: function() {},
-          pause: function() {}
+          play: function() {
+            var self = this;
+            if (self._raf) cancelAnimationFrame(self._raf);
+            var start = performance.now() - (self.currentTime * 1000);
+            function loop() {
+              var elapsed = (performance.now() - start) / 1000;
+              self.seek(elapsed % self.duration());
+              self._raf = requestAnimationFrame(loop);
+            }
+            self._raf = requestAnimationFrame(loop);
+          },
+          pause: function() {
+            if (this._raf) cancelAnimationFrame(this._raf);
+          }
         };
-        window.__timelines['aurora'] = shaderTl;
-        if (!window.tl) window.tl = shaderTl;
+        // Connect existing fallback if already loaded
+        if (existing && typeof existing.seek === 'function') {
+          var origSeek = existing.seek;
+          existing.play = shaderTl.play.bind(existing);
+          existing.pause = shaderTl.pause.bind(existing);
+          shaderTl.seek = function(t) {
+            this.currentTime = Number(t) || 0;
+            origSeek(this.currentTime);
+            window.dispatchEvent(new CustomEvent('hf-seek', { detail: { time: this.currentTime } }));
+          };
+        }
+        window.__timelines[key] = shaderTl;
+        window.tl = shaderTl;
+        // Start autoplay for standalone preview
+        shaderTl.play();
       })();
     </script>
         
