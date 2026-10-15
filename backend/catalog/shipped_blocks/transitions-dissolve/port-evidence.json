@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "transitions-dissolve",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-dissolve",
+  "source_sha256": "be35ea72f94bcf20ce5b4e4b4c39f99c9f734d6aa8d2244f33ff247439f31afb",
+  "output_html_sha256": "e6053f9197b1bbb72fe70cea04366d579b7cfd9d3b22dc47c64d8e93cfb615e8",
+  "duration": 24,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase",
+    "crossfade"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-push",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-push",
+  "source_sha256": "6e94839890101bbcbf14cfe76c5d41d06738fa70b6d1c423e3b41692d52c8441",
+  "output_html_sha256": "8ebfe3737f456ee769f58390c5e098cc87e971e9144a1d4a308f3e03e9b984a9",
+  "duration": 24,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

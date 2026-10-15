@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "week-in-merges",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/week-in-merges",
+  "source_sha256": "f6a989512c338008950615189d3036395e990eed684003d26359e51997fd6026",
+  "output_html_sha256": "3552cc9c4f2090ed7f51158bbff794629cdff034707e509d7dc7e1c30427f1f8",
+  "duration": 16,
+  "dimensions": {
+    "width": 1080,
+    "height": 1350
+  },
+  "tags": [
+    "data",
+    "chart",
+    "ranking",
+    "leaderboard"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "news-ticker",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/news-ticker",
+  "source_sha256": "8da727da9c8c2e7adda0d5f7ce1991b5443eb65145d058ccfa64b3331fc565df",
+  "output_html_sha256": "bc6701d1738f9eb18b883808c2aa9aeb0558aaa8c955ec43c5e96f35574fb57a",
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "lower-third",
+    "overlay",
+    "news",
+    "ticker"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}
