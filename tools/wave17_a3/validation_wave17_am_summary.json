@@ -1,0 +1,3500 @@
+{
+  "apple-money-count": {
+    "id": "apple-money-count",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary Apple trademark, Apple Pay references, and proprietary audio assets.",
+    "donor_source_path": "registry/blocks/apple-money-count",
+    "donor_dir_sha256": "ad8e919f2068b6aa48984135c6f108c367c1d1c5042318b72c568e4394075ccb",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "blue-sweater-intro-video": {
+    "id": "blue-sweater-intro-video",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary personal creator likeness and avatar photograph (joe-sai-avatar.png).",
+    "donor_source_path": "registry/blocks/blue-sweater-intro-video",
+    "donor_dir_sha256": "54b4937026bb8927003bcb3d280f863f84de40ba501dcd12d2cfe3d6161f9340",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "chatgpt-exchange": {
+    "id": "chatgpt-exchange",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary OpenAI ChatGPT brand name, logo, and trademark trade dress.",
+    "donor_source_path": "registry/blocks/chatgpt-exchange",
+    "donor_dir_sha256": "e6edbdb0cc92f146197ee4af15da3b158c78a347f41e38fe55206b95daaf9c86",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "claude-exchange": {
+    "id": "claude-exchange",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary Anthropic Claude brand name, logo, and trademark trade dress.",
+    "donor_source_path": "registry/blocks/claude-exchange",
+    "donor_dir_sha256": "9937484714986f65315201cb7c86e6048966b37e45125a86b99e7041cb3abac5",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "code-snippet-apple-terminal-pro": {
+    "id": "code-snippet-apple-terminal-pro",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary Apple macOS Terminal interface trade dress and branding.",
+    "donor_source_path": "registry/blocks/code-snippet-apple-terminal-pro",
+    "donor_dir_sha256": "7abe0b85ec7be03c9180dbca52ecb47c6982ce43af1ebe7223dbce34b30041df",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "heygen-avatar-promo-card": {
+    "id": "heygen-avatar-promo-card",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary HeyGen avatar video service trademark and visual branding.",
+    "donor_source_path": "registry/blocks/heygen-avatar-promo-card",
+    "donor_dir_sha256": "1ac9acd618c56e8d45a83a58c2379c40c9fa234c3b94237c5f4b67417ec72f1e",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "ios26-liquid-glass": {
+    "id": "ios26-liquid-glass",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary Apple iPhone 3D model (iphone.glb) and 25 proprietary trademarked iOS app icons.",
+    "donor_source_path": "registry/blocks/ios26-liquid-glass",
+    "donor_dir_sha256": "16628cfcd3de1259505e397ca5171f982ee3e69c0c404f7f232dcf437dbf215a",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "macos-notification": {
+    "id": "macos-notification",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary Apple macOS system notification interface and visual assets.",
+    "donor_source_path": "registry/blocks/macos-notification",
+    "donor_dir_sha256": "ab40b4720b80c90c30a7864e5389d6fd7cbe3bb8ae8e92c479298990ba5ba3a2",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "macos-tahoe-liquid-glass": {
+    "id": "macos-tahoe-liquid-glass",
+    "status": "BLOCKED_RIGHTS",
+    "runtime_operable": false,
+    "legal_obstacle": "Proprietary Apple MacBook 3D model (macbook.glb) and trademarked macOS application icons.",
+    "donor_source_path": "registry/blocks/macos-tahoe-liquid-glass",
+    "donor_dir_sha256": "c01f62ee0e3359bc89f48166deb5795a075d92ea932df7439ed8ae0b6c69922e",
+    "rights_status": "BLOCKED_PROPRIETARY",
+    "blocker_code": "BLOCKED_RIGHTS"
+  },
+  "canopy-part-title": {
+    "id": "canopy-part-title",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires unvendored Three.js r170 ESM postprocessing (EffectComposer/BokehPass) and dynamic Google Fonts runtime loader.",
+    "donor_source_path": "registry/blocks/canopy-part-title",
+    "donor_dir_sha256": "7775e8a77ac13a56eb49ff51435f95cabf4ba1535737bebacd895ee0b8dde012",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "exploded-stack": {
+    "id": "exploded-stack",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires unvendored Three.js r184 ESM geometry modules (RoundedBoxGeometry) and jsdelivr fontsource woff2 webfonts.",
+    "donor_source_path": "registry/blocks/exploded-stack",
+    "donor_dir_sha256": "751b97b1af61d4f3ce4fe49855bf1e60398c291e01448d16aae4238a3302d3d7",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "extruded-logo": {
+    "id": "extruded-logo",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires unvendored Three.js r184 ESM FontLoader and TextGeometry external modules.",
+    "donor_source_path": "registry/blocks/extruded-logo",
+    "donor_dir_sha256": "61301925166d374c7b859e27ddcc3384c69181296daf9f152326199b313ed9c4",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "glass-hero": {
+    "id": "glass-hero",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires unvendored Three.js r184 ESM modules and jsdelivr fontsource woff2 webfonts.",
+    "donor_source_path": "registry/blocks/glass-hero",
+    "donor_dir_sha256": "396168638cae311dc757a7744b362eda8aa4d4fc4f18679eea8abb62a8c0d278",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "glass-shard-title": {
+    "id": "glass-shard-title",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires unvendored d3-delaunay.min.js external script and custom HDR environment loader.",
+    "donor_source_path": "registry/blocks/glass-shard-title",
+    "donor_dir_sha256": "3bb0674fbf19ba05c5438ab59d27641661fd7ffbd1edef15ecbcbb800ac9ff40",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "lottie-character-walk": {
+    "id": "lottie-character-walk",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires unvendored lottie-web external runtime player and external character animation data.",
+    "donor_source_path": "registry/blocks/lottie-character-walk",
+    "donor_dir_sha256": "0ff2737e6360fe76f4d216d8ec3b003cb8b0768f12ad9980a3c3a3ec3dbd8795",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "liquid-glass-notification": {
+    "id": "liquid-glass-notification",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires WebGPU API (navigator.gpu) and unbundled liquid-glass IIFE library.",
+    "donor_source_path": "registry/blocks/liquid-glass-notification",
+    "donor_dir_sha256": "5b334d95f4413d47e2cdd32dcc0764982168387516f9889329cd823c73183ecd",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "liquid-glass-widgets": {
+    "id": "liquid-glass-widgets",
+    "status": "BLOCKED_DEPENDENCY",
+    "runtime_operable": false,
+    "technical_obstacle": "Requires WebGPU API (navigator.gpu) and unbundled liquid-glass IIFE library.",
+    "donor_source_path": "registry/blocks/liquid-glass-widgets",
+    "donor_dir_sha256": "4ff91320a2dfb596ca7780f19ec8e3c35c8858f13dcb932c4adee549614bc129",
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocker_code": "BLOCKED_DEPENDENCY"
+  },
+  "ai-answer-rank": {
+    "id": "ai-answer-rank",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "AI Answer Rank",
+    "dimensions": {
+      "width": 1080,
+      "height": 1080
+    },
+    "duration": 9.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "0825d43ea31e6d4c6fe812d5eedcc461833ae8e81e3ccb9f7ed3a80c9620afbe",
+    "shipped_dir_sha256": "21efce2dacb8dd9cb6711ac48baf96725d7425f6d72d304fa8e60c72067d1357",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-answer-rank_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-answer-rank_shot_v.png",
+    "sentinel_frame_hashes": [
+      "0514595aa5c7ca68",
+      "0514595aa5c7ca68"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-answer-rank_16_9.mp4",
+    "physical_mp4_16_9_sha256": "5f7b70bd1e6da561c63a3b5eae5f1708fd64ac43a24a3036621be0832fa6b940",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-answer-rank_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c966740cd9818e749769c77e7e1ab3ca33213954b2e3adb83c854be2738929c2",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "ai-chat-reveal": {
+    "id": "ai-chat-reveal",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "AI Chat Reveal",
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "duration": 19.3333,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "c71cb2c52a8b5a7be44cc63290e7afeabf633cbd072976eb4a1b727e99e692be",
+    "shipped_dir_sha256": "a2a4d7f23a82f9498e12531faf7d8b77728e73ee3a80ab4d0a8f75c9059e93d6",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-chat-reveal_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-chat-reveal_shot_v.png",
+    "sentinel_frame_hashes": [
+      "9993c7af7ddaba98",
+      "9993c7af7ddaba98"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-chat-reveal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059644d99b3e3bccbc3191df5cb8699a22479566c065befec944b182362b0dee",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\ai-chat-reveal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "219317973c5670d6c6918fa6661a34d3b04c2c7bbd53725beaf7d8ca272914de",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "app-showcase": {
+    "id": "app-showcase",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "App Showcase",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.5,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "8883daaadc338c01d625b48477095b3093d8afe2bdb0580fddd37dd638470b3a",
+    "shipped_dir_sha256": "10ad5bfa1fbe8da63983aef658947039cdc656fc39d718713adbee377be8172e",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\app-showcase_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\app-showcase_shot_v.png",
+    "sentinel_frame_hashes": [
+      "1064fab3f38c6c1c",
+      "1064fab3f38c6c1c"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\app-showcase_16_9.mp4",
+    "physical_mp4_16_9_sha256": "7ec1a6540ec7aad4febc9bf4311f3b5b62d25d70ecbb169c0628fc68d0e61631",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\app-showcase_9_16.mp4",
+    "physical_mp4_9_16_sha256": "e04793fda94dcea250635005cf5c78df475c2abaf0f334d44804d5538d703775",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "aurora": {
+    "id": "aurora",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Aurora",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "2a96a0795cb7b8605b51737f2879409b714b2aa4db3c53a33162b61a06b7de70",
+    "shipped_dir_sha256": "316b31972235edf0fac001448ff10e8d4db0ffde3aee1ecc5fd0ede01902d3c1",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\aurora_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\aurora_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\aurora_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\aurora_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "bar-chart-race": {
+    "id": "bar-chart-race",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Bar Chart Race",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 12.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "c93b3cd3936e7c4f7b6ad3b934bc1f81cbf2fc4f1780b4257846ea098d91e9e1",
+    "shipped_dir_sha256": "912c0b69f1c2328a342c9c14dc468f3bf23ff82a566514559475f7da94168c8f",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\bar-chart-race_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\bar-chart-race_shot_v.png",
+    "sentinel_frame_hashes": [
+      "8f4f088efe987d85",
+      "8f4f088efe987d85"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\bar-chart-race_16_9.mp4",
+    "physical_mp4_16_9_sha256": "8ac8d8924d5674f202188100a2c775898d123d38a5eb5323aec5e3d521ec5d76",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\bar-chart-race_9_16.mp4",
+    "physical_mp4_9_16_sha256": "0b0cc02e652ad1f32b6bb91694f4b057529f057727c056dfa6463bde832362fa",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "beat-freeze-cut": {
+    "id": "beat-freeze-cut",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Beat Freeze Cut",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "b43418e9116fce8bd6ed866f5fbab1bd04fb20a80e4f004d76e93a47a0ced62f",
+    "shipped_dir_sha256": "d42135b8b859f8448fd1016ff244e03f78495503369f1275a805dec8308598c3",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\beat-freeze-cut_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\beat-freeze-cut_shot_v.png",
+    "sentinel_frame_hashes": [
+      "e31ffd417a400972",
+      "e31ffd417a400972"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\beat-freeze-cut_16_9.mp4",
+    "physical_mp4_16_9_sha256": "f1279e9b570b4e9732f5d8fb9f1006c19fe5000d3384bebc65b0c3c79c719fb1",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\beat-freeze-cut_9_16.mp4",
+    "physical_mp4_9_16_sha256": "4791a9e8464835e1f62712675a270066e98c96e1c8bc24fa4c8c28b5e1238a0a",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "blob": {
+    "id": "blob",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Blob",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "3ab67ad4e8340e76ee2fd478b853f8f48e0a4073b3616be7e794f8d316bab8eb",
+    "shipped_dir_sha256": "a6ae690b6be2d69b19f01c7e1d864966e4fd0b59e727f02c935ab8facef73f1d",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\blob_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\blob_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\blob_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\blob_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "camcorder-hud": {
+    "id": "camcorder-hud",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Camcorder HUD",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "53f76992237df07ff7fa346d986d7c8cc6bc5f46426058ce5c8431f151aedbf0",
+    "shipped_dir_sha256": "2b105e196346c3d8e544272ee93a94430b80d699b53a9be686818e25c2a75f33",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camcorder-hud_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camcorder-hud_shot_v.png",
+    "sentinel_frame_hashes": [
+      "f7660730f7c5bdf8",
+      "f7660730f7c5bdf8"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camcorder-hud_16_9.mp4",
+    "physical_mp4_16_9_sha256": "f7e208c0fa9490b661c8a5f71d64f21ca3f83c90718e116a1a0ce139e530774e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camcorder-hud_9_16.mp4",
+    "physical_mp4_9_16_sha256": "643e0a89ba5d6fa7488e76a22c5c9c84bde979cf2ef34b6ccf361207b7dc0a5b",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "camera-dolly-zoom": {
+    "id": "camera-dolly-zoom",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Dolly Zoom (Vertigo Shot)",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "fda2758e696b3fc7e3dee75ee0adb8b80417dc0a3377948485a6fddabf237571",
+    "shipped_dir_sha256": "a8af64578b127b70b0afa59d6ab036f021527f5357c940a34b3ed4496dd8c49a",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camera-dolly-zoom_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camera-dolly-zoom_shot_v.png",
+    "sentinel_frame_hashes": [
+      "b69860be5e64ff09",
+      "b69860be5e64ff09"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camera-dolly-zoom_16_9.mp4",
+    "physical_mp4_16_9_sha256": "248511735c02599d1ee2356751565908f0b2cee7f8214c70af062c4ee49cdc2f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\camera-dolly-zoom_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2f88e7a634e4367b7a463096292fa3d59246a56e98dcff42ed40137e52d4d181",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-circle-1": {
+    "id": "carousel-circle-1",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Circle Carousel 1",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "6bcc9b04e50fc3d5f78b67cd978d631873fee76bddc32a8dd29dcd19d2302a4a",
+    "shipped_dir_sha256": "36b75db0a51fa3be51c07609edfc62e997bbee01359588a181a6b4682ee99975",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-1_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-1_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-circle-2": {
+    "id": "carousel-circle-2",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Circle Carousel 2",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "032245d639e0f115d8ef57030a80950a11c713916ed94bcf4c8ef6fbbde19dea",
+    "shipped_dir_sha256": "9b2c3eefaf0eec63d2af80eecbcdcf8986709c2c7c1a644e4f01c4e5e379f63a",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-2_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-2_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-circle-3": {
+    "id": "carousel-circle-3",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Circle Carousel 3",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "a784ef04f51d34cf5176df2de8f7d50a20f074daa4c564cf72ce8c3744aadbab",
+    "shipped_dir_sha256": "0e2bf7f22034f83ae60937083796df7b242a5cdcaee7c838cd2df1e2e222fde3",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-3_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-3_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-circle-4": {
+    "id": "carousel-circle-4",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Circle Carousel 4",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "61f9e4bcc75f38deb2356c5ad1c51ae4fa7597397eb5f632f05e035f3f8795eb",
+    "shipped_dir_sha256": "7fb1a2fab7948850d54f7cb9f73398946f0dee20a24a184cbbd8b7de9c2109f1",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-4_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-4_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-circle-5": {
+    "id": "carousel-circle-5",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Circle Carousel 5",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "8e6fce65b33b0d06513e8bafdd0aa5b39aba2e8bd544d5e708df98d4fb7715e2",
+    "shipped_dir_sha256": "09a4f3b14dad3cfa878b4e2da4523f663307f56cc10b4c547f2d1abbab3c1f87",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-5_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-5_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-circle-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-orbit-1": {
+    "id": "carousel-orbit-1",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Orbit Carousel 1",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "e87a3587ea10181f9fe62f81f06604a7c02223c4084495249a3072d9e3afadc1",
+    "shipped_dir_sha256": "f3ba1bac1c03967bcdb6d8732f0070461435bfdc5a90f33c8209e8dd60997960",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-1_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-1_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5d5d334a63dfbe4c648ac16a2546b2c3549e469babbf8c5096ed198a37c960a6",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-orbit-2": {
+    "id": "carousel-orbit-2",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Orbit Carousel 2",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "0600371396b4508cfe8604913575c46f78903d9a100b335ba4418813ad300f97",
+    "shipped_dir_sha256": "d6c207f764b5e8edfe971fd0201ad1f112a14019f62ba111fc8acaaf10c13730",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-2_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-2_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5d5d334a63dfbe4c648ac16a2546b2c3549e469babbf8c5096ed198a37c960a6",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-orbit-3": {
+    "id": "carousel-orbit-3",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Orbit Carousel 3",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "2d37e49b0d9c8948a221bed129107832af777cfa435e9b585b2b8d79c370f074",
+    "shipped_dir_sha256": "12ac7f1ca9063e7ced337d2d8cd317d1b571f9d12f5a71b4968c3b41cf066651",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-3_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-3_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5d5d334a63dfbe4c648ac16a2546b2c3549e469babbf8c5096ed198a37c960a6",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-orbit-4": {
+    "id": "carousel-orbit-4",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Orbit Carousel 4",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "025c64b08d12f808578b47a4c93129d8c3ebd0be3404461d33ba830be7f6ed6a",
+    "shipped_dir_sha256": "7d3921442ac483d8625e2a1ad48eecd6d1f8bd496930464b3067089f816c2b44",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-4_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-4_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5d5d334a63dfbe4c648ac16a2546b2c3549e469babbf8c5096ed198a37c960a6",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-orbit-5": {
+    "id": "carousel-orbit-5",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Orbit Carousel 5",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "6fdcfbc0747a3b4b474b8b32d79c8ecfad5fb1d170463741cacbc85d71bf3711",
+    "shipped_dir_sha256": "fd425a12ff0b3b0be81c8791eb41a4f374cbd0345b81f7e92890b961a5efb4d5",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-5_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-5_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-orbit-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5d5d334a63dfbe4c648ac16a2546b2c3549e469babbf8c5096ed198a37c960a6",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-path-1": {
+    "id": "carousel-path-1",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Path Carousel 1",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "51bc69ccf2fa837b91aa50fdea68b294471b547628dc1e30949c15b3c948e983",
+    "shipped_dir_sha256": "baa05fc9ac7e328584c36b25b9e02ff1eba9ab21408f40b07f75469c97d3c949",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-1_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-1_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-path-2": {
+    "id": "carousel-path-2",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Path Carousel 2",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "c91baa465d64ea6a4bc1780509b5e4c3a8e952a2c0f463cc6bfe570d0542fcfe",
+    "shipped_dir_sha256": "be974efcb5fd81a122d0b421628ce474bd98d62a38a9f160d4ef17a18385b474",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-2_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-2_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-path-3": {
+    "id": "carousel-path-3",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Path Carousel 3",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "7b35a5efff0d1a9a795cf2eeb41845cda19a8e428018339d61d24cc8053148f1",
+    "shipped_dir_sha256": "4d8c9ab491ca2750cf812dbf3ca7cfc5c033c6e68e5b29935ddaf134541c095e",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-3_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-3_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-path-4": {
+    "id": "carousel-path-4",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Path Carousel 4",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "cfdd9908f406fd49131716248477baf4d57cbaf0c5b561a3120560b909f7cd6a",
+    "shipped_dir_sha256": "ac7c2cea8e4944a9d8803c2df94f1ea7aa0d7448ad63c5e8e5f9a20949c79faf",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-4_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-4_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-path-5": {
+    "id": "carousel-path-5",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Path Carousel 5",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "36897b896c50f3cee1994a004cbff4fc7ee6141773b01d0d446b2a10e013d3a5",
+    "shipped_dir_sha256": "cdf3e2f72088f931d1d225bfb23c9a6643602afc249ace1432eb65b1616ad9b8",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-5_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-5_shot_v.png",
+    "sentinel_frame_hashes": [
+      "4eff14f902fea1d0",
+      "4eff14f902fea1d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "47d488b9249f8213b63fc6b27d16ffda59d509e4f0f050280a7e229924fe531e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-path-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "79af4af4319aac97f0c23b8a3f947560c200e66be2c527e63eeb4bc2f0ba4431",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-text-circle-1": {
+    "id": "carousel-text-circle-1",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text + Circle Carousel 1",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "d0d9d7f8277c5fd59083ff1d152ed7e74a1bb64aaa6970c83b02a63eaf52af69",
+    "shipped_dir_sha256": "49dde341fab2d11ad5b2ae7b93e9d83f9165b3b4eec86d394f5ceee31398bf42",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-1_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-1_shot_v.png",
+    "sentinel_frame_hashes": [
+      "e24c8a0f90e5339b",
+      "e24c8a0f90e5339b"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "6a41fccffbf63546892ad679a189803e6c839336ee5a868aa5b489acb6a74379",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f6a6a6aa2888a224b4a7b4e55bd5a1a79036d5f968c94e7293a6e36fd22bb622",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-text-circle-2": {
+    "id": "carousel-text-circle-2",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text + Circle Carousel 2",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "9eeaa3f88afaed655cf945273037e4c68782e1be4611875a256b4f60c416b820",
+    "shipped_dir_sha256": "96c83e4ff3ef9e9a3eca76c5fa577fbd3fd226b58bebe36bb788a3c6ba3ed4f0",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-2_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-2_shot_v.png",
+    "sentinel_frame_hashes": [
+      "e24c8a0f90e5339b",
+      "e24c8a0f90e5339b"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "6a41fccffbf63546892ad679a189803e6c839336ee5a868aa5b489acb6a74379",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f6a6a6aa2888a224b4a7b4e55bd5a1a79036d5f968c94e7293a6e36fd22bb622",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-text-circle-3": {
+    "id": "carousel-text-circle-3",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text + Circle Carousel 3",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "d9871f8b994fadf930937db5c746143ee60ec7c4880390619a6285b4815172e4",
+    "shipped_dir_sha256": "510df54b08b494882757a63e83f6a893881e034b607e8bfae6d45b56eb39916a",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-3_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-3_shot_v.png",
+    "sentinel_frame_hashes": [
+      "e24c8a0f90e5339b",
+      "e24c8a0f90e5339b"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "6a41fccffbf63546892ad679a189803e6c839336ee5a868aa5b489acb6a74379",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f6a6a6aa2888a224b4a7b4e55bd5a1a79036d5f968c94e7293a6e36fd22bb622",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-text-circle-4": {
+    "id": "carousel-text-circle-4",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text + Circle Carousel 4",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "54698b7019f0e069b9ae1751c0a9ff255279d73fe27ad947497c9ff45f316422",
+    "shipped_dir_sha256": "6331bebccd42e18c5932c7bcc81ae0763787e481780369912b12d0ab785f2de2",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-4_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-4_shot_v.png",
+    "sentinel_frame_hashes": [
+      "8d33e93d85cb561c",
+      "8d33e93d85cb561c"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "a2159b8686c90c142a976138782beba5a42f9743dffc6ce3ac7f691206a11ed8",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "ad56a24781c18619d592f9ede8c46a7bf41af8167c95d5095d8b14537728b62f",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-text-circle-5": {
+    "id": "carousel-text-circle-5",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text + Circle Carousel 5",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "474f1ba9e8664bd86b3327d92e300bad2d7f56edd7a9f987545fc760f535ca6e",
+    "shipped_dir_sha256": "ac64c8b3746b6e703c70ae66e1e96000da799ee018f547ee38fd1db086a9ccf7",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-5_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-5_shot_v.png",
+    "sentinel_frame_hashes": [
+      "edc25cc5827e45ef",
+      "edc25cc5827e45ef"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "18423fd056cede0f24f8ca637bec12fb8a1292b3fc548ebd1790dec61cf3c095",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-text-circle-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c44fff46ea424e9e654746fa9f86478a14fe8f30329ef9b10007e1b8a0b1c5cf",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-vision-1": {
+    "id": "carousel-vision-1",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Vision Carousel 1",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "94a017ddfe722422b1e2201fb27bb645fda16280c17618dd13b77200b1b95400",
+    "shipped_dir_sha256": "3c2c92a6f5d16abd357fb5a9e3145263462a965efdc2d54af81cd99709d37c4f",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-1_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-1_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "7f5738f638a904951f86d2583426e4a7ee73a3045384e2ce0004d02313ea3ccb",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-vision-2": {
+    "id": "carousel-vision-2",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Vision Carousel 2",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "3890c7d398c09574dca5a71eeb6970d56d61dd9aca27a935a18f3e782f65cc91",
+    "shipped_dir_sha256": "21f0ce084eb96db89079a9c594648d4cfc454c4ec10dd81d710e4a0713d1a871",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-2_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-2_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "7f5738f638a904951f86d2583426e4a7ee73a3045384e2ce0004d02313ea3ccb",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-vision-3": {
+    "id": "carousel-vision-3",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Vision Carousel 3",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "1a12e373882a8ab1d293d3340ab93e41da495a834010cc705bff332620b327cd",
+    "shipped_dir_sha256": "38c542ff4ab60473a76e95abf87e0dadbd059cb1498ee4db0023eb558e247433",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-3_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-3_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "7f5738f638a904951f86d2583426e4a7ee73a3045384e2ce0004d02313ea3ccb",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-vision-4": {
+    "id": "carousel-vision-4",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Vision Carousel 4",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "6fae582ebd6e94ea99c64597159373632da238dbd215e00d0c6f44f90b36de3a",
+    "shipped_dir_sha256": "37a7d1bc8a2d23da4d40b373a1115da6edfac44d692e6402144d7e2b237de368",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-4_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-4_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "7f5738f638a904951f86d2583426e4a7ee73a3045384e2ce0004d02313ea3ccb",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "carousel-vision-5": {
+    "id": "carousel-vision-5",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Vision Carousel 5",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "dfe8b61ca4fae26b95403095136cb099bd3989223f616f3940675d8fa042237b",
+    "shipped_dir_sha256": "406964448b43a175d09647cd71b48ea157ace94808689625a9b14d514b9d6e5b",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-5_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-5_shot_v.png",
+    "sentinel_frame_hashes": [
+      "594e9d09b8658f2a",
+      "594e9d09b8658f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "059bbccc70e46e16cdb7a21a22cc8dcc6a23d2c607c1913e0db83376a5dd612c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\carousel-vision-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "7f5738f638a904951f86d2583426e4a7ee73a3045384e2ce0004d02313ea3ccb",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "chromatic-radial-split": {
+    "id": "chromatic-radial-split",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Chromatic Radial Split",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "50e4b262572f099afbd57631f22ae15fa0f8f5da1aa30730f67c7ca77e6c204c",
+    "shipped_dir_sha256": "8ff881e743b9c7a278f280553a4ab5edfc2aed309c5ec8cb1547d95351733344",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\chromatic-radial-split_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\chromatic-radial-split_shot_v.png",
+    "sentinel_frame_hashes": [
+      "170da605869b5555",
+      "170da605869b5555"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\chromatic-radial-split_16_9.mp4",
+    "physical_mp4_16_9_sha256": "950010b7b001a0a18b14fd55428f8e0d94070da12b9c16d5967b13d791edce65",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\chromatic-radial-split_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d37423a4756a7a0b0abaca63149bf659fed8a6ba35fa1bc8e1aa1e6ebf1a8366",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "cinemagraph": {
+    "id": "cinemagraph",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Cinemagraph",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 10.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "4e131e24ba5b705959e19a7176debf6a16d495e8337c76a3ab717e3d5b06f895",
+    "shipped_dir_sha256": "6e7c0df9f796a75837908bfbd8cec46a66a0cb0231f72fcc1a9da0c8b67c8d68",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinemagraph_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinemagraph_shot_v.png",
+    "sentinel_frame_hashes": [
+      "c78b6cd9745e0f2a",
+      "c78b6cd9745e0f2a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinemagraph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2951cfe41a0e4d6f725f7a666aada47416a5230757e5ea6254b46d754dc0b520",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinemagraph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f79ac377e9dce0034d076d8889b1aed8efd546f7913a87a55fe834f2f8864291",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "cinematic-zoom": {
+    "id": "cinematic-zoom",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Cinematic Zoom",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "2a7531cdc37c1d2aecea0345c635ee3fcbb9c087c45119431f7d568bdd02082f",
+    "shipped_dir_sha256": "58b59078306a5237a8435c2542c94903395e56cc9faf6f86fbcc3c8574cfb24d",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinematic-zoom_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinematic-zoom_shot_v.png",
+    "sentinel_frame_hashes": [
+      "e696ee6f54e9ac5d",
+      "e696ee6f54e9ac5d"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinematic-zoom_16_9.mp4",
+    "physical_mp4_16_9_sha256": "6d55322a3090c8b50c1882edbd284643ec929cc27ba53bb884eb7a0f76c863b8",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cinematic-zoom_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1502ebb122a5b8ea86648bf9ca012c0ecb2293cad1336a73aa128aaa5bdd3e17",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-3d-extrude": {
+    "id": "code-3d-extrude",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code 3D Extrude",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "5e2edb1b355908ab21923e6a146bf7bb669d1c323cc195ad044e9d7bd6a3d496",
+    "shipped_dir_sha256": "5f46f18fae8ded7b5e0ffb23f8c9051e1ebfd451ea91996ad5c2d7f93367ec68",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-3d-extrude_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-3d-extrude_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-3d-extrude_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-3d-extrude_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-diff": {
+    "id": "code-diff",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Diff",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "7f4dbc0928ab20236dfde20546733c6cf9e526d3dbfc6c2fe2f7937aaf414032",
+    "shipped_dir_sha256": "db48c40ef5be77d23381a78ede9d0dcfd5c6d5c8603962df74f11d3832f3d8de",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-diff_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-diff_shot_v.png",
+    "sentinel_frame_hashes": [
+      "f20282e6608ce873",
+      "f20282e6608ce873"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-diff_16_9.mp4",
+    "physical_mp4_16_9_sha256": "e020d9515bc0b154e220dbc6e859ebde2d150935c9b9fce777c1981f705fab5b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-diff_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d2922154ad66c2c941b8cc0ebf2418f4e1a2874a066f25e4bf697b467d4e92d8",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-highlight": {
+    "id": "code-highlight",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Highlight Sweep",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "91291fc5f9ef0ea630a183b41482c7f91c66609e7658742f0d9901faf4dd06ea",
+    "shipped_dir_sha256": "f39d6411b9a4c91b3ec912206593c18585697053a692390772c35e22765aaf98",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-highlight_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-highlight_shot_v.png",
+    "sentinel_frame_hashes": [
+      "535b69c0480e2339",
+      "535b69c0480e2339"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-highlight_16_9.mp4",
+    "physical_mp4_16_9_sha256": "0929eab1f0842763852b36b9d95a9b93443992320d5638d880eab2e8b1839b44",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-highlight_9_16.mp4",
+    "physical_mp4_9_16_sha256": "0ffed6bae56224f8331894869e49b7d28f5f4d164f10d011c4d76f875c211960",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-morph": {
+    "id": "code-morph",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Morph",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 7.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "c2ee6741bf0edd93d4f69ab1b9d2681eb1811cd982a4cd34ac6fdc2b96fe425a",
+    "shipped_dir_sha256": "5b409b93dcf94d7942f17ee6f8ab1c438e0856ab8df05df2047205f8c9c98468",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-morph_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-morph_shot_v.png",
+    "sentinel_frame_hashes": [
+      "2302c712b200193e",
+      "2302c712b200193e"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-morph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "944bd2d829ed560a7403cfa42e0958fb5953d3c379f3a0880270c370c3a58309",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-morph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "270bad10514b59de07170892923d2021f87ffe55785283796cd94729dc11518f",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-particle-assemble": {
+    "id": "code-particle-assemble",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Particle Assemble",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "022150b0273bf4798d7a8716422a70116732af36b246d7a50d51ae6abf481c06",
+    "shipped_dir_sha256": "17ded67950e377b0a5115fd46e07a64dbc3b1278a4766a4deb81095b397151e3",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-particle-assemble_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-particle-assemble_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-particle-assemble_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-particle-assemble_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-scroll": {
+    "id": "code-scroll",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Scroll To Line",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "dd74273fee09a1214e4b4a69b9c79991c2779607cbd2627366e3b70c456924f1",
+    "shipped_dir_sha256": "5c14a58ffa2de6fb5e60b29bbecb5cdc0cc9606ff8d7eed9d6765dc168f492f2",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-scroll_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-scroll_shot_v.png",
+    "sentinel_frame_hashes": [
+      "143eaa41965bc6df",
+      "143eaa41965bc6df"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-scroll_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4d1b42323bfae2f169372f19f0cb42168e404379f75bd5faf955566854f87166",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-scroll_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f3d9a0ceca409d313ab0e2477e699e1127c8047497d43a18d48591b863f8eec0",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-shader-dissolve": {
+    "id": "code-shader-dissolve",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Shader Dissolve",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 7.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "80e6d40787618d3f1363294196289e9fd45d8fb8438b63173d421cf562bc7aaf",
+    "shipped_dir_sha256": "7910b897f6c38fdc4e2db94e05631ab0e11893e194ed3d3d75d61be43789f08f",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-shader-dissolve_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-shader-dissolve_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-shader-dissolve_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-shader-dissolve_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-slice-hero": {
+    "id": "code-slice-hero",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Slice Hero",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "2397e1c5000efb09310e3fd3ee7161d6127fb78d2201222862fac9fec4a416db",
+    "shipped_dir_sha256": "dea64d10bbe473389dc95387837a5b1e130b61e27a02a846fdbd412fb5264a3e",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-slice-hero_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-slice-hero_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-slice-hero_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-slice-hero_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-snippet-dark-2026": {
+    "id": "code-snippet-dark-2026",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Snippet - Dark 2026",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 11.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "4c34a7a4f2bb193b593914fbad62ee2173d7a5674fc9dbdb16550b0f47df64b8",
+    "shipped_dir_sha256": "92ef4470e0c163e3fa0a39a03b2310c1313ef3413faaad4569e619dacb9e59c1",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-2026_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-2026_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-2026_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-2026_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-snippet-dark-modern": {
+    "id": "code-snippet-dark-modern",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Snippet - Dark Modern",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 11.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ac74aebe802b04aeebe81064a83d72e258e88ad82bf4bd430f516d4b07a4b0ec",
+    "shipped_dir_sha256": "b996d1a404d756716bfe48994ff9e59fe4a74d6fa277969d6a1b16b638c5a855",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-modern_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-modern_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-modern_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-snippet-dark-modern_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "code-typing": {
+    "id": "code-typing",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Code Typing",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 5.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "af53c4dc04954cb084b8f6da5ad00ce069bb55d90fd7edb1ebdc0e653518c869",
+    "shipped_dir_sha256": "987e3c89b912e47b60c1e3756c0db50940fd68f3dc8c45623946f29e92c807cd",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-typing_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-typing_shot_v.png",
+    "sentinel_frame_hashes": [
+      "f07f0fb7108c680c",
+      "f07f0fb7108c680c"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-typing_16_9.mp4",
+    "physical_mp4_16_9_sha256": "48f0ca287551cc8c2cf22573abe43733e90d814f1dc2a36e5d9b8d133352ccb0",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\code-typing_9_16.mp4",
+    "physical_mp4_9_16_sha256": "4c8f8010ca461af4ff430420a08c4c3191f5cf169f0c30b1ce1a12af577362ab",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "cosmic-orb": {
+    "id": "cosmic-orb",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Cosmic Orb",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 10.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "329479793ee915979a8902418e98f5c7c03ff8ce56910cdcd7aea894d1ef1ed3",
+    "shipped_dir_sha256": "2884e36c6c9760db1c3df079be5d84ffe5d608ffd7c0ea9aecc338d67e80fd3e",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cosmic-orb_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cosmic-orb_shot_v.png",
+    "sentinel_frame_hashes": [
+      "23087c1f5ca9069f",
+      "23087c1f5ca9069f"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cosmic-orb_16_9.mp4",
+    "physical_mp4_16_9_sha256": "17d2b77da64ffc65ce58810e1a1f00072d09ac4bf51ee112ee5fcc0f3c64feb0",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cosmic-orb_9_16.mp4",
+    "physical_mp4_9_16_sha256": "93da275f224162895c539477a25ce51e45c82ba4827efe12f7c0578b31c8e3f8",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "cross-warp-morph": {
+    "id": "cross-warp-morph",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Cross Warp Morph",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "05f379f7a5dcfb82da67187a22ac35840fb9a0662ef9df61adc4f3e925605964",
+    "shipped_dir_sha256": "7f81714b73544210d28d79820bd2eb356db4f727aadf9f00c52a1fd0ea66195b",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cross-warp-morph_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cross-warp-morph_shot_v.png",
+    "sentinel_frame_hashes": [
+      "84ed054e347f86c7",
+      "84ed054e347f86c7"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cross-warp-morph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "8456ba6c77a740ba722073a2641a7328ff14109ea182a07811e45de2ba99857f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cross-warp-morph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "69104d229b66f2547d6c8e0d233b4f2068b87dc7b538a68e83d69baf70155bdd",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "cuboid-carousel": {
+    "id": "cuboid-carousel",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Cuboid Carousel",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.67,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "8b3bb227e581f75e7be4c7a3b33855ca0535adfc3c32f356e77e3f7294208be1",
+    "shipped_dir_sha256": "5d94fb12cd78a190762652f01bdc9aef2160843ee52462c7ce580197a9486e34",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cuboid-carousel_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cuboid-carousel_shot_v.png",
+    "sentinel_frame_hashes": [
+      "5738db7592dbd3d5",
+      "5738db7592dbd3d5"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cuboid-carousel_16_9.mp4",
+    "physical_mp4_16_9_sha256": "54bdae7bdc0362512dcbe4a8953813e527299c468796ac0168ad4233ba066802",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\cuboid-carousel_9_16.mp4",
+    "physical_mp4_9_16_sha256": "0c832eefa7e3484a0fa4ee4149dd21046d899db7e3b7e277c803bf064e52e927",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "data-chart": {
+    "id": "data-chart",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Data Chart",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 15.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "a8b6441dc1dc39c53f6ed4ca8d597658c3658b1ad5597c2d32f5253fada23127",
+    "shipped_dir_sha256": "f22af6894760ac27790abcfcb8823b3c2e2ff1f0827532a59edf031f32156de1",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\data-chart_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\data-chart_shot_v.png",
+    "sentinel_frame_hashes": [
+      "bbd989fc63eb9bf4",
+      "bbd989fc63eb9bf4"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\data-chart_16_9.mp4",
+    "physical_mp4_16_9_sha256": "e0c99f943d954056dbf67e197177bfdb8f2e499f593ce82ac9318ce249cb4493",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\data-chart_9_16.mp4",
+    "physical_mp4_9_16_sha256": "8a6801ef112c4de767cf8382289b99b61a9b9fbc8590a1be281407753b9efc3d",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "domain-warp-dissolve": {
+    "id": "domain-warp-dissolve",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Domain Warp Dissolve",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "03c09f78ce2e968ab06587feb5d0487d79aa86ffbd65129809d3bda1e5741add",
+    "shipped_dir_sha256": "cf2c65e1a658d30855409dd344d9b6e718b69b31bd2eea23f541613629180753",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\domain-warp-dissolve_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\domain-warp-dissolve_shot_v.png",
+    "sentinel_frame_hashes": [
+      "0aaedfa39e189757",
+      "0aaedfa39e189757"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\domain-warp-dissolve_16_9.mp4",
+    "physical_mp4_16_9_sha256": "58c9f602f5240297a5b1c43358ed6cf3f6e844abefd5e389b5eb484c0cd42cc6",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\domain-warp-dissolve_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d0b08d38054c27245540d77d419041f49749f336c9594b483aeadc0ebe50ab34",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "editorial-flash-overlay": {
+    "id": "editorial-flash-overlay",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Editorial Flash Overlay",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "0e30e7840b5d85fbe87d81d4cc3911107ba534ade118f4168673e956b12eda35",
+    "shipped_dir_sha256": "c9133b65fdd9cdf7475b4afe2772a44a44e12c88edeaa7d260d1a51f9d1d36c7",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\editorial-flash-overlay_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\editorial-flash-overlay_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\editorial-flash-overlay_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\editorial-flash-overlay_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "flash-through-white": {
+    "id": "flash-through-white",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Flash Through White",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "e2486d88e7d391156ce1c1957fa198e4a7ff981355bf4959105dd6781859463d",
+    "shipped_dir_sha256": "e2fecb50d7eb39b618494283b474002b9f63f52e6b11ada649e82ec513490011",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flash-through-white_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flash-through-white_shot_v.png",
+    "sentinel_frame_hashes": [
+      "00ecd1dcca6f2c61",
+      "00ecd1dcca6f2c61"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flash-through-white_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4a2c0f48b1e4fe855596d1aae23e12f43af0f008d3bcca1730cdd3a9f4b4a44f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flash-through-white_9_16.mp4",
+    "physical_mp4_9_16_sha256": "9ee8075f109d484ae3be7b2481d6fa14e93c09554ec57bf69e24f422c60b2ef8",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "flowchart": {
+    "id": "flowchart",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Flowchart",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 12.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "20b8691fe6a3eb39edb3bdcff616df099c1a8c3600164ae1a3a6811b1e2ebeff",
+    "shipped_dir_sha256": "8dfe3417c37f874fd39dfaac23f2d4892917c35048bccac1953e3e7142a3f920",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart_shot_v.png",
+    "sentinel_frame_hashes": [
+      "b1ded7fd881cf25e",
+      "b1ded7fd881cf25e"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart_16_9.mp4",
+    "physical_mp4_16_9_sha256": "afa7b9981e3ae56b155e99e56cc54f6f91a5e7cf22fea68981a14f05e68a86f7",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "flowchart-vertical": {
+    "id": "flowchart-vertical",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Flowchart Vertical",
+    "dimensions": {
+      "width": 1440,
+      "height": 2560
+    },
+    "duration": 12.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "d895ad5c28c2e591f737ffcfdc020b113c960194eaddb041dfe7a87aca2f9e3e",
+    "shipped_dir_sha256": "3d97816933453e7f09fe9c0d0ab6fd3e9fd84fd1d207295d1c25350849c1b836",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart-vertical_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart-vertical_shot_v.png",
+    "sentinel_frame_hashes": [
+      "cc06a6d103a8af7d",
+      "cc06a6d103a8af7d"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart-vertical_16_9.mp4",
+    "physical_mp4_16_9_sha256": "a3f5a533f14d019eb2bc6e8f0c235d242339fcebac1975ff6759814fda062f3e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowchart-vertical_9_16.mp4",
+    "physical_mp4_9_16_sha256": "24af40f68902a49020f031379bbe77a4b36fede4380ac40d79f67e7ea8acaca3",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "flowing-gradient": {
+    "id": "flowing-gradient",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Flowing Gradient",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ca7220005c6de606a542ebc771f3c50d2d2fd2a8721e853bfa657d5f4683bdfa",
+    "shipped_dir_sha256": "d93e26b829671f4ddfde611907017bb65a8febedf6e95f619a926ae594086799",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowing-gradient_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowing-gradient_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowing-gradient_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\flowing-gradient_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "fractal-noise": {
+    "id": "fractal-noise",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Fractal Noise",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "e44bf95212caad14ee49f45712d55fcdff3407d4730d894d73339c133637bfd6",
+    "shipped_dir_sha256": "93a95361b4cc547984e55c4c7b87c6bdc7479126c30f1f15ad4a8b65bab63bcb",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\fractal-noise_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\fractal-noise_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\fractal-noise_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\fractal-noise_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "freeze-frame-dressing": {
+    "id": "freeze-frame-dressing",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Freeze-Frame Dressing",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "f40fb094e1ae7a0acbb40640046ef6e65971e6ea10af3493cf01d75c8253063d",
+    "shipped_dir_sha256": "0e5380c7cab297db888b038b384e1ec73287ab7733f68d09b98595f6ac32d835",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\freeze-frame-dressing_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\freeze-frame-dressing_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\freeze-frame-dressing_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\freeze-frame-dressing_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "frost": {
+    "id": "frost",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Frost",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "0f0d302ded31fc132d2dc36e3a80c12ce4ed806851e3cfd5b260400dda7b6c9b",
+    "shipped_dir_sha256": "9fabc675f9afc4973972225f9834b97db4620d8f91db2ddcd36ee0ad60ab9bc3",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "frost-sequence-camera-orbit": {
+    "id": "frost-sequence-camera-orbit",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Frost Sequence Camera Orbit",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 22.5,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "2bc9d64a2cc1505f6194eeb6dbc1e156aa313632022fb3c7f408255badc2e997",
+    "shipped_dir_sha256": "fe99b7a89f636cd9eac9b6618fa458b2495722d685ed971cf9c55c0129801493",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost-sequence-camera-orbit_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost-sequence-camera-orbit_shot_v.png",
+    "sentinel_frame_hashes": [
+      "2aa1489a700c7900",
+      "2aa1489a700c7900"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost-sequence-camera-orbit_16_9.mp4",
+    "physical_mp4_16_9_sha256": "de596f538b4612540448918c7870849a0bf8fc825879ee046860ea94f8977c68",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\frost-sequence-camera-orbit_9_16.mp4",
+    "physical_mp4_9_16_sha256": "e4f2e7ebb4cfe9753a1f4b4559b4b95b9724247ea1a6c49411e9d9772abff5af",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "gallery-tunnel": {
+    "id": "gallery-tunnel",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Gallery Tunnel",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 12.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "175295c22aec6612a47e0c4aa060617e4767595296897878c5852654dffaaa65",
+    "shipped_dir_sha256": "1d50e8d0150a76d4d915496dce1452dd911d86b1860a3981807a85c0cdc3ad09",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gallery-tunnel_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gallery-tunnel_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gallery-tunnel_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gallery-tunnel_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5c9cfd6fc657992dc07d395593d63e449f187e334ece9a376b42f33bad5e053d",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "glitch": {
+    "id": "glitch",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Glitch",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ab63535da7a724240ac08ae171502a1856aa11e83b338ad11215a4843a86acc2",
+    "shipped_dir_sha256": "d35a93630ee020cb05d536876a4afeca88ce670490603877b088e0d3fdff81fb",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\glitch_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\glitch_shot_v.png",
+    "sentinel_frame_hashes": [
+      "cf43063b92ff229d",
+      "cf43063b92ff229d"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\glitch_16_9.mp4",
+    "physical_mp4_16_9_sha256": "eed8fa6e0240e773b26a825e9289102d765d0b363972a5187d5a87e205df9550",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\glitch_9_16.mp4",
+    "physical_mp4_9_16_sha256": "758ac237fef770be9c44c976fdcf8da6608bd3cdfb2d27637d05310aad18701d",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "godrays": {
+    "id": "godrays",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Godrays",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ed1d13f807f0826f29795950b7f53c42c9f1a1651b82704a19b0a1143aba09e1",
+    "shipped_dir_sha256": "e06f1b91c5ffb0db5c5948e5fcc8781daf5f4cb83f931f0bf637ba984c6ba5fc",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\godrays_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\godrays_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\godrays_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\godrays_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "goo": {
+    "id": "goo",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Goo",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "11d16de3cc3fc0b8a2ac71ffef71bd2b19b95fd8f937b08c8ca452d2cd312ba1",
+    "shipped_dir_sha256": "e73a6c0e7dea95f702d9b3e87c74332feeeea6cca36e9f05b07d7853129dfad3",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\goo_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\goo_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\goo_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\goo_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "gooey-split": {
+    "id": "gooey-split",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Gooey Split",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.7,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "b8bf870cc3330412646a09b08f6a2b415e872d8342a721b3007bf458cbde6f0a",
+    "shipped_dir_sha256": "06c6ae565e2c0c725c177c633ec4494d5a28ee1b7840f190cdcada60ebcbefd9",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gooey-split_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gooey-split_shot_v.png",
+    "sentinel_frame_hashes": [
+      "a7a2046611237499",
+      "a7a2046611237499"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gooey-split_16_9.mp4",
+    "physical_mp4_16_9_sha256": "55dd2431d64dd7495a3712abdf9fd03b06f93cf63e7c36aad52c3b9834303b3b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gooey-split_9_16.mp4",
+    "physical_mp4_9_16_sha256": "ea672206db7281289f4f2be8754fe3a25c53161a017ec1a0a680333643b70218",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "gravitational-lens": {
+    "id": "gravitational-lens",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Gravitational Lens",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "232e56592bd5384124f9292c5118653f027dc06f469904784a8d453a25dd4c51",
+    "shipped_dir_sha256": "b5cb79401fe8c324452236ca646af5197c6f1e6054cc358d9f6834d7aa53009e",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gravitational-lens_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gravitational-lens_shot_v.png",
+    "sentinel_frame_hashes": [
+      "8ed91085b3c80e69",
+      "8ed91085b3c80e69"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gravitational-lens_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22b75cb8973a11a5bf3c54fbde491199dda612e79e01ecf6e5e0f2a19c51cc98",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\gravitational-lens_9_16.mp4",
+    "physical_mp4_9_16_sha256": "221c4585068f3b6c437a1bd7d03cd1b92c208ffc23d8735aa30e144d678c7cf3",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "halftone-field": {
+    "id": "halftone-field",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Halftone Field",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 10.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "3a17594235b13ca780ce17e828f2a57c6285952822d4e49820776e62d194cd12",
+    "shipped_dir_sha256": "e83a1f9c0942cbc6c6424c6de3ad60a465e1112bdd8cb63aedda353cd882a0af",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\halftone-field_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\halftone-field_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\halftone-field_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\halftone-field_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f386e5302f1701f04648ee23db23a836b526b4af9c4ec8eadbc0b59626f904bd",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "holographic": {
+    "id": "holographic",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Holographic",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "acbb8793055d150a8cd5e4497572bbe33c45f46dedf379d8931709168a4eb403",
+    "shipped_dir_sha256": "d06766f4080ffc58dd61dcc96d237b3a705c85e290e1758fe81a8df131742d71",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\holographic_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\holographic_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\holographic_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\holographic_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-frame": {
+    "id": "hw-frame",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Sketched Frame",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "0a22d32a74a9842b90557bd055024cf60cfc026a708ef6e7c503479eb9485087",
+    "shipped_dir_sha256": "5b3e27315dfea4eba134983caa92c3a4407a1af37103bb358cb9f155677a4fc8",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-frame_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-frame_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6c783d2224eba866",
+      "6c783d2224eba866"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-frame_16_9.mp4",
+    "physical_mp4_16_9_sha256": "5c128192471c03fa645f34a2a3eb8f7f2a0db85be1f9d656a4120c4dcd2f781f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-frame_9_16.mp4",
+    "physical_mp4_9_16_sha256": "89bc7fcd866407a71c9e094b5deddef28af0a89574432d90ce2b038797b4aa2e",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-path-text": {
+    "id": "hw-path-text",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text Along a Path",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "71401e6ab0cc212b459ca7a7d34a7b5df460c1e04184ceb1a34ccd8dfc2c17af",
+    "shipped_dir_sha256": "2478327da77cf6fadb346e9a436402364c50f26bc9b9706c93e68d19a8d87476",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-path-text_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-path-text_shot_v.png",
+    "sentinel_frame_hashes": [
+      "08e4d2194ef4838a",
+      "08e4d2194ef4838a"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-path-text_16_9.mp4",
+    "physical_mp4_16_9_sha256": "ebb3eb5455973f941dca5460bb81d32c336619b94521fbe99a30eb5ecd4c3f6a",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-path-text_9_16.mp4",
+    "physical_mp4_9_16_sha256": "fae62847b7ad3843d8c62f090fd66b9a274e4e68e56904c74fe71a6568279898",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-pipeline": {
+    "id": "hw-pipeline",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Hand-Drawn Flowchart",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 7.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ba6439a4c31b2f7600cd31226c6e43edb38e7766d5980f4dbcfb85072705856f",
+    "shipped_dir_sha256": "fde872f2d265d8874946f52220d8d586d2a6d637e5a4bf0bf09983d89fa31852",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-pipeline_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-pipeline_shot_v.png",
+    "sentinel_frame_hashes": [
+      "c3dfb36be6921ab5",
+      "c3dfb36be6921ab5"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-pipeline_16_9.mp4",
+    "physical_mp4_16_9_sha256": "b497fd87aaa99ece5e6aab52ec2ff540f5d768866e36631b9e833cac2d748d21",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-pipeline_9_16.mp4",
+    "physical_mp4_9_16_sha256": "4655af720230a3242f08d6966826869cb1f7b49b883083876e985f4373889bce",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-scribble-transition": {
+    "id": "hw-scribble-transition",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Scribble Transition",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.2,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "936d3593a8c4e6c14a91951c5fe5bb2d88ac43bdbb5eede574a0a1a5cf721b5c",
+    "shipped_dir_sha256": "70ea484438519fec02f75d9999fdb2f05eea074fe71fe7e02e96bdaa15eb4f71",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-scribble-transition_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-scribble-transition_shot_v.png",
+    "sentinel_frame_hashes": [
+      "93e33d336e6fd27c",
+      "93e33d336e6fd27c"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-scribble-transition_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c6ddfdc19616dca3eee0cbd3775134844e802174b5c66dd5152153651cc84214",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-scribble-transition_9_16.mp4",
+    "physical_mp4_9_16_sha256": "20875985d243029bba6b382777418926affb8db331776cf22c3148b78d076f96",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-text-cloud": {
+    "id": "hw-text-cloud",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Speech Bubble",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "74cacd41af0d77693d53e8ddfd8e66dff8f4697fec44109ad6dbec8aeaa59698",
+    "shipped_dir_sha256": "51deaccb3634e62d0a4fe94490e074d5d431c112afa7b5db13a17974d2468fcb",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-text-cloud_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-text-cloud_shot_v.png",
+    "sentinel_frame_hashes": [
+      "e4a7e20908300836",
+      "e4a7e20908300836"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-text-cloud_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c6444e1c8cfc8c719ff0b976f2242d4c64d8f1003bd91bcf674d6cd5a73b09e0",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-text-cloud_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14c89a87628b59f9669327e5b7cefdf18e2a83b67fbc10d7e394b9458fc3ef0c",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-title": {
+    "id": "hw-title",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Handwritten Title",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "38d52aab2d095c18a39607212c8cb2fbea7c2118f9b5cfa3e8ff0ef526ff4e99",
+    "shipped_dir_sha256": "280abd211afaf5f17d51ca6e780f0f11db2a8f8ea475a0eedb3aff50527139e4",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-title_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-title_shot_v.png",
+    "sentinel_frame_hashes": [
+      "5d5c54c613b73d40",
+      "5d5c54c613b73d40"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-title_16_9.mp4",
+    "physical_mp4_16_9_sha256": "d5556ba2a57b7546d1aad3d3ad22b049bdea596d03f3b02eabebaaa49412ef51",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-title_9_16.mp4",
+    "physical_mp4_9_16_sha256": "8baa7bbce94827dfa098e05c8e2fcabd4c89cf6aad89092db6b5caa1ac6bb973",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "hw-write-title": {
+    "id": "hw-write-title",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Handwritten Write-On Title",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ef37696ef6a0e06ae67447303b6f9309f58e90f0fea3000c281d94f6173658c0",
+    "shipped_dir_sha256": "610a1d5e890a6119bb04e8a125961b3c9b77b53dbb91e1be9555b9fa88dc4487",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-write-title_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-write-title_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-write-title_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\hw-write-title_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "instagram-follow": {
+    "id": "instagram-follow",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Instagram Follow",
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "duration": 4.5,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "e548db57e4b928998bd9168cc572c2a4fbfa91c0e92c4d80347828cc11661fe6",
+    "shipped_dir_sha256": "fb467ef8ee37322ad9561e8168656c3dc4eca167a02dedecefda9fcc7f57c8cd",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\instagram-follow_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\instagram-follow_shot_v.png",
+    "sentinel_frame_hashes": [
+      "c4bcba86438cd089",
+      "d1777479e3106b4f"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\instagram-follow_16_9.mp4",
+    "physical_mp4_16_9_sha256": "e65d625948c83f1b5351a043dad6b5d652967f1af5f80ca4b7009038ed3cfe06",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\instagram-follow_9_16.mp4",
+    "physical_mp4_9_16_sha256": "304f8f510c25b37ef07554d88cc41d6bea780080d47c748975aac986f007216c",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lens-flare": {
+    "id": "lens-flare",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lens Flare",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "20ce783ef3e4d5e9e98becaedf740467da949ea8191877fa054a17f97a010957",
+    "shipped_dir_sha256": "607151737cdfc9384e6bd1833bc612c0e8fc3b3513da26581e2be20398110551",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lens-flare_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lens-flare_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lens-flare_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lens-flare_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "light-leak": {
+    "id": "light-leak",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Light Leak",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "3a74066c3a96d726e51221c3c056fafe5798bba10638d7f853de369d35df0538",
+    "shipped_dir_sha256": "01af5d754a506019ad084b515c98aef186ca469bdd8fe8837438ed129dbbff7e",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\light-leak_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\light-leak_shot_v.png",
+    "sentinel_frame_hashes": [
+      "00c34c9925062934",
+      "00c34c9925062934"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\light-leak_16_9.mp4",
+    "physical_mp4_16_9_sha256": "a7abfb3fb1f721a7b27c512ed32faa5bbdf25a0d37337bf5ec3167989aa28d88",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\light-leak_9_16.mp4",
+    "physical_mp4_9_16_sha256": "bffdf5312c52d8d306aa1c4574ddbc8e308edf1eb5d44e723ccf4b7a21c0f8cd",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "liquid-metal": {
+    "id": "liquid-metal",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Liquid Metal",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "cff6c2574702389c9c3fc56614cf3fdafe5558d81244de99a61342d6b9fb0024",
+    "shipped_dir_sha256": "635dce2f8902c6b3da41f05b50bc1234ddce2b2931e73be1e364fb3e3bf23621",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\liquid-metal_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\liquid-metal_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\liquid-metal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\liquid-metal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "logo-outro": {
+    "id": "logo-outro",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Logo Outro",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 6.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "85de1064b86919bb16cddb2f7b6265f76ff12d28c0dd0d6ec01def286922f639",
+    "shipped_dir_sha256": "19c0e0bd15ea1be7520513cb00c1b2f6510657ac35f05f27ea72ce077733dbac",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\logo-outro_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\logo-outro_shot_v.png",
+    "sentinel_frame_hashes": [
+      "7f9cd1aff81ba5bf",
+      "7f9cd1aff81ba5bf"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\logo-outro_16_9.mp4",
+    "physical_mp4_16_9_sha256": "bb66833b522d151cad7176e8644b7fc503cdc40bfc6a28b9e30b20e7ba25a942",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\logo-outro_9_16.mp4",
+    "physical_mp4_9_16_sha256": "cafda70b93d9c5ac5c79ef1ec5523d9739257fbe3ddc5860785b0be61984282f",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lower-third-bild": {
+    "id": "lower-third-bild",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 BILD Style",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "471891ca9475a3674997c91709b87a1c5eaede6e374bf2cfa1eda8488be2d63a",
+    "shipped_dir_sha256": "5b6112f1217ab87826683a150a5fa9c03450fb2bfc2bc9a4c4cd75ed055634e2",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lower-third-bild_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lower-third-bild_shot_v.png",
+    "sentinel_frame_hashes": [
+      "5fb4fcd76ba910fc",
+      "5fb4fcd76ba910fc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lower-third-bild_16_9.mp4",
+    "physical_mp4_16_9_sha256": "8ea1af93b621f42569e2c6a8c8dd96406ccc40cb3078ed376553766dee3af97f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lower-third-bild_9_16.mp4",
+    "physical_mp4_9_16_sha256": "9416a46361d8faa014c4d434a5b462bfd4deb0a837980feaf31483b56f0ca62d",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-accent-underline": {
+    "id": "lt-accent-underline",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Accent Underline",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "dafec8e24697647e97fbf721f1ef9ea0b779e268605360a777896bb9af1fdebe",
+    "shipped_dir_sha256": "46b785f7a2c008deb4925caff069d6b1f83c97483eb4ee29b5c6cfa6b4841388",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-accent-underline_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-accent-underline_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-accent-underline_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-accent-underline_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-bold-block": {
+    "id": "lt-bold-block",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Bold Block",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "77c29535cf821445977b60a1324610982aaecdce322e02105861c02d78e8194b",
+    "shipped_dir_sha256": "bed8257f588a60b77a252e1bb543ccec5ab9bf5b5f0e747b35d187f78057f735",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-bold-block_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-bold-block_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-bold-block_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-bold-block_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-clean-bar": {
+    "id": "lt-clean-bar",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Clean Bar",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "e621cdd29ce4626ce56ec6bb207df44df5996747adb2200dc201af1c8c0fd84a",
+    "shipped_dir_sha256": "e3b0f6a681053191fc7eeb1a9f740fc81a34fff0c374e1cd999e3c6a90ee1125",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-clean-bar_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-clean-bar_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-clean-bar_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-clean-bar_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-color-block": {
+    "id": "lt-color-block",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Color Block",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "db69fbdbcbef560e4623dd3c9ffeab62d8bc07199c90c4f5d7c39d24acbf9e5c",
+    "shipped_dir_sha256": "56dd132cf2154d1e47d28bcc1386ed36959854a83c4a5fa36ce38e249b407863",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-color-block_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-color-block_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-color-block_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-color-block_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-dark-card": {
+    "id": "lt-dark-card",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Dark Card",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "9b109c717cd776b4bc451290e765aa46bee6379366b78b337a6fac55070b7355",
+    "shipped_dir_sha256": "767ff13032b3163b10e908278af331791751255ddf5f3d54b318930989c55792",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-dark-card_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-dark-card_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-dark-card_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-dark-card_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-kicker-name": {
+    "id": "lt-kicker-name",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Kicker Name",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "95831e9276b5b46b3e2738378208048a555f29554a43be99903de364ede05caa",
+    "shipped_dir_sha256": "e4b06ca5fca701495ab63373f3aad007c3183ded20ed58aa13c9fd92aae39563",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-kicker-name_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-kicker-name_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-kicker-name_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-kicker-name_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-mask-reveal": {
+    "id": "lt-mask-reveal",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Mask Reveal",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "7f4189126fb719487f9abe8a15d96d37c7bcead807e352d70efb285754ea3e92",
+    "shipped_dir_sha256": "e79e074760de8f4e6b1bd51b85a9bb49cc96f8b146a6a6921493229de72cb32d",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-mask-reveal_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-mask-reveal_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-mask-reveal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-mask-reveal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-neon-border": {
+    "id": "lt-neon-border",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Neon Border",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "a6d89754941d52a54470d011d30839692e8f6f7572c2448614c08487c6b2733f",
+    "shipped_dir_sha256": "98a57de4c80ababf87239353b77fb041101d1ed1c109ad687fd1aed021e76d2f",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-neon-border_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-neon-border_shot_v.png",
+    "sentinel_frame_hashes": [
+      "aadd2b3bab5fe62d",
+      "aadd2b3bab5fe62d"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-neon-border_16_9.mp4",
+    "physical_mp4_16_9_sha256": "3dce71d493139eb95da8b1b69b8edf6dae0dc7a94d546bc1557639729969fdd3",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-neon-border_9_16.mp4",
+    "physical_mp4_9_16_sha256": "48b322be25d12d75f8a799e54d6bc244181a57786aeb87cf4bb39df8cbfc5490",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-side-rule": {
+    "id": "lt-side-rule",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Side Rule",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "71d3b74e50a93a12597bf8f0f031db73fb957a6ee66e92525510e1f30f0204d2",
+    "shipped_dir_sha256": "7b0f02274ad30f435c5a3992ec3d2bbef42ebad6f9af4f8a0056bddea07f583f",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-side-rule_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-side-rule_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-side-rule_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-side-rule_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-soft-pill": {
+    "id": "lt-soft-pill",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Soft Pill",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "33870f4c5a0098149de7f13f300da34447a97cac4328dca9ac7d29b5a3be30b6",
+    "shipped_dir_sha256": "0b519de956beb6b5b69211c0335c2c65c440d092e72a876d832a12f5fa2d28f2",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-soft-pill_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-soft-pill_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-soft-pill_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-soft-pill_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "lt-stack-bars": {
+    "id": "lt-stack-bars",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Lower Third \u2014 Stack Bars",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 4.8,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "cab7b29c1ea5cdd591a89127b3d26c74cd1937e658b79d0f925e31df9eb5ab77",
+    "shipped_dir_sha256": "f5cda201971fdf53dd64081a233f510d035d7e5f6885398b0a881352d596096a",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-stack-bars_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-stack-bars_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-stack-bars_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\lt-stack-bars_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "marble": {
+    "id": "marble",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Marble",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "8ce7f828790f95f35b61b51d64f4f6c3b7645254608690867a7ecf5aefca2e8c",
+    "shipped_dir_sha256": "026bc5cd7e95e4f443aa45a720abff05c9151648db70785c0c9fe897ddc5e0f4",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\marble_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\marble_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\marble_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\marble_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mesh-gradient": {
+    "id": "mesh-gradient",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Mesh Gradient",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "ae3d5bd3316ae981480ce57c73851b5199a4ba1249b1dcb241cd759c2d23e0cc",
+    "shipped_dir_sha256": "61233683efcbee84fe32ae7e3fa558dce12ae8e462ce9e2184b45a3015d18a74",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mesh-gradient_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mesh-gradient_shot_v.png",
+    "sentinel_frame_hashes": [
+      "311265f5f5d99e24",
+      "311265f5f5d99e24"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mesh-gradient_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9f10e74bd32bd0e8b89facf7e683546586144d7e7eeb0cb9e913866c037eacfa",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mesh-gradient_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1f2536c981a1a235150d5d30983464e2781ddbce539d26345db32b4f283106b4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "message-thread-reveal": {
+    "id": "message-thread-reveal",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Message Thread Reveal",
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "duration": 25.7667,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "22a1479924d3ed2388a372c500ebfc1acc6ff0097e7aed29d8d4a3c6c2f7e13d",
+    "shipped_dir_sha256": "de7a052522443d6e4eed3b65a4594492247abe93a7c4d8ff8f5aa1a89a81736c",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\message-thread-reveal_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\message-thread-reveal_shot_v.png",
+    "sentinel_frame_hashes": [
+      "c33a1059fe542f8e",
+      "c33a1059fe542f8e"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\message-thread-reveal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "eff3d2d1f6243034cc2ca72f5c4172f4c07b63e3f50cd46842b4f9cb93b44942",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\message-thread-reveal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "433801bd0be05daa820b8b61e50397331b87c49088974093f87fab9c9a8645a9",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-background": {
+    "id": "mk-background",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Minimal Gradient Background",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 10.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "d418cbb6d199ea8a27390a9c4cf84cc069285fc6249fabd9da667dd0980f6cf6",
+    "shipped_dir_sha256": "be9d5c7e8e0688b122a9d2a4c6da1761ad5f5d322e224f06d9fb68715dff9e62",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-background_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-background_shot_v.png",
+    "sentinel_frame_hashes": [
+      "422c9b232e00455c",
+      "422c9b232e00455c"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-background_16_9.mp4",
+    "physical_mp4_16_9_sha256": "02e4e52328fc531dcf43e6c717bbabe036629260a6837f3ef99ae1957d026205",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-background_9_16.mp4",
+    "physical_mp4_9_16_sha256": "423ef86128c27667000686dac0c00a9e0a4c875b9f5458964725707dd02372a6",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-callout-highlight": {
+    "id": "mk-callout-highlight",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Word-Sweep Highlight",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "6c8f808209c39df52e3223c1146d7ca8c4ea7f822a7c9fbb872510d8461491be",
+    "shipped_dir_sha256": "a35b242c722196dcc4251a62f1dd2327a30dd656c642daa72120ff4ac12edf72",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-callout-highlight_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-callout-highlight_shot_v.png",
+    "sentinel_frame_hashes": [
+      "86f7c3d10acb8911",
+      "86f7c3d10acb8911"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-callout-highlight_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2911f25ec9dbd7d996d5a7860ffc5ea28f3af7907a41642337d705b389ab52f1",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-callout-highlight_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d45665f2cb6b95e959c80b3839a0dd35e7534109fe5b40b9658693e96fd14a91",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-clone-wall-transition": {
+    "id": "mk-clone-wall-transition",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Text Clone Wall Transition",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 2.4,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "3d5cee19b1a3e106da0db0ac59b31e9293fc727d2f4249cd48052888f2d96bd3",
+    "shipped_dir_sha256": "fb646c6be066b532ffa8106f25d57dde33aed447013f5cb2799d388153618b78",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-clone-wall-transition_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-clone-wall-transition_shot_v.png",
+    "sentinel_frame_hashes": [
+      "395fdc10c6153fc8",
+      "395fdc10c6153fc8"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-clone-wall-transition_16_9.mp4",
+    "physical_mp4_16_9_sha256": "68664198ae8b8c4b38a2c4b7a039082190b4f1569bef9ffa6b083eecf6f4cb5f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-clone-wall-transition_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1e9752b13df1836e25cbeb7ef4d56cea34a1fba797573b608bc1bdd7effa5bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-line-graph": {
+    "id": "mk-line-graph",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Minimal Line Graph",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 7.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "135b930f522313fc04c8f1d16bd3f965e4e04adfdd23e42d7a5dc326fa4ac85d",
+    "shipped_dir_sha256": "4a2da8afb81bcbaaa3ad942cc231f1a3ddc4dba2fc95b76151f04a646e2ed3d5",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-line-graph_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-line-graph_shot_v.png",
+    "sentinel_frame_hashes": [
+      "7df711d02b9007af",
+      "7df711d02b9007af"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-line-graph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "1eaa7ffbac34b8e5d80bb7064437fa23870a96c105bcd129fb7807e97eb7c85b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-line-graph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1605642da5fc5c30da062c7578b90622fa8fe98730b47c1e89d29f925a55918d",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-placeholder-grid": {
+    "id": "mk-placeholder-grid",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Rounded Media Grid",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "a63aa0ad3e536eab433df99a02a3194fa0a32ddba8af64fbe85ff7b53aec7547",
+    "shipped_dir_sha256": "bbcc2dd38eabb25b5f0ff68bf14904ba159172bbd8d8dbd9963fe5e50f42ffe3",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-placeholder-grid_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-placeholder-grid_shot_v.png",
+    "sentinel_frame_hashes": [
+      "aa79d03e8b1636d0",
+      "aa79d03e8b1636d0"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-placeholder-grid_16_9.mp4",
+    "physical_mp4_16_9_sha256": "a1271284ac1cfb5b778a2bd540695e122bc7e521a785e3411e6a49b84c758f9b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-placeholder-grid_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d7c5936c8c917941893bb585c0b498614e3da00e76d5c96524a350fb8594169a",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-progress-stat": {
+    "id": "mk-progress-stat",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Count-Up Stat Card",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 7.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "15b9c41158c7c545c89b3268ea34e32d06e35afe6a716890720385116fadac05",
+    "shipped_dir_sha256": "b98cd9126c4fe74761f63c80d158fef48562cb6ae6fd7548bb65cbbe6198b20f",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-progress-stat_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-progress-stat_shot_v.png",
+    "sentinel_frame_hashes": [
+      "5a5991ab53cfe9d7",
+      "5a5991ab53cfe9d7"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-progress-stat_16_9.mp4",
+    "physical_mp4_16_9_sha256": "f304108ca9226c50cfb33247cdae69a0d19ddaa99a305a8cd0b38052b3716f28",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-progress-stat_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f15d838742161403174ce0cfb01dfef02d04e784f75aa582a069b7f3cc43d77c",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  },
+  "mk-specs-list": {
+    "id": "mk-specs-list",
+    "status": "ACTIVATED_REAL",
+    "runtime_operable": true,
+    "title": "Specs Checklist",
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "duration": 8.0,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "donor_dir_sha256": "950e4d006820e02aea499ed3b1be7aca04b9dfac27ddc8347dde9ca307894193",
+    "shipped_dir_sha256": "d2f10907c27a05f3170837c8e2ae517dcb66979cfad8e20267b04380c52962df",
+    "browser_preview_verified": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-specs-list_shot_0.png",
+    "browser_vertical_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-specs-list_shot_v.png",
+    "sentinel_frame_hashes": [
+      "6a61ecf795c1f8cc",
+      "6a61ecf795c1f8cc"
+    ],
+    "temporal_motion_verified": true,
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-specs-list_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c8b20ef11897dad204ca316254b3b159410542962f6011e7b72e3fbe1a48677e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave17_renders\\mk-specs-list_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a37d79178add03b1379883ece8a18faa0f60d7c68448eda926bf5695107e2bd4",
+    "ffprobe_verified": true,
+    "project_workflow_verified": true
+  }
+}
