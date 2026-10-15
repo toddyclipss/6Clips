@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "thread-message-stack",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/thread-message-stack",
+  "source_sha256": "4efa717d9e0f625728dbf66cf0be95c7ad4dd2afa1736570e066158e191bc8ee",
+  "output_html_sha256": "b36f16ddcb72059f88bb603c5ac2eb56e9c3f4a41882d5f590416f6df587508d",
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "social",
+    "conversation",
+    "messages"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

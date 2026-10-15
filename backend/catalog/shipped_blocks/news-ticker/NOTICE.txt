@@ -1,0 +1,4 @@
+HyperFrames original composition: Apache-2.0; source registry/blocks/news-ticker
+Source repository: https://github.com/heygen-com/hyperframes
+Modified: adapted to local offline GSAP timeline compatibility runtime; zero external CDN egress.
+Independent native timeline player: AGPL-3.0-only, ViralMint Contributors.

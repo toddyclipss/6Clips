@@ -1,0 +1,2294 @@
+{
+  "total_nz_09": 75,
+  "already_shipped": 13,
+  "pending": 62,
+  "items": [
+    {
+      "id": "nebula",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "news-ticker",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 7,
+      "description": "Premium broadcast-style lower-third ticker with live label, headline ribbon, and scrolling news crawl."
+    },
+    {
+      "id": "north-korea-locked-down",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "korea-map.png"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 7,
+      "description": "Realistic map zoom into North Korea with a red scribble circle, locked-down pop-up label, and reddish editorial wash."
+    },
+    {
+      "id": "notes-reveal",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "courier-prime-400.woff2",
+        "courier-prime-700.woff2",
+        "hyperframes-logo-black.svg",
+        "permanent-marker-400.woff2"
+      ],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "titleL1",
+          "type": "string",
+          "role": "content",
+          "label": "Note title line 1",
+          "description": "First line of the note title.",
+          "default": "Things nobody told me"
+        },
+        {
+          "id": "titleL2",
+          "type": "string",
+          "role": "content",
+          "label": "Note title line 2",
+          "description": "Second line of the note title.",
+          "default": "about video."
+        },
+        {
+          "id": "noteLine1",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 1",
+          "description": "First typed line of the note. The seven body lines are the bulk of the video: they must be about the brand this video promotes, not about video-making.",
+          "default": "my videos sucked"
+        },
+        {
+          "id": "noteLine2",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 2",
+          "description": "Second typed line of the note.",
+          "default": "my tools cost $$$"
+        },
+        {
+          "id": "noteLine3",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 3",
+          "description": "Third typed line of the note.",
+          "default": "and re-edits never end."
+        },
+        {
+          "id": "noteLine4",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 4",
+          "description": "Fourth typed line of the note \u2014 the turn, where the brand enters.",
+          "default": "then i tried writing html only"
+        },
+        {
+          "id": "noteLine5",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 5",
+          "description": "Fifth typed line of the note \u2014 name the brand here.",
+          "default": "started HyperFrames three weeks ago"
+        },
+        {
+          "id": "noteLine6",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 6",
+          "description": "Sixth typed line of the note.",
+          "default": "the grind is gone, but more than that \u2014"
+        },
+        {
+          "id": "noteLine7",
+          "type": "string",
+          "role": "content",
+          "label": "Note body line 7",
+          "description": "Last typed line of the note \u2014 the payoff.",
+          "default": "I ship videos weekly."
+        },
+        {
+          "id": "cardTop",
+          "type": "string",
+          "role": "content",
+          "label": "Card headline top",
+          "description": "First marker line on the closing card. The underline follows its last word.",
+          "default": "THE POWER"
+        },
+        {
+          "id": "cardMid",
+          "type": "string",
+          "role": "content",
+          "label": "Card headline middle",
+          "description": "Short connector line between the two headline lines, centred on the card.",
+          "default": "OF"
+        },
+        {
+          "id": "cardBottom",
+          "type": "string",
+          "role": "content",
+          "label": "Card headline bottom",
+          "description": "Last marker line on the closing card. Its first word is ringed.",
+          "default": "ONE FILE"
+        },
+        {
+          "id": "check1Label",
+          "type": "string",
+          "role": "content",
+          "label": "Checklist 1 label",
+          "description": "Typewriter label of the first checklist row.",
+          "default": "WRITE"
+        },
+        {
+          "id": "check1Value",
+          "type": "string",
+          "role": "content",
+          "label": "Checklist 1 value",
+          "description": "Marker value of the first checklist row.",
+          "default": "HTML"
+        },
+        {
+          "id": "check2Label",
+          "type": "string",
+          "role": "content",
+          "label": "Checklist 2 label",
+          "description": "Typewriter label of the second checklist row.",
+          "default": "RENDER"
+        },
+        {
+          "id": "check2Value",
+          "type": "string",
+          "role": "content",
+          "label": "Checklist 2 value",
+          "description": "Marker value of the second checklist row.",
+          "default": "IN 4K"
+        },
+        {
+          "id": "check3Label",
+          "type": "string",
+          "role": "content",
+          "label": "Checklist 3 label",
+          "description": "Typewriter label of the third checklist row.",
+          "default": "SHIP"
+        },
+        {
+          "id": "check3Value",
+          "type": "string",
+          "role": "content",
+          "label": "Checklist 3 value",
+          "description": "Marker value of the third checklist row.",
+          "default": "TODAY"
+        },
+        {
+          "id": "brandLogo",
+          "type": "image",
+          "role": "content",
+          "label": "Brand logo",
+          "description": "Transparent mark of the brand this video promotes, in the sign-off strip under the card.",
+          "portrays": [
+            "subject_logo"
+          ],
+          "default": "assets/hyperframes-logo-black.svg"
+        },
+        {
+          "id": "brandDomain",
+          "type": "string",
+          "role": "content",
+          "label": "Sign-off domain",
+          "description": "Domain of the brand this video promotes, closing the sign-off strip. Use the real domain, or a call to action when no domain fits.",
+          "portrays": [
+            "subject_domain"
+          ],
+          "default": "hyperframes.heygen.com"
+        }
+      ],
+      "duration": 24.85,
+      "description": "A personal note is typed character by character in a notes app - caret riding every letter, the page scrolling up on measured settle curves as each line lands - then cuts to a hand-lettered paper card with a marker headline and a ticked checklist"
+    },
+    {
+      "id": "notification-cascade",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "desk-backdrop.jpg",
+        "hyperframes-logo-white.svg"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "notifTitle",
+          "type": "string",
+          "role": "content",
+          "label": "Notification title",
+          "description": "Bold first line on every banner.",
+          "default": "New render"
+        },
+        {
+          "id": "message1",
+          "type": "string",
+          "role": "content",
+          "label": "Message 1",
+          "description": "Subtitle of the first banner to land.",
+          "default": "Launch video is ready."
+        },
+        {
+          "id": "message2",
+          "type": "string",
+          "role": "content",
+          "label": "Message 2",
+          "description": "Subtitle of the second banner.",
+          "default": "All checks passed."
+        },
+        {
+          "id": "message3",
+          "type": "string",
+          "role": "content",
+          "label": "Message 3",
+          "description": "Subtitle of the third banner.",
+          "default": "4K render done in 92s."
+        },
+        {
+          "id": "message4",
+          "type": "string",
+          "role": "content",
+          "label": "Message 4",
+          "description": "Subtitle of the fourth banner.",
+          "default": "Published to the catalog."
+        },
+        {
+          "id": "appName",
+          "type": "string",
+          "role": "content",
+          "label": "App name",
+          "description": "Name of the brand this video promotes, credited in the corner of every banner. Use the real name of that brand.",
+          "portrays": [
+            "subject_name"
+          ],
+          "default": "HyperFrames"
+        },
+        {
+          "id": "headlineTop",
+          "type": "string",
+          "role": "content",
+          "label": "End-card line 1",
+          "description": "First line of the closing card.",
+          "default": "SHIP VIDEO"
+        },
+        {
+          "id": "headlineAccent",
+          "type": "string",
+          "role": "content",
+          "label": "End-card line 2",
+          "description": "Accented second line of the closing card.",
+          "default": "FROM HTML"
+        },
+        {
+          "id": "footerText",
+          "type": "string",
+          "role": "content",
+          "label": "End-card footer",
+          "description": "Domain of the brand this video promotes, under the end-card headline. Use the real domain, or a call to action when no domain fits.",
+          "portrays": [
+            "subject_domain"
+          ],
+          "default": "hyperframes.heygen.com"
+        },
+        {
+          "id": "brandLogo",
+          "type": "image",
+          "role": "content",
+          "label": "Brand logo",
+          "description": "Transparent mark of the brand this video promotes, centered on the closing card.",
+          "portrays": [
+            "subject_logo"
+          ],
+          "default": "assets/hyperframes-logo-white.svg"
+        }
+      ],
+      "duration": 14,
+      "description": "Phone notifications land one after another and stack up the screen, each banner pushing the pile down as it arrives, before the whole stack lifts away into a closing card"
+    },
+    {
+      "id": "nyc-paris-flight",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "map-nyc-paris.png",
+        "sfx-mix.wav"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 6,
+      "description": "Apple-style realistic map animation with a plane flying from New York to Paris, marker circle, landing pop, and sound effects."
+    },
+    {
+      "id": "orbit-card",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "assets/gsap-3.14.2.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "Archivo-LICENSE.txt",
+        "archivo-regular.ttf",
+        "archivo-semibold.ttf",
+        "gsap-3.14.2.min.js",
+        "GSAP-NOTICE.txt",
+        "orbit-motion.js",
+        "orbit-scene.js",
+        "Three-LICENSE.txt",
+        "three.core.min.js",
+        "three.module.min.js"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 10,
+      "description": "A single feature card orbits a dot sphere on approved Blender camera motion."
+    },
+    {
+      "id": "organic-light-leak-overlay",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Finite CSS light-leak overlay for memory beats and motivated transitions"
+    },
+    {
+      "id": "oscilloscope-trace",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "waveform",
+          "type": "enum",
+          "label": "Waveform",
+          "default": "sine",
+          "options": [
+            {
+              "value": "sine",
+              "label": "Sine"
+            },
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "triangle",
+              "label": "Triangle"
+            },
+            {
+              "value": "data",
+              "label": "Data series"
+            }
+          ]
+        },
+        {
+          "id": "frequency",
+          "type": "number",
+          "label": "Signal frequency",
+          "unit": "Hz",
+          "default": 12,
+          "min": 0.1,
+          "max": 200,
+          "step": 0.1
+        },
+        {
+          "id": "amplitude",
+          "type": "number",
+          "label": "Amplitude",
+          "unit": "div",
+          "default": 3,
+          "min": 0.1,
+          "max": 4,
+          "step": 0.1
+        },
+        {
+          "id": "persistenceMs",
+          "type": "number",
+          "label": "Phosphor persistence (tau)",
+          "unit": "ms",
+          "default": 100,
+          "min": 1,
+          "max": 1000,
+          "step": 1
+        },
+        {
+          "id": "phosphorColor",
+          "type": "color",
+          "label": "Phosphor colour",
+          "default": "#5dff8f"
+        },
+        {
+          "id": "sweepRate",
+          "type": "number",
+          "label": "Sweep rate",
+          "unit": "sweeps/s",
+          "default": 5,
+          "min": 0.25,
+          "max": 60,
+          "step": 0.25
+        },
+        {
+          "id": "dataSeries",
+          "type": "string",
+          "label": "Data series (waveform=data)",
+          "default": "",
+          "placeholder": "0,0.4,0.9,0.3,-0.6,-1,-0.2,0.5"
+        }
+      ],
+      "duration": 6,
+      "description": "CRT oscilloscope beam sweeping a waveform across a 10x8 graticule, with closed-form phosphor persistence: the tail decays as exp(-age/tau) and brightens where the beam slows"
+    },
+    {
+      "id": "plasma",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "prism",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "product-turntable",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 6,
+      "description": "A product turns a full revolution on a studio plinth in a seamless loop. Drop in a GLB or glTF model, or keep the built-in drink can with your own label."
+    },
+    {
+      "id": "rack-focus",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "nearfocus",
+          "type": "number",
+          "label": "Near focal distance",
+          "default": 1.2,
+          "min": 0.2,
+          "max": 100,
+          "step": 0.05,
+          "unit": "m"
+        },
+        {
+          "id": "farfocus",
+          "type": "number",
+          "label": "Far focal distance",
+          "default": 80,
+          "min": 0.3,
+          "max": 400,
+          "step": 0.5,
+          "unit": "m"
+        },
+        {
+          "id": "focallength",
+          "type": "number",
+          "label": "Focal length",
+          "default": 85,
+          "min": 12,
+          "max": 300,
+          "step": 1,
+          "unit": "mm"
+        },
+        {
+          "id": "aperture",
+          "type": "number",
+          "label": "Aperture (f-number)",
+          "default": 1.8,
+          "min": 0.95,
+          "max": 22,
+          "step": 0.05
+        },
+        {
+          "id": "blades",
+          "type": "number",
+          "label": "Aperture blades (bokeh shape)",
+          "default": 6,
+          "min": 3,
+          "max": 14,
+          "step": 1
+        },
+        {
+          "id": "catseye",
+          "type": "number",
+          "label": "Cat eye clipping at the corners",
+          "default": 0.62,
+          "min": 0,
+          "max": 1,
+          "step": 0.02
+        },
+        {
+          "id": "pullstart",
+          "type": "number",
+          "label": "Pull start",
+          "default": 1.2,
+          "min": 0,
+          "max": 30,
+          "step": 0.05,
+          "unit": "s"
+        },
+        {
+          "id": "pullduration",
+          "type": "number",
+          "label": "Pull duration",
+          "default": 3.2,
+          "min": 0.1,
+          "max": 30,
+          "step": 0.05,
+          "unit": "s"
+        },
+        {
+          "id": "pullease",
+          "type": "string",
+          "label": "Pull easing (GSAP ease)",
+          "default": "power2.inOut",
+          "placeholder": "power2.inOut"
+        },
+        {
+          "id": "bokeh",
+          "type": "number",
+          "label": "Bokeh exposure",
+          "default": 1,
+          "min": 0,
+          "max": 3,
+          "step": 0.05
+        },
+        {
+          "id": "backdrop",
+          "type": "color",
+          "label": "Backdrop",
+          "default": "#05060a"
+        }
+      ],
+      "duration": 6,
+      "description": "A focus pull with real aperture bokeh: the focal plane travels from a near subject to a far one, so one resolves as the other blows into hard-edged polygon discs that clip to a cat's eye toward the corners. A focus pull only reads against content at two clearly separated depths, so this block carries its own depth-layered night exterior and puts both subject depths on variables."
+    },
+    {
+      "id": "reddit-post",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": "Reddit",
+      "variables": [],
+      "duration": 5,
+      "description": "Animated Reddit post card overlay with upvotes and comments"
+    },
+    {
+      "id": "ridged-burn",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Shader transition with ridged turbulence burn effect"
+    },
+    {
+      "id": "ripple-waves",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Shader transition with concentric ripple wave distortion"
+    },
+    {
+      "id": "sdf-iris",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Shader transition with signed distance field iris reveal"
+    },
+    {
+      "id": "share-sheet-carousel",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "hyperframes-logo-black.svg",
+        "slide-01.jpg",
+        "slide-02.jpg",
+        "slide-03.jpg",
+        "slide-04.jpg"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "shareTitle",
+          "type": "string",
+          "role": "content",
+          "label": "Sheet title",
+          "description": "Heading at the top of the share sheet.",
+          "default": "Share"
+        },
+        {
+          "id": "senderName",
+          "type": "string",
+          "role": "content",
+          "label": "Sender",
+          "description": "Name of the brand this video promotes, shown as the sender offering the item. Use the real name of that brand.",
+          "portrays": [
+            "subject_name"
+          ],
+          "default": "HyperFrames"
+        },
+        {
+          "id": "itemLabel",
+          "type": "string",
+          "role": "content",
+          "label": "Item",
+          "description": "What the sender is offering, completing the sentence \"\u2026 would like to share \u2026\".",
+          "default": "a video"
+        },
+        {
+          "id": "stripText",
+          "type": "string",
+          "role": "content",
+          "label": "Brand strip",
+          "description": "Positioning line of the brand this video promotes, in small caps beside its logo.",
+          "portrays": [
+            "subject_tagline"
+          ],
+          "default": "OPEN-SOURCE VIDEO ENGINE \u00b7 SHIP FROM HTML"
+        },
+        {
+          "id": "acceptLabel",
+          "type": "string",
+          "role": "content",
+          "label": "Accept label",
+          "description": "Right-hand action button.",
+          "default": "Accept"
+        },
+        {
+          "id": "declineLabel",
+          "type": "string",
+          "role": "content",
+          "label": "Decline label",
+          "description": "Left-hand action button.",
+          "default": "Decline"
+        },
+        {
+          "id": "slideImage1",
+          "type": "image",
+          "role": "content",
+          "label": "Slide image 1",
+          "description": "First carousel image; also fills the blurred background.",
+          "default": "assets/slide-01.jpg"
+        },
+        {
+          "id": "slideImage2",
+          "type": "image",
+          "role": "content",
+          "label": "Slide image 2",
+          "description": "Second carousel image; also fills the blurred background.",
+          "default": "assets/slide-02.jpg"
+        },
+        {
+          "id": "slideImage3",
+          "type": "image",
+          "role": "content",
+          "label": "Slide image 3",
+          "description": "Third carousel image; also fills the blurred background.",
+          "default": "assets/slide-03.jpg"
+        },
+        {
+          "id": "slideImage4",
+          "type": "image",
+          "role": "content",
+          "label": "Slide image 4",
+          "description": "Fourth carousel image; also fills the blurred background.",
+          "default": "assets/slide-04.jpg"
+        },
+        {
+          "id": "brandLogo",
+          "type": "image",
+          "role": "content",
+          "label": "Brand logo",
+          "description": "Transparent horizontal wordmark of the brand this video promotes, in the preview strip.",
+          "portrays": [
+            "subject_logo"
+          ],
+          "default": "assets/hyperframes-logo-black.svg"
+        }
+      ],
+      "duration": 7.2333,
+      "description": "A share sheet springs up from the bottom of the phone and cycles previews inside its card on a fast cut rhythm while the blurred ground swaps behind it, ending on an accept tap"
+    },
+    {
+      "id": "sine-wave",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "slack-notification-ad",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "fonts",
+        "img"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": true,
+      "trademark": "Slack",
+      "variables": [],
+      "duration": 12,
+      "description": "A portrait lock screen fills with escalating Slack video requests before HeyGen delivers the payoff"
+    },
+    {
+      "id": "snow",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "density",
+          "type": "enum",
+          "role": "style",
+          "label": "Density",
+          "description": "Flake count across the frame.",
+          "default": "sparse",
+          "options": [
+            {
+              "value": "sparse",
+              "label": "Sparse"
+            },
+            {
+              "value": "dense",
+              "label": "Dense"
+            }
+          ]
+        },
+        {
+          "id": "speed",
+          "type": "enum",
+          "role": "style",
+          "label": "Fall speed",
+          "description": "How fast flakes fall and sway.",
+          "default": "calm",
+          "options": [
+            {
+              "value": "calm",
+              "label": "Calm"
+            },
+            {
+              "value": "gust",
+              "label": "Gust"
+            }
+          ]
+        }
+      ],
+      "duration": 6,
+      "description": "Seek-safe falling-snow overlay: sparse or dense flakes drift down with size, speed and opacity correlated per flake for depth, radial-masked so the frame center stays clear"
+    },
+    {
+      "id": "spain-map",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js",
+        "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 12,
+      "description": "Animated Spain choropleth by autonomous community with staggered reveals and gradient legend \u2014 D3 conic conformal projection"
+    },
+    {
+      "id": "spiral-galaxy",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "stars",
+          "type": "number",
+          "label": "Star count",
+          "default": 20000,
+          "min": 2000,
+          "max": 40000,
+          "step": 1000
+        },
+        {
+          "id": "arms",
+          "type": "number",
+          "label": "Arm count",
+          "default": 3,
+          "min": 2,
+          "max": 8,
+          "step": 1
+        },
+        {
+          "id": "rate",
+          "type": "number",
+          "label": "Rotation rate",
+          "default": 0.25,
+          "min": 0,
+          "max": 1.5,
+          "step": 0.05,
+          "unit": "rad/s"
+        },
+        {
+          "id": "glow",
+          "type": "number",
+          "label": "Core brightness",
+          "default": 1.9,
+          "min": 0.2,
+          "max": 4,
+          "step": 0.1
+        },
+        {
+          "id": "size",
+          "type": "number",
+          "label": "Star size",
+          "default": 10,
+          "min": 2,
+          "max": 40,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "id": "core",
+          "type": "color",
+          "label": "Core colour",
+          "default": "#ffa575"
+        },
+        {
+          "id": "rim",
+          "type": "color",
+          "label": "Rim colour",
+          "default": "#311599"
+        }
+      ],
+      "duration": 10,
+      "description": "A spiral galaxy seen from outside, turning with real differential rotation: inner stars orbit faster than outer ones, so the arms wind up over the shot instead of spinning rigidly. 20,000 additive GPU sprites, seeded once and solved directly from time, so any frame can be rendered on its own."
+    },
+    {
+      "id": "split-flap-board",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "boardText",
+          "type": "string",
+          "label": "Board text",
+          "default": "NOW BOARDING",
+          "maxLength": 24
+        },
+        {
+          "id": "flapAlphabet",
+          "type": "string",
+          "label": "Flap alphabet (drum order)",
+          "default": " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,'",
+          "maxLength": 64
+        },
+        {
+          "id": "flipDuration",
+          "type": "number",
+          "label": "Seconds per flap",
+          "default": 0.09,
+          "min": 0.03,
+          "max": 1.2,
+          "step": 0.01,
+          "unit": "s"
+        },
+        {
+          "id": "cellStagger",
+          "type": "number",
+          "label": "Per-cell start stagger",
+          "default": 0.05,
+          "min": 0,
+          "max": 0.5,
+          "step": 0.01,
+          "unit": "s"
+        },
+        {
+          "id": "cellCount",
+          "type": "number",
+          "label": "Cells on the board",
+          "default": 12,
+          "min": 1,
+          "max": 24,
+          "step": 1
+        }
+      ],
+      "duration": 3.5,
+      "description": "Solari-style departure board: every cell walks its drum forward through the intervening characters of a fixed alphabet until it lands on its target, so the text resolves as a mechanical cascade instead of a fade."
+    },
+    {
+      "id": "spotify-card",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": "Spotify",
+      "variables": [],
+      "duration": 5,
+      "description": "Animated Spotify now-playing card with album art and progress bar"
+    },
+    {
+      "id": "starfield",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "density",
+          "type": "enum",
+          "role": "style",
+          "label": "Density",
+          "description": "Star count across the frame.",
+          "default": "sparse",
+          "options": [
+            {
+              "value": "sparse",
+              "label": "Sparse"
+            },
+            {
+              "value": "dense",
+              "label": "Dense"
+            }
+          ]
+        },
+        {
+          "id": "tone",
+          "type": "enum",
+          "role": "style",
+          "label": "Tone",
+          "description": "Star color mix.",
+          "default": "warm",
+          "options": [
+            {
+              "value": "warm",
+              "label": "Warm (white + yellow)"
+            },
+            {
+              "value": "cool",
+              "label": "Cool (white + blue)"
+            },
+            {
+              "value": "white",
+              "label": "White only"
+            }
+          ]
+        },
+        {
+          "id": "speed",
+          "type": "enum",
+          "role": "style",
+          "label": "Twinkle speed",
+          "description": "How fast stars pulse.",
+          "default": "slow",
+          "options": [
+            {
+              "value": "slow",
+              "label": "Slow"
+            },
+            {
+              "value": "fast",
+              "label": "Fast"
+            }
+          ]
+        }
+      ],
+      "duration": 6,
+      "description": "Seek-safe night-sky overlay: sparse or dense stars in three size tiers that twinkle and drift in two parallax layers, radial-masked to keep the frame center clear"
+    },
+    {
+      "id": "strands",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "stripes",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "swirl",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "swirl-vortex",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Shader transition with swirling vortex distortion"
+    },
+    {
+      "id": "thermal-distortion",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Shader transition with heat haze thermal distortion"
+    },
+    {
+      "id": "thread-message-stack",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 8,
+      "description": "A source-owned editable conversation stack with arbitrary incoming and outgoing messages"
+    },
+    {
+      "id": "tiktok-follow",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "transitions-3d",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 11,
+      "description": "Showcase of 3D perspective flip and rotate transitions"
+    },
+    {
+      "id": "transitions-blur",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 20,
+      "description": "Showcase of blur-based transitions between scenes"
+    },
+    {
+      "id": "transitions-cover",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 21,
+      "description": "Showcase of cover/uncover slide transitions"
+    },
+    {
+      "id": "transitions-destruction",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 14,
+      "description": "Showcase of destructive break-apart transitions"
+    },
+    {
+      "id": "transitions-dissolve",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 24,
+      "description": "Showcase of dissolve and fade transitions"
+    },
+    {
+      "id": "transitions-distortion",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 21,
+      "description": "Showcase of warp and distortion transitions"
+    },
+    {
+      "id": "transitions-grid",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 11,
+      "description": "Showcase of grid-based tile transitions"
+    },
+    {
+      "id": "transitions-light",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 21,
+      "description": "Showcase of light-based glow and flash transitions"
+    },
+    {
+      "id": "transitions-mechanical",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 15,
+      "description": "Showcase of mechanical shutter and iris transitions"
+    },
+    {
+      "id": "transitions-other",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 20,
+      "description": "Showcase of miscellaneous creative transitions"
+    },
+    {
+      "id": "transitions-push",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 24,
+      "description": "Showcase of push and slide transitions"
+    },
+    {
+      "id": "transitions-radial",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 20,
+      "description": "Showcase of radial wipe and reveal transitions"
+    },
+    {
+      "id": "transitions-scale",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 15,
+      "description": "Showcase of scale and zoom transitions"
+    },
+    {
+      "id": "ui-3d-reveal",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 13,
+      "description": "Perspective 3D reveal animation for UI elements"
+    },
+    {
+      "id": "us-map",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js",
+        "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 12,
+      "description": "Animated US choropleth map with staggered state reveals, value labels, and gradient legend \u2014 pure inline SVG with GSAP"
+    },
+    {
+      "id": "us-map-bubble",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js",
+        "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 12,
+      "description": "Animated US bubble map with proportional city markers, value callouts, and connection lines \u2014 composable with us-map"
+    },
+    {
+      "id": "us-map-flow",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js",
+        "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 12,
+      "description": "Animated connection arcs between US cities over a base map \u2014 composable origin-destination flow visualization"
+    },
+    {
+      "id": "us-map-hex",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 10,
+      "description": "Animated hexagonal tile grid map \u2014 each state as an equal-weight hex with data fill and abbreviation label"
+    },
+    {
+      "id": "vfx-anamorphic-flare",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "intensity",
+          "type": "number",
+          "label": "Streak intensity",
+          "default": 5,
+          "min": 0,
+          "max": 20,
+          "step": 0.1
+        },
+        {
+          "id": "threshold",
+          "type": "number",
+          "label": "High-pass threshold",
+          "default": 0.3,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "streakLength",
+          "type": "number",
+          "label": "Streak length gain",
+          "default": 1,
+          "min": 0.1,
+          "max": 6,
+          "step": 0.05
+        },
+        {
+          "id": "tint",
+          "type": "color",
+          "label": "Streak tint",
+          "default": "#7a8aff"
+        },
+        {
+          "id": "bloomRadius",
+          "type": "number",
+          "label": "Bloom radius",
+          "default": 0,
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "id": "timeScale",
+          "type": "number",
+          "label": "Drift rate",
+          "default": 0.5,
+          "min": 0,
+          "max": 3,
+          "step": 0.05
+        },
+        {
+          "id": "emitters",
+          "type": "number",
+          "label": "Emitter count",
+          "default": 140,
+          "min": 1,
+          "max": 400,
+          "step": 1
+        },
+        {
+          "id": "backdrop",
+          "type": "color",
+          "label": "Backdrop",
+          "default": "#04040a"
+        }
+      ],
+      "duration": 10,
+      "description": "A drifting field of bright points, each one throwing the long horizontal blue-violet streak a real anamorphic cinema lens produces. Built from the measured filter constants: a 0.3 high-pass, 80 horizontal taps at quarter resolution, a samples/3 gain and a 0x7a8aff tint."
+    },
+    {
+      "id": "vfx-iphone-device",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/DRACOLoader.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": "Apple iPhone",
+      "variables": [],
+      "duration": 15,
+      "description": "Real GLTF iPhone 15 Pro Max and MacBook Pro models with live HTML-in-Canvas screen content, morphing glass lens, product review camera choreography, and 360\u00b0 turntable."
+    },
+    {
+      "id": "vfx-liquid-background",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": true,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 12,
+      "description": "Organic liquid simulation with vertex displacement on a subdivided plane. HTML content floats above rippling fluid surface with real-time wave dynamics."
+    },
+    {
+      "id": "vfx-liquid-glass",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/CopyShader.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/LuminosityHighPassShader.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/EffectComposer.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/RenderPass.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/ShaderPass.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/postprocessing/UnrealBloomPass.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 20,
+      "description": "VFX composition block"
+    },
+    {
+      "id": "vfx-magnetic",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 15,
+      "description": "VFX composition block"
+    },
+    {
+      "id": "vfx-portal",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 10,
+      "description": "VFX composition block"
+    },
+    {
+      "id": "vfx-shatter",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 12,
+      "description": "VFX composition block"
+    },
+    {
+      "id": "vfx-text-cursor",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": true,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 8,
+      "description": "Dramatic text reveal with cursor glow, chromatic shadow rays, and directional lighting on a black stage. Canvas-based shader post-processing with spectral color edges."
+    },
+    {
+      "id": "voronoi",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "vpn-youtube-spot",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [
+        "vpn-sfx.wav"
+      ],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": "YouTube",
+      "variables": [],
+      "duration": 7,
+      "description": "Snappy Apple-style YouTube insert showing a phone finding and installing a friendly VPN app with sound effects."
+    },
+    {
+      "id": "water",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "waveform",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "week-in-merges",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [
+        {
+          "id": "eyebrow",
+          "type": "string",
+          "label": "Eyebrow",
+          "default": "ACME / WEEK IN MERGES"
+        },
+        {
+          "id": "title",
+          "type": "string",
+          "label": "Title",
+          "default": "Pull requests merged this week"
+        },
+        {
+          "id": "period",
+          "type": "string",
+          "label": "Period",
+          "default": "1 September - 7 September 2026 \u00b7 America/Los_Angeles"
+        },
+        {
+          "id": "total",
+          "type": "string",
+          "label": "Total",
+          "default": "12 PRs"
+        },
+        {
+          "id": "footer",
+          "type": "string",
+          "label": "Footer",
+          "default": "Speed proportional to merges \u00b7 By PR author"
+        },
+        {
+          "id": "source",
+          "type": "string",
+          "label": "Source line",
+          "default": "Example org \u00b7 1 repo \u00b7 Bots \u00b7 0"
+        },
+        {
+          "id": "rows",
+          "type": "string",
+          "label": "Rows (JSON array of name, merges, avatar)",
+          "default": "[{\"name\":\"Ada\",\"merges\":12,\"avatar\":\"\"},{\"name\":\"Bao\",\"merges\":7,\"avatar\":\"\"},{\"name\":\"Cam\",\"merges\":4,\"avatar\":\"\"},{\"name\":\"Dee\",\"merges\":2,\"avatar\":\"\"},{\"name\":\"Eli\",\"merges\":1,\"avatar\":\"\"}]"
+        },
+        {
+          "id": "rows_max",
+          "type": "number",
+          "label": "Maximum rows",
+          "default": 12,
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "description": "Authors drawn, highest merge count first."
+        },
+        {
+          "id": "overflow",
+          "type": "string",
+          "label": "Overflow line",
+          "default": "",
+          "description": "Line for everyone past the cap. Empty writes it from the rows left out."
+        }
+      ],
+      "duration": 16,
+      "description": "Each author's avatar bounces across their row at a speed set by how many pull requests they merged"
+    },
+    {
+      "id": "weight-wave",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "whip-pan",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": true,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 4,
+      "description": "Shader transition simulating a fast camera whip pan"
+    },
+    {
+      "id": "wireframe-portal-title",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/clipper-lib@6.4.2/clipper.js"
+      ],
+      "links": [],
+      "assets": [
+        "fonts"
+      ],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": true,
+      "trademark": null,
+      "variables": [],
+      "duration": 8,
+      "description": "A wireframe portal bursts open, the title comes through, then its letters swap into a second phrase."
+    },
+    {
+      "id": "world-map",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+        "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js",
+        "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": null,
+      "variables": [],
+      "duration": 14,
+      "description": "Animated world choropleth with country-by-country reveal, tooltip labels, and rotating globe inset \u2014 D3 Natural Earth projection"
+    },
+    {
+      "id": "x-post",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=block"
+      ],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": "X (formerly Twitter)",
+      "variables": [],
+      "duration": 5,
+      "description": "Animated X/Twitter post card overlay with engagement metrics"
+    },
+    {
+      "id": "yt-comment-card",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": "YouTube",
+      "variables": [],
+      "duration": 8,
+      "description": "Social comments typing on over footage: avatar pop, username and time, per-character typewriter, likes row; image avatars or initials chips"
+    },
+    {
+      "id": "yt-lcd-background",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": "YouTube",
+      "variables": [],
+      "duration": 10,
+      "description": "Textured paper board: scanlines with slow drift, optional pixel grid, static grain, and display text with a blur-focus entrance and chromatic-fringe title"
+    },
+    {
+      "id": "yt-logo-intro",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": true,
+      "has_shader": false,
+      "trademark": "YouTube",
+      "variables": [],
+      "duration": 6,
+      "description": "Logo stamp pops on a lined board, a kicker line gives way to the title with an accent arrow chip; seeded line distortion"
+    },
+    {
+      "id": "yt-lower-third",
+      "status": "ALREADY_SHIPPED",
+      "category": null,
+      "is_shipped": true
+    },
+    {
+      "id": "yt-prism-title",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": false,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": "YouTube",
+      "variables": [],
+      "duration": 6,
+      "description": "Display title on a transparent root: blur-focus entrance, red/blue fringe that settles then breathes, perspective bow, slow scale drift"
+    },
+    {
+      "id": "yt-vertical-fill",
+      "status": "PENDING",
+      "category": null,
+      "is_shipped": false,
+      "scripts": [
+        "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      ],
+      "links": [],
+      "assets": [],
+      "has_gsap": true,
+      "has_three": true,
+      "has_canvas": false,
+      "has_svg": false,
+      "has_shader": false,
+      "trademark": "YouTube",
+      "variables": [],
+      "duration": 8,
+      "description": "Portrait media filling a widescreen frame via blurred-scale, mirror, or copy side fills; grid texture and foreground contrast lift (images inside the block; keep live footage in the host)"
+    }
+  ]
+}

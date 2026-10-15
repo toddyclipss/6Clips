@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "thermal-distortion",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/thermal-distortion",
+  "source_sha256": "cb82b1f76d6c2dcd0d555697fec0155105ba62395d555852ace032448127e276",
+  "output_html_sha256": "3c7bf6e71aab97eb1ebe986e6a6f4b05bbb5c83074bf3a682fa723a9ede1a090",
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

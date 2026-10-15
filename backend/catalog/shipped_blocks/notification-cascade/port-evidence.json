@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "notification-cascade",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/notification-cascade",
+  "source_sha256": "9bb3a62e358ff2b66c2afa6b9bd6110bfc3e834c8ff4c543c52cfc368c0db1d9",
+  "output_html_sha256": "c4847d5af4331d156272dabc212729309c5d74c09e14920e9cea19c73df94a03",
+  "duration": 14,
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "tags": [
+    "showcase",
+    "mock-ui",
+    "notification",
+    "vertical",
+    "ad-template"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

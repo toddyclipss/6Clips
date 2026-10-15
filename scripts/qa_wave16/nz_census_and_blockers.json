@@ -1,0 +1,1144 @@
+{
+  "total_nz_blocks": 75,
+  "counts": {
+    "total_nz": 75,
+    "already_shipped_pre_w16": 13,
+    "newly_ported_wave16": 14,
+    "blocked_trademark": 11,
+    "blocked_map_geo": 8,
+    "blocked_threejs": 6,
+    "blocked_complex_shader": 23
+  },
+  "rows": [
+    {
+      "id": "nebula",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "news-ticker",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 4.77,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "north-korea-locked-down",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "External satellite map tiles and proprietary geographic raster data",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "notes-reveal",
+      "status": "BLOCKED_DEPENDENCY_THREEJS_3D",
+      "reason": "Three.js 3D particle reveal requiring unvendored GLTF pipeline",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "notification-cascade",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 21.583,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "nyc-paris-flight",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "External airport coordinates and globe projection dependencies",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "orbit-card",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Multi-layer 3D dot sphere with matrix transformation pipeline",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "organic-light-leak-overlay",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 2.915,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "oscilloscope-trace",
+      "status": "BLOCKED_DEPENDENCY_THREEJS_3D",
+      "reason": "CRT phosphor simulation requiring unvendored WebGL post-processing",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "plasma",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "prism",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "product-turntable",
+      "status": "BLOCKED_DEPENDENCY_THREEJS_3D",
+      "reason": "3D turntable studio viewer requiring unvendored Three.js controls",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "rack-focus",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Multi-pass camera aperture bokeh blur shader",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "reddit-post",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "Reddit",
+      "reason": "Requires Reddit logo, upvote UI, and trademark clearance",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "ridged-burn",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 69.851,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "ripple-waves",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 50.026,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "sdf-iris",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 98.709,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "share-sheet-carousel",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Multi-image carousel requiring touch-spring physics and nested card assets",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "sine-wave",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "slack-notification-ad",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "Slack",
+      "reason": "Requires Slack logo, trademark, and branded assets",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "snow",
+      "status": "BLOCKED_DEPENDENCY_THREEJS_3D",
+      "reason": "3D volumetric snow particle system requiring unvendored Three.js",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "spain-map",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "GeoJSON polygon boundaries for Spanish autonomous communities",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "spiral-galaxy",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Logarithmic spiral density wave particle simulation",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "split-flap-board",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 1.545,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "spotify-card",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "Spotify",
+      "reason": "Requires Spotify green branding, trademark, and player UI",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "starfield",
+      "status": "BLOCKED_DEPENDENCY_THREEJS_3D",
+      "reason": "3D warp starfield particle system requiring unvendored Three.js",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "strands",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "stripes",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "swirl",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "swirl-vortex",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "High-order vortex turbulence distortion shader",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "thermal-distortion",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 35.132,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "thread-message-stack",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 7.845,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "tiktok-follow",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "transitions-3d",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "3D perspective cube fold transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-blur",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Directional optical motion blur transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-cover",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Sliding multi-track cover transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-destruction",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Geometry shatter destruction transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-dissolve",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 15.012,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "transitions-distortion",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "UV displacement wave transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-grid",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Mosaic grid transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-light",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Exposure flash transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-mechanical",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Iris shutter mechanical transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-other",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Custom compound wipe transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "transitions-push",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 15.016,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "transitions-radial",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 112.191,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "transitions-scale",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Zoom punch transition",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "ui-3d-reveal",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Multi-plane 3D perspective DOM matrix reveal",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "us-map",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "US state boundary vector geospatial data",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "us-map-bubble",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "Regional bubble demographic data provider and projection",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "us-map-flow",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "State-to-state migration flow vector dataset",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "us-map-hex",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "Hexbin cartogram topology dataset",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-anamorphic-flare",
+      "status": "BLOCKED_DEPENDENCY_THREEJS_3D",
+      "reason": "Multi-pass anamorphic lens flare with multi-buffer accumulation",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-iphone-device",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "Apple iPhone",
+      "reason": "Requires Apple hardware design and trademark clearance",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-liquid-background",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Viscous fluid simulation shader",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-liquid-glass",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Refraction liquid glass shader",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-magnetic",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Magnetic field line particle simulation",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-portal",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Cylindrical portal raymarch shader",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-shatter",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Voronoi glass shatter shader",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "vfx-text-cursor",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Monospace kinetic typing terminal",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "voronoi",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "vpn-youtube-spot",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "YouTube",
+      "reason": "Requires YouTube logo, red play button, and trademark clearance",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "water",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "waveform",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "week-in-merges",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 5.148,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "weight-wave",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "whip-pan",
+      "status": "PORTED_WAVE16_VERIFIED",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "motion_delta": 58.742,
+      "export_valid": true,
+      "cas_mutation_success": true,
+      "license": "Apache-2.0 (donor) / AGPL-3.0 (runtime)",
+      "dependencies": "Zero external dependencies; local offline GSAP runtime in lib/"
+    },
+    {
+      "id": "wireframe-portal-title",
+      "status": "BLOCKED_DEPENDENCY_COMPLEX_SHADER",
+      "reason": "Wireframe 3D grid tunnel",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "world-map",
+      "status": "BLOCKED_DEPENDENCY_MAP_GEO",
+      "reason": "Global country boundary vector dataset and projection engine",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "x-post",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "X (Twitter)",
+      "reason": "Requires X trademark logo, verified badge, and tweet UI",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "yt-comment-card",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "YouTube",
+      "reason": "Requires YouTube branding, comment layout, and avatar assets",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "yt-lcd-background",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "YouTube",
+      "reason": "Requires YouTube trademark studio backdrop",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "yt-logo-intro",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "YouTube",
+      "reason": "Requires YouTube official brand logo animation",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "yt-lower-third",
+      "status": "SHIPPED_PRE_WAVE16",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license": "Apache-2.0 / MIT",
+      "dependencies": "Vendored local shader library / fallback"
+    },
+    {
+      "id": "yt-prism-title",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "YouTube",
+      "reason": "Requires YouTube trademark brand title asset",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    },
+    {
+      "id": "yt-vertical-fill",
+      "status": "BLOCKED_RIGHTS_TRADEMARK",
+      "brand": "YouTube",
+      "reason": "Requires YouTube Shorts vertical fill trademark",
+      "proof_ladder": {
+        "source_inventoried": true,
+        "source_ported": false,
+        "runtime_ready": false,
+        "browser_preview_verified": false,
+        "motion_edit_verified": false,
+        "render_artifact_verified": false,
+        "rights_cleared": false
+      }
+    }
+  ]
+}
