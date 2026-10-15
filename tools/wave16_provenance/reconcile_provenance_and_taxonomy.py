@@ -541,7 +541,7 @@ def build_authoritative_wave16_inventory(donor_dir: Path = DONOR_PATH) -> Dict[s
         })
 
     inventory = {
-        "schema_version": 2,
+        "schema_version": 1,
         "wave": 16,
         "agent": "Agent 5 (Provenance, Rights & Taxonomy Reconciler)",
         "source_inventory": "HyperFrames",

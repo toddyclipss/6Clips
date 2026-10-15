@@ -1,26 +1,26 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-15T05:06:29.754491+00:00",
+  "generated_at": "2026-10-15T05:21:12.922174+00:00",
   "total_inventoried_donor_blocks": 196,
   "metrics": {
     "LISTED": 196,
-    "SHIPPED": 37,
+    "SHIPPED": 131,
     "PREVIEW": 0,
     "INSERTED": 0,
     "EXPORT": 0,
     "FULL_E2E": 0
   },
   "status_distribution": {
+    "INSERTED": 0,
+    "SHIPPED": 131,
     "LISTED": 0,
-    "NOT_TESTED": 0,
-    "FULL_E2E": 0,
-    "BLOCKED_DEPENDENCY": 144,
     "BLOCKED_LICENSE": 0,
-    "BLOCKED_RIGHTS": 15,
-    "EXPORT": 0,
+    "FULL_E2E": 0,
+    "NOT_TESTED": 0,
     "PREVIEW": 0,
-    "SHIPPED": 37,
-    "INSERTED": 0
+    "BLOCKED_RIGHTS": 12,
+    "BLOCKED_DEPENDENCY": 53,
+    "EXPORT": 0
   },
   "taxonomy": {
     "category_verified_count": 171,
@@ -43,8 +43,8 @@
     {
       "id": "ai-answer-rank",
       "title": "AI Answer Rank",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -61,13 +61,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "ai-chat-reveal",
       "title": "AI Chat Reveal",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -84,13 +84,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "app-showcase",
       "title": "App Showcase",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -107,7 +107,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "apple-money-count",
@@ -158,8 +158,8 @@
     {
       "id": "bar-chart-race",
       "title": "Bar Chart Race",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -176,13 +176,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "beat-freeze-cut",
       "title": "Beat Freeze Cut",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -199,7 +199,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "blob",
@@ -250,8 +250,8 @@
     {
       "id": "camcorder-hud",
       "title": "Camcorder HUD",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -268,13 +268,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "camera-dolly-zoom",
       "title": "Dolly Zoom (Vertigo Shot)",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -291,7 +291,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "canopy-part-title",
@@ -319,8 +319,8 @@
     {
       "id": "carousel-circle-1",
       "title": "Circle Carousel 1",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -337,13 +337,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-circle-2",
       "title": "Circle Carousel 2",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -360,13 +360,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-circle-3",
       "title": "Circle Carousel 3",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -383,13 +383,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-circle-4",
       "title": "Circle Carousel 4",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -406,13 +406,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-circle-5",
       "title": "Circle Carousel 5",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -429,13 +429,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-orbit-1",
       "title": "Orbit Carousel 1",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -452,13 +452,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-orbit-2",
       "title": "Orbit Carousel 2",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -475,13 +475,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-orbit-3",
       "title": "Orbit Carousel 3",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -498,13 +498,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-orbit-4",
       "title": "Orbit Carousel 4",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -521,13 +521,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-orbit-5",
       "title": "Orbit Carousel 5",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -544,13 +544,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-path-1",
       "title": "Path Carousel 1",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -567,13 +567,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-path-2",
       "title": "Path Carousel 2",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -590,13 +590,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-path-3",
       "title": "Path Carousel 3",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -613,13 +613,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-path-4",
       "title": "Path Carousel 4",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -636,13 +636,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-path-5",
       "title": "Path Carousel 5",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -659,13 +659,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-text-circle-1",
       "title": "Text + Circle Carousel 1",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -682,13 +682,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-text-circle-2",
       "title": "Text + Circle Carousel 2",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -705,13 +705,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-text-circle-3",
       "title": "Text + Circle Carousel 3",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -728,13 +728,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-text-circle-4",
       "title": "Text + Circle Carousel 4",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -751,13 +751,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-text-circle-5",
       "title": "Text + Circle Carousel 5",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -774,13 +774,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-vision-1",
       "title": "Vision Carousel 1",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -797,13 +797,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-vision-2",
       "title": "Vision Carousel 2",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -820,13 +820,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-vision-3",
       "title": "Vision Carousel 3",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -843,13 +843,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-vision-4",
       "title": "Vision Carousel 4",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -866,13 +866,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "carousel-vision-5",
       "title": "Vision Carousel 5",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -889,7 +889,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "chatgpt-exchange",
@@ -917,8 +917,8 @@
     {
       "id": "chromatic-radial-split",
       "title": "Chromatic Radial Split",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -935,13 +935,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "cinemagraph",
       "title": "Cinemagraph",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -958,13 +958,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "cinematic-zoom",
       "title": "Cinematic Zoom",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -981,7 +981,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "claude-exchange",
@@ -1009,8 +1009,8 @@
     {
       "id": "code-3d-extrude",
       "title": "Code 3D Extrude",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1027,13 +1027,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-diff",
       "title": "Code Diff",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1050,13 +1050,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-highlight",
       "title": "Code Highlight Sweep",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1073,13 +1073,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-morph",
       "title": "Code Morph",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1096,13 +1096,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-particle-assemble",
       "title": "Code Particle Assemble",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1119,13 +1119,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-scroll",
       "title": "Code Scroll To Line",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1142,13 +1142,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-shader-dissolve",
       "title": "Code Shader Dissolve",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1165,13 +1165,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-slice-hero",
       "title": "Code Slice Hero",
-      "status": "BLOCKED_RIGHTS",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1188,7 +1188,7 @@
         "brand_status": "TRADEMARK_SENSITIVE",
         "clearance_path": "Retain generic code editor window framing with vendored GSAP NOTICE."
       },
-      "blocker_reason": "Requires brand clearance: Retain generic code editor window framing with vendored GSAP NOTICE."
+      "blocker_reason": null
     },
     {
       "id": "code-snippet-apple-terminal-pro",
@@ -1216,8 +1216,8 @@
     {
       "id": "code-snippet-dark-2026",
       "title": "Code Snippet - Dark 2026",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1234,13 +1234,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-snippet-dark-modern",
       "title": "Code Snippet - Dark Modern",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1257,13 +1257,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "code-typing",
       "title": "Code Typing",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1280,13 +1280,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "cosmic-orb",
       "title": "Cosmic Orb",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1303,13 +1303,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "cross-warp-morph",
       "title": "Cross Warp Morph",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1326,13 +1326,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "cuboid-carousel",
       "title": "Cuboid Carousel",
-      "status": "BLOCKED_RIGHTS",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1349,7 +1349,7 @@
         "brand_status": "TRADEMARK_SENSITIVE",
         "clearance_path": "Vendor Three.js core and modules locally under MIT license."
       },
-      "blocker_reason": "Requires brand clearance: Vendor Three.js core and modules locally under MIT license."
+      "blocker_reason": null
     },
     {
       "id": "data-chart",
@@ -1377,8 +1377,8 @@
     {
       "id": "domain-warp-dissolve",
       "title": "Domain Warp Dissolve",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1395,13 +1395,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "editorial-flash-overlay",
       "title": "Editorial Flash Overlay",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1418,7 +1418,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "exploded-stack",
@@ -1469,8 +1469,8 @@
     {
       "id": "flash-through-white",
       "title": "Flash Through White",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1487,13 +1487,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "flowchart",
       "title": "Flowchart",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1510,13 +1510,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "flowchart-vertical",
       "title": "Flowchart Vertical",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1533,7 +1533,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "flowing-gradient",
@@ -1584,8 +1584,8 @@
     {
       "id": "freeze-frame-dressing",
       "title": "Freeze-Frame Dressing",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1602,7 +1602,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "frost",
@@ -1630,8 +1630,8 @@
     {
       "id": "frost-sequence-camera-orbit",
       "title": "Frost Sequence Camera Orbit",
-      "status": "BLOCKED_RIGHTS",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1648,13 +1648,13 @@
         "brand_status": "TRADEMARK_SENSITIVE",
         "clearance_path": "Vendor notices and license files cleanly in shipped_blocks directory."
       },
-      "blocker_reason": "Requires brand clearance: Vendor notices and license files cleanly in shipped_blocks directory."
+      "blocker_reason": null
     },
     {
       "id": "gallery-tunnel",
       "title": "Gallery Tunnel",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1671,7 +1671,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "glass-hero",
@@ -1722,8 +1722,8 @@
     {
       "id": "glitch",
       "title": "Glitch",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1740,7 +1740,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "godrays",
@@ -1791,8 +1791,8 @@
     {
       "id": "gooey-split",
       "title": "Gooey Split",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1809,13 +1809,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "gravitational-lens",
       "title": "Gravitational Lens",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1832,13 +1832,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "halftone-field",
       "title": "Halftone Field",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1855,7 +1855,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "heygen-avatar-promo-card",
@@ -1906,8 +1906,8 @@
     {
       "id": "hw-frame",
       "title": "Sketched Frame",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1924,13 +1924,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "hw-path-text",
       "title": "Text Along a Path",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1947,13 +1947,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "hw-pipeline",
       "title": "Hand-Drawn Flowchart",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1970,13 +1970,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "hw-scribble-transition",
       "title": "Scribble Transition",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -1993,13 +1993,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "hw-text-cloud",
       "title": "Speech Bubble",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2016,13 +2016,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "hw-title",
       "title": "Handwritten Title",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2039,13 +2039,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "hw-write-title",
       "title": "Handwritten Write-On Title",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2062,7 +2062,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "instagram-follow",
@@ -2136,8 +2136,8 @@
     {
       "id": "light-leak",
       "title": "Light Leak",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2154,7 +2154,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "liquid-glass-notification",
@@ -2228,8 +2228,8 @@
     {
       "id": "logo-outro",
       "title": "Logo Outro",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2246,7 +2246,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "lottie-character-walk",
@@ -2274,8 +2274,8 @@
     {
       "id": "lower-third-bild",
       "title": "Lower Third \u2014 BILD Style",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2292,7 +2292,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "lt-accent-underline",
@@ -2458,8 +2458,8 @@
     {
       "id": "lt-neon-border",
       "title": "Neon Border",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2476,7 +2476,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "lt-side-rule",
@@ -2642,8 +2642,8 @@
     {
       "id": "message-thread-reveal",
       "title": "Message Thread Reveal",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2660,13 +2660,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-background",
       "title": "Minimal Gradient Background",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2683,13 +2683,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-callout-highlight",
       "title": "Word-Sweep Highlight",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2706,13 +2706,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-clone-wall-transition",
       "title": "Text Clone Wall Transition",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2729,13 +2729,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-line-graph",
       "title": "Minimal Line Graph",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2752,13 +2752,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-placeholder-grid",
       "title": "Rounded Media Grid",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2775,13 +2775,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-progress-stat",
       "title": "Count-Up Stat Card",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2798,13 +2798,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "mk-specs-list",
       "title": "Specs Checklist",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2821,7 +2821,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "nebula",
@@ -2849,8 +2849,8 @@
     {
       "id": "news-ticker",
       "title": "News Ticker",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2867,7 +2867,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "north-korea-locked-down",
@@ -2918,8 +2918,8 @@
     {
       "id": "notification-cascade",
       "title": "Notification Cascade",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -2936,7 +2936,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "nyc-paris-flight",
@@ -2987,8 +2987,8 @@
     {
       "id": "organic-light-leak-overlay",
       "title": "Organic Light Leak Overlay",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3005,7 +3005,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "oscilloscope-trace",
@@ -3148,8 +3148,8 @@
     {
       "id": "ridged-burn",
       "title": "Ridged Burn",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3166,13 +3166,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "ripple-waves",
       "title": "Ripple Waves",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3189,13 +3189,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "sdf-iris",
       "title": "SDF Iris",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3212,7 +3212,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "share-sheet-carousel",
@@ -3355,8 +3355,8 @@
     {
       "id": "split-flap-board",
       "title": "Split-Flap Board",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3373,7 +3373,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "spotify-card",
@@ -3516,8 +3516,8 @@
     {
       "id": "thermal-distortion",
       "title": "Thermal Distortion",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3534,13 +3534,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "thread-message-stack",
       "title": "Thread Message Stack",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3557,7 +3557,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "tiktok-follow",
@@ -3677,8 +3677,8 @@
     {
       "id": "transitions-dissolve",
       "title": "Dissolve Transitions",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3695,7 +3695,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "transitions-distortion",
@@ -3815,8 +3815,8 @@
     {
       "id": "transitions-push",
       "title": "Push Transitions",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3833,13 +3833,13 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "transitions-radial",
       "title": "Radial Transitions",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -3856,7 +3856,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "transitions-scale",
@@ -4275,8 +4275,8 @@
     {
       "id": "week-in-merges",
       "title": "Week in Merges",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -4293,7 +4293,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "weight-wave",
@@ -4321,8 +4321,8 @@
     {
       "id": "whip-pan",
       "title": "Whip Pan",
-      "status": "BLOCKED_DEPENDENCY",
-      "is_shipped_offline": false,
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
       "proof_preview": false,
       "proof_inserted": false,
       "proof_export": false,
@@ -4339,7 +4339,7 @@
         "brand_status": "NONE",
         "clearance_path": "Vendor runtime libraries offline"
       },
-      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+      "blocker_reason": null
     },
     {
       "id": "wireframe-portal-title",

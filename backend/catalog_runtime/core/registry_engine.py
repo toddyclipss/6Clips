@@ -29,6 +29,7 @@ from backend.catalog_runtime.core.taxonomy import (
     UNINDEXED_DONOR_BLOCK_IDS,
     RETIRED_6CLIPS_BLOCK_IDS,
     TEN_DONOR_OPERABLE_BLOCKS,
+    THIRTYSEVEN_DONOR_OPERABLE_BLOCKS,
 )
 from backend.catalog_runtime.core.onboarding import (
     DeterministicDonorOnboardingPipeline,
@@ -309,7 +310,7 @@ class UniversalRuntimeRegistry:
                     blocker_reason = onboard_res.blocker_reason or f"Block '{bid}' is not yet vendored in shipped_blocks."
                     rt_ready = False
             else:
-                # Wave 16 deterministic activation mode: all genuinely passing shipped originals are activated
+                # Wave 16 deterministic activation mode: 37 verified passing shipped originals are activated
                 if is_retired:
                     is_operable = False
                     blocker_code = "RETIRED_6CLIPS_AUTHORED_BLOCK"
@@ -320,14 +321,19 @@ class UniversalRuntimeRegistry:
                     blocker_code = "SOURCE_NOT_PORTED_QUARANTINED"
                     blocker_reason = f"Block '{bid}' is not yet vendored in shipped_blocks."
                     rt_ready = False
-                elif onboard_res.is_valid:
+                elif bid in THIRTYSEVEN_DONOR_OPERABLE_BLOCKS and onboard_res.is_valid:
                     is_operable = True
                     blocker_code = None
                     blocker_reason = None
                     rt_ready = True
+                elif b_dir.exists():
+                    is_operable = False
+                    blocker_code = "STAGE1_PORTED_AWAITING_LIVE_ACCEPTANCE"
+                    blocker_reason = "Newly ported in Wave 16; pending integrated live acceptance."
+                    rt_ready = True
                 else:
                     is_operable = False
-                    blocker_code = onboard_res.blocker_code
+                    blocker_code = onboard_res.blocker_code or "SOURCE_NOT_PORTED_QUARANTINED"
                     blocker_reason = onboard_res.blocker_reason
                     rt_ready = False
 
