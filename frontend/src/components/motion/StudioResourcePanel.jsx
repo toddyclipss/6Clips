@@ -32,6 +32,9 @@ import {
   HYPERFRAMES_CATEGORIES,
   fetchAllInventoryPages,
   DONOR_INTERNALIZED_IDS,
+  DONOR_PACKAGED_IDS,
+  DONOR_SHADER_IDS,
+  DONOR_LOWER_THIRD_IDS,
   RETIRED_6CLIPS_BLOCK_IDS,
   resolveBlockCategory,
 } from "../../utils/catalogOriginals"
@@ -880,15 +883,41 @@ export default function StudioResourcePanel({
                 {filteredCatalog.map((item) => {
                   const bName = item.name || item.id
                   const isOperational = DONOR_INTERNALIZED_IDS.has(bName) || Boolean(item.isOperational) || item.integration_status === "INTERNALIZED"
-                  const posterUrl = isOperational
+                  const isPackaged = DONOR_PACKAGED_IDS.has(bName) || Boolean(item.isPackaged)
+                  const isShader = DONOR_SHADER_IDS.has(bName) || Boolean(item.isShader)
+                  const isLowerThird = DONOR_LOWER_THIRD_IDS.has(bName) || Boolean(item.isLowerThird)
+                  const canInsert = isOperational || isPackaged
+                  const posterUrl = isPackaged
                     ? (item.poster_url || item.preview?.poster || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspectRatio}`)
                     : null
+
+                  let statusChipLabel = "Unported"
+                  let statusBg = "#fef3c7"
+                  let statusColor = "#b45309"
+                  if (isOperational) {
+                    statusChipLabel = "Operational"
+                    statusBg = "#ecfdf5"
+                    statusColor = "#047857"
+                  } else if (isShader) {
+                    statusChipLabel = "Shader (Packaged)"
+                    statusBg = "#faf5ff"
+                    statusColor = "#9333ea"
+                  } else if (isLowerThird) {
+                    statusChipLabel = "Lower-Third (Packaged)"
+                    statusBg = "#f0fdf4"
+                    statusColor = "#0284c7"
+                  } else if (isPackaged) {
+                    statusChipLabel = "Packaged"
+                    statusBg = "#e0f2fe"
+                    statusColor = "#0369a1"
+                  }
 
                   return (
                     <Box
                       key={bName}
                       data-testid={`catalog-card-${bName}`}
                       data-operational={isOperational}
+                      data-packaged={isPackaged}
                       onMouseEnter={() => {
                         if (isOperational) handleCatalogItemMouseEnter(item)
                       }}
@@ -916,11 +945,11 @@ export default function StudioResourcePanel({
                         borderColor: "divider",
                         bgcolor: "#ffffff",
                         cursor: isOperational ? "grab" : "default",
-                        opacity: isOperational ? 1 : 0.85,
+                        opacity: isOperational ? 1 : isPackaged ? 0.95 : 0.85,
                         transition: "all 0.15s ease",
                         "&:hover": {
-                          borderColor: isOperational ? "#8b5cf6" : "warning.main",
-                          bgcolor: isOperational ? "#f8fafc" : "#fffbeb",
+                          borderColor: isOperational ? "#8b5cf6" : isPackaged ? "#38bdf8" : "warning.main",
+                          bgcolor: isOperational ? "#f8fafc" : isPackaged ? "#f0f9ff" : "#fffbeb",
                           boxShadow: isOperational ? "0 2px 8px rgba(139, 92, 246, 0.12)" : "none",
                         },
                       }}
@@ -932,7 +961,7 @@ export default function StudioResourcePanel({
                             width: 56,
                             height: 56,
                             borderRadius: 1,
-                            bgcolor: isOperational ? "#0f172a" : "#f1f5f9",
+                            bgcolor: isOperational ? "#0f172a" : isPackaged ? "#1e293b" : "#f1f5f9",
                             overflow: "hidden",
                             flexShrink: 0,
                             position: "relative",
@@ -942,7 +971,7 @@ export default function StudioResourcePanel({
                             justifyContent: "center",
                           }}
                         >
-                          {isOperational && posterUrl ? (
+                          {posterUrl ? (
                             <Box
                               component="img"
                               src={posterUrl}
@@ -976,21 +1005,33 @@ export default function StudioResourcePanel({
                           >
                             {item.title || bName}
                           </Typography>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              fontFamily: "monospace",
+                              fontSize: "0.65rem",
+                              color: "text.disabled",
+                              display: "block",
+                              lineHeight: 1.1,
+                            }}
+                          >
+                            {bName}
+                          </Typography>
                           <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.25, flexWrap: "wrap", gap: 0.5 }}>
                             <Chip
                               size="small"
-                              label={isOperational ? "Operational" : "Unported"}
+                              label={statusChipLabel}
                               sx={{
                                 height: 16,
                                 fontSize: "0.58rem",
                                 fontWeight: 800,
-                                bgcolor: isOperational ? "#ecfdf5" : "#fef3c7",
-                                color: isOperational ? "#047857" : "#b45309",
+                                bgcolor: statusBg,
+                                color: statusColor,
                               }}
                             />
                             <Chip
                               size="small"
-                              label={item.category || "scenes"}
+                              label={item.category_label || item.category || "scenes"}
                               sx={{ height: 16, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#f1f5f9" }}
                             />
                             {(() => {
@@ -1016,13 +1057,15 @@ export default function StudioResourcePanel({
                           </Stack>
                         </Box>
 
-                        {/* Action Buttons: Ask AI & Insert */}
+                        {/* Action Buttons: Insert */}
                         <Stack direction="column" spacing={0.5} alignItems="flex-end">
                           <Tooltip
                             title={
                               isOperational
                                 ? "Insert block into timeline at current playhead"
-                                : "Block pending porting & verification in Wave 15"
+                                : isPackaged
+                                ? "Insert packaged block into timeline"
+                                : "Block pending porting & verification in Wave 16"
                             }
                             arrow
                           >
@@ -1030,20 +1073,20 @@ export default function StudioResourcePanel({
                               <Button
                                 size="small"
                                 variant="contained"
-                                disabled={!isOperational}
+                                disabled={!canInsert}
                                 data-testid={`insert-block-${bName}`}
                                 sx={{
                                   height: 22,
                                   fontSize: "0.68rem",
                                   px: 1,
                                   py: 0,
-                                  bgcolor: isOperational ? "primary.main" : "action.disabledBackground",
+                                  bgcolor: isOperational ? "primary.main" : isPackaged ? "info.main" : "action.disabledBackground",
                                   textTransform: "none",
                                   fontWeight: 700,
                                 }}
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  if (!isOperational) return
+                                  if (!canInsert) return
                                   if (onAddBlock) {
                                     onAddBlock(item)
                                   } else if (onAddMediaToTimeline) {

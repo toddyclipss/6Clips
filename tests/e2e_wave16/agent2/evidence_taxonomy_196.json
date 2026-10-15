@@ -1,0 +1,1178 @@
+{
+  "ai-answer-rank": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "data-charts"
+  },
+  "ai-chat-reveal": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "app-showcase": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "apple-money-count": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "aurora": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "bar-chart-race": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "beat-freeze-cut": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "blob": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "blue-sweater-intro-video": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "camcorder-hud": {
+    "group": "motion-effects",
+    "label": "Motion & effects",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "camera-dolly-zoom": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "canopy-part-title": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-circle-1": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-circle-2": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-circle-3": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-circle-4": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-circle-5": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-orbit-1": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-orbit-2": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-orbit-3": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-orbit-4": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-orbit-5": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-path-1": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-path-2": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-path-3": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-path-4": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-path-5": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-text-circle-1": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-text-circle-2": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-text-circle-3": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-text-circle-4": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-text-circle-5": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-vision-1": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-vision-2": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-vision-3": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-vision-4": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "carousel-vision-5": {
+    "group": "carousels",
+    "label": "Carousels",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "chatgpt-exchange": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "chromatic-radial-split": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "cinemagraph": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "general"
+  },
+  "cinematic-zoom": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "claude-exchange": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-3d-extrude": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-diff": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-highlight": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-morph": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-particle-assemble": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-scroll": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-shader-dissolve": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-slice-hero": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-snippet-apple-terminal-pro": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-snippet-dark-2026": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-snippet-dark-modern": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "code-typing": {
+    "group": "code",
+    "label": "Code",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "cosmic-orb": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "cross-warp-morph": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "cuboid-carousel": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "data-chart": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "domain-warp-dissolve": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "editorial-flash-overlay": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "exploded-stack": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "scenes-demos"
+  },
+  "extruded-logo": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "scenes-demos"
+  },
+  "flash-through-white": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "flowchart": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "flowchart-vertical": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "flowing-gradient": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "fractal-noise": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "freeze-frame-dressing": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "frost": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "frost-sequence-camera-orbit": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "gallery-tunnel": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "glass-hero": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "scenes-demos"
+  },
+  "glass-shard-title": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "glitch": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "godrays": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "goo": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "gooey-split": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "scenes-demos"
+  },
+  "gravitational-lens": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "halftone-field": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "heygen-avatar-promo-card": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "holographic": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "hw-frame": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "hw-path-text": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "hw-pipeline": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "hw-scribble-transition": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "hw-text-cloud": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "hw-title": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "hw-write-title": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "instagram-follow": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "ios26-liquid-glass": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lens-flare": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "light-leak": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "liquid-glass-notification": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "liquid-glass-widgets": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "liquid-metal": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "logo-outro": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lottie-character-walk": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lower-third-bild": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-accent-underline": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-bold-block": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-clean-bar": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-color-block": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-dark-card": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-kicker-name": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-mask-reveal": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-neon-border": {
+    "group": "motion-effects",
+    "label": "Motion & effects",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-side-rule": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-soft-pill": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "lt-stack-bars": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "macos-notification": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "macos-tahoe-liquid-glass": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "marble": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mesh-gradient": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "message-thread-reveal": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-background": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-callout-highlight": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-clone-wall-transition": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-line-graph": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-placeholder-grid": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-progress-stat": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "mk-specs-list": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "nebula": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "news-ticker": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "north-korea-locked-down": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "notes-reveal": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "notification-cascade": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "nyc-paris-flight": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "orbit-card": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "organic-light-leak-overlay": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "oscilloscope-trace": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "plasma": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "prism": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "product-turntable": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "scenes-demos"
+  },
+  "rack-focus": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "reddit-post": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "ridged-burn": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "ripple-waves": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "sdf-iris": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "share-sheet-carousel": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "sine-wave": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "slack-notification-ad": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "snow": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "scenes-demos"
+  },
+  "spain-map": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "spiral-galaxy": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "split-flap-board": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "spotify-card": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "starfield": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "strands": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "stripes": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "swirl": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "swirl-vortex": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "thermal-distortion": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "thread-message-stack": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "tiktok-follow": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-3d": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-blur": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-cover": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-destruction": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-dissolve": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-distortion": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-grid": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-light": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-mechanical": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-other": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-push": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-radial": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "transitions-scale": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "ui-3d-reveal": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "us-map": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "us-map-bubble": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "us-map-flow": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "us-map-hex": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-anamorphic-flare": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-iphone-device": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-liquid-background": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-liquid-glass": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-magnetic": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-portal": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-shatter": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "vfx-text-cursor": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "voronoi": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "vpn-youtube-spot": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "water": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "waveform": {
+    "group": null,
+    "label": null,
+    "status": "SOURCE_CATEGORY_MISSING",
+    "fallback": "backgrounds"
+  },
+  "week-in-merges": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "weight-wave": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "whip-pan": {
+    "group": "transitions",
+    "label": "Transitions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "wireframe-portal-title": {
+    "group": "3d-motion",
+    "label": "3D motion",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "world-map": {
+    "group": "data-charts",
+    "label": "Data & charts",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "x-post": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "yt-comment-card": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "yt-lcd-background": {
+    "group": "surfaces",
+    "label": "Surfaces",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "yt-logo-intro": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "yt-lower-third": {
+    "group": "scenes-demos",
+    "label": "Scenes & demos",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "yt-prism-title": {
+    "group": "text-captions",
+    "label": "Text & captions",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  },
+  "yt-vertical-fill": {
+    "group": "blocks",
+    "label": "Blocks",
+    "status": "SOURCE_CATEGORY_VERIFIED",
+    "fallback": null
+  }
+}
