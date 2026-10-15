@@ -1,0 +1,22 @@
+{
+  "slug": "hw-title",
+  "source_slug": "hw-title",
+  "source_html_sha256": "4ced2ce725fde59d21f5d34a4b4787bb5dd778b8a9267852a4dac587d6e296e8",
+  "output_html_sha256": "e8c22d28cbd10cee249c4bf5949526fdc7587148b8aff4b9785ceccc64162c6e",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 11,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "typography",
+    "title-card",
+    "overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

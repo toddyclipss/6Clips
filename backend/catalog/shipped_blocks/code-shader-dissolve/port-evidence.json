@@ -1,0 +1,23 @@
+{
+  "slug": "code-shader-dissolve",
+  "source_slug": "code-shader-dissolve",
+  "source_html_sha256": "ee638e1a9b12bb8b6c935bff898ec0a21c2cce975551f9194cbaedee9de502ba",
+  "output_html_sha256": "9cb8e5b6d3445c595f8dd0b06eef67bce4b7dbfed517be4414f2012363d29526",
+  "uses_three": true,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 10,
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "shader",
+    "webgl",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

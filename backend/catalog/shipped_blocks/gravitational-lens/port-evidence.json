@@ -1,0 +1,20 @@
+{
+  "slug": "gravitational-lens",
+  "source_slug": "gravitational-lens",
+  "source_html_sha256": "e873bcca352a2e2721c3fed5d7ea355145d9df9dc9d2454564609bea8e61e475",
+  "output_html_sha256": "e56a60f939a60f4290d08188f4e81ebe329cdc46a60c238feb75d1c672784df4",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

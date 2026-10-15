@@ -1,0 +1,4 @@
+Block ID: cross-warp-morph
+Original donor path: registry/blocks/cross-warp-morph
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

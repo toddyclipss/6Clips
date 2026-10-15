@@ -1,0 +1,22 @@
+{
+  "slug": "beat-freeze-cut",
+  "source_slug": "beat-freeze-cut",
+  "source_html_sha256": "c1c62628b55f3a6b751b03459a2d714bdeb356cb6797195590dfcc0278c66788",
+  "output_html_sha256": "165c46c4b60f6b7c3990392ae839bfc4007ee5826a5dacbce0c001c8d7a26ecd",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "music",
+    "beat-driven",
+    "freeze-frame"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

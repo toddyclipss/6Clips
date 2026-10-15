@@ -1,0 +1,378 @@
+{
+  "title": "Wave 16 Taxonomy and Registry Discrepancy Reconciliation Report",
+  "total_donor_blocks": 196,
+  "indexed_in_catalog_gallery_mdx": 171,
+  "missing_from_catalog_gallery_mdx": 25,
+  "indexed_in_registry_json": 170,
+  "unindexed_in_registry_json": 26,
+  "agent4_tag_heuristic_matched": 178,
+  "agent4_tag_heuristic_missing": 18,
+  "discrepancy_root_cause": "The 171/25 split is authoritative because docs/snippets/catalog-gallery-data.mdx represents the actual upstream HyperFrames gallery catalog. Agent 4's 178/18 count in Wave 15 was an artifact of running keyword pattern-matching on block tags, which coincidentally matched 7 of the 25 unindexed blocks while missing 14 blocks that actually were indexed in the upstream gallery. registry/registry.json indexes 170 blocks because it omits week-in-merges.",
+  "unindexed_blocks_25": [
+    {
+      "id": "ai-answer-rank",
+      "in_registry_json": false,
+      "proposed_fallback": "data-charts",
+      "reasoning": "Ranks items in a structured list with comparison metrics; fits data-charts category.",
+      "tags": [
+        "mock-ui",
+        "ai",
+        "chat",
+        "ranking",
+        "list",
+        "marketing",
+        "ad-template",
+        "square"
+      ]
+    },
+    {
+      "id": "aurora",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU shader generating ambient flowing aurora sky backgrounds.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "aurora",
+        "sky"
+      ]
+    },
+    {
+      "id": "blob",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU organic gradient blob background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "abstract",
+        "organic",
+        "gradient"
+      ]
+    },
+    {
+      "id": "cinemagraph",
+      "in_registry_json": false,
+      "proposed_fallback": "scenes-demos",
+      "reasoning": "Partial photo loop motion effect demonstrating visual scene treatment.",
+      "tags": [
+        "effect",
+        "cinemagraph",
+        "photo",
+        "loop",
+        "freeze-frame"
+      ]
+    },
+    {
+      "id": "exploded-stack",
+      "in_registry_json": false,
+      "proposed_fallback": "3d-motion",
+      "reasoning": "Three.js 3D isometric exploded view layers diagram.",
+      "tags": [
+        "3d-object",
+        "three-js",
+        "webgl",
+        "isometric",
+        "exploded-view",
+        "layers",
+        "diagram",
+        "architecture"
+      ]
+    },
+    {
+      "id": "extruded-logo",
+      "in_registry_json": false,
+      "proposed_fallback": "3d-motion",
+      "reasoning": "Three.js 3D extruded logo and text title card animation.",
+      "tags": [
+        "3d-object",
+        "three-js",
+        "webgl",
+        "logo",
+        "text",
+        "extruded",
+        "title-card"
+      ]
+    },
+    {
+      "id": "fractal-noise",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU fractal noise texture background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "noise",
+        "texture",
+        "clouds"
+      ]
+    },
+    {
+      "id": "frost",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU ice and frost orb material background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "orb",
+        "ice",
+        "frost",
+        "material"
+      ]
+    },
+    {
+      "id": "glass-hero",
+      "in_registry_json": false,
+      "proposed_fallback": "3d-motion",
+      "reasoning": "Three.js 3D glass refraction hero title card.",
+      "tags": [
+        "3d-object",
+        "three-js",
+        "webgl",
+        "glass",
+        "refraction",
+        "hero",
+        "title-card"
+      ]
+    },
+    {
+      "id": "goo",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU 3D organic liquid goo orb background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "liquid",
+        "3d",
+        "organic",
+        "orb"
+      ]
+    },
+    {
+      "id": "gooey-split",
+      "in_registry_json": false,
+      "proposed_fallback": "motion-effects",
+      "reasoning": "Gooey metaball morph and motion-blur transition effect.",
+      "tags": [
+        "effect",
+        "gooey",
+        "metaball",
+        "motion-blur",
+        "morph",
+        "logo",
+        "icon"
+      ]
+    },
+    {
+      "id": "holographic",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU iridescent holographic rainbow orb background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "holographic",
+        "iridescent",
+        "rainbow",
+        "orb"
+      ]
+    },
+    {
+      "id": "lens-flare",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU optical lens flare and glowing ambient light background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "flare",
+        "glow"
+      ]
+    },
+    {
+      "id": "plasma",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU purple plasma texture background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "texture",
+        "plasma",
+        "purple"
+      ]
+    },
+    {
+      "id": "prism",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU optical prism rainbow dispersion background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "prism",
+        "rainbow"
+      ]
+    },
+    {
+      "id": "product-turntable",
+      "in_registry_json": false,
+      "proposed_fallback": "3d-motion",
+      "reasoning": "Three.js GLB 3D product showcase on a rotating turntable.",
+      "tags": [
+        "3d-object",
+        "three-js",
+        "webgl",
+        "product",
+        "turntable",
+        "glb",
+        "loop"
+      ]
+    },
+    {
+      "id": "sine-wave",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU glowing sine wave lines background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "wave",
+        "line",
+        "glow"
+      ]
+    },
+    {
+      "id": "snow",
+      "in_registry_json": false,
+      "proposed_fallback": "motion-effects",
+      "reasoning": "Looping particle snow and snowfall ambient overlay effect.",
+      "tags": [
+        "snow",
+        "snowfall",
+        "winter",
+        "weather",
+        "overlay",
+        "ambient",
+        "particles",
+        "media-treatment-overlay",
+        "loopable"
+      ]
+    },
+    {
+      "id": "starfield",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Looping twinkling starfield and night-sky particle background.",
+      "tags": [
+        "starfield",
+        "night-sky",
+        "stars",
+        "twinkle",
+        "sky",
+        "weather",
+        "overlay",
+        "ambient",
+        "particles",
+        "media-treatment-overlay",
+        "loopable"
+      ]
+    },
+    {
+      "id": "strands",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU flowing ribbons and light strands background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "light",
+        "lines",
+        "ribbons"
+      ]
+    },
+    {
+      "id": "stripes",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU monochrome animated stripes pattern background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "pattern",
+        "stripes",
+        "monochrome"
+      ]
+    },
+    {
+      "id": "swirl",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU abstract flowing gradient swirl background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "gradient",
+        "flow",
+        "abstract"
+      ]
+    },
+    {
+      "id": "voronoi",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU cellular Voronoi pattern background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "background",
+        "pattern",
+        "cells",
+        "voronoi"
+      ]
+    },
+    {
+      "id": "water",
+      "in_registry_json": false,
+      "proposed_fallback": "backgrounds",
+      "reasoning": "Procedural WebGPU blue fluid water orb material background.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "orb",
+        "water",
+        "material",
+        "blue"
+      ]
+    },
+    {
+      "id": "waveform",
+      "in_registry_json": false,
+      "proposed_fallback": "data-charts",
+      "reasoning": "Audio visualizer waveform with reactive bars for music/voice data.",
+      "tags": [
+        "webgpu",
+        "webgpu-shader",
+        "audio",
+        "music",
+        "visualizer",
+        "bars"
+      ]
+    }
+  ]
+}

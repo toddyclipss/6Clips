@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
- * CatalogDrawer: detailed inspector for a selected catalog block.
+ * CatalogDrawer (Wave 16): detailed inspector for a selected catalog block.
  * Enforces truthful inspection:
  * - Operable blocks get interactive preview, variable customization, and Insert into Motion.
+ * - Packaged blocks (17 shaders + 10 lower thirds) show packaging status and allow Motion Studio inspection.
  * - Inventory-only metadata entries have preview, insert, customize, and export disabled with real blocker reasons.
  */
 import React, { useState } from "react"
@@ -47,9 +48,20 @@ import {
   IconSend,
   IconMovie,
   IconClockHour4,
+  IconPackage,
+  IconSparkles,
+  IconAlertCircle,
 } from "@tabler/icons-react"
 import http from "../../api/http"
-import { DONOR_INTERNALIZED_IDS, UNINDEXED_DONOR_IDS, HYPERFRAMES_CATEGORIES } from "../../utils/catalogOriginals"
+import {
+  DONOR_INTERNALIZED_IDS,
+  DONOR_PACKAGED_IDS,
+  DONOR_SHADER_IDS,
+  DONOR_LOWER_THIRD_IDS,
+  SOURCE_CATEGORY_MISSING_IDS,
+  UNINDEXED_DONOR_IDS,
+  HYPERFRAMES_CATEGORIES,
+} from "../../utils/catalogOriginals"
 
 export default function CatalogDrawer({
   item,
@@ -91,24 +103,35 @@ export default function CatalogDrawer({
   const is9x16 = aspect === "9:16"
   const isDonorInternalized = DONOR_INTERNALIZED_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
   const isOperational = isDonorInternalized || Boolean(item.isOperational)
+  const isPackaged = DONOR_PACKAGED_IDS.has(item.id) || Boolean(item.isPackaged)
+  const isShader = DONOR_SHADER_IDS.has(item.id) || Boolean(item.isShader)
+  const isLowerThird = DONOR_LOWER_THIRD_IDS.has(item.id) || Boolean(item.isLowerThird)
   const isUnindexed = UNINDEXED_DONOR_IDS.has(item.id) || Boolean(item.isUnindexed)
+  const isMissingCategory = Boolean(item.source_category_missing) || SOURCE_CATEGORY_MISSING_IDS.has(item.id)
   const is6ClipsOriginal = Boolean(item.is6ClipsOriginal) || item.origin === "6CLIPS_ORIGINAL"
 
   const previewUrl = isOperational
-    ? `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
+    ? `/api/projects/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
+    : (isPackaged ? `/api/projects/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}` : null)
+
+  const posterUrl = isPackaged
+    ? `/api/projects/catalog/blocks/${item.id}/poster?aspect_ratio=${aspect}`
     : null
 
-  let readinessLabel = "QUARANTINED"
+  let readinessLabel = "NEEDS ADAPTATION"
   let readinessColor = "warning"
   if (isOperational) {
     readinessLabel = "OPERATIONAL (INTERNALIZED)"
     readinessColor = "success"
-  } else if (item.integration_status === "ELIGIBLE_NOT_PORTED") {
-    readinessLabel = "VETTED (NOT PORTED)"
-    readinessColor = "warning"
-  } else if (item.integration_status === "NEEDS_ADAPTATION") {
-    readinessLabel = "NEEDS ADAPTATION"
-    readinessColor = "warning"
+  } else if (isShader) {
+    readinessLabel = "PACKAGED SHADER (SHIPPED)"
+    readinessColor = "info"
+  } else if (isLowerThird) {
+    readinessLabel = "PACKAGED LOWER-THIRD (SHIPPED)"
+    readinessColor = "info"
+  } else if (isPackaged) {
+    readinessLabel = "LOCAL PACKAGED"
+    readinessColor = "info"
   } else if (item.integration_status === "BLOCKED_DEPENDENCY") {
     readinessLabel = "BLOCKED DEPENDENCY"
     readinessColor = "error"
@@ -147,8 +170,11 @@ export default function CatalogDrawer({
   }
 
   const handleInsertIntoMotion = () => {
-    if (!isOperational) return
-    navigate(`/motion?insertBlock=${encodeURIComponent(item.id)}&aspect=${aspect}`)
+    if (isOperational) {
+      navigate(`/motion?insertBlock=${encodeURIComponent(item.id)}&aspect=${aspect}`)
+    } else if (isPackaged) {
+      navigate(`/motion?block=${encodeURIComponent(item.id)}&aspect=${aspect}`)
+    }
   }
 
   return (
@@ -184,7 +210,7 @@ export default function CatalogDrawer({
             <Box sx={{ flex: 1, pr: 2 }}>
               <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
                 <Chip
-                  label={item.category?.toUpperCase() || "SCENES"}
+                  label={item.category_label || item.category?.toUpperCase() || "SCENES"}
                   size="small"
                   color="primary"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
@@ -197,7 +223,7 @@ export default function CatalogDrawer({
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
                 />
                 <Chip
-                  label={isDonorInternalized ? "HyperFrames (Internalized)" : "HyperFrames Donor Original"}
+                  label={isDonorInternalized ? "HyperFrames (Internalized)" : isPackaged ? "HyperFrames (Packaged)" : "HyperFrames Donor Original"}
                   size="small"
                   variant="outlined"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
@@ -211,9 +237,10 @@ export default function CatalogDrawer({
                     sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
                   />
                 )}
-                {item.source_category_missing && (
+                {isMissingCategory && (
                   <Chip
-                    label="Tags Resolved"
+                    icon={<IconAlertCircle size={12} />}
+                    label="Source Category Missing"
                     size="small"
                     color="warning"
                     variant="outlined"
@@ -226,7 +253,7 @@ export default function CatalogDrawer({
                 {item.title || item.id}
               </Typography>
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                ID: <code>{item.id}</code> · Author: {item.author || "HyperFrames"}
+                Original Slug: <code data-testid="drawer-block-slug">{item.id}</code> · Origin Dir: <code>{item.relative_source_path || `registry/blocks/${item.id}`}</code>
               </Typography>
             </Box>
 
@@ -236,7 +263,7 @@ export default function CatalogDrawer({
           </Stack>
         </Box>
 
-        {/* Preview Stage: Operational iframe OR Truthful Quarantine Notice */}
+        {/* Preview Stage: Operational iframe OR Packaged Poster OR Truthful Notice */}
         <Box
           sx={{
             p: 2,
@@ -255,7 +282,7 @@ export default function CatalogDrawer({
             sx={{ width: "100%", mb: 1.5 }}
           >
             <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 600 }}>
-              {isOperational ? "STANDALONE PREVIEW" : "PREVIEW QUARANTINED (INVENTORY ONLY)"}
+              {isOperational ? "STANDALONE LIVE PREVIEW" : isPackaged ? "PACKAGED BLOCK PREVIEW" : "PREVIEW QUARANTINED (INVENTORY ONLY)"}
             </Typography>
 
             <ToggleButtonGroup
@@ -295,13 +322,13 @@ export default function CatalogDrawer({
               overflow: "hidden",
               border: 1,
               borderColor: alpha("#fff", 0.1),
-              bgcolor: isOperational ? "#090d16" : "#0f172a",
+              bgcolor: isOperational ? "#090d16" : isPackaged ? "#0f172a" : "#0f172a",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {isOperational ? (
+            {isOperational && previewUrl ? (
               <Box
                 component="iframe"
                 src={previewUrl}
@@ -310,6 +337,20 @@ export default function CatalogDrawer({
                   width: "100%",
                   height: "100%",
                   border: 0,
+                }}
+              />
+            ) : isPackaged && posterUrl ? (
+              <Box
+                component="img"
+                src={posterUrl}
+                alt={item.title || item.id}
+                onError={(e) => {
+                  e.target.style.display = "none"
+                }}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: is9x16 ? "cover" : "contain",
                 }}
               />
             ) : (
@@ -349,7 +390,7 @@ export default function CatalogDrawer({
             }}
           >
             <Tab label="Overview" />
-            <Tab label={`Variables (${item.variables_count || 0})`} />
+            <Tab label={`Variables (${(item.variables || []).length})`} />
             <Tab label="Provenance & Legal" />
             <Tab label="Aspect Parity" />
             <Tab
@@ -365,13 +406,24 @@ export default function CatalogDrawer({
         <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>
           {tab === 0 && (
             <Stack spacing={2}>
-              {!isOperational && (
+              {!isOperational && !isPackaged && (
                 <Alert severity={item.integration_status?.includes("BLOCKED") ? "error" : "warning"}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                    {item.integration_status || "QUARANTINED"}
+                    {item.integration_status || "NEEDS ADAPTATION"}
                   </Typography>
                   <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
                     {item.blocker_reason || "This block is retained as untrusted donor metadata and is withheld from production execution."}
+                  </Typography>
+                </Alert>
+              )}
+
+              {isPackaged && !isOperational && (
+                <Alert severity="info" icon={<IconPackage size={20} />}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                    Locally Packaged in shipped_blocks
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
+                    This block is physically vendored at <code>backend/catalog/shipped_blocks/{item.id}</code> with offline entrypoint and assets.
                   </Typography>
                 </Alert>
               )}
@@ -395,21 +447,60 @@ export default function CatalogDrawer({
                   <Table size="small">
                     <TableBody>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, width: 200 }}>Block ID</TableCell>
+                        <TableCell sx={{ fontWeight: 600, width: 200 }}>Block ID / Slug</TableCell>
                         <TableCell><code>{item.id}</code></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600 }}>Origin</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Origin Directory</TableCell>
+                        <TableCell><code>{item.relative_source_path || `registry/blocks/${item.id}`}</code></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>Category Status</TableCell>
                         <TableCell>
-                          {is6ClipsOriginal ? "6Clips Original Work" : "HyperFrames Donor Original"}
+                          {isMissingCategory ? (
+                            <Stack direction="row" spacing={1} alignItems="center">
+                              <Chip
+                                label="SOURCE_CATEGORY_MISSING"
+                                color="warning"
+                                size="small"
+                                sx={{ height: 18, fontSize: "0.65rem", fontWeight: 700 }}
+                              />
+                              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                Proposed fallback: <b>{item.proposed_fallback_category || "scenes-demos"}</b>
+                              </Typography>
+                            </Stack>
+                          ) : (
+                            <Stack direction="row" spacing={1} alignItems="center">
+                              <Chip
+                                label="SOURCE_CATEGORY_CONFIRMED"
+                                color="success"
+                                size="small"
+                                sx={{ height: 18, fontSize: "0.65rem", fontWeight: 700 }}
+                              />
+                              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                Authentic group: <b>{item.category_label || item.category}</b>
+                              </Typography>
+                            </Stack>
+                          )}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600 }}>Integration Status</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Packaging Status</TableCell>
                         <TableCell>
                           <Chip
-                            label={item.integration_status || (isOperational ? "INTERNALIZED" : "UNVERIFIED")}
-                            color={isOperational ? "success" : "warning"}
+                            label={isPackaged ? "LOCAL_SHIPPED" : "UNPORTED"}
+                            color={isPackaged ? "info" : "default"}
+                            size="small"
+                            sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>Operational Status</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={isOperational ? "INTERNALIZED_OPERATIONAL" : (isPackaged ? "PACKAGED_PENDING_INTEGRATION" : "UNPORTED_QUARANTINED")}
+                            color={isOperational ? "success" : isPackaged ? "info" : "warning"}
                             size="small"
                             sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
                           />
@@ -419,8 +510,8 @@ export default function CatalogDrawer({
                         <TableCell sx={{ fontWeight: 600 }}>License Status</TableCell>
                         <TableCell>
                           <Chip
-                            label={item.license_status || (isOperational ? "VERIFIED_PERMISSIVE" : "UNVERIFIED")}
-                            color={item.license_status?.startsWith("VERIFIED") ? "success" : "warning"}
+                            label={item.license_status || (isPackaged ? "VERIFIED_PERMISSIVE" : "RESTRICTED")}
+                            color={item.license_status?.startsWith("VERIFIED") || isPackaged ? "success" : "warning"}
                             size="small"
                             sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
                           />
@@ -431,6 +522,8 @@ export default function CatalogDrawer({
                         <TableCell>
                           {isOperational
                             ? "Enabled (100% Offline Shipped Package)"
+                            : isPackaged
+                            ? "Packaged in shipped_blocks (Integration in progress)"
                             : "Disabled (Withheld from Client Execution)"}
                         </TableCell>
                       </TableRow>
@@ -448,7 +541,7 @@ export default function CatalogDrawer({
                   Composition Variables Schema
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {isOperational
+                  {isPackaged
                     ? "Declared variables configurable for independent timeline instances."
                     : "Declared variables metadata from donor manifest (inspection only; binding disabled)."}
                 </Typography>
@@ -503,11 +596,11 @@ export default function CatalogDrawer({
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 600 }}>License Status</TableCell>
-                      <TableCell><code>{item.license_status || "UNVERIFIED"}</code></TableCell>
+                      <TableCell><code>{item.license_status || (isPackaged ? "VERIFIED_PERMISSIVE" : "RESTRICTED")}</code></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 600 }}>License Evidence</TableCell>
-                      <TableCell>{item.license_evidence || "Awaiting formal review."}</TableCell>
+                      <TableCell>{item.license_evidence || (isPackaged ? "Vetted offline in backend/catalog/shipped_blocks with notice" : "Donor checkout whole-tree audit")}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 600 }}>Relative Source Path</TableCell>
@@ -543,7 +636,7 @@ export default function CatalogDrawer({
                       <TableCell sx={{ fontWeight: 600, width: 200 }}>9:16 Vertical</TableCell>
                       <TableCell>
                         <Chip
-                          label={item.aspect_9_16 || "CONTAINED_ONLY"}
+                          label={item.aspect_9_16 || (item.supported_aspects?.includes("9:16") ? "NATIVE" : "CONTAINED_ONLY")}
                           size="small"
                           color={item.aspect_9_16 === "NATIVE" ? "primary" : "default"}
                           sx={{ fontWeight: 700 }}
@@ -554,7 +647,7 @@ export default function CatalogDrawer({
                       <TableCell sx={{ fontWeight: 600 }}>16:9 Landscape</TableCell>
                       <TableCell>
                         <Chip
-                          label={item.aspect_16_9 || "CONTAINED_ONLY"}
+                          label={item.aspect_16_9 || (item.supported_aspects?.includes("16:9") ? "NATIVE" : "CONTAINED_ONLY")}
                           size="small"
                           color={item.aspect_16_9 === "NATIVE" ? "primary" : "default"}
                           sx={{ fontWeight: 700 }}
@@ -579,12 +672,14 @@ export default function CatalogDrawer({
               </Box>
 
               {!isOperational ? (
-                <Alert severity="error" icon={<IconLock size={20} />}>
+                <Alert severity={isPackaged ? "info" : "error"} icon={isPackaged ? <IconPackage size={20} /> : <IconLock size={20} />}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                    Insertion Disabled (Inventory Only Entry)
+                    {isPackaged ? "Packaged on Disk (Integration Clearance Pending)" : "Insertion Disabled (Inventory Only Entry)"}
                   </Typography>
                   <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
-                    {item.blocker_reason || "This block is not verified for runtime distribution and cannot be inserted into project compositions."}
+                    {isPackaged
+                      ? `Block '${item.id}' is physically vendored in shipped_blocks. Direct timeline insertion requires integration clearance from Agent 1/5.`
+                      : (item.blocker_reason || "This block is not verified for runtime distribution and cannot be inserted into project compositions.")}
                   </Typography>
                 </Alert>
               ) : (
@@ -734,6 +829,16 @@ export default function CatalogDrawer({
                   Insert into Motion
                 </Button>
               )
+            ) : isPackaged ? (
+              <Button
+                variant="outlined"
+                size="small"
+                color="info"
+                startIcon={<IconMovie size={16} />}
+                onClick={handleInsertIntoMotion}
+              >
+                Inspect in Motion
+              </Button>
             ) : (
               <Tooltip title="Actions are disabled for inventory-only blocks until rights-cleared.">
                 <span>

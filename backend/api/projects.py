@@ -178,8 +178,9 @@ async def apply_project_operation(
                     status_code=409,
                     detail=f"Block '{target_bid}' is a retired non-HyperFrames block and cannot be added to projects."
                 )
-            from backend.catalog.manifest_service import DONOR_INTERNALIZED_BLOCKS
-            if target_bid not in DONOR_INTERNALIZED_BLOCKS:
+            from backend.catalog.manifest_service import CatalogManifestService
+            operable_ids = CatalogManifestService.get_operable_block_ids()
+            if target_bid not in operable_ids:
                 raise HTTPException(
                     status_code=403,
                     detail=f"Block '{target_bid}' is quarantined/uninternalized."

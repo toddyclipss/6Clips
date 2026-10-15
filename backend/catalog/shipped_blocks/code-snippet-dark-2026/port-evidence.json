@@ -1,0 +1,22 @@
+{
+  "slug": "code-snippet-dark-2026",
+  "source_slug": "code-snippet-dark-2026",
+  "source_html_sha256": "7ad89558f2ba209f019662b2dc3ad68b35e385b2e7f3a74e4cc439e9a32b4f77",
+  "output_html_sha256": "fd72ee99045762eac27e048ecd77731c71aeb0efcbcc7b9f35e05b8a04c23839",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 11,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "developer",
+    "showcase",
+    "vscode"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

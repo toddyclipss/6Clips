@@ -1,0 +1,1820 @@
+{
+  "frost-sequence-camera-orbit": {
+    "slug": "frost-sequence-camera-orbit",
+    "source_slug": "frost-sequence-camera-orbit",
+    "source_html_sha256": "7b895065f177ba0d3e3837712724b5d4eaa9cdf775e2bc6309478b50fed84694",
+    "output_html_sha256": "34232806b35d38bb80837f19a57ab311684bf73c7f3c72ad77e32bf2c3ef9bd6",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 26,
+    "duration": 22.5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "ice",
+      "frost",
+      "camera-orbit",
+      "logo",
+      "particles",
+      "webgpu",
+      "two-headlines"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "cuboid-carousel": {
+    "slug": "cuboid-carousel",
+    "source_slug": "cuboid-carousel",
+    "source_html_sha256": "2d992fc1cb5a8640f9139c5789be53ffa6c4393fc44e17792dfc9bf24bb19a5c",
+    "output_html_sha256": "54ce10646e9b8461409bbfbe6377a93ea46b81256638473c8b1ed6c4b1d6434c",
+    "uses_three": true,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 22,
+    "duration": 6.67,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "carousel",
+      "cards",
+      "travelling-wave",
+      "pbr",
+      "shadows",
+      "room-environment"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "cosmic-orb": {
+    "slug": "cosmic-orb",
+    "source_slug": "cosmic-orb",
+    "source_html_sha256": "96238d6d1df537c362736e92a97f0e348a7b416827d468cdeef89226ad76b28e",
+    "output_html_sha256": "6a09169f44eb65b5eec9de7636bf8a0bcba3989a0f145ea423428d3f275fcf26",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "webgl",
+      "shader",
+      "background",
+      "showcase",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "gallery-tunnel": {
+    "slug": "gallery-tunnel",
+    "source_slug": "gallery-tunnel",
+    "source_html_sha256": "8142f6f8e79a4672e5ea7804e75142a8f8371effacc9ce511ef08587be7284d8",
+    "output_html_sha256": "815ed63df9ef1d41629a2f2d8a1a04fad447554f7a9695e57d9b73bdde51f381",
+    "uses_three": true,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 10,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "webgl",
+      "3d",
+      "background",
+      "showcase",
+      "depth",
+      "loop"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "gooey-split": {
+    "slug": "gooey-split",
+    "source_slug": "gooey-split",
+    "source_html_sha256": "4eff75ccc58ce1c76258c87396082df8378c3446ab2ac443001d6f18b355fc29",
+    "output_html_sha256": "38d3b90bcfac2641a7818a9e4ec24752ff631d9694dbf6c25cd7eb85880f1dcc",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4.7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "effect",
+      "gooey",
+      "metaball",
+      "motion-blur",
+      "morph",
+      "logo",
+      "icon"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-3d-extrude": {
+    "slug": "code-3d-extrude",
+    "source_slug": "code-3d-extrude",
+    "source_html_sha256": "48775b0649d260711c60c2b605f56b12fbf8bbdcdcc1324275b21cbab939fdbb",
+    "output_html_sha256": "5690a44e11db533be8a0266af36e9ede26958694f3021fd6baad3d07b2912721",
+    "uses_three": true,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 10,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "3d",
+      "webgl",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-particle-assemble": {
+    "slug": "code-particle-assemble",
+    "source_slug": "code-particle-assemble",
+    "source_html_sha256": "6a698b191e6f929b88ebb9a645e0e2ab254221f8080b6ad7ebb8f1bf5d1413df",
+    "output_html_sha256": "89c2496439e0e548b7cf2df0dea1c9b3b59e82c20d3f816334b3b5b840e18375",
+    "uses_three": true,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 10,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "particles",
+      "gpu",
+      "webgl",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-shader-dissolve": {
+    "slug": "code-shader-dissolve",
+    "source_slug": "code-shader-dissolve",
+    "source_html_sha256": "ee638e1a9b12bb8b6c935bff898ec0a21c2cce975551f9194cbaedee9de502ba",
+    "output_html_sha256": "9cb8e5b6d3445c595f8dd0b06eef67bce4b7dbfed517be4414f2012363d29526",
+    "uses_three": true,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 10,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "shader",
+      "webgl",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "glitch": {
+    "slug": "glitch",
+    "source_slug": "glitch",
+    "source_html_sha256": "f8101d1a5b71aa0ce4eb44444ee95e6ad0d7d16eb8b38b5ac81422a01fc5240b",
+    "output_html_sha256": "1e366c80a926425d5b847b69dc591c67bd2d70a4147b683e6fab55fc5954e836",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "gravitational-lens": {
+    "slug": "gravitational-lens",
+    "source_slug": "gravitational-lens",
+    "source_html_sha256": "e873bcca352a2e2721c3fed5d7ea355145d9df9dc9d2454564609bea8e61e475",
+    "output_html_sha256": "e56a60f939a60f4290d08188f4e81ebe329cdc46a60c238feb75d1c672784df4",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "halftone-field": {
+    "slug": "halftone-field",
+    "source_slug": "halftone-field",
+    "source_html_sha256": "4b8e56dd736713db5a01274fb4fa5f96cf8ae7f4b3375772abf92d574efd3a08",
+    "output_html_sha256": "26d8dae3b079a71eef18ffca621141c6f919308abf4bd8917ff2615e7b7af752",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "webgl",
+      "shader",
+      "background",
+      "texture",
+      "halftone"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "light-leak": {
+    "slug": "light-leak",
+    "source_slug": "light-leak",
+    "source_html_sha256": "018575074693864c3f0f71380f85f089c172f73717b80787640b2da3615345be",
+    "output_html_sha256": "888c79cbc3919607f51aeb2eb70803d900f88c1067ec18e4628872e590a3cf73",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "chromatic-radial-split": {
+    "slug": "chromatic-radial-split",
+    "source_slug": "chromatic-radial-split",
+    "source_html_sha256": "d328cc320397eb2109c6a2dab030bbcca7556c06c197416c288995aeef1e4d99",
+    "output_html_sha256": "fac505edbc61adcb8855f482987a9b58edab113a27e6a19ba3c6d971a802bc60",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "cinemagraph": {
+    "slug": "cinemagraph",
+    "source_slug": "cinemagraph",
+    "source_html_sha256": "8b2a982b91d9e8fa2a9040069536915f0c3b7a4cc506581729e584b1a77218ae",
+    "output_html_sha256": "132d2a4feeddfaf2c6b2beb81967c1eedae7a2fc323c0fe6e75aa4dd72158ba4",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "effect",
+      "cinemagraph",
+      "photo",
+      "loop",
+      "freeze-frame"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "cinematic-zoom": {
+    "slug": "cinematic-zoom",
+    "source_slug": "cinematic-zoom",
+    "source_html_sha256": "72b3a83d5de6a56fd389044aa15e785dbb40d5402cea6b95684b6b9cec0e4aba",
+    "output_html_sha256": "384db11874d67cf50ba4e198acce7e4f3f429f7e6cc0855819323afa29bc8fe1",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "cross-warp-morph": {
+    "slug": "cross-warp-morph",
+    "source_slug": "cross-warp-morph",
+    "source_html_sha256": "fa9748f6f6059b2575d90eb98fd14a45de3c75e7dac1e925d997bc61e56ab85e",
+    "output_html_sha256": "b1dca1126fc4aa118c443e12d5c42c0a9696230a274d9e6e9d8d9b0f011f3680",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "domain-warp-dissolve": {
+    "slug": "domain-warp-dissolve",
+    "source_slug": "domain-warp-dissolve",
+    "source_html_sha256": "7d910616bf3eb799c9904a941a5edeb99a00de14bf6e0a094844978c30b2a874",
+    "output_html_sha256": "49f42b8fc2c3ddfabf657828620e42daab3f113c063c8ae4ea3f988400376381",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "editorial-flash-overlay": {
+    "slug": "editorial-flash-overlay",
+    "source_slug": "editorial-flash-overlay",
+    "source_html_sha256": "0730392042a50c077c7eb3808bf6d76ddc0bcec6b6272fb2ce300007bd26478f",
+    "output_html_sha256": "bfebe612e64cf51935a8928ea78ad12f4d26ff11f862d43b635887bdc073a5df",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "flash",
+      "editorial",
+      "social",
+      "light",
+      "transition",
+      "overlay",
+      "media-treatment-overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "flash-through-white": {
+    "slug": "flash-through-white",
+    "source_slug": "flash-through-white",
+    "source_html_sha256": "d63cdbe17d81c12ee23406dd2dacf7e6a9489121906a7a3a2f74980ece623bac",
+    "output_html_sha256": "430681319ed32b75ed13aa5853e05de5bbc91014a6e102b85b29c7fd11339f47",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "freeze-frame-dressing": {
+    "slug": "freeze-frame-dressing",
+    "source_slug": "freeze-frame-dressing",
+    "source_html_sha256": "8175acc1768cf941b9b6b5694aa10f11216823f43a57c74c4c9bcf9a581ec87a",
+    "output_html_sha256": "395396245c74801c140510d036d38b833466fce40242080d00a2bbe35b78e5fd",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "freeze-frame",
+      "cutout",
+      "scrapbook",
+      "paper",
+      "social",
+      "overlay",
+      "media-treatment-overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "beat-freeze-cut": {
+    "slug": "beat-freeze-cut",
+    "source_slug": "beat-freeze-cut",
+    "source_html_sha256": "c1c62628b55f3a6b751b03459a2d714bdeb356cb6797195590dfcc0278c66788",
+    "output_html_sha256": "165c46c4b60f6b7c3990392ae839bfc4007ee5826a5dacbce0c001c8d7a26ecd",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "music",
+      "beat-driven",
+      "freeze-frame"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "camera-dolly-zoom": {
+    "slug": "camera-dolly-zoom",
+    "source_slug": "camera-dolly-zoom",
+    "source_html_sha256": "5e101fbb8bad0181cc498013fd8805099c1f3fcc409e74f97ec62e88af61fff7",
+    "output_html_sha256": "2cbfd292f8f93799bef46ce82bdcab7bd25d46971d0207849a1f7bf40fc16757",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "camera",
+      "depth",
+      "3d",
+      "cinematic"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-diff": {
+    "slug": "code-diff",
+    "source_slug": "code-diff",
+    "source_html_sha256": "5356890fec4947e384b044d7dda3d03601432125a4ce60087caac0e3639d9d93",
+    "output_html_sha256": "c43bd0e14c3fc5002e1a1b7c35a612e59f79d587bed08cee4053848fc390107d",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "diff",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-highlight": {
+    "slug": "code-highlight",
+    "source_slug": "code-highlight",
+    "source_html_sha256": "2e28ffdb11fe7b595e47488f2dfb93db514f315dd5f334c902540fcbebf2bb2f",
+    "output_html_sha256": "9f993b6c1adc99b2634f5abbf8f308d5eb5f4d0a62c8f2b32280d55988d79732",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "highlight",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-morph": {
+    "slug": "code-morph",
+    "source_slug": "code-morph",
+    "source_html_sha256": "26b2342609f1da2ef2f65fef5dbc0fc3230f78893c11569e4e055f3015f6e4a2",
+    "output_html_sha256": "93111507eeae6edad88322dd4818efe5b4e908ef960813d3455ed11bf1b37565",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "morph",
+      "refactor",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-scroll": {
+    "slug": "code-scroll",
+    "source_slug": "code-scroll",
+    "source_html_sha256": "29291ee000f1bef15e999314d112ea153f21da2618083852323b617fee9cae86",
+    "output_html_sha256": "71ae6994efb72e9bc6b8f10f4e3bd8f93ec24ba0733ac8908fa8be9882beb1b6",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "scroll",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-slice-hero": {
+    "slug": "code-slice-hero",
+    "source_slug": "code-slice-hero",
+    "source_html_sha256": "cfd599653f8c04daf146702da4e8eb720712ab3dc3679e0d0b0c1bedf90976a0",
+    "output_html_sha256": "891e624c597d46d48600c3c794ff022a0df2c770818766bd9d3158b24b80a3ab",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 13,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "transition",
+      "typography",
+      "tiles",
+      "flip",
+      "webgl2",
+      "shadows",
+      "two-headlines"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-snippet-dark-2026": {
+    "slug": "code-snippet-dark-2026",
+    "source_slug": "code-snippet-dark-2026",
+    "source_html_sha256": "7ad89558f2ba209f019662b2dc3ad68b35e385b2e7f3a74e4cc439e9a32b4f77",
+    "output_html_sha256": "fd72ee99045762eac27e048ecd77731c71aeb0efcbcc7b9f35e05b8a04c23839",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 11,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "developer",
+      "showcase",
+      "vscode"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-snippet-dark-modern": {
+    "slug": "code-snippet-dark-modern",
+    "source_slug": "code-snippet-dark-modern",
+    "source_html_sha256": "ff75ef10ef76930ab359cbf6b9518b5073b552ca276355e3baae5e7f65d4b1b8",
+    "output_html_sha256": "4e1a57bacedc1ad0fc095b1f5d74c6d96bd19bff30f34cc23da91fc8e3982521",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 11,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "developer",
+      "showcase",
+      "vscode"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "code-typing": {
+    "slug": "code-typing",
+    "source_slug": "code-typing",
+    "source_html_sha256": "99477451bdffeb368523b9cf7b36ca8385c0c15c2438b46597269e179f9f8fdf",
+    "output_html_sha256": "33b3c85623d0cd750bd781c49fa5c921afd87c621f35fd34e94cf3859572a537",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "typing",
+      "developer"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "bar-chart-race": {
+    "slug": "bar-chart-race",
+    "source_slug": "bar-chart-race",
+    "source_html_sha256": "5ce62fd8178c61a09dc7fdac0ad810268edbb68b5321a08698a205579ccfe895",
+    "output_html_sha256": "37da7c596cbdb0e0a451af7d0aaa143a415bf74108bd4035e52c5cf6a737698e",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data",
+      "chart",
+      "statistics",
+      "ranking"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "flowchart": {
+    "slug": "flowchart",
+    "source_slug": "flowchart",
+    "source_html_sha256": "c5432d04f4f720de031377a35fbf07f1c2cbee72b04b40f7b79b0e26f5fd63bc",
+    "output_html_sha256": "527c0e85a454cd681cd1546cca29a9881b00a33fe2519e55e849e86082aabc9e",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "diagram",
+      "flowchart",
+      "interactive"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "flowchart-vertical": {
+    "slug": "flowchart-vertical",
+    "source_slug": "flowchart-vertical",
+    "source_html_sha256": "35b54ecdd282e83beb464276483dc633c64a7e47138447b2b5642df463cfc548",
+    "output_html_sha256": "699631314ad6f36bc77ddf6cc5f8fca6b307805ba2b73c797f648f23c5549a92",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 12,
+    "dimensions": {
+      "width": 1440,
+      "height": 2560
+    },
+    "tags": [
+      "diagram",
+      "flowchart",
+      "interactive",
+      "portrait"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-line-graph": {
+    "slug": "mk-line-graph",
+    "source_slug": "mk-line-graph",
+    "source_html_sha256": "7f277f1a048c41a394f66555820c524b8d1d5ac0e2363b4828c393ed34cd1801",
+    "output_html_sha256": "48572d82ca4787cd5e50714bc345c32e217d9f4b4fd2cd9736a1d25c15b60810",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data-viz",
+      "chart",
+      "graph",
+      "minimal"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-progress-stat": {
+    "slug": "mk-progress-stat",
+    "source_slug": "mk-progress-stat",
+    "source_html_sha256": "2c6d9e0dedf250a8e25b53c87057b511ae20545f30e7c1b1ec27b366bec74178",
+    "output_html_sha256": "db82ac6a676cbf009bdd16b082d1a6cadd868441688d48430540696ecff0f96d",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data-viz",
+      "stat",
+      "minimal"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-specs-list": {
+    "slug": "mk-specs-list",
+    "source_slug": "mk-specs-list",
+    "source_html_sha256": "5bff5b3726cb6041c8419d3b157ad27db76bb8b64f4bd975498d5049ea3bd699",
+    "output_html_sha256": "c1b6c5d03629e14807d8be96b5c6a30b55f0031d894058a247d02ec7cb0708fb",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data-viz",
+      "list",
+      "minimal",
+      "professional"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "ai-answer-rank": {
+    "slug": "ai-answer-rank",
+    "source_slug": "ai-answer-rank",
+    "source_html_sha256": "2356710971ba7d4e565af910d362c70fae81dc75da678bd39619c239f2d53dce",
+    "output_html_sha256": "75301a3bba58968eb705698ca1b9489c869c6f94b95c3fe53785aca7828d3d79",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 9,
+    "dimensions": {
+      "width": 1080,
+      "height": 1080
+    },
+    "tags": [
+      "mock-ui",
+      "ai",
+      "chat",
+      "ranking",
+      "list",
+      "marketing",
+      "ad-template",
+      "square"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "ai-chat-reveal": {
+    "slug": "ai-chat-reveal",
+    "source_slug": "ai-chat-reveal",
+    "source_html_sha256": "b114399a570efe0dd5720bae3032f69b746965ebc9ec36040b19d694ef08ffe4",
+    "output_html_sha256": "80c0fb391e6aea663d0532576ad1dd4f7d2e869053bdbec8879918e6f0c713ba",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 10,
+    "duration": 19.3333,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "mock-ui",
+      "ai",
+      "chat",
+      "vertical",
+      "ad-template"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "app-showcase": {
+    "slug": "app-showcase",
+    "source_slug": "app-showcase",
+    "source_html_sha256": "c7e1b4d8ec2a2c1f70a8ed67a147ba5c4985074eb475d611b2bec6d921b10ade",
+    "output_html_sha256": "4245764a1ef6bbeaf0e3932fd74c3e7f054575fbb87c41bb7b34d8431ea7ea54",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 5.5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "showcase",
+      "app",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "camcorder-hud": {
+    "slug": "camcorder-hud",
+    "source_slug": "camcorder-hud",
+    "source_html_sha256": "f7e1b992a4ad93195ada7dc0ecb3ed0beb3916c8a40ac7a518b7745bf5f8810b",
+    "output_html_sha256": "5a67bbdeb23d3c89a719a75e0ab980f9a5e2a2c6212a27b17e0115f8c6c9cb73",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "camcorder",
+      "camera",
+      "recording",
+      "hud",
+      "overlay",
+      "creator",
+      "media-treatment-overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "message-thread-reveal": {
+    "slug": "message-thread-reveal",
+    "source_slug": "message-thread-reveal",
+    "source_html_sha256": "b20d646fb57101df1b263c4726714060448b307be5d068411218a21e895d6e16",
+    "output_html_sha256": "c59b98e87b1fbacbb079406ba560c822e1a54e4bb7de7eb209648cb0de221c42",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 11,
+    "duration": 25.7667,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "mock-ui",
+      "chat",
+      "vertical",
+      "ad-template"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-background": {
+    "slug": "mk-background",
+    "source_slug": "mk-background",
+    "source_html_sha256": "c6c46792306476f850ccff6e2bd792e57a3cc8f0e8d9c8ac9866aa9d8f05d8da",
+    "output_html_sha256": "e469f8a81a57f8b79983f17b9876b2aae44dfb62fd4ecca4df27407f9a355698",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "background",
+      "gradient",
+      "minimal",
+      "professional",
+      "presentation"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-callout-highlight": {
+    "slug": "mk-callout-highlight",
+    "source_slug": "mk-callout-highlight",
+    "source_html_sha256": "ab80d94b07373fd1bb136c3560183e916876e9318729202698fd26c2e999dd46",
+    "output_html_sha256": "613a7be761f4247a5f595155739e7f8dcb220d47f2716c7c8faeaf34de126660",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "typography",
+      "karaoke",
+      "captions",
+      "minimal"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-clone-wall-transition": {
+    "slug": "mk-clone-wall-transition",
+    "source_slug": "mk-clone-wall-transition",
+    "source_html_sha256": "6d8ef20a89b52613b0e08147014c587dbe89baf0b22f7ab38684f9f71aa1d54c",
+    "output_html_sha256": "7691c71e8246a4afa809b5e325b0bed4857d4c3875384e2eeb1317e8e0e3e50c",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 2.4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "typography",
+      "wipe"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "mk-placeholder-grid": {
+    "slug": "mk-placeholder-grid",
+    "source_slug": "mk-placeholder-grid",
+    "source_html_sha256": "52dfb41de653657021a21a1039fcdd0a0a9439acc10b850dc767cef02b7dedc9",
+    "output_html_sha256": "94a7f5f36122c393e5709f5e826861c6c775f9521a995c996dac7e10585ce18c",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "placeholder",
+      "media",
+      "grid",
+      "minimal"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "lower-third-bild": {
+    "slug": "lower-third-bild",
+    "source_slug": "lower-third-bild",
+    "source_html_sha256": "e336778dd191bbac725aea6831c047d6ff6ca830f0705489b38ec0c7f80217f8",
+    "output_html_sha256": "e9793973fe12e6b6169b0a8218e490dd669d60de5ab01b31aee12b72e9ba63cd",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 12,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "broadcast",
+      "lower-third",
+      "news",
+      "overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "lt-neon-border": {
+    "slug": "lt-neon-border",
+    "source_slug": "lt-neon-border",
+    "source_html_sha256": "073000c8a2b634ff71a9509733293f17e8cde3f19094f4bf2407710bccbfbecb",
+    "output_html_sha256": "507703f755ae83fdb3b2256c271f40bb9fea39077f239f2ee6a99619768d73d9",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 4.8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "lower-third",
+      "glow",
+      "loop",
+      "video-primitive"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-frame": {
+    "slug": "hw-frame",
+    "source_slug": "hw-frame",
+    "source_html_sha256": "339876f3c8f2b1ab81ef52b6bc0be0cf894c78d25607f41885fd3aea8b484009",
+    "output_html_sha256": "d8f52604215a9f3ddf8e5b176a4850813b1fba5439729a5d057938ce9a717a4e",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 11,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "frame",
+      "media"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-path-text": {
+    "slug": "hw-path-text",
+    "source_slug": "hw-path-text",
+    "source_html_sha256": "0641285d5248335fa7ef69dabcbcf960c792614d13fc5105568879224e1b3d92",
+    "output_html_sha256": "6334fda49a21275107c3cbf7a2015946dcc3c4d2a7ee3122527dbd81d29c17d6",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 11,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "typography",
+      "path",
+      "overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-pipeline": {
+    "slug": "hw-pipeline",
+    "source_slug": "hw-pipeline",
+    "source_html_sha256": "5f2d91c91d37dd6b57a015a02361c67c9a62ca33849b901b3bebad8157fb7dbb",
+    "output_html_sha256": "39b6992f9c8483d1e55402cbba5af6bb5c5da8ae20ea1dbc0e1639b383475051",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 11,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "diagram",
+      "data-viz",
+      "overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-scribble-transition": {
+    "slug": "hw-scribble-transition",
+    "source_slug": "hw-scribble-transition",
+    "source_html_sha256": "45d56e7039969d9d8336bdf8f0709a0a60638b33c27cdfad9923cb4d93bcf566",
+    "output_html_sha256": "759379eda8cc3c2d7ef8c9c3c389e6e5e66c625cb07a0ad4c1b25d9ae9062dc5",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 2.2,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "transition",
+      "wipe"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-text-cloud": {
+    "slug": "hw-text-cloud",
+    "source_slug": "hw-text-cloud",
+    "source_html_sha256": "d0aafa7d638560b1fff46564320d03358fe1203a7d1d27ebcba4df68a296bb93",
+    "output_html_sha256": "8ed5a06e00eeec8f8e23fd08b996f063fdf6b57778ca8c645e8179858533b033",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 11,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "speech-bubble",
+      "overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-title": {
+    "slug": "hw-title",
+    "source_slug": "hw-title",
+    "source_html_sha256": "4ced2ce725fde59d21f5d34a4b4787bb5dd778b8a9267852a4dac587d6e296e8",
+    "output_html_sha256": "e8c22d28cbd10cee249c4bf5949526fdc7587148b8aff4b9785ceccc64162c6e",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 11,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "typography",
+      "title-card",
+      "overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "hw-write-title": {
+    "slug": "hw-write-title",
+    "source_slug": "hw-write-title",
+    "source_html_sha256": "da7375c1acedf86f3cf5839f6bc75ef3817d674752aaf462a9e0d0e471ac7e90",
+    "output_html_sha256": "033306eb2e8accac98538edf605fb2baa16d9b3665c5ac76701a7704baf97133",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 13,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "typography",
+      "title-card",
+      "write-on",
+      "overlay"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "logo-outro": {
+    "slug": "logo-outro",
+    "source_slug": "logo-outro",
+    "source_html_sha256": "b3ed1e2dbdbe1f4a36bcf11e8a75f1f7eca7c29e5f75e86628fd8922629364ff",
+    "output_html_sha256": "28e4e5d93d8740d67915b38145c35968c3ac41f04b3b26c52506c2ba6a75a699",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "branding",
+      "outro",
+      "logo"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-circle-1": {
+    "slug": "carousel-circle-1",
+    "source_slug": "carousel-circle-1",
+    "source_html_sha256": "032667a2dfb57c7f67d79d8d82b5df0bdb63ee3d8e667d4d2f8a5381c24b4892",
+    "output_html_sha256": "b965058f1f2401b6516eb20b82d4ace8e541de73e932592da41a45b8fc8df1b8",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-circle-2": {
+    "slug": "carousel-circle-2",
+    "source_slug": "carousel-circle-2",
+    "source_html_sha256": "8094f851c979f76ff161a9c53dd87ffb685966755bc92ea2eb71c8720cef1c6a",
+    "output_html_sha256": "62501fc0d71108a5ea36ee28c2a0c8025a1e577b734f6330217932b3260b8801",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-circle-3": {
+    "slug": "carousel-circle-3",
+    "source_slug": "carousel-circle-3",
+    "source_html_sha256": "a334c7d2fafd9b624d3f64aa6dd3fbd37103225cdf36f91464e9b8cff46dc075",
+    "output_html_sha256": "3171fb59706c9b03a9ed66f0b9ffd7b9150ee9ae472eab660ca6bea30276e711",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-circle-4": {
+    "slug": "carousel-circle-4",
+    "source_slug": "carousel-circle-4",
+    "source_html_sha256": "5fe628211980d2b31aabf8058384e923d2ee3ceb085ab6b1fc1e35e623f8bc4b",
+    "output_html_sha256": "be28914a005958ea91e27dd73bdd6b55afccd28447664dc162dbaee217fe42c5",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-circle-5": {
+    "slug": "carousel-circle-5",
+    "source_slug": "carousel-circle-5",
+    "source_html_sha256": "736e643641302cc021967cb11b5e2652685a36a91e870d5658ac840c48bac53a",
+    "output_html_sha256": "35a1171760a6afef5b47959976d9f1a13e8d39ccc8ba2413147016221016aff8",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-orbit-1": {
+    "slug": "carousel-orbit-1",
+    "source_slug": "carousel-orbit-1",
+    "source_html_sha256": "b15f6fe3663d1f4e39bc556b1ca9bb926e635a70125b15b4b2e2d2157d560bf5",
+    "output_html_sha256": "3d67e7ed5a25d35cd828558db066ebba484c5e2c1bb480587fdde73c585aea16",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-orbit-2": {
+    "slug": "carousel-orbit-2",
+    "source_slug": "carousel-orbit-2",
+    "source_html_sha256": "6ef1da4f013d09b6fba6d4e29d07f091c85e9f1809201373ef5d1f83eb9703de",
+    "output_html_sha256": "45f0ab904e05e4979b6358276d9860b5c8068b17c5ad857aaae012e9049bdbfd",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-orbit-3": {
+    "slug": "carousel-orbit-3",
+    "source_slug": "carousel-orbit-3",
+    "source_html_sha256": "1d3a40f9cde8df9964cd6aaacfd9946907a3da7c1f57b6c44ab9853adca19b86",
+    "output_html_sha256": "a7bd7e07a515ef05bd286eb3947a83c05c702b1f7330e083aa95fafda62273aa",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-orbit-4": {
+    "slug": "carousel-orbit-4",
+    "source_slug": "carousel-orbit-4",
+    "source_html_sha256": "0a62d4563d50462671743196a9d4a83b1035806776c15c4cd52fd90a28ee0934",
+    "output_html_sha256": "9d71957ec1720e1356001466e16ca6e02479469d15b6cae811b1e3faee95b6ef",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-orbit-5": {
+    "slug": "carousel-orbit-5",
+    "source_slug": "carousel-orbit-5",
+    "source_html_sha256": "e88d3f197ac16d5bc8b90af833e2ca351ae06811d14ad79eff5435f69a2ce2ef",
+    "output_html_sha256": "3e3e590997e7a0bfab83ec51dc430faaa8c2d728b08e02f217bc8004530a5da2",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-path-1": {
+    "slug": "carousel-path-1",
+    "source_slug": "carousel-path-1",
+    "source_html_sha256": "a731f857642e0097b17924b9ccd9c709acb46ea33acabddbbf18f5672073f039",
+    "output_html_sha256": "3b8c64e6c8c8448284e1ebcea6bbcffb5368d50e786656d94401c6bac99a4727",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-path-2": {
+    "slug": "carousel-path-2",
+    "source_slug": "carousel-path-2",
+    "source_html_sha256": "b4fd7518e58c5ed216d9489c7e7e73dfeeef2ca1a020e0591ee8ad40e1ed14f3",
+    "output_html_sha256": "26971e1501378d6d1289d5d7af7492ac8155172acf599f5f79083623dda3e5ac",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-path-3": {
+    "slug": "carousel-path-3",
+    "source_slug": "carousel-path-3",
+    "source_html_sha256": "3043f53dc584e66d7b0d98fbcbf22b2a8ad301491fdb9c2adf84fd5808b7dfa6",
+    "output_html_sha256": "e2674d05cf246918972a03aba325c64fd06dd343d28d45760f60738ec055ef8b",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-path-4": {
+    "slug": "carousel-path-4",
+    "source_slug": "carousel-path-4",
+    "source_html_sha256": "cbab07ff423af313cca8db5665a169fce7ab3d3c800ae18e0558192ea2438415",
+    "output_html_sha256": "27e7f8476d6bc7aad50f9dab8aa6990bf420dc02fb89672ce75c4d6969d00eac",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-path-5": {
+    "slug": "carousel-path-5",
+    "source_slug": "carousel-path-5",
+    "source_html_sha256": "8831ce915c048199c9f55e34e5f52e818a19dcb8b0b7f63904fff971a638adfd",
+    "output_html_sha256": "c1baa9e642eb38024bf3b4a9def881adf01bf308f86e690791a75853ec495ab4",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-text-circle-1": {
+    "slug": "carousel-text-circle-1",
+    "source_slug": "carousel-text-circle-1",
+    "source_html_sha256": "d4d2e3788c943f9c13110028e84d50c24dc54107b9004e281337e2cc107c7b32",
+    "output_html_sha256": "badda0a58ae2a2f3bee52732802da64ae0e4ff622db9a45e4ec90904104a3d47",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-text-circle-2": {
+    "slug": "carousel-text-circle-2",
+    "source_slug": "carousel-text-circle-2",
+    "source_html_sha256": "b7e75f05d928b68f94ece9e99e99d49253e5d2d261cc33767c2cf2cdc6bb75d2",
+    "output_html_sha256": "90c479299ee9b267088ba8278be415eba550fbddbad24936b2e7fe9014eca66b",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-text-circle-3": {
+    "slug": "carousel-text-circle-3",
+    "source_slug": "carousel-text-circle-3",
+    "source_html_sha256": "b7bba91caec2ff003b42de0b36d664a479edeb09c65006329e062f5d01156e27",
+    "output_html_sha256": "19c4e5a0454c4d6adf0a6a48fa5cfa0c59fb214dba89af7a9a2255c36ddae6dc",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-text-circle-4": {
+    "slug": "carousel-text-circle-4",
+    "source_slug": "carousel-text-circle-4",
+    "source_html_sha256": "5f916f4c261c37ef1f4d9623c26f63487660aa2859894dee888615ef6de747f8",
+    "output_html_sha256": "de1e0229527001e568ccc6a53472b1f688d31b78cc34bdfd696a1328e1ea3487",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-text-circle-5": {
+    "slug": "carousel-text-circle-5",
+    "source_slug": "carousel-text-circle-5",
+    "source_html_sha256": "1c3a8d08b21bca807beb9d9b620ad5f6e978db0e1f05f86ae9a6d3843c826ed6",
+    "output_html_sha256": "67cdd02490477e128057778964b4daa7a2e11951273b5a8719eba27e41874f71",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-vision-1": {
+    "slug": "carousel-vision-1",
+    "source_slug": "carousel-vision-1",
+    "source_html_sha256": "7b5cac68691076f46be6ed1a55b0a1b2f7515c078b024c9e956d3ad71e1e794a",
+    "output_html_sha256": "8a4ea7cbc68b6063521f67ab518404f6c767acc75e9e36b0c80f9f1e1278a89c",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 8,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-vision-2": {
+    "slug": "carousel-vision-2",
+    "source_slug": "carousel-vision-2",
+    "source_html_sha256": "d2d689bfc225659439c60a9e204a0de4b13c455e2a2b2ae892024c58f5f15dd9",
+    "output_html_sha256": "8e97b362d9dad60ac00b09c6b4743e1cbc7ff3d248a2737f907108824443ca39",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-vision-3": {
+    "slug": "carousel-vision-3",
+    "source_slug": "carousel-vision-3",
+    "source_html_sha256": "2d7c42e522aef5f82d91533d39a6a303b1582340eb9ebb6e10aee458054c49ed",
+    "output_html_sha256": "c8cab97f952c342d613c869938f2eb99d3365042cff0f08bb2cca6729f416111",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-vision-4": {
+    "slug": "carousel-vision-4",
+    "source_slug": "carousel-vision-4",
+    "source_html_sha256": "19e83c90b5bb94a0b6f239b67bf562c884a4edac4431401297a4ef6c01bf9739",
+    "output_html_sha256": "72f47b84b3bdfe603896b44caa6ced668aceb0622facbbf805b889a924f3e31a",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  },
+  "carousel-vision-5": {
+    "slug": "carousel-vision-5",
+    "source_slug": "carousel-vision-5",
+    "source_html_sha256": "c9dbaffb2ba30b8760f114468aa10b8fb7ea670efc73751c247092f94872e763",
+    "output_html_sha256": "3d15c0e987ad64887e634cef5b29db6c47932bd22706df6c20b822944edd2dc6",
+    "uses_three": false,
+    "zero_egress_verified": true,
+    "disallowed_matches": [],
+    "files_count": 7,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ],
+    "rights_status": "VERIFIED_PERMISSIVE"
+  }
+}

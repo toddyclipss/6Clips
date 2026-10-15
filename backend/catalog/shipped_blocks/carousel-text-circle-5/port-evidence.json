@@ -1,0 +1,24 @@
+{
+  "slug": "carousel-text-circle-5",
+  "source_slug": "carousel-text-circle-5",
+  "source_html_sha256": "1c3a8d08b21bca807beb9d9b620ad5f6e978db0e1f05f86ae9a6d3843c826ed6",
+  "output_html_sha256": "67cdd02490477e128057778964b4daa7a2e11951273b5a8719eba27e41874f71",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 7,
+  "duration": 5,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "carousel",
+    "title-card",
+    "kinetic-text",
+    "images",
+    "showcase",
+    "circle"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

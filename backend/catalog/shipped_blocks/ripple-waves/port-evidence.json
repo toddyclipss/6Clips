@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "ripple-waves",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/ripple-waves",
+  "source_sha256": "4b6c4df7f51c0a5fd163cf6c584876e169de3357190a6570474f6213f2d0db83",
+  "output_html_sha256": "772b7dbcc1186247a6ffe4ff077024af57f467655ec374806dd59635eab4de34",
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

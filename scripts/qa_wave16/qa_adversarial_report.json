@@ -1,0 +1,613 @@
+{
+  "timestamp": "2026-10-15T01:15:33.005920+00:00",
+  "wave": 16,
+  "agent": "agent-4",
+  "harness": "adversarial_cross_family",
+  "tested_groups": {
+    "newly_ported_nz": [
+      {
+        "id": "news-ticker",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 18.61,
+          "brightness_t2": 22.08,
+          "delta": 4.77,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "news-ticker_audit.mp4",
+          "mp4_size_bytes": 12928,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "bcd95ce5757064d8f813b8f39afd669a1efcd9fe725910bba67051f2f7674675"
+        },
+        "cas_mutation": {
+          "block_id": "news-ticker",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-news-ticker-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "8e5fe7fd48148396",
+          "fingerprint_rev2": "91f0676069fdba53"
+        }
+      },
+      {
+        "id": "notification-cascade",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 129.36,
+          "brightness_t2": 141.4,
+          "delta": 21.583,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "notification-cascade_audit.mp4",
+          "mp4_size_bytes": 104774,
+          "codec": "h264",
+          "width": 640,
+          "height": 1138,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "967ac943bc49b9d72fa6b024909c3b7dd6a5022e28f8e70c1ffc0bc76bb443bd"
+        },
+        "cas_mutation": {
+          "block_id": "notification-cascade",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-notification-cascade-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "c66bca0024cc66f5",
+          "fingerprint_rev2": "282162ba39777749"
+        }
+      },
+      {
+        "id": "organic-light-leak-overlay",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 17.0,
+          "brightness_t2": 19.91,
+          "delta": 2.915,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "organic-light-leak-overlay_audit.mp4",
+          "mp4_size_bytes": 4268,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "77e3afbbdbb2962b0afe72fe35ae1d838e8ded036689225c93b40962b387b1d2"
+        },
+        "cas_mutation": {
+          "block_id": "organic-light-leak-overlay",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-organic-light-leak-overlay-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "ae8a48a29dc822c3",
+          "fingerprint_rev2": "1e7a6887008fc187"
+        }
+      },
+      {
+        "id": "split-flap-board",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 27.51,
+          "brightness_t2": 28.51,
+          "delta": 1.545,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "split-flap-board_audit.mp4",
+          "mp4_size_bytes": 10364,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "538573a50f36cbc3f78e2b9c072e945a1237ec859bcb20cf3713d905257326ab"
+        },
+        "cas_mutation": {
+          "block_id": "split-flap-board",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-split-flap-board-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "db01d43a8e54ef83",
+          "fingerprint_rev2": "81847016ef1a3064"
+        }
+      },
+      {
+        "id": "thread-message-stack",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 70.53,
+          "brightness_t2": 74.49,
+          "delta": 7.845,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "thread-message-stack_audit.mp4",
+          "mp4_size_bytes": 12479,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "4089180473a960904d4cad525ec830fe33bb24756d49e93fbb22a7eac5eb8306"
+        },
+        "cas_mutation": {
+          "block_id": "thread-message-stack",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-thread-message-stack-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "0114d442523f9f9f",
+          "fingerprint_rev2": "902ddddaf3fa4a44"
+        }
+      },
+      {
+        "id": "week-in-merges",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 249.19,
+          "brightness_t2": 249.19,
+          "delta": 5.148,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "week-in-merges_audit.mp4",
+          "mp4_size_bytes": 26776,
+          "codec": "h264",
+          "width": 640,
+          "height": 800,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "99c3e9520bc5d9a667d79aa65f74c26461a3b0afa9bd6bd78681f35456af7862"
+        },
+        "cas_mutation": {
+          "block_id": "week-in-merges",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-week-in-merges-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "80e330563a81b9df",
+          "fingerprint_rev2": "88478fe1aed1a38b"
+        }
+      },
+      {
+        "id": "whip-pan",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 25.07,
+          "brightness_t2": 83.8,
+          "delta": 58.742,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "whip-pan_audit.mp4",
+          "mp4_size_bytes": 8469,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "256e550a61085d2897283757282bf182e94e7ad46ef671d0f7d6484265e37918"
+        },
+        "cas_mutation": {
+          "block_id": "whip-pan",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-whip-pan-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "a9631f0d5bbc72d3",
+          "fingerprint_rev2": "39abe499f49dc131"
+        }
+      },
+      {
+        "id": "ripple-waves",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 64.28,
+          "brightness_t2": 114.31,
+          "delta": 50.026,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "ripple-waves_audit.mp4",
+          "mp4_size_bytes": 10434,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "ecaddba4af0b4bda15a371cd0078809837b353bdd851204a233689f02c677d60"
+        },
+        "cas_mutation": {
+          "block_id": "ripple-waves",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-ripple-waves-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "fbc3a7ea510f78eb",
+          "fingerprint_rev2": "23bd76b92efea7a5"
+        }
+      },
+      {
+        "id": "sdf-iris",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 40.92,
+          "brightness_t2": 109.94,
+          "delta": 98.709,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "sdf-iris_audit.mp4",
+          "mp4_size_bytes": 11705,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "c762ff91728f7e8e43291cec6c9d33285063ed8af10e6249451d470c86b257bf"
+        },
+        "cas_mutation": {
+          "block_id": "sdf-iris",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-sdf-iris-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "b51861e93694dfcb",
+          "fingerprint_rev2": "67d94239952b76ea"
+        }
+      },
+      {
+        "id": "ridged-burn",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 10.64,
+          "brightness_t2": 80.48,
+          "delta": 69.851,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "ridged-burn_audit.mp4",
+          "mp4_size_bytes": 17827,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "25c8aa3d6eaa4582faa8cc280edb3e96955080961316a22588f4764b8d187fce"
+        },
+        "cas_mutation": {
+          "block_id": "ridged-burn",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-ridged-burn-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "968c8daa0c151bf0",
+          "fingerprint_rev2": "95ddab066cb215b1"
+        }
+      },
+      {
+        "id": "thermal-distortion",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 72.48,
+          "brightness_t2": 107.61,
+          "delta": 35.132,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "thermal-distortion_audit.mp4",
+          "mp4_size_bytes": 9733,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "05f308d382f2d6b09a2cb96fe24ef4c01b8c9cd55aee4427dea5594d05e21842"
+        },
+        "cas_mutation": {
+          "block_id": "thermal-distortion",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-thermal-distortion-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "a54aeb6c4e723bec",
+          "fingerprint_rev2": "c887e5f9e6836ade"
+        }
+      },
+      {
+        "id": "transitions-push",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 27.37,
+          "brightness_t2": 39.29,
+          "delta": 15.016,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "transitions-push_audit.mp4",
+          "mp4_size_bytes": 6086,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "c758ce656b1897a6e682cb5cf994ee59e682792b40359cd8c780561191654343"
+        },
+        "cas_mutation": {
+          "block_id": "transitions-push",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-transitions-push-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "450a7c535128e21c",
+          "fingerprint_rev2": "6c1439e41c572dd5"
+        }
+      },
+      {
+        "id": "transitions-dissolve",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 27.37,
+          "brightness_t2": 39.28,
+          "delta": 15.012,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "transitions-dissolve_audit.mp4",
+          "mp4_size_bytes": 6055,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "3981cb9b4f378c618326ed3d269a697d65848be57bb77502d99af43051847b0b"
+        },
+        "cas_mutation": {
+          "block_id": "transitions-dissolve",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-transitions-dissolve-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "6be8fe459c31f94e",
+          "fingerprint_rev2": "917f4f5f4d9f5dc9"
+        }
+      },
+      {
+        "id": "transitions-radial",
+        "motion": {
+          "status": "PASS",
+          "brightness_t1": 29.46,
+          "brightness_t2": 137.92,
+          "delta": 112.191,
+          "egress_violations": [],
+          "has_timeline": true
+        },
+        "export": {
+          "mp4_file": "transitions-radial_audit.mp4",
+          "mp4_size_bytes": 9428,
+          "codec": "h264",
+          "width": 640,
+          "height": 360,
+          "frames": 2,
+          "duration": 0.333333,
+          "valid_export": true,
+          "file_sha256": "471a9b75cc6ed0088ca1864fa936f06f32962fc87630300c14dd97f9510658e9"
+        },
+        "cas_mutation": {
+          "block_id": "transitions-radial",
+          "cas_success": true,
+          "initial_rev": 0,
+          "after_insert_rev": 1,
+          "after_edit_rev": 2,
+          "inserted_clip_id": "clip-transitions-radial-1",
+          "persisted_param": "TEST_PARAM_EDITED",
+          "fingerprint_initial": "5eb7a804ad48ed4f",
+          "fingerprint_rev1": "6a69200d658ad25b",
+          "fingerprint_rev2": "4698498fdd69fab0"
+        }
+      }
+    ],
+    "ten_lower_thirds": [
+      {
+        "id": "lt-accent-underline",
+        "motion_status": "PASS",
+        "motion_delta": 0.42,
+        "brightness": 254.51999999999998,
+        "export_valid": true,
+        "export_sha": "d27d07c5c47e8be69cfbca0fbacd1574e68dddd1dc2fb08bf3876ca7f973670d",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-bold-block",
+        "motion_status": "PASS",
+        "motion_delta": 2.053,
+        "brightness": 249.295,
+        "export_valid": true,
+        "export_sha": "bd352079eb9a1623e59f8477af6040b8b300f371191db6c0f1cb02fbc3bd60f2",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-clean-bar",
+        "motion_status": "PASS",
+        "motion_delta": 0.803,
+        "brightness": 254.59,
+        "export_valid": true,
+        "export_sha": "316940ad9d80f4dfe5795e0613c2be0fc3ef839c911020b812df68efcd4b5bd6",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-color-block",
+        "motion_status": "PASS",
+        "motion_delta": 0.942,
+        "brightness": 248.56,
+        "export_valid": true,
+        "export_sha": "cf0578b8cfa065f14f3e7b3cf2f3986ea0b36be0fddc3d2dcd3363fbbcdec9c4",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-dark-card",
+        "motion_status": "PASS",
+        "motion_delta": 1.621,
+        "brightness": 249.20499999999998,
+        "export_valid": true,
+        "export_sha": "80f442000c0c693ea1a7811c7eb44b52c39a076364881452e68347fa694ac01d",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-kicker-name",
+        "motion_status": "PASS",
+        "motion_delta": 0.431,
+        "brightness": 254.51,
+        "export_valid": true,
+        "export_sha": "366c58b261424482039a373347bc12a4c235d3e43187a13e92338368bb76c8ce",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-mask-reveal",
+        "motion_status": "PASS",
+        "motion_delta": 0.361,
+        "brightness": 254.785,
+        "export_valid": true,
+        "export_sha": "597f7e9735ade8403ed18e0f4fe5ddd538c20124895b9f6e78444c74193d58ad",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-side-rule",
+        "motion_status": "PASS",
+        "motion_delta": 0.532,
+        "brightness": 254.58499999999998,
+        "export_valid": true,
+        "export_sha": "1fba46047dc14a3864e2d75909bf174faca4514dbd63aca0603b88c288f2317f",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-soft-pill",
+        "motion_status": "PASS",
+        "motion_delta": 0.587,
+        "brightness": 254.685,
+        "export_valid": true,
+        "export_sha": "1bd5c40838aec083900cf47e0f5ec6e48c3ff25371343ab7b676b87d8775ac11",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      },
+      {
+        "id": "lt-stack-bars",
+        "motion_status": "PASS",
+        "motion_delta": 0.889,
+        "brightness": 252.07,
+        "export_valid": true,
+        "export_sha": "77835fd958f928930875e74301a741d5c2799c81830c535a01a43c8f8eeb72fc",
+        "cas_success": true,
+        "classification": "RENDER_VERIFIED_STAGE_AWAITING_PUBLIC_PROMOTION"
+      }
+    ],
+    "negative_safety": {
+      "creator-hud": {
+        "on_disk": true,
+        "is_retired": true,
+        "leaked_into_nz": false,
+        "quarantined": true
+      },
+      "glitch-transition": {
+        "on_disk": true,
+        "is_retired": true,
+        "leaked_into_nz": false,
+        "quarantined": true
+      }
+    }
+  },
+  "summary": {
+    "total_new_nz_ported": 14,
+    "passed_motion_nz": 14,
+    "valid_export_nz": 14,
+    "valid_cas_nz": 14,
+    "ten_lower_thirds_audited": 10,
+    "ten_lower_thirds_cas_verified": 10,
+    "ten_lower_thirds_export_verified": 10,
+    "zero_egress_violations": true,
+    "zero_leakage_retired_substitutes": true
+  }
+}

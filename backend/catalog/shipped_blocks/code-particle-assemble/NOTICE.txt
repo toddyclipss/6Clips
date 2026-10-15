@@ -1,0 +1,4 @@
+Block ID: code-particle-assemble
+Original donor path: registry/blocks/code-particle-assemble
+Vendored libraries: GSAP 3.14.2 (Standard License Notice), Three.js (MIT License)
+Zero egress: verified airgapped, zero external network requests.

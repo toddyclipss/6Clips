@@ -1,0 +1,4 @@
+Block ID: code-slice-hero
+Original donor path: registry/blocks/code-slice-hero
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

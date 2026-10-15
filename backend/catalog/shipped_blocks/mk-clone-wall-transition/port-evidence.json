@@ -1,0 +1,21 @@
+{
+  "slug": "mk-clone-wall-transition",
+  "source_slug": "mk-clone-wall-transition",
+  "source_html_sha256": "6d8ef20a89b52613b0e08147014c587dbe89baf0b22f7ab38684f9f71aa1d54c",
+  "output_html_sha256": "7691c71e8246a4afa809b5e325b0bed4857d4c3875384e2eeb1317e8e0e3e50c",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 2.4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "typography",
+    "wipe"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,24 @@
+{
+  "slug": "ai-chat-reveal",
+  "source_slug": "ai-chat-reveal",
+  "source_html_sha256": "b114399a570efe0dd5720bae3032f69b746965ebc9ec36040b19d694ef08ffe4",
+  "output_html_sha256": "80c0fb391e6aea663d0532576ad1dd4f7d2e869053bdbec8879918e6f0c713ba",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 10,
+  "duration": 19.3333,
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "tags": [
+    "showcase",
+    "mock-ui",
+    "ai",
+    "chat",
+    "vertical",
+    "ad-template"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,21 @@
+{
+  "slug": "mk-progress-stat",
+  "source_slug": "mk-progress-stat",
+  "source_html_sha256": "2c6d9e0dedf250a8e25b53c87057b511ae20545f30e7c1b1ec27b366bec74178",
+  "output_html_sha256": "db82ac6a676cbf009bdd16b082d1a6cadd868441688d48430540696ecff0f96d",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "data-viz",
+    "stat",
+    "minimal"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

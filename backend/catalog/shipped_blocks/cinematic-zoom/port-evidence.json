@@ -1,0 +1,20 @@
+{
+  "slug": "cinematic-zoom",
+  "source_slug": "cinematic-zoom",
+  "source_html_sha256": "72b3a83d5de6a56fd389044aa15e785dbb40d5402cea6b95684b6b9cec0e4aba",
+  "output_html_sha256": "384db11874d67cf50ba4e198acce7e4f3f429f7e6cc0855819323afa29bc8fe1",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

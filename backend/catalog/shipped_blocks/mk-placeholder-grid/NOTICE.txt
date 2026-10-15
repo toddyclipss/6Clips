@@ -1,0 +1,4 @@
+Block ID: mk-placeholder-grid
+Original donor path: registry/blocks/mk-placeholder-grid
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.
