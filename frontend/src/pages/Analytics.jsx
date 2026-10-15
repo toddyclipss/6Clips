@@ -155,21 +155,6 @@ export default function Analytics() {
           >
             Refresh
           </Button>
-
-          {/* Test fixture action only if no live receipts exist */}
-          {receipts.length === 0 && (
-            <Button
-              variant="contained"
-              color="warning"
-              size="small"
-              startIcon={<IconSparkles size={16} />}
-              disabled={seeding}
-              onClick={handleSeedFixture}
-              sx={{ textTransform: "none", fontWeight: 700 }}
-            >
-              {seeding ? "Seeding..." : "Load Test Fixture"}
-            </Button>
-          )}
         </Stack>
       </Stack>
 
@@ -202,19 +187,9 @@ export default function Analytics() {
               AWAITING_PUBLISHED_POST
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 520, mx: "auto", mb: 3 }}>
-              No confirmed publication receipts registered yet. When a video is published through Phase 10 Distribution
+              No confirmed publication receipts registered yet. When a video is published through automated background distribution
               or an external provider receipt is recorded, real post metrics will surface here.
             </Typography>
-            <Button
-              variant="outlined"
-              color="warning"
-              startIcon={<IconSparkles size={16} />}
-              onClick={handleSeedFixture}
-              disabled={seeding}
-              sx={{ textTransform: "none", fontWeight: 700 }}
-            >
-              {seeding ? "Generating..." : "Preview with Isolated Test Fixture"}
-            </Button>
           </CardContent>
         </Card>
       ) : (

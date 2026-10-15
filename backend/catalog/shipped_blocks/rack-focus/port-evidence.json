@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "rack-focus",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/rack-focus",
+  "source_sha256": "9abb3443c92d41cba53db5942cf33acf9f47d4040459bf7c0dfbb277ab7534bb",
+  "output_html_sha256": "4e5af6850f2c47564459502211fdfc88546c48f02db7812f272e9f4f3aace543",
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "webgl",
+    "shader",
+    "camera",
+    "depth",
+    "cinematic",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

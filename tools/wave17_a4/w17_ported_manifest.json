@@ -1,0 +1,110 @@
+[
+  {
+    "slug": "transitions-3d",
+    "source_sha": "54b3034238d1383f334d6a4234d5f45e74b7f646b84558f3ffe2bcbecb3a677c",
+    "output_sha": "4b6b721905837b1a23a4e05cc4e9838af1faa2d1b95d089822032ab4b91dae05",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-3d"
+  },
+  {
+    "slug": "transitions-blur",
+    "source_sha": "d493c347a9399f33cf02f7be887d67555681af48fe9f102c5247884d1c0518c3",
+    "output_sha": "50a291670c937a64a27f159a3f04855dae88bb7b586ab6c25c8659bbe6f68e89",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-blur"
+  },
+  {
+    "slug": "transitions-cover",
+    "source_sha": "d5e701cccd3b60993484b51d2e054298b7f136177f34cbebce4c1de448c59006",
+    "output_sha": "4ff5163fa0a0f230fe4716d1aab4b8ca7fa9ffdc00397a50ff2d9caecfebeaa2",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-cover"
+  },
+  {
+    "slug": "transitions-destruction",
+    "source_sha": "d5cd1cdd3a1e087bbbc8f0b4e4a47b45170e612845b637453119ce95cd1cf3d9",
+    "output_sha": "2b57964550aac16364f79c0827b3258af5a0e6776414c951f6dd18f41c73d521",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-destruction"
+  },
+  {
+    "slug": "transitions-distortion",
+    "source_sha": "1ed8fd8308a10f749fc920ce9d77df7985a1b024bfc66ed8555bbd4d25e5ad84",
+    "output_sha": "c9d880f68441907798795b1df9ab8596e1ab862a3d4a726df1c1cbb533f4de55",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-distortion"
+  },
+  {
+    "slug": "transitions-grid",
+    "source_sha": "abb3c444c9d73e97973a93f4fa810babc2deb80f575ebefb9b628599f8c94211",
+    "output_sha": "370a575e5cf2012116665bfc3e98ff888ac7ce8a43919236191e2f2e53c48f60",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-grid"
+  },
+  {
+    "slug": "transitions-light",
+    "source_sha": "74b04f50a317191dc30ae8b849819bc51c24ec045b094fa553d9cc92d2a8ab74",
+    "output_sha": "4cff785ab21ad961183605e9ace0a14679812c40157a1f4ade5155916922297e",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-light"
+  },
+  {
+    "slug": "transitions-mechanical",
+    "source_sha": "098589405f547834c5359d5c94a2f1dfed06c0780f23962e54c3e3577cea9c1f",
+    "output_sha": "200680c2b8eb8cb36f5356dc6240283f2ba1de769d8a8e314ba32443b9809536",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-mechanical"
+  },
+  {
+    "slug": "transitions-other",
+    "source_sha": "e77fcfaa70bde8e9a5bcc57f7295b6ed37aef9661ed1d0472cf94e981671bac1",
+    "output_sha": "b2cefd7d817cf6c729f8f8a90a4ef8f0d9b7cb8959da2d6e6e1ea11a04814270",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-other"
+  },
+  {
+    "slug": "transitions-scale",
+    "source_sha": "6781bb145004f49ca83ad57bacdba3c32678bee568ac5583b88211eec24be143",
+    "output_sha": "6caa64836fbdbae1de134989d9949fe3adffbeea3818ecc100e061ba7979e878",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\transitions-scale"
+  },
+  {
+    "slug": "share-sheet-carousel",
+    "source_sha": "c51358e4dcfc77d61b79c4e72540f30d01104066a7b278d5bece98cb902ebea7",
+    "output_sha": "7ce831353514c83bdec466f4b0b53c09a8a542f7dc41267ebda08401b93c03ce",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\share-sheet-carousel"
+  },
+  {
+    "slug": "snow",
+    "source_sha": "40ab276706377dd4d35d155ae80da818129f0f1d324db01b54b17448c8f67879",
+    "output_sha": "2e437dfee15b738ce6e0f639f15583c29ce50e9a41b734bc595a63a27546767d",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\snow"
+  },
+  {
+    "slug": "starfield",
+    "source_sha": "3465d75b46e12c5e770b4caaf65fa81e7fd0b88aefed9ff5c56a37d64ae6b199",
+    "output_sha": "8af8402125a59782749686e61cd1dc61910612a0d1880b50a9e59bc51c2968e9",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\starfield"
+  },
+  {
+    "slug": "rack-focus",
+    "source_sha": "9abb3443c92d41cba53db5942cf33acf9f47d4040459bf7c0dfbb277ab7534bb",
+    "output_sha": "4e5af6850f2c47564459502211fdfc88546c48f02db7812f272e9f4f3aace543",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\rack-focus"
+  },
+  {
+    "slug": "swirl-vortex",
+    "source_sha": "d2ec8ec40dd47e584463b82f806dbc474aed8e1a94648e7637032ecb0f9f481b",
+    "output_sha": "d21309dbc5d1da303ce4759cb43489d0a6feed0f4d00c37d71ed9700dff3ea16",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\swirl-vortex"
+  },
+  {
+    "slug": "vfx-magnetic",
+    "source_sha": "5d8cb92132690f681c0acd5ad9c9a326d79fc59e8904eba9e6d1542acd54c1dd",
+    "output_sha": "355276a63cceeb98632f2d218fdb52e21937516548d0b9db00d445906f67dbf4",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\vfx-magnetic"
+  },
+  {
+    "slug": "vfx-text-cursor",
+    "source_sha": "71834bda1e5a5a45aa137e5b0eca2b9ed408cb7dc9b47a0dd4008eb7b4cfe235",
+    "output_sha": "8e78238e398c1865e0e28772f237e131484f052768075f333b2f02e30cd02096",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\vfx-text-cursor"
+  },
+  {
+    "slug": "ui-3d-reveal",
+    "source_sha": "fbb3f7960686a1f5932bfd07b105c3029cdd898f113911be662e6bc36892e993",
+    "output_sha": "9f4f461f4d1f40b0e0256c79d05d49c05cdcc9fbfa3faa54c7e7676c931a9a43",
+    "target_dir": "C:\\Users\\toddy\\Desktop\\ViralMint-wave17-04-nz-qa\\backend\\catalog\\shipped_blocks\\ui-3d-reveal"
+  }
+]

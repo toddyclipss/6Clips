@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "ui-3d-reveal",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/ui-3d-reveal",
+  "source_sha256": "fbb3f7960686a1f5932bfd07b105c3029cdd898f113911be662e6bc36892e993",
+  "output_html_sha256": "9f4f461f4d1f40b0e0256c79d05d49c05cdcc9fbfa3faa54c7e7676c931a9a43",
+  "duration": 13,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "showcase",
+    "3d",
+    "reveal"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

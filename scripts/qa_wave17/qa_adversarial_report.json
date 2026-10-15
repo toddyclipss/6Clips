@@ -1,0 +1,890 @@
+{
+  "schema_version": 1,
+  "wave": 17,
+  "agent": "Agent 4 (N-Z HyperFrames Porting & Independent Anti-Fake QA)",
+  "timestamp": "2026-10-15T09:49:17.911029+00:00",
+  "execution_mode": "BASELINE_QA",
+  "candidate_path": null,
+  "integrated_candidate_status": "PENDING",
+  "summary": {
+    "w17_newly_ported_passed": "18/18",
+    "w16_regression_passed": "14/14",
+    "wave15_lower_thirds_passed": "4/10",
+    "standin_audit_passed": true,
+    "legacy_route_parity_passed": true,
+    "negative_controls_passed": true,
+    "oaas_sidebar_locked": true,
+    "production_fixtures_clean": true
+  },
+  "wave17_newly_ported_blocks": [
+    {
+      "block_id": "transitions-3d",
+      "motion": {
+        "passed": true,
+        "delta": 119.794,
+        "brightness": 57.76,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-3d_audit.mp4",
+        "mp4_size_bytes": 53719,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "4574ff04609cbdcfbb06c18425df5697428caf688dabb7aa94db0491566d2cae"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "77ef0f58b71e069b",
+        "rev_2_fingerprint": "8d7c85a608cc5dd5"
+      },
+      "frame_hashes": [
+        "ba8dc44f243e497bc771f8fc873e0d2fee00b12a133d78f9644f37477630661c",
+        "ba8dc44f243e497bc771f8fc873e0d2fee00b12a133d78f9644f37477630661c",
+        "00c86eaeadb069d442d7c01e44e6b113e9d17e29a954898ecfb3ed4b691b630e",
+        "00c86eaeadb069d442d7c01e44e6b113e9d17e29a954898ecfb3ed4b691b630e",
+        "cd69639e4fd5b787914918586b7d7a6a6f5e4bcb306863adc1ac2fadc36647d0"
+      ]
+    },
+    {
+      "block_id": "transitions-blur",
+      "motion": {
+        "passed": true,
+        "delta": 113.128,
+        "brightness": 52.8,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-blur_audit.mp4",
+        "mp4_size_bytes": 70333,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "d4db30f552c19d7758b4586482c35bab26c59159bacb6dd2dd7db653f2756de6"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "b182ec2557560e51",
+        "rev_2_fingerprint": "0a1ffb0440d25b8a"
+      },
+      "frame_hashes": [
+        "4c43541fb9d364bdaaa5fe7d5a454837edbcb3a0c55a82bedfec06487084e4e1",
+        "5e0eeae1bd59ab297d31dda7b84be66b0b8f925f91d96bd8e80104831479aaa2",
+        "7bd4909e0a500ec0a0069e708453834e841e6231ce9a04cdcdf999c348975e46",
+        "c3e5ba8c22db6592af0b8c7d3c54dd0dd773e70c11f54541cbfda9992d8f9374",
+        "c4a6c60c307d3fb71750678ea0011b4bcf75acef82474776aec012a8f1df0e58"
+      ]
+    },
+    {
+      "block_id": "transitions-cover",
+      "motion": {
+        "passed": true,
+        "delta": 94.645,
+        "brightness": 94.96,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-cover_audit.mp4",
+        "mp4_size_bytes": 32636,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "4cc8bce5d83c6c4075f5c8d9208b2703f6089b1c61d76cafe3856ea559332307"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "e39bbcb0392ea24a",
+        "rev_2_fingerprint": "6743f6c2fafd3546"
+      },
+      "frame_hashes": [
+        "24bd3f2f256436af8616a69434944f95e3fcce6eb7d46e1fc8edc5b7b34d313c",
+        "24bd3f2f256436af8616a69434944f95e3fcce6eb7d46e1fc8edc5b7b34d313c",
+        "24bd3f2f256436af8616a69434944f95e3fcce6eb7d46e1fc8edc5b7b34d313c",
+        "13fa1657cc225c96a82683e7dc8f1b2a10450f044defb328e211d28fc1007afe",
+        "13fa1657cc225c96a82683e7dc8f1b2a10450f044defb328e211d28fc1007afe"
+      ]
+    },
+    {
+      "block_id": "transitions-destruction",
+      "motion": {
+        "passed": true,
+        "delta": 16.338,
+        "brightness": 33.23,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-destruction_audit.mp4",
+        "mp4_size_bytes": 55783,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "73ba9b2f42a644fb9e69ad9d8c33ebcd2f59052b1ab40eba4ee405175be4a603"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "35b321799df1e2ff",
+        "rev_2_fingerprint": "b69b0ec3ac799e91"
+      },
+      "frame_hashes": [
+        "4c43541fb9d364bdaaa5fe7d5a454837edbcb3a0c55a82bedfec06487084e4e1",
+        "c732b24972ab59d1c593ee726401c537fd48d55aa629d276fa5b24d73f61d2f6",
+        "5085bf553929ee5a04c4268fe10416c322511a1aa8cf7a3db675a6ffe5745100",
+        "4dcdcd6dc85cffb8da9a5b4027b52d14e38fbcf68e0df3af50c577a4a459f7a0",
+        "4dcdcd6dc85cffb8da9a5b4027b52d14e38fbcf68e0df3af50c577a4a459f7a0"
+      ]
+    },
+    {
+      "block_id": "transitions-distortion",
+      "motion": {
+        "passed": true,
+        "delta": 89.011,
+        "brightness": 40.88,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-distortion_audit.mp4",
+        "mp4_size_bytes": 70385,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "f0bafef86f51894fd7c54a73b5f55a4b140af782c93464719cdc2cf3315423f7"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "b777a1a0856ffe1b",
+        "rev_2_fingerprint": "0f68adf312b0a895"
+      },
+      "frame_hashes": [
+        "3f6d7f991778136564b86f0946c213da3e46877d1b6d8c8e96bef3dc4f2a2b77",
+        "768aee8071ca5a615dcce6fd8e085c3d4d58d010e4460d05776d4daac203fa0d",
+        "768aee8071ca5a615dcce6fd8e085c3d4d58d010e4460d05776d4daac203fa0d",
+        "609864be24bf11f075faa2db6454d99b2cafd096a5a8b7aaa2e993093b294ea8",
+        "2a7050a3169c59051edb8a131be4b71957b2c360e5434c53af61a4208f6440ee"
+      ]
+    },
+    {
+      "block_id": "transitions-grid",
+      "motion": {
+        "passed": true,
+        "delta": 24.541,
+        "brightness": 26.93,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-grid_audit.mp4",
+        "mp4_size_bytes": 52887,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "73abaaeccc3c890603c70edc1b08e49c7f0b6e0484d33b8779c1312e0f886dde"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "0e45566c59318501",
+        "rev_2_fingerprint": "9a723dce1df71c31"
+      },
+      "frame_hashes": [
+        "6cfc8183791477d7c899a0330b1e8a608b62098487c674d83244a6c357efe9ae",
+        "693e56c8c5df68d67766a5c8f6a142021d18ce70a6e8c0e6b1ae4264831320d6",
+        "693e56c8c5df68d67766a5c8f6a142021d18ce70a6e8c0e6b1ae4264831320d6",
+        "9780ee65bcdbcf82dd01c3f9c2a2200f5d3bc679fd2251e0c11bf116b7e25a81",
+        "9780ee65bcdbcf82dd01c3f9c2a2200f5d3bc679fd2251e0c11bf116b7e25a81"
+      ]
+    },
+    {
+      "block_id": "transitions-light",
+      "motion": {
+        "passed": true,
+        "delta": 9.539,
+        "brightness": 38.04,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-light_audit.mp4",
+        "mp4_size_bytes": 68050,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "d6c6d4a2d2228f1333141ac044acf0d0873fc4f1b13da4b7232c15d8b107bea0"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "f24bb081e5e3e272",
+        "rev_2_fingerprint": "9e09fd89abaf462a"
+      },
+      "frame_hashes": [
+        "a0c0fb53782b4930179e5aa9f61252590042646fe8ba616454e87ed5d8fe3c65",
+        "fb79d74adf2fca50880f39732de86c33c0bccbc4a9092b0cbf7ca3b89380b8fd",
+        "fb79d74adf2fca50880f39732de86c33c0bccbc4a9092b0cbf7ca3b89380b8fd",
+        "592f862470258c22dfbe956a3230ed0cd86704edb9fcdf2b07cab2558f7c5c9a",
+        "592f862470258c22dfbe956a3230ed0cd86704edb9fcdf2b07cab2558f7c5c9a"
+      ]
+    },
+    {
+      "block_id": "transitions-mechanical",
+      "motion": {
+        "passed": true,
+        "delta": 16.342,
+        "brightness": 33.24,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-mechanical_audit.mp4",
+        "mp4_size_bytes": 55821,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "d7afb6ce8eaab2ada128885ee22b44eeccfe66a585eaed34ec2d8debb7ed8902"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "c173d10aa97996da",
+        "rev_2_fingerprint": "0454e881b67fb636"
+      },
+      "frame_hashes": [
+        "4c43541fb9d364bdaaa5fe7d5a454837edbcb3a0c55a82bedfec06487084e4e1",
+        "844f3c61b2e41c5b0366cb249186c218d4ee7abf42f15cf424c781ec3e020c34",
+        "0f66228a5b496102cf79033329bf4d7b3f81473f14ef2da6a242036063809f26",
+        "f5d8ebf5b632f6c53e14f8894df56b0805ee6342e19e7316e6d40331cfc5f769",
+        "f5d8ebf5b632f6c53e14f8894df56b0805ee6342e19e7316e6d40331cfc5f769"
+      ]
+    },
+    {
+      "block_id": "transitions-other",
+      "motion": {
+        "passed": true,
+        "delta": 15.832,
+        "brightness": 32.99,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-other_audit.mp4",
+        "mp4_size_bytes": 51660,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "e7cd6a625bc4921e8cc403e11e76a507cc5e0ff401850d373a3b73c942d3b4d5"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "71d2dd45c70cef19",
+        "rev_2_fingerprint": "107c94612fa16222"
+      },
+      "frame_hashes": [
+        "4c43541fb9d364bdaaa5fe7d5a454837edbcb3a0c55a82bedfec06487084e4e1",
+        "13a69d2054be1ee9c8115dd037eee90ec28bf0634113fc0cdfcf40bd8dc97d5f",
+        "3e1ee616d46be9e472e79d81eebee5da257278287eab52e0a78b491481b25585",
+        "cb7a6ae9b13b8b532df6439ce55c5394e677ffd39928033cd64f92d7acd130f3",
+        "cb7a6ae9b13b8b532df6439ce55c5394e677ffd39928033cd64f92d7acd130f3"
+      ]
+    },
+    {
+      "block_id": "transitions-scale",
+      "motion": {
+        "passed": true,
+        "delta": 113.135,
+        "brightness": 52.83,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "transitions-scale_audit.mp4",
+        "mp4_size_bytes": 72774,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "7e7aea229022eca1c0d559bd91e12e50030a59811e741a6677414da47bc1823e"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "5dafd2a96539dc66",
+        "rev_2_fingerprint": "8bdedc5e0316b0ee"
+      },
+      "frame_hashes": [
+        "4c43541fb9d364bdaaa5fe7d5a454837edbcb3a0c55a82bedfec06487084e4e1",
+        "c91ca4de7899650ee7c85d440703988d75df6ab4437bd90818c3916a5956d3a7",
+        "428a4c5125dbb2e836eae9f138b25fb931f6fbf9c633922b76596588296e3f33",
+        "9d3bbc6263ed0dec8a3e1707d8808a0302143444ac9146c2302f884fd622ab3f",
+        "d49a3aa81a02f835dea76b3c582b0dffd3a5e13e43f7c4720582d7e1625e1b2a"
+      ]
+    },
+    {
+      "block_id": "share-sheet-carousel",
+      "motion": {
+        "passed": true,
+        "delta": 30.488,
+        "brightness": 96.84,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "share-sheet-carousel_audit.mp4",
+        "mp4_size_bytes": 300574,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "49ddc4bfaddcb28c1a221163afcbb09a49a5159ad2b096219464b46af578adb1"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "779f12720fa95634",
+        "rev_2_fingerprint": "3c72ad940fe2cf26"
+      },
+      "frame_hashes": [
+        "672106784c1155245ac5f79f1c8c6e391e35ced8ebf72f44feaccc4b285b37fe",
+        "0049f34568fc0ca55a0723884130b873e854c8180c1ae80b70c7ed72e63f975d",
+        "b07eb84601ffd869f760189616b3c54ea985e306246d6290d53934a817271001",
+        "5529f1089934805f2c1658ff9e87dae1eed01500d5a1842c9ad040996a2c14b4",
+        "aa8251838ab3adbed7beba2295f179c4d9c0221bd6b5098767582e6f785f36a8"
+      ]
+    },
+    {
+      "block_id": "snow",
+      "motion": {
+        "passed": true,
+        "delta": 0.729,
+        "brightness": 17.36,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "snow_audit.mp4",
+        "mp4_size_bytes": 59414,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "ad7cd9d19cf396c3b61af4bcb829bafb068eb18829f8325ee261e58b177441d3"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "19efc8943c5e9409",
+        "rev_2_fingerprint": "cae4e806e41bacf5"
+      },
+      "frame_hashes": [
+        "83777bbd08556fdd2a427e78352badb154b77e6f541cecd060239f84e6f86358",
+        "6330c85efcc5f2441b159fd9ac9b7ca21bdc869404aa36a5a5976af1c9fa74dd",
+        "65374c37ce1f785879552d540ada00e0083e4c93f1674f230e9128ffc8391a11",
+        "a6b6fac0d4afec88f03213c50856cb5bf88c42880521210d91a14e4b50a4e03e",
+        "3496030e0026c33c0cbd7a966be6be99830b10270bd080d48a835d4d1a747d39"
+      ]
+    },
+    {
+      "block_id": "starfield",
+      "motion": {
+        "passed": true,
+        "delta": 0.074,
+        "brightness": 17.04,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "starfield_audit.mp4",
+        "mp4_size_bytes": 29825,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "06f09442f6605ad2cd69adf86a71481aca4404f0492410d497ee04ff264164bd"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "61280ad4e9e49fa5",
+        "rev_2_fingerprint": "ace2e475f168672c"
+      },
+      "frame_hashes": [
+        "dfddaee34dd15608577c4d90617afc5f96b82aa920a2d4c89d226f83e23d808c",
+        "f30451261ce583a9c122baac30229451d5ded25f03fd795632f32eaead7ee36d",
+        "e4b35ab88825f10d40daf5ba494dfa5590861d1fbac836b6b050df992bddba74",
+        "2459fe0d19bf1605c1654b543f3e25fb9ceb9d29842f07939e0bf30ad3ba90c9",
+        "c62e2382bd65ad09f01a14cb0f6837e103446755bba60f37cc3fad1fa896a4b6"
+      ]
+    },
+    {
+      "block_id": "rack-focus",
+      "motion": {
+        "passed": true,
+        "delta": 62.643,
+        "brightness": 56.01,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "rack-focus_audit.mp4",
+        "mp4_size_bytes": 593116,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "3974cb2f2195d5669dee919851641b2ac56d48600a36c728a1258a33df532b06"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "1c83ecc48013f839",
+        "rev_2_fingerprint": "d7016a33dcaea56e"
+      },
+      "frame_hashes": [
+        "24c150bec0a5de4af52632eb37a454132f640d86afe346fd5d33307b3792288a",
+        "2a7cb1fbbc2ad9394f1f10028c94989f1f957b3f51ea916f1b0a0dd6b69271dc",
+        "e38bdfb75f0ca481d28b6a635a48db34bbe4344a35981164cd2d97c91a60a501",
+        "d590b7ccd4db1eb326eb08d0adc388d29bc82fa222e799bade9a4c0d62282d70",
+        "470670b365a24b07df0c0b0498b81b365fe7713bdef62504c35833b6c02eac13"
+      ]
+    },
+    {
+      "block_id": "swirl-vortex",
+      "motion": {
+        "passed": true,
+        "delta": 49.81,
+        "brightness": 77.41,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "swirl-vortex_audit.mp4",
+        "mp4_size_bytes": 97720,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "f87bbd930a0b32a227704c3dcecabdc91b90189b3ff6ad2847a75c811147bac1"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "18b015b543e5e482",
+        "rev_2_fingerprint": "c3efcb3992f935cd"
+      },
+      "frame_hashes": [
+        "242fc4c9055879316e0035f2829b736d15b499107d903a53266bdf1c744b44e6",
+        "f5d8fa427847458ccb58d7769379c25548e94b0f01df55d81bf13d62f30c6eb8",
+        "4ce3c0425b48a6f6e80fa34bcaf4be7372abe85a5e2bdc5cb559326dea58f266",
+        "5bf1bed2b28d6d1c2a163bff7801734a4b261d8906c666bf661147a580e9acf3",
+        "5bf1bed2b28d6d1c2a163bff7801734a4b261d8906c666bf661147a580e9acf3"
+      ]
+    },
+    {
+      "block_id": "vfx-magnetic",
+      "motion": {
+        "passed": true,
+        "delta": 0.8,
+        "brightness": 0.45,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "vfx-magnetic_audit.mp4",
+        "mp4_size_bytes": 33695,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "5df8dc0a2d7aac6a1bc24d535fba8d0740f8c021eeaa69c3905df457f8d24e58"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "91bb00ffb4822d72",
+        "rev_2_fingerprint": "7ce34d7368fb170d"
+      },
+      "frame_hashes": [
+        "1f56bd4f609fab80a2b9cce7487d5c08de2768476849e1353881ca748d8d3b6a",
+        "5cf132f4244b9c9ad01dc1905d1c4735ac766eb545d6e451deed120cdf1a17e2",
+        "093dd0b36ce9fc33b070562e92e672e40be9bf812171fcf9d537ab6e6725c86f",
+        "f9aa24cb7749db523e46ca46188ec2b29f312cf57bfdef3be515db9e7b27e80e",
+        "7095a9053c484b31e59267291687a63d39029fa311ae6c74d5434065757a6c6c"
+      ]
+    },
+    {
+      "block_id": "vfx-text-cursor",
+      "motion": {
+        "passed": true,
+        "delta": 158.872,
+        "brightness": 70.91,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "vfx-text-cursor_audit.mp4",
+        "mp4_size_bytes": 1998699,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "62b6ffa44cb7d3f3c1f914b75a527670184603536a0ffa27f7ed767ec426bd64"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "016c31aea6d26b78",
+        "rev_2_fingerprint": "5ae47bd7790ff93a"
+      },
+      "frame_hashes": [
+        "50a2a0d1c8d1bf81daa51d79ddcf7fe4c62b0a046296e9555aa5c388eeddade4",
+        "bea1f3e9c36fc31c296447565c38abf2b4065cc6c29acf12e55cc2ac3cc51bfd",
+        "60fd6ac05ec7066bd172a58211ab21dbe130b971b28ec0ebbe008b10c04b63ba",
+        "9d6b7a46c6c7c5f7fbc04833e3a99419af18a4b9c24dce5026ae84c507aa41d2",
+        "c82546610b59c9ebdfec85303638ddb434a15e66d3ef8dddfaa6c603951b14b9"
+      ]
+    },
+    {
+      "block_id": "ui-3d-reveal",
+      "motion": {
+        "passed": true,
+        "delta": 32.323,
+        "brightness": 29.78,
+        "is_black": false
+      },
+      "network_egress": {
+        "passed": true,
+        "violations": []
+      },
+      "export": {
+        "mp4_file": "ui-3d-reveal_audit.mp4",
+        "mp4_size_bytes": 163970,
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "frames": 5,
+        "duration": 0.833333,
+        "valid_export": true,
+        "file_sha256": "417c9ad46ede9e311786d5972bdcb1f2ce065b2c267447c67e61d8325451a807"
+      },
+      "cas_mutation": {
+        "cas_success": true,
+        "rev_0_fingerprint": "5eb7a804ad48ed4f",
+        "rev_1_fingerprint": "0d86b0af501322ce",
+        "rev_2_fingerprint": "0785523c300ba276"
+      },
+      "frame_hashes": [
+        "a1d72a044dd0928d3b075655388da14b1a684389bb1e0b5501dc66224089bfbf",
+        "a1d72a044dd0928d3b075655388da14b1a684389bb1e0b5501dc66224089bfbf",
+        "3c1e40c42e8417948146598973f81d5e05abaabcfca3a84ac35208becb04398a",
+        "bfce8bc13970196325c13f33b199ea104425f7b16d6b891cd20734e792549789",
+        "b7ff58a49f63687407acfe09ac40cb4ec9091ff64be6341b5dfeeb3be13505c0"
+      ]
+    }
+  ],
+  "wave16_regression_blocks": [
+    {
+      "block_id": "news-ticker",
+      "motion_passed": true,
+      "motion_delta": 2.096,
+      "export_valid": true,
+      "export_sha": "24e2690954e8f19c6815c929aee8f0c4efe0f5f5ad2da44e9986e698a63042a9"
+    },
+    {
+      "block_id": "notification-cascade",
+      "motion_passed": true,
+      "motion_delta": 3.004,
+      "export_valid": true,
+      "export_sha": "939f57c4104eadcf5e5bd5474c72df6271a392d666ca1bafeb6641a2c241de14"
+    },
+    {
+      "block_id": "organic-light-leak-overlay",
+      "motion_passed": true,
+      "motion_delta": 64.295,
+      "export_valid": true,
+      "export_sha": "80c928155c608f8f1c3772a27aa4c2fb0d820c37317f8efb46c67931ffbfa19e"
+    },
+    {
+      "block_id": "split-flap-board",
+      "motion_passed": true,
+      "motion_delta": 1.529,
+      "export_valid": true,
+      "export_sha": "09a9113e7d727063e0d510d727524e890810f508482387bee5ec3758e030e0e6"
+    },
+    {
+      "block_id": "thread-message-stack",
+      "motion_passed": true,
+      "motion_delta": 14.945,
+      "export_valid": true,
+      "export_sha": "6d029840c28f011dcbbfe13bc783f75dd36e457fe829a144fdf75ffbabd18f85"
+    },
+    {
+      "block_id": "week-in-merges",
+      "motion_passed": true,
+      "motion_delta": 3.276,
+      "export_valid": true,
+      "export_sha": "7672a5bbeb4e98471d7abca9e8b0f0299dcdb40f7e8ae3ceaebd311228d8f8b7"
+    },
+    {
+      "block_id": "whip-pan",
+      "motion_passed": true,
+      "motion_delta": 75.521,
+      "export_valid": true,
+      "export_sha": "2baca1e1c97b84a079e8a36e483d40813b6b79af80e8c8c0954f8d415fc6185d"
+    },
+    {
+      "block_id": "ripple-waves",
+      "motion_passed": true,
+      "motion_delta": 63.273,
+      "export_valid": true,
+      "export_sha": "34f7a5a22c7e25a015f8153328bbc421301b28a28a483545f6ec930248d4ec65"
+    },
+    {
+      "block_id": "sdf-iris",
+      "motion_passed": true,
+      "motion_delta": 98.58,
+      "export_valid": true,
+      "export_sha": "67c82e9337b344a78b2488f5da35e3904e15660e4cc13e7471df854c6947f081"
+    },
+    {
+      "block_id": "ridged-burn",
+      "motion_passed": true,
+      "motion_delta": 65.849,
+      "export_valid": true,
+      "export_sha": "0b30274462a3879ac1b47f43e907861ed9fb27b6f73c664793a2a8a149dc06c5"
+    },
+    {
+      "block_id": "thermal-distortion",
+      "motion_passed": true,
+      "motion_delta": 42.559,
+      "export_valid": true,
+      "export_sha": "77e3e3a77c78ad450cc7f2666e02499f223072614bb153322b7f0a12df648316"
+    },
+    {
+      "block_id": "transitions-push",
+      "motion_passed": true,
+      "motion_delta": 2.314,
+      "export_valid": true,
+      "export_sha": "40c56f3184080b9637075cad1d5815ad0bdb9c329ffb93c15e6bc1e05475c2f1"
+    },
+    {
+      "block_id": "transitions-dissolve",
+      "motion_passed": true,
+      "motion_delta": 2.666,
+      "export_valid": true,
+      "export_sha": "0d438cd22601677e8fc4e5cbac57e18e416ebe7e15dd9efb3ea772c7140735c0"
+    },
+    {
+      "block_id": "transitions-radial",
+      "motion_passed": true,
+      "motion_delta": 16.108,
+      "export_valid": true,
+      "export_sha": "e984ded088bccf5099f41d7cea88aac188d0778800f823d68dfa0857ec239035"
+    }
+  ],
+  "wave15_lower_thirds": [
+    {
+      "block_id": "lt-accent-underline",
+      "motion_passed": false,
+      "motion_delta": 0.434,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-bold-block",
+      "motion_passed": true,
+      "motion_delta": 2.052,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-clean-bar",
+      "motion_passed": false,
+      "motion_delta": 0.788,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-color-block",
+      "motion_passed": true,
+      "motion_delta": 0.95,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-dark-card",
+      "motion_passed": true,
+      "motion_delta": 1.736,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-kicker-name",
+      "motion_passed": false,
+      "motion_delta": 0.425,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-mask-reveal",
+      "motion_passed": false,
+      "motion_delta": 0.359,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-side-rule",
+      "motion_passed": false,
+      "motion_delta": 0.536,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-soft-pill",
+      "motion_passed": false,
+      "motion_delta": 0.574,
+      "export_valid": true,
+      "cas_success": true
+    },
+    {
+      "block_id": "lt-stack-bars",
+      "motion_passed": true,
+      "motion_delta": 0.883,
+      "export_valid": true,
+      "cas_success": true
+    }
+  ],
+  "standin_detection": {
+    "detected_identical_cross_block_renders": [],
+    "detected_static_solid_blocks": [],
+    "standins_detected": false,
+    "standin_audit_passed": true
+  },
+  "oaas_sidebar_audit": {
+    "found_nav_labels": [
+      "Trends",
+      "My Channel",
+      "Library",
+      "Motion Graphics",
+      "Messages",
+      "Settings"
+    ],
+    "banned_nav_entries_detected": [],
+    "found_fixture_buttons": [],
+    "oaas_sidebar_locked": true,
+    "production_fixtures_clean": true
+  },
+  "legacy_route_parity": {
+    "clips_route_preserved": true,
+    "tools_route_preserved": true,
+    "motion_route_active": true,
+    "parity_audit_passed": true
+  },
+  "negative_controls": {
+    "corrupt_mp4_rejected": true,
+    "network_leak_quarantine_triggered": true,
+    "wrong_sha_detected": true
+  }
+}

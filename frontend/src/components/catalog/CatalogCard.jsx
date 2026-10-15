@@ -281,7 +281,7 @@ export default function CatalogCard({
           >
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Chip
-                label="INVENTORY ONLY"
+                label="TEMPLATE"
                 size="small"
                 sx={{
                   height: 18,

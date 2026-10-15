@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-mechanical",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-mechanical",
+  "source_sha256": "098589405f547834c5359d5c94a2f1dfed06c0780f23962e54c3e3577cea9c1f",
+  "output_html_sha256": "200680c2b8eb8cb36f5356dc6240283f2ba1de769d8a8e314ba32443b9809536",
+  "duration": 15,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "transitions-3d",
+  "type": "hyperframes:block",
+  "title": "3D Transitions",
+  "description": "Showcase of 3D perspective flip and rotate transitions",
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 11,
+  "files": [
+    {
+      "path": "transitions-3d.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "lib/gsap_offline.js",
+      "type": "hyperframes:library"
+    }
+  ],
+  "preview": {
+    "video": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/transitions-3d.mp4",
+    "poster": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/transitions-3d.png"
+  }
+}

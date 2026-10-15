@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-destruction",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-destruction",
+  "source_sha256": "d5cd1cdd3a1e087bbbc8f0b4e4a47b45170e612845b637453119ce95cd1cf3d9",
+  "output_html_sha256": "2b57964550aac16364f79c0827b3258af5a0e6776414c951f6dd18f41c73d521",
+  "duration": 14,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

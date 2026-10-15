@@ -256,19 +256,6 @@ export default function Distribution() {
         title="Distribution & Scheduling"
         subtitle="Review approved renders, optimize SEO metadata, and dispatch queued multi-platform releases."
         accentColor="#0ea5e9"
-        actions={
-          <Stack direction="row" spacing={1}>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={handleWorkerTick}
-              startIcon={<IconRotate2 size={16} />}
-              sx={{ borderRadius: "20px" }}
-            >
-              Trigger Worker Tick
-            </Button>
-          </Stack>
-        }
       />
 
       <Box sx={{ flex: 1, overflow: "auto", px: { xs: 2, md: 3 }, py: 2.5 }}>
