@@ -1,7 +1,7 @@
 {
   "wave": 18,
   "agent": "agent-4",
-  "timestamp": "2026-10-15T14:56:33.350079+00:00",
+  "timestamp": "2026-10-15T15:33:52.407260+00:00",
   "overall_status": "PASS",
   "wave18_ported_audit": [
     {
@@ -105,9 +105,9 @@
     {
       "slug": "aurora",
       "exists": true,
-      "has_gsap_timeline": false,
+      "has_gsap_timeline": true,
       "requires_webgpu": true,
-      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+      "audit_finding": "TIMELINE_OPERABLE"
     },
     {
       "slug": "data-chart",
@@ -119,16 +119,16 @@
     {
       "slug": "flowing-gradient",
       "exists": true,
-      "has_gsap_timeline": false,
+      "has_gsap_timeline": true,
       "requires_webgpu": true,
-      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+      "audit_finding": "TIMELINE_OPERABLE"
     },
     {
       "slug": "holographic",
       "exists": true,
-      "has_gsap_timeline": false,
+      "has_gsap_timeline": true,
       "requires_webgpu": true,
-      "audit_finding": "WEBGPU_SHADER_DEPENDENT"
+      "audit_finding": "TIMELINE_OPERABLE"
     },
     {
       "slug": "instagram-follow",

@@ -80,7 +80,7 @@ def test_owner_observed_baseline_10_adversarial_audit():
         content = html_file.read_text(encoding="utf-8")
         assert len(content) > 100, f"HTML file for {slug} is too small"
 
-        has_timeline = "__timelines" in content or "gsap" in content
+        has_timeline = ("__timelines" in content or "gsap" in content) and "data-no-timeline" not in content
         has_webgpu = "webgpu" in content.lower() or "data-requires-webgpu" in content
 
         if has_timeline:
