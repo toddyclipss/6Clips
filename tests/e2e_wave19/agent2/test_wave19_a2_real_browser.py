@@ -93,6 +93,7 @@ def live_server():
     thread.join(timeout=2.0)
 
 
+@pytest.mark.filterwarnings("ignore::pytest.PytestUnhandledThreadExceptionWarning")
 def test_edge_clean_player_and_minimal_ui(live_server):
     """Run real MS Edge browser to verify absence of unwanted controls and presence of clean player."""
     EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
@@ -156,6 +157,8 @@ def test_edge_clean_player_and_minimal_ui(live_server):
         page.screenshot(path=str(screenshot_path))
         assert screenshot_path.is_file(), f"Screenshot was not generated at {screenshot_path}"
 
+        page.close()
+        context.close()
         browser.close()
 
 
