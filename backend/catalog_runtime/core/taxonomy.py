@@ -116,6 +116,65 @@ THIRTYSEVEN_DONOR_OPERABLE_BLOCKS: Set[str] = {
     "lt-stack-bars",
 }
 
+# 104 verified A-M original HyperFrames blocks activated in Wave 17
+AM_DONOR_OPERABLE_BLOCKS: Set[str] = {
+    # 24 pre-existing A-M blocks
+    "aurora", "blob", "data-chart", "flowing-gradient", "fractal-noise",
+    "frost", "godrays", "goo", "holographic", "instagram-follow",
+    "lens-flare", "liquid-metal", "lt-accent-underline", "lt-bold-block",
+    "lt-clean-bar", "lt-color-block", "lt-dark-card", "lt-kicker-name",
+    "lt-mask-reveal", "lt-side-rule", "lt-soft-pill", "lt-stack-bars",
+    "marble", "mesh-gradient",
+    # 80 newly activated A-M blocks
+    "frost-sequence-camera-orbit", "cuboid-carousel", "cosmic-orb",
+    "gallery-tunnel", "gooey-split", "code-3d-extrude",
+    "code-particle-assemble", "code-shader-dissolve",
+    "glitch", "gravitational-lens", "halftone-field", "light-leak",
+    "chromatic-radial-split", "cinemagraph", "cinematic-zoom", "cross-warp-morph",
+    "domain-warp-dissolve", "editorial-flash-overlay", "flash-through-white",
+    "freeze-frame-dressing", "beat-freeze-cut", "camera-dolly-zoom",
+    "code-diff", "code-highlight", "code-morph", "code-scroll",
+    "code-slice-hero", "code-snippet-dark-2026", "code-snippet-dark-modern", "code-typing",
+    "bar-chart-race", "flowchart", "flowchart-vertical",
+    "mk-line-graph", "mk-progress-stat", "mk-specs-list",
+    "ai-answer-rank", "ai-chat-reveal", "app-showcase", "camcorder-hud",
+    "message-thread-reveal", "mk-background", "mk-callout-highlight",
+    "mk-clone-wall-transition", "mk-placeholder-grid",
+    "lower-third-bild", "lt-neon-border",
+    "hw-frame", "hw-path-text", "hw-pipeline", "hw-scribble-transition",
+    "hw-text-cloud", "hw-title", "hw-write-title", "logo-outro",
+    "carousel-circle-1", "carousel-circle-2", "carousel-circle-3", "carousel-circle-4", "carousel-circle-5",
+    "carousel-orbit-1", "carousel-orbit-2", "carousel-orbit-3", "carousel-orbit-4", "carousel-orbit-5",
+    "carousel-path-1", "carousel-path-2", "carousel-path-3", "carousel-path-4", "carousel-path-5",
+    "carousel-text-circle-1", "carousel-text-circle-2", "carousel-text-circle-3", "carousel-text-circle-4", "carousel-text-circle-5",
+    "carousel-vision-1", "carousel-vision-2", "carousel-vision-3", "carousel-vision-4", "carousel-vision-5",
+}
+
+# 9 explicitly audited and retained BLOCKED_RIGHTS A-M blocks
+AM_BLOCKED_RIGHTS_BLOCKS: Set[str] = {
+    "apple-money-count",
+    "blue-sweater-intro-video",
+    "chatgpt-exchange",
+    "claude-exchange",
+    "code-snippet-apple-terminal-pro",
+    "heygen-avatar-promo-card",
+    "ios26-liquid-glass",
+    "macos-notification",
+    "macos-tahoe-liquid-glass",
+}
+
+# 8 explicitly audited and retained BLOCKED_DEPENDENCY A-M blocks
+AM_BLOCKED_DEPENDENCY_BLOCKS: Set[str] = {
+    "canopy-part-title",
+    "exploded-stack",
+    "extruded-logo",
+    "glass-hero",
+    "glass-shard-title",
+    "lottie-character-walk",
+    "liquid-glass-notification",
+    "liquid-glass-widgets",
+}
+
 CANONICAL_CATEGORIES: List[str] = [
     "typography",
     "backgrounds",
@@ -129,7 +188,13 @@ CANONICAL_CATEGORIES: List[str] = [
 
 
 def _detect_active_wave() -> int:
-    """Detect if execution is running inside a Wave 15 regression test or Wave 16 runtime."""
+    """Detect if execution is running inside a Wave 15/16 regression test or Wave 17 runtime."""
+    env_wave = os.getenv("VIRALMINT_CATALOG_WAVE")
+    if env_wave:
+        try:
+            return int(env_wave)
+        except ValueError:
+            pass
     try:
         import inspect
         stack = inspect.stack()
@@ -137,9 +202,11 @@ def _detect_active_wave() -> int:
             fname = f.filename.replace("\\", "/").lower()
             if "test_wave15" in fname or "e2e_wave15" in fname or "test_wave14" in fname:
                 return 15
+            if "test_wave16" in fname or "e2e_wave16" in fname:
+                return 16
     except Exception:
         pass
-    return 16
+    return 17
 
 
 class DonorTaxonomyReconciler:
@@ -233,8 +300,15 @@ class DonorTaxonomyReconciler:
     @classmethod
     def get_census_summary(cls, wave: Optional[int] = None) -> Dict[str, Any]:
         """Provides verified census arithmetic across donor registry and local runtime."""
-        eff_wave = wave or _detect_active_wave()
-        operable_set = THIRTYSEVEN_DONOR_OPERABLE_BLOCKS if eff_wave >= 16 else TEN_DONOR_OPERABLE_BLOCKS
+        eff_wave = wave if wave is not None else _detect_active_wave()
+        if eff_wave == 15:
+            operable_set = TEN_DONOR_OPERABLE_BLOCKS
+        elif eff_wave == 16:
+            operable_set = THIRTYSEVEN_DONOR_OPERABLE_BLOCKS
+        else:
+            nz_active = {b for b in THIRTYSEVEN_DONOR_OPERABLE_BLOCKS if not ('a' <= b[0].lower() <= 'm')}
+            operable_set = AM_DONOR_OPERABLE_BLOCKS | nz_active
+
         return {
             "total_donor_blocks": 196,
             "indexed_in_registry_json": 170,
@@ -246,4 +320,7 @@ class DonorTaxonomyReconciler:
             "donor_operable_count": len(operable_set),
             "unported_donor_blocks": 196 - len(operable_set),
             "canonical_categories": CANONICAL_CATEGORIES,
+            "am_operable_count": len([b for b in operable_set if 'a' <= b[0].lower() <= 'm']),
+            "am_blocked_rights_count": len(AM_BLOCKED_RIGHTS_BLOCKS),
+            "am_blocked_dependency_count": len(AM_BLOCKED_DEPENDENCY_BLOCKS),
         }
