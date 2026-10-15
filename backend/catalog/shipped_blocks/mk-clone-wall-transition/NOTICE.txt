@@ -1,0 +1,4 @@
+Block ID: mk-clone-wall-transition
+Original donor path: registry/blocks/mk-clone-wall-transition
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

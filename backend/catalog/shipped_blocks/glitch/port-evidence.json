@@ -1,0 +1,20 @@
+{
+  "slug": "glitch",
+  "source_slug": "glitch",
+  "source_html_sha256": "f8101d1a5b71aa0ce4eb44444ee95e6ad0d7d16eb8b38b5ac81422a01fc5240b",
+  "output_html_sha256": "1e366c80a926425d5b847b69dc591c67bd2d70a4147b683e6fab55fc5954e836",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

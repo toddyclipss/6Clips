@@ -1,0 +1,24 @@
+{
+  "slug": "code-particle-assemble",
+  "source_slug": "code-particle-assemble",
+  "source_html_sha256": "6a698b191e6f929b88ebb9a645e0e2ab254221f8080b6ad7ebb8f1bf5d1413df",
+  "output_html_sha256": "89c2496439e0e548b7cf2df0dea1c9b3b59e82c20d3f816334b3b5b840e18375",
+  "uses_three": true,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 10,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "particles",
+    "gpu",
+    "webgl",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

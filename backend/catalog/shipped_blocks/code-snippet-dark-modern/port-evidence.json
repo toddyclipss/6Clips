@@ -1,0 +1,22 @@
+{
+  "slug": "code-snippet-dark-modern",
+  "source_slug": "code-snippet-dark-modern",
+  "source_html_sha256": "ff75ef10ef76930ab359cbf6b9518b5073b552ca276355e3baae5e7f65d4b1b8",
+  "output_html_sha256": "4e1a57bacedc1ad0fc095b1f5d74c6d96bd19bff30f34cc23da91fc8e3982521",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 11,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "developer",
+    "showcase",
+    "vscode"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

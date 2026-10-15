@@ -1,0 +1,21 @@
+{
+  "slug": "flowchart",
+  "source_slug": "flowchart",
+  "source_html_sha256": "c5432d04f4f720de031377a35fbf07f1c2cbee72b04b40f7b79b0e26f5fd63bc",
+  "output_html_sha256": "527c0e85a454cd681cd1546cca29a9881b00a33fe2519e55e849e86082aabc9e",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 12,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "diagram",
+    "flowchart",
+    "interactive"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "freeze-frame-dressing",
+  "source_slug": "freeze-frame-dressing",
+  "source_html_sha256": "8175acc1768cf941b9b6b5694aa10f11216823f43a57c74c4c9bcf9a581ec87a",
+  "output_html_sha256": "395396245c74801c140510d036d38b833466fce40242080d00a2bbe35b78e5fd",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "freeze-frame",
+    "cutout",
+    "scrapbook",
+    "paper",
+    "social",
+    "overlay",
+    "media-treatment-overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

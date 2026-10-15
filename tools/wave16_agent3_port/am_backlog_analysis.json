@@ -1,0 +1,2604 @@
+{
+  "ai-answer-rank": {
+    "slug": "ai-answer-rank",
+    "title": "AI Answer Rank",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 9,
+    "dimensions": {
+      "width": 1080,
+      "height": 1080
+    },
+    "tags": [
+      "mock-ui",
+      "ai",
+      "chat",
+      "ranking",
+      "list",
+      "marketing",
+      "ad-template",
+      "square"
+    ]
+  },
+  "ai-chat-reveal": {
+    "slug": "ai-chat-reveal",
+    "title": "AI Chat Reveal",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 19.3333,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "mock-ui",
+      "ai",
+      "chat",
+      "vertical",
+      "ad-template"
+    ]
+  },
+  "app-showcase": {
+    "slug": "app-showcase",
+    "title": "App Showcase",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5.5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "showcase",
+      "app",
+      "3d"
+    ]
+  },
+  "apple-money-count": {
+    "slug": "apple-money-count",
+    "title": "Apple Money Count",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "BLOCKED_RIGHTS",
+    "blocked_reason": "Proprietary Apple trademark/assets",
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "showcase",
+      "finance",
+      "kinetic",
+      "youtube",
+      "sfx"
+    ]
+  },
+  "bar-chart-race": {
+    "slug": "bar-chart-race",
+    "title": "Bar Chart Race",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data",
+      "chart",
+      "statistics",
+      "ranking"
+    ]
+  },
+  "beat-freeze-cut": {
+    "slug": "beat-freeze-cut",
+    "title": "Beat Freeze Cut",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=block"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "music",
+      "beat-driven",
+      "freeze-frame"
+    ]
+  },
+  "blue-sweater-intro-video": {
+    "slug": "blue-sweater-intro-video",
+    "title": "Blue Sweater Intro Video",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "showcase",
+      "ai",
+      "creator",
+      "sfx"
+    ]
+  },
+  "camcorder-hud": {
+    "slug": "camcorder-hud",
+    "title": "Camcorder HUD",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "camcorder",
+      "camera",
+      "recording",
+      "hud",
+      "overlay",
+      "creator",
+      "media-treatment-overlay"
+    ]
+  },
+  "camera-dolly-zoom": {
+    "slug": "camera-dolly-zoom",
+    "title": "Dolly Zoom (Vertigo Shot)",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "camera",
+      "depth",
+      "3d",
+      "cinematic"
+    ]
+  },
+  "canopy-part-title": {
+    "slug": "canopy-part-title",
+    "title": "Canopy Part Title",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Gelasio:wght@500;600&display=swap"
+    ],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "title-card",
+      "leaves",
+      "organic",
+      "depth-of-field",
+      "two-headlines",
+      "sweep"
+    ]
+  },
+  "carousel-circle-1": {
+    "slug": "carousel-circle-1",
+    "title": "Circle Carousel 1",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-circle-2": {
+    "slug": "carousel-circle-2",
+    "title": "Circle Carousel 2",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-circle-3": {
+    "slug": "carousel-circle-3",
+    "title": "Circle Carousel 3",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-circle-4": {
+    "slug": "carousel-circle-4",
+    "title": "Circle Carousel 4",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-circle-5": {
+    "slug": "carousel-circle-5",
+    "title": "Circle Carousel 5",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-orbit-1": {
+    "slug": "carousel-orbit-1",
+    "title": "Orbit Carousel 1",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ]
+  },
+  "carousel-orbit-2": {
+    "slug": "carousel-orbit-2",
+    "title": "Orbit Carousel 2",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ]
+  },
+  "carousel-orbit-3": {
+    "slug": "carousel-orbit-3",
+    "title": "Orbit Carousel 3",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ]
+  },
+  "carousel-orbit-4": {
+    "slug": "carousel-orbit-4",
+    "title": "Orbit Carousel 4",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ]
+  },
+  "carousel-orbit-5": {
+    "slug": "carousel-orbit-5",
+    "title": "Orbit Carousel 5",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "orbit",
+      "3d"
+    ]
+  },
+  "carousel-path-1": {
+    "slug": "carousel-path-1",
+    "title": "Path Carousel 1",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ]
+  },
+  "carousel-path-2": {
+    "slug": "carousel-path-2",
+    "title": "Path Carousel 2",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ]
+  },
+  "carousel-path-3": {
+    "slug": "carousel-path-3",
+    "title": "Path Carousel 3",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ]
+  },
+  "carousel-path-4": {
+    "slug": "carousel-path-4",
+    "title": "Path Carousel 4",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ]
+  },
+  "carousel-path-5": {
+    "slug": "carousel-path-5",
+    "title": "Path Carousel 5",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "path"
+    ]
+  },
+  "carousel-text-circle-1": {
+    "slug": "carousel-text-circle-1",
+    "title": "Text + Circle Carousel 1",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-text-circle-2": {
+    "slug": "carousel-text-circle-2",
+    "title": "Text + Circle Carousel 2",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-text-circle-3": {
+    "slug": "carousel-text-circle-3",
+    "title": "Text + Circle Carousel 3",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-text-circle-4": {
+    "slug": "carousel-text-circle-4",
+    "title": "Text + Circle Carousel 4",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-text-circle-5": {
+    "slug": "carousel-text-circle-5",
+    "title": "Text + Circle Carousel 5",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "title-card",
+      "kinetic-text",
+      "images",
+      "showcase",
+      "circle"
+    ]
+  },
+  "carousel-vision-1": {
+    "slug": "carousel-vision-1",
+    "title": "Vision Carousel 1",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ]
+  },
+  "carousel-vision-2": {
+    "slug": "carousel-vision-2",
+    "title": "Vision Carousel 2",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ]
+  },
+  "carousel-vision-3": {
+    "slug": "carousel-vision-3",
+    "title": "Vision Carousel 3",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ]
+  },
+  "carousel-vision-4": {
+    "slug": "carousel-vision-4",
+    "title": "Vision Carousel 4",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ]
+  },
+  "carousel-vision-5": {
+    "slug": "carousel-vision-5",
+    "title": "Vision Carousel 5",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "carousel",
+      "gallery",
+      "images",
+      "showcase",
+      "vision",
+      "3d"
+    ]
+  },
+  "chatgpt-exchange": {
+    "slug": "chatgpt-exchange",
+    "title": "ChatGPT Exchange",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "BLOCKED_RIGHTS",
+    "blocked_reason": "Proprietary AI brand trademark (chatgpt-exchange)",
+    "duration": 14.9,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "mock-ui",
+      "ai",
+      "chat",
+      "vertical",
+      "ad-template"
+    ]
+  },
+  "chromatic-radial-split": {
+    "slug": "chromatic-radial-split",
+    "title": "Chromatic Radial Split",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "cinemagraph": {
+    "slug": "cinemagraph",
+    "title": "Cinemagraph",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "effect",
+      "cinemagraph",
+      "photo",
+      "loop",
+      "freeze-frame"
+    ]
+  },
+  "cinematic-zoom": {
+    "slug": "cinematic-zoom",
+    "title": "Cinematic Zoom",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "claude-exchange": {
+    "slug": "claude-exchange",
+    "title": "Claude Exchange",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "BLOCKED_RIGHTS",
+    "blocked_reason": "Proprietary AI brand trademark (claude-exchange)",
+    "duration": 21.4,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "mock-ui",
+      "ai",
+      "chat",
+      "vertical",
+      "ad-template"
+    ]
+  },
+  "code-3d-extrude": {
+    "slug": "code-3d-extrude",
+    "title": "Code 3D Extrude",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "3d",
+      "webgl",
+      "developer"
+    ]
+  },
+  "code-diff": {
+    "slug": "code-diff",
+    "title": "Code Diff",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "diff",
+      "developer"
+    ]
+  },
+  "code-highlight": {
+    "slug": "code-highlight",
+    "title": "Code Highlight Sweep",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "highlight",
+      "developer"
+    ]
+  },
+  "code-morph": {
+    "slug": "code-morph",
+    "title": "Code Morph",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "morph",
+      "refactor",
+      "developer"
+    ]
+  },
+  "code-particle-assemble": {
+    "slug": "code-particle-assemble",
+    "title": "Code Particle Assemble",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "particles",
+      "gpu",
+      "webgl",
+      "developer"
+    ]
+  },
+  "code-scroll": {
+    "slug": "code-scroll",
+    "title": "Code Scroll To Line",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "scroll",
+      "developer"
+    ]
+  },
+  "code-shader-dissolve": {
+    "slug": "code-shader-dissolve",
+    "title": "Code Shader Dissolve",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "shader",
+      "webgl",
+      "developer"
+    ]
+  },
+  "code-slice-hero": {
+    "slug": "code-slice-hero",
+    "title": "Code Slice Hero",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "assets/gsap-3.14.2.min.js",
+      "shadows.js",
+      "surface.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "transition",
+      "typography",
+      "tiles",
+      "flip",
+      "webgl2",
+      "shadows",
+      "two-headlines"
+    ]
+  },
+  "code-snippet-apple-terminal-pro": {
+    "slug": "code-snippet-apple-terminal-pro",
+    "title": "Code Snippet - Apple Terminal Pro",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "developer",
+      "showcase",
+      "terminal",
+      "apple",
+      "apple-terminal"
+    ]
+  },
+  "code-snippet-dark-2026": {
+    "slug": "code-snippet-dark-2026",
+    "title": "Code Snippet - Dark 2026",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 11,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "developer",
+      "showcase",
+      "vscode"
+    ]
+  },
+  "code-snippet-dark-modern": {
+    "slug": "code-snippet-dark-modern",
+    "title": "Code Snippet - Dark Modern",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 11,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "developer",
+      "showcase",
+      "vscode"
+    ]
+  },
+  "code-typing": {
+    "slug": "code-typing",
+    "title": "Code Typing",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "code",
+      "code-animation",
+      "typing",
+      "developer"
+    ]
+  },
+  "cosmic-orb": {
+    "slug": "cosmic-orb",
+    "title": "Cosmic Orb",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "webgl",
+      "shader",
+      "background",
+      "showcase",
+      "3d"
+    ]
+  },
+  "cross-warp-morph": {
+    "slug": "cross-warp-morph",
+    "title": "Cross Warp Morph",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "cuboid-carousel": {
+    "slug": "cuboid-carousel",
+    "title": "Cuboid Carousel",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "assets/gsap-3.14.2.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+    ],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6.67,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "carousel",
+      "cards",
+      "travelling-wave",
+      "pbr",
+      "shadows",
+      "room-environment"
+    ]
+  },
+  "domain-warp-dissolve": {
+    "slug": "domain-warp-dissolve",
+    "title": "Domain Warp Dissolve",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "editorial-flash-overlay": {
+    "slug": "editorial-flash-overlay",
+    "title": "Editorial Flash Overlay",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "flash",
+      "editorial",
+      "social",
+      "light",
+      "transition",
+      "overlay",
+      "media-treatment-overlay"
+    ]
+  },
+  "exploded-stack": {
+    "slug": "exploded-stack",
+    "title": "Exploded Stack",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-object",
+      "three-js",
+      "webgl",
+      "isometric",
+      "exploded-view",
+      "layers",
+      "diagram",
+      "architecture"
+    ]
+  },
+  "extruded-logo": {
+    "slug": "extruded-logo",
+    "title": "Extruded Logo",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-object",
+      "three-js",
+      "webgl",
+      "logo",
+      "text",
+      "extruded",
+      "title-card"
+    ]
+  },
+  "flash-through-white": {
+    "slug": "flash-through-white",
+    "title": "Flash Through White",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "flowchart": {
+    "slug": "flowchart",
+    "title": "Flowchart",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=block"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "diagram",
+      "flowchart",
+      "interactive"
+    ]
+  },
+  "flowchart-vertical": {
+    "slug": "flowchart-vertical",
+    "title": "Flowchart Vertical",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=block"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1440,
+      "height": 2560
+    },
+    "tags": [
+      "diagram",
+      "flowchart",
+      "interactive",
+      "portrait"
+    ]
+  },
+  "freeze-frame-dressing": {
+    "slug": "freeze-frame-dressing",
+    "title": "Freeze-Frame Dressing",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "freeze-frame",
+      "cutout",
+      "scrapbook",
+      "paper",
+      "social",
+      "overlay",
+      "media-treatment-overlay"
+    ]
+  },
+  "frost-sequence-camera-orbit": {
+    "slug": "frost-sequence-camera-orbit",
+    "title": "Frost Sequence Camera Orbit",
+    "tech": [
+      "gsap",
+      "webgpu/shader"
+    ],
+    "scripts": [
+      "assets/gsap-3.14.2.min.js",
+      "assets/frost.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 22.5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "ice",
+      "frost",
+      "camera-orbit",
+      "logo",
+      "particles",
+      "webgpu",
+      "two-headlines"
+    ]
+  },
+  "gallery-tunnel": {
+    "slug": "gallery-tunnel",
+    "title": "Gallery Tunnel",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "webgl",
+      "3d",
+      "background",
+      "showcase",
+      "depth",
+      "loop"
+    ]
+  },
+  "glass-hero": {
+    "slug": "glass-hero",
+    "title": "Glass Hero",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-object",
+      "three-js",
+      "webgl",
+      "glass",
+      "refraction",
+      "hero",
+      "title-card"
+    ]
+  },
+  "glass-shard-title": {
+    "slug": "glass-shard-title",
+    "title": "Glass Shard Title",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/dist/d3-delaunay.min.js",
+      "assets/glass-main.js"
+    ],
+    "links": [
+      "assets/ferndale_studio_01_1k.hdr",
+      "assets/matcap-1.png"
+    ],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 12.16,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "3d-motion",
+      "title-card",
+      "glass",
+      "voronoi",
+      "shards",
+      "fog",
+      "hdr"
+    ]
+  },
+  "glitch": {
+    "slug": "glitch",
+    "title": "Glitch",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "gooey-split": {
+    "slug": "gooey-split",
+    "title": "Gooey Split",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/CustomEase.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4.7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "effect",
+      "gooey",
+      "metaball",
+      "motion-blur",
+      "morph",
+      "logo",
+      "icon"
+    ]
+  },
+  "gravitational-lens": {
+    "slug": "gravitational-lens",
+    "title": "Gravitational Lens",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "halftone-field": {
+    "slug": "halftone-field",
+    "title": "Halftone Field",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "webgl",
+      "shader",
+      "background",
+      "texture",
+      "halftone"
+    ]
+  },
+  "heygen-avatar-promo-card": {
+    "slug": "heygen-avatar-promo-card",
+    "title": "HeyGen Avatar Promo Card",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "BLOCKED_RIGHTS",
+    "blocked_reason": "Proprietary third-party brand/avatar asset (HeyGen trademark)",
+    "duration": 10,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "avatar",
+      "promotion",
+      "vertical"
+    ]
+  },
+  "hw-frame": {
+    "slug": "hw-frame",
+    "title": "Sketched Frame",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "frame",
+      "media"
+    ]
+  },
+  "hw-path-text": {
+    "slug": "hw-path-text",
+    "title": "Text Along a Path",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "typography",
+      "path",
+      "overlay"
+    ]
+  },
+  "hw-pipeline": {
+    "slug": "hw-pipeline",
+    "title": "Hand-Drawn Flowchart",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "diagram",
+      "data-viz",
+      "overlay"
+    ]
+  },
+  "hw-scribble-transition": {
+    "slug": "hw-scribble-transition",
+    "title": "Scribble Transition",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 2.2,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "transition",
+      "wipe"
+    ]
+  },
+  "hw-text-cloud": {
+    "slug": "hw-text-cloud",
+    "title": "Speech Bubble",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "speech-bubble",
+      "overlay"
+    ]
+  },
+  "hw-title": {
+    "slug": "hw-title",
+    "title": "Handwritten Title",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "typography",
+      "title-card",
+      "overlay"
+    ]
+  },
+  "hw-write-title": {
+    "slug": "hw-write-title",
+    "title": "Handwritten Write-On Title",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "assets/baked/caveat-pen.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "handwritten",
+      "typography",
+      "title-card",
+      "write-on",
+      "overlay"
+    ]
+  },
+  "ios26-liquid-glass": {
+    "slug": "ios26-liquid-glass",
+    "title": "iOS 26 Liquid Glass Home Screen",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/DRACOLoader.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "BLOCKED_RIGHTS",
+    "blocked_reason": "Proprietary Apple trademark/assets",
+    "duration": 15,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "liquid-glass-html-in-canvas",
+      "webgpu",
+      "3d",
+      "iphone",
+      "ios26",
+      "notifications",
+      "gltf",
+      "html-in-canvas"
+    ]
+  },
+  "light-leak": {
+    "slug": "light-leak",
+    "title": "Light Leak",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "shader"
+    ]
+  },
+  "liquid-glass-notification": {
+    "slug": "liquid-glass-notification",
+    "title": "Liquid Glass Notification",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
+      "lib/liquid-glass.iife.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "html-in-canvas",
+      "liquid-glass-html-in-canvas",
+      "webgpu"
+    ]
+  },
+  "liquid-glass-widgets": {
+    "slug": "liquid-glass-widgets",
+    "title": "Liquid Glass Widgets",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
+      "lib/liquid-glass.iife.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "html-in-canvas",
+      "liquid-glass-html-in-canvas",
+      "webgpu"
+    ]
+  },
+  "logo-outro": {
+    "slug": "logo-outro",
+    "title": "Logo Outro",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=block"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 6,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "branding",
+      "outro",
+      "logo"
+    ]
+  },
+  "lottie-character-walk": {
+    "slug": "lottie-character-walk",
+    "title": "Lottie Character Walk",
+    "tech": [
+      "gsap",
+      "lottie"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie_light.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    ],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 7.5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "character",
+      "character-animation",
+      "mascot",
+      "walk-cycle",
+      "gesture",
+      "pointing",
+      "puppet",
+      "lottie",
+      "explainer"
+    ]
+  },
+  "lower-third-bild": {
+    "slug": "lower-third-bild",
+    "title": "Lower Third \u2014 BILD Style",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "broadcast",
+      "lower-third",
+      "news",
+      "overlay"
+    ]
+  },
+  "lt-neon-border": {
+    "slug": "lt-neon-border",
+    "title": "Neon Border",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 4.8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "lower-third",
+      "glow",
+      "loop",
+      "video-primitive"
+    ]
+  },
+  "macos-notification": {
+    "slug": "macos-notification",
+    "title": "macOS Notification",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=block"
+    ],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 5,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "social",
+      "overlay",
+      "notification"
+    ]
+  },
+  "macos-tahoe-liquid-glass": {
+    "slug": "macos-tahoe-liquid-glass",
+    "title": "macOS Tahoe Liquid Glass Desktop",
+    "tech": [
+      "three.js",
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/DRACOLoader.js",
+      "https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "BLOCKED_RIGHTS",
+    "blocked_reason": "Proprietary Apple trademark/assets",
+    "duration": 15,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "html-in-canvas",
+      "3d",
+      "macos",
+      "tahoe",
+      "gltf"
+    ]
+  },
+  "message-thread-reveal": {
+    "slug": "message-thread-reveal",
+    "title": "Message Thread Reveal",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": true,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 25.7667,
+    "dimensions": {
+      "width": 1080,
+      "height": 1920
+    },
+    "tags": [
+      "showcase",
+      "mock-ui",
+      "chat",
+      "vertical",
+      "ad-template"
+    ]
+  },
+  "mk-background": {
+    "slug": "mk-background",
+    "title": "Minimal Gradient Background",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 10,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "background",
+      "gradient",
+      "minimal",
+      "professional",
+      "presentation"
+    ]
+  },
+  "mk-callout-highlight": {
+    "slug": "mk-callout-highlight",
+    "title": "Word-Sweep Highlight",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "typography",
+      "karaoke",
+      "captions",
+      "minimal"
+    ]
+  },
+  "mk-clone-wall-transition": {
+    "slug": "mk-clone-wall-transition",
+    "title": "Text Clone Wall Transition",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 2.4,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "transition",
+      "typography",
+      "wipe"
+    ]
+  },
+  "mk-line-graph": {
+    "slug": "mk-line-graph",
+    "title": "Minimal Line Graph",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data-viz",
+      "chart",
+      "graph",
+      "minimal"
+    ]
+  },
+  "mk-placeholder-grid": {
+    "slug": "mk-placeholder-grid",
+    "title": "Rounded Media Grid",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "placeholder",
+      "media",
+      "grid",
+      "minimal"
+    ]
+  },
+  "mk-progress-stat": {
+    "slug": "mk-progress-stat",
+    "title": "Count-Up Stat Card",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 7,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data-viz",
+      "stat",
+      "minimal"
+    ]
+  },
+  "mk-specs-list": {
+    "slug": "mk-specs-list",
+    "title": "Specs Checklist",
+    "tech": [
+      "gsap"
+    ],
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+    ],
+    "links": [],
+    "has_assets": false,
+    "rights_status": "VERIFIED_PERMISSIVE",
+    "blocked_reason": null,
+    "duration": 8,
+    "dimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "tags": [
+      "data-viz",
+      "list",
+      "minimal",
+      "professional"
+    ]
+  }
+}

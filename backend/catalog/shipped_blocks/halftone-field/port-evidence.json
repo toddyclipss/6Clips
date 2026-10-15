@@ -1,0 +1,23 @@
+{
+  "slug": "halftone-field",
+  "source_slug": "halftone-field",
+  "source_html_sha256": "4b8e56dd736713db5a01274fb4fa5f96cf8ae7f4b3375772abf92d574efd3a08",
+  "output_html_sha256": "26d8dae3b079a71eef18ffca621141c6f919308abf4bd8917ff2615e7b7af752",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 10,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "webgl",
+    "shader",
+    "background",
+    "texture",
+    "halftone"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

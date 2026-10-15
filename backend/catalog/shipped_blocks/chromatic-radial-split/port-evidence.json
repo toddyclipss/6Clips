@@ -1,0 +1,20 @@
+{
+  "slug": "chromatic-radial-split",
+  "source_slug": "chromatic-radial-split",
+  "source_html_sha256": "d328cc320397eb2109c6a2dab030bbcca7556c06c197416c288995aeef1e4d99",
+  "output_html_sha256": "fac505edbc61adcb8855f482987a9b58edab113a27e6a19ba3c6d971a802bc60",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

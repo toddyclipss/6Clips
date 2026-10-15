@@ -1,0 +1,23 @@
+{
+  "slug": "cosmic-orb",
+  "source_slug": "cosmic-orb",
+  "source_html_sha256": "96238d6d1df537c362736e92a97f0e348a7b416827d468cdeef89226ad76b28e",
+  "output_html_sha256": "6a09169f44eb65b5eec9de7636bf8a0bcba3989a0f145ea423428d3f275fcf26",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 10,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "webgl",
+    "shader",
+    "background",
+    "showcase",
+    "3d"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

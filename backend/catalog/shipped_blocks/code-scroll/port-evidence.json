@@ -1,0 +1,22 @@
+{
+  "slug": "code-scroll",
+  "source_slug": "code-scroll",
+  "source_html_sha256": "29291ee000f1bef15e999314d112ea153f21da2618083852323b617fee9cae86",
+  "output_html_sha256": "71ae6994efb72e9bc6b8f10f4e3bd8f93ec24ba0733ac8908fa8be9882beb1b6",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "scroll",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

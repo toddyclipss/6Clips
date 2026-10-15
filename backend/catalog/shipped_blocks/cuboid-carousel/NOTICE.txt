@@ -1,0 +1,4 @@
+Block ID: cuboid-carousel
+Original donor path: registry/blocks/cuboid-carousel
+Vendored libraries: GSAP 3.14.2 (Standard License Notice), Three.js (MIT License)
+Zero egress: verified airgapped, zero external network requests.

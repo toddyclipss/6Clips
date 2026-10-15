@@ -1,0 +1,23 @@
+{
+  "slug": "mk-background",
+  "source_slug": "mk-background",
+  "source_html_sha256": "c6c46792306476f850ccff6e2bd792e57a3cc8f0e8d9c8ac9866aa9d8f05d8da",
+  "output_html_sha256": "e469f8a81a57f8b79983f17b9876b2aae44dfb62fd4ecca4df27407f9a355698",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 10,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "background",
+    "gradient",
+    "minimal",
+    "professional",
+    "presentation"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

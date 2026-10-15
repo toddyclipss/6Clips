@@ -1,0 +1,21 @@
+{
+  "slug": "hw-scribble-transition",
+  "source_slug": "hw-scribble-transition",
+  "source_html_sha256": "45d56e7039969d9d8336bdf8f0709a0a60638b33c27cdfad9923cb4d93bcf566",
+  "output_html_sha256": "759379eda8cc3c2d7ef8c9c3c389e6e5e66c625cb07a0ad4c1b25d9ae9062dc5",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 2.2,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "transition",
+    "wipe"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

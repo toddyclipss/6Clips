@@ -1,0 +1,22 @@
+{
+  "slug": "mk-placeholder-grid",
+  "source_slug": "mk-placeholder-grid",
+  "source_html_sha256": "52dfb41de653657021a21a1039fcdd0a0a9439acc10b850dc767cef02b7dedc9",
+  "output_html_sha256": "94a7f5f36122c393e5709f5e826861c6c775f9521a995c996dac7e10585ce18c",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "placeholder",
+    "media",
+    "grid",
+    "minimal"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

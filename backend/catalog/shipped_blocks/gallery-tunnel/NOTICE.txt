@@ -1,0 +1,4 @@
+Block ID: gallery-tunnel
+Original donor path: registry/blocks/gallery-tunnel
+Vendored libraries: GSAP 3.14.2 (Standard License Notice), Three.js (MIT License)
+Zero egress: verified airgapped, zero external network requests.

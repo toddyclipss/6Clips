@@ -1,0 +1,4 @@
+Block ID: carousel-circle-2
+Original donor path: registry/blocks/carousel-circle-2
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

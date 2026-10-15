@@ -1,0 +1,4 @@
+Block ID: glitch
+Original donor path: registry/blocks/glitch
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.
