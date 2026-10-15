@@ -154,16 +154,33 @@ class OutcomeDeliveryEngine:
             sm.transition_to(OutcomeJobState.PLANNED, reason=rationale)
             cls._save_job(job_record)
 
-            # Step 3: PRODUCE (Project creation & timeline structure)
-            sm.transition_to(OutcomeJobState.PRODUCING, reason="Constructing versioned project and timeline")
+            # Step 3: PRODUCE (Project creation/lookup & timeline structure)
+            sm.transition_to(OutcomeJobState.PRODUCING, reason="Constructing or retrieving versioned project and timeline")
             cls._save_job(job_record)
 
             title_candidate = f"OAAS - {request.user_intent[:40]}"
-            project = await ProjectService.create_project(
-                name=title_candidate,
-                aspect_ratio=aspect,
-                user_id=request.user_id,
-            )
+            if request.project_id:
+                project = await ProjectService.get_project(request.project_id)
+                logger.info("Reusing existing project %s at revision %d", project.id, project.revision)
+            else:
+                project = await ProjectService.create_project(
+                    name=title_candidate,
+                    aspect_ratio=aspect,
+                    user_id=request.user_id,
+                )
+
+            # Apply any requested native editor actions directly on the canonical project
+            if request.editor_actions:
+                from backend.oaas_motion_actions.adapter import OAASMotionActionAdapter
+                batch_res = await OAASMotionActionAdapter.batch_execute(
+                    project_id=project.id,
+                    commands=request.editor_actions,
+                    author="main_agent",
+                    user_id=request.user_id,
+                )
+                project = await ProjectService.get_project(project.id)
+                logger.info("Applied %d native editor actions; project %s at revision %d", len(batch_res), project.id, project.revision)
+
             job_record.project_id = project.id
             job_record.revision_id = project.revision
             cls._save_job(job_record)
