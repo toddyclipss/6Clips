@@ -1,0 +1,31 @@
+capability_id,legacy_name,legacy_route,native_command,native_ui_location,cas_target,parity_status,description
+tool_captions,Captions,/api/tools/captions,CAPTIONS_EDIT,Refine Inspector: Tools Tab,tracks.clips.captions,NATIVE_END_TO_END,Generates styled synchronized animated captions.
+tool_reframe,Smart Reframe,/api/tools/reframe,REFRAME,Refine Inspector: Tools Tab,tracks.clips.transform,NATIVE_END_TO_END,Reframes video into 9:16 vertical or 16:9 horizontal with focal tracking.
+tool_audio_enhance,Audio Enhance,/api/tools/audio-enhance,AUDIO_ENHANCE,Refine Inspector: Tools Tab,tracks.clips.audio_filters,NATIVE_PARTIAL,"Applies dynamic range compression, de-essing, and voice normalization."
+tool_watermark,Watermark,/api/tools/watermark,WATERMARK,Refine Inspector: Tools Tab,tracks.overlays,NATIVE_END_TO_END,Places brand watermark logo at configurable anchor and opacity.
+tool_merge_clips,Merge Clips,/api/tools/merge-clips,MERGE_CLIPS,Timeline Workspace,tracks.clips,NATIVE_END_TO_END,Sequences multiple video clips into a single continuous timeline track.
+tool_remove_silence,Remove Silence,/api/tools/remove-silence,REMOVE_SILENCE,Refine Inspector: Tools Tab,tracks.clips,NATIVE_END_TO_END,Detects dead air and ripple-deletes silent segments.
+tool_translate,Translate Audio,/api/tools/translate,TRANSLATE,Refine Inspector: Tools Tab,tracks.clips.captions,NATIVE_PARTIAL,Translates speech and synchronizes multilingual subtitle tracks.
+tool_hook_analysis,Hook Analysis,/api/tools/hook-analysis,HOOK_ANALYSIS,Refine Inspector: Tools Tab,metadata.hook_score,NATIVE_END_TO_END,Evaluates first 3 seconds retention score and pacing recommendations.
+tool_enhance_prompt,Enhance Prompt,/api/tools/enhance-prompt,ENHANCE_PROMPT,Main Agent Goal Bar,metadata.prompt,NATIVE_END_TO_END,Expands short creative intent into full motion composition specification.
+tool_voiceover,Voiceover Generator,/api/tools/voiceover,VOICEOVER,Refine Inspector: Tools Tab,tracks.audio,NATIVE_PARTIAL,Generates neural voiceover using local Edge-TTS.
+tool_transform,Transform & Rotate,/api/tools/transform,TRANSFORM,Refine Inspector: Tools Tab,tracks.clips.transform,NATIVE_END_TO_END,"Applies scaling, rotation, and anchor positioning to visual layers."
+tool_music_visualizer,Music Visualizer,/api/tools/music-visualizer,MUSIC_VISUALIZER,Refine Inspector: Tools Tab,tracks.blocks,NATIVE_END_TO_END,Binds audio waveform frequencies to reactive HyperFrames motion layers.
+tool_gif,GIF Generator,/api/tools/gif,GIF,Refine Inspector: Tools Tab,output.gif,NATIVE_END_TO_END,Exports animated GIF loop from marked in/out region.
+tool_speed,Speed Presets,/api/tools/speed,SPEED,Refine Inspector: Tools Tab,tracks.clips.playback_rate,NATIVE_END_TO_END,Adjusts clip playback velocity (0.25x to 4x) with pitch preservation.
+tool_metadata,Metadata Editor,/api/tools/metadata,METADATA,Refine Inspector: Properties Tab,metadata,NATIVE_END_TO_END,"Inspects and edits video container title, tags, and SEO tags."
+tool_auto_chapters,Auto Chapters,/api/tools/auto-chapters,AUTO_CHAPTERS,Refine Inspector: Tools Tab,metadata.chapters,NATIVE_END_TO_END,Generates topic chapters from transcript boundary shifts.
+tool_trim,Video Trim,/api/tools/trim,TRIM,Timeline Workspace,tracks.clips.trim,NATIVE_END_TO_END,Natively trims head and tail of selected media clip.
+tool_subtitles,Subtitles Burner,/api/tools/subtitles,SUBTITLES,Refine Inspector: Tools Tab,tracks.clips.captions,NATIVE_END_TO_END,Burns stylized subtitle blocks onto exported frames.
+tool_compress,Video Compressor,/api/tools/compress,COMPRESS,Refine Inspector: Tools Tab,output.compression,NATIVE_PARTIAL,Transcodes output media targeting specific bitrate or file size budget.
+tool_crop,Crop Aspect,/api/tools/crop,CROP,Refine Inspector: Tools Tab,tracks.clips.crop,NATIVE_END_TO_END,"Crops video rectangle to 9:16, 16:9, 1:1, or 4:5 ratios."
+tool_auto_zoom,Auto Dynamic Zoom,/api/tools/auto-zoom,AUTO_ZOOM,Refine Inspector: Tools Tab,tracks.clips.keyframes,NATIVE_END_TO_END,Injects progressive zoom keyframes on emphasis words or scene cuts.
+clip_source_upload,Source Video Upload,/api/projects/assets,GRAPHIC_INSERT,Motion Resources Panel: Assets,assets,NATIVE_END_TO_END,Uploads and binds raw long-form footage into project CAS.
+clip_filmstrip_bench,Filmstrip Range Bench,/api/projects/bench_ranges,RANGE_SELECT,Timeline Workspace: Range Bench,bench_ranges,NATIVE_END_TO_END,Selects in/out points directly on canvas filmstrip without separate player.
+clip_virality_scoreboard,Virality Scoreboard,/api/scoring/score,VIRALITY_SCORE,Refine Inspector: Properties Tab,metadata.virality,NATIVE_END_TO_END,Displays 5-factor virality score breakdown on candidate clips.
+clip_auto_cut_dialog,Auto-Cut Silence,/api/tools/remove-silence,REMOVE_SILENCE,Timeline Workspace: Auto-Cut,tracks.clips,NATIVE_END_TO_END,Extracts candidate clips automatically based on speech pause detection.
+clip_split_playhead,Split at Playhead,/api/projects/split,SPLIT,Timeline Workspace: Split Action,tracks.clips,NATIVE_END_TO_END,Splits clip at current transport playhead time into two contiguous clips.
+clip_slip_editing,Slip Edit Operation,/api/projects/slip,SLIP,Timeline Workspace: Slip Action,tracks.clips.source_offset,NATIVE_END_TO_END,Nudges source media window while preserving timeline duration and position.
+clip_ripple_delete,Ripple Delete,/api/projects/ripple_delete,RIPPLE_DELETE,Timeline Workspace: Ripple Delete,tracks.clips,NATIVE_END_TO_END,Removes clip and shifts all subsequent clips left to prevent timeline gaps.
+clip_caption_override,Caption Word Override,/api/projects/caption_override,CAPTIONS_EDIT,Refine Inspector: Variables & Captions,tracks.clips.caption_overrides,NATIVE_END_TO_END,Persists word corrections across transcriptions.
+clip_batch_approval_publish,Batch Approval & Publish,/api/distribution/approval/sign,EXPORT,Motion Header: Export & Approval,output.approved_revisions,NATIVE_END_TO_END,Cryptographically signs approved revision for background distribution handoff.
