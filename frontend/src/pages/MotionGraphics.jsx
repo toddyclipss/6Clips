@@ -989,6 +989,31 @@ export default function MotionGraphics() {
 
     if (kind === "catalog" || item.type === "block") {
       const blockData = item.data || item.item || item
+      const category = (blockData?.category || item?.category || "").toLowerCase()
+      const tags = Array.isArray(blockData?.tags) ? blockData.tags.map((t) => String(t).toLowerCase()) : []
+      const isCaptionBlock = category === "text-captions" || category === "captions" || category === "typography" || tags.includes("captions") || tags.includes("caption-style") || tags.includes("typography")
+      const isAudioBlock = category === "audio" || category === "music" || tags.includes("audio") || tags.includes("music")
+      const isTransitionBlock = category === "transitions" || tags.includes("transition") || tags.includes("transitions")
+
+      const destType = (targetTrack?.type || "video").toLowerCase()
+
+      if (isCaptionBlock && destType !== "captions" && destType !== "text") {
+        showSnackbar(`Incompatible track: Caption block "${blockData.title || blockData.name}" can only be dropped on a text/captions track.`, "error")
+        return
+      }
+      if (isAudioBlock && destType !== "audio") {
+        showSnackbar(`Incompatible track: Audio block "${blockData.title || blockData.name}" can only be dropped on an audio track.`, "error")
+        return
+      }
+      if (isTransitionBlock && destType !== "transition" && destType !== "transitions") {
+        showSnackbar(`Incompatible track: Transition block "${blockData.title || blockData.name}" can only be dropped on a transition track.`, "error")
+        return
+      }
+      if (!isCaptionBlock && !isAudioBlock && !isTransitionBlock && (destType === "audio" || destType === "captions" || destType === "text")) {
+        showSnackbar(`Incompatible track: Visual block "${blockData.title || blockData.name}" can only be dropped on a media/video track.`, "error")
+        return
+      }
+
       const defaultVars = {}
       if (Array.isArray(blockData.variables)) {
         blockData.variables.forEach((v) => {
@@ -1094,6 +1119,15 @@ export default function MotionGraphics() {
       }
     }
   }
+
+  const handleDropRejected = useCallback(({ item, track, reason }) => {
+    const title = item?.title || item?.name || item?.id || "Item"
+    if (reason === "TRACK_LOCKED") {
+      showSnackbar(`Track "${track?.name || track?.id || 'target'}" is locked.`, "error")
+    } else {
+      showSnackbar(`Incompatible track: Cannot drop "${title}" onto ${track?.type || 'target'} track "${track?.name || track?.id || ''}".`, "error")
+    }
+  }, [showSnackbar])
 
   // 5d. Resolve and consume /motion?asset={key} deep links
   useEffect(() => {
@@ -2258,6 +2292,7 @@ export default function MotionGraphics() {
               onRenameTrack={handleRenameTrack}
               onMoveClip={handleMoveClip}
               onDropExternalClip={handleDropExternalClip}
+              onDropRejected={handleDropRejected}
             />
           )}
         </Box>

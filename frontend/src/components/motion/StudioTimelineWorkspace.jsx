@@ -875,6 +875,7 @@ export default function StudioTimelineWorkspace({
   onRenameTrack,
   onMoveClip,
   onDropExternalClip,
+  onDropRejected = null,
 }) {
   const containerRef = useRef(null)
   const [zoom, setZoom] = useState(1.0)
@@ -958,17 +959,57 @@ export default function StudioTimelineWorkspace({
       }
     }
     const destType = (track.type || "video").toLowerCase()
-    const rawMediaType = (item?.media_type || item?.mediaType || item?.kind || "").toLowerCase()
-    const isAudio = rawMediaType === "audio" || item?.data?.media === "audio" || (item?.data?.ext && ["mp3", "wav", "aac", "ogg"].includes(item.data.ext.toLowerCase())) || item?.data?.source === "music"
-    const isBlock = rawMediaType === "block" || item?.kind === "catalog" || item?.type === "block"
-    const isCaption = rawMediaType === "caption" || rawMediaType === "captions"
+    const blockData = item?.data || item?.item || item
+    const rawMediaType = (item?.media_type || item?.mediaType || item?.kind || blockData?.type || "").toLowerCase()
 
-    if (isAudio && destType !== "audio") return false
-    if (!isAudio && destType === "audio") return false
-    if (isCaption && destType !== "captions") return false
-    if (!isCaption && destType === "captions") return false
-    if (isBlock && !["graphics", "components", "video"].includes(destType)) return false
-    return true
+    const category = (blockData?.category || item?.category || "").toLowerCase()
+    const tags = Array.isArray(blockData?.tags) ? blockData.tags.map((t) => String(t).toLowerCase()) : []
+    const isBlock = rawMediaType === "block" || item?.kind === "catalog" || item?.type === "block"
+
+    // Captions / Typography
+    const isCaptionBlock = isBlock && (
+      category === "text-captions" ||
+      category === "captions" ||
+      category === "typography" ||
+      tags.includes("captions") ||
+      tags.includes("caption-style") ||
+      tags.includes("typography")
+    )
+    const isCaption = rawMediaType === "caption" || rawMediaType === "captions" || isCaptionBlock
+
+    // Audio
+    const isAudioBlock = isBlock && (category === "audio" || category === "music" || tags.includes("audio") || tags.includes("music"))
+    const isAudio = rawMediaType === "audio" || isAudioBlock || item?.data?.media === "audio" ||
+      (item?.data?.ext && ["mp3", "wav", "aac", "ogg"].includes(item.data.ext.toLowerCase())) ||
+      item?.data?.source === "music"
+
+    // Transitions
+    const isTransition = (isBlock && (category === "transitions" || tags.includes("transition") || tags.includes("transitions"))) || rawMediaType === "transition"
+
+    if (isAudio) {
+      return destType === "audio"
+    }
+    if (destType === "audio") {
+      return isAudio
+    }
+    if (isCaption) {
+      return destType === "captions" || destType === "text"
+    }
+    if (destType === "captions" || destType === "text") {
+      return isCaption
+    }
+    if (isTransition) {
+      return destType === "transition" || destType === "transitions"
+    }
+    if (destType === "transition" || destType === "transitions") {
+      return isTransition
+    }
+
+    if (isBlock) {
+      return ["video", "media", "graphics", "components"].includes(destType)
+    }
+
+    return ["video", "media", "image"].includes(destType)
   }, [])
 
   // Window listeners for Escape cancellation and dragend cleanup
@@ -1564,7 +1605,16 @@ export default function StudioTimelineWorkspace({
 
                         if (!droppedItem) return
                         if (track.locked) return
-                        if (!isExternalItemValidForTrack(droppedItem, track)) return
+                        if (!isExternalItemValidForTrack(droppedItem, track)) {
+                          if (onDropRejected) {
+                            onDropRejected({
+                              item: droppedItem,
+                              track,
+                              reason: track.locked ? "TRACK_LOCKED" : "INCOMPATIBLE_TRACK",
+                            })
+                          }
+                          return
+                        }
 
                         if (onDropExternalClip) {
                           onDropExternalClip({

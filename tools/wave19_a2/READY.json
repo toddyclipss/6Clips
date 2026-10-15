@@ -1,0 +1,84 @@
+{
+  "agent": "wave19_agent2",
+  "ready": true,
+  "role": "Minimal UI, One Clean Player, Native Drag/Drop",
+  "git_base_sha": "5103a363b9b8514a486ffe83ef289f47eb67a782",
+  "git_tip_sha": "a41096b07c8bbdb20519f87b75805e4ccf44bd52",
+  "git_branch": "wave19/02-clean-native-motion-ui",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave19-02-motion-ui",
+  "clean_player": {
+    "stage_goal_composer_removed": true,
+    "stage_prompt_input_removed": true,
+    "stage_run_goal_button_removed": true,
+    "preset_chips_removed": true,
+    "neutral_stage_testid": "studio-stage-no-project",
+    "canonical_player_testid": "motion-player",
+    "single_player": true,
+    "single_timeline": true
+  },
+  "clean_resource_panel": {
+    "remote_video_ingest_button_removed": true,
+    "download_video_stream_bar_removed": true,
+    "resolution_chooser_1080p_720p_removed": true,
+    "catalog_card_preview_eye_button_removed": true,
+    "catalog_card_insert_button_removed": true,
+    "catalog_card_ask_ai_button_removed": true
+  },
+  "native_drag_and_drop": {
+    "pointer_and_keyboard_accessible": true,
+    "strict_track_compatibility_enforced": true,
+    "captions_to_text_track_only": true,
+    "media_to_video_track_only": true,
+    "audio_to_audio_track_only": true,
+    "transitions_to_transition_boundaries_only": true,
+    "pre_drop_visual_feedback": true,
+    "rejection_before_cas_mutation": true,
+    "rejection_feedback_snackbars": true
+  },
+  "ephemeral_stage_hover_previews": {
+    "enabled_on_catalog_hover_and_focus": true,
+    "reverts_on_mouse_leave_and_blur": true,
+    "prevents_project_dirtying": true,
+    "restores_prior_playhead_and_playback": true,
+    "debounced_timer_guarded": true
+  },
+  "catalog_categorization": {
+    "census": 196,
+    "upstream_gallery_groups": [
+      "scenes-demos",
+      "transitions",
+      "carousels",
+      "text-captions",
+      "blocks",
+      "surfaces",
+      "code",
+      "data-charts",
+      "3d-motion",
+      "motion-effects"
+    ],
+    "unclassified_honest_label": "Unclassified in source",
+    "retired_6clips_originals_excluded": [
+      "creator-hud",
+      "glitch-transition"
+    ]
+  },
+  "refine_right_inspector": {
+    "tabs": [
+      "properties",
+      "variables",
+      "tools"
+    ],
+    "native_context_sensitive_tools": true,
+    "legacy_tools_crosswalk_count": 21
+  },
+  "tests": {
+    "unit_test_suite": "tests/test_wave19_a2_minimal_ui_dragdrop.py",
+    "unit_tests_passed": 8,
+    "unit_tests_failed": 0,
+    "e2e_browser_suite": "tests/e2e_wave19/agent2/test_wave19_a2_real_browser.py",
+    "e2e_browser": "Microsoft Edge",
+    "e2e_passed": 1,
+    "e2e_failed": 0,
+    "screenshot_evidence": "tools/wave19_a2/screenshot_clean_player_edge.png"
+  }
+}
