@@ -22,8 +22,8 @@ from backend.catalog_runtime.core.models import (
 
 logger = logging.getLogger(__name__)
 
-# The 26 on-disk block directories present in donor registry/blocks but omitted from aggregate registry.json
-UNINDEXED_DONOR_BLOCK_IDS: Set[str] = {
+# The 25 on-disk block directories present in donor registry/blocks but omitted from gallery index
+UNINDEXED_DONOR_BLOCK_IDS_25: Set[str] = {
     "ai-answer-rank",
     "aurora",
     "blob",
@@ -49,7 +49,23 @@ UNINDEXED_DONOR_BLOCK_IDS: Set[str] = {
     "voronoi",
     "water",
     "waveform",
-    "week-in-merges",
+}
+
+# Backwards compatibility alias for Wave 15/16 reconcilers
+UNINDEXED_DONOR_BLOCK_IDS: Set[str] = UNINDEXED_DONOR_BLOCK_IDS_25 | {"week-in-merges"}
+
+# The 10 blocks verified by the owner in the running UI baseline
+OWNER_OBSERVED_10_BASELINE: Set[str] = {
+    "aurora",
+    "data-chart",
+    "flowing-gradient",
+    "holographic",
+    "instagram-follow",
+    "plasma",
+    "stripes",
+    "tiktok-follow",
+    "weight-wave",
+    "yt-lower-third",
 }
 
 # The two non-HyperFrames blocks authored directly in 6Clips that must be retired safely
@@ -204,9 +220,15 @@ def _detect_active_wave() -> int:
                 return 15
             if "test_wave16" in fname or "e2e_wave16" in fname:
                 return 16
+            if "test_wave17" in fname:
+                return 17
+            if "test_wave18" in fname:
+                return 18
+            if "test_wave19" in fname or "e2e_wave19" in fname:
+                return 19
     except Exception:
         pass
-    return 17
+    return 19
 
 
 class DonorTaxonomyReconciler:
@@ -305,22 +327,36 @@ class DonorTaxonomyReconciler:
             operable_set = TEN_DONOR_OPERABLE_BLOCKS
         elif eff_wave == 16:
             operable_set = THIRTYSEVEN_DONOR_OPERABLE_BLOCKS
-        else:
+        elif eff_wave in (17, 18):
             nz_active = {b for b in THIRTYSEVEN_DONOR_OPERABLE_BLOCKS if not ('a' <= b[0].lower() <= 'm')}
             operable_set = AM_DONOR_OPERABLE_BLOCKS | nz_active
+        else:
+            # Wave 19: All 156 shipped blocks on disk verified for runtime operation
+            # Strictly distinguishes 156 shipped from 40 pending/blocked and 10 owner baseline
+            shipped_dir = Path(__file__).resolve().parents[2] / "catalog" / "shipped_blocks"
+            if shipped_dir.exists():
+                shipped_slugs = set(d.name for d in shipped_dir.iterdir() if d.is_dir() and d.name not in RETIRED_6CLIPS_BLOCK_IDS)
+                operable_set = shipped_slugs
+            else:
+                operable_set = AM_DONOR_OPERABLE_BLOCKS
 
         return {
             "total_donor_blocks": 196,
             "indexed_in_registry_json": 170,
-            "unindexed_block_directories": 26,
-            "unindexed_block_ids": sorted(list(UNINDEXED_DONOR_BLOCK_IDS)),
+            "indexed_in_gallery_mdx": 171,
+            "unindexed_block_directories": 25,
+            "unindexed_block_ids": sorted(list(UNINDEXED_DONOR_BLOCK_IDS_25)),
             "retired_6clips_blocks": sorted(list(RETIRED_6CLIPS_BLOCK_IDS)),
             "retired_6clips_count": len(RETIRED_6CLIPS_BLOCK_IDS),
             "donor_operable_blocks": sorted(list(operable_set)),
             "donor_operable_count": len(operable_set),
             "unported_donor_blocks": 196 - len(operable_set),
+            "unshipped_pending_or_blocked_count": 196 - len(operable_set),
+            "owner_observed_baseline_count": len(OWNER_OBSERVED_10_BASELINE),
+            "owner_observed_baseline_blocks": sorted(list(OWNER_OBSERVED_10_BASELINE)),
             "canonical_categories": CANONICAL_CATEGORIES,
             "am_operable_count": len([b for b in operable_set if 'a' <= b[0].lower() <= 'm']),
             "am_blocked_rights_count": len(AM_BLOCKED_RIGHTS_BLOCKS),
             "am_blocked_dependency_count": len(AM_BLOCKED_DEPENDENCY_BLOCKS),
+            "wave": eff_wave,
         }

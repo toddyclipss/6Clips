@@ -643,6 +643,17 @@
 
         // Render initial frame at t=0
         renderShader(cvs, shaderType, 0.0, vars);
+
+        // Wave 19: listen to hf-seek event and start autoplay for standalone preview
+        window.addEventListener("hf-seek", function(e) {
+          if (e.detail && typeof e.detail.time === "number") {
+            renderShader(cvs, shaderType, e.detail.time, vars);
+          }
+        });
+        if (!window.tl) window.tl = window.__timelines[blockKey];
+        try {
+          window.__timelines[blockKey].play();
+        } catch(e) {}
       })(canvases[i]);
     }
   }

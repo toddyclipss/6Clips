@@ -234,6 +234,8 @@
           };
           paint();
           window.__timelines["weight-wave"] = tl;
+          window.tl = tl;
+          tl.play();
 
           /* ── The trap, made loud ──────────────────────────────────────────
              A static font (or a failed load) renders every character at one

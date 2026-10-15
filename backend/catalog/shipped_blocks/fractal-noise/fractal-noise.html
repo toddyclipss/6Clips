@@ -38,13 +38,30 @@
           seek: function(t) {
             this.currentTime = Number(t) || 0;
             window.__shaderTime = this.currentTime;
+            var existing = (window.__timelines && window.__timelines['fractal-noise'] && window.__timelines['fractal-noise'] !== shaderTl) ? window.__timelines['fractal-noise'] : null;
+            if (existing && typeof existing.seek === 'function') {
+              existing.seek(this.currentTime);
+            }
             window.dispatchEvent(new CustomEvent('hf-seek', { detail: { time: this.currentTime } }));
           },
-          play: function() {},
-          pause: function() {}
+          play: function() {
+            var self = this;
+            if (self._raf) cancelAnimationFrame(self._raf);
+            var start = performance.now() - (self.currentTime * 1000);
+            function loop() {
+              var elapsed = (performance.now() - start) / 1000;
+              self.seek(elapsed % self.duration());
+              self._raf = requestAnimationFrame(loop);
+            }
+            self._raf = requestAnimationFrame(loop);
+          },
+          pause: function() {
+            if (this._raf) cancelAnimationFrame(this._raf);
+          }
         };
         window.__timelines['fractal-noise'] = shaderTl;
         if (!window.tl) window.tl = shaderTl;
+        shaderTl.play();
       })();
     </script>
         
