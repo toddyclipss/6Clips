@@ -3,7 +3,7 @@
   "total_inventoried": 196,
   "gallery_confirmed_count": 171,
   "fallback_mapped_count": 25,
-  "shipped_on_disk_count": 131,
+  "shipped_on_disk_count": 149,
   "trademark_items_count": 15,
   "retired_blocks_in_donor_inventory": 0,
   "entries": {
@@ -1611,7 +1611,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1671,7 +1671,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1707,7 +1707,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1767,7 +1767,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1815,7 +1815,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1863,7 +1863,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1875,7 +1875,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1887,7 +1887,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1899,7 +1899,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1923,7 +1923,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1935,7 +1935,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1947,7 +1947,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1959,7 +1959,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -1971,7 +1971,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -2007,7 +2007,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -2019,7 +2019,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -2127,7 +2127,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
@@ -2163,7 +2163,7 @@
       "license": "MIT",
       "is_trademark_sensitive": false,
       "trademark_notice_required": false,
-      "shipped_on_disk": false,
+      "shipped_on_disk": true,
       "requires_offline_adapter": true,
       "retired_6clips_block": false
     },
