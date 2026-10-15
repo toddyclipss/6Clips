@@ -3084,6 +3084,8 @@
         );
         window.__timelines = window.__timelines || {};
         window.__timelines["frost-sequence-rig"] = timeline;
+        window.__timelines["frost-sequence-camera-orbit"] = timeline;
+        window.tl = timeline;
         const activeTimeline = () => window.__timelines["frost-sequence-rig"] || timeline;
         function rigRevision() {
           const clean = (v) =>

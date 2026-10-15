@@ -1077,5 +1077,25 @@
         </script>
       </div>
     </template>
+  
+    <script>
+      (function() {
+        window.__timelines = window.__timelines || {};
+        if (typeof tl !== 'undefined') {
+          window.__timelines['code-snippet-dark-2026'] = tl;
+          window.tl = tl;
+        } else {
+          var sTl = {
+            seek: function(t) {},
+            play: function() {},
+            pause: function() {},
+            duration: function() { return 5.0; }
+          };
+          window.__timelines['code-snippet-dark-2026'] = sTl;
+          window.tl = sTl;
+        }
+      })();
+    </script>
+            
   </body>
 </html>

@@ -151,7 +151,9 @@
     for (const [key,id] of Object.entries(config.textBindings||{})) if(Object.hasOwn(vars,key)) {
       const el=document.getElementById(id);if(el)el.textContent=String(vars[key]).slice(0,160);
     }
-    window.__timelines=window.__timelines||{};window.__timelines[config.id]=timeline;
+    window.__timelines=window.__timelines||{};window.__timelines = window.__timelines || {};
+    window.__timelines[config.id]=timeline;
+    window.tl = timeline;
     window.__wave15Native={version:1,config,seek:t=>timeline.seek(t),play:()=>timeline.play(),pause:()=>timeline.pause(),stateAt};
     seek(0);
   }

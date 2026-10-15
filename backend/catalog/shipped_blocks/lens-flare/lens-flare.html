@@ -28,5 +28,25 @@
     </div>
     <script src="lib/shaders.iife.js"></script>
     <script src="lib/shader_fallback.js"></script>
+  
+    <script>
+      (function() {
+        window.__timelines = window.__timelines || {};
+        var shaderTl = {
+          currentTime: 0,
+          duration: function() { return 10.0; },
+          seek: function(t) {
+            this.currentTime = Number(t) || 0;
+            window.__shaderTime = this.currentTime;
+            window.dispatchEvent(new CustomEvent('hf-seek', { detail: { time: this.currentTime } }));
+          },
+          play: function() {},
+          pause: function() {}
+        };
+        window.__timelines['lens-flare'] = shaderTl;
+        if (!window.tl) window.tl = shaderTl;
+      })();
+    </script>
+        
   </body>
 </html>

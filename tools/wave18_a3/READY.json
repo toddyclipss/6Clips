@@ -1,0 +1,26 @@
+{
+  "status": "READY_FOR_INTEGRATION_REVIEW",
+  "agent": "Agent 3 / 5 \u2014 Original HyperFrames A\u2013M: Real Preview + Export Fidelity",
+  "branch": "wave18/03-hyperframes-am-real-preview",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave18-03-am-preview",
+  "base_sha": "d5ba68efa4757de09687cb6e1419575b1ce8f808",
+  "tip_sha": "d5ba68efa4757de09687cb6e1419575b1ce8f808",
+  "census": {
+    "total_am_donor_identities": 121,
+    "owner_observed_preview_baseline": 10,
+    "a_m_user_preview_verified": 100,
+    "a_m_export_verified": 100,
+    "blocked_rights_count": 9,
+    "blocked_dependency_count": 12,
+    "retired_legacy_substitutes": 2
+  },
+  "gates": {
+    "zero_synthetic_frames": true,
+    "zero_unvendored_cdn": true,
+    "airgapped_csp_enforced": true,
+    "temporal_dynamism_verified": true,
+    "ffprobe_media_decoded": true,
+    "project_cas_revision_persisted": true
+  },
+  "ready_timestamp": "2026-10-15T15:11:18Z"
+}
