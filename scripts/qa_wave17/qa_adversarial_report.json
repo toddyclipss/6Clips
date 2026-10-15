@@ -2,7 +2,7 @@
   "schema_version": 1,
   "wave": 17,
   "agent": "Agent 4 (N-Z HyperFrames Porting & Independent Anti-Fake QA)",
-  "timestamp": "2026-10-15T09:49:17.911029+00:00",
+  "timestamp": "2026-10-15T10:13:46.354507+00:00",
   "execution_mode": "BASELINE_QA",
   "candidate_path": null,
   "integrated_candidate_status": "PENDING",
@@ -346,8 +346,8 @@
         "4c43541fb9d364bdaaa5fe7d5a454837edbcb3a0c55a82bedfec06487084e4e1",
         "13a69d2054be1ee9c8115dd037eee90ec28bf0634113fc0cdfcf40bd8dc97d5f",
         "3e1ee616d46be9e472e79d81eebee5da257278287eab52e0a78b491481b25585",
-        "cb7a6ae9b13b8b532df6439ce55c5394e677ffd39928033cd64f92d7acd130f3",
-        "cb7a6ae9b13b8b532df6439ce55c5394e677ffd39928033cd64f92d7acd130f3"
+        "377c27be8c396b6cf5964194bf9637b08329fee937f69900e20117ae63e5822f",
+        "377c27be8c396b6cf5964194bf9637b08329fee937f69900e20117ae63e5822f"
       ]
     },
     {
