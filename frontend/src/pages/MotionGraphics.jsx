@@ -75,9 +75,16 @@ export default function MotionGraphics() {
   // Workspace exposure mode (Create / Review / Refine) — respect URL query on initial load
   const [workspaceMode, setWorkspaceMode] = useState(() => {
     const qp = new URLSearchParams(window.location.search)
-    const m = qp.get("mode")
-    if (m && ["create", "review", "refine"].includes(m.toLowerCase())) {
-      return m.toLowerCase()
+    const m = qp.get("mode")?.toLowerCase()
+    if (m && ["create", "review", "refine"].includes(m)) {
+      return m
+    }
+    if (m && ["clip", "tools", "code"].includes(m)) {
+      return "refine"
+    }
+    const t = qp.get("tab")?.toLowerCase()
+    if (t && ["clip", "tools", "code"].includes(t)) {
+      return "refine"
     }
     return "create"
   })
@@ -99,16 +106,34 @@ export default function MotionGraphics() {
   }, [productionBatch, renderedVideo])
 
   const activeReviewOutput = reviewOutputs[selectedOutputIndex] || reviewOutputs[0] || renderedVideo
-  const [activeContext, setActiveContext] = useState("hyperframes") // hyperframes | clip | tools | code
+  const [activeContext, setActiveContext] = useState(() => {
+    const qp = new URLSearchParams(window.location.search)
+    const m = qp.get("mode")?.toLowerCase()
+    if (m && ["clip", "tools", "code", "hyperframes"].includes(m)) {
+      return m
+    }
+    const t = qp.get("tab")?.toLowerCase()
+    if (t && ["clip", "tools", "code", "hyperframes"].includes(t)) {
+      return t
+    }
+    return "hyperframes"
+  }) // hyperframes | clip | tools | code
   const [leftNav, setLeftNav] = useState(() => {
     const qp = new URLSearchParams(window.location.search)
-    const m = qp.get("mode")
-    return m?.toLowerCase() === "refine" ? "layers" : "resources"
+    const tab = qp.get("tab")?.toLowerCase()
+    if (tab === "catalog") return "resources"
+    const m = qp.get("mode")?.toLowerCase()
+    if (m === "clip" || m === "tools") return "resources"
+    return m === "refine" ? "layers" : "resources"
   })
   const [rightNav, setRightNav] = useState("properties") // properties | variables
 
   // Pinned panels control
-  const [pinnedLeft, setPinnedLeft] = useState(true)
+  const [pinnedLeft, setPinnedLeft] = useState(() => {
+    const qp = new URLSearchParams(window.location.search)
+    if (qp.get("tab") === "catalog") return true
+    return true
+  })
   const [pinnedRight, setPinnedRight] = useState(true)
   const [expandedPreview, setExpandedPreview] = useState(false)
 
@@ -298,12 +323,23 @@ export default function MotionGraphics() {
     let cancelled = false
     const queryParams = new URLSearchParams(window.location.search)
     const requestedId = queryParams.get("projectId") || queryParams.get("project_id")
-    const requestedMode = queryParams.get("mode")
-    if (requestedMode && ["create", "review", "refine"].includes(requestedMode.toLowerCase())) {
-      setWorkspaceMode(requestedMode.toLowerCase())
-      if (requestedMode.toLowerCase() === "refine") {
+    const requestedMode = queryParams.get("mode")?.toLowerCase()
+    const requestedTab = queryParams.get("tab")?.toLowerCase()
+    if (requestedMode && ["create", "review", "refine"].includes(requestedMode)) {
+      setWorkspaceMode(requestedMode)
+      if (requestedMode === "refine") {
         setLeftNav("layers")
       }
+    } else if (requestedMode && ["clip", "tools", "code"].includes(requestedMode)) {
+      setWorkspaceMode("refine")
+      setActiveContext(requestedMode)
+      if (requestedMode === "clip" || requestedMode === "tools") {
+        setLeftNav("resources")
+      }
+    }
+    if (requestedTab === "catalog") {
+      setPinnedLeft(true)
+      setLeftNav("resources")
     }
 
     if (!requestedId) {

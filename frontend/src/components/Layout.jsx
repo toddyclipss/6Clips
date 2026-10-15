@@ -35,15 +35,10 @@ const COLLAPSED_WIDTH = 64
 
 const navItems = [
   { to: "/trends",       icon: <IconTrendingUp size={20} stroke={1.8} />,    label: "Trends" },
-  { to: "/channels",     icon: <IconBroadcast size={20} stroke={1.8} />,     label: "My Channels" },
-  { to: "/clips",        icon: <IconScissors size={20} stroke={1.8} />,      label: "Clip Studio" },
+  { to: "/channels",     icon: <IconBroadcast size={20} stroke={1.8} />,     label: "My Channel" },
   { to: "/videos",       icon: <IconFolder size={20} stroke={1.8} />,        label: "Library" },
-  { to: "/catalog",      icon: <IconLayoutGrid size={20} stroke={1.8} />,    label: "Catalog" },
   { to: "/motion",       icon: <IconMovie size={20} stroke={1.8} />,         label: "Motion Graphics" },
-  { to: "/distribution", icon: <IconSend size={20} stroke={1.8} />,          label: "Distribution" },
-  { to: "/analytics",    icon: <IconChartBar size={20} stroke={1.8} />,      label: "Analytics" },
-  { to: "/tools",        icon: <IconTool size={20} stroke={1.8} />,          label: "Tools" },
-  { to: "/messaging",    icon: <IconDeviceMobile size={20} stroke={1.8} />,  label: "Messaging" },
+  { to: "/messaging",    icon: <IconDeviceMobile size={20} stroke={1.8} />,  label: "Messages" },
   ...pluginNavItems.filter(i => (i.position || "top") === "top"),
 ]
 
@@ -116,6 +111,8 @@ export default function Layout() {
         to={to}
         end={to === "/"}
         selected={active}
+        aria-label={label}
+        data-testid={`nav-${label.toLowerCase().replace(/\s+/g, "-")}`}
         sx={{
           borderRadius: 2.5,
           mb: 0.5,

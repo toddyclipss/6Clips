@@ -21,6 +21,9 @@ import {
   IconEye,
   IconThumbUp,
   IconMessageDots,
+  IconSend,
+  IconSparkles,
+  IconInbox,
 } from "@tabler/icons-react"
 import http from "../api/http"
 import useAppStore from "../store/appStore"
@@ -668,6 +671,266 @@ function PlatformTab({ platform }) {
   )
 }
 
+/* ── Outcome Delivery Summary (Wave 17 OAAS Consolidation) ───────── */
+
+function OutcomeDeliverySummary({ onSwitchTab }) {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [receipts, setReceipts] = useState([])
+  const [distributionJobs, setDistributionJobs] = useState([])
+  const [providerStatus, setProviderStatus] = useState(null)
+  const showSnackbar = useAppStore((s) => s.showSnackbar)
+
+  const loadOutcomeData = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const [recRes, jobsRes, statRes] = await Promise.allSettled([
+        http.get("/api/analytics/receipts"),
+        http.get("/api/distribution/jobs"),
+        http.get("/api/analytics/status"),
+      ])
+
+      if (recRes.status === "fulfilled") {
+        setReceipts(recRes.value.data?.receipts || [])
+      }
+      if (jobsRes.status === "fulfilled") {
+        setDistributionJobs(jobsRes.value.data?.jobs || jobsRes.value.data || [])
+      }
+      if (statRes.status === "fulfilled") {
+        setProviderStatus(statRes.value.data)
+      }
+    } catch (e) {
+      setError(e.message || "Failed to load outcome data")
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadOutcomeData()
+  }, [loadOutcomeData])
+
+  const handleCancelJob = async (jobId) => {
+    try {
+      await http.post(`/api/distribution/jobs/${jobId}/cancel`)
+      showSnackbar(`Cancelled release job ${jobId}`, "info")
+      loadOutcomeData()
+    } catch (e) {
+      showSnackbar(`Cancel failed: ${e.response?.data?.detail || e.message}`, "error")
+    }
+  }
+
+  const isYtConnected = providerStatus?.youtube?.connected || false
+  const isTtConnected = providerStatus?.tiktok?.connected || false
+
+  return (
+    <Box data-testid="outcome-summary" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      {/* Top Banner / Truth Disclosure */}
+      <Alert severity="info" sx={{ borderRadius: "14px", border: "1px solid rgba(14, 165, 233, 0.25)" }}>
+        <strong>Outcome-As-A-Service (OAAS):</strong> Video distribution, multi-platform scheduling, and performance analytics are consolidated into automated background services. Platforms are <code>NOT_CONNECTED</code> by default; live publication outcomes appear only upon verified provider receipts.
+      </Alert>
+
+      {/* KPI / Metric Outcome Cards */}
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" }, gap: 2 }}>
+        <Paper variant="outlined" sx={{ p: 2, borderRadius: "14px", bgcolor: "#f8fafc" }}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box sx={{ width: 40, height: 40, borderRadius: "10px", bgcolor: "#ecfdf5", color: "#059669", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <IconCircleCheck size={22} stroke={1.8} />
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: "uppercase", fontSize: "0.7rem" }}>
+                Verified Published
+              </Typography>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: "text.primary" }}>
+                {receipts.length}
+              </Typography>
+            </Box>
+          </Stack>
+        </Paper>
+
+        <Paper variant="outlined" sx={{ p: 2, borderRadius: "14px", bgcolor: "#f8fafc" }}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box sx={{ width: 40, height: 40, borderRadius: "10px", bgcolor: "#f0f9ff", color: "#0284c7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <IconSend size={22} stroke={1.8} />
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: "uppercase", fontSize: "0.7rem" }}>
+                Scheduled Queue
+              </Typography>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: "text.primary" }}>
+                {distributionJobs.length}
+              </Typography>
+            </Box>
+          </Stack>
+        </Paper>
+
+        <Paper variant="outlined" sx={{ p: 2, borderRadius: "14px", bgcolor: "#f8fafc" }}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box sx={{ width: 40, height: 40, borderRadius: "10px", bgcolor: "#faf5ff", color: "#7c3aed", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <IconSparkles size={22} stroke={1.8} />
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: "uppercase", fontSize: "0.7rem" }}>
+                Connected Platforms
+              </Typography>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: "text.primary" }}>
+                {(isYtConnected ? 1 : 0) + (isTtConnected ? 1 : 0)} / 2
+              </Typography>
+            </Box>
+          </Stack>
+        </Paper>
+      </Box>
+
+      {/* Platform Connectors Section */}
+      <Paper variant="outlined" data-testid="platform-connectors" sx={{ p: 2.5, borderRadius: "16px" }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
+          Platform Credentials & Automation State
+        </Typography>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <Box sx={{ flex: 1, p: 2, borderRadius: "12px", border: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Avatar sx={{ bgcolor: "#fee2e2", color: "#ef4444" }}>
+                <IconBrandYoutube size={22} />
+              </Avatar>
+              <Box>
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>YouTube API</Typography>
+                <Chip
+                  size="small"
+                  label={isYtConnected ? "CONNECTED" : "NOT_CONNECTED"}
+                  color={isYtConnected ? "success" : "default"}
+                  sx={{ height: 18, fontSize: "0.65rem", fontWeight: 700, mt: 0.5 }}
+                />
+              </Box>
+            </Stack>
+            <Button
+              size="small"
+              variant={isYtConnected ? "outlined" : "contained"}
+              onClick={() => onSwitchTab(1)}
+              sx={{ borderRadius: "20px", fontSize: "0.75rem", textTransform: "none" }}
+            >
+              {isYtConnected ? "Manage Channel" : "Connect YouTube"}
+            </Button>
+          </Box>
+
+          <Box sx={{ flex: 1, p: 2, borderRadius: "12px", border: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Avatar sx={{ bgcolor: "#f1f5f9", color: "#0f172a" }}>
+                <IconBroadcast size={22} />
+              </Avatar>
+              <Box>
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>TikTok API</Typography>
+                <Chip
+                  size="small"
+                  label={isTtConnected ? "CONNECTED" : "NOT_CONNECTED"}
+                  color={isTtConnected ? "success" : "default"}
+                  sx={{ height: 18, fontSize: "0.65rem", fontWeight: 700, mt: 0.5 }}
+                />
+              </Box>
+            </Stack>
+            <Button
+              size="small"
+              variant={isTtConnected ? "outlined" : "contained"}
+              onClick={() => onSwitchTab(2)}
+              sx={{ borderRadius: "20px", fontSize: "0.75rem", textTransform: "none" }}
+            >
+              {isTtConnected ? "Manage Channel" : "Connect TikTok"}
+            </Button>
+          </Box>
+        </Stack>
+      </Paper>
+
+      {/* Published Outcomes (Provider-Verified) */}
+      <Paper variant="outlined" data-testid="published-outcomes" sx={{ p: 2.5, borderRadius: "16px" }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+              Published Outcomes (Provider-Verified)
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              Authentic post performance receipts recorded directly from platform endpoints
+            </Typography>
+          </Box>
+          <Tooltip title="Refresh receipts">
+            <IconButton size="small" onClick={loadOutcomeData}>
+              <IconRefresh size={18} />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+
+        {receipts.length === 0 ? (
+          <Box sx={{ p: 4, textAlign: "center", border: "1px dashed", borderColor: "divider", borderRadius: "12px" }}>
+            <IconInbox size={40} color="#94a3b8" style={{ marginBottom: 8 }} />
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: "text.primary" }}>
+              AWAITING_PUBLISHED_POST
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 480, mx: "auto", mt: 0.5, fontSize: "0.82rem" }}>
+              No confirmed publication receipts registered yet. When a video is dispatched through background distribution and verified by the external provider, real metrics will surface here.
+            </Typography>
+          </Box>
+        ) : (
+          <Stack spacing={1.5}>
+            {receipts.map((rec, i) => (
+              <Box key={rec.id || i} sx={{ p: 1.5, borderRadius: "10px", border: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    {rec.title || rec.video_id || `Post ${rec.id}`}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                    {rec.platform} · {rec.published_at ? timeAgo(rec.published_at) : "Verified Published"}
+                  </Typography>
+                </Box>
+                <Chip size="small" label="VERIFIED" color="success" sx={{ fontWeight: 700, height: 20 }} />
+              </Box>
+            ))}
+          </Stack>
+        )}
+      </Paper>
+
+      {/* Pending Approvals & Distribution Queue */}
+      <Paper variant="outlined" data-testid="distribution-queue" sx={{ p: 2.5, borderRadius: "16px" }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
+          Pending Approvals & Distribution Queue
+        </Typography>
+        <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 2 }}>
+          Automated releases awaiting scheduled publication window or background worker dispatch
+        </Typography>
+
+        {distributionJobs.length === 0 ? (
+          <Box sx={{ p: 3, textAlign: "center", border: "1px dashed", borderColor: "divider", borderRadius: "12px" }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "0.82rem" }}>
+              No pending releases in the queue. Rendered compositions in Motion Graphics can be dispatched for automated delivery.
+            </Typography>
+          </Box>
+        ) : (
+          <Stack spacing={1.5}>
+            {distributionJobs.map((job) => (
+              <Box key={job.job_id || job.id} sx={{ p: 1.5, borderRadius: "10px", border: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    {job.title || job.output_id || job.job_id}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                    Target: {(job.platforms || []).join(", ") || "Multi-platform"} · Status: {job.status}
+                  </Typography>
+                </Box>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Chip size="small" label={job.status || "QUEUED"} color="info" sx={{ fontWeight: 700, height: 20 }} />
+                  {job.status !== "published" && job.status !== "failed" && (
+                    <Button size="small" color="error" variant="text" onClick={() => handleCancelJob(job.job_id || job.id)}>
+                      Cancel
+                    </Button>
+                  )}
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
+        )}
+      </Paper>
+    </Box>
+  )
+}
+
 /* ── Main Page ─────────────────────────────────────────────────── */
 
 export default function Channels() {
@@ -687,10 +950,10 @@ export default function Channels() {
           <IconBroadcast size={26} stroke={1.8} style={{ color: "#a78bfa" }} />
           <Box>
             <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: -0.3 }}>
-              My Channels
+              My Channel
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Connect YouTube and TikTok channels to view content and analyze videos
+              Outcome delivery summary, verified published releases, and connected channels
             </Typography>
           </Box>
         </Stack>
@@ -699,6 +962,7 @@ export default function Channels() {
       {/* ── Tabs ── */}
       <Box sx={{ px: 3, flexShrink: 0, borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ minHeight: 42 }}>
+          <Tab icon={<IconSparkles size={18} stroke={1.8} />} iconPosition="start" label="Outcomes & Delivery" sx={{ textTransform: "none", minHeight: 42, fontSize: "0.9rem" }} />
           <Tab icon={<IconBrandYoutube size={18} stroke={1.8} />} iconPosition="start" label="YouTube" sx={{ textTransform: "none", minHeight: 42, fontSize: "0.9rem" }} />
           <Tab icon={<IconBroadcast size={18} stroke={1.8} />} iconPosition="start" label="TikTok" sx={{ textTransform: "none", minHeight: 42, fontSize: "0.9rem" }} />
         </Tabs>
@@ -706,8 +970,9 @@ export default function Channels() {
 
       {/* ── Scrollable content ── */}
       <Box sx={{ flex: 1, overflow: "auto", p: { xs: 2, md: 3 } }}>
-        {tab === 0 && <PlatformTab platform="youtube" />}
-        {tab === 1 && <PlatformTab platform="tiktok" />}
+        {tab === 0 && <OutcomeDeliverySummary onSwitchTab={(newTab) => setTab(newTab)} />}
+        {tab === 1 && <PlatformTab platform="youtube" />}
+        {tab === 2 && <PlatformTab platform="tiktok" />}
       </Box>
     </Box>
   )

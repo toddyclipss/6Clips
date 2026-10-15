@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react"
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom"
 import { Snackbar, Alert, Button, CircularProgress, Box } from "@mui/material"
 import ErrorBoundary from "./components/ErrorBoundary"
 import Layout from "./components/Layout"
@@ -83,6 +83,19 @@ function GlobalSnackbar() {
   )
 }
 
+function LegacyRedirect({ to, defaultQuery = {} }) {
+  const location = useLocation()
+  const currentParams = new URLSearchParams(location.search)
+  Object.entries(defaultQuery).forEach(([k, v]) => {
+    if (!currentParams.has(k)) {
+      currentParams.set(k, v)
+    }
+  })
+  const qs = currentParams.toString()
+  const target = qs ? `${to}?${qs}` : to
+  return <Navigate to={target} replace />
+}
+
 function MotionRouteWrapper() {
   const qp = new URLSearchParams(window.location.search)
   const review = qp.get("review")
@@ -117,12 +130,12 @@ export default function App() {
               <Route path="avatar" element={<Navigate to="/trends" replace />} />
               <Route path="create" element={<Navigate to="/trends" replace />} />
               <Route path="cron" element={<Navigate to="/" />} />
-              <Route path="clips" element={<ClipStudio />} />
+              <Route path="clips" element={<LegacyRedirect to="/motion" defaultQuery={{ mode: "clip" }} />} />
               <Route path="motion" element={<MotionRouteWrapper />} />
-              <Route path="distribution" element={<Distribution />} />
-              <Route path="analytics" element={<Analytics />} />
-              <Route path="catalog" element={<Catalog />} />
-              <Route path="tools" element={<Tools />} />
+              <Route path="distribution" element={<LegacyRedirect to="/channels" />} />
+              <Route path="analytics" element={<LegacyRedirect to="/channels" />} />
+              <Route path="catalog" element={<LegacyRedirect to="/motion" defaultQuery={{ tab: "catalog" }} />} />
+              <Route path="tools" element={<LegacyRedirect to="/motion" defaultQuery={{ mode: "tools" }} />} />
               <Route path="tools/captions" element={<ToolCaptions />} />
               <Route path="tools/reframe" element={<ToolReframe />} />
               <Route path="tools/audio-enhance" element={<ToolAudioEnhance />} />

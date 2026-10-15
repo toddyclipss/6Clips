@@ -311,7 +311,7 @@ export default function Catalog() {
                   Packaged on Disk
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 800, fontSize: "0.85rem", color: "#0284c7" }}>
-                  {counts?.PACKAGED_37 ?? 37} Shipped Cards
+                  {counts?.PACKAGED_37 ?? 37} Packaged Blocks
                 </Typography>
               </Box>
             </Stack>
