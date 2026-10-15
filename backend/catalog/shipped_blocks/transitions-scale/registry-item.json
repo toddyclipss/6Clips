@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "transitions-scale",
+  "type": "hyperframes:block",
+  "title": "Scale Transitions",
+  "description": "Showcase of scale and zoom transitions",
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 15,
+  "files": [
+    {
+      "path": "transitions-scale.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "lib/gsap_offline.js",
+      "type": "hyperframes:library"
+    }
+  ],
+  "preview": {
+    "video": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/transitions-scale.mp4",
+    "poster": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/transitions-scale.png"
+  }
+}

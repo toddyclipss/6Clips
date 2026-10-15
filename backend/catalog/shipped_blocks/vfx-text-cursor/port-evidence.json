@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "vfx-text-cursor",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/vfx-text-cursor",
+  "source_sha256": "71834bda1e5a5a45aa137e5b0eca2b9ed408cb7dc9b47a0dd4008eb7b4cfe235",
+  "output_html_sha256": "8e78238e398c1865e0e28772f237e131484f052768075f333b2f02e30cd02096",
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "html-in-canvas",
+    "text",
+    "shader",
+    "cursor",
+    "chromatic"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

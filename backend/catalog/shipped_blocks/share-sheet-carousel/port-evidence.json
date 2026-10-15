@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "share-sheet-carousel",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/share-sheet-carousel",
+  "source_sha256": "c51358e4dcfc77d61b79c4e72540f30d01104066a7b278d5bece98cb902ebea7",
+  "output_html_sha256": "7ce831353514c83bdec466f4b0b53c09a8a542f7dc41267ebda08401b93c03ce",
+  "duration": 7.2333,
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "tags": [
+    "showcase",
+    "mock-ui",
+    "share-sheet",
+    "vertical",
+    "ad-template"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

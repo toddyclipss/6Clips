@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "transitions-distortion",
+  "wave": 17,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/transitions-distortion",
+  "source_sha256": "1ed8fd8308a10f749fc920ce9d77df7985a1b024bfc66ed8555bbd4d25e5ad84",
+  "output_html_sha256": "c9d880f68441907798795b1df9ab8596e1ab862a3d4a726df1c1cbb533f4de55",
+  "duration": 21,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "showcase"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}
