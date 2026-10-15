@@ -1,0 +1,20 @@
+{
+  "slug": "domain-warp-dissolve",
+  "source_slug": "domain-warp-dissolve",
+  "source_html_sha256": "7d910616bf3eb799c9904a941a5edeb99a00de14bf6e0a094844978c30b2a874",
+  "output_html_sha256": "49f42b8fc2c3ddfabf657828620e42daab3f113c063c8ae4ea3f988400376381",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

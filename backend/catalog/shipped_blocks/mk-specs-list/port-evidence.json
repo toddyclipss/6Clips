@@ -1,0 +1,22 @@
+{
+  "slug": "mk-specs-list",
+  "source_slug": "mk-specs-list",
+  "source_html_sha256": "5bff5b3726cb6041c8419d3b157ad27db76bb8b64f4bd975498d5049ea3bd699",
+  "output_html_sha256": "c1b6c5d03629e14807d8be96b5c6a30b55f0031d894058a247d02ec7cb0708fb",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "data-viz",
+    "list",
+    "minimal",
+    "professional"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

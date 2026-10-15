@@ -1,0 +1,4 @@
+Block ID: carousel-path-5
+Original donor path: registry/blocks/carousel-path-5
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

@@ -1,0 +1,22 @@
+{
+  "slug": "hw-path-text",
+  "source_slug": "hw-path-text",
+  "source_html_sha256": "0641285d5248335fa7ef69dabcbcf960c792614d13fc5105568879224e1b3d92",
+  "output_html_sha256": "6334fda49a21275107c3cbf7a2015946dcc3c4d2a7ee3122527dbd81d29c17d6",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 11,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "typography",
+    "path",
+    "overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

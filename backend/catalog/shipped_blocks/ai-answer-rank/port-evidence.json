@@ -1,0 +1,26 @@
+{
+  "slug": "ai-answer-rank",
+  "source_slug": "ai-answer-rank",
+  "source_html_sha256": "2356710971ba7d4e565af910d362c70fae81dc75da678bd39619c239f2d53dce",
+  "output_html_sha256": "75301a3bba58968eb705698ca1b9489c869c6f94b95c3fe53785aca7828d3d79",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 9,
+  "dimensions": {
+    "width": 1080,
+    "height": 1080
+  },
+  "tags": [
+    "mock-ui",
+    "ai",
+    "chat",
+    "ranking",
+    "list",
+    "marketing",
+    "ad-template",
+    "square"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

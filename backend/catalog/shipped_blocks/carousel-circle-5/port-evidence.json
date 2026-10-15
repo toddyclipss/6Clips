@@ -1,0 +1,23 @@
+{
+  "slug": "carousel-circle-5",
+  "source_slug": "carousel-circle-5",
+  "source_html_sha256": "736e643641302cc021967cb11b5e2652685a36a91e870d5658ac840c48bac53a",
+  "output_html_sha256": "35a1171760a6afef5b47959976d9f1a13e8d39ccc8ba2413147016221016aff8",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 7,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "circle"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

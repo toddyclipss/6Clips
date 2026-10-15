@@ -1,0 +1,25 @@
+{
+  "slug": "editorial-flash-overlay",
+  "source_slug": "editorial-flash-overlay",
+  "source_html_sha256": "0730392042a50c077c7eb3808bf6d76ddc0bcec6b6272fb2ce300007bd26478f",
+  "output_html_sha256": "bfebe612e64cf51935a8928ea78ad12f4d26ff11f862d43b635887bdc073a5df",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "flash",
+    "editorial",
+    "social",
+    "light",
+    "transition",
+    "overlay",
+    "media-treatment-overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

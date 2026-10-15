@@ -1,0 +1,22 @@
+{
+  "slug": "code-diff",
+  "source_slug": "code-diff",
+  "source_html_sha256": "5356890fec4947e384b044d7dda3d03601432125a4ce60087caac0e3639d9d93",
+  "output_html_sha256": "c43bd0e14c3fc5002e1a1b7c35a612e59f79d587bed08cee4053848fc390107d",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "diff",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

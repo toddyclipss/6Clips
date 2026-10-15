@@ -1,0 +1,21 @@
+{
+  "slug": "logo-outro",
+  "source_slug": "logo-outro",
+  "source_html_sha256": "b3ed1e2dbdbe1f4a36bcf11e8a75f1f7eca7c29e5f75e86628fd8922629364ff",
+  "output_html_sha256": "28e4e5d93d8740d67915b38145c35968c3ac41f04b3b26c52506c2ba6a75a699",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "branding",
+    "outro",
+    "logo"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

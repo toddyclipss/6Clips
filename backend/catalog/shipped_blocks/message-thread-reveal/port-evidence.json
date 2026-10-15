@@ -1,0 +1,23 @@
+{
+  "slug": "message-thread-reveal",
+  "source_slug": "message-thread-reveal",
+  "source_html_sha256": "b20d646fb57101df1b263c4726714060448b307be5d068411218a21e895d6e16",
+  "output_html_sha256": "c59b98e87b1fbacbb079406ba560c822e1a54e4bb7de7eb209648cb0de221c42",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 11,
+  "duration": 25.7667,
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "tags": [
+    "showcase",
+    "mock-ui",
+    "chat",
+    "vertical",
+    "ad-template"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

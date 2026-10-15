@@ -1,0 +1,26 @@
+{
+  "slug": "frost-sequence-camera-orbit",
+  "source_slug": "frost-sequence-camera-orbit",
+  "source_html_sha256": "7b895065f177ba0d3e3837712724b5d4eaa9cdf775e2bc6309478b50fed84694",
+  "output_html_sha256": "34232806b35d38bb80837f19a57ab311684bf73c7f3c72ad77e32bf2c3ef9bd6",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 26,
+  "duration": 22.5,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "3d-motion",
+    "ice",
+    "frost",
+    "camera-orbit",
+    "logo",
+    "particles",
+    "webgpu",
+    "two-headlines"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "camcorder-hud",
+  "source_slug": "camcorder-hud",
+  "source_html_sha256": "f7e1b992a4ad93195ada7dc0ecb3ed0beb3916c8a40ac7a518b7745bf5f8810b",
+  "output_html_sha256": "5a67bbdeb23d3c89a719a75e0ab980f9a5e2a2c6212a27b17e0115f8c6c9cb73",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "camcorder",
+    "camera",
+    "recording",
+    "hud",
+    "overlay",
+    "creator",
+    "media-treatment-overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

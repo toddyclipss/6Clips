@@ -1,0 +1,23 @@
+{
+  "slug": "code-morph",
+  "source_slug": "code-morph",
+  "source_html_sha256": "26b2342609f1da2ef2f65fef5dbc0fc3230f78893c11569e4e055f3015f6e4a2",
+  "output_html_sha256": "93111507eeae6edad88322dd4818efe5b4e908ef960813d3455ed11bf1b37565",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "morph",
+    "refactor",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

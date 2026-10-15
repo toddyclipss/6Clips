@@ -1,0 +1,26 @@
+{
+  "slug": "code-slice-hero",
+  "source_slug": "code-slice-hero",
+  "source_html_sha256": "cfd599653f8c04daf146702da4e8eb720712ab3dc3679e0d0b0c1bedf90976a0",
+  "output_html_sha256": "891e624c597d46d48600c3c794ff022a0df2c770818766bd9d3158b24b80a3ab",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 13,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "3d-motion",
+    "transition",
+    "typography",
+    "tiles",
+    "flip",
+    "webgl2",
+    "shadows",
+    "two-headlines"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

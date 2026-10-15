@@ -1,0 +1,22 @@
+{
+  "slug": "lt-neon-border",
+  "source_slug": "lt-neon-border",
+  "source_html_sha256": "073000c8a2b634ff71a9509733293f17e8cde3f19094f4bf2407710bccbfbecb",
+  "output_html_sha256": "507703f755ae83fdb3b2256c271f40bb9fea39077f239f2ee6a99619768d73d9",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4.8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "lower-third",
+    "glow",
+    "loop",
+    "video-primitive"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

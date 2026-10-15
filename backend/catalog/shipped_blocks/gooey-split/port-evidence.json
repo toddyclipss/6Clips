@@ -1,0 +1,25 @@
+{
+  "slug": "gooey-split",
+  "source_slug": "gooey-split",
+  "source_html_sha256": "4eff75ccc58ce1c76258c87396082df8378c3446ab2ac443001d6f18b355fc29",
+  "output_html_sha256": "38d3b90bcfac2641a7818a9e4ec24752ff631d9694dbf6c25cd7eb85880f1dcc",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4.7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "effect",
+    "gooey",
+    "metaball",
+    "motion-blur",
+    "morph",
+    "logo",
+    "icon"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "carousel-path-3",
+  "source_slug": "carousel-path-3",
+  "source_html_sha256": "3043f53dc584e66d7b0d98fbcbf22b2a8ad301491fdb9c2adf84fd5808b7dfa6",
+  "output_html_sha256": "e2674d05cf246918972a03aba325c64fd06dd343d28d45760f60738ec055ef8b",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 7,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "path"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

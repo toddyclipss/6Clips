@@ -1,0 +1,20 @@
+{
+  "slug": "cross-warp-morph",
+  "source_slug": "cross-warp-morph",
+  "source_html_sha256": "fa9748f6f6059b2575d90eb98fd14a45de3c75e7dac1e925d997bc61e56ab85e",
+  "output_html_sha256": "b1dca1126fc4aa118c443e12d5c42c0a9696230a274d9e6e9d8d9b0f011f3680",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

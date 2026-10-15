@@ -1,0 +1,20 @@
+{
+  "slug": "light-leak",
+  "source_slug": "light-leak",
+  "source_html_sha256": "018575074693864c3f0f71380f85f089c172f73717b80787640b2da3615345be",
+  "output_html_sha256": "888c79cbc3919607f51aeb2eb70803d900f88c1067ec18e4628872e590a3cf73",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

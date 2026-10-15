@@ -1,0 +1,24 @@
+{
+  "slug": "carousel-orbit-3",
+  "source_slug": "carousel-orbit-3",
+  "source_html_sha256": "1d3a40f9cde8df9964cd6aaacfd9946907a3da7c1f57b6c44ab9853adca19b86",
+  "output_html_sha256": "a7bd7e07a515ef05bd286eb3947a83c05c702b1f7330e083aa95fafda62273aa",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 7,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "orbit",
+    "3d"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

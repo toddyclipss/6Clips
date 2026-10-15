@@ -1,0 +1,4 @@
+Block ID: editorial-flash-overlay
+Original donor path: registry/blocks/editorial-flash-overlay
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

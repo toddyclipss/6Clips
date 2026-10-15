@@ -1,0 +1,4 @@
+Block ID: mk-progress-stat
+Original donor path: registry/blocks/mk-progress-stat
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

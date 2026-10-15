@@ -1,0 +1,22 @@
+{
+  "slug": "camera-dolly-zoom",
+  "source_slug": "camera-dolly-zoom",
+  "source_html_sha256": "5e101fbb8bad0181cc498013fd8805099c1f3fcc409e74f97ec62e88af61fff7",
+  "output_html_sha256": "2cbfd292f8f93799bef46ce82bdcab7bd25d46971d0207849a1f7bf40fc16757",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "camera",
+    "depth",
+    "3d",
+    "cinematic"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

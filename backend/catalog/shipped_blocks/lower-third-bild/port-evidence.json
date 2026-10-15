@@ -1,0 +1,22 @@
+{
+  "slug": "lower-third-bild",
+  "source_slug": "lower-third-bild",
+  "source_html_sha256": "e336778dd191bbac725aea6831c047d6ff6ca830f0705489b38ec0c7f80217f8",
+  "output_html_sha256": "e9793973fe12e6b6169b0a8218e490dd669d60de5ab01b31aee12b72e9ba63cd",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 12,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "broadcast",
+    "lower-third",
+    "news",
+    "overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,4 @@
+Block ID: domain-warp-dissolve
+Original donor path: registry/blocks/domain-warp-dissolve
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

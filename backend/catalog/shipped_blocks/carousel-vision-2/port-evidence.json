@@ -1,0 +1,24 @@
+{
+  "slug": "carousel-vision-2",
+  "source_slug": "carousel-vision-2",
+  "source_html_sha256": "d2d689bfc225659439c60a9e204a0de4b13c455e2a2b2ae892024c58f5f15dd9",
+  "output_html_sha256": "8e97b362d9dad60ac00b09c6b4743e1cbc7ff3d248a2737f907108824443ca39",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 7,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "vision",
+    "3d"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

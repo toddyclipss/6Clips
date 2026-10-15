@@ -1,0 +1,23 @@
+{
+  "slug": "cinemagraph",
+  "source_slug": "cinemagraph",
+  "source_html_sha256": "8b2a982b91d9e8fa2a9040069536915f0c3b7a4cc506581729e584b1a77218ae",
+  "output_html_sha256": "132d2a4feeddfaf2c6b2beb81967c1eedae7a2fc323c0fe6e75aa4dd72158ba4",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 10,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "effect",
+    "cinemagraph",
+    "photo",
+    "loop",
+    "freeze-frame"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

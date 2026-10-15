@@ -1,0 +1,23 @@
+{
+  "slug": "code-3d-extrude",
+  "source_slug": "code-3d-extrude",
+  "source_html_sha256": "48775b0649d260711c60c2b605f56b12fbf8bbdcdcc1324275b21cbab939fdbb",
+  "output_html_sha256": "5690a44e11db533be8a0266af36e9ede26958694f3021fd6baad3d07b2912721",
+  "uses_three": true,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 10,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "3d",
+    "webgl",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

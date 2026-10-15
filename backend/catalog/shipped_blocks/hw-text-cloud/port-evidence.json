@@ -1,0 +1,21 @@
+{
+  "slug": "hw-text-cloud",
+  "source_slug": "hw-text-cloud",
+  "source_html_sha256": "d0aafa7d638560b1fff46564320d03358fe1203a7d1d27ebcba4df68a296bb93",
+  "output_html_sha256": "8ed5a06e00eeec8f8e23fd08b996f063fdf6b57778ca8c645e8179858533b033",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 11,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "speech-bubble",
+    "overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}
