@@ -71,8 +71,13 @@
     "legacy_tools_crosswalk_count": 21
   },
   "tests": {
-    "test_suite": "tests/test_wave19_a2_minimal_ui_dragdrop.py",
-    "passed": 8,
-    "failed": 0
+    "unit_test_suite": "tests/test_wave19_a2_minimal_ui_dragdrop.py",
+    "unit_tests_passed": 8,
+    "unit_tests_failed": 0,
+    "e2e_browser_suite": "tests/e2e_wave19/agent2/test_wave19_a2_real_browser.py",
+    "e2e_browser": "Microsoft Edge",
+    "e2e_passed": 1,
+    "e2e_failed": 0,
+    "screenshot_evidence": "tools/wave19_a2/screenshot_clean_player_edge.png"
   }
 }
