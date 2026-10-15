@@ -260,38 +260,6 @@ export default function StudioToolbar({
                 <IconLayersSubtract size={15} stroke={1.8} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Clip Studio Range & Filmstrip Bench" arrow>
-              <IconButton
-                size="small"
-                data-testid="studio-toolbar-clip-btn"
-                onClick={() => onSelectContext("clip")}
-                sx={{
-                  width: 26,
-                  height: 26,
-                  bgcolor: activeContext === "clip" ? "#ede9fe" : "transparent",
-                  color: activeContext === "clip" ? "primary.main" : "text.secondary",
-                  borderRadius: 1.5,
-                }}
-              >
-                <IconScissors size={15} stroke={1.8} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Deterministic Media Tools" arrow>
-              <IconButton
-                size="small"
-                data-testid="studio-toolbar-tools-btn"
-                onClick={() => onSelectContext("tools")}
-                sx={{
-                  width: 26,
-                  height: 26,
-                  bgcolor: activeContext === "tools" ? "#ede9fe" : "transparent",
-                  color: activeContext === "tools" ? "primary.main" : "text.secondary",
-                  borderRadius: 1.5,
-                }}
-              >
-                <IconAdjustments size={15} stroke={1.8} />
-              </IconButton>
-            </Tooltip>
             <Tooltip title="CodeMirror 6 & Project Code" arrow>
               <IconButton
                 size="small"

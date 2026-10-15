@@ -31,6 +31,7 @@ import {
 import {
   HYPERFRAMES_CATEGORIES,
   fetchAllInventoryPages,
+  SHIPPED_OPERATIONAL_IDS,
   DONOR_INTERNALIZED_IDS,
   DONOR_PACKAGED_IDS,
   DONOR_SHADER_IDS,
@@ -264,8 +265,8 @@ export default function StudioResourcePanel({
   }).sort((a, b) => {
     const aName = a.name || a.id
     const bName = b.name || b.id
-    const aOp = (DONOR_INTERNALIZED_IDS.has(aName) || Boolean(a.isOperational) || a.integration_status === "INTERNALIZED") ? 2 : ((DONOR_PACKAGED_IDS.has(aName) || Boolean(a.isPackaged)) ? 1 : 0)
-    const bOp = (DONOR_INTERNALIZED_IDS.has(bName) || Boolean(b.isOperational) || b.integration_status === "INTERNALIZED") ? 2 : ((DONOR_PACKAGED_IDS.has(bName) || Boolean(b.isPackaged)) ? 1 : 0)
+    const aOp = (SHIPPED_OPERATIONAL_IDS.has(aName) || DONOR_INTERNALIZED_IDS.has(aName) || Boolean(a.isOperational) || a.integration_status === "SHIPPED_OPERATIONAL" || a.integration_status === "INTERNALIZED") ? 2 : ((DONOR_PACKAGED_IDS.has(aName) || Boolean(a.isPackaged)) ? 1 : 0)
+    const bOp = (SHIPPED_OPERATIONAL_IDS.has(bName) || DONOR_INTERNALIZED_IDS.has(bName) || Boolean(b.isOperational) || b.integration_status === "SHIPPED_OPERATIONAL" || b.integration_status === "INTERNALIZED") ? 2 : ((DONOR_PACKAGED_IDS.has(bName) || Boolean(b.isPackaged)) ? 1 : 0)
     return bOp - aOp
   })
 
@@ -907,34 +908,26 @@ export default function StudioResourcePanel({
               <Stack spacing={1}>
                 {filteredCatalog.map((item) => {
                   const bName = item.name || item.id
-                  const isOperational = DONOR_INTERNALIZED_IDS.has(bName) || Boolean(item.isOperational) || item.integration_status === "INTERNALIZED"
-                  const isPackaged = DONOR_PACKAGED_IDS.has(bName) || Boolean(item.isPackaged)
+                  const isOperational = SHIPPED_OPERATIONAL_IDS.has(bName) || DONOR_INTERNALIZED_IDS.has(bName) || Boolean(item.isOperational) || item.integration_status === "SHIPPED_OPERATIONAL" || item.integration_status === "INTERNALIZED"
+                  const isPackaged = isOperational || DONOR_PACKAGED_IDS.has(bName) || Boolean(item.isPackaged)
                   const isShader = DONOR_SHADER_IDS.has(bName) || Boolean(item.isShader)
                   const isLowerThird = DONOR_LOWER_THIRD_IDS.has(bName) || Boolean(item.isLowerThird)
-                  const canInsert = isOperational || isPackaged
+                  const canInsert = isOperational
                   const posterUrl = isPackaged
                     ? (item.poster_url || item.preview?.poster || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspectRatio}`)
                     : null
 
-                  let statusChipLabel = "Template"
-                  let statusBg = "#f1f5f9"
-                  let statusColor = "#64748b"
+                  let statusChipLabel = isOperational ? "Operational" : "Awaiting Port"
+                  let statusBg = isOperational ? "#ecfdf5" : "#f1f5f9"
+                  let statusColor = isOperational ? "#047857" : "#94a3b8"
                   if (isOperational) {
                     statusChipLabel = "Operational"
                     statusBg = "#ecfdf5"
                     statusColor = "#047857"
-                  } else if (isShader) {
-                    statusChipLabel = "Shader (Packaged)"
-                    statusBg = "#faf5ff"
-                    statusColor = "#9333ea"
-                  } else if (isLowerThird) {
-                    statusChipLabel = "Lower-Third (Packaged)"
-                    statusBg = "#f0fdf4"
-                    statusColor = "#0284c7"
-                  } else if (isPackaged) {
-                    statusChipLabel = "Packaged"
-                    statusBg = "#e0f2fe"
-                    statusColor = "#0369a1"
+                  } else {
+                    statusChipLabel = "Awaiting Port"
+                    statusBg = "#f8fafc"
+                    statusColor = "#94a3b8"
                   }
 
                   return (
@@ -1085,15 +1078,48 @@ export default function StudioResourcePanel({
                           </Stack>
                         </Box>
 
-                        {/* Action Buttons: Insert */}
-                        <Stack direction="column" spacing={0.5} alignItems="flex-end">
+                        {/* Action Buttons: Preview & Insert */}
+                        <Stack direction="row" spacing={0.5} alignItems="center">
+                          <Tooltip
+                            title={
+                              isOperational
+                                ? "Preview block animation on player"
+                                : "Preview unavailable (donor block awaiting stage 2 porting)"
+                            }
+                            arrow
+                          >
+                            <span>
+                              <IconButton
+                                size="small"
+                                disabled={!isOperational}
+                                data-testid={`preview-block-${bName}`}
+                                sx={{
+                                  width: 22,
+                                  height: 22,
+                                  color: isOperational ? "primary.main" : "text.disabled",
+                                  bgcolor: isOperational ? "#f5f3ff" : "transparent",
+                                  border: "1px solid",
+                                  borderColor: isOperational ? "#ddd6fe" : "transparent",
+                                  "&:hover": { bgcolor: "#ede9fe" },
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (isOperational && onStartGhostPreview) {
+                                    onStartGhostPreview(item)
+                                  }
+                                }}
+                              >
+                                <IconEye size={13} stroke={2} />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
                           <Tooltip
                             title={
                               isOperational
                                 ? "Insert block into timeline at current playhead"
                                 : isPackaged
                                 ? "Insert packaged block into timeline"
-                                : "Block pending porting & verification in Wave 16"
+                                : "Donor block awaiting stage 2 porting"
                             }
                             arrow
                           >
@@ -1108,7 +1134,7 @@ export default function StudioResourcePanel({
                                   fontSize: "0.68rem",
                                   px: 1,
                                   py: 0,
-                                  bgcolor: isOperational ? "primary.main" : isPackaged ? "info.main" : "action.disabledBackground",
+                                  bgcolor: isOperational ? "primary.main" : "action.disabledBackground",
                                   textTransform: "none",
                                   fontWeight: 700,
                                 }}

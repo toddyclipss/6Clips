@@ -113,8 +113,8 @@ export default function App() {
         <Suspense fallback={<LazyFallback />}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Navigate to="/trends" replace />} />
-              <Route path="chat" element={<Navigate to="/trends" replace />} />
+              <Route index element={<Navigate to="/motion" replace />} />
+              <Route path="chat" element={<Navigate to="/motion" replace />} />
               <Route path="dashboard" element={<Navigate to="/videos" replace />} />
               {/* `/videos` is the Library. The path is legacy and stays: it is
                   bookmarked, and every ?tab= link the old page published still

@@ -213,10 +213,164 @@ export const DONOR_LOWER_THIRD_IDS = new Set([
  * Exactly 37 blocks packaged in backend/catalog/shipped_blocks
  * (10 internalized + 17 shaders + 10 lower thirds)
  */
+export const SHIPPED_OPERATIONAL_IDS = new Set([
+  'ai-answer-rank',
+  'ai-chat-reveal',
+  'app-showcase',
+  'aurora',
+  'bar-chart-race',
+  'beat-freeze-cut',
+  'blob',
+  'camcorder-hud',
+  'camera-dolly-zoom',
+  'carousel-circle-1',
+  'carousel-circle-2',
+  'carousel-circle-3',
+  'carousel-circle-4',
+  'carousel-circle-5',
+  'carousel-orbit-1',
+  'carousel-orbit-2',
+  'carousel-orbit-3',
+  'carousel-orbit-4',
+  'carousel-orbit-5',
+  'carousel-path-1',
+  'carousel-path-2',
+  'carousel-path-3',
+  'carousel-path-4',
+  'carousel-path-5',
+  'carousel-text-circle-1',
+  'carousel-text-circle-2',
+  'carousel-text-circle-3',
+  'carousel-text-circle-4',
+  'carousel-text-circle-5',
+  'carousel-vision-1',
+  'carousel-vision-2',
+  'carousel-vision-3',
+  'carousel-vision-4',
+  'carousel-vision-5',
+  'chromatic-radial-split',
+  'cinemagraph',
+  'cinematic-zoom',
+  'code-3d-extrude',
+  'code-diff',
+  'code-highlight',
+  'code-morph',
+  'code-particle-assemble',
+  'code-scroll',
+  'code-shader-dissolve',
+  'code-slice-hero',
+  'code-snippet-dark-2026',
+  'code-snippet-dark-modern',
+  'code-typing',
+  'cosmic-orb',
+  'cross-warp-morph',
+  'cuboid-carousel',
+  'data-chart',
+  'domain-warp-dissolve',
+  'editorial-flash-overlay',
+  'flash-through-white',
+  'flowchart',
+  'flowchart-vertical',
+  'flowing-gradient',
+  'fractal-noise',
+  'freeze-frame-dressing',
+  'frost',
+  'frost-sequence-camera-orbit',
+  'gallery-tunnel',
+  'glitch',
+  'godrays',
+  'goo',
+  'gooey-split',
+  'gravitational-lens',
+  'halftone-field',
+  'holographic',
+  'hw-frame',
+  'hw-path-text',
+  'hw-pipeline',
+  'hw-scribble-transition',
+  'hw-text-cloud',
+  'hw-title',
+  'hw-write-title',
+  'instagram-follow',
+  'lens-flare',
+  'light-leak',
+  'liquid-metal',
+  'logo-outro',
+  'lower-third-bild',
+  'lt-accent-underline',
+  'lt-bold-block',
+  'lt-clean-bar',
+  'lt-color-block',
+  'lt-dark-card',
+  'lt-kicker-name',
+  'lt-mask-reveal',
+  'lt-neon-border',
+  'lt-side-rule',
+  'lt-soft-pill',
+  'lt-stack-bars',
+  'marble',
+  'mesh-gradient',
+  'message-thread-reveal',
+  'mk-background',
+  'mk-callout-highlight',
+  'mk-clone-wall-transition',
+  'mk-line-graph',
+  'mk-placeholder-grid',
+  'mk-progress-stat',
+  'mk-specs-list',
+  'nebula',
+  'news-ticker',
+  'notification-cascade',
+  'organic-light-leak-overlay',
+  'plasma',
+  'prism',
+  'rack-focus',
+  'ridged-burn',
+  'ripple-waves',
+  'sdf-iris',
+  'share-sheet-carousel',
+  'sine-wave',
+  'snow',
+  'split-flap-board',
+  'starfield',
+  'strands',
+  'stripes',
+  'swirl',
+  'swirl-vortex',
+  'thermal-distortion',
+  'thread-message-stack',
+  'tiktok-follow',
+  'transitions-3d',
+  'transitions-blur',
+  'transitions-cover',
+  'transitions-destruction',
+  'transitions-dissolve',
+  'transitions-distortion',
+  'transitions-grid',
+  'transitions-light',
+  'transitions-mechanical',
+  'transitions-other',
+  'transitions-push',
+  'transitions-radial',
+  'transitions-scale',
+  'ui-3d-reveal',
+  'vfx-magnetic',
+  'vfx-text-cursor',
+  'voronoi',
+  'water',
+  'waveform',
+  'week-in-merges',
+  'weight-wave',
+  'whip-pan',
+  'yt-lower-third',
+])
+
+/**
+ * Packaged and operable donor blocks (149 active shipped blocks + 10 baseline internalized)
+ */
 export const DONOR_PACKAGED_IDS = new Set([
+  ...SHIPPED_OPERATIONAL_IDS,
   ...DONOR_INTERNALIZED_IDS,
-  ...DONOR_SHADER_IDS,
-  ...DONOR_LOWER_THIRD_IDS,
 ])
 
 /**
@@ -5499,26 +5653,19 @@ export function normalizeDonorBlock(rawBlock) {
   const proposedFallback = isMissing ? (rawTax.proposed_fallback_category || tax.fallback || 'scenes-demos') : null
 
   // Clean status calculation
-  let statusLabel = 'NEEDS ADAPTATION'
-  let integrationStatus = rawBlock.integration_status || 'NEEDS_ADAPTATION'
-  let runtimeStatus = rawBlock.runtime_status || 'NEEDS_ADAPTATION'
+  const isShipped = SHIPPED_OPERATIONAL_IDS.has(id)
+  let statusLabel = isShipped ? 'OPERATIONAL' : 'STAGE 2 AWAITING PORT'
+  let integrationStatus = isShipped ? 'SHIPPED_OPERATIONAL' : (rawBlock.integration_status || 'STAGE2_AWAITING_PORT')
+  let runtimeStatus = isShipped ? 'OPERATIONAL' : (rawBlock.runtime_status || 'AWAITING_PORT')
 
-  if (isInternalized) {
+  if (isShipped) {
+    statusLabel = 'OPERATIONAL'
+    integrationStatus = 'SHIPPED_OPERATIONAL'
+    runtimeStatus = 'OPERATIONAL'
+  } else if (isInternalized) {
     statusLabel = 'OPERATIONAL'
     integrationStatus = 'INTERNALIZED'
     runtimeStatus = 'INTERNALIZED_WORKING'
-  } else if (isShader) {
-    statusLabel = 'PACKAGED SHADER'
-    integrationStatus = 'SHIPPED_SHADER'
-    runtimeStatus = 'PACKAGED_PORTED'
-  } else if (isLowerThird) {
-    statusLabel = 'PACKAGED LOWER-THIRD'
-    integrationStatus = 'SHIPPED_LOWER_THIRD'
-    runtimeStatus = 'PACKAGED_PORTED'
-  } else if (isPackaged) {
-    statusLabel = 'PACKAGED'
-    integrationStatus = 'PACKAGED_PORTED'
-    runtimeStatus = 'PACKAGED_PORTED'
   } else if (rawBlock.integration_status === 'BLOCKED_LICENSE' || rawBlock.license_status === 'RESTRICTED') {
     statusLabel = 'BLOCKED LICENSE'
     integrationStatus = 'BLOCKED_LICENSE'
@@ -5529,8 +5676,8 @@ export function normalizeDonorBlock(rawBlock) {
     runtimeStatus = 'BLOCKED_DEPENDENCY'
   }
 
-  const isOperational = isInternalized
-  const isInsertable = isInternalized || Boolean(rawBlock.runtime_operable)
+  const isOperational = SHIPPED_OPERATIONAL_IDS.has(id) || isInternalized || Boolean(rawBlock.is_operational) || Boolean(rawBlock.isOperational)
+  const isInsertable = isOperational
 
   return {
     ...rawBlock,
