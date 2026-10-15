@@ -640,7 +640,7 @@
         if (REG) {
           const srcs = REG.imageVars.map(
             (id, i) =>
-              varUrl(V[id]) || "assets/carousel-images/" + DATA.cards[i % DATA.cards.length].file,
+              varUrl(V[id]) || "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e293b'/%3E%3Cstop offset='100%25' stop-color='%230f172a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Crect x='20' y='20' width='560' height='760' rx='16' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-opacity='0.4'/%3E%3Ccircle cx='300' cy='360' r='80' fill='%2338bdf8' fill-opacity='0.2'/%3E%3Ctext x='50%25' y='520' dominant-baseline='middle' text-anchor='middle' font-family='system-ui, -apple-system, sans-serif' font-weight='700' font-size='36' fill='%23f8fafc'%3ECard%3C/text%3E%3C/svg%3E",
           );
           DATA.cards = await Promise.all(
             srcs.map(async (src, i) => {
@@ -747,7 +747,7 @@
           inner.className = "card-inner";
           inner.id = el.id + "-inner";
           const img = document.createElement("img");
-          img.src = c.abs ? c.file : "assets/carousel-images/" + c.file;
+          img.src = c.abs ? c.file : "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e293b'/%3E%3Cstop offset='100%25' stop-color='%230f172a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Crect x='20' y='20' width='560' height='760' rx='16' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-opacity='0.4'/%3E%3Ccircle cx='300' cy='360' r='80' fill='%2338bdf8' fill-opacity='0.2'/%3E%3Ctext x='50%25' y='520' dominant-baseline='middle' text-anchor='middle' font-family='system-ui, -apple-system, sans-serif' font-weight='700' font-size='36' fill='%23f8fafc'%3ECard%3C/text%3E%3C/svg%3E";
           img.alt = "";
 
           if (!is3d) el.style.zIndex = String(n - i);
@@ -1006,7 +1006,13 @@
           }
         }
         render(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines = window.__timelines || {};
+        window.__timelines = window.__timelines || {};
         window.__timelines[DATA.id] = tl;
+        window.tl = tl;
+        window.tl = tl;
+        window.tl = tl;
       })();
     </script>
   </body>

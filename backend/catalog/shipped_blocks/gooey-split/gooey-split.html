@@ -3,7 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <script src="lib/gsap.min.js"></script>
-    <!-- CustomEase vendored fallback -->
+    
+    <script>
+      window.CustomEase = {
+        create: function(name, path) {
+          var m = path.match(/C\s*([\d\.-]+)[\s,]+([\d\.-]+)[\s,]+([\d\.-]+)[\s,]+([\d\.-]+)/);
+          if (!m) return (typeof gsap !== 'undefined') ? gsap.parseEase('power2.out') : function(t) { return t; };
+          var x1 = parseFloat(m[1]), y1 = parseFloat(m[2]), x2 = parseFloat(m[3]), y2 = parseFloat(m[4]);
+          return function(t) {
+            if (t <= 0) return 0;
+            if (t >= 1) return 1;
+            var s = t;
+            for (var i = 0; i < 5; i++) {
+              var currentX = 3*Math.pow(1-s, 2)*s*x1 + 3*(1-s)*s*s*x2 + s*s*s - t;
+              var derivX = 3*Math.pow(1-s, 2)*x1 + 6*(1-s)*s*(x2-x1) + 3*s*s*(1-x2);
+              if (Math.abs(derivX) < 1e-5) break;
+              s -= currentX / derivX;
+            }
+            s = Math.max(0, Math.min(1, s));
+            return 3*Math.pow(1-s, 2)*s*y1 + 3*(1-s)*s*s*y2 + s*s*s;
+          };
+        }
+      };
+    </script>
+    
     <!--
       gooey-split: a dot splits into a three-dot menu with a gooey neck, spins into a
       swirl mark under directional motion blur, breaks back into three dots, and merges.
@@ -951,6 +974,7 @@
 
         window.__timelines = window.__timelines || {};
         window.__timelines["gooey-split"] = tl;
+        window.tl = tl;
       })();
     </script>
   </body>

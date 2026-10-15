@@ -1,0 +1,744 @@
+{
+  "ai-answer-rank": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "ai-chat-reveal": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "app-showcase": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "aurora": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "bar-chart-race": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "beat-freeze-cut": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "blob": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "camcorder-hud": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "camera-dolly-zoom": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-circle-1": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-circle-2": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-circle-3": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-circle-4": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-circle-5": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-orbit-1": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-orbit-2": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-orbit-3": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-orbit-4": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-orbit-5": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-path-1": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-path-2": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-path-3": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-path-4": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-path-5": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-text-circle-1": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-text-circle-2": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-text-circle-3": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-text-circle-4": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-text-circle-5": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-vision-1": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-vision-2": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-vision-3": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-vision-4": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "carousel-vision-5": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "chromatic-radial-split": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "cinemagraph": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "cinematic-zoom": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-3d-extrude": {
+    "page_errors": 2,
+    "console_errors": 0,
+    "first_page_error": "Unexpected token 'export'",
+    "has_tl": false,
+    "can_seek": false
+  },
+  "code-diff": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-highlight": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-morph": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-particle-assemble": {
+    "page_errors": 2,
+    "console_errors": 0,
+    "first_page_error": "Unexpected token 'export'",
+    "has_tl": false,
+    "can_seek": false
+  },
+  "code-scroll": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-shader-dissolve": {
+    "page_errors": 2,
+    "console_errors": 0,
+    "first_page_error": "Unexpected token 'export'",
+    "has_tl": false,
+    "can_seek": false
+  },
+  "code-slice-hero": {
+    "page_errors": 1,
+    "console_errors": 2,
+    "first_page_error": "window.CodeSliceSurface is not a function",
+    "has_tl": false,
+    "can_seek": false
+  },
+  "code-snippet-dark-2026": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-snippet-dark-modern": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "code-typing": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "cosmic-orb": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "creator-hud": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "cross-warp-morph": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "cuboid-carousel": {
+    "page_errors": 0,
+    "console_errors": 8,
+    "first_page_error": null,
+    "has_tl": false,
+    "can_seek": false
+  },
+  "data-chart": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "domain-warp-dissolve": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "editorial-flash-overlay": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "flash-through-white": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "flowchart": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "flowchart-vertical": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "flowing-gradient": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "fractal-noise": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "freeze-frame-dressing": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "frost": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "frost-sequence-camera-orbit": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "gallery-tunnel": {
+    "page_errors": 1,
+    "console_errors": 0,
+    "first_page_error": "THREEJS.WebGLRenderer is not a constructor",
+    "has_tl": true,
+    "can_seek": false
+  },
+  "glitch": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "glitch-transition": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "godrays": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "goo": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "gooey-split": {
+    "page_errors": 1,
+    "console_errors": 0,
+    "first_page_error": "CustomEase is not defined",
+    "has_tl": false,
+    "can_seek": false
+  },
+  "gravitational-lens": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "halftone-field": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "holographic": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-frame": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-path-text": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-pipeline": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-scribble-transition": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-text-cloud": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-title": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "hw-write-title": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "instagram-follow": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lens-flare": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "light-leak": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "liquid-metal": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "logo-outro": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lower-third-bild": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-accent-underline": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-bold-block": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-clean-bar": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-color-block": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-dark-card": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-kicker-name": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-mask-reveal": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-neon-border": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-side-rule": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-soft-pill": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "lt-stack-bars": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "marble": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mesh-gradient": {
+    "page_errors": 0,
+    "console_errors": 1,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "message-thread-reveal": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-background": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-callout-highlight": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-clone-wall-transition": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-line-graph": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-placeholder-grid": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-progress-stat": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  },
+  "mk-specs-list": {
+    "page_errors": 0,
+    "console_errors": 0,
+    "first_page_error": null,
+    "has_tl": true,
+    "can_seek": true
+  }
+}
