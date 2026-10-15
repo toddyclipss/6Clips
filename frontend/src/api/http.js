@@ -67,6 +67,9 @@ http.interceptors.response.use(
         durationMs,
       })
     }
+    if (axios.isCancel(err) || err?.code === "ERR_CANCELED" || err?.message === "canceled") {
+      return Promise.reject(err)
+    }
     console.error("API error:", err.response?.data || err.message)
     return Promise.reject(err)
   }

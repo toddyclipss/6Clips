@@ -282,7 +282,7 @@ export default function CatalogDrawer({
             sx={{ width: "100%", mb: 1.5 }}
           >
             <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 600 }}>
-              {isOperational ? "STANDALONE LIVE PREVIEW" : isPackaged ? "PACKAGED BLOCK PREVIEW" : "PREVIEW QUARANTINED (INVENTORY ONLY)"}
+              {isOperational ? "STANDALONE LIVE PREVIEW" : isPackaged ? "PACKAGED BLOCK PREVIEW" : "TEMPLATE PREVIEW"}
             </Typography>
 
             <ToggleButtonGroup
@@ -488,7 +488,7 @@ export default function CatalogDrawer({
                         <TableCell sx={{ fontWeight: 600 }}>Packaging Status</TableCell>
                         <TableCell>
                           <Chip
-                            label={isPackaged ? "LOCAL_SHIPPED" : "UNPORTED"}
+                            label={isPackaged ? "LOCAL_SHIPPED" : "TEMPLATE"}
                             color={isPackaged ? "info" : "default"}
                             size="small"
                             sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
@@ -499,8 +499,8 @@ export default function CatalogDrawer({
                         <TableCell sx={{ fontWeight: 600 }}>Operational Status</TableCell>
                         <TableCell>
                           <Chip
-                            label={isOperational ? "INTERNALIZED_OPERATIONAL" : (isPackaged ? "PACKAGED_PENDING_INTEGRATION" : "UNPORTED_QUARANTINED")}
-                            color={isOperational ? "success" : isPackaged ? "info" : "warning"}
+                            label={isOperational ? "OPERATIONAL" : (isPackaged ? "PACKAGED" : "TEMPLATE")}
+                            color={isOperational ? "success" : isPackaged ? "info" : "default"}
                             size="small"
                             sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
                           />
@@ -674,7 +674,7 @@ export default function CatalogDrawer({
               {!isOperational ? (
                 <Alert severity={isPackaged ? "info" : "error"} icon={isPackaged ? <IconPackage size={20} /> : <IconLock size={20} />}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                    {isPackaged ? "Packaged on Disk (Integration Clearance Pending)" : "Insertion Disabled (Inventory Only Entry)"}
+                    {isPackaged ? "Packaged on Disk (Integration Clearance Pending)" : "Insertion Disabled (Template Entry)"}
                   </Typography>
                   <Typography variant="body2" sx={{ fontSize: "0.82rem" }}>
                     {isPackaged

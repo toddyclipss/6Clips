@@ -63,12 +63,31 @@ export default function StudioResourcePanel({
   onAskAiToInsert,
   onRefreshLibrary,
 }) {
-  const [tab, setTab] = useState(0) // 0 = Assets, 1 = Sources (Trends), 2 = Catalog
+  const [tab, setTab] = useState(() => {
+    try {
+      const qp = new URLSearchParams(window.location.search)
+      const t = qp.get("tab")?.toLowerCase()
+      if (t === "catalog") return 2
+      if (t === "sources" || t === "trends") return 1
+      if (t === "assets" || t === "media") return 0
+    } catch {}
+    return 0
+  }) // 0 = Assets, 1 = Sources (Trends), 2 = Catalog
   const [search, setSearch] = useState("")
   const [catalogItems, setCatalogItems] = useState([])
   const [catalogLoading, setCatalogLoading] = useState(false)
   const [catalogError, setCatalogError] = useState(null)
   const [catalogCategory, setCatalogCategory] = useState("all")
+
+  useEffect(() => {
+    try {
+      const qp = new URLSearchParams(window.location.search)
+      const t = qp.get("tab")?.toLowerCase()
+      if (t === "catalog") setTab(2)
+      else if (t === "sources" || t === "trends") setTab(1)
+      else if (t === "assets" || t === "media") setTab(0)
+    } catch {}
+  }, [])
 
   // Ingest URL state (yt-dlp Video Download)
   const [ingestUrlOpen, setIngestUrlOpen] = useState(false)
@@ -242,6 +261,12 @@ export default function StudioResourcePanel({
     if (catalogCategory === "source_missing") return Boolean(item.source_category_missing)
     const cat = (item.category || "").toLowerCase()
     return cat === catalogCategory.toLowerCase()
+  }).sort((a, b) => {
+    const aName = a.name || a.id
+    const bName = b.name || b.id
+    const aOp = (DONOR_INTERNALIZED_IDS.has(aName) || Boolean(a.isOperational) || a.integration_status === "INTERNALIZED") ? 2 : ((DONOR_PACKAGED_IDS.has(aName) || Boolean(a.isPackaged)) ? 1 : 0)
+    const bOp = (DONOR_INTERNALIZED_IDS.has(bName) || Boolean(b.isOperational) || b.integration_status === "INTERNALIZED") ? 2 : ((DONOR_PACKAGED_IDS.has(bName) || Boolean(b.isPackaged)) ? 1 : 0)
+    return bOp - aOp
   })
 
   // Audio playback handler
@@ -891,9 +916,9 @@ export default function StudioResourcePanel({
                     ? (item.poster_url || item.preview?.poster || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspectRatio}`)
                     : null
 
-                  let statusChipLabel = "Unported"
-                  let statusBg = "#fef3c7"
-                  let statusColor = "#b45309"
+                  let statusChipLabel = "Template"
+                  let statusBg = "#f1f5f9"
+                  let statusColor = "#64748b"
                   if (isOperational) {
                     statusChipLabel = "Operational"
                     statusBg = "#ecfdf5"
@@ -983,9 +1008,12 @@ export default function StudioResourcePanel({
                               }}
                             />
                           ) : (
-                            <Typography variant="caption" sx={{ fontSize: "0.55rem", fontWeight: 700, color: "text.disabled", textAlign: "center", px: 0.5 }}>
-                              INVENTORY ONLY
-                            </Typography>
+                            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                              <IconSparkles size={16} stroke={1.5} color="#94a3b8" />
+                              <Typography variant="caption" sx={{ fontSize: "0.55rem", fontWeight: 700, color: "text.disabled", textAlign: "center", px: 0.5, mt: 0.2 }}>
+                                TEMPLATE
+                              </Typography>
+                            </Box>
                           )}
                         </Box>
 
