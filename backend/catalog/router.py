@@ -569,6 +569,16 @@ async def get_catalog_inventory_snapshot():
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/wave16-audit")
+async def get_wave16_audit():
+    """Return Wave 16 canonical inventory reconciliation, 37 operable blocks, proof ladder, and CAS activation audit."""
+    try:
+        return CatalogManifestService.get_wave16_factual_audit()
+    except Exception as e:
+        logger.error("Error generating wave16 audit: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/wave15-audit")
 async def get_wave15_audit():
     """Return Wave 15 canonical inventory reconciliation, proof ladder, and native category taxonomy."""
