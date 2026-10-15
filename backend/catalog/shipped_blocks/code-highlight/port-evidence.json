@@ -1,0 +1,22 @@
+{
+  "slug": "code-highlight",
+  "source_slug": "code-highlight",
+  "source_html_sha256": "2e28ffdb11fe7b595e47488f2dfb93db514f315dd5f334c902540fcbebf2bb2f",
+  "output_html_sha256": "9f993b6c1adc99b2634f5abbf8f308d5eb5f4d0a62c8f2b32280d55988d79732",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 5,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "highlight",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

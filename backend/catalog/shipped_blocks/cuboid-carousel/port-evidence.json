@@ -1,0 +1,25 @@
+{
+  "slug": "cuboid-carousel",
+  "source_slug": "cuboid-carousel",
+  "source_html_sha256": "2d992fc1cb5a8640f9139c5789be53ffa6c4393fc44e17792dfc9bf24bb19a5c",
+  "output_html_sha256": "54ce10646e9b8461409bbfbe6377a93ea46b81256638473c8b1ed6c4b1d6434c",
+  "uses_three": true,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 22,
+  "duration": 6.67,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "3d-motion",
+    "carousel",
+    "cards",
+    "travelling-wave",
+    "pbr",
+    "shadows",
+    "room-environment"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

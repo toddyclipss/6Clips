@@ -33,12 +33,12 @@ from backend.catalog_runtime.core.taxonomy import (
 )
 
 
-def get_runtime_block_spec(block_id: str) -> Optional[RuntimeBlockSpec]:
+def get_runtime_block_spec(block_id: str, wave: Optional[int] = None) -> Optional[RuntimeBlockSpec]:
     """
     Retrieve typed RuntimeBlockSpec for any known block.
     Returns None if block_id is unknown.
     """
-    b = UniversalRuntimeRegistry.get_block(block_id)
+    b = UniversalRuntimeRegistry.get_block(block_id, wave=wave)
     if not b:
         return None
 
@@ -63,38 +63,38 @@ def get_runtime_block_spec(block_id: str) -> Optional[RuntimeBlockSpec]:
     )
 
 
-def list_runtime_block_specs(only_public: bool = True) -> List[RuntimeBlockSpec]:
+def list_runtime_block_specs(only_public: bool = True, wave: Optional[int] = None) -> List[RuntimeBlockSpec]:
     """
     List all runtime block specs.
     If only_public is True, returns only verified operable donor blocks.
     If False, returns all 196 donor blocks plus retired blocks.
     """
-    blocks = UniversalRuntimeRegistry.discover_all_blocks()
+    blocks = UniversalRuntimeRegistry.discover_all_blocks(wave=wave)
     specs = []
     for b in blocks.values():
         is_retired = DonorTaxonomyReconciler.is_retired_6clips_block(b.id)
         if only_public and (not b.runtime_operable or is_retired):
             continue
-        spec = get_runtime_block_spec(b.id)
+        spec = get_runtime_block_spec(b.id, wave=wave)
         if spec:
             specs.append(spec)
     return specs
 
 
-def validate_runtime_operable(block_id: str) -> None:
+def validate_runtime_operable(block_id: str, wave: Optional[int] = None, allow_retired: bool = False) -> None:
     """
     Convenience validator for peer modules.
     Raises BlockUnavailableError (HTTP 403 or 409) if block cannot be operated on.
     """
-    UniversalRuntimeRegistry.validate_block_operable(block_id)
+    UniversalRuntimeRegistry.validate_block_operable(block_id, wave=wave, allow_retired=allow_retired)
 
 
-def get_proof_ladder(block_id: str) -> Dict[str, Any]:
+def get_proof_ladder(block_id: str, wave: Optional[int] = None) -> Dict[str, Any]:
     """
     Returns the independent proof ladder for a specific block ID.
     Raises BlockUnavailableError if block does not exist.
     """
-    b = UniversalRuntimeRegistry.get_block(block_id)
+    b = UniversalRuntimeRegistry.get_block(block_id, wave=wave)
     if not b:
         raise BlockUnavailableError(
             block_id=block_id,

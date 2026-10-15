@@ -1,0 +1,21 @@
+{
+  "slug": "hw-frame",
+  "source_slug": "hw-frame",
+  "source_html_sha256": "339876f3c8f2b1ab81ef52b6bc0be0cf894c78d25607f41885fd3aea8b484009",
+  "output_html_sha256": "d8f52604215a9f3ddf8e5b176a4850813b1fba5439729a5d057938ce9a717a4e",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 11,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "frame",
+    "media"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

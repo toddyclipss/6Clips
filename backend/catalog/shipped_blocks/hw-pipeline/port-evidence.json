@@ -1,0 +1,22 @@
+{
+  "slug": "hw-pipeline",
+  "source_slug": "hw-pipeline",
+  "source_html_sha256": "5f2d91c91d37dd6b57a015a02361c67c9a62ca33849b901b3bebad8157fb7dbb",
+  "output_html_sha256": "39b6992f9c8483d1e55402cbba5af6bb5c5da8ae20ea1dbc0e1639b383475051",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 11,
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "diagram",
+    "data-viz",
+    "overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

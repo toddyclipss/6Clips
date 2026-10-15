@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "organic-light-leak-overlay",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/organic-light-leak-overlay",
+  "source_sha256": "bcc5a58c8964317e7c335705449b1ab961e2ba5492f28b6f8a0406b24e45ff7e",
+  "output_html_sha256": "3d863b3726d3c9e9ae0df2eeee64e0957edcb81d5a2db501f5433e682e693cb0",
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "light-leak",
+    "film",
+    "memory",
+    "transition",
+    "overlay",
+    "media-treatment-overlay"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

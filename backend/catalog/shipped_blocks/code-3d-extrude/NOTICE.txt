@@ -1,0 +1,4 @@
+Block ID: code-3d-extrude
+Original donor path: registry/blocks/code-3d-extrude
+Vendored libraries: GSAP 3.14.2 (Standard License Notice), Three.js (MIT License)
+Zero egress: verified airgapped, zero external network requests.

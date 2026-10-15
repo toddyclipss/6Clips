@@ -1,0 +1,1114 @@
+{
+  "title": "Wave 16 Rights, Licensing and Provenance Audit Report",
+  "total_donor_blocks": 196,
+  "source_code_spdx": "Apache-2.0",
+  "donor_license_path": "C:\\Users\\toddy\\Desktop\\hyperframes\\LICENSE",
+  "trademark_sensitive_count": 15,
+  "trademark_sensitive_blocks": [
+    {
+      "id": "apple-money-count",
+      "title": "Apple Money Count",
+      "description": "Apple-style finance counter that counts from $0 to $10,000, flashes green, and bursts money icons with sound.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/apple-money-count",
+      "source_sha256": "5760397a329a9ae63119607938eaadb06c161ca165c29c0b98c0099621e04b7a",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Apple Inc. (Apple Pay / iOS Wallet simulation)",
+          "risk_type": "TRADEMARK_AND_MEDIA",
+          "description": "Simulates Apple Pay wallet interaction; bundles unverified sound effect assets/sfx-production.wav",
+          "actionable_clearance_path": "Remove Apple trademark logos and pay branding; replace proprietary sound effect with CC0 licensed audio."
+        },
+        "bundled_license_files": [],
+        "bundled_fonts": [],
+        "bundled_media_assets": [
+          "assets/sfx-production.wav"
+        ],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Apple Inc. (Apple Pay / iOS Wallet simulation)",
+        "actionable_clearance_path": "Remove Apple trademark logos and pay branding; replace proprietary sound effect with CC0 licensed audio."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Remove Apple trademark logos and pay branding; replace proprietary sound effect with CC0 licensed audio.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/apple-money-count/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 5.0,
+      "tags": [
+        "showcase",
+        "finance",
+        "kinetic",
+        "youtube",
+        "sfx"
+      ]
+    },
+    {
+      "id": "canopy-part-title",
+      "title": "Canopy Part Title",
+      "description": "Leaves sweep through the frame and part to reveal the headline.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/canopy-part-title",
+      "source_sha256": "2d1d69c6d6f46dbc3df5cf4d412c881de90c7a6a80b79376351e86b12f1faebd",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Canopy brand identity reference",
+          "risk_type": "MEDIA_PROVENANCE",
+          "description": "3D leaf model with unverified textures (leaf-surface-color.webp, leaf-surface-normal.webp)",
+          "actionable_clearance_path": "Verify texture provenance or substitute CC0 procedural leaf shader."
+        },
+        "bundled_license_files": [],
+        "bundled_fonts": [],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net",
+          "fonts.googleapis.com"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Canopy brand identity reference",
+        "actionable_clearance_path": "Verify texture provenance or substitute CC0 procedural leaf shader."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Verify texture provenance or substitute CC0 procedural leaf shader.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/canopy-part-title/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 12.0,
+      "tags": [
+        "3d-motion",
+        "title-card",
+        "leaves",
+        "organic",
+        "depth-of-field",
+        "two-headlines",
+        "sweep"
+      ]
+    },
+    {
+      "id": "chatgpt-exchange",
+      "title": "ChatGPT Exchange",
+      "description": "A portrait ChatGPT-style exchange types and sends a prompt, streams an answer, assembles a comparison table, and scrolls back through the result",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/chatgpt-exchange",
+      "source_sha256": "2999f1e35e29a43e9762a5efebdf944f5ddec82a330f331780cd945ccadfcb5c",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "OpenAI LLC (ChatGPT UI simulation)",
+          "risk_type": "TRADEMARK_LOOKALIKE",
+          "description": "Simulates OpenAI ChatGPT conversational interface; bundles Inter font (SIL OFL-1.1)",
+          "actionable_clearance_path": "Neutralize AI branding; retain generic chat bubble UI layout."
+        },
+        "bundled_license_files": [
+          "assets/fonts/inter-LICENSE.txt"
+        ],
+        "bundled_fonts": [
+          "assets/fonts/inter-latin-400-normal.woff2",
+          "assets/fonts/inter-latin-500-normal.woff2",
+          "assets/fonts/inter-latin-600-normal.woff2"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: OpenAI LLC (ChatGPT UI simulation)",
+        "actionable_clearance_path": "Neutralize AI branding; retain generic chat bubble UI layout."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Neutralize AI branding; retain generic chat bubble UI layout.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/chatgpt-exchange/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 14.9,
+      "tags": [
+        "showcase",
+        "mock-ui",
+        "ai",
+        "chat",
+        "vertical",
+        "ad-template"
+      ]
+    },
+    {
+      "id": "claude-exchange",
+      "title": "Claude Exchange",
+      "description": "A portrait Claude-style exchange types a prompt, works through search and reasoning steps, then streams a detailed answer with citations and actions",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/claude-exchange",
+      "source_sha256": "68488113a3205987f4268b30b9f849288fb2fbb50871220078c4ab8293424f63",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Anthropic PBC (Claude UI simulation)",
+          "risk_type": "TRADEMARK_LOOKALIKE",
+          "description": "Simulates Anthropic Claude conversational interface; bundles EB Garamond & Inter fonts (SIL OFL-1.1)",
+          "actionable_clearance_path": "Neutralize Anthropic branding; retain generic chat bubble UI layout."
+        },
+        "bundled_license_files": [
+          "assets/fonts/eb-garamond-LICENSE.txt",
+          "assets/fonts/inter-LICENSE.txt"
+        ],
+        "bundled_fonts": [
+          "assets/fonts/eb-garamond-latin-400-normal.woff2",
+          "assets/fonts/eb-garamond-latin-700-normal.woff2",
+          "assets/fonts/inter-latin-400-normal.woff2",
+          "assets/fonts/inter-latin-500-normal.woff2",
+          "assets/fonts/inter-latin-600-normal.woff2"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Anthropic PBC (Claude UI simulation)",
+        "actionable_clearance_path": "Neutralize Anthropic branding; retain generic chat bubble UI layout."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Neutralize Anthropic branding; retain generic chat bubble UI layout.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/claude-exchange/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 21.4,
+      "tags": [
+        "showcase",
+        "mock-ui",
+        "ai",
+        "chat",
+        "vertical",
+        "ad-template"
+      ]
+    },
+    {
+      "id": "code-slice-hero",
+      "title": "Code Slice Hero",
+      "description": "A tiled headline surface flips cell by cell under a sweeping depth field to reveal the rear headline.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/code-slice-hero",
+      "source_sha256": "8eeaf224ea649f81b19303e6c9e14ff3991cab91f36b5a456b77332fd076b008",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Raycast style simulation",
+          "risk_type": "STYLE_LOOKALIKE",
+          "description": "Raycast-styled developer window with Geist font and bundled GSAP runtime",
+          "actionable_clearance_path": "Retain generic code editor window framing with vendored GSAP NOTICE."
+        },
+        "bundled_license_files": [
+          "assets/GSAP-NOTICE.txt",
+          "assets/Geist-OFL.txt"
+        ],
+        "bundled_fonts": [
+          "assets/Geist-Bold.ttf"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Raycast style simulation",
+        "actionable_clearance_path": "Retain generic code editor window framing with vendored GSAP NOTICE."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Retain generic code editor window framing with vendored GSAP NOTICE.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/code-slice-hero/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 8.0,
+      "tags": [
+        "3d-motion",
+        "transition",
+        "typography",
+        "tiles",
+        "flip",
+        "webgl2",
+        "shadows",
+        "two-headlines"
+      ]
+    },
+    {
+      "id": "cuboid-carousel",
+      "title": "Cuboid Carousel",
+      "description": "A chain of bevelled cuboids rides a travelling wave as a content carousel.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/cuboid-carousel",
+      "source_sha256": "a938fa2ce48d6287b767058494bbb72f36d0e9d48fc4dcccd619e78db22a18a3",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Three.js / WebGL RoomEnvironment",
+          "risk_type": "TECHNICAL_DEPENDENCY",
+          "description": "Three.js 3D cuboid carousel; requires RoomEnvironment and offline Three.js vendoring",
+          "actionable_clearance_path": "Vendor Three.js core and modules locally under MIT license."
+        },
+        "bundled_license_files": [
+          "assets/GSAP-NOTICE.txt",
+          "assets/Three-LICENSE.txt"
+        ],
+        "bundled_fonts": [],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "fonts.googleapis.com"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Three.js / WebGL RoomEnvironment",
+        "actionable_clearance_path": "Vendor Three.js core and modules locally under MIT license."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Vendor Three.js core and modules locally under MIT license.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/cuboid-carousel/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 6.67,
+      "tags": [
+        "3d-motion",
+        "carousel",
+        "cards",
+        "travelling-wave",
+        "pbr",
+        "shadows",
+        "room-environment"
+      ]
+    },
+    {
+      "id": "frost-sequence-camera-orbit",
+      "title": "Frost Sequence Camera Orbit",
+      "description": "An orbiting camera follows an ice logo as it breaks apart, reforms into two text moments, and fades.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/frost-sequence-camera-orbit",
+      "source_sha256": "fd48f48b0c4e3df35a0c09748f7ea09713d0fd2756f693b3b460f0c216f8e566",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Clipper / OpentypeJS / GSAP bundled libraries",
+          "risk_type": "THIRD_PARTY_LICENSES",
+          "description": "Bundles Clipper (Boost), OpentypeJS (MIT), and GSAP with notice",
+          "actionable_clearance_path": "Vendor notices and license files cleanly in shipped_blocks directory."
+        },
+        "bundled_license_files": [
+          "assets/Clipper-LICENSE.txt",
+          "assets/GSAP-NOTICE.txt",
+          "assets/OpentypeJS-LICENSE.txt",
+          "assets/Three-LICENSE.txt",
+          "assets/ThreeMeshBVH-LICENSE.txt",
+          "assets/fonts/Geist-OFL.txt"
+        ],
+        "bundled_fonts": [
+          "assets/fonts/Geist-Bold.ttf",
+          "assets/fonts/Geist-Regular.ttf",
+          "assets/fonts/Geist-SemiBold.ttf"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Clipper / OpentypeJS / GSAP bundled libraries",
+        "actionable_clearance_path": "Vendor notices and license files cleanly in shipped_blocks directory."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Vendor notices and license files cleanly in shipped_blocks directory.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/frost-sequence-camera-orbit/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 22.5,
+      "tags": [
+        "3d-motion",
+        "ice",
+        "frost",
+        "camera-orbit",
+        "logo",
+        "particles",
+        "webgpu",
+        "two-headlines"
+      ]
+    },
+    {
+      "id": "glass-shard-title",
+      "title": "Glass Shard Title",
+      "description": "Glass shards fly in through fog and tile themselves into the headline.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/glass-shard-title",
+      "source_sha256": "934b7c83466a235bdb05feb8de8afcee278a50b5802760dcde5d5d4a60cf2c32",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Studio HDR asset provenance",
+          "risk_type": "MEDIA_PROVENANCE",
+          "description": "Bundles 1K HDR studio lighting environment ferndale_studio_01_1k.hdr and Cormorant Garamond font",
+          "actionable_clearance_path": "Verify CC0 license for HDR map (Poly Haven / CC0) or generate synthetic reflection probe."
+        },
+        "bundled_license_files": [
+          "assets/Three-LICENSE.txt",
+          "assets/fonts/CormorantGaramond-OFL.txt",
+          "assets/fonts/Geist-OFL.txt"
+        ],
+        "bundled_fonts": [
+          "assets/fonts/Geist-Bold.ttf",
+          "assets/fonts/Geist-Regular.ttf",
+          "assets/fonts/Geist-SemiBold.ttf",
+          "assets/fonts/cormorant-garamond.woff2"
+        ],
+        "bundled_media_assets": [
+          "assets/ferndale_studio_01_1k.hdr"
+        ],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Studio HDR asset provenance",
+        "actionable_clearance_path": "Verify CC0 license for HDR map (Poly Haven / CC0) or generate synthetic reflection probe."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Verify CC0 license for HDR map (Poly Haven / CC0) or generate synthetic reflection probe.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/glass-shard-title/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 12.16,
+      "tags": [
+        "3d-motion",
+        "title-card",
+        "glass",
+        "voronoi",
+        "shards",
+        "fog",
+        "hdr"
+      ]
+    },
+    {
+      "id": "heygen-avatar-promo-card",
+      "title": "HeyGen Avatar Promo Card",
+      "description": "A portrait HeyGen offer card pairs a moving avatar mosaic with bold promotional typography and a branded callout",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/heygen-avatar-promo-card",
+      "source_sha256": "7a2f54cc7a82bb5a34a2777f0c685fa8ba6c0ac3deec8eb8e2778dd231655d3d",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "HeyGen Inc. (HeyGen logo mark)",
+          "risk_type": "TRADEMARK_LOGO",
+          "description": "Explicitly includes heygen-logo.svg in bundled assets",
+          "actionable_clearance_path": "Replace heygen-logo.svg with generic user avatar or open-source brand mark."
+        },
+        "bundled_license_files": [
+          "assets/fonts/eb-garamond-LICENSE.txt",
+          "assets/fonts/inter-LICENSE.txt"
+        ],
+        "bundled_fonts": [],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: HeyGen Inc. (HeyGen logo mark)",
+        "actionable_clearance_path": "Replace heygen-logo.svg with generic user avatar or open-source brand mark."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Replace heygen-logo.svg with generic user avatar or open-source brand mark.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/heygen-avatar-promo-card/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 10.0,
+      "tags": [
+        "showcase",
+        "avatar",
+        "promotion",
+        "vertical"
+      ]
+    },
+    {
+      "id": "orbit-card",
+      "title": "Orbit Card",
+      "description": "A single feature card orbits a dot sphere on approved Blender camera motion.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/orbit-card",
+      "source_sha256": "07abc5129b0634e36c23d70aa8e0cf84d879b29aecc508eafb0dd4ca3d1d4d6f",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Archivo font & Three.js",
+          "risk_type": "TECHNICAL_DEPENDENCY",
+          "description": "3D orbiting card presentation with Archivo fonts and Three.js runtime",
+          "actionable_clearance_path": "Vendor Archivo OFL font and Three.js runtime offline."
+        },
+        "bundled_license_files": [
+          "assets/Archivo-LICENSE.txt",
+          "assets/GSAP-NOTICE.txt",
+          "assets/Three-LICENSE.txt"
+        ],
+        "bundled_fonts": [
+          "assets/archivo-regular.ttf",
+          "assets/archivo-semibold.ttf"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Archivo font & Three.js",
+        "actionable_clearance_path": "Vendor Archivo OFL font and Three.js runtime offline."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Vendor Archivo OFL font and Three.js runtime offline.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/orbit-card/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 10.0,
+      "tags": [
+        "3d-motion",
+        "cards",
+        "feature-reveal",
+        "dots",
+        "orbit",
+        "blender-motion",
+        "sphere"
+      ]
+    },
+    {
+      "id": "slack-notification-ad",
+      "title": "Slack Notification Ad",
+      "description": "A portrait lock screen fills with escalating Slack video requests before HeyGen delivers the payoff",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/slack-notification-ad",
+      "source_sha256": "d5e298701f56829567030e2eeb0831b85e3ea67009578953ecd6e3cc787fdf5f",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Slack Technologies / Salesforce & HeyGen",
+          "risk_type": "TRADEMARK_LOGO",
+          "description": "Explicitly bundles slack-mark.svg and heygen-mark.svg",
+          "actionable_clearance_path": "Replace proprietary Slack and HeyGen SVG marks with generic notification bell icon."
+        },
+        "bundled_license_files": [
+          "assets/fonts/inter-LICENSE.txt"
+        ],
+        "bundled_fonts": [
+          "assets/fonts/inter-latin-400-normal.woff2",
+          "assets/fonts/inter-latin-500-normal.woff2",
+          "assets/fonts/inter-latin-600-normal.woff2"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Slack Technologies / Salesforce & HeyGen",
+        "actionable_clearance_path": "Replace proprietary Slack and HeyGen SVG marks with generic notification bell icon."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Replace proprietary Slack and HeyGen SVG marks with generic notification bell icon.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/slack-notification-ad/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 12.0,
+      "tags": [
+        "showcase",
+        "mock-ui",
+        "notification",
+        "vertical",
+        "ad-template"
+      ]
+    },
+    {
+      "id": "spotify-card",
+      "title": "Spotify Now Playing",
+      "description": "Animated Spotify now-playing card with album art and progress bar",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/spotify-card",
+      "source_sha256": "b4bc38b27927b7f73ce233c702c82f5fe944ae3d78bf94225090709b07d7721c",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Spotify AB (Spotify UI simulation)",
+          "risk_type": "TRADEMARK_LOOKALIKE",
+          "description": "Simulates Spotify player card UI layout and media controls",
+          "actionable_clearance_path": "Retain generic media player widget controls; remove Spotify specific branding."
+        },
+        "bundled_license_files": [],
+        "bundled_fonts": [],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net",
+          "fonts.googleapis.com"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Spotify AB (Spotify UI simulation)",
+        "actionable_clearance_path": "Retain generic media player widget controls; remove Spotify specific branding."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Retain generic media player widget controls; remove Spotify specific branding.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/spotify-card/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "duration": 5.0,
+      "tags": [
+        "social",
+        "overlay",
+        "spotify"
+      ]
+    },
+    {
+      "id": "vpn-youtube-spot",
+      "title": "VPN YouTube Spot",
+      "description": "Snappy Apple-style YouTube insert showing a phone finding and installing a friendly VPN app with sound effects.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/vpn-youtube-spot",
+      "source_sha256": "d8e745911561497cb93100cbca7a15cb9fe30ec6332439af9728a40981f5c1aa",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "YouTube sponsored ad layout & sound effect",
+          "risk_type": "MEDIA_PROVENANCE",
+          "description": "Simulates sponsor segment layout; bundles assets/vpn-sfx.wav",
+          "actionable_clearance_path": "Verify vpn-sfx.wav audio provenance or replace with CC0 audio asset."
+        },
+        "bundled_license_files": [],
+        "bundled_fonts": [],
+        "bundled_media_assets": [
+          "assets/vpn-sfx.wav"
+        ],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: YouTube sponsored ad layout & sound effect",
+        "actionable_clearance_path": "Verify vpn-sfx.wav audio provenance or replace with CC0 audio asset."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Verify vpn-sfx.wav audio provenance or replace with CC0 audio asset.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/vpn-youtube-spot/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 7.0,
+      "tags": [
+        "app",
+        "showcase",
+        "youtube",
+        "sfx"
+      ]
+    },
+    {
+      "id": "wireframe-portal-title",
+      "title": "Wireframe Portal Title",
+      "description": "A wireframe portal bursts open, the title comes through, then its letters swap into a second phrase.",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/wireframe-portal-title",
+      "source_sha256": "68218f458cd15f1702dc8175b8a2bb8bb05739f0d66e9acc77803861f93cd881",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "Geist font family",
+          "risk_type": "FONT_LICENSE",
+          "description": "Bundles Geist fonts under SIL OFL-1.1 license",
+          "actionable_clearance_path": "Preserve Geist OFL license file alongside bundled fonts."
+        },
+        "bundled_license_files": [
+          "assets/fonts/Geist-OFL.txt"
+        ],
+        "bundled_fonts": [
+          "assets/fonts/Geist-Bold.ttf",
+          "assets/fonts/Geist-Regular.ttf",
+          "assets/fonts/Geist-SemiBold.ttf"
+        ],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: Geist font family",
+        "actionable_clearance_path": "Preserve Geist OFL license file alongside bundled fonts."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Preserve Geist OFL license file alongside bundled fonts.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/wireframe-portal-title/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 8.0,
+      "tags": [
+        "3d-motion",
+        "title-card",
+        "wireframe",
+        "portal",
+        "burst",
+        "typography",
+        "post-processing",
+        "phrase-swap"
+      ]
+    },
+    {
+      "id": "x-post",
+      "title": "X Post Card",
+      "description": "Animated X/Twitter post card overlay with engagement metrics",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/x-post",
+      "source_sha256": "a39bfd0513869866b6041f541eb6a4c85eaff8db27a4c6f017ed3e445a776df7",
+      "in_registry_json": true,
+      "taxonomy": {
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_evidence": [
+          "docs/snippets/catalog-gallery-data.mdx"
+        ],
+        "proposed_fallback_category": null,
+        "fallback_reasoning": null
+      },
+      "rights_and_licensing": {
+        "source_code_spdx": "Apache-2.0",
+        "brand_trademark_status": "TRADEMARK_SENSITIVE",
+        "trademark_details": {
+          "trademark_entity": "X Corp. (Twitter / X UI simulation)",
+          "risk_type": "TRADEMARK_LOOKALIKE",
+          "description": "Simulates X (formerly Twitter) social media post card UI",
+          "actionable_clearance_path": "Use generic microblog post card layout; avoid proprietary brand logo marks."
+        },
+        "bundled_license_files": [],
+        "bundled_fonts": [],
+        "bundled_media_assets": [],
+        "external_cdn_references": [
+          "cdn.jsdelivr.net",
+          "fonts.googleapis.com"
+        ],
+        "license_status": "RESTRICTED",
+        "license_evidence": "Trademark/trade dress review required: X Corp. (Twitter / X UI simulation)",
+        "actionable_clearance_path": "Use generic microblog post card layout; avoid proprietary brand logo marks."
+      },
+      "integration_status": "BLOCKED_RIGHTS",
+      "blocker_reason": "Requires brand clearance: Use generic microblog post card layout; avoid proprietary brand logo marks.",
+      "supported_aspects": [
+        "9:16",
+        "16:9"
+      ],
+      "evidence_refs": [
+        "registry/blocks/x-post/registry-item.json",
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "source_inventoried": true,
+      "source_ported": false,
+      "runtime_ready": false,
+      "browser_preview_verified": false,
+      "motion_edit_verified": false,
+      "render_artifact_verified": false,
+      "rights_cleared": false,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration": 5.0,
+      "tags": [
+        "social",
+        "overlay",
+        "twitter"
+      ]
+    }
+  ],
+  "all_159_unported_status_breakdown": {
+    "trademark_or_media_restricted": 15,
+    "unvendored_cdn_dependencies": 144
+  }
+}

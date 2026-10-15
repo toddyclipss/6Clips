@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "whip-pan",
+  "type": "hyperframes:block",
+  "title": "Whip Pan",
+  "description": "Shader transition simulating a fast camera whip pan",
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 4,
+  "files": [
+    {
+      "path": "whip-pan.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "lib/gsap_offline.js",
+      "type": "hyperframes:library"
+    }
+  ],
+  "preview": {
+    "video": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/whip-pan.mp4",
+    "poster": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/whip-pan.png"
+  }
+}

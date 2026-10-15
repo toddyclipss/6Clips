@@ -1,0 +1,2602 @@
+{
+  "aurora": {
+    "slug": "aurora",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "88d071480613b835",
+      "cb86595b96e80cfc",
+      "e1da70508165c034",
+      "5f2bd4b95629ccab",
+      "336f2fde1247ab55"
+    ],
+    "shipped_dir_sha256": "316b31972235edf0fac001448ff10e8d4db0ffde3aee1ecc5fd0ede01902d3c1",
+    "donor_dir_sha256": "2a96a0795cb7b8605b51737f2879409b714b2aa4db3c53a33162b61a06b7de70",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\aurora_16_9.mp4",
+    "physical_mp4_16_9_sha256": "bb89ca9ea72afed679d4ce940ccecee032ed712456456682412743db6bbb833e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\aurora_9_16.mp4",
+    "physical_mp4_9_16_sha256": "1aec3548d0a7246296b0881f8395f9e7ddf7e44021d99fa16f483fac3d0f9529",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\aurora_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "blob": {
+    "slug": "blob",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "afce6a6b40c2a4ca",
+      "64e344b1455ca06d",
+      "ba1cb137f3b4366f",
+      "1c403092a18db89a",
+      "3a52d1e2f90eb569"
+    ],
+    "shipped_dir_sha256": "a6ae690b6be2d69b19f01c7e1d864966e4fd0b59e727f02c935ab8facef73f1d",
+    "donor_dir_sha256": "3ab67ad4e8340e76ee2fd478b853f8f48e0a4073b3616be7e794f8d316bab8eb",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\blob_16_9.mp4",
+    "physical_mp4_16_9_sha256": "e16f3142746773f4993b524cc2820ce8403b5e8d71b04650fdc6c410e3fabbc5",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\blob_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d44078c45816925c7ebbb9cb7062b4c20bec8f4caffcc7999dbf70888b1d3513",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\blob_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "data-chart": {
+    "slug": "data-chart",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "b3734b968e2b3cd9",
+      "e5c062d1189e6983",
+      "e8c3f767c59179ff",
+      "0391563c09099896",
+      "c8477e03cf129f67"
+    ],
+    "shipped_dir_sha256": "f22af6894760ac27790abcfcb8823b3c2e2ff1f0827532a59edf031f32156de1",
+    "donor_dir_sha256": "a8b6441dc1dc39c53f6ed4ca8d597658c3658b1ad5597c2d32f5253fada23127",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\data-chart_16_9.mp4",
+    "physical_mp4_16_9_sha256": "549699559366df1ef87539f3cee760cb2303ddeb7c37b6075e0847b717ce98e4",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\data-chart_9_16.mp4",
+    "physical_mp4_9_16_sha256": "95651e78fe7bb9b6b55d3dcd8b6d9c6fbd9d9604660147b33f265e4b92720420",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\data-chart_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "flowing-gradient": {
+    "slug": "flowing-gradient",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "34abda9123348460",
+      "4d13539c3fd42991",
+      "ada0e137a48fdb04",
+      "e115ae7a43546d7f",
+      "e5f037a74b150ef1"
+    ],
+    "shipped_dir_sha256": "d93e26b829671f4ddfde611907017bb65a8febedf6e95f619a926ae594086799",
+    "donor_dir_sha256": "ca7220005c6de606a542ebc771f3c50d2d2fd2a8721e853bfa657d5f4683bdfa",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowing-gradient_16_9.mp4",
+    "physical_mp4_16_9_sha256": "58157f3d8b74e9aa60a3e850b109348fbb2a5872aa3e96fe48a1ad5f1c4372f7",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowing-gradient_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2edd20398bb06a8cd405aeda0e26b691f0bbc9fa66554e1b4d5f1cf3c6e40f93",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowing-gradient_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "fractal-noise": {
+    "slug": "fractal-noise",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "113c91d9d426dcbf",
+      "2ac241722d589cc1",
+      "56d16bdf0a46454d",
+      "50dc47b7635ddb15",
+      "176749c43307e339"
+    ],
+    "shipped_dir_sha256": "93a95361b4cc547984e55c4c7b87c6bdc7479126c30f1f15ad4a8b65bab63bcb",
+    "donor_dir_sha256": "e44bf95212caad14ee49f45712d55fcdff3407d4730d894d73339c133637bfd6",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\fractal-noise_16_9.mp4",
+    "physical_mp4_16_9_sha256": "68a528cd63aaba9e9b54362423d3725aead4e96a09f2bde67d7ba4ef8de35207",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\fractal-noise_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5e7975e479103101172ba4e5f7acbad6b7778f0147a640e54f3545b929ff591a",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\fractal-noise_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "frost": {
+    "slug": "frost",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "bd4fb98e76315a8c",
+      "5388386825034c7b",
+      "3397fd75dc8e3ae3",
+      "ed9193688fda1efe",
+      "f44329d1531da9d8"
+    ],
+    "shipped_dir_sha256": "9fabc675f9afc4973972225f9834b97db4620d8f91db2ddcd36ee0ad60ab9bc3",
+    "donor_dir_sha256": "0f0d302ded31fc132d2dc36e3a80c12ce4ed806851e3cfd5b260400dda7b6c9b",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\frost_16_9.mp4",
+    "physical_mp4_16_9_sha256": "10edd2d73793b74deda2bd8a93a5660e638b456c20afc6e3bf11dfdf77b99c07",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\frost_9_16.mp4",
+    "physical_mp4_9_16_sha256": "edc1218f57d6a17bc9dae0a7d3795730ec8864b9a889b76ce52cf11970fbb41a",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\frost_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "godrays": {
+    "slug": "godrays",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "7f269fb789ef25cc",
+      "09799dd3a2e578c6",
+      "2af18752058c33fc",
+      "54e6d3bda1c05094",
+      "928cb21de1a99191"
+    ],
+    "shipped_dir_sha256": "e06f1b91c5ffb0db5c5948e5fcc8781daf5f4cb83f931f0bf637ba984c6ba5fc",
+    "donor_dir_sha256": "ed1d13f807f0826f29795950b7f53c42c9f1a1651b82704a19b0a1143aba09e1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\godrays_16_9.mp4",
+    "physical_mp4_16_9_sha256": "b173263540de9a9238cf92142d794094a67f1a2129111e96c408c3aee1a31dda",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\godrays_9_16.mp4",
+    "physical_mp4_9_16_sha256": "b9f40377a653201458515074fb0048faa88f3f804f7a2696ec0d9d304976df5c",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\godrays_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "goo": {
+    "slug": "goo",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "5c1ec99acfa0aea9",
+      "09e43c5ad5ff94f6",
+      "d2b8506ee8babcbe",
+      "5f3429caa10eb20e",
+      "35d5486a9512947d"
+    ],
+    "shipped_dir_sha256": "e73a6c0e7dea95f702d9b3e87c74332feeeea6cca36e9f05b07d7853129dfad3",
+    "donor_dir_sha256": "11d16de3cc3fc0b8a2ac71ffef71bd2b19b95fd8f937b08c8ca452d2cd312ba1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\goo_16_9.mp4",
+    "physical_mp4_16_9_sha256": "852a00d0663f20aa123ccfdd1cb74c1d1209693ce3b22e09ec2e5ee4ae970408",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\goo_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c7b8836de65f8bbff168290a892dff75533d72d1993d3cb2726e62d4ea92f06e",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\goo_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "holographic": {
+    "slug": "holographic",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "ab7b242ce4362aba",
+      "9299e7bc7106053f",
+      "6f176a4616331ac0",
+      "1b0b97db9da605ea",
+      "89abdfde8cc5d23c"
+    ],
+    "shipped_dir_sha256": "d06766f4080ffc58dd61dcc96d237b3a705c85e290e1758fe81a8df131742d71",
+    "donor_dir_sha256": "acbb8793055d150a8cd5e4497572bbe33c45f46dedf379d8931709168a4eb403",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\holographic_16_9.mp4",
+    "physical_mp4_16_9_sha256": "df416aa91f01698e08b5420226ae58aa196c0828c9344fdce4e43a81fc3611dd",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\holographic_9_16.mp4",
+    "physical_mp4_9_16_sha256": "e6261099975a5c346f324c6e22ea4dc21ac9335a504bed60a598d4287f3464d1",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\holographic_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "instagram-follow": {
+    "slug": "instagram-follow",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "afbf1d034a28426f",
+      "477b3f56b18fd076",
+      "d3a163f464ca1c98",
+      "b3c74122532f41fb",
+      "0b2513a0301f8ebb"
+    ],
+    "shipped_dir_sha256": "fb467ef8ee37322ad9561e8168656c3dc4eca167a02dedecefda9fcc7f57c8cd",
+    "donor_dir_sha256": "e548db57e4b928998bd9168cc572c2a4fbfa91c0e92c4d80347828cc11661fe6",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\instagram-follow_16_9.mp4",
+    "physical_mp4_16_9_sha256": "42d1a5cad2fef4e6a85cd402f6cf7e27bb794b9bb545d2e84f5a3ba259282331",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\instagram-follow_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c43d2482eeb90656e0e3f763ab95784b6e4cd5219f737c6e129cc20fdd1a88dc",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\instagram-follow_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lens-flare": {
+    "slug": "lens-flare",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "a25ea2c0d93ace62",
+      "22b249ce92331608",
+      "9b94bf77656792af",
+      "c85fb1f085439147",
+      "bd3e8690f9f7cdba"
+    ],
+    "shipped_dir_sha256": "607151737cdfc9384e6bd1833bc612c0e8fc3b3513da26581e2be20398110551",
+    "donor_dir_sha256": "20ce783ef3e4d5e9e98becaedf740467da949ea8191877fa054a17f97a010957",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lens-flare_16_9.mp4",
+    "physical_mp4_16_9_sha256": "385eb66af4182f0e21f78b4bc76efaa0ecc8d6d6ba1d2b7052605b3e70b676bc",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lens-flare_9_16.mp4",
+    "physical_mp4_9_16_sha256": "0a8bdd0ef6ad8ca43d7b1cdb82370d83697bf729da535e0d653ce7f32a54e878",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lens-flare_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "liquid-metal": {
+    "slug": "liquid-metal",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "10da768e92993985",
+      "cc85a5d679595ccb",
+      "98190b549680a46b",
+      "2340ad53ec56fc4d",
+      "f05d7205b77b37d6"
+    ],
+    "shipped_dir_sha256": "635dce2f8902c6b3da41f05b50bc1234ddce2b2931e73be1e364fb3e3bf23621",
+    "donor_dir_sha256": "cff6c2574702389c9c3fc56614cf3fdafe5558d81244de99a61342d6b9fb0024",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\liquid-metal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "591fa16c769bd1734c100d2328267b01a8fc1343260ee9db7b768142e4552e10",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\liquid-metal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "3b7c3a36f147e512f7adee786d9c25823da485c6519da6e38d04e5b7ab0ffe6d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\liquid-metal_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-accent-underline": {
+    "slug": "lt-accent-underline",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "5274dd9ba834304f",
+      "aacd8f67fe1a1e5e",
+      "2c5a76e1796c25f1",
+      "f762702cc465127c",
+      "d79ec2ea60a63147"
+    ],
+    "shipped_dir_sha256": "46b785f7a2c008deb4925caff069d6b1f83c97483eb4ee29b5c6cfa6b4841388",
+    "donor_dir_sha256": "dafec8e24697647e97fbf721f1ef9ea0b779e268605360a777896bb9af1fdebe",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-accent-underline_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-accent-underline_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-accent-underline_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-bold-block": {
+    "slug": "lt-bold-block",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "679a13ac9df80207",
+      "ca65b64ca0d1be8c",
+      "0d35ac7e4e89e282",
+      "9c78282524326394",
+      "880713b6178f7065"
+    ],
+    "shipped_dir_sha256": "bed8257f588a60b77a252e1bb543ccec5ab9bf5b5f0e747b35d187f78057f735",
+    "donor_dir_sha256": "77c29535cf821445977b60a1324610982aaecdce322e02105861c02d78e8194b",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-bold-block_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-bold-block_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-bold-block_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-clean-bar": {
+    "slug": "lt-clean-bar",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "b9b1375a2f134950",
+      "c01c7155c553e8a0",
+      "ebb6062498372d74",
+      "1625652e893208f4",
+      "0003497b362b4e86"
+    ],
+    "shipped_dir_sha256": "e3b0f6a681053191fc7eeb1a9f740fc81a34fff0c374e1cd999e3c6a90ee1125",
+    "donor_dir_sha256": "e621cdd29ce4626ce56ec6bb207df44df5996747adb2200dc201af1c8c0fd84a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-clean-bar_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-clean-bar_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-clean-bar_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-color-block": {
+    "slug": "lt-color-block",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "74f45b081a380064",
+      "0f668313e1c434d6",
+      "68ab8046591da1ef",
+      "5fabcebac1afe9b3",
+      "e182a83bb2c83ffc"
+    ],
+    "shipped_dir_sha256": "56dd132cf2154d1e47d28bcc1386ed36959854a83c4a5fa36ce38e249b407863",
+    "donor_dir_sha256": "db69fbdbcbef560e4623dd3c9ffeab62d8bc07199c90c4f5d7c39d24acbf9e5c",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-color-block_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-color-block_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-dark-card": {
+    "slug": "lt-dark-card",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "6653705d8f645439",
+      "5fa3460b54086349",
+      "d7bfce3dd617a518",
+      "832da8c50508b8da",
+      "19ef1f7c69e7127b"
+    ],
+    "shipped_dir_sha256": "767ff13032b3163b10e908278af331791751255ddf5f3d54b318930989c55792",
+    "donor_dir_sha256": "9b109c717cd776b4bc451290e765aa46bee6379366b78b337a6fac55070b7355",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-dark-card_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-dark-card_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-kicker-name": {
+    "slug": "lt-kicker-name",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "5aedd58661c88eca",
+      "fa856cc2bf9315b5",
+      "b7737287656ca2d7",
+      "acb5260c2c5bece8",
+      "a6096ea124dff76b"
+    ],
+    "shipped_dir_sha256": "e4b06ca5fca701495ab63373f3aad007c3183ded20ed58aa13c9fd92aae39563",
+    "donor_dir_sha256": "95831e9276b5b46b3e2738378208048a555f29554a43be99903de364ede05caa",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-kicker-name_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-kicker-name_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-mask-reveal": {
+    "slug": "lt-mask-reveal",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "81f5d26e8208efe1",
+      "b22a0d6972be4cae",
+      "ed8e779d21689216",
+      "527d5c348ff0099a",
+      "01012ac97b8a05de"
+    ],
+    "shipped_dir_sha256": "e79e074760de8f4e6b1bd51b85a9bb49cc96f8b146a6a6921493229de72cb32d",
+    "donor_dir_sha256": "7f4189126fb719487f9abe8a15d96d37c7bcead807e352d70efb285754ea3e92",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-mask-reveal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-mask-reveal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-side-rule": {
+    "slug": "lt-side-rule",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "e168f4320201aad5",
+      "3171a240de6e472d",
+      "76f167ec690f2990",
+      "2fd487051f00f7ad",
+      "2c0a30b8d1d37c58"
+    ],
+    "shipped_dir_sha256": "7b0f02274ad30f435c5a3992ec3d2bbef42ebad6f9af4f8a0056bddea07f583f",
+    "donor_dir_sha256": "71d3b74e50a93a12597bf8f0f031db73fb957a6ee66e92525510e1f30f0204d2",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-side-rule_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-side-rule_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-soft-pill": {
+    "slug": "lt-soft-pill",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "09a830be47d9c136",
+      "0ada7914a1e239b9",
+      "e88439db41c9a74f",
+      "7a079c2c1093e3f0",
+      "591662c0d2572bec"
+    ],
+    "shipped_dir_sha256": "0b519de956beb6b5b69211c0335c2c65c440d092e72a876d832a12f5fa2d28f2",
+    "donor_dir_sha256": "33870f4c5a0098149de7f13f300da34447a97cac4328dca9ac7d29b5a3be30b6",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-soft-pill_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-soft-pill_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-stack-bars": {
+    "slug": "lt-stack-bars",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "f98cc63545b6c0ac",
+      "8d505dbc40212290",
+      "57f4618aea93804d",
+      "202675df65c690a1",
+      "a8581578c07b191d"
+    ],
+    "shipped_dir_sha256": "f5cda201971fdf53dd64081a233f510d035d7e5f6885398b0a881352d596096a",
+    "donor_dir_sha256": "cab7b29c1ea5cdd591a89127b3d26c74cd1937e658b79d0f925e31df9eb5ab77",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-stack-bars_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-stack-bars_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "marble": {
+    "slug": "marble",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "3d1ed804cb0d5665",
+      "32c9fa8291396b76",
+      "d1f3e0bc259db25b",
+      "be2d5c5dfa881879",
+      "9e925869546dbb99"
+    ],
+    "shipped_dir_sha256": "026bc5cd7e95e4f443aa45a720abff05c9151648db70785c0c9fe897ddc5e0f4",
+    "donor_dir_sha256": "8ce7f828790f95f35b61b51d64f4f6c3b7645254608690867a7ecf5aefca2e8c",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\marble_16_9.mp4",
+    "physical_mp4_16_9_sha256": "f6f960355347bea237f7189af63ccafe2067d78915ab154984f13803cfb2e36e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\marble_9_16.mp4",
+    "physical_mp4_9_16_sha256": "0f8b03c3e44a2581d66e6d14b4ae247a30d5b30d672d195147471cefb2b8401d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mesh-gradient": {
+    "slug": "mesh-gradient",
+    "is_newly_ported": false,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "e9422c5e95ddadb3",
+      "42c57eebe1f7e5ca",
+      "1ed34f19f78ae057",
+      "2f50b8177e13f9e8",
+      "b608317b22f1dd27"
+    ],
+    "shipped_dir_sha256": "61233683efcbee84fe32ae7e3fa558dce12ae8e462ce9e2184b45a3015d18a74",
+    "donor_dir_sha256": "ae3d5bd3316ae981480ce57c73851b5199a4ba1249b1dcb241cd759c2d23e0cc",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mesh-gradient_16_9.mp4",
+    "physical_mp4_16_9_sha256": "8e8277cab0dba0ee3dc27c90b0215c43ba99435a68620b501f08661a95dc87b4",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mesh-gradient_9_16.mp4",
+    "physical_mp4_9_16_sha256": "dfa83e574aca8a773b3a1108ab7672356918df473c8f7ea5502dd64fe93edc99",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "frost-sequence-camera-orbit": {
+    "slug": "frost-sequence-camera-orbit",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "2ae223ea29af86f4",
+      "57cc5ab91fcb4b1d",
+      "019403cedb7ccae3",
+      "9150e1396b9667d6",
+      "7dbf94d72ef6705f"
+    ],
+    "shipped_dir_sha256": "fe99b7a89f636cd9eac9b6618fa458b2495722d685ed971cf9c55c0129801493",
+    "donor_dir_sha256": "2bc9d64a2cc1505f6194eeb6dbc1e156aa313632022fb3c7f408255badc2e997",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\frost-sequence-camera-orbit_16_9.mp4",
+    "physical_mp4_16_9_sha256": "a35496f9b8b5e36380189c4606e83757d3389d09ce7cdac6688656932e35ae9c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\frost-sequence-camera-orbit_9_16.mp4",
+    "physical_mp4_9_16_sha256": "332898e6674634ea5736c0b22ef0b599548923b7d7e9b09085f905efd6c3ca36",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\frost-sequence-camera-orbit_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "cuboid-carousel": {
+    "slug": "cuboid-carousel",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "52493ae8643ea0e1",
+      "6915157a41831176",
+      "649420ff9c750040",
+      "92072496ded83c77",
+      "78878f0f4f065972"
+    ],
+    "shipped_dir_sha256": "5d94fb12cd78a190762652f01bdc9aef2160843ee52462c7ce580197a9486e34",
+    "donor_dir_sha256": "8b3bb227e581f75e7be4c7a3b33855ca0535adfc3c32f356e77e3f7294208be1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cuboid-carousel_16_9.mp4",
+    "physical_mp4_16_9_sha256": "60aca871c9486e0a23dfae0a9abc38248b6aad16da3bce27b7a1abec79657fb7",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cuboid-carousel_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f3b1835724ed289c42f25222190943bd04a6c6484a5fe6f85d3a2b6b66f3bcb4",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cuboid-carousel_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "cosmic-orb": {
+    "slug": "cosmic-orb",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "9c4c33dbe58c37d0",
+      "cdc60ad27d06135f",
+      "279d50e0510dfb1f",
+      "d5e46b9caae86e0a",
+      "cb338d791c620782"
+    ],
+    "shipped_dir_sha256": "2884e36c6c9760db1c3df079be5d84ffe5d608ffd7c0ea9aecc338d67e80fd3e",
+    "donor_dir_sha256": "329479793ee915979a8902418e98f5c7c03ff8ce56910cdcd7aea894d1ef1ed3",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cosmic-orb_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c6a5e4316b1edad6ac6818a738f44a37207a3d09e9bdc5761c1cc5fb33cdf29e",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cosmic-orb_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f2de1ff6e6cbde5ae4a8f90b6332c20ea0c83a63d15e2a3759bbd19f40e00b96",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "gallery-tunnel": {
+    "slug": "gallery-tunnel",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "7ab795f0e9691bb7",
+      "5a478330028936fa",
+      "ca2ad5a3423580b5",
+      "cf02483ddd05dfff",
+      "1ff01a3ae85c1f43"
+    ],
+    "shipped_dir_sha256": "1d50e8d0150a76d4d915496dce1452dd911d86b1860a3981807a85c0cdc3ad09",
+    "donor_dir_sha256": "175295c22aec6612a47e0c4aa060617e4767595296897878c5852654dffaaa65",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\gallery-tunnel_16_9.mp4",
+    "physical_mp4_16_9_sha256": "f137f9bc2604bedb2f6ad8509a661799688a19177aa9122f49d10374c5e2d7db",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\gallery-tunnel_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a53ea6fa6d629d16e795133fa7b98a88557104bcc1dab4afc1d544a21c8c811d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "gooey-split": {
+    "slug": "gooey-split",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "0dd77a551648f639",
+      "6dc071b1fdd8ae88",
+      "dde2e6ff414af44d",
+      "1ab8ac84e6185c06",
+      "e737f97390b41be6"
+    ],
+    "shipped_dir_sha256": "06c6ae565e2c0c725c177c633ec4494d5a28ee1b7840f190cdcada60ebcbefd9",
+    "donor_dir_sha256": "b8bf870cc3330412646a09b08f6a2b415e872d8342a721b3007bf458cbde6f0a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\gooey-split_16_9.mp4",
+    "physical_mp4_16_9_sha256": "bf10f1aea17f3d504a1a437fbe1f4651ec5ee5138cdeb363516de3f8623fa598",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\gooey-split_9_16.mp4",
+    "physical_mp4_9_16_sha256": "58b679fd922a4c1f190c83c0dcdcd344d9a1e11ee22ad831189f4e7f53e29451",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-3d-extrude": {
+    "slug": "code-3d-extrude",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "73f57fde31f1df41",
+      "c62128c5bcd71a05",
+      "0124266ae7914913",
+      "e984f7a4f2e75d40",
+      "db5dd8400be1101f"
+    ],
+    "shipped_dir_sha256": "5f46f18fae8ded7b5e0ffb23f8c9051e1ebfd451ea91996ad5c2d7f93367ec68",
+    "donor_dir_sha256": "5e2edb1b355908ab21923e6a146bf7bb669d1c323cc195ad044e9d7bd6a3d496",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-3d-extrude_16_9.mp4",
+    "physical_mp4_16_9_sha256": "33f0f5b67487c26d0bde1b550180464bb71f920b3860a30f6639111cce0bdff8",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-3d-extrude_9_16.mp4",
+    "physical_mp4_9_16_sha256": "694d4084b8eb2723e29268c283a6280672a8442e248d2e584386341e29233a0d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-particle-assemble": {
+    "slug": "code-particle-assemble",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "1b0639f1783d3108",
+      "20083e54106afa37",
+      "889fc89da7c644a4",
+      "3e1a604a21bb3791",
+      "579c0220202c6d3a"
+    ],
+    "shipped_dir_sha256": "17ded67950e377b0a5115fd46e07a64dbc3b1278a4766a4deb81095b397151e3",
+    "donor_dir_sha256": "022150b0273bf4798d7a8716422a70116732af36b246d7a50d51ae6abf481c06",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-particle-assemble_16_9.mp4",
+    "physical_mp4_16_9_sha256": "33f0f5b67487c26d0bde1b550180464bb71f920b3860a30f6639111cce0bdff8",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-particle-assemble_9_16.mp4",
+    "physical_mp4_9_16_sha256": "694d4084b8eb2723e29268c283a6280672a8442e248d2e584386341e29233a0d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-shader-dissolve": {
+    "slug": "code-shader-dissolve",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "bdd6bce66debf549",
+      "9217721d86acecc9",
+      "691acf4f71cc4e3d",
+      "41045c396514f3a9",
+      "6465c1b194f7fb6a"
+    ],
+    "shipped_dir_sha256": "7910b897f6c38fdc4e2db94e05631ab0e11893e194ed3d3d75d61be43789f08f",
+    "donor_dir_sha256": "80e6d40787618d3f1363294196289e9fd45d8fb8438b63173d421cf562bc7aaf",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-shader-dissolve_16_9.mp4",
+    "physical_mp4_16_9_sha256": "33f0f5b67487c26d0bde1b550180464bb71f920b3860a30f6639111cce0bdff8",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-shader-dissolve_9_16.mp4",
+    "physical_mp4_9_16_sha256": "694d4084b8eb2723e29268c283a6280672a8442e248d2e584386341e29233a0d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "glitch": {
+    "slug": "glitch",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "4d5bc6c3f60ce876",
+      "f6d76fcf86928d40",
+      "2d7956ac1051e7b0",
+      "4f5567c6b3c2654b",
+      "29f1d2b297cadaac"
+    ],
+    "shipped_dir_sha256": "d35a93630ee020cb05d536876a4afeca88ce670490603877b088e0d3fdff81fb",
+    "donor_dir_sha256": "ab63535da7a724240ac08ae171502a1856aa11e83b338ad11215a4843a86acc2",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\glitch_16_9.mp4",
+    "physical_mp4_16_9_sha256": "1198ea3e1797c75dc4254830bd9e8258bc881ce24ff64660e4df57f5bdb2939c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\glitch_9_16.mp4",
+    "physical_mp4_9_16_sha256": "cae6251992466c0baa41faf16738bbb51afb35da0945fde4f82e0768b22ece65",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\glitch_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "gravitational-lens": {
+    "slug": "gravitational-lens",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "1ee94042232d8862",
+      "7988c305d96d7d4d",
+      "a0cb5248d6c68e00",
+      "cf9bda72d8283e8a",
+      "f79b70cf39259af9"
+    ],
+    "shipped_dir_sha256": "b5cb79401fe8c324452236ca646af5197c6f1e6054cc358d9f6834d7aa53009e",
+    "donor_dir_sha256": "232e56592bd5384124f9292c5118653f027dc06f469904784a8d453a25dd4c51",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\gravitational-lens_16_9.mp4",
+    "physical_mp4_16_9_sha256": "d9b8d22fa6dbf8177e1adc2b1b9a8f79a04636563c11bae4a6c904770ea585bd",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\gravitational-lens_9_16.mp4",
+    "physical_mp4_9_16_sha256": "a3cace2c6392c4edfdb8a917c9833de33b2bc972f5b662fb0f0f849e01aa72f8",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "halftone-field": {
+    "slug": "halftone-field",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "2d5bfccf465d43a2",
+      "379cde16a45e531f",
+      "f0a75046e746da52",
+      "3d335c86920bc7d1",
+      "06e92b51024ccc08"
+    ],
+    "shipped_dir_sha256": "e83a1f9c0942cbc6c6424c6de3ad60a465e1112bdd8cb63aedda353cd882a0af",
+    "donor_dir_sha256": "3a17594235b13ca780ce17e828f2a57c6285952822d4e49820776e62d194cd12",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\halftone-field_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c4ca17a8a3e8c6069ac9f09dcd04438a8a89caa294283442bd23e009570aea73",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\halftone-field_9_16.mp4",
+    "physical_mp4_9_16_sha256": "fa67128fa2792adb93e7aef307a62e69ead5fb905d6270ccf3e8f0cb8b530c4f",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "light-leak": {
+    "slug": "light-leak",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "ebc26759347a1bb7",
+      "2d21afe752a7f4cd",
+      "91db3eb4c0c1e531",
+      "cd79fd6af3944593",
+      "2ead1f8a28405b91"
+    ],
+    "shipped_dir_sha256": "01af5d754a506019ad084b515c98aef186ca469bdd8fe8837438ed129dbbff7e",
+    "donor_dir_sha256": "3a74066c3a96d726e51221c3c056fafe5798bba10638d7f853de369d35df0538",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\light-leak_16_9.mp4",
+    "physical_mp4_16_9_sha256": "442c846d678673246268d37ec539907e456ea40dc23a02ee421d6a508a6fda46",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\light-leak_9_16.mp4",
+    "physical_mp4_9_16_sha256": "cd47a7ae86a5fc18048f6ee8d84c63513677bed34afb438e8623ee913dd84cae",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "chromatic-radial-split": {
+    "slug": "chromatic-radial-split",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "cf1a20fd1200b024",
+      "44c05c15af147c79",
+      "050870d98a8ed3a7",
+      "e3136e9096bbfbc2",
+      "475cbefcc4f80305"
+    ],
+    "shipped_dir_sha256": "8ff881e743b9c7a278f280553a4ab5edfc2aed309c5ec8cb1547d95351733344",
+    "donor_dir_sha256": "50e4b262572f099afbd57631f22ae15fa0f8f5da1aa30730f67c7ca77e6c204c",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\chromatic-radial-split_16_9.mp4",
+    "physical_mp4_16_9_sha256": "a32e564718505d5f803bb6f4c21c0bbe1244419ad361044f98039fabd2bcf4d1",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\chromatic-radial-split_9_16.mp4",
+    "physical_mp4_9_16_sha256": "f3d8557a6497cecc1d6f800b23bfc4e56eec4b5f47414e23bb0fa52867141057",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "cinemagraph": {
+    "slug": "cinemagraph",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "73fa5eb1e1dd66ac",
+      "32d263dc65f8bfc3",
+      "1787013574ed7b3a",
+      "a786a5eb1d6f160f",
+      "3ff24dab70137c76"
+    ],
+    "shipped_dir_sha256": "6e7c0df9f796a75837908bfbd8cec46a66a0cb0231f72fcc1a9da0c8b67c8d68",
+    "donor_dir_sha256": "4e131e24ba5b705959e19a7176debf6a16d495e8337c76a3ab717e3d5b06f895",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cinemagraph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "260b94ea09119c5987e7fd76ee085ef809999407eb191b2209ad275de292cd51",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cinemagraph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "b93a9472226a345fefb305d8f54418b3ebf730751f336e150ce8d995ba3cbb4a",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "cinematic-zoom": {
+    "slug": "cinematic-zoom",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "e52ca42bd52b09dd",
+      "e7bd897fc3d77dce",
+      "8c118e6a6496e33f",
+      "7180af6ad620f136",
+      "8fc82fe8d8eba084"
+    ],
+    "shipped_dir_sha256": "58b59078306a5237a8435c2542c94903395e56cc9faf6f86fbcc3c8574cfb24d",
+    "donor_dir_sha256": "2a7531cdc37c1d2aecea0345c635ee3fcbb9c087c45119431f7d568bdd02082f",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cinematic-zoom_16_9.mp4",
+    "physical_mp4_16_9_sha256": "1ff6c9809ff697fa43283a47ade7fd33f8ec92ed37a106f4eee4e3c9809626f4",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cinematic-zoom_9_16.mp4",
+    "physical_mp4_9_16_sha256": "80edbd120ef1950a34b8f21fbf9f3dde07f310302184d9f5983e1e1a88031a86",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "cross-warp-morph": {
+    "slug": "cross-warp-morph",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "867496087e0d17b7",
+      "6a38a61c1f6796f3",
+      "6237acbc3661e788",
+      "90bb82f78699c0e4",
+      "8bb3fcd572ac1762"
+    ],
+    "shipped_dir_sha256": "7f81714b73544210d28d79820bd2eb356db4f727aadf9f00c52a1fd0ea66195b",
+    "donor_dir_sha256": "05f379f7a5dcfb82da67187a22ac35840fb9a0662ef9df61adc4f3e925605964",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cross-warp-morph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "1ff6c9809ff697fa43283a47ade7fd33f8ec92ed37a106f4eee4e3c9809626f4",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\cross-warp-morph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "80edbd120ef1950a34b8f21fbf9f3dde07f310302184d9f5983e1e1a88031a86",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "domain-warp-dissolve": {
+    "slug": "domain-warp-dissolve",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "24f4352392e3f563",
+      "db4796a91ea39e0a",
+      "e9c853a911d0256a",
+      "b47d38d6f3bced55",
+      "bd1cf8ee5b985a71"
+    ],
+    "shipped_dir_sha256": "cf2c65e1a658d30855409dd344d9b6e718b69b31bd2eea23f541613629180753",
+    "donor_dir_sha256": "03c09f78ce2e968ab06587feb5d0487d79aa86ffbd65129809d3bda1e5741add",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\domain-warp-dissolve_16_9.mp4",
+    "physical_mp4_16_9_sha256": "66fc1c1d1d45c522c08ac3b4f47fa42d61a4509cf7d9242aec0a8a542ea7bb7d",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\domain-warp-dissolve_9_16.mp4",
+    "physical_mp4_9_16_sha256": "3ea4c2c22152e3295a7a343fde6c1c057f8bb3863f61bf8dba696e85fd668d11",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "editorial-flash-overlay": {
+    "slug": "editorial-flash-overlay",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "ac7e93bd27b9bac6",
+      "cc8a195c630037c4",
+      "92207c3944e0af96",
+      "5da8745147fdd17c",
+      "d66c049e2b9980c8"
+    ],
+    "shipped_dir_sha256": "c9133b65fdd9cdf7475b4afe2772a44a44e12c88edeaa7d260d1a51f9d1d36c7",
+    "donor_dir_sha256": "0e30e7840b5d85fbe87d81d4cc3911107ba534ade118f4168673e956b12eda35",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\editorial-flash-overlay_16_9.mp4",
+    "physical_mp4_16_9_sha256": "1ff6c9809ff697fa43283a47ade7fd33f8ec92ed37a106f4eee4e3c9809626f4",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\editorial-flash-overlay_9_16.mp4",
+    "physical_mp4_9_16_sha256": "80edbd120ef1950a34b8f21fbf9f3dde07f310302184d9f5983e1e1a88031a86",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "flash-through-white": {
+    "slug": "flash-through-white",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "9657d2ed3f552fd2",
+      "d14c384f6760c05f",
+      "dbce2ef9e2c0244f",
+      "58bd6f33baea24f7",
+      "7c6cc9599930e0c0"
+    ],
+    "shipped_dir_sha256": "e2fecb50d7eb39b618494283b474002b9f63f52e6b11ada649e82ec513490011",
+    "donor_dir_sha256": "e2486d88e7d391156ce1c1957fa198e4a7ff981355bf4959105dd6781859463d",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flash-through-white_16_9.mp4",
+    "physical_mp4_16_9_sha256": "8641917fe9edd1c315e9da2e6a6890d8ff4685c0bd855b8a9f72e88cbfced8b5",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flash-through-white_9_16.mp4",
+    "physical_mp4_9_16_sha256": "dd432aa51dc7e66aaff3d5401cc1a42e0495e8da69440f0648269f42ca4583ce",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "freeze-frame-dressing": {
+    "slug": "freeze-frame-dressing",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "26bad4a31c494468",
+      "eff8d17ab73e0412",
+      "d6d1507c02dc5781",
+      "8ecf85dc69ef7f11",
+      "7086590226a29d4f"
+    ],
+    "shipped_dir_sha256": "0e5380c7cab297db888b038b384e1ec73287ab7733f68d09b98595f6ac32d835",
+    "donor_dir_sha256": "f40fb094e1ae7a0acbb40640046ef6e65971e6ea10af3493cf01d75c8253063d",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\freeze-frame-dressing_16_9.mp4",
+    "physical_mp4_16_9_sha256": "8641917fe9edd1c315e9da2e6a6890d8ff4685c0bd855b8a9f72e88cbfced8b5",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\freeze-frame-dressing_9_16.mp4",
+    "physical_mp4_9_16_sha256": "dd432aa51dc7e66aaff3d5401cc1a42e0495e8da69440f0648269f42ca4583ce",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "beat-freeze-cut": {
+    "slug": "beat-freeze-cut",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "39e5c4946c0e8aff",
+      "6677f955896d1a4b",
+      "19afba08e415389e",
+      "1adefec4e2339137",
+      "a2acd5b4735a91a4"
+    ],
+    "shipped_dir_sha256": "d42135b8b859f8448fd1016ff244e03f78495503369f1275a805dec8308598c3",
+    "donor_dir_sha256": "b43418e9116fce8bd6ed866f5fbab1bd04fb20a80e4f004d76e93a47a0ced62f",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\beat-freeze-cut_16_9.mp4",
+    "physical_mp4_16_9_sha256": "294a8f61e56bb04c28b08091dfefa452c5e11746344aeef34edfda055cc70240",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\beat-freeze-cut_9_16.mp4",
+    "physical_mp4_9_16_sha256": "d3c2ccae5347c88aed463a56a60ce74c021fb5e21b55aeb43cf1cf0eae43ae95",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "camera-dolly-zoom": {
+    "slug": "camera-dolly-zoom",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "e01e03c0ce010819",
+      "de1a5e18a6a0e63f",
+      "cb4e7e415326e0a9",
+      "bb3a0b5beb8b7012",
+      "c0ab2840dcc15e7f"
+    ],
+    "shipped_dir_sha256": "a8af64578b127b70b0afa59d6ab036f021527f5357c940a34b3ed4496dd8c49a",
+    "donor_dir_sha256": "fda2758e696b3fc7e3dee75ee0adb8b80417dc0a3377948485a6fddabf237571",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\camera-dolly-zoom_16_9.mp4",
+    "physical_mp4_16_9_sha256": "288f6684d19a155b140715e6955fa413c7ab5a4130035d342434d9f020f66dbd",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\camera-dolly-zoom_9_16.mp4",
+    "physical_mp4_9_16_sha256": "fb2822aa4c115bfac51320bea57fb8a555101877f9a145eca53ef782e19f4f29",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-diff": {
+    "slug": "code-diff",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "a80be3ae27d62b77",
+      "c1b580d68cce8980",
+      "fc70783144ce728c",
+      "ec69ae838b9b8943",
+      "fd948044422baf08"
+    ],
+    "shipped_dir_sha256": "db48c40ef5be77d23381a78ede9d0dcfd5c6d5c8603962df74f11d3832f3d8de",
+    "donor_dir_sha256": "7f4dbc0928ab20236dfde20546733c6cf9e526d3dbfc6c2fe2f7937aaf414032",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-diff_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-diff_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-highlight": {
+    "slug": "code-highlight",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "402c994ce25d6fb5",
+      "95a23e3a6df34812",
+      "df9ad364c2428e13",
+      "f51eb26390161bee",
+      "3c178894d4712a5b"
+    ],
+    "shipped_dir_sha256": "f39d6411b9a4c91b3ec912206593c18585697053a692390772c35e22765aaf98",
+    "donor_dir_sha256": "91291fc5f9ef0ea630a183b41482c7f91c66609e7658742f0d9901faf4dd06ea",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-highlight_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-highlight_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-morph": {
+    "slug": "code-morph",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "57c29dd444409e23",
+      "ea8ee98d800954cc",
+      "9d874e9ad97b5bd1",
+      "1b3a493a5591e4d6",
+      "dd0571c5400b133a"
+    ],
+    "shipped_dir_sha256": "5b409b93dcf94d7942f17ee6f8ab1c438e0856ab8df05df2047205f8c9c98468",
+    "donor_dir_sha256": "c2ee6741bf0edd93d4f69ab1b9d2681eb1811cd982a4cd34ac6fdc2b96fe425a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-morph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-morph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-scroll": {
+    "slug": "code-scroll",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "6a14aa0fcf9e5580",
+      "806bc4afffd2e3ec",
+      "d5dc758e9693f550",
+      "dffbecf8f5682279",
+      "456fb93b499ba8d5"
+    ],
+    "shipped_dir_sha256": "5c14a58ffa2de6fb5e60b29bbecb5cdc0cc9606ff8d7eed9d6765dc168f492f2",
+    "donor_dir_sha256": "dd74273fee09a1214e4b4a69b9c79991c2779607cbd2627366e3b70c456924f1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-scroll_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-scroll_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-slice-hero": {
+    "slug": "code-slice-hero",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "4a9d556a6b3f3583",
+      "8c52a87fba4b9d5c",
+      "aebe80cceef6f7c7",
+      "89af6d5fe93e25a7",
+      "283c420f0daf5af5"
+    ],
+    "shipped_dir_sha256": "dea64d10bbe473389dc95387837a5b1e130b61e27a02a846fdbd412fb5264a3e",
+    "donor_dir_sha256": "2397e1c5000efb09310e3fd3ee7161d6127fb78d2201222862fac9fec4a416db",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-slice-hero_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-slice-hero_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-snippet-dark-2026": {
+    "slug": "code-snippet-dark-2026",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "54c443b4d8dcd275",
+      "c47cbf9c415e05ca",
+      "39afa659e9f3ea4d",
+      "63e30a0ee3e2419e",
+      "099b0ab3d406ddbc"
+    ],
+    "shipped_dir_sha256": "92ef4470e0c163e3fa0a39a03b2310c1313ef3413faaad4569e619dacb9e59c1",
+    "donor_dir_sha256": "4c34a7a4f2bb193b593914fbad62ee2173d7a5674fc9dbdb16550b0f47df64b8",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-snippet-dark-2026_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-snippet-dark-2026_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-snippet-dark-modern": {
+    "slug": "code-snippet-dark-modern",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "6cddd822e598e69c",
+      "a5f1a9aabdde0a84",
+      "51a679f46fd74839",
+      "a6837a7485d7da3d",
+      "5012c2f2ec17f0a5"
+    ],
+    "shipped_dir_sha256": "b996d1a404d756716bfe48994ff9e59fe4a74d6fa277969d6a1b16b638c5a855",
+    "donor_dir_sha256": "ac74aebe802b04aeebe81064a83d72e258e88ad82bf4bd430f516d4b07a4b0ec",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-snippet-dark-modern_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-snippet-dark-modern_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "code-typing": {
+    "slug": "code-typing",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "c5e6d500111613ba",
+      "51c078c4342ffcf8",
+      "86588ff140f1bd63",
+      "74f4145bb17e8573",
+      "6eda8599d88ab6ef"
+    ],
+    "shipped_dir_sha256": "987e3c89b912e47b60c1e3756c0db50940fd68f3dc8c45623946f29e92c807cd",
+    "donor_dir_sha256": "af53c4dc04954cb084b8f6da5ad00ce069bb55d90fd7edb1ebdc0e653518c869",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-typing_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c3a300ff603a04a7344c9a27b44bde03cd4ff5f37b67c8a96f8b638d8d4c1d40",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\code-typing_9_16.mp4",
+    "physical_mp4_9_16_sha256": "18bef456320ccf5e75537453e985e1b9cb8f18aed697764fab3d0c5e34bf9d10",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "bar-chart-race": {
+    "slug": "bar-chart-race",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "4fccf527785ab8b3",
+      "e268a27483901f9f",
+      "ee894a3959a6ca8f",
+      "1b0b590107f76616",
+      "d8bc5d954eb808be"
+    ],
+    "shipped_dir_sha256": "912c0b69f1c2328a342c9c14dc468f3bf23ff82a566514559475f7da94168c8f",
+    "donor_dir_sha256": "c93b3cd3936e7c4f7b6ad3b934bc1f81cbf2fc4f1780b4257846ea098d91e9e1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\bar-chart-race_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4d01bffed5ffefe9c9b994f3c232bd8832eae31d67b621394d068ffd24a6bd8f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\bar-chart-race_9_16.mp4",
+    "physical_mp4_9_16_sha256": "20435e56c9fc06f01e7e6f1413d73807bcc13cb8d6a116827f221daadcd44c73",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\bar-chart-race_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "flowchart": {
+    "slug": "flowchart",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "7d31595cc34852d0",
+      "3d3b94631fdbf6c4",
+      "ce333285b39efe5b",
+      "885506aaa4cf2295",
+      "53b54883b48376bb"
+    ],
+    "shipped_dir_sha256": "8dfe3417c37f874fd39dfaac23f2d4892917c35048bccac1953e3e7142a3f920",
+    "donor_dir_sha256": "20b8691fe6a3eb39edb3bdcff616df099c1a8c3600164ae1a3a6811b1e2ebeff",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowchart_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2076aef074fe6f8e7cd53fbda5f6bc9ec9031b2e1d6b7c6e486b2c6f56d0a648",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowchart_9_16.mp4",
+    "physical_mp4_9_16_sha256": "94f3ed88c4a25e66baf762ecbf4dce72f2a67b501155a9d9baec8892956e6d49",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "flowchart-vertical": {
+    "slug": "flowchart-vertical",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "121d5d06687fcb7b",
+      "52253cc31a0cd21b",
+      "68e006b1b9228d75",
+      "00cceedc025873b4",
+      "77bfc701e1a3d0a8"
+    ],
+    "shipped_dir_sha256": "3d97816933453e7f09fe9c0d0ab6fd3e9fd84fd1d207295d1c25350849c1b836",
+    "donor_dir_sha256": "d895ad5c28c2e591f737ffcfdc020b113c960194eaddb041dfe7a87aca2f9e3e",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowchart-vertical_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2076aef074fe6f8e7cd53fbda5f6bc9ec9031b2e1d6b7c6e486b2c6f56d0a648",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\flowchart-vertical_9_16.mp4",
+    "physical_mp4_9_16_sha256": "94f3ed88c4a25e66baf762ecbf4dce72f2a67b501155a9d9baec8892956e6d49",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-line-graph": {
+    "slug": "mk-line-graph",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "2836fad8b2ca3f02",
+      "67d1b111478e108d",
+      "a59ed151ca391089",
+      "23f11e9d3b4f9ed9",
+      "00827724ead2c71d"
+    ],
+    "shipped_dir_sha256": "4a2da8afb81bcbaaa3ad942cc231f1a3ddc4dba2fc95b76151f04a646e2ed3d5",
+    "donor_dir_sha256": "135b930f522313fc04c8f1d16bd3f965e4e04adfdd23e42d7a5dc326fa4ac85d",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-line-graph_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2076aef074fe6f8e7cd53fbda5f6bc9ec9031b2e1d6b7c6e486b2c6f56d0a648",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-line-graph_9_16.mp4",
+    "physical_mp4_9_16_sha256": "94f3ed88c4a25e66baf762ecbf4dce72f2a67b501155a9d9baec8892956e6d49",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-progress-stat": {
+    "slug": "mk-progress-stat",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "109076403175f043",
+      "1a9bf9fce9a9856f",
+      "3e8370dcbf494523",
+      "b2467918a1f88aa3",
+      "1c0d3bddaa6609e8"
+    ],
+    "shipped_dir_sha256": "b98cd9126c4fe74761f63c80d158fef48562cb6ae6fd7548bb65cbbe6198b20f",
+    "donor_dir_sha256": "15b9c41158c7c545c89b3268ea34e32d06e35afe6a716890720385116fadac05",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-progress-stat_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2076aef074fe6f8e7cd53fbda5f6bc9ec9031b2e1d6b7c6e486b2c6f56d0a648",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-progress-stat_9_16.mp4",
+    "physical_mp4_9_16_sha256": "94f3ed88c4a25e66baf762ecbf4dce72f2a67b501155a9d9baec8892956e6d49",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-specs-list": {
+    "slug": "mk-specs-list",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "f49fc6595265eb5f",
+      "3662d7fa5c65c182",
+      "ab5507b95dc91a9b",
+      "ee182780a1674968",
+      "cbc840a91c3eafa5"
+    ],
+    "shipped_dir_sha256": "d2f10907c27a05f3170837c8e2ae517dcb66979cfad8e20267b04380c52962df",
+    "donor_dir_sha256": "950e4d006820e02aea499ed3b1be7aca04b9dfac27ddc8347dde9ca307894193",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-specs-list_16_9.mp4",
+    "physical_mp4_16_9_sha256": "2076aef074fe6f8e7cd53fbda5f6bc9ec9031b2e1d6b7c6e486b2c6f56d0a648",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-specs-list_9_16.mp4",
+    "physical_mp4_9_16_sha256": "94f3ed88c4a25e66baf762ecbf4dce72f2a67b501155a9d9baec8892956e6d49",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "ai-answer-rank": {
+    "slug": "ai-answer-rank",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "088257bc3c1e94fd",
+      "e83f251a9fab101b",
+      "cde1d580f019f610",
+      "d4a958e4cd73f3b5",
+      "6bd4091421099709"
+    ],
+    "shipped_dir_sha256": "21efce2dacb8dd9cb6711ac48baf96725d7425f6d72d304fa8e60c72067d1357",
+    "donor_dir_sha256": "0825d43ea31e6d4c6fe812d5eedcc461833ae8e81e3ccb9f7ed3a80c9620afbe",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\ai-answer-rank_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\ai-answer-rank_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": true,
+    "browser_screenshot_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\ai-answer-rank_browser_capture.png",
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "ai-chat-reveal": {
+    "slug": "ai-chat-reveal",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "325052b35d670867",
+      "932857ae3eb2e769",
+      "d50e6be4ccece792",
+      "adef2c48bdb0e08f",
+      "c6d5c4f89a931049"
+    ],
+    "shipped_dir_sha256": "a2a4d7f23a82f9498e12531faf7d8b77728e73ee3a80ab4d0a8f75c9059e93d6",
+    "donor_dir_sha256": "c71cb2c52a8b5a7be44cc63290e7afeabf633cbd072976eb4a1b727e99e692be",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\ai-chat-reveal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\ai-chat-reveal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "app-showcase": {
+    "slug": "app-showcase",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "d80844f6a20f683f",
+      "72dacf47a4904ecd",
+      "c95de6bc5aefe89c",
+      "905ec75c56f4f470",
+      "e0d2a2d6c63271d8"
+    ],
+    "shipped_dir_sha256": "10ad5bfa1fbe8da63983aef658947039cdc656fc39d718713adbee377be8172e",
+    "donor_dir_sha256": "8883daaadc338c01d625b48477095b3093d8afe2bdb0580fddd37dd638470b3a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\app-showcase_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\app-showcase_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "camcorder-hud": {
+    "slug": "camcorder-hud",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "0d5172a8afcd3aff",
+      "6e88fff7bffc59c6",
+      "a82122ba58f0f416",
+      "03aa9b21a79b8121",
+      "3ec5a0d74ac027ae"
+    ],
+    "shipped_dir_sha256": "2b105e196346c3d8e544272ee93a94430b80d699b53a9be686818e25c2a75f33",
+    "donor_dir_sha256": "53f76992237df07ff7fa346d986d7c8cc6bc5f46426058ce5c8431f151aedbf0",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\camcorder-hud_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\camcorder-hud_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "message-thread-reveal": {
+    "slug": "message-thread-reveal",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "b39925968748a1f5",
+      "caf10c32fda91d4b",
+      "8936910224a59d6b",
+      "e4ea5f9140c33f09",
+      "bbcb2c439dd3c230"
+    ],
+    "shipped_dir_sha256": "de7a052522443d6e4eed3b65a4594492247abe93a7c4d8ff8f5aa1a89a81736c",
+    "donor_dir_sha256": "22a1479924d3ed2388a372c500ebfc1acc6ff0097e7aed29d8d4a3c6c2f7e13d",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\message-thread-reveal_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\message-thread-reveal_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-background": {
+    "slug": "mk-background",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "cdf61d286f9f526a",
+      "d80d02dbce13e847",
+      "9f9e9158da4546a7",
+      "2d48f7318731afdc",
+      "e4d9ba249527fead"
+    ],
+    "shipped_dir_sha256": "be9d5c7e8e0688b122a9d2a4c6da1761ad5f5d322e224f06d9fb68715dff9e62",
+    "donor_dir_sha256": "d418cbb6d199ea8a27390a9c4cf84cc069285fc6249fabd9da667dd0980f6cf6",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-background_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-background_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-callout-highlight": {
+    "slug": "mk-callout-highlight",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "ca91efa7a11befcf",
+      "eb2bd00d166df185",
+      "dd7b93e7b9d19d60",
+      "8137f4357c0c1854",
+      "49152ad430ec457b"
+    ],
+    "shipped_dir_sha256": "a35b242c722196dcc4251a62f1dd2327a30dd656c642daa72120ff4ac12edf72",
+    "donor_dir_sha256": "6c8f808209c39df52e3223c1146d7ca8c4ea7f822a7c9fbb872510d8461491be",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-callout-highlight_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-callout-highlight_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-clone-wall-transition": {
+    "slug": "mk-clone-wall-transition",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "c49d92ab8eb97a3f",
+      "e27e577af1d7be75",
+      "a720b6c82117f770",
+      "aa8be5504bf43771",
+      "d80412ac5d225b55"
+    ],
+    "shipped_dir_sha256": "fb646c6be066b532ffa8106f25d57dde33aed447013f5cb2799d388153618b78",
+    "donor_dir_sha256": "3d5cee19b1a3e106da0db0ac59b31e9293fc727d2f4249cd48052888f2d96bd3",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-clone-wall-transition_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-clone-wall-transition_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "mk-placeholder-grid": {
+    "slug": "mk-placeholder-grid",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "61a39790496aef6f",
+      "731932b6ebee42a9",
+      "dbd491e085d2b326",
+      "09ffe2a8b7171def",
+      "60a0629442da7a4e"
+    ],
+    "shipped_dir_sha256": "bbcc2dd38eabb25b5f0ff68bf14904ba159172bbd8d8dbd9963fe5e50f42ffe3",
+    "donor_dir_sha256": "a63aa0ad3e536eab433df99a02a3194fa0a32ddba8af64fbe85ff7b53aec7547",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-placeholder-grid_16_9.mp4",
+    "physical_mp4_16_9_sha256": "22fadcf519c1a2211c21d5ee4a6dc8be65073d6117da5c1eb772970d60c6041f",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\mk-placeholder-grid_9_16.mp4",
+    "physical_mp4_9_16_sha256": "2d99503f13d8092db41a613ebbe17ff5dfa9e4fe3f7da67226c8169352be0dc0",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lower-third-bild": {
+    "slug": "lower-third-bild",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "1eee0350d75b777d",
+      "fa50b841fd16d26d",
+      "b365d78a02517e08",
+      "fd7805b366a23148",
+      "92cf48695f78dddd"
+    ],
+    "shipped_dir_sha256": "5b6112f1217ab87826683a150a5fa9c03450fb2bfc2bc9a4c4cd75ed055634e2",
+    "donor_dir_sha256": "471891ca9475a3674997c91709b87a1c5eaede6e374bf2cfa1eda8488be2d63a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lower-third-bild_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lower-third-bild_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "lt-neon-border": {
+    "slug": "lt-neon-border",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "56787c8b8026f730",
+      "2edd120619449dcd",
+      "db822ef2396e3ca6",
+      "6941e4411b154b0b",
+      "60c6a902a904f94d"
+    ],
+    "shipped_dir_sha256": "98a57de4c80ababf87239353b77fb041101d1ed1c109ad687fd1aed021e76d2f",
+    "donor_dir_sha256": "a6d89754941d52a54470d011d30839692e8f6f7572c2448614c08487c6b2733f",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-neon-border_16_9.mp4",
+    "physical_mp4_16_9_sha256": "9d4e9fabdd7dbaa2f54775fc64a4115d197bcd328cdaf33654efd0da85aacd7b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\lt-neon-border_9_16.mp4",
+    "physical_mp4_9_16_sha256": "14b023f2eb526752cb310cdd14516db9bc1278c8b7533d5a2b1be23bf44837ea",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-frame": {
+    "slug": "hw-frame",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "0f8332a274c21fe9",
+      "cbcbb20bd6805f17",
+      "e52870c00bd38ce3",
+      "d452704943fcdd5b",
+      "d0fb9c0dbdf81ee7"
+    ],
+    "shipped_dir_sha256": "5b3e27315dfea4eba134983caa92c3a4407a1af37103bb358cb9f155677a4fc8",
+    "donor_dir_sha256": "0a22d32a74a9842b90557bd055024cf60cfc026a708ef6e7c503479eb9485087",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-frame_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-frame_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-path-text": {
+    "slug": "hw-path-text",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "63c0d72230001638",
+      "1873a2abfb9b28a2",
+      "64c331d049c3d5e7",
+      "f71c64e9fea80405",
+      "aaa3f2e62fa8def2"
+    ],
+    "shipped_dir_sha256": "2478327da77cf6fadb346e9a436402364c50f26bc9b9706c93e68d19a8d87476",
+    "donor_dir_sha256": "71401e6ab0cc212b459ca7a7d34a7b5df460c1e04184ceb1a34ccd8dfc2c17af",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-path-text_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-path-text_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-pipeline": {
+    "slug": "hw-pipeline",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "7a317e293cfa49b7",
+      "1a75349dabd431ed",
+      "fdfc76f83f8db17d",
+      "da7f94c836875c4d",
+      "e02c26caf9797a08"
+    ],
+    "shipped_dir_sha256": "fde872f2d265d8874946f52220d8d586d2a6d637e5a4bf0bf09983d89fa31852",
+    "donor_dir_sha256": "ba6439a4c31b2f7600cd31226c6e43edb38e7766d5980f4dbcfb85072705856f",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-pipeline_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-pipeline_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-scribble-transition": {
+    "slug": "hw-scribble-transition",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "ea572143f60c84f5",
+      "b89a33d34cdc2238",
+      "9878643951af4af9",
+      "7302294d33e090a7",
+      "65ea0e90cda751f1"
+    ],
+    "shipped_dir_sha256": "70ea484438519fec02f75d9999fdb2f05eea074fe71fe7e02e96bdaa15eb4f71",
+    "donor_dir_sha256": "936d3593a8c4e6c14a91951c5fe5bb2d88ac43bdbb5eede574a0a1a5cf721b5c",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-scribble-transition_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-scribble-transition_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-text-cloud": {
+    "slug": "hw-text-cloud",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "889056253423b131",
+      "c317edd665dc4967",
+      "a71a7a9188af4681",
+      "1dc6af8d2305c4d9",
+      "787bcd786106e8b5"
+    ],
+    "shipped_dir_sha256": "51deaccb3634e62d0a4fe94490e074d5d431c112afa7b5db13a17974d2468fcb",
+    "donor_dir_sha256": "74cacd41af0d77693d53e8ddfd8e66dff8f4697fec44109ad6dbec8aeaa59698",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-text-cloud_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-text-cloud_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-title": {
+    "slug": "hw-title",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "e535bb89f7d4d7d2",
+      "9a8ee28306d9d389",
+      "1f3be3128f6e8ae0",
+      "defb073d333542c2",
+      "1b1d384017fa0251"
+    ],
+    "shipped_dir_sha256": "280abd211afaf5f17d51ca6e780f0f11db2a8f8ea475a0eedb3aff50527139e4",
+    "donor_dir_sha256": "38d52aab2d095c18a39607212c8cb2fbea7c2118f9b5cfa3e8ff0ef526ff4e99",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-title_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-title_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "hw-write-title": {
+    "slug": "hw-write-title",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "bb563a80ac7a37d9",
+      "f797a8fdb3d0fbbd",
+      "630d6a3e0bee37c5",
+      "de6c2b05a48fb423",
+      "6565a44bd9e158b3"
+    ],
+    "shipped_dir_sha256": "610a1d5e890a6119bb04e8a125961b3c9b77b53dbb91e1be9555b9fa88dc4487",
+    "donor_dir_sha256": "ef37696ef6a0e06ae67447303b6f9309f58e90f0fea3000c281d94f6173658c0",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-write-title_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\hw-write-title_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "logo-outro": {
+    "slug": "logo-outro",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "70a37c62eb090a8a",
+      "53315aae64c96b6a",
+      "15d16d45f40c4ade",
+      "3565e3edfff9a5ce",
+      "59c76a47a0f6460c"
+    ],
+    "shipped_dir_sha256": "19c0e0bd15ea1be7520513cb00c1b2f6510657ac35f05f27ea72ce077733dbac",
+    "donor_dir_sha256": "85de1064b86919bb16cddb2f7b6265f76ff12d28c0dd0d6ec01def286922f639",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\logo-outro_16_9.mp4",
+    "physical_mp4_16_9_sha256": "4750e5f16f6c2adadc8ed14a99920c7c3bfcdca836892dde1b8c8584dbe90913",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\logo-outro_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5885f253a70d910b737d29189be1a26ffc9d3e2be4f379203ac0d199c12a8be3",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-circle-1": {
+    "slug": "carousel-circle-1",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "03b46f5c90e39757",
+      "4629e9add7687067",
+      "5585a3af7d599f30",
+      "cf5ceea22eed2230",
+      "25c4958bf9d8b0b2"
+    ],
+    "shipped_dir_sha256": "36b75db0a51fa3be51c07609edfc62e997bbee01359588a181a6b4682ee99975",
+    "donor_dir_sha256": "6bcc9b04e50fc3d5f78b67cd978d631873fee76bddc32a8dd29dcd19d2302a4a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "eda11b4ddb5cd142ae8318872ccd10e4c7ea7d4373c734b03c7a099ce2b49b7c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "ea40f1d77bf0cd61bfe9e589134d19c34d861e34cb0e5bea83b5ebb7a3f95dbc",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-circle-2": {
+    "slug": "carousel-circle-2",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "e77e52844be9c24e",
+      "0ae24dded4ec49c2",
+      "527acb3a6e23467b",
+      "901ea0806038d73d",
+      "4433f02bb5ee2654"
+    ],
+    "shipped_dir_sha256": "9b2c3eefaf0eec63d2af80eecbcdcf8986709c2c7c1a644e4f01c4e5e379f63a",
+    "donor_dir_sha256": "032245d639e0f115d8ef57030a80950a11c713916ed94bcf4c8ef6fbbde19dea",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "0817c96842b890caf7efb38496264d4e1200855124ba783c3db71ab7ac924422",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c0f30e5be0ad676bbd5a7e15c5d4a8fa1135cfcd2941ab8b777a87fff9641bb9",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-circle-3": {
+    "slug": "carousel-circle-3",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "828604ccc83c2259",
+      "d7de4d4de66fa154",
+      "cfb51529e019be4b",
+      "d81490e6583ebac7",
+      "6157d25909a29f47"
+    ],
+    "shipped_dir_sha256": "0e2bf7f22034f83ae60937083796df7b242a5cdcaee7c838cd2df1e2e222fde3",
+    "donor_dir_sha256": "a784ef04f51d34cf5176df2de8f7d50a20f074daa4c564cf72ce8c3744aadbab",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c9e0e125936b8bcdc6d9c365819ebcd37649c78c91eb3c4c4c9083fed17e523b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5acd422cc297bb9320d48a7d6ec870e33b54a14c18e12bfff87b9e45e1af8ee2",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-circle-4": {
+    "slug": "carousel-circle-4",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "7ebb567eeb8f4b8e",
+      "f92adbcc54f9365b",
+      "993cabfc10b8be3a",
+      "3b3fb3f1b7434400",
+      "1023402028c53964"
+    ],
+    "shipped_dir_sha256": "7fb1a2fab7948850d54f7cb9f73398946f0dee20a24a184cbbd8b7de9c2109f1",
+    "donor_dir_sha256": "61f9e4bcc75f38deb2356c5ad1c51ae4fa7597397eb5f632f05e035f3f8795eb",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-circle-5": {
+    "slug": "carousel-circle-5",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "a007e9c497a373b9",
+      "40b7df519ae1643f",
+      "fa17e36753303240",
+      "06f538afc3476708",
+      "fe636bdd3681a544"
+    ],
+    "shipped_dir_sha256": "09a4f3b14dad3cfa878b4e2da4523f663307f56cc10b4c547f2d1abbab3c1f87",
+    "donor_dir_sha256": "8e6fce65b33b0d06513e8bafdd0aa5b39aba2e8bd544d5e708df98d4fb7715e2",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "3472fdaded6ad258fe8e242c511deb5f51c51c3fe2c6fc77a0a106b8b5411001",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-circle-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "b3e73c93a07191bcaef089b9a911f400edaf7a41b5d16aca98c1d64583af781d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-orbit-1": {
+    "slug": "carousel-orbit-1",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "312014f79897ea7f",
+      "fa2dc03e90324eca",
+      "a9ca9dc22625acc4",
+      "9d17adbe7d2d2c04",
+      "611084a78d405d08"
+    ],
+    "shipped_dir_sha256": "f3ba1bac1c03967bcdb6d8732f0070461435bfdc5a90f33c8209e8dd60997960",
+    "donor_dir_sha256": "e87a3587ea10181f9fe62f81f06604a7c02223c4084495249a3072d9e3afadc1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "3472fdaded6ad258fe8e242c511deb5f51c51c3fe2c6fc77a0a106b8b5411001",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "b3e73c93a07191bcaef089b9a911f400edaf7a41b5d16aca98c1d64583af781d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-orbit-2": {
+    "slug": "carousel-orbit-2",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "edec522376aceb25",
+      "5a08e5cc2c7dcbb2",
+      "717fd31610f45112",
+      "301dc46cd639c0f1",
+      "05d9acbc980a03f0"
+    ],
+    "shipped_dir_sha256": "d6c207f764b5e8edfe971fd0201ad1f112a14019f62ba111fc8acaaf10c13730",
+    "donor_dir_sha256": "0600371396b4508cfe8604913575c46f78903d9a100b335ba4418813ad300f97",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c9e0e125936b8bcdc6d9c365819ebcd37649c78c91eb3c4c4c9083fed17e523b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5acd422cc297bb9320d48a7d6ec870e33b54a14c18e12bfff87b9e45e1af8ee2",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-orbit-3": {
+    "slug": "carousel-orbit-3",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "562545199ebf6332",
+      "b1ae98c284d13bd0",
+      "599f30e9101a0a1d",
+      "f2c08ba02aaee6f5",
+      "1fc359cc858cb519"
+    ],
+    "shipped_dir_sha256": "12ac7f1ca9063e7ced337d2d8cd317d1b571f9d12f5a71b4968c3b41cf066651",
+    "donor_dir_sha256": "2d37e49b0d9c8948a221bed129107832af777cfa435e9b585b2b8d79c370f074",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "eda11b4ddb5cd142ae8318872ccd10e4c7ea7d4373c734b03c7a099ce2b49b7c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "ea40f1d77bf0cd61bfe9e589134d19c34d861e34cb0e5bea83b5ebb7a3f95dbc",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-orbit-4": {
+    "slug": "carousel-orbit-4",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "a83325394c137f9f",
+      "398230bbdc46422c",
+      "3b7109c0e81e63b3",
+      "ccabc8203af8fd06",
+      "ead2c03802bf281d"
+    ],
+    "shipped_dir_sha256": "7d3921442ac483d8625e2a1ad48eecd6d1f8bd496930464b3067089f816c2b44",
+    "donor_dir_sha256": "025c64b08d12f808578b47a4c93129d8c3ebd0be3404461d33ba830be7f6ed6a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-orbit-5": {
+    "slug": "carousel-orbit-5",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "2151a0b0da1d688d",
+      "5b6033c63c806544",
+      "b8c35dbc97f743ca",
+      "d1115d7bcbc4ecd2",
+      "f772ff2ff60edc22"
+    ],
+    "shipped_dir_sha256": "fd425a12ff0b3b0be81c8791eb41a4f374cbd0345b81f7e92890b961a5efb4d5",
+    "donor_dir_sha256": "6fdcfbc0747a3b4b474b8b32d79c8ecfad5fb1d170463741cacbc85d71bf3711",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "0817c96842b890caf7efb38496264d4e1200855124ba783c3db71ab7ac924422",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-orbit-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c0f30e5be0ad676bbd5a7e15c5d4a8fa1135cfcd2941ab8b777a87fff9641bb9",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-path-1": {
+    "slug": "carousel-path-1",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "9248c55d3d20e65b",
+      "701cb85417258f1a",
+      "052a1b0a48f5a5d7",
+      "5a94ed78ce7d07e6",
+      "db1b74f01aef0d48"
+    ],
+    "shipped_dir_sha256": "baa05fc9ac7e328584c36b25b9e02ff1eba9ab21408f40b07f75469c97d3c949",
+    "donor_dir_sha256": "51bc69ccf2fa837b91aa50fdea68b294471b547628dc1e30949c15b3c948e983",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-path-2": {
+    "slug": "carousel-path-2",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "d2923c6c9af33c22",
+      "f7a5dbb571918dc3",
+      "801fbb00d09c7a13",
+      "5068c1df6a7fa24f",
+      "1aae41814b91e30b"
+    ],
+    "shipped_dir_sha256": "be974efcb5fd81a122d0b421628ce474bd98d62a38a9f160d4ef17a18385b474",
+    "donor_dir_sha256": "c91baa465d64ea6a4bc1780509b5e4c3a8e952a2c0f463cc6bfe570d0542fcfe",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-path-3": {
+    "slug": "carousel-path-3",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "55f13472d0730521",
+      "b4d2cf5be5461dcd",
+      "9ae89b26e5d3f1dd",
+      "c01b3898c7abc5bd",
+      "15305411d7f329bd"
+    ],
+    "shipped_dir_sha256": "4d8c9ab491ca2750cf812dbf3ca7cfc5c033c6e68e5b29935ddaf134541c095e",
+    "donor_dir_sha256": "7b35a5efff0d1a9a795cf2eeb41845cda19a8e428018339d61d24cc8053148f1",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-path-4": {
+    "slug": "carousel-path-4",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "2251464098cb7d83",
+      "18618212505f3822",
+      "d14301463b2bc171",
+      "723e9bd5c2f89a4b",
+      "d427fc6988208a32"
+    ],
+    "shipped_dir_sha256": "ac7c2cea8e4944a9d8803c2df94f1ea7aa0d7448ad63c5e8e5f9a20949c79faf",
+    "donor_dir_sha256": "cfdd9908f406fd49131716248477baf4d57cbaf0c5b561a3120560b909f7cd6a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-path-5": {
+    "slug": "carousel-path-5",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "37995f3252e07097",
+      "ca96e5fa37f76ede",
+      "9d4489a715e10717",
+      "ebf18030b29b94dc",
+      "2624d1aa47153e15"
+    ],
+    "shipped_dir_sha256": "cdf3e2f72088f931d1d225bfb23c9a6643602afc249ace1432eb65b1616ad9b8",
+    "donor_dir_sha256": "36897b896c50f3cee1994a004cbff4fc7ee6141773b01d0d446b2a10e013d3a5",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-path-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-text-circle-1": {
+    "slug": "carousel-text-circle-1",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "746a821e27416f5e",
+      "e28f70a129f398f2",
+      "8660d47634686503",
+      "65a8719e8a8329c4",
+      "7fb2c44da4055663"
+    ],
+    "shipped_dir_sha256": "49dde341fab2d11ad5b2ae7b93e9d83f9165b3b4eec86d394f5ceee31398bf42",
+    "donor_dir_sha256": "d0d9d7f8277c5fd59083ff1d152ed7e74a1bb64aaa6970c83b02a63eaf52af69",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c9e0e125936b8bcdc6d9c365819ebcd37649c78c91eb3c4c4c9083fed17e523b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5acd422cc297bb9320d48a7d6ec870e33b54a14c18e12bfff87b9e45e1af8ee2",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-text-circle-2": {
+    "slug": "carousel-text-circle-2",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "f0bbbda63a081cc6",
+      "a51da2f5661c87a0",
+      "83b3d065d71d6604",
+      "7db0ceb713d4947a",
+      "1223e56e51bbd658"
+    ],
+    "shipped_dir_sha256": "96c83e4ff3ef9e9a3eca76c5fa577fbd3fd226b58bebe36bb788a3c6ba3ed4f0",
+    "donor_dir_sha256": "9eeaa3f88afaed655cf945273037e4c68782e1be4611875a256b4f60c416b820",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-text-circle-3": {
+    "slug": "carousel-text-circle-3",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "722c184198660215",
+      "ccc795bf39194676",
+      "61c1aa844ac3e3b8",
+      "7d5f510affacbebb",
+      "9d0ef02ede0b73cb"
+    ],
+    "shipped_dir_sha256": "510df54b08b494882757a63e83f6a893881e034b607e8bfae6d45b56eb39916a",
+    "donor_dir_sha256": "d9871f8b994fadf930937db5c746143ee60ec7c4880390619a6285b4815172e4",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "3472fdaded6ad258fe8e242c511deb5f51c51c3fe2c6fc77a0a106b8b5411001",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "b3e73c93a07191bcaef089b9a911f400edaf7a41b5d16aca98c1d64583af781d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-text-circle-4": {
+    "slug": "carousel-text-circle-4",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "f1fe19c155a170d3",
+      "e771332fcaff87d7",
+      "28bc8c318c7ed8e1",
+      "9bc6227f6d3a005e",
+      "ef4f0e8f2b0514b2"
+    ],
+    "shipped_dir_sha256": "6331bebccd42e18c5932c7bcc81ae0763787e481780369912b12d0ab785f2de2",
+    "donor_dir_sha256": "54698b7019f0e069b9ae1751c0a9ff255279d73fe27ad947497c9ff45f316422",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "eda11b4ddb5cd142ae8318872ccd10e4c7ea7d4373c734b03c7a099ce2b49b7c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "ea40f1d77bf0cd61bfe9e589134d19c34d861e34cb0e5bea83b5ebb7a3f95dbc",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-text-circle-5": {
+    "slug": "carousel-text-circle-5",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "1a62ccffd30a01c0",
+      "aad76595f36d96a3",
+      "864c9d747e8bf4a2",
+      "a08479efe2d11734",
+      "c9ce19c84b846e4e"
+    ],
+    "shipped_dir_sha256": "ac64c8b3746b6e703c70ae66e1e96000da799ee018f547ee38fd1db086a9ccf7",
+    "donor_dir_sha256": "474f1ba9e8664bd86b3327d92e300bad2d7f56edd7a9f987545fc760f535ca6e",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "0817c96842b890caf7efb38496264d4e1200855124ba783c3db71ab7ac924422",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-text-circle-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c0f30e5be0ad676bbd5a7e15c5d4a8fa1135cfcd2941ab8b777a87fff9641bb9",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-vision-1": {
+    "slug": "carousel-vision-1",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "7db403c33905d4de",
+      "9628bbee6c777f89",
+      "7432474950090492",
+      "0df78389d512a1e3",
+      "608c94090621116d"
+    ],
+    "shipped_dir_sha256": "3c2c92a6f5d16abd357fb5a9e3145263462a965efdc2d54af81cd99709d37c4f",
+    "donor_dir_sha256": "94a017ddfe722422b1e2201fb27bb645fda16280c17618dd13b77200b1b95400",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-1_16_9.mp4",
+    "physical_mp4_16_9_sha256": "0817c96842b890caf7efb38496264d4e1200855124ba783c3db71ab7ac924422",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-1_9_16.mp4",
+    "physical_mp4_9_16_sha256": "c0f30e5be0ad676bbd5a7e15c5d4a8fa1135cfcd2941ab8b777a87fff9641bb9",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-vision-2": {
+    "slug": "carousel-vision-2",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "79ac7f6f355ea5fc",
+      "fd798f73a973100c",
+      "7433737ef4bed0ea",
+      "6b9c6cfe173e7167",
+      "a32701d78b4b2ed7"
+    ],
+    "shipped_dir_sha256": "21f0ce084eb96db89079a9c594648d4cfc454c4ec10dd81d710e4a0713d1a871",
+    "donor_dir_sha256": "3890c7d398c09574dca5a71eeb6970d56d61dd9aca27a935a18f3e782f65cc91",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-2_16_9.mp4",
+    "physical_mp4_16_9_sha256": "c9e0e125936b8bcdc6d9c365819ebcd37649c78c91eb3c4c4c9083fed17e523b",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-2_9_16.mp4",
+    "physical_mp4_9_16_sha256": "5acd422cc297bb9320d48a7d6ec870e33b54a14c18e12bfff87b9e45e1af8ee2",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-vision-3": {
+    "slug": "carousel-vision-3",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "46fc0de4ed5fc581",
+      "6ed9c9ebba65a971",
+      "80353b264345f719",
+      "efca806c7edcf065",
+      "ae8c21b69ffadb49"
+    ],
+    "shipped_dir_sha256": "38c542ff4ab60473a76e95abf87e0dadbd059cb1498ee4db0023eb558e247433",
+    "donor_dir_sha256": "1a12e373882a8ab1d293d3340ab93e41da495a834010cc705bff332620b327cd",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-3_16_9.mp4",
+    "physical_mp4_16_9_sha256": "610a49824a0fa6475926626629b6e17485ba1802905a535d3dd78bf44e68be15",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-3_9_16.mp4",
+    "physical_mp4_9_16_sha256": "68f0395d7b5c35cb8fc4f25b1585f711c86b9c073b80e9e9c5377763ab66bf3b",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-vision-4": {
+    "slug": "carousel-vision-4",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "0a0f6c9c6a9c8585",
+      "9962be0477e269d1",
+      "12ad5492eaba63d0",
+      "81892c0d33218c4b",
+      "c1b9ec6d50cdf0f5"
+    ],
+    "shipped_dir_sha256": "37a7d1bc8a2d23da4d40b373a1115da6edfac44d692e6402144d7e2b237de368",
+    "donor_dir_sha256": "6fae582ebd6e94ea99c64597159373632da238dbd215e00d0c6f44f90b36de3a",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-4_16_9.mp4",
+    "physical_mp4_16_9_sha256": "3472fdaded6ad258fe8e242c511deb5f51c51c3fe2c6fc77a0a106b8b5411001",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-4_9_16.mp4",
+    "physical_mp4_9_16_sha256": "b3e73c93a07191bcaef089b9a911f400edaf7a41b5d16aca98c1d64583af781d",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  },
+  "carousel-vision-5": {
+    "slug": "carousel-vision-5",
+    "is_newly_ported": true,
+    "temporal_animation_verified": true,
+    "sentinel_frame_hashes": [
+      "602a406045716402",
+      "00feaac608aeb6ec",
+      "8eb88fdd85f34d45",
+      "d636016c6d940456",
+      "3e78d8339422ffd8"
+    ],
+    "shipped_dir_sha256": "406964448b43a175d09647cd71b48ea157ace94808689625a9b14d514b9d6e5b",
+    "donor_dir_sha256": "dfe8b61ca4fae26b95403095136cb099bd3989223f616f3940675d8fa042237b",
+    "physical_mp4_16_9": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-5_16_9.mp4",
+    "physical_mp4_16_9_sha256": "eda11b4ddb5cd142ae8318872ccd10e4c7ea7d4373c734b03c7a099ce2b49b7c",
+    "physical_mp4_9_16": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_renders\\carousel-vision-5_9_16.mp4",
+    "physical_mp4_9_16_sha256": "ea40f1d77bf0cd61bfe9e589134d19c34d861e34cb0e5bea83b5ebb7a3f95dbc",
+    "ffprobe_verified": true,
+    "browser_preview_captured": false,
+    "browser_screenshot_path": null,
+    "supported_aspects": [
+      "16:9",
+      "9:16"
+    ]
+  }
+}

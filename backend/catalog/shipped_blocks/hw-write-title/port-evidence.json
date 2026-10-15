@@ -1,0 +1,23 @@
+{
+  "slug": "hw-write-title",
+  "source_slug": "hw-write-title",
+  "source_html_sha256": "da7375c1acedf86f3cf5839f6bc75ef3817d674752aaf462a9e0d0e471ac7e90",
+  "output_html_sha256": "033306eb2e8accac98538edf605fb2baa16d9b3665c5ac76701a7704baf97133",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 13,
+  "duration": 6,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "handwritten",
+    "typography",
+    "title-card",
+    "write-on",
+    "overlay"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

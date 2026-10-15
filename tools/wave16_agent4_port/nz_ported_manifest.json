@@ -1,0 +1,443 @@
+{
+  "count": 14,
+  "items": [
+    {
+      "schema_version": 1,
+      "id": "news-ticker",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/news-ticker",
+      "source_sha256": "8da727da9c8c2e7adda0d5f7ce1991b5443eb65145d058ccfa64b3331fc565df",
+      "output_html_sha256": "bc6701d1738f9eb18b883808c2aa9aeb0558aaa8c955ec43c5e96f35574fb57a",
+      "duration": 7,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "lower-third",
+        "overlay",
+        "news",
+        "ticker"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "notification-cascade",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/notification-cascade",
+      "source_sha256": "9bb3a62e358ff2b66c2afa6b9bd6110bfc3e834c8ff4c543c52cfc368c0db1d9",
+      "output_html_sha256": "c4847d5af4331d156272dabc212729309c5d74c09e14920e9cea19c73df94a03",
+      "duration": 14,
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "tags": [
+        "showcase",
+        "mock-ui",
+        "notification",
+        "vertical",
+        "ad-template"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "organic-light-leak-overlay",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/organic-light-leak-overlay",
+      "source_sha256": "bcc5a58c8964317e7c335705449b1ab961e2ba5492f28b6f8a0406b24e45ff7e",
+      "output_html_sha256": "3d863b3726d3c9e9ae0df2eeee64e0957edcb81d5a2db501f5433e682e693cb0",
+      "duration": 4,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "light-leak",
+        "film",
+        "memory",
+        "transition",
+        "overlay",
+        "media-treatment-overlay"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "split-flap-board",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/split-flap-board",
+      "source_sha256": "9163b183acf143783dc19ed41694d4c8a2eb46adcf7b85cee8202f63fc15653e",
+      "output_html_sha256": "173650227cc0521c815a43f5e1b3d489a4cd73cbe83e670da26f11941963c429",
+      "duration": 3.5,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "text",
+        "kinetic",
+        "mechanical",
+        "split-flap",
+        "solari",
+        "departure-board",
+        "reveal"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "thread-message-stack",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/thread-message-stack",
+      "source_sha256": "4efa717d9e0f625728dbf66cf0be95c7ad4dd2afa1736570e066158e191bc8ee",
+      "output_html_sha256": "b36f16ddcb72059f88bb603c5ac2eb56e9c3f4a41882d5f590416f6df587508d",
+      "duration": 8,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "social",
+        "conversation",
+        "messages"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "week-in-merges",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/week-in-merges",
+      "source_sha256": "f6a989512c338008950615189d3036395e990eed684003d26359e51997fd6026",
+      "output_html_sha256": "3552cc9c4f2090ed7f51158bbff794629cdff034707e509d7dc7e1c30427f1f8",
+      "duration": 16,
+      "dimensions": {
+        "width": 1080,
+        "height": 1350
+      },
+      "tags": [
+        "data",
+        "chart",
+        "ranking",
+        "leaderboard"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "whip-pan",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/whip-pan",
+      "source_sha256": "97a690de11f6dcebd6356bea84cba1af6ae61bfe03b9b7cc75a81368c93a12c9",
+      "output_html_sha256": "1fb449ce07cd534dab64424b5918d940fc9908d87c108ef77790b948bf1c1abd",
+      "duration": 4,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "shader"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "ripple-waves",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/ripple-waves",
+      "source_sha256": "4b6c4df7f51c0a5fd163cf6c584876e169de3357190a6570474f6213f2d0db83",
+      "output_html_sha256": "772b7dbcc1186247a6ffe4ff077024af57f467655ec374806dd59635eab4de34",
+      "duration": 4,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "shader"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "sdf-iris",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/sdf-iris",
+      "source_sha256": "355dd21c493cb11d92f7153c7d8e4f0d832c67e3d094ce95e8abce73cea46e99",
+      "output_html_sha256": "b9a09b7127208f95a0bb73102f451d283ffbf53e185f9f97d9d7866d4c13b48b",
+      "duration": 4,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "shader"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "ridged-burn",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/ridged-burn",
+      "source_sha256": "fd6309001b327eba4004e3c334a2d45525fcd5730ba6fd2d2e095e21b5ecd477",
+      "output_html_sha256": "7b478df04de829299d01238d204073e0f6acbc3af40547392d39b1919b73a6f5",
+      "duration": 4,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "shader"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "thermal-distortion",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/thermal-distortion",
+      "source_sha256": "cb82b1f76d6c2dcd0d555697fec0155105ba62395d555852ace032448127e276",
+      "output_html_sha256": "3c7bf6e71aab97eb1ebe986e6a6f4b05bbb5c83074bf3a682fa723a9ede1a090",
+      "duration": 4,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "shader"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "transitions-push",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/transitions-push",
+      "source_sha256": "6e94839890101bbcbf14cfe76c5d41d06738fa70b6d1c423e3b41692d52c8441",
+      "output_html_sha256": "8ebfe3737f456ee769f58390c5e098cc87e971e9144a1d4a308f3e03e9b984a9",
+      "duration": 24,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "showcase"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "transitions-dissolve",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/transitions-dissolve",
+      "source_sha256": "be35ea72f94bcf20ce5b4e4b4c39f99c9f734d6aa8d2244f33ff247439f31afb",
+      "output_html_sha256": "e6053f9197b1bbb72fe70cea04366d579b7cfd9d3b22dc47c64d8e93cfb615e8",
+      "duration": 24,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "showcase",
+        "crossfade"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    },
+    {
+      "schema_version": 1,
+      "id": "transitions-radial",
+      "wave": 16,
+      "agent": "agent-4",
+      "origin": "DONOR_ORIGINAL",
+      "relative_source_path": "registry/blocks/transitions-radial",
+      "source_sha256": "2e723ae75e92e6e4c1c51e6c596122bb43df8c2fef1ff4363ed787588bec4111",
+      "output_html_sha256": "7430d3a9cc30d90b26ddb779fcd8ae6b7ef16a85f297250ed707f0d226c850fa",
+      "duration": 20,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "tags": [
+        "transition",
+        "showcase"
+      ],
+      "status_ladder": {
+        "source_inventoried": true,
+        "source_ported": true,
+        "runtime_ready": true,
+        "browser_preview_verified": true,
+        "motion_edit_verified": true,
+        "render_artifact_verified": true,
+        "rights_cleared": true
+      },
+      "license_status": "VERIFIED_PERMISSIVE",
+      "offline_vendored": true
+    }
+  ]
+}

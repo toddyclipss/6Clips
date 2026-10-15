@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
 /**
- * CatalogCard: individual motion block card with truthful posters for operational blocks,
+ * CatalogCard (Wave 16): individual motion block card with truthful posters for operational & packaged blocks,
  * authentic metadata/blocker blueprints for inventory-only blocks (without fake posters),
  * aspect ratio badge, real disposition status, authentic HyperFrames categories, and
  * non-destructive hover Ghost Preview.
@@ -24,8 +24,18 @@ import {
   IconLock,
   IconAlertCircle,
   IconFolderOff,
+  IconPackage,
+  IconSparkles,
 } from "@tabler/icons-react"
-import { DONOR_INTERNALIZED_IDS, UNINDEXED_DONOR_IDS } from "../../utils/catalogOriginals"
+import {
+  DONOR_INTERNALIZED_IDS,
+  DONOR_PACKAGED_IDS,
+  DONOR_SHADER_IDS,
+  DONOR_LOWER_THIRD_IDS,
+  SOURCE_CATEGORY_MISSING_IDS,
+  UNINDEXED_DONOR_IDS,
+  CATEGORY_COLOR_MAP,
+} from "../../utils/catalogOriginals"
 
 export default function CatalogCard({
   item,
@@ -42,25 +52,31 @@ export default function CatalogCard({
   const is9x16 = aspectRatio === "9:16"
   const isDonorInternalized = DONOR_INTERNALIZED_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
   const isOperational = isDonorInternalized || Boolean(item.isOperational)
+  const isPackaged = DONOR_PACKAGED_IDS.has(item.id) || Boolean(item.isPackaged)
+  const isShader = DONOR_SHADER_IDS.has(item.id) || Boolean(item.isShader)
+  const isLowerThird = DONOR_LOWER_THIRD_IDS.has(item.id) || Boolean(item.isLowerThird)
   const isUnindexed = UNINDEXED_DONOR_IDS.has(item.id) || Boolean(item.isUnindexed)
+  const isMissingCategory = Boolean(item.source_category_missing) || SOURCE_CATEGORY_MISSING_IDS.has(item.id)
 
-  const aspectSupport = is9x16 ? (item.aspect_9_16 || "CONTAINED_ONLY") : (item.aspect_16_9 || "CONTAINED_ONLY")
+  const aspectSupport = is9x16
+    ? (item.aspect_9_16 || (item.supported_aspects?.includes("9:16") ? "NATIVE" : "CONTAINED_ONLY"))
+    : (item.aspect_16_9 || (item.supported_aspects?.includes("16:9") ? "NATIVE" : "CONTAINED_ONLY"))
 
-  // For operational blocks only: truthful poster & preview endpoints
-  const posterUrl = isOperational
-    ? (item.poster_url || `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspectRatio}`)
+  // For operational & packaged blocks: truthful poster & preview endpoints
+  const posterUrl = isPackaged
+    ? (item.poster_url || `/api/projects/catalog/blocks/${item.id}/poster?aspect_ratio=${aspectRatio}`)
     : null
   const previewUrl = isOperational
-    ? (item.preview_url || `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspectRatio}`)
+    ? (item.preview_url || `/api/projects/catalog/blocks/${item.id}/preview?aspect_ratio=${aspectRatio}`)
     : null
 
-  // Hover Ghost Preview: debounced 220ms, ONLY active for operational blocks
+  // Hover Ghost Preview: debounced 200ms, active for operational blocks
   const handleMouseEnter = () => {
     setHovered(true)
     if (isOperational) {
       hoverTimerRef.current = setTimeout(() => {
         setGhostActive(true)
-      }, 220)
+      }, 200)
     }
   }
 
@@ -88,22 +104,26 @@ export default function CatalogCard({
   const frameHeight = is9x16 ? 260 : 160
 
   // Status computation based on real backend disposition
-  let statusLabel = "QUARANTINED"
-  let statusColor = theme.palette.warning.main
-  let statusIcon = <IconLock size={14} />
+  let statusLabel = "NEEDS ADAPTATION"
+  let statusColor = theme.palette.warning.dark
+  let statusIcon = <IconAlertTriangle size={14} />
 
   if (isOperational) {
     statusLabel = "OPERATIONAL"
     statusColor = theme.palette.success.main
     statusIcon = <IconPlayerPlay size={14} />
-  } else if (item.integration_status === "ELIGIBLE_NOT_PORTED") {
-    statusLabel = "VETTED (NOT PORTED)"
-    statusColor = theme.palette.warning.main
-    statusIcon = <IconClockHour4 size={14} />
-  } else if (item.integration_status === "NEEDS_ADAPTATION") {
-    statusLabel = "NEEDS ADAPTATION"
-    statusColor = theme.palette.warning.dark
-    statusIcon = <IconAlertTriangle size={14} />
+  } else if (isShader) {
+    statusLabel = "PACKAGED SHADER"
+    statusColor = "#8b5cf6"
+    statusIcon = <IconSparkles size={14} />
+  } else if (isLowerThird) {
+    statusLabel = "PACKAGED LOWER-THIRD"
+    statusColor = "#0284c7"
+    statusIcon = <IconPackage size={14} />
+  } else if (isPackaged) {
+    statusLabel = "PACKAGED"
+    statusColor = theme.palette.info.main
+    statusIcon = <IconPackage size={14} />
   } else if (item.integration_status === "BLOCKED_DEPENDENCY") {
     statusLabel = "BLOCKED DEPENDENCY"
     statusColor = theme.palette.error.main
@@ -121,10 +141,13 @@ export default function CatalogCard({
       ? theme.palette.info.main
       : theme.palette.text.secondary
 
+  const catStyle = CATEGORY_COLOR_MAP[item.category] || { bg: "#f1f5f9", text: "#475569", border: "#cbd5e1" }
+
   return (
     <Box
       data-testid={`catalog-card-${item.id}`}
       data-operational={isOperational}
+      data-packaged={isPackaged}
       data-status={statusLabel}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -142,7 +165,7 @@ export default function CatalogCard({
         borderRadius: "14px",
         overflow: "hidden",
         border: 1,
-        borderColor: hovered ? (isOperational ? "primary.main" : "warning.main") : "divider",
+        borderColor: hovered ? (isOperational ? "primary.main" : isPackaged ? "info.main" : "warning.main") : "divider",
         bgcolor: isDark ? alpha("#fff", 0.03) : "#ffffff",
         transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
         transform: hovered ? "translateY(-3px)" : "none",
@@ -164,7 +187,7 @@ export default function CatalogCard({
         sx={{
           height: frameHeight,
           position: "relative",
-          bgcolor: isOperational ? "#000" : isDark ? "#0f172a" : "#f1f5f9",
+          bgcolor: isOperational ? "#000" : isPackaged ? "#0f172a" : isDark ? "#0f172a" : "#f1f5f9",
           overflow: "hidden",
           display: "flex",
           alignItems: "center",
@@ -192,6 +215,9 @@ export default function CatalogCard({
               src={posterUrl}
               alt={item.title}
               loading="lazy"
+              onError={(e) => {
+                e.target.style.display = "none"
+              }}
               sx={{
                 width: "100%",
                 height: "100%",
@@ -200,6 +226,43 @@ export default function CatalogCard({
               }}
             />
           )
+        ) : isPackaged ? (
+          /* Packaged Shipped Block (Shaders & Lower Thirds) */
+          <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
+            <Box
+              component="img"
+              src={posterUrl}
+              alt={item.title}
+              loading="lazy"
+              onError={(e) => {
+                e.target.style.display = "none"
+              }}
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: is9x16 ? "cover" : "contain",
+                display: "block",
+              }}
+            />
+            <Box
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                px: 1,
+                py: 0.25,
+                borderRadius: "4px",
+                bgcolor: alpha("#000", 0.75),
+                color: isShader ? "#c084fc" : "#38bdf8",
+                fontSize: "0.62rem",
+                fontWeight: 800,
+                letterSpacing: "0.04em",
+                zIndex: 2,
+              }}
+            >
+              {isShader ? "SHADER" : isLowerThird ? "LOWER-THIRD" : "SHIPPED"}
+            </Box>
+          </Box>
         ) : (
           /* Honest Metadata Frame for Inventory-Only Blocks (NO fake posters) */
           <Box
@@ -349,20 +412,34 @@ export default function CatalogCard({
       {/* Card Info Footer */}
       <Box sx={{ p: 1.5, flex: 1, display: "flex", flexDirection: "column" }}>
         <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={1}>
-          <Typography
-            sx={{
-              fontSize: "0.92rem",
-              fontWeight: 700,
-              lineHeight: 1.3,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: "vertical",
-            }}
-          >
-            {item.title || item.id}
-          </Typography>
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Typography
+              sx={{
+                fontSize: "0.92rem",
+                fontWeight: 700,
+                lineHeight: 1.3,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: "vertical",
+              }}
+            >
+              {item.title || item.id}
+            </Typography>
+            {/* Displayed Original Slug */}
+            <Typography
+              data-testid={`card-slug-${item.id}`}
+              sx={{
+                fontSize: "0.68rem",
+                fontFamily: "monospace",
+                color: "text.disabled",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {item.id}
+            </Typography>
+          </Box>
 
           <Chip
             label={statusLabel}
@@ -383,24 +460,14 @@ export default function CatalogCard({
         {/* Authentic Categories and Provenance Chips */}
         <Stack direction="row" spacing={0.5} sx={{ mt: 0.75, mb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
           {/* Authentic HyperFrames Category */}
-          <Chip
-            label={item.category || "scenes"}
-            size="small"
-            sx={{
-              height: 16,
-              fontSize: "0.6rem",
-              fontWeight: 700,
-              bgcolor: alpha(theme.palette.primary.main, 0.12),
-              color: theme.palette.primary.main,
-            }}
-          />
-
-          {/* Missing Source Category Diagnostic */}
-          {item.source_category_missing && (
-            <Tooltip title="Diagnostic: Upstream registry-item.json has no explicit category. Classified via tags." arrow>
+          {isMissingCategory ? (
+            <Tooltip
+              title={`Source Category Missing in upstream gallery. Proposed fallback: ${item.proposed_fallback_category || "scenes-demos"}`}
+              arrow
+            >
               <Chip
                 icon={<IconAlertCircle size={10} />}
-                label="Tags Resolved"
+                label={`Proposed: ${item.proposed_fallback_category || "scenes"}`}
                 size="small"
                 sx={{
                   height: 16,
@@ -410,6 +477,20 @@ export default function CatalogCard({
                   color: theme.palette.warning.dark,
                   border: "1px dashed",
                   borderColor: alpha(theme.palette.warning.main, 0.4),
+                }}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Authentic HyperFrames upstream gallery category" arrow>
+              <Chip
+                label={item.category_label || item.category || "Scenes & Demos"}
+                size="small"
+                sx={{
+                  height: 16,
+                  fontSize: "0.6rem",
+                  fontWeight: 700,
+                  bgcolor: alpha(theme.palette.primary.main, 0.12),
+                  color: theme.palette.primary.main,
                 }}
               />
             </Tooltip>
@@ -480,7 +561,7 @@ export default function CatalogCard({
           sx={{ mt: 1.25, pt: 1, borderTop: 1, borderColor: "divider" }}
         >
           <Typography sx={{ fontSize: "0.7rem", color: "text.disabled", fontWeight: 500 }}>
-            {item.id} · {item.license || "Apache-2.0"}
+            {item.license || "Apache-2.0"}
           </Typography>
           <Typography sx={{ fontSize: "0.7rem", color: "text.disabled" }}>
             {(item.variables || []).length} vars

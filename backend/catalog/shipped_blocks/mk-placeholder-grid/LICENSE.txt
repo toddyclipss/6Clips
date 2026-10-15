@@ -1,0 +1,3 @@
+HyperFrames Apache-2.0 / ViralMint AGPL-3.0-only compatible distribution.
+Original donor block source from hyperframes (Apache-2.0).
+Bundled dependencies licensed under their respective notices (MIT / Standard Notice).

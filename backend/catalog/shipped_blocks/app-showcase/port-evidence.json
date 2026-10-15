@@ -1,0 +1,21 @@
+{
+  "slug": "app-showcase",
+  "source_slug": "app-showcase",
+  "source_html_sha256": "c7e1b4d8ec2a2c1f70a8ed67a147ba5c4985074eb475d611b2bec6d921b10ade",
+  "output_html_sha256": "4245764a1ef6bbeaf0e3932fd74c3e7f054575fbb87c41bb7b34d8431ea7ea54",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 5.5,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "showcase",
+    "app",
+    "3d"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

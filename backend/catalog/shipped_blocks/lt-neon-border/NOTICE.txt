@@ -1,0 +1,4 @@
+Block ID: lt-neon-border
+Original donor path: registry/blocks/lt-neon-border
+Vendored libraries: GSAP 3.14.2 (Standard License Notice)
+Zero egress: verified airgapped, zero external network requests.

@@ -1,0 +1,22 @@
+{
+  "slug": "bar-chart-race",
+  "source_slug": "bar-chart-race",
+  "source_html_sha256": "5ce62fd8178c61a09dc7fdac0ad810268edbb68b5321a08698a205579ccfe895",
+  "output_html_sha256": "37da7c596cbdb0e0a451af7d0aaa143a415bf74108bd4035e52c5cf6a737698e",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 12,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "data",
+    "chart",
+    "statistics",
+    "ranking"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

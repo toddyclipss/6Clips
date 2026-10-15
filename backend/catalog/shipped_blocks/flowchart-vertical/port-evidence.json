@@ -1,0 +1,22 @@
+{
+  "slug": "flowchart-vertical",
+  "source_slug": "flowchart-vertical",
+  "source_html_sha256": "35b54ecdd282e83beb464276483dc633c64a7e47138447b2b5642df463cfc548",
+  "output_html_sha256": "699631314ad6f36bc77ddf6cc5f8fca6b307805ba2b73c797f648f23c5549a92",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 12,
+  "dimensions": {
+    "width": 1440,
+    "height": 2560
+  },
+  "tags": [
+    "diagram",
+    "flowchart",
+    "interactive",
+    "portrait"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

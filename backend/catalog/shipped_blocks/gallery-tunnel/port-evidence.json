@@ -1,0 +1,24 @@
+{
+  "slug": "gallery-tunnel",
+  "source_slug": "gallery-tunnel",
+  "source_html_sha256": "8142f6f8e79a4672e5ea7804e75142a8f8371effacc9ce511ef08587be7284d8",
+  "output_html_sha256": "815ed63df9ef1d41629a2f2d8a1a04fad447554f7a9695e57d9b73bdde51f381",
+  "uses_three": true,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 10,
+  "duration": 12,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "webgl",
+    "3d",
+    "background",
+    "showcase",
+    "depth",
+    "loop"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

@@ -1,0 +1,22 @@
+{
+  "slug": "mk-callout-highlight",
+  "source_slug": "mk-callout-highlight",
+  "source_html_sha256": "ab80d94b07373fd1bb136c3560183e916876e9318729202698fd26c2e999dd46",
+  "output_html_sha256": "613a7be761f4247a5f595155739e7f8dcb220d47f2716c7c8faeaf34de126660",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 8,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "typography",
+    "karaoke",
+    "captions",
+    "minimal"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

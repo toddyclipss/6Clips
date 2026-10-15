@@ -1,0 +1,22 @@
+{
+  "slug": "mk-line-graph",
+  "source_slug": "mk-line-graph",
+  "source_html_sha256": "7f277f1a048c41a394f66555820c524b8d1d5ac0e2363b4828c393ed34cd1801",
+  "output_html_sha256": "48572d82ca4787cd5e50714bc345c32e217d9f4b4fd2cd9736a1d25c15b60810",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 7,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "data-viz",
+    "chart",
+    "graph",
+    "minimal"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

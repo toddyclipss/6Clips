@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "split-flap-board",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/split-flap-board",
+  "source_sha256": "9163b183acf143783dc19ed41694d4c8a2eb46adcf7b85cee8202f63fc15653e",
+  "output_html_sha256": "173650227cc0521c815a43f5e1b3d489a4cd73cbe83e670da26f11941963c429",
+  "duration": 3.5,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "text",
+    "kinetic",
+    "mechanical",
+    "split-flap",
+    "solari",
+    "departure-board",
+    "reveal"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "flash-through-white",
+  "source_slug": "flash-through-white",
+  "source_html_sha256": "d63cdbe17d81c12ee23406dd2dacf7e6a9489121906a7a3a2f74980ece623bac",
+  "output_html_sha256": "430681319ed32b75ed13aa5853e05de5bbc91014a6e102b85b29c7fd11339f47",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

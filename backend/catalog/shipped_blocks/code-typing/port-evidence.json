@@ -1,0 +1,22 @@
+{
+  "slug": "code-typing",
+  "source_slug": "code-typing",
+  "source_html_sha256": "99477451bdffeb368523b9cf7b36ca8385c0c15c2438b46597269e179f9f8fdf",
+  "output_html_sha256": "33b3c85623d0cd750bd781c49fa5c921afd87c621f35fd34e94cf3859572a537",
+  "uses_three": false,
+  "zero_egress_verified": true,
+  "disallowed_matches": [],
+  "files_count": 8,
+  "duration": 5,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "code",
+    "code-animation",
+    "typing",
+    "developer"
+  ],
+  "rights_status": "VERIFIED_PERMISSIVE"
+}

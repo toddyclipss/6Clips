@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "sdf-iris",
+  "wave": 16,
+  "agent": "agent-4",
+  "origin": "DONOR_ORIGINAL",
+  "relative_source_path": "registry/blocks/sdf-iris",
+  "source_sha256": "355dd21c493cb11d92f7153c7d8e4f0d832c67e3d094ce95e8abce73cea46e99",
+  "output_html_sha256": "b9a09b7127208f95a0bb73102f451d283ffbf53e185f9f97d9d7866d4c13b48b",
+  "duration": 4,
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tags": [
+    "transition",
+    "shader"
+  ],
+  "status_ladder": {
+    "source_inventoried": true,
+    "source_ported": true,
+    "runtime_ready": true,
+    "browser_preview_verified": true,
+    "motion_edit_verified": true,
+    "render_artifact_verified": true,
+    "rights_cleared": true
+  },
+  "license_status": "VERIFIED_PERMISSIVE",
+  "offline_vendored": true
+}

@@ -1,0 +1,68 @@
+{
+  "reproduced_fixture": {
+    "wave15_fixture_formula": "pulse = math.sin(t * 2.0) * 0.5 + 0.5; r = int(pulse*180 + nx*50); g = int((1-pulse)*160 + ny*60); b = int(pulse*210 + 40)",
+    "source_file": "tools/wave15_shader_port/render_and_validate_27.py",
+    "lines": "254-260 (in the 'else:' branch for non-shader blocks)",
+    "streams_byte_identical": true,
+    "stream_sha256": "407457e033c9f1aeaa8b224964cd13c46e90cf0fad3e0eaa55f590ec81112365",
+    "wave15_reported_mp4_sha": "058776c52c0cf55a36348a33f2fee0bb2ed3dc607f23a6497b8853b1ccd673c0",
+    "explanation": "Wave 15 Agent 3 was exclusively tasked with porting and validating WebGPU shaders. For non-shader baseline blocks (data-chart, instagram-follow, tiktok-follow, weight-wave, yt-lower-third), the test runner used a single generic procedural fallback loop in the 'else:' block. Because instagram-follow and tiktok-follow share identical 1080x1920 dimensions and duration, the generated PPM input piped to FFmpeg was bit-for-bit identical, producing identical MP4 hashes. This was an artifact of the mock procedural test runner, NOT a flaw in the actual component code."
+  },
+  "real_evidence": {
+    "instagram": {
+      "slug": "instagram-follow",
+      "frame_paths": [
+        "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\instagram-follow\\frame_0_t0.0s.png",
+        "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\instagram-follow\\frame_1_t1.0s.png",
+        "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\instagram-follow\\frame_2_t2.5s.png"
+      ],
+      "frame_hashes": [
+        "b163a0aad98a71aa447db7a809f06266205b25369ace5f2f2146f5c3b1f8e66c",
+        "26002abec149a6f397f27ea79f90a8613b29db107a4579502b6f98bc6d997951",
+        "45e2782be47295c88c8e56888f75dde14583e87622194ee64fc7e2d41dd4d593"
+      ],
+      "motion_detected": true,
+      "is_solid_color": false,
+      "stddev": [
+        14.16,
+        16.63,
+        20.72
+      ]
+    },
+    "tiktok": {
+      "slug": "tiktok-follow",
+      "frame_paths": [
+        "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\tiktok-follow\\frame_0_t0.0s.png",
+        "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\tiktok-follow\\frame_1_t1.0s.png",
+        "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\tiktok-follow\\frame_2_t2.5s.png"
+      ],
+      "frame_hashes": [
+        "b163a0aad98a71aa447db7a809f06266205b25369ace5f2f2146f5c3b1f8e66c",
+        "df0689acb6453493fc7f9b94b33ac334ab45f030c7aabed17102ada28bf3368a",
+        "80f98f5d3296f69d0a3972a3ae69389902387b78217915dc12305191bd1837ca"
+      ],
+      "motion_detected": true,
+      "is_solid_color": false,
+      "stddev": [
+        20.94,
+        14.34,
+        15.15
+      ]
+    },
+    "frame_comparison": {
+      "t1_hashes_differ": true,
+      "ig_t1_hash": "26002abec149a6f397f27ea79f90a8613b29db107a4579502b6f98bc6d997951",
+      "tt_t1_hash": "df0689acb6453493fc7f9b94b33ac334ab45f030c7aabed17102ada28bf3368a",
+      "visual_difference_detected": true,
+      "difference_mean_pixel_delta": 0.56,
+      "difference_map_path": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\diff_instagram_vs_tiktok_t1s.png"
+    },
+    "real_mp4_exports": {
+      "instagram_mp4": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\instagram-follow_real.mp4",
+      "instagram_mp4_sha256": "342534804b7f04d4342a95d33dd2e0fefdaf3e73ea15031016b373e08b4d2bde",
+      "tiktok_mp4": "C:\\Users\\toddy\\AppData\\Local\\Temp\\viralmint_wave16_ig_tt_investigation\\tiktok-follow_real.mp4",
+      "tiktok_mp4_sha256": "623d6be89b0e7bc4b7ef050f1aecf208430bd27cc5b8d601bae161e2f2f66b11",
+      "mp4_hashes_are_distinct": true
+    }
+  }
+}

@@ -1,0 +1,4552 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-10-15T05:21:12.922174+00:00",
+  "total_inventoried_donor_blocks": 196,
+  "metrics": {
+    "LISTED": 196,
+    "SHIPPED": 131,
+    "PREVIEW": 0,
+    "INSERTED": 0,
+    "EXPORT": 0,
+    "FULL_E2E": 0
+  },
+  "status_distribution": {
+    "INSERTED": 0,
+    "SHIPPED": 131,
+    "LISTED": 0,
+    "BLOCKED_LICENSE": 0,
+    "FULL_E2E": 0,
+    "NOT_TESTED": 0,
+    "PREVIEW": 0,
+    "BLOCKED_RIGHTS": 12,
+    "BLOCKED_DEPENDENCY": 53,
+    "EXPORT": 0
+  },
+  "taxonomy": {
+    "category_verified_count": 171,
+    "category_missing_count": 25,
+    "category_distribution": {
+      "scenes-demos": 33,
+      "data-charts": 10,
+      "transitions": 31,
+      "motion-effects": 2,
+      "3d-motion": 7,
+      "carousels": 25,
+      "code": 11,
+      "blocks": 19,
+      "surfaces": 14,
+      "text-captions": 19
+    }
+  },
+  "retired_6clips_blocks_count": 0,
+  "records": [
+    {
+      "id": "ai-answer-rank",
+      "title": "AI Answer Rank",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "data-charts"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "ai-chat-reveal",
+      "title": "AI Chat Reveal",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "app-showcase",
+      "title": "App Showcase",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "apple-money-count",
+      "title": "Apple Money Count",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Remove Apple trademark logos and pay branding; replace proprietary sound effect with CC0 licensed audio."
+      },
+      "blocker_reason": "Requires brand clearance: Remove Apple trademark logos and pay branding; replace proprietary sound effect with CC0 licensed audio."
+    },
+    {
+      "id": "aurora",
+      "title": "Aurora",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "bar-chart-race",
+      "title": "Bar Chart Race",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "beat-freeze-cut",
+      "title": "Beat Freeze Cut",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "blob",
+      "title": "Blob",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "blue-sweater-intro-video",
+      "title": "Blue Sweater Intro Video",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "camcorder-hud",
+      "title": "Camcorder HUD",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "motion-effects",
+        "category_label": "Motion & effects",
+        "subcategory": "Camera & 3D",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "camera-dolly-zoom",
+      "title": "Dolly Zoom (Vertigo Shot)",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "canopy-part-title",
+      "title": "Canopy Part Title",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Verify texture provenance or substitute CC0 procedural leaf shader."
+      },
+      "blocker_reason": "Requires brand clearance: Verify texture provenance or substitute CC0 procedural leaf shader."
+    },
+    {
+      "id": "carousel-circle-1",
+      "title": "Circle Carousel 1",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-circle-2",
+      "title": "Circle Carousel 2",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-circle-3",
+      "title": "Circle Carousel 3",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-circle-4",
+      "title": "Circle Carousel 4",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-circle-5",
+      "title": "Circle Carousel 5",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-orbit-1",
+      "title": "Orbit Carousel 1",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-orbit-2",
+      "title": "Orbit Carousel 2",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-orbit-3",
+      "title": "Orbit Carousel 3",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-orbit-4",
+      "title": "Orbit Carousel 4",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-orbit-5",
+      "title": "Orbit Carousel 5",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-path-1",
+      "title": "Path Carousel 1",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-path-2",
+      "title": "Path Carousel 2",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-path-3",
+      "title": "Path Carousel 3",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-path-4",
+      "title": "Path Carousel 4",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-path-5",
+      "title": "Path Carousel 5",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-text-circle-1",
+      "title": "Text + Circle Carousel 1",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-text-circle-2",
+      "title": "Text + Circle Carousel 2",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-text-circle-3",
+      "title": "Text + Circle Carousel 3",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-text-circle-4",
+      "title": "Text + Circle Carousel 4",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-text-circle-5",
+      "title": "Text + Circle Carousel 5",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-vision-1",
+      "title": "Vision Carousel 1",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-vision-2",
+      "title": "Vision Carousel 2",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-vision-3",
+      "title": "Vision Carousel 3",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-vision-4",
+      "title": "Vision Carousel 4",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "carousel-vision-5",
+      "title": "Vision Carousel 5",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "carousels",
+        "category_label": "Carousels",
+        "subcategory": "Carousels",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "chatgpt-exchange",
+      "title": "ChatGPT Exchange",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Neutralize AI branding; retain generic chat bubble UI layout."
+      },
+      "blocker_reason": "Requires brand clearance: Neutralize AI branding; retain generic chat bubble UI layout."
+    },
+    {
+      "id": "chromatic-radial-split",
+      "title": "Chromatic Radial Split",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "cinemagraph",
+      "title": "Cinemagraph",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "scenes-demos"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "cinematic-zoom",
+      "title": "Cinematic Zoom",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "claude-exchange",
+      "title": "Claude Exchange",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Neutralize Anthropic branding; retain generic chat bubble UI layout."
+      },
+      "blocker_reason": "Requires brand clearance: Neutralize Anthropic branding; retain generic chat bubble UI layout."
+    },
+    {
+      "id": "code-3d-extrude",
+      "title": "Code 3D Extrude",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-diff",
+      "title": "Code Diff",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-highlight",
+      "title": "Code Highlight Sweep",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-morph",
+      "title": "Code Morph",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-particle-assemble",
+      "title": "Code Particle Assemble",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-scroll",
+      "title": "Code Scroll To Line",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-shader-dissolve",
+      "title": "Code Shader Dissolve",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-slice-hero",
+      "title": "Code Slice Hero",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Retain generic code editor window framing with vendored GSAP NOTICE."
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-snippet-apple-terminal-pro",
+      "title": "Code Snippet - Apple Terminal Pro",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Snippets",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "code-snippet-dark-2026",
+      "title": "Code Snippet - Dark 2026",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Snippets",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-snippet-dark-modern",
+      "title": "Code Snippet - Dark Modern",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Snippets",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "code-typing",
+      "title": "Code Typing",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "code",
+        "category_label": "Code",
+        "subcategory": "Code Animations",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "cosmic-orb",
+      "title": "Cosmic Orb",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "cross-warp-morph",
+      "title": "Cross Warp Morph",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "cuboid-carousel",
+      "title": "Cuboid Carousel",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Vendor Three.js core and modules locally under MIT license."
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "data-chart",
+      "title": "Data Chart",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "domain-warp-dissolve",
+      "title": "Domain Warp Dissolve",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "editorial-flash-overlay",
+      "title": "Editorial Flash Overlay",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "exploded-stack",
+      "title": "Exploded Stack",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "3d-motion"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "extruded-logo",
+      "title": "Extruded Logo",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "3d-motion"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "flash-through-white",
+      "title": "Flash Through White",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "flowchart",
+      "title": "Flowchart",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "flowchart-vertical",
+      "title": "Flowchart Vertical",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "flowing-gradient",
+      "title": "Flowing Gradient",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "fractal-noise",
+      "title": "Fractal Noise",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "freeze-frame-dressing",
+      "title": "Freeze-Frame Dressing",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "frost",
+      "title": "Frost",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "frost-sequence-camera-orbit",
+      "title": "Frost Sequence Camera Orbit",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Vendor notices and license files cleanly in shipped_blocks directory."
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "gallery-tunnel",
+      "title": "Gallery Tunnel",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "glass-hero",
+      "title": "Glass Hero",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "3d-motion"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "glass-shard-title",
+      "title": "Glass Shard Title",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Verify CC0 license for HDR map (Poly Haven / CC0) or generate synthetic reflection probe."
+      },
+      "blocker_reason": "Requires brand clearance: Verify CC0 license for HDR map (Poly Haven / CC0) or generate synthetic reflection probe."
+    },
+    {
+      "id": "glitch",
+      "title": "Glitch",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "godrays",
+      "title": "Godrays",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "goo",
+      "title": "Goo",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "gooey-split",
+      "title": "Gooey Split",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "motion-effects"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "gravitational-lens",
+      "title": "Gravitational Lens",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "halftone-field",
+      "title": "Halftone Field",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "Texture",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "heygen-avatar-promo-card",
+      "title": "HeyGen Avatar Promo Card",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Replace heygen-logo.svg with generic user avatar or open-source brand mark."
+      },
+      "blocker_reason": "Requires brand clearance: Replace heygen-logo.svg with generic user avatar or open-source brand mark."
+    },
+    {
+      "id": "holographic",
+      "title": "Holographic",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-frame",
+      "title": "Sketched Frame",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-path-text",
+      "title": "Text Along a Path",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Typography & Text",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-pipeline",
+      "title": "Hand-Drawn Flowchart",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-scribble-transition",
+      "title": "Scribble Transition",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-text-cloud",
+      "title": "Speech Bubble",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-title",
+      "title": "Handwritten Title",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Typography & Text",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "hw-write-title",
+      "title": "Handwritten Write-On Title",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Typography & Text",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "instagram-follow",
+      "title": "Instagram Follow",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "ios26-liquid-glass",
+      "title": "iOS 26 Liquid Glass Home Screen",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "lens-flare",
+      "title": "Lens Flare",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "light-leak",
+      "title": "Light Leak",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "liquid-glass-notification",
+      "title": "Liquid Glass Notification",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "liquid-glass-widgets",
+      "title": "Liquid Glass Widgets",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "liquid-metal",
+      "title": "Liquid Metal",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "logo-outro",
+      "title": "Logo Outro",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lottie-character-walk",
+      "title": "Lottie Character Walk",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "lower-third-bild",
+      "title": "Lower Third \u2014 BILD Style",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-accent-underline",
+      "title": "Lower Third \u2014 Accent Underline",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-bold-block",
+      "title": "Lower Third \u2014 Bold Block",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-clean-bar",
+      "title": "Lower Third \u2014 Clean Bar",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-color-block",
+      "title": "Lower Third \u2014 Color Block",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-dark-card",
+      "title": "Lower Third \u2014 Dark Card",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-kicker-name",
+      "title": "Lower Third \u2014 Kicker Name",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-mask-reveal",
+      "title": "Lower Third \u2014 Mask Reveal",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-neon-border",
+      "title": "Neon Border",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "motion-effects",
+        "category_label": "Motion & effects",
+        "subcategory": "Motion Primitives",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-side-rule",
+      "title": "Lower Third \u2014 Side Rule",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-soft-pill",
+      "title": "Lower Third \u2014 Soft Pill",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "lt-stack-bars",
+      "title": "Lower Third \u2014 Stack Bars",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "macos-notification",
+      "title": "macOS Notification",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "macos-tahoe-liquid-glass",
+      "title": "macOS Tahoe Liquid Glass Desktop",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "marble",
+      "title": "Marble",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "Texture",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mesh-gradient",
+      "title": "Mesh Gradient",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "message-thread-reveal",
+      "title": "Message Thread Reveal",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-background",
+      "title": "Minimal Gradient Background",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-callout-highlight",
+      "title": "Word-Sweep Highlight",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Captions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-clone-wall-transition",
+      "title": "Text Clone Wall Transition",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-line-graph",
+      "title": "Minimal Line Graph",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-placeholder-grid",
+      "title": "Rounded Media Grid",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-progress-stat",
+      "title": "Count-Up Stat Card",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "mk-specs-list",
+      "title": "Specs Checklist",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "nebula",
+      "title": "Nebula",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "news-ticker",
+      "title": "News Ticker",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Lower Thirds",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "north-korea-locked-down",
+      "title": "North Korea Locked Down",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "notes-reveal",
+      "title": "Notes Reveal",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "notification-cascade",
+      "title": "Notification Cascade",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "nyc-paris-flight",
+      "title": "NYC Paris Flight",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "orbit-card",
+      "title": "Orbit Card",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Vendor Archivo OFL font and Three.js runtime offline."
+      },
+      "blocker_reason": "Requires brand clearance: Vendor Archivo OFL font and Three.js runtime offline."
+    },
+    {
+      "id": "organic-light-leak-overlay",
+      "title": "Organic Light Leak Overlay",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "oscilloscope-trace",
+      "title": "Oscilloscope Trace",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "plasma",
+      "title": "Plasma",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "prism",
+      "title": "Prism",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "product-turntable",
+      "title": "Product Turntable",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "3d-motion"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "rack-focus",
+      "title": "Rack Focus",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "reddit-post",
+      "title": "Reddit Post Card",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "ridged-burn",
+      "title": "Ridged Burn",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "ripple-waves",
+      "title": "Ripple Waves",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "sdf-iris",
+      "title": "SDF Iris",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "share-sheet-carousel",
+      "title": "Share-Sheet Carousel",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "sine-wave",
+      "title": "Sine Wave",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "slack-notification-ad",
+      "title": "Slack Notification Ad",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Replace proprietary Slack and HeyGen SVG marks with generic notification bell icon."
+      },
+      "blocker_reason": "Requires brand clearance: Replace proprietary Slack and HeyGen SVG marks with generic notification bell icon."
+    },
+    {
+      "id": "snow",
+      "title": "Snow",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "motion-effects"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "spain-map",
+      "title": "Spain Map",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "spiral-galaxy",
+      "title": "Spiral Galaxy",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "split-flap-board",
+      "title": "Split-Flap Board",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Typography & Text",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "spotify-card",
+      "title": "Spotify Now Playing",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Retain generic media player widget controls; remove Spotify specific branding."
+      },
+      "blocker_reason": "Requires brand clearance: Retain generic media player widget controls; remove Spotify specific branding."
+    },
+    {
+      "id": "starfield",
+      "title": "Starfield",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "strands",
+      "title": "Strands",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "stripes",
+      "title": "Stripes",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "swirl",
+      "title": "Swirl",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "swirl-vortex",
+      "title": "Swirl Vortex",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "thermal-distortion",
+      "title": "Thermal Distortion",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "thread-message-stack",
+      "title": "Thread Message Stack",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "tiktok-follow",
+      "title": "TikTok Follow",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "transitions-3d",
+      "title": "3D Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-blur",
+      "title": "Blur Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-cover",
+      "title": "Cover Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-destruction",
+      "title": "Destruction Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-dissolve",
+      "title": "Dissolve Transitions",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "transitions-distortion",
+      "title": "Distortion Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-grid",
+      "title": "Grid Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-light",
+      "title": "Light Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-mechanical",
+      "title": "Mechanical Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-other",
+      "title": "Other Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "transitions-push",
+      "title": "Push Transitions",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "transitions-radial",
+      "title": "Radial Transitions",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "transitions-scale",
+      "title": "Scale Transitions",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "CSS Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "ui-3d-reveal",
+      "title": "3D UI Reveal",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "us-map",
+      "title": "US Map",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "us-map-bubble",
+      "title": "US Bubble Map",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "us-map-flow",
+      "title": "US Flow Map",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "us-map-hex",
+      "title": "US Hex Grid Map",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-anamorphic-flare",
+      "title": "Anamorphic Streak Flare",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-iphone-device",
+      "title": "iPhone & MacBook 3D Showcase",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-liquid-background",
+      "title": "Liquid Background",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-liquid-glass",
+      "title": "Liquid Glass",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-magnetic",
+      "title": "Magnetic",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-portal",
+      "title": "Portal",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-shatter",
+      "title": "Shatter",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "vfx-text-cursor",
+      "title": "VFX Text Cursor",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "HTML-in-Canvas",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "voronoi",
+      "title": "Voronoi",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "vpn-youtube-spot",
+      "title": "VPN YouTube Spot",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Showcases",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Verify vpn-sfx.wav audio provenance or replace with CC0 audio asset."
+      },
+      "blocker_reason": "Requires brand clearance: Verify vpn-sfx.wav audio provenance or replace with CC0 audio asset."
+    },
+    {
+      "id": "water",
+      "title": "Water",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "backgrounds"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "waveform",
+      "title": "Waveform",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_MISSING",
+        "category_id": null,
+        "category_label": null,
+        "subcategory": null,
+        "proposed_fallback": "data-charts"
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Cleared"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "week-in-merges",
+      "title": "Week in Merges",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "weight-wave",
+      "title": "Weight Wave",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Typography & Text",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "whip-pan",
+      "title": "Whip Pan",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "transitions",
+        "category_label": "Transitions",
+        "subcategory": "Shader Transitions",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "wireframe-portal-title",
+      "title": "Wireframe Portal Title",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "3d-motion",
+        "category_label": "3D motion",
+        "subcategory": "3D motion",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Preserve Geist OFL license file alongside bundled fonts."
+      },
+      "blocker_reason": "Requires brand clearance: Preserve Geist OFL license file alongside bundled fonts."
+    },
+    {
+      "id": "world-map",
+      "title": "World Map",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "data-charts",
+        "category_label": "Data & charts",
+        "subcategory": "Data",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "x-post",
+      "title": "X Post Card",
+      "status": "BLOCKED_RIGHTS",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "TRADEMARK_SENSITIVE",
+        "clearance_path": "Use generic microblog post card layout; avoid proprietary brand logo marks."
+      },
+      "blocker_reason": "Requires brand clearance: Use generic microblog post card layout; avoid proprietary brand logo marks."
+    },
+    {
+      "id": "yt-comment-card",
+      "title": "Comment Cards",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "yt-lcd-background",
+      "title": "Scanline Board Background",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "surfaces",
+        "category_label": "Surfaces",
+        "subcategory": "Texture",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "yt-logo-intro",
+      "title": "Logo Intro Sequence",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "yt-lower-third",
+      "title": "YouTube Lower Third",
+      "status": "SHIPPED",
+      "is_shipped_offline": true,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "scenes-demos",
+        "category_label": "Scenes & demos",
+        "subcategory": "Social Overlays",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": null
+    },
+    {
+      "id": "yt-prism-title",
+      "title": "Chromatic Fringe Title",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "text-captions",
+        "category_label": "Text & captions",
+        "subcategory": "Typography & Text",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    },
+    {
+      "id": "yt-vertical-fill",
+      "title": "Vertical Media Filler",
+      "status": "BLOCKED_DEPENDENCY",
+      "is_shipped_offline": false,
+      "proof_preview": false,
+      "proof_inserted": false,
+      "proof_export": false,
+      "proof_full_e2e": false,
+      "taxonomy": {
+        "category_status": "SOURCE_CATEGORY_VERIFIED",
+        "category_id": "blocks",
+        "category_label": "Blocks",
+        "subcategory": "Blocks",
+        "proposed_fallback": null
+      },
+      "rights": {
+        "spdx": "Apache-2.0",
+        "brand_status": "NONE",
+        "clearance_path": "Vendor runtime libraries offline"
+      },
+      "blocker_reason": "Unvendored runtime CDN/GSAP dependencies require static timeline compiler and offline vendoring"
+    }
+  ]
+}
