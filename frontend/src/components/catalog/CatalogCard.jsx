@@ -3,7 +3,8 @@
 /**
  * CatalogCard: individual motion block card with truthful posters for operational blocks,
  * authentic metadata/blocker blueprints for inventory-only blocks (without fake posters),
- * aspect ratio badge, real disposition status, and non-destructive hover Ghost Preview.
+ * aspect ratio badge, real disposition status, authentic HyperFrames categories, and
+ * non-destructive hover Ghost Preview.
  */
 import React, { useState, useRef, useEffect } from "react"
 import {
@@ -11,6 +12,7 @@ import {
   Typography,
   Stack,
   Chip,
+  Tooltip,
   alpha,
   useTheme,
 } from "@mui/material"
@@ -20,9 +22,10 @@ import {
   IconAlertTriangle,
   IconClockHour4,
   IconLock,
-  IconSparkles,
+  IconAlertCircle,
+  IconFolderOff,
 } from "@tabler/icons-react"
-import { SIXCLIPS_ORIGINAL_IDS, INTERNALIZED_DONOR_IDS } from "../../utils/catalogInventory"
+import { DONOR_INTERNALIZED_IDS, UNINDEXED_DONOR_IDS } from "../../utils/catalogOriginals"
 
 export default function CatalogCard({
   item,
@@ -37,18 +40,18 @@ export default function CatalogCard({
   const hoverTimerRef = useRef(null)
 
   const is9x16 = aspectRatio === "9:16"
-  const is6ClipsOriginal = SIXCLIPS_ORIGINAL_IDS.has(item.id) || item.origin === "6CLIPS_ORIGINAL"
-  const isDonorInternalized = INTERNALIZED_DONOR_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
-  const isOperational = is6ClipsOriginal || isDonorInternalized || Boolean(item.isOperational)
+  const isDonorInternalized = DONOR_INTERNALIZED_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
+  const isOperational = isDonorInternalized || Boolean(item.isOperational)
+  const isUnindexed = UNINDEXED_DONOR_IDS.has(item.id) || Boolean(item.isUnindexed)
 
   const aspectSupport = is9x16 ? (item.aspect_9_16 || "CONTAINED_ONLY") : (item.aspect_16_9 || "CONTAINED_ONLY")
 
   // For operational blocks only: truthful poster & preview endpoints
   const posterUrl = isOperational
-    ? `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspectRatio}`
+    ? (item.poster_url || `/api/catalog/blocks/${item.id}/poster?aspect_ratio=${aspectRatio}`)
     : null
   const previewUrl = isOperational
-    ? `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspectRatio}`
+    ? (item.preview_url || `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspectRatio}`)
     : null
 
   // Hover Ghost Preview: debounced 220ms, ONLY active for operational blocks
@@ -91,7 +94,7 @@ export default function CatalogCard({
 
   if (isOperational) {
     statusLabel = "OPERATIONAL"
-    statusColor = is6ClipsOriginal ? theme.palette.secondary.main : theme.palette.info.main
+    statusColor = theme.palette.success.main
     statusIcon = <IconPlayerPlay size={14} />
   } else if (item.integration_status === "ELIGIBLE_NOT_PORTED") {
     statusLabel = "VETTED (NOT PORTED)"
@@ -259,7 +262,7 @@ export default function CatalogCard({
                   overflow: "hidden",
                 }}
               >
-                {item.blocker_reason || "Metadata-only block entry awaiting provenance clearance."}
+                {item.blocker_reason || "Metadata-only donor block entry awaiting porting and verification."}
               </Typography>
             </Box>
 
@@ -377,40 +380,67 @@ export default function CatalogCard({
           />
         </Stack>
 
-        {/* Origin Badge */}
-        <Stack direction="row" spacing={0.75} sx={{ mt: 0.5, mb: 0.5 }}>
-          {is6ClipsOriginal ? (
-            <Chip
-              label="6Clips Original"
-              size="small"
-              sx={{
-                height: 16,
-                fontSize: "0.6rem",
-                fontWeight: 700,
-                bgcolor: alpha(theme.palette.secondary.main, 0.15),
-                color: theme.palette.secondary.main,
-              }}
-            />
-          ) : (
-            <Chip
-              label={isDonorInternalized ? "HyperFrames (Internalized)" : "HyperFrames Donor"}
-              size="small"
-              sx={{
-                height: 16,
-                fontSize: "0.6rem",
-                fontWeight: 600,
-                bgcolor: alpha(theme.palette.text.secondary, 0.12),
-                color: "text.secondary",
-              }}
-            />
+        {/* Authentic Categories and Provenance Chips */}
+        <Stack direction="row" spacing={0.5} sx={{ mt: 0.75, mb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+          {/* Authentic HyperFrames Category */}
+          <Chip
+            label={item.category || "scenes"}
+            size="small"
+            sx={{
+              height: 16,
+              fontSize: "0.6rem",
+              fontWeight: 700,
+              bgcolor: alpha(theme.palette.primary.main, 0.12),
+              color: theme.palette.primary.main,
+            }}
+          />
+
+          {/* Missing Source Category Diagnostic */}
+          {item.source_category_missing && (
+            <Tooltip title="Diagnostic: Upstream registry-item.json has no explicit category. Classified via tags." arrow>
+              <Chip
+                icon={<IconAlertCircle size={10} />}
+                label="Tags Resolved"
+                size="small"
+                sx={{
+                  height: 16,
+                  fontSize: "0.58rem",
+                  fontWeight: 600,
+                  bgcolor: alpha(theme.palette.warning.main, 0.12),
+                  color: theme.palette.warning.dark,
+                  border: "1px dashed",
+                  borderColor: alpha(theme.palette.warning.main, 0.4),
+                }}
+              />
+            </Tooltip>
           )}
+
+          {/* 26 Unindexed Donor Dir Indicator */}
+          {isUnindexed && (
+            <Tooltip title="One of 26 unindexed directories under registry/blocks/." arrow>
+              <Chip
+                icon={<IconFolderOff size={10} />}
+                label="Unindexed"
+                size="small"
+                sx={{
+                  height: 16,
+                  fontSize: "0.58rem",
+                  fontWeight: 600,
+                  bgcolor: alpha(theme.palette.info.main, 0.1),
+                  color: theme.palette.info.dark,
+                }}
+              />
+            </Tooltip>
+          )}
+
+          {/* License Status */}
           {item.license_status && (
             <Chip
               label={item.license_status.replace("VERIFIED_", "")}
               size="small"
               sx={{
                 height: 16,
-                fontSize: "0.6rem",
+                fontSize: "0.58rem",
                 fontWeight: 600,
                 bgcolor: alpha(
                   item.license_status.startsWith("VERIFIED")
@@ -440,7 +470,7 @@ export default function CatalogCard({
             flex: 1,
           }}
         >
-          {item.description || "Self-contained motion block for video compositions."}
+          {item.description || "Original HyperFrames donor block for video compositions."}
         </Typography>
 
         <Stack
@@ -450,10 +480,10 @@ export default function CatalogCard({
           sx={{ mt: 1.25, pt: 1, borderTop: 1, borderColor: "divider" }}
         >
           <Typography sx={{ fontSize: "0.7rem", color: "text.disabled", fontWeight: 500 }}>
-            {item.category || "general"} · {item.license || "Apache-2.0"}
+            {item.id} · {item.license || "Apache-2.0"}
           </Typography>
           <Typography sx={{ fontSize: "0.7rem", color: "text.disabled" }}>
-            {item.variables_count || 0} vars
+            {(item.variables || []).length} vars
           </Typography>
         </Stack>
       </Box>

@@ -148,11 +148,22 @@ class RegistryAdapter:
             aspect_compat_16x9 = "NATIVE"
             aspect_compat_9x16 = "ADAPTED" if block_name == "weight-wave" else "CONTAINED_ONLY"
 
+        is_retired = block_name in ("creator-hud", "glitch-transition")
+        origin = "RETIRED_6CLIPS_AUTHORED" if is_retired else "DONOR_ORIGINAL"
+
         return {
             "id": block_name,
             "name": block_name,
             "title": title,
+            "origin": origin,
             "category": category,
+            "source_category": None,
+            "source_category_status": "SOURCE_CATEGORY_MISSING",
+            "proposed_fallback_category": category,
+            "is_original_category": False,
+            "retired": is_retired,
+            "requires_migration": is_retired,
+            "is_public": not is_retired,
             "description": description,
             "tags": tags,
             "dimensions": {"width": width, "height": height},
@@ -173,6 +184,7 @@ class RegistryAdapter:
         limit: Optional[int] = 300,
         offset: int = 0,
         query: Optional[str] = None,
+        include_retired: bool = True,
     ) -> List[Dict[str, Any]]:
         """List and normalize available catalog blocks with full discovery and pagination support."""
         search_query = search or query
@@ -183,6 +195,9 @@ class RegistryAdapter:
         all_matching = []
         for bdir in sorted(reg_dir.iterdir()):
             if not bdir.is_dir():
+                continue
+            # When include_retired is False, exclude retired 6Clips-authored blocks from public listings
+            if not include_retired and bdir.name in ("creator-hud", "glitch-transition"):
                 continue
             manifest_file = bdir / "registry-item.json"
             if not manifest_file.exists():

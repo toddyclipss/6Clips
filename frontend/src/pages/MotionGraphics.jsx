@@ -31,6 +31,7 @@ import useClipSettings from "../components/clip/useClipSettings"
 import useBenchRanges from "../components/clip/bench/useBenchRanges"
 import MotionInstallGate from "../components/MotionInstallGate"
 import MotionReviewPanel from "../components/motion/MotionReviewPanel"
+import { inspectLegacyProjectBlocks, DONOR_INTERNALIZED_IDS } from "../utils/catalogOriginals"
 
 /**
  * Unified Motion Graphics Workspace (/motion).
@@ -135,9 +136,16 @@ export default function MotionGraphics() {
   const [ghostPreview, setGhostPreview] = useState(null)
   const preGhostPlayingRef = useRef(false)
 
+  // Diagnostic report for legacy 6Clips blocks requiring migration
+  const legacyReport = useMemo(() => {
+    return inspectLegacyProjectBlocks(document)
+  }, [document])
+
   const handleStartGhostPreview = useCallback((catalogItem) => {
     if (!catalogItem) return
     const bName = catalogItem.name || catalogItem.id
+    const isOp = DONOR_INTERNALIZED_IDS.has(bName) || Boolean(catalogItem.isOperational)
+    if (!isOp) return
     const aspect = aspectRatio || "9:16"
     const previewUrl = `/api/projects/catalog/blocks/${bName}/preview?aspect_ratio=${aspect}`
     const posterUrl = catalogItem.poster_url || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspect}`
@@ -1733,6 +1741,41 @@ export default function MotionGraphics() {
         onCancelDraft={handleCancelDraft}
         onNewProject={handleNewProject}
       />
+
+      {/* Migration Warning: Controlled notice for legacy projects with retired 6Clips blocks */}
+      {legacyReport.hasLegacy && (
+        <Alert
+          severity="warning"
+          variant="filled"
+          data-testid="legacy-blocks-migration-alert"
+          sx={{
+            mx: 2,
+            mt: 1,
+            mb: 0.5,
+            borderRadius: 1.5,
+            fontSize: "0.8rem",
+            py: 0.5,
+          }}
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => {
+                showSnackbar(
+                  `Legacy block(s) (${legacyReport.legacyBlocks.join(", ")}) preserved safely. In Wave 15, replace with authentic HyperFrames donor originals.`,
+                  "info"
+                )
+              }}
+              sx={{ fontWeight: 700, fontSize: "0.72rem" }}
+            >
+              Migration Info
+            </Button>
+          }
+        >
+          <strong>REQUIRES_MIGRATION:</strong> Legacy 6Clips-authored block(s) detected (
+          {legacyReport.legacyBlocks.join(", ")}). Project content and timing are fully preserved. In Wave 15, replace with authentic HyperFrames donor originals.
+        </Alert>
+      )}
 
       {/* 2. Main Studio Body: Vertical Split (Upper: Stage & Panels; Lower: Full-Width Contextual Workspace) */}
       <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>

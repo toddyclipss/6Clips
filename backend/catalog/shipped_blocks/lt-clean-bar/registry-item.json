@@ -1,0 +1,65 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-clean-bar",
+  "type": "hyperframes:block",
+  "title": "Lower Third — Clean Bar",
+  "description": "Minimal white-card lower third for podcasts/interviews: accent tab, name + role, clip-wipe entrance",
+  "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 4.8,
+  "files": [
+    {
+      "path": "lt-clean-bar.html",
+      "target": "compositions/lt-clean-bar.html",
+      "type": "hyperframes:composition"
+    }
+  ],
+  "variables": [
+    {
+      "id": "name",
+      "type": "string",
+      "label": "Name",
+      "default": "Dr. Maya Chen",
+      "origin": "PORT_EXTENSION_EXPLICIT"
+    },
+    {
+      "id": "role",
+      "type": "string",
+      "label": "Role",
+      "default": "Host · Neuroscientist",
+      "origin": "PORT_EXTENSION_EXPLICIT"
+    }
+  ],
+  "wave15_port": {
+    "source_category": {
+      "category_id": "text-captions",
+      "category": "Text & captions",
+      "subcategory": "Lower Thirds",
+      "navigation_path": [
+        "Catalog",
+        "Text & captions",
+        "Lower Thirds"
+      ],
+      "doc_category": "Lower Thirds",
+      "status": "SOURCE_CATEGORY_VERIFIED",
+      "proposed_fallback": null,
+      "evidence": [
+        "docs/snippets/catalog-gallery-data.mdx"
+      ],
+      "conflict": false
+    },
+    "runtime": "independent-static-timeline-v1",
+    "fidelity": "ORIGINAL_MARKUP_STYLES_TIMING_EASING_RETAINED; VISUAL_BASELINE_REVIEW_PENDING",
+    "variables_origin": "PORT_EXTENSION_EXPLICIT",
+    "native_aspect_policy": "contain",
+    "public_ready": false
+  }
+}

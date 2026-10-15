@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "id": "lt-soft-pill",
+  "source_files": {
+    "lt-soft-pill.html": "e1f14e3b482622e6005beec80678bc70ad661e15f3db3e3461fae414a81d5c83",
+    "registry-item.json": "8854ecbb4e19edbc63a49199bd8fa82329605d93bbfa877a84f62e403c542fca"
+  },
+  "source_sha256": "33870f4c5a0098149de7f13f300da34447a97cac4328dca9ac7d29b5a3be30b6",
+  "compiled_timeline": {
+    "id": "lt-soft-pill",
+    "duration": 4.8,
+    "targets": [
+      "lt",
+      "lt-dot",
+      "lt-name",
+      "lt-pill",
+      "lt-role"
+    ],
+    "initial": [
+      {
+        "targets": [
+          "lt-pill"
+        ],
+        "values": {
+          "scale": 0.88,
+          "y": 18.0,
+          "opacity": 0.0
+        }
+      },
+      {
+        "targets": [
+          "lt-dot"
+        ],
+        "values": {
+          "scale": 0.0
+        }
+      },
+      {
+        "targets": [
+          "lt-name",
+          "lt-role"
+        ],
+        "values": {
+          "opacity": 0.0,
+          "x": -10.0
+        }
+      }
+    ],
+    "operations": [
+      {
+        "targets": [
+          "lt-pill"
+        ],
+        "values": {
+          "scale": 1.0,
+          "y": 0.0,
+          "opacity": 1.0
+        },
+        "start": 0.1,
+        "duration": 0.55,
+        "ease": "back.out(1.7)"
+      },
+      {
+        "targets": [
+          "lt-dot"
+        ],
+        "values": {
+          "scale": 1.0
+        },
+        "start": 0.4,
+        "duration": 0.4,
+        "ease": "back.out(3)"
+      },
+      {
+        "targets": [
+          "lt-name"
+        ],
+        "values": {
+          "opacity": 1.0,
+          "x": 0.0
+        },
+        "start": 0.42,
+        "duration": 0.45,
+        "ease": "power3.out"
+      },
+      {
+        "targets": [
+          "lt-role"
+        ],
+        "values": {
+          "opacity": 1.0,
+          "x": 0.0
+        },
+        "start": 0.5,
+        "duration": 0.45,
+        "ease": "power3.out"
+      },
+      {
+        "targets": [
+          "lt-pill"
+        ],
+        "values": {
+          "scale": 0.94,
+          "y": 14.0,
+          "opacity": 0.0
+        },
+        "start": 4.3,
+        "duration": 0.35,
+        "ease": "power2.in"
+      },
+      {
+        "targets": [
+          "lt"
+        ],
+        "values": {
+          "visibility": "hidden"
+        },
+        "start": 4.75,
+        "duration": 0,
+        "ease": "none"
+      }
+    ],
+    "textBindings": {
+      "name": "lt-name",
+      "role": "lt-role"
+    }
+  },
+  "source_html_sha256": "e1f14e3b482622e6005beec80678bc70ad661e15f3db3e3461fae414a81d5c83",
+  "output_html_sha256": "06dcde31704dc9e31431af7605feb9406a7944c1b9b9f90a917acbd26b75b76c",
+  "runtime_sha256": "e84f19ea3865d33227a1376a4c22000e6fab0a9a74bb67b591c707f27e00e392",
+  "source_scripts_executed": false,
+  "rights": {
+    "composition": "Apache-2.0",
+    "runtime": "AGPL-3.0-only",
+    "gsap": "REMOVED_NOT_REDISTRIBUTED",
+    "assets": "NONE",
+    "trademark": "NONE_IDENTIFIED"
+  },
+  "fidelity_limits": [
+    "Visual comparison against an authorized original GSAP renderer not yet performed",
+    "Original fonts absent upstream; exact glyph metrics depend on system font fallback",
+    "Additional text controls are explicitly port extensions"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "id": "lt-mask-reveal",
+  "source_files": {
+    "lt-mask-reveal.html": "7f348ec3124e211f7ec8e7241f21220134504ab713143e3f9dc10e016892e2e3",
+    "registry-item.json": "befe86d7bd1598242f43fbdd032230d06f511184172d8dcf5b9990b53073b143"
+  },
+  "source_sha256": "7f4189126fb719487f9abe8a15d96d37c7bcead807e352d70efb285754ea3e92",
+  "compiled_timeline": {
+    "id": "lt-mask-reveal",
+    "duration": 4.8,
+    "targets": [
+      "lt",
+      "lt-name",
+      "lt-role",
+      "lt-sweep"
+    ],
+    "initial": [
+      {
+        "targets": [
+          "lt-name"
+        ],
+        "values": {
+          "clipPath": "inset(0 100% 0 0)"
+        }
+      },
+      {
+        "targets": [
+          "lt-sweep"
+        ],
+        "values": {
+          "x": 0.0,
+          "opacity": 0.0
+        }
+      },
+      {
+        "targets": [
+          "lt-role"
+        ],
+        "values": {
+          "y": 14.0,
+          "opacity": 0.0
+        }
+      }
+    ],
+    "operations": [
+      {
+        "targets": [
+          "lt-sweep"
+        ],
+        "values": {
+          "opacity": 1.0
+        },
+        "start": 0.1,
+        "duration": 0.12,
+        "ease": "none"
+      },
+      {
+        "targets": [
+          "lt-sweep"
+        ],
+        "values": {
+          "x": 536.0
+        },
+        "start": 0.12,
+        "duration": 0.55,
+        "ease": "power2.inOut"
+      },
+      {
+        "targets": [
+          "lt-name"
+        ],
+        "values": {
+          "clipPath": "inset(0 0% 0 0)"
+        },
+        "start": 0.16,
+        "duration": 0.5,
+        "ease": "power2.inOut"
+      },
+      {
+        "targets": [
+          "lt-sweep"
+        ],
+        "values": {
+          "opacity": 0.0
+        },
+        "start": 0.6,
+        "duration": 0.15,
+        "ease": "none"
+      },
+      {
+        "targets": [
+          "lt-role"
+        ],
+        "values": {
+          "y": 0.0,
+          "opacity": 1.0
+        },
+        "start": 0.55,
+        "duration": 0.5,
+        "ease": "power3.out"
+      },
+      {
+        "targets": [
+          "lt-role"
+        ],
+        "values": {
+          "opacity": 0.0
+        },
+        "start": 4.25,
+        "duration": 0.3,
+        "ease": "power2.in"
+      },
+      {
+        "targets": [
+          "lt-name"
+        ],
+        "values": {
+          "clipPath": "inset(0 0 0 100%)"
+        },
+        "start": 4.3,
+        "duration": 0.4,
+        "ease": "power2.in"
+      },
+      {
+        "targets": [
+          "lt"
+        ],
+        "values": {
+          "visibility": "hidden"
+        },
+        "start": 4.75,
+        "duration": 0,
+        "ease": "none"
+      }
+    ],
+    "textBindings": {
+      "name": "lt-name",
+      "role": "lt-role"
+    }
+  },
+  "source_html_sha256": "7f348ec3124e211f7ec8e7241f21220134504ab713143e3f9dc10e016892e2e3",
+  "output_html_sha256": "af0f7f7e146ceafa5b8f7817d88b0206db6517e379d3b2266386bc3538b55ead",
+  "runtime_sha256": "e84f19ea3865d33227a1376a4c22000e6fab0a9a74bb67b591c707f27e00e392",
+  "source_scripts_executed": false,
+  "rights": {
+    "composition": "Apache-2.0",
+    "runtime": "AGPL-3.0-only",
+    "gsap": "REMOVED_NOT_REDISTRIBUTED",
+    "assets": "NONE",
+    "trademark": "NONE_IDENTIFIED"
+  },
+  "fidelity_limits": [
+    "Visual comparison against an authorized original GSAP renderer not yet performed",
+    "Original fonts absent upstream; exact glyph metrics depend on system font fallback",
+    "Additional text controls are explicitly port extensions"
+  ]
+}

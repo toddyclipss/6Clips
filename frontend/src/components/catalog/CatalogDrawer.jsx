@@ -49,7 +49,7 @@ import {
   IconClockHour4,
 } from "@tabler/icons-react"
 import http from "../../api/http"
-import { SIXCLIPS_ORIGINAL_IDS, INTERNALIZED_DONOR_IDS } from "../../utils/catalogInventory"
+import { DONOR_INTERNALIZED_IDS, UNINDEXED_DONOR_IDS, HYPERFRAMES_CATEGORIES } from "../../utils/catalogOriginals"
 
 export default function CatalogDrawer({
   item,
@@ -89,9 +89,10 @@ export default function CatalogDrawer({
   if (!item) return null
 
   const is9x16 = aspect === "9:16"
-  const is6ClipsOriginal = SIXCLIPS_ORIGINAL_IDS.has(item.id) || item.origin === "6CLIPS_ORIGINAL"
-  const isDonorInternalized = INTERNALIZED_DONOR_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
-  const isOperational = is6ClipsOriginal || isDonorInternalized || Boolean(item.isOperational)
+  const isDonorInternalized = DONOR_INTERNALIZED_IDS.has(item.id) || item.integration_status === "INTERNALIZED"
+  const isOperational = isDonorInternalized || Boolean(item.isOperational)
+  const isUnindexed = UNINDEXED_DONOR_IDS.has(item.id) || Boolean(item.isUnindexed)
+  const is6ClipsOriginal = Boolean(item.is6ClipsOriginal) || item.origin === "6CLIPS_ORIGINAL"
 
   const previewUrl = isOperational
     ? `/api/catalog/blocks/${item.id}/preview?aspect_ratio=${aspect}`
@@ -100,8 +101,8 @@ export default function CatalogDrawer({
   let readinessLabel = "QUARANTINED"
   let readinessColor = "warning"
   if (isOperational) {
-    readinessLabel = "OPERATIONAL"
-    readinessColor = is6ClipsOriginal ? "secondary" : "info"
+    readinessLabel = "OPERATIONAL (INTERNALIZED)"
+    readinessColor = "success"
   } else if (item.integration_status === "ELIGIBLE_NOT_PORTED") {
     readinessLabel = "VETTED (NOT PORTED)"
     readinessColor = "warning"
@@ -152,11 +153,13 @@ export default function CatalogDrawer({
 
   return (
     <Drawer
+      data-testid="catalog-drawer"
       anchor="right"
       open={open}
       onClose={onClose}
       slotProps={{
         paper: {
+          "data-testid": "catalog-drawer-paper",
           sx: {
             width: { xs: "100%", sm: 680 },
             maxWidth: "100vw",
@@ -181,7 +184,7 @@ export default function CatalogDrawer({
             <Box sx={{ flex: 1, pr: 2 }}>
               <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
                 <Chip
-                  label={item.category?.toUpperCase() || "GENERAL"}
+                  label={item.category?.toUpperCase() || "SCENES"}
                   size="small"
                   color="primary"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
@@ -193,19 +196,28 @@ export default function CatalogDrawer({
                   variant="outlined"
                   sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
                 />
-                {is6ClipsOriginal ? (
+                <Chip
+                  label={isDonorInternalized ? "HyperFrames (Internalized)" : "HyperFrames Donor Original"}
+                  size="small"
+                  variant="outlined"
+                  sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
+                />
+                {isUnindexed && (
                   <Chip
-                    label="6Clips Original"
+                    label="Unindexed Dir"
                     size="small"
-                    color="secondary"
-                    sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
-                  />
-                ) : (
-                  <Chip
-                    label={isDonorInternalized ? "HyperFrames (Internalized)" : "HyperFrames Donor Original"}
-                    size="small"
+                    color="info"
                     variant="outlined"
                     sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
+                  />
+                )}
+                {item.source_category_missing && (
+                  <Chip
+                    label="Tags Resolved"
+                    size="small"
+                    color="warning"
+                    variant="outlined"
+                    sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600, borderStyle: "dashed" }}
                   />
                 )}
               </Stack>

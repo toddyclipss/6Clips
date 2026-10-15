@@ -1,0 +1,156 @@
+<!-- Modified by ViralMint Wave15: original markup/styles retained; timeline statically compiled to independent local player. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Original motion script statically compiled; no donor JavaScript executed. -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+
+      #root .lt {
+        position: absolute;
+        left: 120px;
+        bottom: 116px;
+      }
+      #root .lt-block {
+        background: #2756ff;
+        padding: 20px 36px 24px 32px;
+        box-shadow: 0 16px 44px rgba(39, 86, 255, 0.34);
+        display: inline-flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #root .lt-name {
+        font-family: "League Gothic", sans-serif;
+        font-size: 84px;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 0.86;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      #root .lt-role {
+        font-family: "Space Mono", monospace;
+        font-size: 24px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.86);
+        line-height: 1.2;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="lt-color-block"
+      data-width="1920"
+      data-height="1080"
+      data-start="0"
+      data-duration="4.8"
+    >
+      <div id="lt-clip" class="clip" data-start="0" data-duration="4.8" data-track-index="0">
+        <div id="lt" class="lt">
+          <div id="lt-block" class="lt-block">
+            <div id="lt-name" class="lt-name">Dr. Maya Chen</div>
+            <div id="lt-role" class="lt-role">Host · Neuroscientist</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Original motion script statically compiled; no donor JavaScript executed. -->
+  <script>/* SPDX-License-Identifier: AGPL-3.0-only
+ * Independently implemented deterministic player for compiled Apache-2.0
+ * HyperFrames motion declarations. Contains no GSAP implementation or code.
+ * The compiler accepts a deliberately small, fail-closed subset.
+ */
+(() => {
+  'use strict';
+  const clone = x => JSON.parse(JSON.stringify(x));
+  function ease(spec, p) {
+    if (spec === 'none') return p;
+    const power = /^power([1-4])\.(in|out|inOut)$/.exec(spec);
+    if (power) {
+      const n = Number(power[1]) + 1;
+      if (power[2] === 'in') return p ** n;
+      if (power[2] === 'out') return 1 - (1-p) ** n;
+      return p < .5 ? (2*p) ** n / 2 : 1 - (2*(1-p)) ** n / 2;
+    }
+    const back = /^back\.out\(([0-9.]+)\)$/.exec(spec);
+    if (back) { const s=Number(back[1]), q=p-1; return 1+(s+1)*q*q*q+s*q*q; }
+    throw new Error('Unsupported compiled easing: '+spec);
+  }
+  function interpolate(a, b, p) {
+    if (typeof a === 'number' && typeof b === 'number') return a+(b-a)*p;
+    if (typeof b === 'string' && b.startsWith('inset(')) {
+      const av=String(a).match(/-?\d+(?:\.\d+)?/g), bv=b.match(/-?\d+(?:\.\d+)?/g);
+      if (!av || !bv || av.length!==4 || bv.length!==4) throw new Error('Unsupported clip path');
+      return 'inset('+bv.map((v,i)=>(Number(av[i])+(Number(v)-Number(av[i]))*p)+'%').join(' ')+')';
+    }
+    return p>=1 ? b : a;
+  }
+  function mount(config) {
+    const nodes={}, base={};
+    for (const id of config.targets) {
+      const el=document.getElementById(id);
+      if (!el) throw new Error('Missing compiled target: '+id);
+      nodes[id]=el;
+      const css=getComputedStyle(el);
+      if (css.transform!=='none') throw new Error('Uncompiled initial transform: '+id);
+      base[id]={x:0,y:0,scale:1,scaleX:1,scaleY:1,opacity:Number(css.opacity),visibility:css.visibility,clipPath:css.clipPath==='none'?'inset(0% 0% 0% 0%)':css.clipPath,transformOrigin:css.transformOrigin};
+    }
+    for (const op of config.initial) for (const id of op.targets) Object.assign(base[id],op.values);
+    const ops=config.operations.map(op=>clone(op));
+    // Infer each starting value from the state at its original scheduled time.
+    function stateAt(t, limit=ops.length) {
+      const state=clone(base);
+      for (let i=0;i<limit;i++) {
+        const op=ops[i]; if (t<op.start) continue;
+        const p=op.duration===0?1:Math.min(1,(t-op.start)/op.duration);
+        for (const id of op.targets) for (const [key,value] of Object.entries(op.values))
+          state[id][key]=op.duration===0?value:interpolate(op.from[id][key],value,ease(op.ease,p));
+      }
+      return state;
+    }
+    ops.forEach((op,i)=>{op.from={};const state=stateAt(op.start,i);for(const id of op.targets)op.from[id]=clone(state[id]);});
+    function seek(t) {
+      if (!Number.isFinite(t)) throw new Error('Invalid seek time');
+      t=Math.max(0,Math.min(config.duration,t)); const state=stateAt(t);
+      for (const [id,v] of Object.entries(state)) {
+        const s=nodes[id].style;
+        s.transform=`translate(${v.x}px, ${v.y}px) scale(${v.scale*v.scaleX}, ${v.scale*v.scaleY})`;
+        s.transformOrigin=v.transformOrigin; s.opacity=String(v.opacity);s.visibility=v.visibility;s.clipPath=v.clipPath;
+      }
+      return timeline;
+    }
+    let frame=null, current=0, start=0;
+    const timeline={seek(t){current=t;return seek(t);},duration(){return config.duration;},pause(){if(frame!==null)cancelAnimationFrame(frame);frame=null;return timeline;},play(){timeline.pause();start=performance.now()-current*1000;function tick(now){current=(now-start)/1000;seek(current);if(current<config.duration)frame=requestAnimationFrame(tick);}frame=requestAnimationFrame(tick);return timeline;}};
+    const vars=(window.__hyperframes&&window.__hyperframes.getVariables)?window.__hyperframes.getVariables():{};
+    for (const [key,id] of Object.entries(config.textBindings||{})) if(Object.hasOwn(vars,key)) {
+      const el=document.getElementById(id);if(el)el.textContent=String(vars[key]).slice(0,160);
+    }
+    window.__timelines=window.__timelines||{};window.__timelines[config.id]=timeline;
+    window.__wave15Native={version:1,config,seek:t=>timeline.seek(t),play:()=>timeline.play(),pause:()=>timeline.pause(),stateAt};
+    seek(0);
+  }
+  window.HyperFramesNative={mount,ease};
+})();
+</script>
+<script>HyperFramesNative.mount({"id":"lt-color-block","duration":4.8,"targets":["lt","lt-block","lt-name","lt-role"],"initial":[{"targets":["lt-block"],"values":{"x":-80.0,"opacity":0.0}},{"targets":["lt-name"],"values":{"y":24.0,"opacity":0.0}},{"targets":["lt-role"],"values":{"y":18.0,"opacity":0.0}}],"operations":[{"targets":["lt-block"],"values":{"x":0.0,"opacity":1.0},"start":0.1,"duration":0.5,"ease":"back.out(1.4)"},{"targets":["lt-name"],"values":{"y":0.0,"opacity":1.0},"start":0.3,"duration":0.42,"ease":"power3.out"},{"targets":["lt-role"],"values":{"y":0.0,"opacity":1.0},"start":0.4,"duration":0.42,"ease":"power3.out"},{"targets":["lt-block"],"values":{"x":-60.0,"opacity":0.0},"start":4.3,"duration":0.35,"ease":"power2.in"},{"targets":["lt"],"values":{"visibility":"hidden"},"start":4.75,"duration":0,"ease":"none"}],"textBindings":{"name":"lt-name","role":"lt-role"}});</script>
+</body>
+</html>

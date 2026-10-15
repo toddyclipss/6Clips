@@ -231,21 +231,27 @@ export default function CatalogReconciliationModal({
           {/* Verified Shipped Blocks List */}
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-              Structurally Verified Shipped Blocks & 6Clips Substitutes (Zero-CDN, Zero-Donor)
+              Structurally Verified Shipped Donor Blocks (10 Internalized Originals)
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 1.5 }}>
+              <Chip label="aurora (VFX · Apache-2.0 & MIT)" color="success" size="small" />
+              <Chip label="flowing-gradient (VFX · Apache-2.0 & MIT)" color="success" size="small" />
+              <Chip label="plasma (VFX · Apache-2.0 & MIT)" color="success" size="small" />
+              <Chip label="data-chart (Data · Apache-2.0)" color="success" size="small" />
+              <Chip label="holographic (VFX · Apache-2.0 & MIT)" color="success" size="small" />
+              <Chip label="instagram-follow (Social · Apache-2.0)" color="success" size="small" />
+              <Chip label="tiktok-follow (Social · Apache-2.0)" color="success" size="small" />
+              <Chip label="yt-lower-third (Social · Apache-2.0)" color="success" size="small" />
+              <Chip label="weight-wave (Text Effects · OFL-1.1)" color="success" size="small" />
+              <Chip label="stripes (VFX · Apache-2.0 & MIT)" color="success" size="small" />
+            </Stack>
+
+            <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.5, fontWeight: 600 }}>
+              Retired 6Clips Substitutes (Excluded from Public Catalog & Motion Picker):
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-              <Chip label="aurora (Backgrounds · Apache-2.0 & MIT)" color="success" size="small" />
-              <Chip label="flowing-gradient (Backgrounds · Apache-2.0 & MIT)" color="success" size="small" />
-              <Chip label="plasma (Backgrounds · Apache-2.0 & MIT)" color="success" size="small" />
-              <Chip label="data-chart (Charts · Apache-2.0)" color="success" size="small" />
-              <Chip label="holographic (Charts · Apache-2.0 & MIT)" color="success" size="small" />
-              <Chip label="instagram-follow (CTA · Apache-2.0)" color="success" size="small" />
-              <Chip label="tiktok-follow (CTA · Apache-2.0)" color="success" size="small" />
-              <Chip label="yt-lower-third (Lower-Thirds · Apache-2.0)" color="success" size="small" />
-              <Chip label="weight-wave (Typography · OFL-1.1)" color="success" size="small" />
-              <Chip label="stripes (Transitions · Apache-2.0 & MIT)" color="success" size="small" />
-              <Chip label="glitch-transition (Transitions · 6Clips Apache-2.0 Original)" color="info" size="small" />
-              <Chip label="creator-hud (Overlays · 6Clips Apache-2.0 Original)" color="info" size="small" />
+              <Chip label="glitch-transition (Retired 6Clips Substitute · Apache-2.0)" variant="outlined" color="default" size="small" />
+              <Chip label="creator-hud (Retired 6Clips Substitute · Apache-2.0)" variant="outlined" color="default" size="small" />
             </Stack>
           </Box>
         </Stack>
