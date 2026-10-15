@@ -32,7 +32,7 @@ export const HYPERFRAMES_CATEGORIES = [
   { id: 'data-charts', label: 'Data & Charts', color: 'green' },
   { id: '3d-motion', label: '3D Motion', color: 'violet' },
   { id: 'motion-effects', label: 'Motion & Effects', color: 'pink' },
-  { id: 'source_missing', label: 'Source Category Missing', color: 'slate' },
+  { id: 'source_missing', label: 'Unclassified in source', color: 'slate' },
 ]
 
 /**

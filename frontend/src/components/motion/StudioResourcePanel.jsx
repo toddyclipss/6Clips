@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react"
 import {
   Box, Stack, Typography, Tabs, Tab, IconButton, InputBase,
   Button, Tooltip, CircularProgress, Chip, Dialog, DialogTitle,
-  DialogContent, DialogActions, Select, MenuItem, FormControl,
+  DialogContent, DialogActions,
 } from "@mui/material"
 import http from "../../api/http"
 import {
@@ -25,7 +25,6 @@ import {
   IconBrandInstagram,
   IconWorld,
   IconX,
-  IconDownload,
   IconLink,
 } from "@tabler/icons-react"
 import {
@@ -90,62 +89,7 @@ export default function StudioResourcePanel({
     } catch {}
   }, [])
 
-  // Ingest URL state (yt-dlp Video Download)
-  const [ingestUrlOpen, setIngestUrlOpen] = useState(false)
-  const [ingestUrlInput, setIngestUrlInput] = useState("")
-  const [ingestQuality, setIngestQuality] = useState("best")
-  const [ingesting, setIngesting] = useState(false)
-  const ingestAbortRef = useRef(null)
 
-  useEffect(() => {
-    return () => {
-      if (ingestAbortRef.current) ingestAbortRef.current.abort()
-    }
-  }, [])
-
-  const handleIngestUrl = async () => {
-    const raw = (ingestUrlInput || "").trim()
-    if (!raw) return
-    setIngesting(true)
-    if (ingestAbortRef.current) ingestAbortRef.current.abort()
-    ingestAbortRef.current = new AbortController()
-    const userIntentId = `ingest_intent_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`
-
-    try {
-      const res = await http.post("/api/downloaded/batch-download", {
-        urls: [{ url: raw }],
-        options: { quality: ingestQuality, container: "mp4" },
-        analyze: false,
-      }, {
-        signal: ingestAbortRef.current.signal,
-        headers: {
-          "X-Component-Origin": "StudioResourcePanel",
-          "X-User-Intent-ID": userIntentId,
-          "X-Effect-Name": "video-download",
-        },
-      })
-      if (res.data?.job_id) {
-        setIngestUrlInput("")
-        setIngestUrlOpen(false)
-        if (onRefreshLibrary) {
-          await onRefreshLibrary()
-        } else {
-          try {
-            const r = await http.get("/api/library/items")
-            const list = r.data?.items || r.data
-            if (Array.isArray(list) && list.length > 0 && onSelectSource) {
-              onSelectSource(list[0])
-            }
-          } catch {}
-        }
-      }
-    } catch (err) {
-      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") return
-      console.error("Ingest URL failed:", err)
-    } finally {
-      setIngesting(false)
-    }
-  }
 
   // Audio Pre-listening state
   const [playingAudioKey, setPlayingAudioKey] = useState(null)
@@ -448,72 +392,7 @@ export default function StudioResourcePanel({
               sx={{ ml: 1, fontSize: "0.75rem", flex: 1 }}
             />
           </Box>
-          <Tooltip title={ingestUrlOpen ? "Close URL Ingest" : "Ingest Remote Video URL (yt-dlp)"} arrow>
-            <IconButton
-              size="small"
-              className="IngestUrlButton"
-              data-testid="ingest-url-button"
-              onClick={() => setIngestUrlOpen(!ingestUrlOpen)}
-              sx={{
-                width: 26,
-                height: 26,
-                borderRadius: 1.5,
-                border: "1px solid",
-                borderColor: ingestUrlOpen ? "primary.main" : "divider",
-                color: ingestUrlOpen ? "primary.main" : "text.secondary",
-                bgcolor: ingestUrlOpen ? "action.selected" : "#f8fafc",
-              }}
-            >
-              <IconDownload size={14} />
-            </IconButton>
-          </Tooltip>
         </Stack>
-
-        {/* Collapsible Remote Video Ingest Bar */}
-        {ingestUrlOpen && (
-          <Box sx={{ mt: 1, p: 1, bgcolor: "#f1f5f9", borderRadius: 1.5, border: "1px solid", borderColor: "divider" }}>
-            <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem", color: "text.secondary", display: "block", mb: 0.5 }}>
-              Download Video Stream (yt-dlp)
-            </Typography>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <InputBase
-                placeholder="Paste video URL (YouTube, TikTok, MP4)..."
-                value={ingestUrlInput}
-                onChange={(e) => setIngestUrlInput(e.target.value)}
-                sx={{
-                  flex: 1,
-                  fontSize: "0.72rem",
-                  bgcolor: "#ffffff",
-                  px: 1,
-                  py: 0.25,
-                  borderRadius: 1,
-                  border: "1px solid",
-                  borderColor: "divider",
-                }}
-              />
-              <FormControl size="small" sx={{ width: 80 }}>
-                <Select
-                  value={ingestQuality}
-                  onChange={(e) => setIngestQuality(e.target.value)}
-                  sx={{ height: 26, fontSize: "0.7rem", bgcolor: "#ffffff" }}
-                >
-                  <MenuItem value="best">Best</MenuItem>
-                  <MenuItem value="1080p">1080p</MenuItem>
-                  <MenuItem value="720p">720p</MenuItem>
-                </Select>
-              </FormControl>
-              <Button
-                size="small"
-                variant="contained"
-                disabled={ingesting || !ingestUrlInput.trim()}
-                onClick={handleIngestUrl}
-                sx={{ height: 26, fontSize: "0.68rem", px: 1, minWidth: "auto", textTransform: "none" }}
-              >
-                {ingesting ? <CircularProgress size={12} color="inherit" /> : "Ingest"}
-              </Button>
-            </Stack>
-          </Box>
-        )}
       </Box>
 
       {/* Content Area */}
@@ -936,10 +815,28 @@ export default function StudioResourcePanel({
                       data-testid={`catalog-card-${bName}`}
                       data-operational={isOperational}
                       data-packaged={isPackaged}
+                      tabIndex={isOperational ? 0 : -1}
+                      role="button"
+                      aria-label={item.title || bName}
+                      title={
+                        isOperational
+                          ? "Drag onto a compatible timeline track, or hover/focus to preview on player"
+                          : "Donor block awaiting stage 2 porting"
+                      }
                       onMouseEnter={() => {
                         if (isOperational) handleCatalogItemMouseEnter(item)
                       }}
                       onMouseLeave={handleCatalogItemMouseLeave}
+                      onFocus={() => {
+                        if (isOperational) handleCatalogItemMouseEnter(item)
+                      }}
+                      onBlur={handleCatalogItemMouseLeave}
+                      onKeyDown={(e) => {
+                        if ((e.key === "Enter" || e.key === " ") && isOperational) {
+                          e.preventDefault()
+                          if (onAddBlock) onAddBlock(item)
+                        }
+                      }}
                       draggable={isOperational}
                       onDragStart={(e) => {
                         if (!isOperational) return
@@ -965,10 +862,11 @@ export default function StudioResourcePanel({
                         cursor: isOperational ? "grab" : "default",
                         opacity: isOperational ? 1 : isPackaged ? 0.95 : 0.85,
                         transition: "all 0.15s ease",
-                        "&:hover": {
+                        "&:hover, &:focus-visible": {
                           borderColor: isOperational ? "#8b5cf6" : isPackaged ? "#38bdf8" : "warning.main",
                           bgcolor: isOperational ? "#f8fafc" : isPackaged ? "#f0f9ff" : "#fffbeb",
                           boxShadow: isOperational ? "0 2px 8px rgba(139, 92, 246, 0.12)" : "none",
+                          outline: "none",
                         },
                       }}
                     >
@@ -1077,96 +975,6 @@ export default function StudioResourcePanel({
                             </Typography>
                           </Stack>
                         </Box>
-
-                        {/* Action Buttons: Preview & Insert */}
-                        <Stack direction="row" spacing={0.5} alignItems="center">
-                          <Tooltip
-                            title={
-                              isOperational
-                                ? "Preview block animation on player"
-                                : "Preview unavailable (donor block awaiting stage 2 porting)"
-                            }
-                            arrow
-                          >
-                            <span>
-                              <IconButton
-                                size="small"
-                                disabled={!isOperational}
-                                data-testid={`preview-block-${bName}`}
-                                sx={{
-                                  width: 22,
-                                  height: 22,
-                                  color: isOperational ? "primary.main" : "text.disabled",
-                                  bgcolor: isOperational ? "#f5f3ff" : "transparent",
-                                  border: "1px solid",
-                                  borderColor: isOperational ? "#ddd6fe" : "transparent",
-                                  "&:hover": { bgcolor: "#ede9fe" },
-                                }}
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  if (isOperational && onStartGhostPreview) {
-                                    onStartGhostPreview(item)
-                                  }
-                                }}
-                              >
-                                <IconEye size={13} stroke={2} />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                          <Tooltip
-                            title={
-                              isOperational
-                                ? "Insert block into timeline at current playhead"
-                                : isPackaged
-                                ? "Insert packaged block into timeline"
-                                : "Donor block awaiting stage 2 porting"
-                            }
-                            arrow
-                          >
-                            <span>
-                              <Button
-                                size="small"
-                                variant="contained"
-                                disabled={!canInsert}
-                                data-testid={`insert-block-${bName}`}
-                                sx={{
-                                  height: 22,
-                                  fontSize: "0.68rem",
-                                  px: 1,
-                                  py: 0,
-                                  bgcolor: isOperational ? "primary.main" : "action.disabledBackground",
-                                  textTransform: "none",
-                                  fontWeight: 700,
-                                }}
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  if (!canInsert) return
-                                  if (onAddBlock) {
-                                    onAddBlock(item)
-                                  } else if (onAddMediaToTimeline) {
-                                    onAddMediaToTimeline({ type: "block", block_id: bName, item })
-                                  }
-                                }}
-                              >
-                                Insert Block
-                              </Button>
-                            </span>
-                          </Tooltip>
-                          {onAskAiToInsert && (
-                            <Tooltip title="Ask AI to insert & style in Chat" arrow>
-                              <IconButton
-                                size="small"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  onAskAiToInsert(item)
-                                }}
-                                sx={{ width: 20, height: 20, color: "#8b5cf6" }}
-                              >
-                                <IconSparkles size={13} />
-                              </IconButton>
-                            </Tooltip>
-                          )}
-                        </Stack>
                       </Stack>
                     </Box>
                   )

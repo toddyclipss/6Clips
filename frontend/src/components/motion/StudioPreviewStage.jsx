@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react"
 import {
   Box, Stack, Typography, IconButton, Slider, Tooltip, CircularProgress, Chip, Button,
-  TextField,
 } from "@mui/material"
 import {
   IconPlayerPlay,
@@ -15,7 +14,7 @@ import {
   IconMaximize,
   IconRefresh,
   IconX,
-  IconSparkles,
+  IconVideo,
 } from "@tabler/icons-react"
 
 /**
@@ -86,7 +85,6 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   const lastPostedPlayRef = useRef(null)
   const [ghostFrameLoaded, setGhostFrameLoaded] = useState(false)
   const [videoDimensions, setVideoDimensions] = useState({ width: 0, height: 0 })
-  const [goalPrompt, setGoalPrompt] = useState("")
 
   // Listen to Escape key to dismiss temporary ghost preview immediately
   useEffect(() => {
@@ -494,7 +492,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
               </Typography>
             </Box>
           ) : (
-            // Default: NO_PROJECT - Main Agent Goal Composer immediately visible on first load
+            // Default: NO_PROJECT - Neutral blank stage (creative goals entered via persistent left Chat)
             <Box
               data-testid="studio-stage-no-project"
               sx={{
@@ -506,136 +504,43 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                 justifyContent: "center",
                 p: { xs: 2, md: 3 },
                 textAlign: "center",
-                color: "#f8fafc",
+                color: "#94a3b8",
                 userSelect: "none",
+                bgcolor: "#090d16",
               }}
             >
               <Box
-                data-testid="main-agent-goal-composer"
                 sx={{
-                  maxWidth: 380,
-                  width: "100%",
-                  bgcolor: "rgba(15, 23, 42, 0.88)",
-                  backdropFilter: "blur(12px)",
-                  borderRadius: 2.5,
-                  p: 2.5,
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  boxShadow: "0 12px 36px rgba(0, 0, 0, 0.4)",
                   display: "flex",
                   flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                   gap: 1.5,
+                  maxWidth: 320,
+                  opacity: 0.8,
                 }}
               >
-                <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-                  <Box sx={{ width: 26, height: 26, borderRadius: 1.5, bgcolor: "primary.main", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <IconSparkles size={16} color="#ffffff" />
-                  </Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: "#ffffff", letterSpacing: "-0.01em" }}>
-                    Main Agent Goal
-                  </Typography>
-                </Stack>
-                <Typography variant="caption" sx={{ color: "#94a3b8", fontSize: "0.72rem", lineHeight: 1.3 }}>
-                  OAAS: Enter your target video goal to generate an automated motion project with zero manual setup.
-                </Typography>
-                <TextField
-                  data-testid="main-agent-goal-input"
-                  fullWidth
-                  multiline
-                  rows={2}
-                  size="small"
-                  placeholder="e.g. 9:16 vertical viral video analyzing AI agent trends with dynamic charts and captions..."
-                  value={goalPrompt}
-                  onChange={(e) => setGoalPrompt(e.target.value)}
-                  inputProps={{ "data-testid": "main-agent-goal-input" }}
+                <Box
                   sx={{
-                    "& .MuiOutlinedInput-root": {
-                      color: "#ffffff",
-                      fontSize: "0.78rem",
-                      bgcolor: "rgba(0, 0, 0, 0.3)",
-                      borderRadius: 1.5,
-                      "& fieldset": { borderColor: "rgba(255, 255, 255, 0.15)" },
-                      "&:hover fieldset": { borderColor: "primary.main" },
-                    },
+                    width: 48,
+                    height: 48,
+                    borderRadius: 2,
+                    bgcolor: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#64748b",
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      if (onStartGoal && goalPrompt.trim()) {
-                        onStartGoal(goalPrompt)
-                      }
-                    }
-                  }}
-                />
-                <Stack direction="row" spacing={1}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="small"
-                    data-testid="main-agent-goal-submit"
-                    disabled={!goalPrompt.trim()}
-                    onClick={() => {
-                      if (onStartGoal && goalPrompt.trim()) onStartGoal(goalPrompt)
-                    }}
-                    sx={{
-                      fontSize: "0.75rem",
-                      fontWeight: 700,
-                      py: 0.6,
-                      textTransform: "none",
-                      bgcolor: "primary.main",
-                      borderRadius: 1.5,
-                    }}
-                  >
-                    Run Goal →
-                  </Button>
-                  {onNewProject && (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      data-testid="main-agent-blank-project"
-                      onClick={onNewProject}
-                      sx={{
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        py: 0.6,
-                        textTransform: "none",
-                        color: "#cbd5e1",
-                        borderColor: "rgba(255, 255, 255, 0.2)",
-                        borderRadius: 1.5,
-                        whiteSpace: "nowrap",
-                        "&:hover": { borderColor: "#ffffff" },
-                      }}
-                    >
-                      Blank Project
-                    </Button>
-                  )}
-                </Stack>
-                {/* OAAS Preset Suggestion Chips */}
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, justifyContent: "center", pt: 0.5 }}>
-                  {[
-                    "Viral AI Breakdown (9:16)",
-                    "Tech Trend Commentary (9:16)",
-                    "Product Reveal (16:9)",
-                  ].map((preset) => (
-                    <Chip
-                      key={preset}
-                      label={preset}
-                      size="small"
-                      onClick={() => {
-                        setGoalPrompt(preset)
-                        if (onStartGoal) onStartGoal(preset)
-                      }}
-                      sx={{
-                        height: 20,
-                        fontSize: "0.62rem",
-                        fontWeight: 600,
-                        bgcolor: "rgba(255, 255, 255, 0.08)",
-                        color: "#cbd5e1",
-                        cursor: "pointer",
-                        "&:hover": { bgcolor: "primary.dark", color: "#ffffff" },
-                      }}
-                    />
-                  ))}
+                >
+                  <IconVideo size={24} stroke={1.5} />
                 </Box>
+                <Typography variant="body2" sx={{ fontWeight: 600, color: "#94a3b8", letterSpacing: "-0.01em" }}>
+                  No Project Loaded
+                </Typography>
+                <Typography variant="caption" sx={{ color: "#64748b", fontSize: "0.72rem", lineHeight: 1.4 }}>
+                  Enter your video goals in Chat at left or open an existing project to begin.
+                </Typography>
               </Box>
             </Box>
           )}
