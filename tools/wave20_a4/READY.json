@@ -1,0 +1,119 @@
+{
+  "agent": "agent-4",
+  "wave": 20,
+  "role": "Original Native Motion Generation & Deterministic QA",
+  "branch": "wave20/04-original-native-motion",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-04-motion-engine",
+  "base_sha": "51924aa5acaebb8e00f899015ee26c44ca86b4fe",
+  "tip_sha": "8bdbec5f2571253bb1081a951c4a5c6eecb2d28f",
+  "status": "READY_FOR_INTEGRATION",
+  "timestamp": "2026-10-15T22:38:00Z",
+  "mandate_summary": {
+    "cancelled_goal_196_blocks": "Former goal to ship 196 original HyperFrames blocks is completely cancelled per Wave 20 directive. Final tree contains strictly ZERO executable imported HyperFrames prebuilt bundles or donor-block catalog/preview UI.",
+    "core_engine_delivered": "Original Knowledge-to-Motion Engine (native_motion_v1) generating safe, typed, editable scene specs directly from creative briefs and knowledge references.",
+    "zero_cdn_egress": "Standalone offline HTML5/Canvas player with deterministic frame stepping API (window.__seekTime, window.__seekFrame).",
+    "temporal_motion_proofs": "2 distinct original motion scenes with temporal variation delta > 0.05, plus 1 speech/captions proof with authentic speech audio track and FFprobe inspection."
+  },
+  "physical_proofs": {
+    "proof1": {
+      "path": "tools/wave20_a4/proofs/proof1_data_kinetic_9x16.mp4",
+      "sha256": "14c2f449a1697be81e61f5007ebc61ab2b21fb2623638fe34823230712ad9ce9",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "duration": 3.0,
+      "frame_count": 90,
+      "video_codec": "h264",
+      "audio_codec": null,
+      "motion_delta_mid": 0.0575,
+      "avg_luminance": 29.81,
+      "verified": true
+    },
+    "proof2": {
+      "path": "tools/wave20_a4/proofs/proof2_editorial_16x9.mp4",
+      "sha256": "a6686be2583506de4a6e1f87496badfea377c5fb02d19cd80a8a3c4630e3f734",
+      "dimensions": "1920x1080",
+      "fps": 30,
+      "duration": 3.0,
+      "frame_count": 90,
+      "video_codec": "h264",
+      "audio_codec": null,
+      "motion_delta_mid": 0.0733,
+      "avg_luminance": 39.2,
+      "verified": true
+    },
+    "proof3": {
+      "path": "tools/wave20_a4/proofs/proof3_speech_captions_9x16.mp4",
+      "sha256": "f64f69da045a14db2cab5f5520d683e99887ebdebc769e71dd25ce83a368f11e",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "duration": 4.5,
+      "frame_count": 135,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "motion_delta_mid": 0.088,
+      "avg_luminance": 35.88,
+      "verified": true
+    }
+  },
+  "qa_ledger": {
+    "total_tests": 22,
+    "passed_tests": 22,
+    "failed_tests": 0,
+    "security_negative_controls": {
+      "reject_script_tags": "PASS",
+      "reject_eval_exec_import": "PASS",
+      "reject_negative_scene_duration": "PASS",
+      "font_family_fallbacks": "PASS",
+      "word_monotonicity_guard": "PASS"
+    },
+    "self_repair": {
+      "wcag_contrast_recovery": "PASS",
+      "safe_zone_overflow_recovery": "PASS",
+      "word_timestamp_overlap_recovery": "PASS",
+      "bounded_retries_fail_closed": "PASS"
+    },
+    "project_service_cas": {
+      "optimistic_concurrency_conflict": "PASS",
+      "idempotent_replay": "PASS",
+      "fine_grained_element_mutation": "PASS",
+      "word_level_caption_mutation": "PASS"
+    }
+  },
+  "delivered_artifacts": [
+    "backend/native_motion/__init__.py",
+    "backend/native_motion/schema.py",
+    "backend/native_motion/generator.py",
+    "backend/native_motion/compiler.py",
+    "backend/native_motion/adapter.py",
+    "backend/native_motion/captions.py",
+    "backend/native_motion/self_repair.py",
+    "backend/native_motion/renderer.py",
+    "tests/wave20/a4/test_schema_and_security.py",
+    "tests/wave20/a4/test_generator_diversity_and_determinism.py",
+    "tests/wave20/a4/test_compiler_and_offline.py",
+    "tests/wave20/a4/test_captions_and_speech.py",
+    "tests/wave20/a4/test_self_repair.py",
+    "tests/wave20/a4/test_revision_cas_adapter.py",
+    "tests/wave20/a4/test_physical_proofs_qa.py",
+    "tools/wave20_a4/generate_speech_wav.py",
+    "tools/wave20_a4/speech_sample.wav",
+    "tools/wave20_a4/run_proofs.py",
+    "tools/wave20_a4/proofs/proof1_data_kinetic_9x16.mp4",
+    "tools/wave20_a4/proofs/proof2_editorial_16x9.mp4",
+    "tools/wave20_a4/proofs/proof3_speech_captions_9x16.mp4",
+    "tools/wave20_a4/proofs/verification_report.json",
+    "tools/wave20_a4/generate_a4_report.py",
+    "tools/wave20_a4/REPORT_WAVE20_A4.md",
+    "tools/wave20_a4/READY.json"
+  ],
+  "reproduction_commands": [
+    "python -c \"import sys; sys.path.insert(0, r'C:\\Users\\toddy\\AppData\\Roaming\\Python\\Python314\\site-packages'); import pytest; sys.exit(pytest.main(['tests/wave20/a4', '-v']))\"",
+    "ffprobe -v error -show_format -show_streams tools/wave20_a4/proofs/proof1_data_kinetic_9x16.mp4",
+    "ffprobe -v error -show_format -show_streams tools/wave20_a4/proofs/proof2_editorial_16x9.mp4",
+    "ffprobe -v error -show_format -show_streams tools/wave20_a4/proofs/proof3_speech_captions_9x16.mp4"
+  ],
+  "agent5_integration_handoff": {
+    "summary": "Agent 4 delivers the foundational Knowledge-to-Motion engine (backend/native_motion/), self-repair engine, ProjectService revision adapter, and 3 FFprobe-verified MP4 proofs. Merge branch wave20/04-original-native-motion into the integration target.",
+    "boundaries_respected": "Exclusively modified backend/native_motion/**, tools/wave20_a4/**, and tests/wave20/a4/**. Zero touches to frontend/**, backend/main.py, backend/oaas_outcomes/**, backend/clipstudio_native/**, or backend/tools_native/**."
+  }
+}
