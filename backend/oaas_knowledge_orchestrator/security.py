@@ -97,14 +97,14 @@ class KnowledgeSecurityValidator:
         return True, None
 
     @classmethod
-    def validate_source_url_authorization(
+    def validate_source_url_security(
         cls,
         url: str,
         authorizations: Optional[Dict[str, Any]] = None,
     ) -> Tuple[bool, Optional[str]]:
         """
         Validate that any remote media URL passes SSRF and network security checks.
-        No user ownership or rights confirmation gate is enforced.
+        Zero ownership/rights confirmation is required or enforced.
         """
         # SSRF and scheme validation via existing IngestionSecurityValidator
         ssrf_ok, _, blocker_code, blocker_reason = IngestionSecurityValidator.validate_url(url)
@@ -112,6 +112,9 @@ class KnowledgeSecurityValidator:
             return False, f"SSRF security policy violation: {blocker_reason}"
 
         return True, None
+
+    # Backward-compatible alias for legacy callers
+    validate_source_url_authorization = validate_source_url_security
 
     @classmethod
     def sanitize_retrieved_knowledge(cls, text_or_chunk: str) -> Tuple[bool, Optional[str]]:

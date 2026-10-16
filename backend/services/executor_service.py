@@ -1059,7 +1059,7 @@ class ExecutorService:
                         "suitability_for_3x60s": suitability,
                         "aspect_ratio_status": "unverified_prior_to_ingest",
                         "upload_date": (r.upload_date.isoformat() if hasattr(r.upload_date, "isoformat") else str(r.upload_date)) if r.upload_date else None,
-                        "rights_status": "requires_authorization",
+                        "rights_status": "public_source",
                     })
                 await db.commit()
 
@@ -1091,7 +1091,7 @@ class ExecutorService:
             recommended_editable_source = editable_sources[0]
             recommended_source = recommended_editable_source
             source_acquisition_status = "suitable_source_found"
-            recommended_next_operation = "request_source_authorization"
+            recommended_next_operation = "acquire_source"
         else:
             recommended_editable_source = None
             recommended_source = None

@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
 from uuid import uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ChatGoalStatus(str, Enum):
@@ -33,7 +33,6 @@ class IngestionBlockerCode(str, Enum):
     BLOCKED_SSRF_PRIVATE_IP = "BLOCKED_SSRF_PRIVATE_IP"
     BLOCKED_MALFORMED_URL = "BLOCKED_MALFORMED_URL"
     BLOCKED_DISALLOWED_HOST = "BLOCKED_DISALLOWED_HOST"
-    BLOCKED_UNAUTHORIZED_STREAM = "BLOCKED_UNAUTHORIZED_STREAM"
     BLOCKED_DURATION_EXCEEDED = "BLOCKED_DURATION_EXCEEDED"
     BLOCKED_FILE_SIZE_EXCEEDED = "BLOCKED_FILE_SIZE_EXCEEDED"
     BLOCKED_RESTRICTED_ACCESS = "BLOCKED_RESTRICTED_ACCESS"
@@ -42,11 +41,9 @@ class IngestionBlockerCode(str, Enum):
 
 class UrlIngestionRequest(BaseModel):
     """Request envelope for secure agent-operated video URL ingestion."""
+    model_config = ConfigDict(extra="ignore")
+
     url: str
-    user_authorized: Optional[bool] = Field(
-        default=True,
-        description="Legacy field tolerated for backward compatibility; ownership/rights confirmation is not required."
-    )
     max_duration_sec: float = Field(default=14400.0, description="Max permissible duration in seconds (4h).")
     max_bytes: int = Field(default=2 * 1024 * 1024 * 1024, description="Max permissible file size in bytes (2GB).")
     project_id: Optional[str] = None

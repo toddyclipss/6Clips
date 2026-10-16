@@ -76,16 +76,15 @@ async def test_authorization_requirement_fail_closed(monkeypatch):
     result = await AgentUrlIngestionService.ingest_url(req)
     assert result.is_allowed is True
     assert result.file_path is not None
-    assert result.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
+    assert result.blocker_code is None
 
 
 @pytest.mark.asyncio
 async def test_authorized_ingest_with_safe_hash_computation(monkeypatch, tmp_path):
-    """When user authorizes and URL is safe, ingestion proceeds and computes valid SHA-256."""
+    """When URL is safe, ingestion proceeds and computes valid SHA-256."""
     monkeypatch.setenv("VIRALMINT_TEST_ENV", "1")
     req = UrlIngestionRequest(
         url="http://test.authorized-creator.com/my_creator_stream.mp4",
-        user_authorized=True,
     )
     result = await AgentUrlIngestionService.ingest_url(req)
     assert result.is_allowed is True
@@ -102,7 +101,6 @@ async def test_duration_and_size_limits(monkeypatch):
     # Test file size limit by setting max_bytes to 5 bytes
     req = UrlIngestionRequest(
         url="http://test.authorized-creator.com/oversized_stream.mp4",
-        user_authorized=True,
         max_bytes=5,  # 5 bytes limit will fail on our test fixture
     )
     result = await AgentUrlIngestionService.ingest_url(req)

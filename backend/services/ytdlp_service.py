@@ -10,6 +10,7 @@ import re
 import shutil
 import threading
 import time
+from typing import Any
 from pathlib import Path
 from backend.config import settings
 from backend.core.exceptions import (
@@ -1039,7 +1040,7 @@ async def download_video(
     filename: str = None,
     extract_audio: bool = True,
     options: dict | None = None,
-    user_authorized: bool = True,
+    **kwargs: Any,
 ) -> dict:
     """
     Download a video using yt-dlp.
@@ -1613,7 +1614,7 @@ def _extract_chapters(info: dict) -> list[dict] | None:
     ]
 
 
-async def get_video_info(url: str, flat: bool = False, user_authorized: bool = True) -> dict:
+async def get_video_info(url: str, flat: bool = False, **kwargs: Any) -> dict:
     """Get video/channel metadata without downloading.
     Use flat=True for channels/playlists to avoid resolving every video."""
     host, clean_path = _sanitize_url_for_audit(url)
@@ -1650,7 +1651,7 @@ async def get_video_info(url: str, flat: bool = False, user_authorized: bool = T
         return {}
 
 
-async def list_channel_videos(url: str, max_videos: int = 5, user_authorized: bool = True) -> list[dict]:
+async def list_channel_videos(url: str, max_videos: int = 5, **kwargs: Any) -> list[dict]:
     """
     Extract video list from a channel/playlist URL without downloading.
     Returns list of dicts with video metadata (url, title, duration, views, etc).

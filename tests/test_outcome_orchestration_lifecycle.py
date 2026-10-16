@@ -32,7 +32,6 @@ async def test_direct_source_bypasses_trends_and_reaches_ready_for_review():
             permitted_uses=["clip_extraction", "motion_review"],
             acquisition_route="authorized_upload",
             is_accessible=True,
-            rights_verified=True,
         )
     ]
 
@@ -70,7 +69,7 @@ async def test_create_project_does_not_terminate_run():
         project_id=proj.id,
     )
     contract.source_assets = [
-        SourceAsset(asset_id="src_fixture", is_accessible=True, rights_verified=True)
+        SourceAsset(asset_id="src_fixture", is_accessible=True)
     ]
 
     sm = OutcomeOrchestrator.get_state_machine(contract)
@@ -97,7 +96,6 @@ async def test_inaccessible_or_unpermitted_source_terminates_in_blocked():
             permitted_uses=["clip_extraction"],
             acquisition_route="trend_candidate",
             is_accessible=False,
-            rights_verified=False,
         )
     ]
 
@@ -122,7 +120,7 @@ async def test_failure_of_third_output_preserves_two_valid_as_partial():
     """Requirement A3: Failure of 3rd output preserves outputs 1 and 2 as PARTIAL without failing batch or claiming COMPLETE."""
     contract = OutcomeOrchestrator.parse_contract_from_prompt("Produce three 60-second clips")
     contract.source_assets = [
-        SourceAsset(asset_id="src_multi_output", is_accessible=True, rights_verified=True)
+        SourceAsset(asset_id="src_multi_output", is_accessible=True)
     ]
 
     port = InProcessFakeProducerPort()

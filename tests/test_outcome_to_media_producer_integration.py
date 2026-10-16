@@ -106,7 +106,6 @@ async def test_full_orchestrated_run_with_real_producer(tmp_path):
                 acquisition_route="authorized_fixture",
                 local_path=str(fixture_path),
                 is_accessible=True,
-                rights_verified=True,
             )
         ],
     )
@@ -178,7 +177,6 @@ async def test_unpermitted_youtube_candidate_halts_in_blocked():
                 permitted_uses=["clip_extraction", "motion_review"],
                 acquisition_route="trend_candidate",
                 is_accessible=False,      # No physical bytes on server
-                rights_verified=False,    # Third party external copyright
             )
         ],
     )
@@ -214,7 +212,6 @@ async def test_partial_failure_tolerance_with_real_producer(tmp_path):
                 acquisition_route="authorized_fixture",
                 local_path=str(fixture_path),
                 is_accessible=True,
-                rights_verified=True,
             )
         ],
     )

@@ -1010,7 +1010,6 @@ class PlannerAgent:
                                 permitted_uses=["clip_extraction", "motion_review"],
                                 acquisition_route="trend_candidate",
                                 is_accessible=False,      # Not downloaded locally
-                                rights_verified=False,    # Unverified external copyright
                             )
                         ]
 

@@ -84,7 +84,6 @@ class KnowledgeOrchestratorStateMachine:
             KnowledgeOrchestratorState.FAILED_TERMINAL,
         },
         KnowledgeOrchestratorState.FAILED_TERMINAL: set(),
-        KnowledgeOrchestratorState.BLOCKED_RIGHTS: set(),
         KnowledgeOrchestratorState.NEEDS_AUTHORIZATION: {
             KnowledgeOrchestratorState.PLANNING,
         },

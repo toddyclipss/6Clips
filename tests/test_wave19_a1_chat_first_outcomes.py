@@ -124,7 +124,6 @@ async def test_chat_goal_with_authorized_url_ingestion(monkeypatch):
     resp = await ChatOutcomeOrchestrator.handle_video_goal(
         chat_context=context,
         message=message,
-        user_authorizations={"user_authorized": True},
         allow_test_fixture=True,
     )
 

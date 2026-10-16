@@ -139,7 +139,6 @@ async def test_scenario_3_refused_unsupported_remote_urls():
     resp_ssrf = await ChatOutcomeOrchestrator.handle_video_goal(
         chat_context=context,
         message=ssrf_message,
-        user_authorizations={"user_authorized": True},
         allow_test_fixture=True,
     )
     assert resp_ssrf.status == ChatGoalStatus.BLOCKED
@@ -154,7 +153,8 @@ async def test_scenario_3_refused_unsupported_remote_urls():
         allow_test_fixture=True,
     )
     assert resp_unauth.status in (ChatGoalStatus.READY_FOR_DELIVERY, ChatGoalStatus.PENDING_CREDENTIALS)
-    assert resp_unauth.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM.value
+    assert resp_unauth.blocker_code is None
+    assert not hasattr(IngestionBlockerCode, "BLOCKED_UNAUTHORIZED_STREAM")
     assert len(resp_unauth.artifact_links) >= 1
 
 

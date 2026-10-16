@@ -119,7 +119,7 @@ def test_editorial_check_not_assessed_invariant():
 
     contract = OutcomeOrchestrator.parse_contract_from_prompt("Create 3 clips")
     contract.source_assets = [
-        SourceAsset(asset_id="src_owned", is_accessible=True, rights_verified=True)
+        SourceAsset(asset_id="src_owned", is_accessible=True)
     ]
 
     import asyncio

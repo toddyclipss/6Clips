@@ -102,7 +102,6 @@ async def test_scenario_3_branded_creator_video_origin(monkeypatch):
     # Branded third-party video URL
     req = UrlIngestionRequest(
         url="https://test.authorized-creator.com/nike_redbull_creator_showcase.mp4",
-        user_authorized=True,
     )
     result = await AgentUrlIngestionService.ingest_url(req)
     assert result.is_allowed is True
@@ -115,22 +114,25 @@ async def test_scenario_4_legacy_caller_user_authorized_false(monkeypatch):
     """Scenario 4: Legacy caller passes user_authorized: false or omits field; no refusal occurs."""
     monkeypatch.setenv("VIRALMINT_TEST_ENV", "1")
 
-    # Ingestion service with user_authorized=False
+    # Ingestion service with legacy extra field user_authorized=False
     req_false = UrlIngestionRequest(
         url="https://test.authorized-creator.com/legacy_stream.mp4",
         user_authorized=False,
     )
+    # Extra field is discarded, not exposed as model field
+    assert "user_authorized" not in req_false.model_fields
+    assert "user_authorized" not in req_false.model_dump()
     res_false = await AgentUrlIngestionService.ingest_url(req_false)
     assert res_false.is_allowed is True
-    assert res_false.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
+    assert res_false.blocker_code is None
 
-    # Ingestion service with user_authorized omitted (defaults to True)
+    # Ingestion service with user_authorized omitted
     req_omitted = UrlIngestionRequest(
         url="https://test.authorized-creator.com/legacy_stream.mp4",
     )
     res_omitted = await AgentUrlIngestionService.ingest_url(req_omitted)
     assert res_omitted.is_allowed is True
-    assert res_omitted.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
+    assert res_omitted.blocker_code is None
 
     # KnowledgeChatOrchestrator with user_authorized: False in authorizations
     v_req = VideoRequestContract(
@@ -139,7 +141,7 @@ async def test_scenario_4_legacy_caller_user_authorized_false(monkeypatch):
         allow_test_fixture=True,
     )
     resp = await KnowledgeChatOrchestrator.handle_video_request(v_req)
-    assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+    assert resp.state != "BLOCKED_RIGHTS"
     assert resp.blocker_code != "BLOCKED_RIGHTS"
 
 
@@ -152,7 +154,7 @@ async def test_scenario_5_create_review_zero_blocked_rights():
     )
     resp = await KnowledgeChatOrchestrator.handle_video_request(v_req)
     assert resp.state in (KnowledgeOrchestratorState.REVIEW_READY, KnowledgeOrchestratorState.VIDEO_VERIFIED, KnowledgeOrchestratorState.PENDING_CREDENTIALS)
-    assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+    assert resp.state != "BLOCKED_RIGHTS"
     assert resp.blocker_code != "BLOCKED_RIGHTS"
 
     # Check WebSocket hook code directly to ensure BLOCKED_RIGHTS is completely expunged
@@ -173,7 +175,7 @@ async def test_scenario_6_technically_unreachable_provider_url():
     res = await AgentUrlIngestionService.ingest_url(req)
     assert res.is_allowed is False
     assert res.blocker_code in (IngestionBlockerCode.BLOCKED_FETCH_FAILED, IngestionBlockerCode.BLOCKED_RESTRICTED_ACCESS)
-    assert res.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
+    assert not hasattr(IngestionBlockerCode, "BLOCKED_UNAUTHORIZED_STREAM")
     assert "rights" not in (res.blocker_reason or "").lower()
     assert "authorization" not in (res.blocker_reason or "").lower()
 
@@ -216,7 +218,7 @@ async def test_scenario_8_ssrf_and_hostile_network_defenses_remain_active():
     ]
 
     for h_url in hostile_urls:
-        req = UrlIngestionRequest(url=h_url, user_authorized=True)
+        req = UrlIngestionRequest(url=h_url)
         res = await AgentUrlIngestionService.ingest_url(req)
         assert res.is_allowed is False
         assert res.blocker_code in (
@@ -224,4 +226,24 @@ async def test_scenario_8_ssrf_and_hostile_network_defenses_remain_active():
             IngestionBlockerCode.BLOCKED_DISALLOWED_HOST,
             IngestionBlockerCode.BLOCKED_INVALID_SCHEME,
         )
-        assert res.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
+        assert not hasattr(IngestionBlockerCode, "BLOCKED_UNAUTHORIZED_STREAM")
+
+
+@pytest.mark.asyncio
+async def test_scenario_9_programmatic_schema_introspection_no_residuals():
+    """Requirement G: Programmatic schema introspection verifying no residual ownership fields."""
+    from backend.oaas_chat_ingestion.models import UrlIngestionRequest
+    from backend.outcome_orchestration.models import SourceAsset
+
+    # UrlIngestionRequest: user_authorized is not declared in fields or JSON schema
+    assert "user_authorized" not in UrlIngestionRequest.model_fields
+    ingest_schema = UrlIngestionRequest.model_json_schema()
+    assert "user_authorized" not in ingest_schema.get("properties", {})
+
+    # SourceAsset: rights_verified is not declared in fields or JSON schema
+    assert "rights_verified" not in SourceAsset.model_fields
+    source_schema = SourceAsset.model_json_schema()
+    assert "rights_verified" not in source_schema.get("properties", {})
+
+    # IngestionBlockerCode: BLOCKED_UNAUTHORIZED_STREAM is completely removed
+    assert not hasattr(IngestionBlockerCode, "BLOCKED_UNAUTHORIZED_STREAM")

@@ -35,7 +35,7 @@ async def test_reconnection_and_replay_does_not_duplicate_projects_or_clips():
         user_id="user_alpha",
     )
     contract.source_assets = [
-        SourceAsset(asset_id="src_recov", is_accessible=True, rights_verified=True)
+        SourceAsset(asset_id="src_recov", is_accessible=True)
     ]
 
     port = InProcessFakeProducerPort()
@@ -65,7 +65,7 @@ async def test_lost_confirmation_retry_is_idempotent():
     """Requirement A3: Retry after lost confirmation consults existing effects without re-executing."""
     contract = OutcomeOrchestrator.parse_contract_from_prompt("Create 3 clips from source")
     contract.source_assets = [
-        SourceAsset(asset_id="src_idempotent", is_accessible=True, rights_verified=True)
+        SourceAsset(asset_id="src_idempotent", is_accessible=True)
     ]
 
     port = InProcessFakeProducerPort()
@@ -90,7 +90,7 @@ async def test_batch_cancellation_preserves_committed_effects():
     """Requirement A3: Cancelling an execution run acknowledges cancellation and reports committed effects."""
     contract = OutcomeOrchestrator.parse_contract_from_prompt("Make 3 vertical clips")
     contract.source_assets = [
-        SourceAsset(asset_id="src_cancel_test", is_accessible=True, rights_verified=True)
+        SourceAsset(asset_id="src_cancel_test", is_accessible=True)
     ]
 
     port = InProcessFakeProducerPort()

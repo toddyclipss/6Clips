@@ -5,7 +5,7 @@
 from enum import Enum
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class IntentKind(str, Enum):
@@ -50,6 +50,8 @@ class OutputState(str, Enum):
 
 
 class SourceAsset(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     asset_id: str
     editorial_role: str = Field(default="primary_footage", description="Role e.g. primary_footage, broll, reference")
     permitted_uses: List[str] = Field(default_factory=lambda: ["clip_extraction", "motion_review"])
@@ -57,7 +59,6 @@ class SourceAsset(BaseModel):
     content_hash: Optional[str] = Field(default=None, description="SHA-256 of physical bytes if available")
     local_path: Optional[str] = Field(default=None, description="Internal path on server to local bytes")
     is_accessible: bool = Field(default=True, description="Whether bytes are physically accessible right now")
-    rights_verified: bool = Field(default=True, description="Legacy field tolerated for backwards compatibility; no ownership/rights confirmation required")
 
 
 class OutputSpec(BaseModel):

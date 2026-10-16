@@ -153,7 +153,7 @@ class KnowledgeChatOrchestrator:
         ingested_media_path: Optional[str] = None
         if found_urls:
             raw_url = found_urls[0]
-            url_ok, url_err = KnowledgeSecurityValidator.validate_source_url_authorization(
+            url_ok, url_err = KnowledgeSecurityValidator.validate_source_url_security(
                 raw_url, req.authorizations
             )
             if not url_ok:
@@ -171,7 +171,6 @@ class KnowledgeChatOrchestrator:
             # Ingest via AgentUrlIngestionService
             ingest_req = UrlIngestionRequest(
                 url=raw_url,
-                user_authorized=True,
                 user_id=req.user_id,
             )
             ingest_res = await AgentUrlIngestionService.ingest_url(ingest_req)

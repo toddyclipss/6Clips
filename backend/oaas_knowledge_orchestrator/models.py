@@ -30,7 +30,6 @@ class KnowledgeOrchestratorState(str, Enum):
     REVIEW_READY = "REVIEW_READY"
 
     # Terminal / Blocker States (Fail-Closed)
-    BLOCKED_RIGHTS = "BLOCKED_RIGHTS"
     PENDING_CREDENTIALS = "PENDING_CREDENTIALS"
     FAILED_RETRYABLE = "FAILED_RETRYABLE"
     FAILED_TERMINAL = "FAILED_TERMINAL"

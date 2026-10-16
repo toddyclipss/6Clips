@@ -85,7 +85,6 @@ class ChatOutcomeOrchestrator:
 
             ingest_req = UrlIngestionRequest(
                 url=raw_url,
-                user_authorized=True,
                 user_id=user_id,
             )
             ingest_res = await AgentUrlIngestionService.ingest_url(ingest_req)
