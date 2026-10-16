@@ -138,7 +138,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   stageState = null,
   loadingMessage = "Loading composition…",
   currentTime = 0,
-  duration = 15,
+  duration = 0,
   isPlaying = false,
   onTogglePlay,
   onPlaybackStateChange,
@@ -187,6 +187,33 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   const lastPostedPlayRef = useRef(null)
   const [videoDimensions, setVideoDimensions] = useState({ width: 0, height: 0 })
 
+  // Authoritative duration from loaded physical video metadata or media_probe
+  const [mediaDuration, setMediaDuration] = useState(() => {
+    const probeDur = Number(renderedVideo?.media_probe?.duration_seconds ?? renderedVideo?.duration_seconds)
+    if (Number.isFinite(probeDur) && probeDur > 0) return probeDur
+    const d = Number(duration)
+    return Number.isFinite(d) && d > 0 ? d : 0
+  })
+
+  useEffect(() => {
+    const probeDur = Number(renderedVideo?.media_probe?.duration_seconds ?? renderedVideo?.duration_seconds)
+    if (Number.isFinite(probeDur) && probeDur > 0) {
+      setMediaDuration(probeDur)
+    } else if (Number.isFinite(Number(duration)) && Number(duration) > 0) {
+      setMediaDuration(Number(duration))
+    }
+  }, [renderedVideo?.media_probe?.duration_seconds, renderedVideo?.duration_seconds, duration])
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0
+    }
+  }, [renderedVideo?.artifact_id, renderedVideo?.sha256, renderedVideo?.output_id, renderedVideo?.preview_ref, renderedVideo?.video_url])
+
+  const effectiveDuration = mediaDuration > 0
+    ? mediaDuration
+    : (Number.isFinite(Number(duration)) && Number(duration) > 0 ? Number(duration) : 0)
+
   const activeCaptions = useMemo(() => {
     if (renderedVideo?.captions && Array.isArray(renderedVideo.captions)) {
       return renderedVideo.captions
@@ -222,7 +249,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   // Expose imperative methods to parent (e.g. for scrubbing from timeline)
   useImperativeHandle(ref, () => ({
     seek: (time) => {
-      const maxDur = typeof duration === "number" && duration > 0 ? duration : 3600
+      const maxDur = effectiveDuration > 0 ? effectiveDuration : 3600
       const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, Math.min(time, maxDur)) : 0
       if (workspaceMode === "review" && videoRef.current) {
         videoRef.current.currentTime = validTime
@@ -323,7 +350,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   }
 
   const handleSeek = (time) => {
-    const maxDur = typeof duration === "number" && duration > 0 ? duration : 3600
+    const maxDur = effectiveDuration > 0 ? effectiveDuration : 3600
     const validTime = typeof time === "number" && Number.isFinite(time) ? Math.max(0, Math.min(time, maxDur)) : 0
     if (workspaceMode === "review" && videoRef.current) {
       videoRef.current.currentTime = validTime
@@ -396,6 +423,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
           {resolvedState === "READY" && workspaceMode === "review" && (renderedVideo?.video_url || renderedVideo?.preview_ref) ? (
             <>
               <video
+                key={renderedVideo.artifact_id || renderedVideo.sha256 || renderedVideo.output_id || renderedVideo.preview_ref || renderedVideo.video_url || "studio-rendered-video"}
                 id="studio-rendered-video"
                 data-testid="studio-rendered-video"
                 ref={videoRef}
@@ -410,8 +438,12 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                   backgroundColor: "#000000",
                 }}
                 onLoadedMetadata={(e) => {
+                  const realDur = e.target.duration
                   setVideoDimensions({ width: e.target.videoWidth, height: e.target.videoHeight })
-                  if (e.target.duration && onDurationChange) onDurationChange(e.target.duration)
+                  if (Number.isFinite(realDur) && realDur > 0) {
+                    setMediaDuration(realDur)
+                    if (onDurationChange) onDurationChange(realDur)
+                  }
                 }}
                 onTimeUpdate={(e) => {
                   if (onTimeUpdate) onTimeUpdate(e.target.currentTime)
@@ -457,7 +489,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                     sx={{ height: 20, fontSize: "0.68rem", fontWeight: 700 }}
                   />
                   <Typography variant="caption" sx={{ color: "#e2e8f0", fontFamily: "monospace", fontSize: "0.72rem" }}>
-                    {videoDimensions.width ? `${videoDimensions.width}×${videoDimensions.height}` : "1080×1920"} • {Number(duration || 10).toFixed(2)}s
+                    {videoDimensions.width ? `${videoDimensions.width}×${videoDimensions.height}` : "1080×1920"} • {effectiveDuration > 0 ? `${Number(effectiveDuration).toFixed(2)}s` : "0.00s"}
                   </Typography>
                 </Stack>
                 {onOpenAdvanced && (
@@ -716,7 +748,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
           >
             {isPlaying ? <IconPlayerPause size={16} stroke={2.5} /> : <IconPlayerPlay size={16} stroke={2.5} />}
           </IconButton>
-          <IconButton size="small" onClick={() => handleSeek(duration)} disabled={resolvedState !== "READY"}>
+          <IconButton size="small" onClick={() => handleSeek(effectiveDuration)} disabled={resolvedState !== "READY"}>
             <IconPlayerSkipForward size={16} />
           </IconButton>
           <Tooltip title="Refresh stage" arrow>
@@ -733,9 +765,9 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
             data-testid="studio-transport-scrubber"
             disabled={resolvedState !== "READY"}
             min={0}
-            max={duration || 15}
+            max={effectiveDuration > 0 ? effectiveDuration : 1}
             step={0.05}
-            value={typeof currentTime === "number" ? Math.min(currentTime, duration || 15) : 0}
+            value={typeof currentTime === "number" ? Math.min(currentTime, effectiveDuration > 0 ? effectiveDuration : 0) : 0}
             onChange={(_, val) => handleSeek(val)}
             sx={{
               color: "primary.main",
@@ -750,7 +782,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
 
         {/* Timecode Readout */}
         <Typography variant="caption" sx={{ fontFamily: "monospace", fontWeight: 700, fontSize: "0.75rem", color: "text.primary" }}>
-          {Number(currentTime || 0).toFixed(2)}s / {Number(duration || 0).toFixed(2)}s
+          {Number(currentTime || 0).toFixed(2)}s / {effectiveDuration > 0 ? `${Number(effectiveDuration).toFixed(2)}s` : "0.00s"}
         </Typography>
 
         {/* Volume & Fullscreen */}
