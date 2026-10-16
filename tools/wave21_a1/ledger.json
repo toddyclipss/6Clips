@@ -1,0 +1,127 @@
+{
+  "wave": 21,
+  "agent": 1,
+  "title": "Machine-Readable Ledger of Features, Invariants, and Tests",
+  "generated_at": "2026-10-16T09:51:30Z",
+  "total_items": 16,
+  "summary": {
+    "PASS": 16,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "items": [
+    {
+      "id": "A1-01",
+      "name": "Mandatory Curated Knowledge Retrieval",
+      "description": "Searches authentic 658-document Agent 3 KnowledgeBase; extracts provenance, technique, and rights status.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_security_and_negatives.py::test_negative_knowledge_unavailable_in_production"
+    },
+    {
+      "id": "A1-02",
+      "name": "Donor MDX Prompt Injection Sanitization",
+      "description": "Strips malicious instructions, prompt overrides, and script tags from retrieved donor documentation.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_security_and_negatives.py::test_security_sanitize_retrieved_knowledge"
+    },
+    {
+      "id": "A1-03",
+      "name": "Blocked Rights Fail-Closed Enforcement",
+      "description": "Truthfully halts generation with BLOCKED_RIGHTS when retrieved technique has restricted donor rights.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_security_and_negatives.py::test_negative_blocked_rights_technique"
+    },
+    {
+      "id": "A1-04",
+      "name": "Path Traversal and Database Isolation",
+      "description": "Guarantees generation and revision runs cannot write outside storage bounds or tamper with production viralmint.db.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_security_and_negatives.py::test_security_path_traversal_and_db_protection"
+    },
+    {
+      "id": "A1-05",
+      "name": "URL Authorization & SSRF Blocker",
+      "description": "Rejects unauthorized URLs, private IP addresses, loopback addresses, and AWS metadata endpoints.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_security_and_negatives.py::test_security_ssrf_blocked_url"
+    },
+    {
+      "id": "A1-06",
+      "name": "Native Action: Silence Removal & Dead-Air Trim",
+      "description": "Bridges ToolsNativeAdapter to detect and strip silence intervals via ffmpeg without SaaS UI.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_native_actions_bridge.py::test_native_bridge_trim_and_silence"
+    },
+    {
+      "id": "A1-07",
+      "name": "Native Action: Aspect Reframing & Gold Caption Highlighting",
+      "description": "Bridges ClipStudioNativeAdapter to reframe project dimensions and apply word-level caption styles.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_native_actions_bridge.py::test_native_bridge_reframe_and_captions"
+    },
+    {
+      "id": "A1-08",
+      "name": "Native Action: Truthful Unsupported Action Reporting",
+      "description": "Returns status UNSUPPORTED when an unmapped legacy editing action is requested.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_native_actions_bridge.py::test_native_bridge_unsupported_action"
+    },
+    {
+      "id": "A1-09",
+      "name": "V1 Journey: Vertical Promo 9:16",
+      "description": "Generates verified vertical MP4 deliverable (1080x1920) with cited typography knowledge and Library registration.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_real_chat_outcomes.py::test_v1_vertical_promo_from_source"
+    },
+    {
+      "id": "A1-10",
+      "name": "V2 Journey: Horizontal Highlights 16:9",
+      "description": "Generates verified widescreen MP4 deliverable (1920x1080) with dynamic highlight pacing.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_real_chat_outcomes.py::test_v2_horizontal_highlights"
+    },
+    {
+      "id": "A1-11",
+      "name": "V3 Journey: Original Infographic Data (1:1)",
+      "description": "Generates square 1:1 motion clip citing data-chart techniques without prebuilt block bundles.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_real_chat_outcomes.py::test_v3_original_infographic_data"
+    },
+    {
+      "id": "A1-12",
+      "name": "V4 & V5 Journeys: Kinetic Typography & Word Captions",
+      "description": "Applies spring easing curves and word-by-word synchronized caption styling to physical media.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_real_chat_outcomes.py::test_v4_data_kinetic_promo"
+    },
+    {
+      "id": "A1-13",
+      "name": "V6 Journey: Multi-Clip Generation",
+      "description": "Renders exact requested output_count (3 clips) and returns distinct Library IDs and deliverable paths.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_real_chat_outcomes.py::test_v6_multi_clip_generation"
+    },
+    {
+      "id": "A1-14",
+      "name": "Same-Project 3 Sequential Conversational Revisions",
+      "description": "Applies dead-air trimming, gold caption styling, and headline emphasis to the SAME canonical Project with CAS incrementation.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_same_project_revisions.py::test_same_project_three_sequential_revisions_and_rollback"
+    },
+    {
+      "id": "A1-15",
+      "name": "Natural-Language Revision Rollback / Undo",
+      "description": "Restores exact historical document snapshot on canonical Project via ProjectService.revert_revision.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_native_actions_bridge.py::test_native_bridge_rollback"
+    },
+    {
+      "id": "A1-16",
+      "name": "WebSocket /ws/chat Client Round-Trip",
+      "description": "Executes FastAPI TestClient WebSocket handshake, sends revision_request, and receives truthful oaas_outcome_update.",
+      "status": "PASS",
+      "test": "tests/wave21/a1/test_websocket_chat_integration.py::test_websocket_chat_revision_request_integration"
+    }
+  ]
+}

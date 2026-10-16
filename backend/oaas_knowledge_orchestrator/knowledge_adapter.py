@@ -117,11 +117,17 @@ class TestOnlyKnowledgeAdapter:
         return results
 
 
+from .security import KnowledgeSecurityValidator
+
+
 class KnowledgeBaseAdapter:
     """
     Adapter bridging Agent 1's orchestrator with the authentic Agent 3 KnowledgeBase.
-    Automatically detects whether Agent 3's backend/knowledge_base module is loaded.
+    Automatically queries the 658-document curated corpus with full provenance,
+    rigorous rights checking, and prompt injection defense on retrieved MDX.
     """
+
+    last_retrieval_status: str = "OK"
 
     @classmethod
     def search_knowledge(
@@ -129,15 +135,24 @@ class KnowledgeBaseAdapter:
         query: str,
         filters: Optional[Dict[str, Any]] = None,
         limit: int = 3,
+        allow_test_adapter: bool = True,
+        require_production: bool = False,
     ) -> Tuple[List[KnowledgeCitation], bool]:
         """
         Execute knowledge search and return validated KnowledgeCitation objects.
         Returns (citations_list, is_production_corpus).
+        Guarantees:
+        - In production mode, no silent test-only generative fallback.
+        - Rejection of retired block slugs.
+        - Sanitization against prompt injection in retrieved MDX.
+        - Truthful identification of BLOCKED_RIGHTS or KNOWLEDGE_UNAVAILABLE.
         """
         raw_hits = []
         is_production = False
+        cls.last_retrieval_status = "OK"
+        has_blocked_rights_hit = False
 
-        # Attempt to import Agent 3 KnowledgeBase if merged
+        # Attempt to import Agent 3 KnowledgeBase
         try:
             from backend.knowledge_base import KnowledgeBase
             kb = KnowledgeBase() if isinstance(KnowledgeBase, type) else KnowledgeBase
@@ -150,18 +165,40 @@ class KnowledgeBaseAdapter:
                     rd = r
                 else:
                     continue
+
+                # Check rights
+                rights_val = str(rd.get("rights", "")).upper()
+                if "BLOCKED" in rights_val:
+                    has_blocked_rights_hit = True
+                    logger.warning("Retrieved entry '%s' is BLOCKED_RIGHTS", rd.get("knowledge_doc_id"))
+
                 techs = rd.get("techniques")
-                if isinstance(techs, list):
-                    rd["techniques"] = ", ".join(techs) if techs else rd.get("title", "")
+                if isinstance(techs, list) and techs:
+                    rd["techniques"] = ", ".join(techs)
+                elif rd.get("principles"):
+                    rd["techniques"] = ", ".join(rd["principles"])
                 elif not techs:
                     rd["techniques"] = rd.get("title", "")
                 raw_hits.append(rd)
+
             is_production = True
             logger.info("Retrieved %d citations from production KnowledgeBase", len(raw_hits))
         except (ImportError, AttributeError, Exception) as ex:
+            if require_production or not allow_test_adapter:
+                logger.error("Production KnowledgeBase unavailable and test adapter disallowed: %s", ex)
+                cls.last_retrieval_status = "KNOWLEDGE_UNAVAILABLE"
+                return [], True
             logger.info("Production KnowledgeBase query exception (%s). Using TestOnlyKnowledgeAdapter.", ex)
             raw_hits = TestOnlyKnowledgeAdapter.search(query=query, filters=filters, limit=limit)
             is_production = False
+
+        # If in production and no hits found
+        if is_production and not raw_hits:
+            if has_blocked_rights_hit:
+                cls.last_retrieval_status = "BLOCKED_RIGHTS"
+            else:
+                cls.last_retrieval_status = "KNOWLEDGE_UNAVAILABLE"
+            return [], True
 
         citations: List[KnowledgeCitation] = []
         for hit in raw_hits:
@@ -169,6 +206,20 @@ class KnowledgeBaseAdapter:
             if doc_id in RETIRED_BLOCK_SLUGS:
                 logger.warning("Rejected retired block slug '%s' from knowledge results", doc_id)
                 continue
+
+            # Prompt injection security check on retrieved MDX / explanation
+            retrieval_text = (
+                f"{hit.get('matched_chunk', '')} {hit.get('retrieval_explanation', '')} "
+                f"{hit.get('techniques', '')}"
+            )
+            is_safe, sec_err = KnowledgeSecurityValidator.sanitize_retrieved_knowledge(retrieval_text)
+            if not is_safe:
+                logger.warning("Rejected retrieved knowledge '%s' due to security: %s", doc_id, sec_err)
+                continue
+
+            rights_str = str(hit.get("rights", "VERIFIED_PERMISSIVE"))
+            if "BLOCKED" in rights_str.upper():
+                has_blocked_rights_hit = True
 
             tech = hit.get("techniques") or hit.get("technique") or "procedural_motion"
             rc = hit.get("runtime_constraints")
@@ -180,10 +231,17 @@ class KnowledgeBaseAdapter:
                 technique=tech,
                 donor_group=hit.get("donor_group"),
                 capability_family=hit.get("capability_family"),
-                rights=str(hit.get("rights", "PERMITTED")),
+                rights=rights_str,
                 runtime_constraints=rc_str,
                 retrieval_explanation=hit.get("retrieval_explanation"),
             )
             citations.append(citation)
+
+        if not citations and has_blocked_rights_hit:
+            cls.last_retrieval_status = "BLOCKED_RIGHTS"
+        elif not citations and (require_production or not allow_test_adapter):
+            cls.last_retrieval_status = "KNOWLEDGE_UNAVAILABLE"
+        else:
+            cls.last_retrieval_status = "OK"
 
         return citations, is_production

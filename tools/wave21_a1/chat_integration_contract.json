@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contract_name": "Wave 21 Agent 1 — Chat Router Integration Contract",
+  "version": "1.0.0",
+  "target_agent": "Agent 5 (Sole Integrator)",
+  "producer_agent": "Agent 1 (OAAS Knowledge Orchestrator & Chat Revisions)",
+  "exclusive_ownership": {
+    "backend": ["backend/oaas_knowledge_orchestrator/**"],
+    "tests": ["tests/wave21/a1/**"],
+    "tools": ["tools/wave21_a1/**"]
+  },
+  "endpoints": {
+    "websocket": {
+      "path": "/ws/chat",
+      "router_file": "backend/api/chat.py",
+      "supported_message_types": [
+        {
+          "type": "set_session",
+          "direction": "client_to_server",
+          "payload": {
+            "session_id": "string (UUID)"
+          },
+          "behavior": "Sets active context session and binds CHAT_SESSION context var"
+        },
+        {
+          "type": "revision_request",
+          "direction": "client_to_server",
+          "payload": {
+            "run_id": "string (krun-* or previous outcome ID)",
+            "feedback": "string (natural-language adjustment)",
+            "expected_revision": "int (canonical Project CAS revision base)",
+            "revert_to_revision": "optional int (historical revision target for rollback)"
+          },
+          "behavior": "Calls KnowledgeChatOrchestrator.revise_deliverable() in-place on the same canonical Project without creating duplicate projects."
+        },
+        {
+          "type": "chat_message",
+          "direction": "client_to_server",
+          "payload": {
+            "content": "string (user request)",
+            "project_id": "optional string",
+            "provider": "optional string",
+            "model": "optional string",
+            "reasoning_level": "optional string"
+          },
+          "behavior": "Invokes KnowledgeChatOrchestrator.handle_video_request() when creative motion generation intention is parsed."
+        },
+        {
+          "type": "oaas_outcome_update",
+          "direction": "server_to_client",
+          "payload": {
+            "session_id": "string",
+            "run_id": "string",
+            "project_id": "string",
+            "revision": "int",
+            "state": "string (enum: REQUESTED, PLANNING, RETRIEVING_KNOWLEDGE, COMPOSING, VALIDATING, RENDERING, VIDEO_VERIFIED, REVIEW_READY, BLOCKED_RIGHTS, PENDING_CREDENTIALS, BLOCKED)",
+            "message": "string",
+            "deliverable_url": "string (/api/projects/{id}/export/download)",
+            "library_asset_id": "string (UUID in generated_videos)",
+            "library_ids": "array of strings (all deliverables in multi-clip runs)",
+            "output_count": "int (number of distinct deliverables rendered)"
+          }
+        }
+      ]
+    }
+  },
+  "entrypoint_signatures": {
+    "handle_video_request": {
+      "module": "backend.oaas_knowledge_orchestrator.orchestrator",
+      "class": "KnowledgeChatOrchestrator",
+      "method": "async def handle_video_request(request_or_message: Union[VideoRequestContract, str], authenticated_context: Optional[Dict[str, Any]] = None, authorizations: Optional[Dict[str, Any]] = None, preferences: Optional[Dict[str, Any]] = None, project_id: Optional[str] = None, allow_test_fixture: bool = True) -> KnowledgeOrchestratorResponse"
+    },
+    "revise_deliverable": {
+      "module": "backend.oaas_knowledge_orchestrator.orchestrator",
+      "class": "KnowledgeChatOrchestrator",
+      "method": "async def revise_deliverable(request_or_run_id: Union[RevisionRequestContract, str], user_feedback: Optional[str] = None, expected_revision: Optional[int] = None, authenticated_context: Optional[Dict[str, Any]] = None, authorizations: Optional[Dict[str, Any]] = None, allow_test_fixture: bool = True) -> KnowledgeOrchestratorResponse"
+    }
+  },
+  "agent_5_patch_instructions": {
+    "file": "backend/api/chat.py",
+    "description": "Agent 5 must ensure that /ws/chat forwards revision_request and creative video requests to KnowledgeChatOrchestrator and broadcasts oaas_outcome_update frames with truthful state, project_id, revision, and deliverable_url. Note that backend/api/chat.py already imports and calls KnowledgeChatOrchestrator.revise_deliverable under revision_request in the current tree."
+  }
+}

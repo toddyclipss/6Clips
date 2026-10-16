@@ -16,6 +16,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from backend.core.exceptions import ProjectError, ProjectNotFoundError, RevisionConflictError
 from backend.services.project_service import ProjectService
+from .native_actions_bridge import NativeActionsBridge
 from .security import KnowledgeSecurityValidator
 
 logger = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ class RevisionDeltaEngine:
         project_id: str,
         expected_revision: int,
         user_feedback: str,
+        revert_to_revision: Optional[int] = None,
         author: str = "main_agent",
     ) -> Dict[str, Any]:
         """
@@ -43,6 +45,33 @@ class RevisionDeltaEngine:
         is_safe, sec_err = KnowledgeSecurityValidator.sanitize_and_validate_prompt(user_feedback)
         if not is_safe:
             raise ValueError(f"Security validation failed on feedback: {sec_err}")
+
+        # Check for explicit rollback / undo request
+        feedback_lower = user_feedback.lower()
+        revert_target = revert_to_revision
+        if not revert_target:
+            rev_match = re.search(r"\b(?:revert\s+to|rollback\s+to|restore)\s+(?:rev(?:ision)?|version|v)?\s*(\d+)\b", feedback_lower)
+            if rev_match:
+                revert_target = int(rev_match.group(1))
+            elif "undo" in feedback_lower or "revert" in feedback_lower:
+                revert_target = max(1, expected_revision - 1)
+
+        if revert_target is not None:
+            revert_res = await NativeActionsBridge.revert_project_revision(
+                project_id=project_id,
+                target_revision=revert_target,
+                author=author,
+            )
+            if revert_res.get("success"):
+                revert_proj = await ProjectService.get_project(project_id)
+                doc_reverted = ProjectService.migrate_project_document(json.loads(revert_proj.document_json)) if revert_proj and revert_proj.document_json else {}
+                return {
+                    "project_id": project_id,
+                    "base_revision": expected_revision,
+                    "resulting_revision": revert_res["new_revision"],
+                    "applied_deltas": [f"reverted_to_revision_{revert_target}"],
+                    "document": doc_reverted,
+                }
 
         # 2. Load existing project document
         project = await ProjectService.get_project(project_id)
@@ -57,7 +86,6 @@ class RevisionDeltaEngine:
         timeline = doc.setdefault("timeline", {})
         tracks = timeline.setdefault("tracks", [])
 
-        feedback_lower = user_feedback.lower()
         applied_deltas: List[str] = []
 
         # ─── Delta 1: Aspect Ratio Change ─────────────────────────────────────
@@ -76,18 +104,18 @@ class RevisionDeltaEngine:
                 doc["native_motion_v1"]["height"] = 1920
             applied_deltas.append("reframe_to_9_16")
 
-        # ─── Delta 2: Cinematic Typography / Second Title Styling ──────────────
-        if "cinematic" in feedback_lower or "title" in feedback_lower or "typography" in feedback_lower:
+        # ─── Delta 2: Cinematic Typography / Headline Emphasis ─────────────────
+        if "cinematic" in feedback_lower or "title" in feedback_lower or "typography" in feedback_lower or "headline" in feedback_lower or "emphasize" in feedback_lower:
             overlay_track = next((t for t in tracks if t.get("type") == "overlay"), None)
             if overlay_track and overlay_track.get("clips"):
-                # If "second title" is mentioned, target the second clip if available
+                # If "second" is mentioned, target the second clip if available
                 target_idx = 1 if ("second" in feedback_lower and len(overlay_track["clips"]) > 1) else 0
                 clip = overlay_track["clips"][target_idx]
                 props = clip.setdefault("properties", {})
                 props["font_family"] = "Cinzel, Playfair Display, serif"
-                props["font_size_pt"] = props.get("font_size_pt", 48) + 6
+                props["font_size_pt"] = props.get("font_size_pt", 48) + 8
                 props["letter_spacing_px"] = 4
-                props["color"] = "#F8FAFC"
+                props["color"] = "#FACC15" if "emphasize" in feedback_lower else "#F8FAFC"
                 props["shadow"] = "0px 4px 20px rgba(0, 0, 0, 0.85)"
                 props["easing"] = "ease_in_out_sine"
                 applied_deltas.append(f"styled_clip_{clip.get('id')}_cinematic")
@@ -96,14 +124,18 @@ class RevisionDeltaEngine:
                 scenes = doc["native_motion_v1"]["scenes"]
                 target_sc = scenes[1] if ("second" in feedback_lower and len(scenes) > 1) else scenes[0]
                 for el in target_sc.get("elements", []):
-                    if "title" in el.get("element_type", "") or "statement" in el.get("element_type", ""):
+                    if any(k in el.get("element_type", "") for k in ("title", "statement", "headline")):
                         el.setdefault("properties", {})["cinematic_mode"] = True
                         el["properties"]["letter_spacing_px"] = 4
+                        el["properties"]["font_size_pt"] = el["properties"].get("font_size_pt", 48) + 8
+                        if "emphasize" in feedback_lower:
+                            el["properties"]["color"] = "#FACC15"
+                            el["properties"]["scale_multiplier"] = 1.15
                         el["properties"]["easing"] = "ease_in_out_sine"
                         applied_deltas.append(f"styled_motion_element_{el.get('element_id')}")
 
         # ─── Delta 3: Remove Dead Air / Trim Tail ──────────────────────────────
-        if "dead air" in feedback_lower or "trim" in feedback_lower or "tighten" in feedback_lower:
+        if "dead air" in feedback_lower or "trim" in feedback_lower or "tighten" in feedback_lower or "silence" in feedback_lower:
             curr_dur = float(timeline.get("duration_seconds", 4.0))
             trim_amount = 0.5 if curr_dur > 2.5 else 0.2
             new_dur = round(max(1.5, curr_dur - trim_amount), 2)
@@ -123,17 +155,19 @@ class RevisionDeltaEngine:
                     c["style"] = "word_highlight_pop_synced"
                     c["highlight_color"] = "#FACC15"  # high-visibility amber/gold
                     c["font_weight"] = "bold"
+                    c["font_family"] = "Cinzel, serif"
                 applied_deltas.append("synchronized_word_highlight_captions")
 
             if "native_motion_v1" in doc and doc["native_motion_v1"].get("captions"):
                 for c in doc["native_motion_v1"]["captions"]:
                     c["style"] = "word_highlight_pop_synced"
                     c["highlight_color"] = "#FACC15"
+                    c["font_family"] = "Cinzel, serif"
                 applied_deltas.append("synced_native_motion_captions")
 
         # ─── Delta 5: Explicit Duration Request ────────────────────────────────
         dur_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:seconds?|secs?|s)\b", user_feedback, re.IGNORECASE)
-        if dur_match and not ("dead air" in feedback_lower):
+        if dur_match and not ("dead air" in feedback_lower or "silence" in feedback_lower):
             target_sec = float(dur_match.group(1))
             if 1.0 <= target_sec <= 300.0:
                 timeline["duration_seconds"] = target_sec
@@ -176,3 +210,32 @@ class RevisionDeltaEngine:
             "applied_deltas": applied_deltas,
             "document": doc,
         }
+
+    @classmethod
+    async def apply_feedback_delta_with_retry(
+        cls,
+        project_id: str,
+        expected_revision: int,
+        user_feedback: str,
+        revert_to_revision: Optional[int] = None,
+        author: str = "main_agent",
+        max_retries: int = 2,
+    ) -> Dict[str, Any]:
+        """Apply delta with optimistic CAS retry on race conditions."""
+        curr_expected = expected_revision
+        last_error = None
+        for attempt in range(max_retries + 1):
+            try:
+                return await cls.apply_feedback_delta(
+                    project_id=project_id,
+                    expected_revision=curr_expected,
+                    user_feedback=user_feedback,
+                    revert_to_revision=revert_to_revision,
+                    author=author,
+                )
+            except RevisionConflictError as rce:
+                last_error = rce
+                logger.warning("CAS conflict on attempt %d: %s. Reloading revision...", attempt + 1, rce)
+                proj = await ProjectService.get_project(project_id)
+                curr_expected = proj.revision
+        raise last_error

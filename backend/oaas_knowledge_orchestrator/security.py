@@ -120,3 +120,51 @@ class KnowledgeSecurityValidator:
             return False, "Remote media ingestion requires explicit user rights confirmation (user_authorized: true)."
 
         return True, None
+
+    @classmethod
+    def sanitize_retrieved_knowledge(cls, text_or_chunk: str) -> Tuple[bool, Optional[str]]:
+        """
+        Scan retrieved MDX/documentation snippets for prompt injection, executable code tags,
+        or jailbreak instructions before passing to creative planner or prompt contexts.
+        """
+        if not text_or_chunk:
+            return True, None
+
+        # Check for injection and system override phrases
+        injection_phrases = [
+            "ignore previous instructions",
+            "disregard all prior instructions",
+            "system prompt override",
+            "you are now in developer mode",
+            "jailbreak",
+            "pretend you are an unrestricted",
+        ]
+        text_lower = text_or_chunk.lower()
+        for phrase in injection_phrases:
+            if phrase in text_lower:
+                logger.warning("Prompt injection pattern '%s' detected in retrieved knowledge", phrase)
+                return False, f"Prompt injection pattern detected in retrieved knowledge: '{phrase}'"
+
+        # Check for unsafe executable patterns
+        for pattern in UNSAFE_PATTERNS:
+            match = pattern.search(text_or_chunk)
+            if match:
+                matched_token = match.group(0)
+                logger.warning("Unsafe pattern '%s' detected in retrieved knowledge content", matched_token)
+                return False, f"Unsafe execution pattern in retrieved knowledge: '{matched_token}'"
+
+        return True, None
+
+    @classmethod
+    def validate_file_path_isolation(cls, target_path: str) -> Tuple[bool, Optional[str]]:
+        """
+        Ensure file operations cannot traverse directories or touch protected system or database files.
+        """
+        path_lower = str(target_path).lower().replace("\\", "/")
+        if ".." in path_lower:
+            return False, "Path traversal ('..') is strictly prohibited."
+        if "viralmint.db" in path_lower and not ("test" in path_lower or "mock" in path_lower):
+            return False, "Direct writes to production viralmint.db are strictly blocked."
+        if any(p in path_lower for p in ["/etc/", "system32", "windows/system", "/var/", "/secrets"]):
+            return False, "System directory access is prohibited."
+        return True, None
