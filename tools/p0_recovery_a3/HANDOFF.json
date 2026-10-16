@@ -1,0 +1,60 @@
+{
+  "agent": "Agent 3 - Real YouTube/TikTok Source Video Edit Lineage",
+  "status": "READY_FOR_AGENT5_INTEGRATION",
+  "date": "2026-10-16",
+  "branch": "p0fix/03-real-source-edit-lineage",
+  "base_commit": "7a76da6ec7bb0fce8e95a38941ab4e7ac8fa68a1",
+  "owned_subsystems": [
+    "backend/oaas_chat_ingestion/ingestion_service.py",
+    "backend/services/ytdlp_service.py",
+    "backend/oaas_media_edit/**",
+    "tests/p0_recovery/a3/**",
+    "tools/p0_recovery_a3/**"
+  ],
+  "root_cause_incident_analysis": {
+    "user_prompt": "analise e edite esse video em ingles https://www.youtube.com/watch?v=FV93IVwJP_4",
+    "casing_defect": "Agent mistakenly probed lowercase l ('FV93lVwJP_4') and received 404, assuming unavailable. Uppercase I ('FV93IVwJP_4') is an active 1115s 4K video by TGG.",
+    "ingestion_defect": "yt-dlp downloaded AV01/Opus streams and output .webm/.mkv despite -o filename.mp4, causing FileNotFoundError. Added format flags, merge-output-format mp4, and automatic ffmpeg remux fallback.",
+    "python_environment_defect": "Python 3.14 on host had yt-dlp executable on PATH but no yt_dlp python package. Added subprocess CLI fallback inside ytdlp_service.py."
+  },
+  "modules_exported": {
+    "backend.oaas_media_edit": [
+      "EditExistingMediaAdapter",
+      "SourceMediaAnalyzer",
+      "NativeMediaEditor",
+      "SafeProjectEditAdapter",
+      "SourceLineageVerifier",
+      "EditIntentType",
+      "EditExistingMediaContract",
+      "SourceMediaAnalysis",
+      "SourceLineageVerification",
+      "EditExecutionResult"
+    ]
+  },
+  "agent5_integration_guide": {
+    "recommended_call_pattern": "adapter = EditExistingMediaAdapter(); intent = adapter.classify_intent(user_prompt); if intent != EditIntentType.NEW_SYNTHETIC_GENERATION: contract = await adapter.prepare_contract(prompt, source_url); result = await adapter.execute_edit(contract); ...",
+    "lineage_verification_predicate": "SourceLineageVerifier.verify(project_id, expected_source_sha256, rendered_deliverable_path, target_aspect_ratio, expected_duration_sec)"
+  },
+  "test_ledger": {
+    "test_suite": "tests/p0_recovery/a3",
+    "tests_total": 22,
+    "tests_passed": 22,
+    "tests_failed": 0,
+    "test_files": [
+      "test_source_acquisition_and_ingestion.py",
+      "test_source_media_analysis_and_lineage.py",
+      "test_native_media_edit_pipeline.py",
+      "test_source_lineage_verifier_predicate.py",
+      "test_e2e_real_video_edit_lineage.py"
+    ]
+  },
+  "quality_gates": {
+    "G1_SSRF_and_Safety": "PASSED - Private IP ranges, file://, and malicious protocols rejected",
+    "G2_URL_Casing_Integrity": "PASSED - Preserves exact case, distinguishes FV93IVwJP_4 from FV93lVwJP_4",
+    "G3_Container_Auto_Resolution": "PASSED - Seamless .webm/.mkv -> .mp4 remuxing",
+    "G4_Real_Media_Analysis": "PASSED - Luminance, motion delta, audio/speech inspection, black card rejection",
+    "G5_Native_Transformations": "PASSED - 9:16 vertical blur background, 1:1, 16:9, audio preservation",
+    "G6_Traceable_Lineage": "PASSED - Canonical project operations (add_asset, add_clip, set_aspect_ratio, set_captions), timeline sha256 verification",
+    "G7_Truthful_Failure": "PASSED - Fails closed truthfully on genuinely missing media; zero fake mock deliverables"
+  }
+}
