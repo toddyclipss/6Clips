@@ -1,0 +1,70 @@
+{
+  "contract_version": "1.0.0",
+  "agent": "Agent 1 (A1) - Wave12 LLM Egress Guard Provenance",
+  "branch": "p0fix/01-wave12-execution-context",
+  "base_sha": "7a76da6ec7bb0fce8e95a38941ab4e7ac8fa68a1",
+  "target_peers": ["Agent 2 (A2)", "Agent 5 (A5)"],
+  "api_contract": {
+    "import_path": "backend.llm_trace",
+    "primary_function": "user_chat_execution_scope",
+    "signature": "user_chat_execution_scope(authenticated_principal: str, session_id: str, run_id: Optional[str] = None, correlation_id: Optional[str] = None, source: str = 'ws_chat', ttl_seconds: float = 300.0, budget_limit_usd: float = 0.0, idempotency_key: Optional[str] = None) -> UserChatExecutionScope",
+    "exported_types": [
+      "UserChatExecutionScope",
+      "user_chat_execution_scope",
+      "InferenceAuthorizationContext",
+      "inference_authorization_context",
+      "get_current_inference_context",
+      "set_inference_context",
+      "clear_inference_context",
+      "run_with_inference_context",
+      "propagate_inference_context",
+      "InferenceAuthorizationError",
+      "UnauthorizedInferenceError",
+      "DebouncedDuplicateError",
+      "check_outbound_authorization"
+    ],
+    "constants": {
+      "triggers": {
+        "TRIGGER_EXPLICIT_CHAT_SUBMIT": "explicit_chat_submit",
+        "TRIGGER_USER_CHAT": "user_chat",
+        "TRIGGER_AUTHORIZED_RUN_ID": "authorized_run_id",
+        "TRIGGER_SCHEDULER_JOB_ID": "scheduler_job_id",
+        "TRIGGER_STARTUP": "startup",
+        "TRIGGER_WS_CONNECT": "ws_connect"
+      },
+      "sources": {
+        "SOURCE_WS_CHAT": "ws_chat",
+        "SOURCE_REST_CHAT": "rest_chat",
+        "SOURCE_DEFERRED_JOB": "deferred_job",
+        "SOURCE_SYSTEM_TASK": "system_task",
+        "SOURCE_UNKNOWN": "unknown"
+      }
+    }
+  },
+  "integration_instructions": {
+    "agent_2_backend_api_chat_py": {
+      "file": "backend/api/chat.py",
+      "action": "Wrap chat_message turn handling in async with user_chat_execution_scope(...) so that all downstream planner and orchestrator generative calls carry validated user provenance.",
+      "code_snippet": "from backend.llm_trace import user_chat_execution_scope, SOURCE_WS_CHAT\n\n# Inside chat_websocket while loop under elif msg_type == 'chat_message':\nasync with user_chat_execution_scope(\n    authenticated_principal=user_id,\n    session_id=current_session_id,\n    run_id=msg.get('run_id'),\n    correlation_id=msg.get('user_intent_id') or msg.get('correlation_id'),\n    source=SOURCE_WS_CHAT,\n    ttl_seconds=300.0,\n):\n    # proceed with KnowledgeChatOrchestrator or PlannerAgent\n"
+    },
+    "agent_5_backend_oaas_knowledge_orchestrator": {
+      "file": "backend/oaas_knowledge_orchestrator/orchestrator.py",
+      "action": "Ensure handle_video_request and revise_deliverable check get_current_inference_context(). If missing but authenticated_context is provided, open a fallback scope or verify caller established scope.",
+      "code_snippet": "from backend.llm_trace import get_current_inference_context, user_chat_execution_scope, SOURCE_WS_CHAT\n\n# If orchestrator invoked outside existing scope:\nif get_current_inference_context() is None and req.user_id:\n    async with user_chat_execution_scope(\n        authenticated_principal=req.user_id,\n        session_id=req.session_id or 'direct_session',\n        run_id=run_id,\n        correlation_id=correlation_id,\n        source=SOURCE_WS_CHAT,\n    ):\n        # call ai_client.chat(...)\n"
+    }
+  },
+  "trust_model": {
+    "server_authored_only": "Clients cannot supply arbitrary trigger=USER_AUTHORIZED. The scope must be instantiated by validated server endpoints with non-empty, non-anonymous authenticated_principal.",
+    "monotonic_ttl": "Each scope has an immutable monotonic start timestamp (time.monotonic()) and bounded TTL (default 300s). Expired contexts are immediately blocked by check_outbound_authorization.",
+    "async_isolation": "Context is stored in Python contextvars (ContextVar), preventing cross-talk between concurrent async sessions.",
+    "thread_adapter": "Worker threads can inherit context using run_with_inference_context(ctx, fn) or @propagate_inference_context."
+  },
+  "tests_summary": {
+    "suite": "tests/p0_recovery/a1/test_wave12_user_chat_execution_scope.py",
+    "tests_total": 19,
+    "tests_passed": 19,
+    "tests_failed": 0,
+    "live_ollama_verified": true,
+    "live_ollama_model": "gemma4:e4b"
+  }
+}

@@ -15,6 +15,7 @@ slug like `anthropic/claude-opus-4.7`.
 """
 import asyncio
 import inspect
+import time
 from enum import Enum
 import json
 from typing import AsyncIterator, Optional, Callable, Any
@@ -173,6 +174,8 @@ class AIClient:
             method="POST",
             component="AIClient._anthropic_stream",
         )
+        if not self.api_key:
+            raise AIKeyMissingError("Anthropic API key missing or unconfigured")
         import anthropic
         client = anthropic.AsyncAnthropic(api_key=self.api_key)
         extra_kwargs = {}
@@ -199,6 +202,8 @@ class AIClient:
             method="POST",
             component="AIClient._openai_stream",
         )
+        if not self.api_key:
+            raise AIKeyMissingError("OpenAI API key missing or unconfigured")
         import openai
         client = openai.AsyncOpenAI(api_key=self.api_key, timeout=55.0)
 
@@ -265,6 +270,8 @@ class AIClient:
             method="POST",
             component="AIClient._openrouter_stream",
         )
+        if not self.api_key:
+            raise AIKeyMissingError("OpenRouter API key missing or unconfigured")
         import openai
         client = openai.AsyncOpenAI(
             api_key=self.api_key,
@@ -374,6 +381,8 @@ class AIClient:
             raise
 
         sig_key = f"{event.user_id_hash}:{self.provider.value}:{self.model}:{req_sig}"
+        total_chars = 0
+        t_start = time.time()
 
         try:
             async with httpx.AsyncClient(timeout=timeout) as client:
@@ -410,6 +419,7 @@ class AIClient:
 
                         delta = msg.get("content", "")
                         if delta:
+                            total_chars += len(delta)
                             yield delta
 
                         tool_calls = msg.get("tool_calls")
@@ -430,6 +440,20 @@ class AIClient:
                                         else {"type": fn_name}
                                     )
                                     yield f"\n<action>{json.dumps(action_dict)}</action>\n"
+
+            elapsed_sec = time.time() - t_start
+            logger.info(
+                "[REAL_LLM_INFERENCE_LOG] run_id=%s correlation_id=%s provider=%s model=%s endpoint=%s elapsed_sec=%.2f chars=%d tokens_approx=%d source=%s",
+                event.run_id or "none",
+                event.correlation_id,
+                self.provider.value,
+                self.model,
+                url,
+                elapsed_sec,
+                total_chars,
+                int(total_chars / 4),
+                event.source or "unknown",
+            )
         except asyncio.CancelledError:
             logger.info("Ollama stream cancelled by caller; closing cleanly.")
             raise
@@ -446,6 +470,8 @@ class AIClient:
             method="POST",
             component="AIClient._gemini_stream",
         )
+        if not self.api_key:
+            raise AIKeyMissingError("Gemini API key missing or unconfigured")
         from google import genai
         from google.genai import types
 
@@ -576,10 +602,25 @@ class AIClient:
                         request_signature=req_sig,
                     )
 
+                    t_tool_start = time.time()
                     try:
                         resp = await client.post(url, json=payload)
                     finally:
                         debouncer.release(f"{event.user_id_hash}:{self.provider.value}:{self.model}:{req_sig}")
+
+                    elapsed_tool = time.time() - t_tool_start
+                    logger.info(
+                        "[REAL_LLM_INFERENCE_LOG] run_id=%s correlation_id=%s provider=%s model=%s endpoint=%s round=%d elapsed_sec=%.2f status=%d source=%s",
+                        event.run_id or "none",
+                        event.correlation_id,
+                        self.provider.value,
+                        self.model,
+                        url,
+                        round_idx,
+                        elapsed_tool,
+                        resp.status_code,
+                        event.source or "unknown",
+                    )
                     if resp.status_code != 200:
                         err_text = resp.text[:200]
                         logger.error("Ollama tool round error (%d): %s", resp.status_code, err_text)
@@ -903,9 +944,14 @@ class AIClient:
                     resp_kwargs["reasoning"] = {"effort": map_reasoning_effort(reasoning_level)}
                 if max_tokens:
                     resp_kwargs["max_output_tokens"] = max_tokens
-                if round_idx == 0 and resp_tools:
-                    resp_kwargs["tools"] = resp_tools
-
+                from backend.llm_trace.guard import check_outbound_authorization
+                check_outbound_authorization(
+                    provider=self.provider.value,
+                    model=self.model,
+                    url="https://api.openai.com/v1/responses",
+                    method="POST",
+                    component="AIClient.chat_with_tools.openai",
+                )
                 resp = await client.responses.create(
                     model=self.model,
                     input=input_items,
@@ -1037,6 +1083,14 @@ class AIClient:
                     contents.append(types.Content(role="user", parts=[types.Part.from_text(text=msg.get("content") or "")]))
 
             for round_idx in range(max_tool_rounds):
+                from backend.llm_trace.guard import check_outbound_authorization
+                check_outbound_authorization(
+                    provider=self.provider.value,
+                    model=self.model,
+                    url="https://generativelanguage.googleapis.com/v1beta/models",
+                    method="POST",
+                    component="AIClient.chat_with_tools.gemini",
+                )
                 resp = await client.aio.models.generate_content(
                     model=self.model,
                     contents=contents,

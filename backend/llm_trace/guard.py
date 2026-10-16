@@ -6,6 +6,7 @@ Outbound inference authorization guard and idempotency / debouncing manager.
 Fails closed on missing authorization context for generative routes. Allows documented
 read-only discovery and status checks.
 """
+import logging
 import os
 import sys
 import time
@@ -22,6 +23,7 @@ from backend.llm_trace.models import (
     ENDPOINT_CATEGORY_STATUS,
     ENDPOINT_CATEGORY_METADATA,
     TRIGGER_EXPLICIT_CHAT_SUBMIT,
+    TRIGGER_USER_CHAT,
     TRIGGER_AUTHORIZED_RUN_ID,
     TRIGGER_SCHEDULER_JOB_ID,
     TRIGGER_STARTUP,
@@ -29,6 +31,7 @@ from backend.llm_trace.models import (
     TRIGGER_HEALTH_CHECK,
     TRIGGER_TEST_AUTHORIZED,
     TRIGGER_UNKNOWN,
+    SOURCE_UNKNOWN,
     AUTH_CLASS_USER_AUTHORIZED,
     AUTH_CLASS_TASK_PREVIOUSLY_AUTHORIZED,
     AUTH_CLASS_READ_ONLY_HEALTH_DISCOVERY,
@@ -39,6 +42,8 @@ from backend.llm_trace.models import (
 )
 from backend.llm_trace.context import get_current_inference_context
 from backend.llm_trace.tracer import sanitize_url, sanitize_stack_frames, record_trace_event
+
+logger = logging.getLogger(__name__)
 
 
 class InferenceAuthorizationError(Exception):
@@ -218,7 +223,45 @@ def check_outbound_authorization(
             event=event,
         )
 
-    # 3. Check for explicitly disallowed triggers
+    # 3. Check context monotonic TTL expiration
+    if ctx.is_expired():
+        age = time.monotonic() - ctx.created_at_mono
+        event = InferenceEvent(
+            event_id=event_id,
+            timestamp_utc=timestamp,
+            pid=pid,
+            process_name=proc_name,
+            component=component,
+            provider=provider,
+            model_id=model,
+            endpoint_url=sanitized_dest,
+            http_method=method.upper(),
+            endpoint_category=category,
+            trigger=ctx.trigger,
+            authorization_class=AUTH_CLASS_BLOCKED_WITH_REASON,
+            user_id_hash=ctx.user_id_hash,
+            correlation_id=ctx.correlation_id,
+            run_id=ctx.run_id,
+            job_id=ctx.job_id,
+            session_id=ctx.session_id,
+            source=ctx.source,
+            callsite_frames=frames,
+            outcome=OUTCOME_BLOCKED,
+            error_type="UnauthorizedInferenceError",
+            metadata={"expired": True, "age_sec": round(age, 2), "ttl_sec": ctx.ttl_seconds},
+        )
+        record_trace_event(event)
+        logger.warning(
+            "[LLM_EGRESS_GUARD] outcome=BLOCKED (EXPIRED) provider=%s model=%s trigger=%s age=%.1fs ttl=%.1fs run_id=%s",
+            provider, model, ctx.trigger, age, ctx.ttl_seconds, ctx.run_id or "none"
+        )
+        raise UnauthorizedInferenceError(
+            f"BLOCKED_UNAUTHORIZED_BACKGROUND_AI: Outbound {category} call to '{provider}/{model}' "
+            f"blocked at boundary — authorization context expired (age={age:.1f}s > ttl={ctx.ttl_seconds}s).",
+            event=event,
+        )
+
+    # 4. Check for explicitly disallowed triggers
     if ctx.trigger in (TRIGGER_WS_CONNECT, TRIGGER_STARTUP):
         event = InferenceEvent(
             event_id=event_id,
@@ -237,18 +280,62 @@ def check_outbound_authorization(
             correlation_id=ctx.correlation_id,
             run_id=ctx.run_id,
             job_id=ctx.job_id,
+            session_id=ctx.session_id,
+            source=ctx.source,
             idempotency_key=ctx.idempotency_key,
             callsite_frames=frames,
             outcome=OUTCOME_BLOCKED,
             error_type="UnauthorizedInferenceError",
         )
         record_trace_event(event)
+        logger.warning(
+            "[LLM_EGRESS_GUARD] outcome=BLOCKED (DISALLOWED_TRIGGER) provider=%s model=%s trigger=%s",
+            provider, model, ctx.trigger
+        )
         raise UnauthorizedInferenceError(
             f"BLOCKED_UNAUTHORIZED_BACKGROUND_AI: Outbound {category} call disallowed on {ctx.trigger}.",
             event=event,
         )
 
-    # 4. Check scheduled / job authorization
+    # 5. Check valid authenticated principal on user chat trigger
+    if ctx.trigger in (TRIGGER_EXPLICIT_CHAT_SUBMIT, TRIGGER_USER_CHAT):
+        if not ctx.is_valid_authenticated_user():
+            event = InferenceEvent(
+                event_id=event_id,
+                timestamp_utc=timestamp,
+                pid=pid,
+                process_name=proc_name,
+                component=component,
+                provider=provider,
+                model_id=model,
+                endpoint_url=sanitized_dest,
+                http_method=method.upper(),
+                endpoint_category=category,
+                trigger=ctx.trigger,
+                authorization_class=AUTH_CLASS_BLOCKED_WITH_REASON,
+                user_id_hash=ctx.user_id_hash,
+                correlation_id=ctx.correlation_id,
+                run_id=ctx.run_id,
+                job_id=ctx.job_id,
+                session_id=ctx.session_id,
+                source=ctx.source,
+                callsite_frames=frames,
+                outcome=OUTCOME_BLOCKED,
+                error_type="UnauthorizedInferenceError",
+                metadata={"invalid_principal": True, "principal": ctx.authenticated_principal},
+            )
+            record_trace_event(event)
+            logger.warning(
+                "[LLM_EGRESS_GUARD] outcome=BLOCKED (INVALID_PRINCIPAL) provider=%s model=%s principal=%s",
+                provider, model, ctx.authenticated_principal
+            )
+            raise UnauthorizedInferenceError(
+                f"BLOCKED_UNAUTHORIZED_BACKGROUND_AI: Outbound {category} call to '{provider}/{model}' "
+                f"blocked at boundary — missing valid authenticated principal (principal='{ctx.authenticated_principal}').",
+                event=event,
+            )
+
+    # 6. Check scheduled / job authorization
     if ctx.trigger in (TRIGGER_AUTHORIZED_RUN_ID, TRIGGER_SCHEDULER_JOB_ID):
         if not ctx.run_id and not ctx.job_id:
             event = InferenceEvent(
@@ -266,6 +353,8 @@ def check_outbound_authorization(
                 authorization_class=AUTH_CLASS_BLOCKED_WITH_REASON,
                 user_id_hash=ctx.user_id_hash,
                 correlation_id=ctx.correlation_id,
+                session_id=ctx.session_id,
+                source=ctx.source,
                 callsite_frames=frames,
                 outcome=OUTCOME_BLOCKED,
                 error_type="UnauthorizedInferenceError",
@@ -277,12 +366,12 @@ def check_outbound_authorization(
                 event=event,
             )
         auth_class = AUTH_CLASS_TASK_PREVIOUSLY_AUTHORIZED
-    elif ctx.trigger in (TRIGGER_EXPLICIT_CHAT_SUBMIT, TRIGGER_TEST_AUTHORIZED):
+    elif ctx.trigger in (TRIGGER_EXPLICIT_CHAT_SUBMIT, TRIGGER_USER_CHAT, TRIGGER_TEST_AUTHORIZED):
         auth_class = AUTH_CLASS_USER_AUTHORIZED
     else:
         auth_class = ctx.authorization_class or AUTH_CLASS_USER_AUTHORIZED
 
-    # 5. Debouncing / idempotency check
+    # 7. Debouncing / idempotency check
     if request_signature:
         sig_key = f"{ctx.user_id_hash}:{provider}:{model}:{request_signature}"
         if not debouncer.acquire(sig_key):
@@ -303,6 +392,8 @@ def check_outbound_authorization(
                 correlation_id=ctx.correlation_id,
                 run_id=ctx.run_id,
                 job_id=ctx.job_id,
+                session_id=ctx.session_id,
+                source=ctx.source,
                 idempotency_key=ctx.idempotency_key,
                 callsite_frames=frames,
                 outcome=OUTCOME_DEBOUNCED,
@@ -313,7 +404,7 @@ def check_outbound_authorization(
                 event=event,
             )
 
-    # 6. Approved event
+    # 8. Approved event
     event = InferenceEvent(
         event_id=event_id,
         timestamp_utc=timestamp,
@@ -331,9 +422,16 @@ def check_outbound_authorization(
         correlation_id=ctx.correlation_id,
         run_id=ctx.run_id,
         job_id=ctx.job_id,
+        session_id=ctx.session_id,
+        source=ctx.source,
         idempotency_key=ctx.idempotency_key,
         callsite_frames=frames,
         outcome=OUTCOME_ALLOWED,
+        metadata={"ttl_remaining_s": round(ctx.time_remaining_seconds(), 2)},
     )
     record_trace_event(event)
+    logger.info(
+        "[LLM_EGRESS_GUARD] outcome=ALLOWED provider=%s model=%s category=%s trigger=%s source=%s run_id=%s correlation_id=%s",
+        provider, model, category, ctx.trigger, ctx.source, ctx.run_id or "none", ctx.correlation_id
+    )
     return event
