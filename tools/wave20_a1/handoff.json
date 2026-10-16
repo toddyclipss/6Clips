@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "wave": 20,
+  "agent": 1,
+  "role": "Chat-first original creative planner, revisions and OAAS outcome truth",
+  "branch": "wave20/01-knowledge-chat-outcomes",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-01-knowledge-chat",
+  "module_path": "backend.oaas_knowledge_orchestrator",
+  "exports": {
+    "classes": [
+      "KnowledgeChatOrchestrator",
+      "KnowledgeOrchestratorStateMachine",
+      "KnowledgeBaseAdapter",
+      "NativeMotionGeneratorAdapter",
+      "RevisionDeltaEngine",
+      "KnowledgeSecurityValidator"
+    ],
+    "models": [
+      "KnowledgeOrchestratorState",
+      "KnowledgeCitation",
+      "CreativeRationale",
+      "NativeMotionSpecContract",
+      "NativeMotionScene",
+      "NativeMotionElement",
+      "ImmutableRunEvidence",
+      "VideoRequestContract",
+      "RevisionRequestContract",
+      "KnowledgeOrchestratorResponse"
+    ],
+    "entrypoints": {
+      "handle_video_request": {
+        "signature": "async def handle_video_request(request_or_message, authenticated_context=None, authorizations=None, preferences=None, project_id=None, allow_test_fixture=True) -> KnowledgeOrchestratorResponse",
+        "description": "Consumes ordinary natural-language user messages from the existing chat, searches authenticated knowledge, generates original native motion spec, commits canonical project CAS revision, renders physical MP4, probes with ffprobe, registers deliverable to Library, and returns immutable run evidence."
+      },
+      "revise_deliverable": {
+        "signature": "async def revise_deliverable(request_or_run_id, user_feedback=None, expected_revision=None, authenticated_context=None, authorizations=None, allow_test_fixture=True) -> KnowledgeOrchestratorResponse",
+        "description": "Mutates the SAME canonical Project timeline in-place using atomic CAS concurrency controls, applying targeted deltas for cinematic typography, dead-air trims, caption word synchronization, and aspect reframing."
+      }
+    }
+  },
+  "peer_contracts": {
+    "agent_3_knowledge_base": {
+      "target_module": "backend.knowledge_base",
+      "target_class": "KnowledgeBase",
+      "method": "search(query: str, filters: Optional[Dict[str, Any]] = None, limit: int = 5) -> List[Dict[str, Any]]",
+      "expected_record_fields": [
+        "knowledge_doc_id",
+        "source_hash",
+        "source_ref",
+        "donor_group",
+        "capability_family",
+        "techniques",
+        "rights",
+        "runtime_constraints",
+        "retrieval_explanation"
+      ],
+      "fallback_behavior": "When backend.knowledge_base is not imported, KnowledgeBaseAdapter uses TestOnlyKnowledgeAdapter with 5 curated techniques and flags is_production_corpus=False."
+    },
+    "agent_4_native_motion": {
+      "target_module": "backend.native_motion",
+      "target_class": "NativeMotionGenerator",
+      "method": "generate(brief: str, knowledge_refs: List[KnowledgeCitation], constraints: Dict[str, Any]) -> NativeMotionSpecContract",
+      "schema_version": "native_motion_v1",
+      "fallback_behavior": "When backend.native_motion is not imported, NativeMotionGeneratorAdapter executes deterministic native layout synthesis with zero executable JS/HTML scripts."
+    },
+    "agent_5_integration_wiring": {
+      "websocket_chat_route": "backend/api/chat.py",
+      "recommended_chat_hook": "In backend/api/chat.py ws_chat endpoint: check if KNOWLEDGE_FIRST flag is enabled; if user requests video generation or revision, route to KnowledgeChatOrchestrator.handle_video_request or revise_deliverable.",
+      "feature_flags": {
+        "KNOWLEDGE_FIRST": {
+          "default": false,
+          "description": "Enables knowledge-first original motion generation for new user traffic."
+        },
+        "LEGACY_PROJECT_COMPAT": {
+          "default": true,
+          "description": "Preserves rollback and read-only compatibility for existing projects."
+        }
+      }
+    }
+  },
+  "states": [
+    "REQUESTED",
+    "PLANNING",
+    "RETRIEVING_KNOWLEDGE",
+    "COMPOSING",
+    "VALIDATING",
+    "RENDERING",
+    "VIDEO_VERIFIED",
+    "REVIEW_READY",
+    "BLOCKED_RIGHTS",
+    "PENDING_CREDENTIALS",
+    "FAILED_RETRYABLE",
+    "FAILED_TERMINAL",
+    "NEEDS_AUTHORIZATION",
+    "BLOCKED"
+  ]
+}
