@@ -1,0 +1,461 @@
+{
+  "benchmark_version": "1.0.0",
+  "total_scenarios": 12,
+  "passed_scenarios": 12,
+  "failed_scenarios": 0,
+  "average_recall_at_5": 0.7639,
+  "average_precision_at_5": 1.0,
+  "average_mrr": 0.8403,
+  "scenario_results": [
+    {
+      "category": "captions_word_highlight",
+      "description": "Voiceover synchronization and per-word karaoke highlights",
+      "query": "karaoke word by word subtitle sweep highlight",
+      "filter": {
+        "capability_family": "captions_word_highlight"
+      },
+      "passed": true,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "component:caption-highlight",
+        "block:mk-callout-highlight",
+        "component:caption-pill-karaoke"
+      ],
+      "retrieved_doc_ids": [
+        "block:mk-callout-highlight",
+        "component:caption-pill-karaoke",
+        "component:caption-highlight",
+        "caption:aurora",
+        "caption:laser"
+      ],
+      "retrieved_titles": [
+        "Word-Sweep Highlight",
+        "Pill Karaoke",
+        "Highlight",
+        "Aurora Captions Style",
+        "Laser Captions Style"
+      ],
+      "scores": [
+        26.3568,
+        20.1164,
+        18.024,
+        16.8514,
+        12.5703
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "captions_cinematic_identities",
+      "description": "Cinematic embedded caption identity for contemplative monologues",
+      "query": "cream warm poetic light monologue captions",
+      "filter": {
+        "capability_family": "captions_word_highlight"
+      },
+      "passed": true,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "caption:cream"
+      ],
+      "retrieved_doc_ids": [
+        "caption:cream",
+        "caption:stardust",
+        "caption:papercut",
+        "doc:prompting/captions-and-talking-heads",
+        "caption:popup"
+      ],
+      "retrieved_titles": [
+        "Cream Captions Style",
+        "Stardust Captions Style",
+        "Papercut Captions Style",
+        "Captions and talking-head footage",
+        "Popup Captions Style"
+      ],
+      "scores": [
+        35.6857,
+        23.226,
+        19.4085,
+        17.7029,
+        12.9309
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "typography_kinetic",
+      "description": "Heavyweight kinetic text slam with arrival deceleration and shake",
+      "query": "headline slam kinetic text landing shake",
+      "filter": {
+        "capability_family": "typography_kinetic"
+      },
+      "passed": true,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "component:headline-slam",
+        "component:char-slam-explode"
+      ],
+      "retrieved_doc_ids": [
+        "component:char-slam-explode",
+        "component:headline-slam",
+        "component:gloss-sweep",
+        "component:shutter-slam",
+        "hero-primitive:per-word-rise"
+      ],
+      "retrieved_titles": [
+        "Char Slam Explode",
+        "Headline Slam",
+        "Gloss Sweep",
+        "Shutter Slam",
+        "Per Word Rise (Hero Primitive)"
+      ],
+      "scores": [
+        33.8343,
+        31.6241,
+        16.5484,
+        13.0248,
+        12.0769
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "typography_scramble_reveal",
+      "description": "Deterministic glyph cycle hacker scramble reveal",
+      "query": "hacker terminal character scramble decode",
+      "filter": {
+        "capability_family": "typography_kinetic"
+      },
+      "passed": true,
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 0.3333,
+      "expected_doc_ids": [
+        "hero-primitive:scramble-reveal",
+        "component:caption-matrix-decode"
+      ],
+      "retrieved_doc_ids": [
+        "component:matrix-decode",
+        "component:scramble-reveal",
+        "hero-primitive:scramble-reveal",
+        "doc:prompting/motion-graphics",
+        "doc:prompting/anatomy"
+      ],
+      "retrieved_titles": [
+        "Matrix Decode",
+        "Scramble Reveal",
+        "Scramble Reveal (Hero Primitive)",
+        "Motion graphics",
+        "Anatomy of a one-shot prompt"
+      ],
+      "scores": [
+        22.7732,
+        17.7867,
+        16.692,
+        8.3173,
+        7.762
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "data_visualization",
+      "description": "Procedural animated bar chart data visualization",
+      "query": "bar chart race animated comparison graph",
+      "filter": {
+        "capability_family": "data_visualization"
+      },
+      "passed": true,
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 0.5,
+      "expected_doc_ids": [
+        "block:bar-chart-grid",
+        "block:bar-chart-race"
+      ],
+      "retrieved_doc_ids": [
+        "doc:prompting/data-and-maps",
+        "block:bar-chart-race",
+        "component:animated-bar-chart",
+        "block:mk-line-graph",
+        "hero-primitive:chart-story"
+      ],
+      "retrieved_titles": [
+        "Data and maps",
+        "Bar Chart Race",
+        "Animated Bar Chart",
+        "Minimal Line Graph",
+        "Chart Story (Hero Primitive)"
+      ],
+      "scores": [
+        21.6268,
+        19.8108,
+        19.4733,
+        16.9159,
+        15.3956
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "transition_wipe",
+      "description": "Geometric clip-path curtain and mask transitions",
+      "query": "curtain reveal smooth transition wipe mask",
+      "filter": {
+        "capability_family": "transition_wipe"
+      },
+      "passed": true,
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "block:slice-reveal-wipe",
+        "component:curtain-reveal"
+      ],
+      "retrieved_doc_ids": [
+        "component:curtain-reveal",
+        "component:grid-pixelate-wipe",
+        "block:transitions-radial",
+        "component:svg-mask-reveal",
+        "block:hw-scribble-transition"
+      ],
+      "retrieved_titles": [
+        "Curtain Reveal",
+        "Grid Pixelate Wipe",
+        "Radial Transitions",
+        "SVG Mask Reveal",
+        "Scribble Transition"
+      ],
+      "scores": [
+        21.8919,
+        14.9699,
+        14.0603,
+        12.469,
+        11.8404
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "background_shader",
+      "description": "WebGPU fragment procedural aurora curtain shader",
+      "query": "aurora borealis green violet curtain webgpu shader night sky",
+      "filter": {
+        "capability_family": "background_shader"
+      },
+      "passed": true,
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "caption:aurora",
+        "block:aurora"
+      ],
+      "retrieved_doc_ids": [
+        "block:aurora",
+        "block:water",
+        "block:liquid-glass-notification",
+        "block:liquid-glass-widgets",
+        "component:aurora-drift"
+      ],
+      "retrieved_titles": [
+        "Aurora",
+        "Water",
+        "Liquid Glass Notification",
+        "Liquid Glass Widgets",
+        "Aurora Drift"
+      ],
+      "scores": [
+        49.2165,
+        20.9073,
+        18.5862,
+        18.469,
+        17.7476
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "camera_3d",
+      "description": "Spherical 3D camera orbit with billboarded card depth scaling",
+      "query": "fibonacci sphere 3d card orbit carousel billboard",
+      "filter": {
+        "capability_family": "camera_3d"
+      },
+      "passed": true,
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "block:carousel-orbit-1",
+        "block:orbit-card"
+      ],
+      "retrieved_doc_ids": [
+        "block:carousel-orbit-1",
+        "block:carousel-orbit-2",
+        "block:carousel-orbit-3",
+        "block:carousel-orbit-4",
+        "block:carousel-orbit-5"
+      ],
+      "retrieved_titles": [
+        "Orbit Carousel 1",
+        "Orbit Carousel 2",
+        "Orbit Carousel 3",
+        "Orbit Carousel 4",
+        "Orbit Carousel 5"
+      ],
+      "scores": [
+        38.6191,
+        38.6191,
+        38.6191,
+        38.6191,
+        38.6191
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "ui_simulation",
+      "description": "UI walkthrough cursor pointer with elastic click ring pulse",
+      "query": "simulated cursor click pulse agent pointer interaction",
+      "filter": {
+        "capability_family": "ui_simulation"
+      },
+      "passed": true,
+      "recall_at_5": 0.6667,
+      "precision_at_5": 1.0,
+      "mrr": 0.25,
+      "expected_doc_ids": [
+        "hero-primitive:press-ripple",
+        "hero-primitive:oversized-cursor",
+        "component:agent-cursor"
+      ],
+      "retrieved_doc_ids": [
+        "component:simulated-cursor",
+        "component:magnetic-cursor",
+        "component:oversized-cursor",
+        "component:agent-cursor",
+        "hero-primitive:press-ripple"
+      ],
+      "retrieved_titles": [
+        "Simulated Cursor",
+        "Magnetic Cursor",
+        "Oversized Cursor",
+        "Agent Cursor",
+        "Press Ripple (Hero Primitive)"
+      ],
+      "scores": [
+        41.722,
+        25.0635,
+        24.5133,
+        22.7333,
+        18.5492
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "responsive_layout",
+      "description": "Mobile 9:16 vertical filler and responsive layout adaptation",
+      "query": "vertical media filler portrait layout",
+      "filter": {
+        "capability_family": "responsive_layout"
+      },
+      "passed": true,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [
+        "block:yt-vertical-fill"
+      ],
+      "retrieved_doc_ids": [
+        "block:yt-vertical-fill",
+        "doc:guides/4k-rendering",
+        "doc:guides/remove-background",
+        "component:separator",
+        "component:grid-card-assemble"
+      ],
+      "retrieved_titles": [
+        "Vertical Media Filler",
+        "Render in 4K",
+        "Remove a background",
+        "Separator",
+        "Grid Card Assemble"
+      ],
+      "scores": [
+        28.4558,
+        11.2353,
+        10.8346,
+        9.1903,
+        8.2229
+      ],
+      "counterexample_passed": null
+    },
+    {
+      "category": "counterexample_mismatch_rejection",
+      "description": "Counterexample test: Shaders must be rejected when filtering for typography_kinetic",
+      "query": "webgpu shader plasma background",
+      "filter": {
+        "capability_family": "typography_kinetic"
+      },
+      "passed": true,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [],
+      "retrieved_doc_ids": [
+        "doc:guides/claude-design-hyperframes",
+        "doc:guides/open-design-hyperframes",
+        "doc:guides/claude-design-send-to-hyperframes",
+        "doc:prompting/motion-graphics",
+        "doc:guides/figma"
+      ],
+      "retrieved_titles": [
+        "Claude Design Hyperframes",
+        "Open Design Hyperframes",
+        "Send to HyperFrames",
+        "Motion graphics",
+        "Figma integration"
+      ],
+      "scores": [
+        5.9616,
+        5.8976,
+        5.4559,
+        3.5839,
+        2.6025
+      ],
+      "counterexample_passed": true
+    },
+    {
+      "category": "rights_filtering",
+      "description": "Counterexample test: Proprietary brand references must be excluded under VERIFIED_PERMISSIVE filter",
+      "query": "apple terminal macos console",
+      "filter": {
+        "rights": "VERIFIED_PERMISSIVE"
+      },
+      "passed": true,
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "expected_doc_ids": [],
+      "retrieved_doc_ids": [
+        "caption:terminal",
+        "block:apple-money-count",
+        "doc:studio-app/index",
+        "component:native-notification-pop",
+        "block:macos-notification"
+      ],
+      "retrieved_titles": [
+        "Terminal Captions Style",
+        "Apple Money Count",
+        "Get the HyperFrames Studio app",
+        "Native Notification Pop",
+        "macOS Notification"
+      ],
+      "scores": [
+        14.2111,
+        9.1586,
+        8.0694,
+        7.9073,
+        7.5916
+      ],
+      "counterexample_passed": true
+    }
+  ]
+}

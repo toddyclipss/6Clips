@@ -1,0 +1,92 @@
+{
+  "agent": "Agent 3 — Exhaustive HyperFrames Documentation Ingestion, Fidelity, Taxonomy and Retrieval",
+  "branch": "wave20/03-hyperframes-knowledge-corpus",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-03-knowledge",
+  "base_sha": "51924aa5acaebb8e00f899015ee26c44ca86b4fe",
+  "timestamp": "2026-10-15T22:21:00Z",
+  "status": "READY_FOR_INTEGRATION",
+  "census_summary": {
+    "total_donor_files_scanned": 1440,
+    "docs_directory_files": 1294,
+    "mdx_files_total": 552,
+    "block_mdx_files": 171,
+    "component_mdx_files": 223,
+    "other_mdx_files": 158,
+    "md_files_total": 6,
+    "registry_block_dirs": 196,
+    "registry_component_dirs": 236,
+    "blocks_without_mdx_reconciled": 25,
+    "components_without_mdx_reconciled": 14,
+    "embedded_caption_identities": 36,
+    "hero_primitives_shelf": 21,
+    "gallery_canonical_groups": 10
+  },
+  "knowledge_corpus_summary": {
+    "total_curated_documents": 658,
+    "airgap_status": "VERIFIED_OFFLINE_ZERO_DONOR_DEPENDENCY",
+    "capability_family_breakdown": {
+      "typography_kinetic": 239,
+      "ui_simulation": 140,
+      "transition_wipe": 82,
+      "background_shader": 72,
+      "captions_word_highlight": 37,
+      "camera_3d": 44,
+      "data_visualization": 39,
+      "responsive_layout": 5
+    },
+    "rights_breakdown": {
+      "VERIFIED_PERMISSIVE": 527,
+      "REFERENCE_ONLY": 129,
+      "BLOCKED_RIGHTS": 2
+    },
+    "test_coverage_ledger": {
+      "D0_identity_hash_provenance": "100% PASS (658/658 docs)",
+      "D1_faithful_extract_categorize": "100% PASS (658/658 docs)",
+      "D2_retrieval_benchmark": "100% PASS (12/12 scenarios, Precision@5=1.00, MRR=0.84)",
+      "D3_spec_synthesis_contract": "VALIDATED_VIA_ADAPTER (live generator PENDING Agent 4)",
+      "D4_live_player_playback": "NOT_APPLICABLE_FOR_KNOWLEDGE_DOCS (PENDING Agent 4/5 integration)",
+      "D5_physical_mp4_render": "NOT_APPLICABLE_FOR_KNOWLEDGE_DOCS (PENDING Agent 4/5 integration)"
+    }
+  },
+  "retrieval_benchmark_summary": {
+    "scenarios_tested": 12,
+    "scenarios_passed": 12,
+    "avg_recall_at_5": 0.76,
+    "avg_precision_at_5": 1.00,
+    "avg_mrr": 0.84,
+    "results_file": "tools/wave20_a3/retrieval_benchmark_results.json"
+  },
+  "contracts_and_interfaces": {
+    "agent_1_search_contract": {
+      "module": "backend.knowledge_base",
+      "class": "KnowledgeBase",
+      "method": "KnowledgeBase.search(query: str, filters: Optional[SearchFilter] = None, limit: int = 10) -> List[SearchResult]",
+      "adapter": "backend.knowledge_base.adapter.KnowledgeAdapter.handle_agent1_query(request: Agent1SearchRequest) -> Agent1SearchResponse",
+      "prompt_formatter": "backend.knowledge_base.adapter.format_prompt_context(results: List[SearchResult]) -> str"
+    },
+    "agent_4_motion_directives_contract": {
+      "module": "backend.knowledge_base.adapter",
+      "method": "KnowledgeAdapter.get_agent4_directives(doc_id: str) -> Optional[MotionDirectives]",
+      "citation_builder": "KnowledgeAdapter.create_knowledge_ref(doc_id: str, applied_techniques: Optional[List[str]] = None) -> Optional[KnowledgeRef]"
+    }
+  },
+  "files_owned": [
+    "backend/knowledge_base/__init__.py",
+    "backend/knowledge_base/models.py",
+    "backend/knowledge_base/storage.py",
+    "backend/knowledge_base/search.py",
+    "backend/knowledge_base/service.py",
+    "backend/knowledge_base/adapter.py",
+    "backend/knowledge_base/data/knowledge_snapshot.json",
+    "tools/wave20_a3/probe_donor.py",
+    "tools/wave20_a3/ingest_corpus.py",
+    "tools/wave20_a3/benchmark_retrieval.py",
+    "tools/wave20_a3/hyperframes_knowledge_census.json",
+    "tools/wave20_a3/hyperframes_knowledge_census.csv",
+    "tools/wave20_a3/retrieval_benchmark_results.json",
+    "tools/wave20_a3/READY.json",
+    "tests/wave20/a3/test_corpus_census_and_fidelity.py",
+    "tests/wave20/a3/test_knowledge_base_search.py",
+    "tests/wave20/a3/test_d0_d2_fidelity.py"
+  ]
+}
