@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2025-2026 ViralMint Contributors
-import React, { useRef, useState, useEffect, useImperativeHandle, forwardRef } from "react"
+import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef } from "react"
 import {
   Box, Stack, Typography, IconButton, Slider, Tooltip, CircularProgress, Chip, Button,
 } from "@mui/material"
@@ -16,6 +16,111 @@ import {
   IconX,
   IconVideo,
 } from "@tabler/icons-react"
+
+/**
+ * Professional Timed Captions Overlay with Word-Level Highlighting.
+ * Speech/transcription timing source, knowledge-derived typography,
+ * high-contrast backdrop, responsive line fitting, non-obscuring lower-third safe zone.
+ */
+function CaptionsOverlay({ currentTime = 0, captions = [], isPortrait = true }) {
+  if (!Array.isArray(captions) || captions.length === 0) return null
+
+  // Normalize caption segments
+  const activeSegment = captions.find((c) => {
+    const start = Number(c.start_seconds ?? c.start_time ?? c.start ?? 0)
+    const dur = Number(c.duration_seconds ?? (c.end_time ? c.end_time - start : 2.5))
+    const end = Number(c.end_seconds ?? c.end_time ?? c.end ?? (start + dur))
+    return currentTime >= start && currentTime <= end
+  })
+
+  if (!activeSegment) return null
+
+  const rawWords = activeSegment.words || activeSegment.word_timings
+  const hasWordTimings = Array.isArray(rawWords) && rawWords.length > 0
+  const text = activeSegment.caption_text || activeSegment.text || ""
+
+  return (
+    <Box
+      data-testid="studio-caption-overlay"
+      aria-live="polite"
+      sx={{
+        position: "absolute",
+        bottom: isPortrait ? "16%" : "12%",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "90%",
+        maxWidth: 420,
+        textAlign: "center",
+        zIndex: 5,
+        pointerEvents: "none",
+        userSelect: "none",
+      }}
+    >
+      <Box
+        sx={{
+          display: "inline-block",
+          bgcolor: "rgba(0, 0, 0, 0.65)",
+          backdropFilter: "blur(4px)",
+          px: { xs: 1.5, sm: 2 },
+          py: { xs: 0.6, sm: 0.8 },
+          borderRadius: 2,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}
+      >
+        {hasWordTimings ? (
+          <Typography
+            component="div"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: "0.95rem", sm: "1.1rem" },
+              letterSpacing: "-0.01em",
+              lineHeight: 1.3,
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {rawWords.map((w, idx) => {
+              const wStart = Number(w.start ?? w.start_time ?? 0)
+              const wEnd = Number(w.end ?? w.end_time ?? (wStart + 0.3))
+              const isCurrentWord = currentTime >= wStart && currentTime <= wEnd
+              const wordStr = typeof w === "string" ? w : (w.word || w.text || "")
+              return (
+                <span
+                  key={idx}
+                  style={{
+                    color: isCurrentWord ? "#facc15" : "#ffffff",
+                    textShadow: isCurrentWord
+                      ? "0 0 10px rgba(250, 204, 21, 0.7), 0 2px 4px rgba(0,0,0,0.8)"
+                      : "0 2px 4px rgba(0,0,0,0.8)",
+                    transform: isCurrentWord ? "scale(1.08)" : "none",
+                    display: "inline-block",
+                    margin: "0 3px",
+                    transition: "color 0.1s ease, transform 0.1s ease",
+                  }}
+                >
+                  {wordStr}
+                </span>
+              )
+            })}
+          </Typography>
+        ) : (
+          <Typography
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: "0.9rem", sm: "1.05rem" },
+              letterSpacing: "-0.01em",
+              color: "#ffffff",
+              textShadow: "0 2px 4px rgba(0,0,0,0.8)",
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {text}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  )
+}
 
 /**
  * Central Stage & Video Preview using HyperFrames Player integration.
@@ -81,6 +186,20 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   const [muted, setMuted] = useState(false)
   const lastPostedPlayRef = useRef(null)
   const [videoDimensions, setVideoDimensions] = useState({ width: 0, height: 0 })
+
+  const activeCaptions = useMemo(() => {
+    if (renderedVideo?.captions && Array.isArray(renderedVideo.captions)) {
+      return renderedVideo.captions
+    }
+    if (project?.document?.captions && Array.isArray(project.document.captions)) {
+      return project.document.captions
+    }
+    const capTrack = project?.document?.timeline?.tracks?.find((t) => t.type === "captions")
+    if (capTrack?.clips && Array.isArray(capTrack.clips)) {
+      return capTrack.clips
+    }
+    return []
+  }, [renderedVideo?.captions, project?.document?.captions, project?.document?.timeline?.tracks])
 
   const ALLOWED_OUTBOUND_ACTIONS = new Set(["play", "pause", "seek", "mute"])
 
@@ -309,6 +428,12 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                   lastPostedPlayRef.current = false
                   if (onPlaybackStateChange) onPlaybackStateChange(false)
                 }}
+              />
+              {/* Professional Timed Captions Overlay */}
+              <CaptionsOverlay
+                currentTime={currentTime}
+                captions={activeCaptions}
+                isPortrait={isPortrait}
               />
               <Box
                 data-testid="studio-review-header"

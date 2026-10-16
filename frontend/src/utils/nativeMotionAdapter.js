@@ -45,6 +45,7 @@ export function isNativeMotionV1(docOrProject) {
   if (target.editor_mode === "native_motion" || target.editor_mode === "native_motion_v1") return true
   if (Boolean(target.native_motion_v1)) return true
   if (Array.isArray(target?.composition?.operators)) return true
+  if (Array.isArray(target?.scenes) && target?.scenes.length > 0) return true
   return false
 }
 
@@ -214,8 +215,8 @@ export function normalizeProjectForPlayer(projectOrDoc) {
       }
 
       const opType = (op.type || op.operator || "").toLowerCase()
-      if (opType === "caption" || opType === "text" || opType === "captions" || op.caption_text || op.text) {
-        captionClips.push({ ...baseClip, type: "captions", caption_text: baseClip.text })
+      if (opType === "caption" || opType === "captions" || Boolean(op.caption_text)) {
+        captionClips.push({ ...baseClip, type: "captions", caption_text: baseClip.text || op.caption_text })
       } else if (opType === "audio" || opType === "speech" || opType === "voiceover" || op.audio_file) {
         audioClips.push({ ...baseClip, type: "audio" })
       } else if (opType === "effect" || opType === "filter") {
@@ -239,6 +240,96 @@ export function normalizeProjectForPlayer(projectOrDoc) {
       isNativeMotion: true,
       tracks,
       duration,
+      fps,
+      aspectRatio,
+      aspect_ratio: aspectRatio,
+      schemaVersion: NATIVE_MOTION_SCHEMA_VERSION,
+    }
+  }
+
+  // If native_motion_v1 with scene graph specification (scenes & captions)
+  if (isNative && Array.isArray(doc.scenes)) {
+    const videoClips = []
+    const audioClips = []
+    const captionClips = []
+    const effectClips = []
+    const transitionClips = []
+
+    doc.scenes.forEach((scene, sIdx) => {
+      const sceneStart = Number(scene.timecode_start ?? (sIdx * 3))
+      const sceneEnd = Number(scene.timecode_end ?? (sceneStart + 3))
+      const sceneDur = Math.max(0.5, sceneEnd - sceneStart)
+
+      const elements = Array.isArray(scene.elements) ? scene.elements : []
+      elements.forEach((el, eIdx) => {
+        const elType = (el.element_type || el.type || "text").toLowerCase()
+        const elStart = sceneStart + Number(el.start_time ?? 0)
+        const elDur = Number(el.duration ?? sceneDur)
+        const clipItem = {
+          id: el.element_id || `scene_${sIdx}_el_${eIdx}`,
+          name: el.properties?.title || el.properties?.text || `${elType} (Scene ${scene.scene_number || sIdx + 1})`,
+          type: elType,
+          start_seconds: elStart,
+          duration_seconds: elDur,
+          trim_start: 0,
+          trim_end: elDur,
+          speed: 1.0,
+          volume: 1.0,
+          caption_text: el.properties?.text || "",
+          properties: el.properties || {},
+          keyframes: el.keyframes || [],
+        }
+
+        if (["audio", "voiceover", "music", "sfx", "speech"].includes(elType)) {
+          audioClips.push({ ...clipItem, type: "audio" })
+        } else if (["captions", "caption"].includes(elType)) {
+          captionClips.push({ ...clipItem, type: "captions" })
+        } else if (["effect", "filter", "shader"].includes(elType)) {
+          effectClips.push({ ...clipItem, type: "effects" })
+        } else if (["transition"].includes(elType)) {
+          transitionClips.push({ ...clipItem, type: "transitions" })
+        } else {
+          videoClips.push({ ...clipItem, type: "video" })
+        }
+      })
+    })
+
+    // Integrate document-level captions if provided
+    if (Array.isArray(doc.captions) && doc.captions.length > 0) {
+      doc.captions.forEach((cap, cIdx) => {
+        const capStart = Number(cap.start_time ?? cap.start ?? 0)
+        const capEnd = Number(cap.end_time ?? cap.end ?? (capStart + 2.5))
+        captionClips.push({
+          id: cap.id || `cap_${cIdx + 1}`,
+          name: cap.text ? (cap.text.slice(0, 30) + (cap.text.length > 30 ? "..." : "")) : `Caption ${cIdx + 1}`,
+          type: "captions",
+          start_seconds: capStart,
+          duration_seconds: Math.max(0.2, capEnd - capStart),
+          trim_start: 0,
+          trim_end: Math.max(0.2, capEnd - capStart),
+          speed: 1.0,
+          volume: 1.0,
+          caption_text: cap.text || "",
+          words: cap.words || [],
+          properties: cap,
+        })
+      })
+    }
+
+    const tracks = [
+      { id: "track-video", name: "Visual Scenes", type: "video", visible: true, locked: false, clips: videoClips },
+      { id: "track-audio", name: "Audio", type: "audio", visible: true, locked: false, clips: audioClips },
+      { id: "track-captions", name: "Captions", type: "captions", visible: true, locked: false, clips: captionClips },
+      { id: "track-effects", name: "Effects", type: "effects", visible: true, locked: false, clips: effectClips },
+      { id: "track-transitions", name: "Transitions", type: "transitions", visible: true, locked: false, clips: transitionClips },
+    ]
+
+    const effectiveDuration = Number(doc.target_duration_sec || duration || (doc.scenes.length * 3))
+
+    return {
+      isNativeMotion: true,
+      tracks,
+      duration: effectiveDuration,
       fps,
       aspectRatio,
       aspect_ratio: aspectRatio,

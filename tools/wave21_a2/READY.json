@@ -1,0 +1,110 @@
+{
+  "wave": 21,
+  "agent": 2,
+  "role": "REAL CREATE/REVIEW UX, ONE PLAYER AND OPTIONAL TIMELINE",
+  "branch": "wave21/02-real-create-review-ui",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-02-ui",
+  "base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "tip_sha": "7c6bc1b40982744f6c168407e44a30035859270f",
+  "status": "STAGE_A_READY_FOR_FIVE_BRANCH_INTEGRATION",
+  "timestamp": "2026-10-16T06:45:00Z",
+  "mandate_summary": {
+    "product_philosophy": "Motion Design OAAS, strictly Create and Review normal UX with single canonical playback surface and unobtrusive optional advanced editing.",
+    "sidebar_navigation": "Five mandatory primary destinations in exact order: Motion Graphics, Trends, My Channel, Library, Messages. Settings secondary.",
+    "catalog_elimination": "Zero user-facing 196 catalog cards, block pickers, or Add Block buttons in active production code paths.",
+    "empty_state_safety": "Opening /motion without project query creates zero phantom projects (zero POST /api/projects).",
+    "timeline_and_player": "Single canonical player and timeline supporting native_motion_v1 operator specs, scenes, elements, and captions with audio sync and word-level highlighting.",
+    "review_and_blockers": "Honest deliverables count, chat correction guidance, editorial approval disclosure confirming it is NOT a social post, and fail-closed blocker handling."
+  },
+  "file_ownership": {
+    "owned_patterns": [
+      "frontend/**",
+      "tests/wave21/a2/**",
+      "tools/wave21_a2/**"
+    ],
+    "disallowed_patterns": [
+      "backend/**",
+      "donor/**",
+      "production DB",
+      "other agents' tools/tests"
+    ],
+    "strictly_honored": true
+  },
+  "test_counts": {
+    "unit_contract_tests": 11,
+    "unit_contract_passed": 11,
+    "browser_edge_e2e_tests": 5,
+    "browser_edge_e2e_passed": 5,
+    "total_tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "pass_rate": "100%",
+    "suites": [
+      "tests/wave21/a2/test_wave21_a2_create_review_ux.py",
+      "tests/wave21/a2/test_wave21_a2_edge_e2e.py"
+    ]
+  },
+  "gate_statuses": {
+    "GT-41": "PENDING_AGENT5_PHYSICAL_REMOVAL",
+    "A2_CREATE_REVIEW_NORMAL_UX": "PASS",
+    "A2_SINGLE_CANONICAL_PLAYER": "PASS",
+    "A2_OPTIONAL_TIMELINE": "PASS",
+    "A2_ZERO_PHANTOM_PROJECT_EMPTY_STATE": "PASS",
+    "A2_CAPTIONS_WORD_LEVEL_OVERLAY": "PASS",
+    "A2_EDITORIAL_APPROVAL_DISCLOSURE": "PASS",
+    "A2_FULL_STACK_INTEGRATION": "PENDING_MERGED_STACK"
+  },
+  "known_blockers": [
+    {
+      "code": "PENDING_MERGED_STACK",
+      "description": "Full end-to-end multi-agent pipeline (Edge driving chat goal through Agent 1 LLM plan, Agent 3 knowledge retrieval, and Agent 4 native render) requires Agent 5 merged candidate environment. Isolated worktree contract and simulated flow verified 100%."
+    }
+  ],
+  "integration_interface": {
+    "frontend_routes": [
+      { "path": "/motion", "type": "PRIMARY_DEFAULT", "description": "Single OAAS Create & Review player" },
+      { "path": "/trends", "type": "PRIMARY", "description": "Trends research" },
+      { "path": "/channels", "type": "PRIMARY", "description": "Channel profiles" },
+      { "path": "/videos", "type": "PRIMARY", "description": "Library and deliverable media" },
+      { "path": "/messaging", "type": "PRIMARY", "description": "Direct communication" },
+      { "path": "/settings", "type": "SECONDARY", "description": "User configuration" },
+      { "path": "/catalog", "type": "LEGACY_REDIRECT", "redirect_to": "/motion" },
+      { "path": "/clips", "type": "LEGACY_REDIRECT", "redirect_to": "/motion" },
+      { "path": "/tools", "type": "LEGACY_REDIRECT", "redirect_to": "/motion" }
+    ],
+    "websocket_inbound_types": [
+      "_connection_state",
+      "oaas_outcome_update",
+      "job_started",
+      "job_progress",
+      "job_complete",
+      "job_failed",
+      "project_updated"
+    ],
+    "websocket_outbound_types": [
+      "chat_message",
+      "set_session"
+    ]
+  },
+  "production_vs_test_distinction": {
+    "production_artifacts": [
+      "frontend/src/store/appStore.js",
+      "frontend/src/hooks/useWebSocket.js",
+      "frontend/src/pages/MotionGraphics.jsx",
+      "frontend/src/utils/nativeMotionAdapter.js",
+      "frontend/src/components/motion/StudioPreviewStage.jsx",
+      "frontend/src/components/motion/MotionReviewPanel.jsx"
+    ],
+    "test_and_tool_artifacts": [
+      "tests/wave21/a2/test_wave21_a2_create_review_ux.py",
+      "tests/wave21/a2/test_wave21_a2_edge_e2e.py",
+      "tools/wave21_a2/ui_real_flow_matrix.json",
+      "tools/wave21_a2/delivery_report.md",
+      "tools/wave21_a2/READY.json",
+      "tools/wave21_a2/evidence/screenshots/edge_1920x1080_create.png",
+      "tools/wave21_a2/evidence/screenshots/edge_1440x900_create.png",
+      "tools/wave21_a2/evidence/screenshots/edge_1366x768_create.png",
+      "tools/wave21_a2/evidence/screenshots/edge_1920x1080_advanced_editing.png"
+    ]
+  }
+}

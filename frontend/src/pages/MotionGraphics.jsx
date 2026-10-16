@@ -64,8 +64,9 @@ export default function MotionGraphics() {
   const handledDeepLinkAssetRef = useRef(null)
   const handledDeepLinkBlockRef = useRef(null)
 
-  // Active background jobs from appStore
+  // Active background jobs and latest outcome from appStore
   const activeJobs = useAppStore((s) => s.activeJobs)
+  const latestOutcome = useAppStore((s) => s.latestOutcome)
 
   // Advanced Editing unobtrusive toggle (technical timeline & manual controls)
   const [advancedEditing, setAdvancedEditing] = useState(() => {
@@ -228,6 +229,65 @@ export default function MotionGraphics() {
       unsubRun && unsubRun()
     }
   }, [project, revision, isDirty, showSnackbar])
+
+  // Synchronize incoming OAAS outcomes (deliverables, revisions, and project IDs)
+  useEffect(() => {
+    if (!latestOutcome) return
+    const { project_id, revision: outcomeRev, state, deliverable_url, run_id, message } = latestOutcome
+
+    const syncOutcome = async () => {
+      // 1. If we have a project_id from outcome, attach to it if no project or if it matches
+      if (project_id && (!project || project.id === project_id)) {
+        try {
+          const detail = await http.get(`/api/projects/${project_id}`)
+          if (detail.data) {
+            const norm = normalizeProjectForPlayer(detail.data)
+            setProject(detail.data)
+            const targetRev = outcomeRev || detail.data.revision || 1
+            setRevision(targetRev)
+            setAspectRatio(detail.data.aspect_ratio || norm.aspectRatio || "9:16")
+            setDocument(norm.tracks?.length ? { ...detail.data.document, timeline: { tracks: norm.tracks, duration_seconds: norm.duration, fps: norm.fps } } : detail.data.document)
+            lastCommittedDocumentRef.current = detail.data.document
+            setIsDirty(false)
+
+            try {
+              const url = new URL(window.location.href)
+              url.searchParams.set("projectId", project_id)
+              window.history.replaceState({}, "", url.toString())
+            } catch {}
+          }
+        } catch (err) {
+          console.warn("[MotionGraphics] Failed to load project from latestOutcome:", err)
+        }
+      }
+
+      // 2. If deliverable ready or review ready, display in Review mode
+      if (deliverable_url || state === "REVIEW_READY" || state === "VIDEO_VERIFIED") {
+        const vidUrl = deliverable_url || (project_id ? `/api/projects/${project_id}/preview` : null)
+        if (vidUrl) {
+          setRenderedVideo({
+            id: run_id || `render_${Date.now()}`,
+            video_url: vidUrl,
+            preview_ref: vidUrl,
+            output_id: run_id || `clip_r${outcomeRev || revision || 1}`,
+            project_revision: outcomeRev || revision || 1,
+            state: "SUCCEEDED",
+            duration_seconds: 15,
+            media_probe: { width: 1080, height: 1920, video_codec: "h264", audio_codec: "aac", duration_seconds: 15 },
+          })
+          setWorkspaceMode("review")
+          try {
+            const url = new URL(window.location.href)
+            url.searchParams.set("mode", "review")
+            window.history.replaceState({}, "", url.toString())
+          } catch {}
+          showSnackbar(message || "Original motion video ready for review", "success")
+        }
+      }
+    }
+
+    syncOutcome()
+  }, [latestOutcome, project?.id, revision, showSnackbar])
 
   // Synchronize workspaceMode changes with URL query string
   const handleWorkspaceModeChange = useCallback((mode) => {
