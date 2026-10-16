@@ -61,6 +61,8 @@ export default function StudioToolbar({
   canCancel = false,
   onCancelDraft,
   onNewProject,
+  advancedEditing = false,
+  onToggleAdvancedEditing,
 }) {
   return (
     <Box
@@ -204,45 +206,72 @@ export default function StudioToolbar({
         </Stack>
       </Stack>
 
-      {/* Center: Stage Level Switcher (Create / Review / Refine) */}
-      <Stack direction="row" spacing={0.2} sx={{ bgcolor: "#f8fafc", p: 0.2, borderRadius: 1.5, border: "1px solid", borderColor: "divider", flexShrink: 0 }}>
-        {[
-          { id: "create", label: "Create" },
-          { id: "review", label: "Review" },
-          { id: "refine", label: "Refine" },
-        ].map((lvl) => {
-          const active = workspaceMode === lvl.id
-          const disabled = !project && lvl.id !== "create"
-          return (
-            <Button
-              key={lvl.id}
-              size="small"
-              disabled={disabled}
-              onClick={() => onWorkspaceModeChange(lvl.id)}
-              sx={{
-                height: 22,
-                px: { xs: 0.8, sm: 1 },
-                fontSize: "0.68rem",
-                fontWeight: active ? 700 : 500,
-                color: active ? "#ffffff" : disabled ? "text.disabled" : "text.secondary",
-                bgcolor: active ? "primary.main" : "transparent",
-                borderRadius: 1.2,
-                boxShadow: active ? "0 1px 4px rgba(139, 92, 246, 0.3)" : "none",
-                "&:hover": {
-                  bgcolor: active ? "primary.dark" : "rgba(0,0,0,0.04)",
-                },
-              }}
-            >
-              {lvl.label}
-            </Button>
-          )
-        })}
+      {/* Center: Stage Level Switcher (Create / Review only) */}
+      <Stack direction="row" spacing={0.6} alignItems="center" sx={{ flexShrink: 0 }}>
+        <Stack direction="row" spacing={0.2} sx={{ bgcolor: "#f8fafc", p: 0.2, borderRadius: 1.5, border: "1px solid", borderColor: "divider" }}>
+          {[
+            { id: "create", label: "Create" },
+            { id: "review", label: "Review" },
+          ].map((lvl) => {
+            const active = workspaceMode === lvl.id
+            const disabled = !project && lvl.id !== "create"
+            return (
+              <Button
+                key={lvl.id}
+                size="small"
+                data-testid={`stage-tab-${lvl.id}`}
+                disabled={disabled}
+                onClick={() => onWorkspaceModeChange(lvl.id)}
+                sx={{
+                  height: 22,
+                  px: { xs: 0.8, sm: 1.2 },
+                  fontSize: "0.68rem",
+                  fontWeight: active ? 700 : 500,
+                  color: active ? "#ffffff" : disabled ? "text.disabled" : "text.secondary",
+                  bgcolor: active ? "primary.main" : "transparent",
+                  borderRadius: 1.2,
+                  boxShadow: active ? "0 1px 4px rgba(139, 92, 246, 0.3)" : "none",
+                  "&:hover": {
+                    bgcolor: active ? "primary.dark" : "rgba(0,0,0,0.04)",
+                  },
+                }}
+              >
+                {lvl.label}
+              </Button>
+            )
+          })}
+        </Stack>
+
+        {/* Unobtrusive Advanced Editing Button */}
+        <Button
+          size="small"
+          data-testid="studio-toolbar-advanced-editing-btn"
+          variant={advancedEditing ? "contained" : "outlined"}
+          onClick={onToggleAdvancedEditing}
+          sx={{
+            height: 22,
+            px: { xs: 0.8, sm: 1 },
+            fontSize: "0.66rem",
+            fontWeight: 600,
+            textTransform: "none",
+            borderRadius: 1.2,
+            borderColor: "divider",
+            bgcolor: advancedEditing ? "primary.main" : "transparent",
+            color: advancedEditing ? "#ffffff" : "text.secondary",
+            "&:hover": {
+              bgcolor: advancedEditing ? "primary.dark" : "rgba(0,0,0,0.04)",
+              borderColor: "primary.main",
+            },
+          }}
+        >
+          Advanced Editing
+        </Button>
       </Stack>
 
       {/* Right: Contextual Controls, Save & Render */}
       <Stack direction="row" alignItems="center" spacing={0.6} sx={{ flexShrink: 0 }}>
         {/* Contextual Bottom Workspace Switcher (HyperFrames Timeline vs Clip Filmstrip) */}
-        {workspaceMode === "refine" && (
+        {advancedEditing && (
           <Stack direction="row" spacing={0.3} sx={{ mr: 0.5 }}>
             <Tooltip title="HyperFrames Multi-track Timeline" arrow>
               <IconButton
@@ -281,7 +310,7 @@ export default function StudioToolbar({
         )}
 
         {/* Workspace Paneling & Stage Expansion Toggles */}
-        {workspaceMode === "refine" && (
+        {advancedEditing && (
           <Stack direction="row" spacing={0.3} sx={{ mr: 0.5 }}>
             <Tooltip title={pinnedLeft ? "Collapse Left Panel (Layers & Assets)" : "Expand Left Panel (Layers & Assets)"} arrow>
               <IconButton

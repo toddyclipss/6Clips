@@ -41,14 +41,11 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   onSeek,
   onRefresh,
   onSelectElementId,
-  ghostPreview = null,
-  onDismissGhostPreview,
-  onInsertGhostBlock,
   workspaceMode = "create",
   renderedVideo = null,
-  onProceedToRefine = null,
+  activeJob = null,
+  onOpenAdvanced = null,
   onDurationChange = null,
-  onStartGoal = null,
   onNewProject = null,
 }, ref) {
   // Determine Stage Finite State Machine (FSM) state
@@ -83,23 +80,7 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
   const videoRef = useRef(null)
   const [muted, setMuted] = useState(false)
   const lastPostedPlayRef = useRef(null)
-  const [ghostFrameLoaded, setGhostFrameLoaded] = useState(false)
   const [videoDimensions, setVideoDimensions] = useState({ width: 0, height: 0 })
-
-  // Listen to Escape key to dismiss temporary ghost preview immediately
-  useEffect(() => {
-    if (!ghostPreview) {
-      setGhostFrameLoaded(false)
-      return
-    }
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        if (onDismissGhostPreview) onDismissGhostPreview()
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [ghostPreview, onDismissGhostPreview])
 
   const ALLOWED_OUTBOUND_ACTIONS = new Set(["play", "pause", "seek", "mute"])
 
@@ -354,22 +335,24 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
                     {videoDimensions.width ? `${videoDimensions.width}×${videoDimensions.height}` : "1080×1920"} • {Number(duration || 10).toFixed(2)}s
                   </Typography>
                 </Stack>
-                {onProceedToRefine && (
+                {onOpenAdvanced && (
                   <Button
-                    data-testid="proceed-to-refine-btn"
-                    variant="contained"
+                    data-testid="stage-open-advanced-btn"
+                    variant="outlined"
                     size="small"
-                    onClick={onProceedToRefine}
+                    onClick={onOpenAdvanced}
                     sx={{
                       pointerEvents: "auto",
-                      fontSize: "0.72rem",
-                      fontWeight: 700,
+                      fontSize: "0.68rem",
+                      fontWeight: 600,
                       textTransform: "none",
-                      bgcolor: "primary.main",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                      color: "#e2e8f0",
+                      borderColor: "rgba(255,255,255,0.25)",
+                      bgcolor: "rgba(15,23,42,0.6)",
+                      "&:hover": { borderColor: "#ffffff", bgcolor: "rgba(15,23,42,0.85)" },
                     }}
                   >
-                    Proceed to Refine →
+                    Advanced Editing
                   </Button>
                 )}
               </Box>
@@ -433,8 +416,8 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
               >
                 Empty Timeline
               </Typography>
-              <Typography variant="caption" sx={{ color: "#64748b", fontSize: "0.72rem", maxWidth: 220 }}>
-                Drop media clips or catalog blocks to start composing
+              <Typography variant="caption" sx={{ color: "#64748b", fontSize: "0.72rem", maxWidth: 240 }}>
+                Describe your video in Chat or add media to timeline
               </Typography>
             </Box>
           ) : resolvedState === "FAILED" ? (
@@ -545,53 +528,31 @@ const StudioPreviewStage = forwardRef(function StudioPreviewStage({
             </Box>
           )}
 
-          {/* Ghost Preview Stage Frame (Pure visual preview, zero overlay clutter) */}
-          {ghostPreview && (
+          {/* Real Authenticated Job State Status Pill (Zero fake percentages) */}
+          {activeJob && activeJob.status === "running" && (
             <Box
-              id="studio-ghost-preview-stage"
-              data-testid="studio-ghost-preview-stage"
+              data-testid="studio-stage-job-status"
               sx={{
                 position: "absolute",
-                inset: 0,
-                zIndex: 10,
-                bgcolor: "#000000",
-                overflow: "hidden",
+                top: 14,
+                left: 14,
+                zIndex: 8,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                bgcolor: "rgba(15, 23, 42, 0.9)",
+                backdropFilter: "blur(6px)",
+                px: 1.5,
+                py: 0.6,
+                borderRadius: 2,
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
               }}
             >
-              {ghostPreview.posterUrl && !ghostFrameLoaded && (
-                <Box
-                  component="img"
-                  src={ghostPreview.posterUrl}
-                  alt={ghostPreview.title || ghostPreview.block_id}
-                  sx={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    zIndex: 1,
-                  }}
-                />
-              )}
-              {ghostPreview.previewUrl && (
-                <iframe
-                  id="studio-ghost-preview-iframe"
-                  src={ghostPreview.previewUrl}
-                  title={`Ghost Preview: ${ghostPreview.title || ghostPreview.block_id}`}
-                  sandbox="allow-scripts"
-                  onLoad={() => setGhostFrameLoaded(true)}
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: 0,
-                    display: "block",
-                    backgroundColor: "#0b0f19",
-                    zIndex: 2,
-                  }}
-                />
-              )}
+              <CircularProgress size={12} sx={{ color: "primary.light" }} />
+              <Typography variant="caption" sx={{ color: "#e2e8f0", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.01em" }}>
+                {activeJob.step || activeJob.message || "composing"}
+              </Typography>
             </Box>
           )}
         </Box>
