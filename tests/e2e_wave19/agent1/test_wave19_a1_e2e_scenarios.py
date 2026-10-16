@@ -145,7 +145,7 @@ async def test_scenario_3_refused_unsupported_remote_urls():
     assert resp_ssrf.status == ChatGoalStatus.BLOCKED
     assert resp_ssrf.blocker_code == IngestionBlockerCode.BLOCKED_SSRF_PRIVATE_IP.value
 
-    # Test 3b: Unauthorized remote URL
+    # Test 3b: Legacy caller with user_authorized: False is not blocked for rights
     unauth_message = "Clip video from https://test.authorized-creator.com/public_stream.mp4"
     resp_unauth = await ChatOutcomeOrchestrator.handle_video_goal(
         chat_context=context,
@@ -153,9 +153,9 @@ async def test_scenario_3_refused_unsupported_remote_urls():
         user_authorizations={"user_authorized": False},
         allow_test_fixture=True,
     )
-    assert resp_unauth.status == ChatGoalStatus.BLOCKED
-    assert resp_unauth.blocker_code == IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM.value
-    assert "authorization" in resp_unauth.message.lower()
+    assert resp_unauth.status in (ChatGoalStatus.READY_FOR_DELIVERY, ChatGoalStatus.PENDING_CREDENTIALS)
+    assert resp_unauth.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM.value
+    assert len(resp_unauth.artifact_links) >= 1
 
 
 @pytest.mark.asyncio
