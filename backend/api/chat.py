@@ -5,6 +5,9 @@ import json
 import asyncio
 import logging
 import re
+import time
+import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from sqlalchemy import select
@@ -24,6 +27,82 @@ router = APIRouter()
 
 planner = PlannerAgent()
 intelligence = UserIntelligence()
+
+# ---------------------------------------------------------------------------
+# P0 A1 Adapter Seam: Server-authored inference authorization context
+# ---------------------------------------------------------------------------
+try:
+    from backend.llm_trace import (
+        inference_authorization_context as _a1_inference_auth_context,
+        TRIGGER_EXPLICIT_CHAT_SUBMIT as _A1_TRIGGER_EXPLICIT_CHAT_SUBMIT,
+    )
+    _A1_TRACE_AVAILABLE = True
+except ImportError:
+    _A1_TRACE_AVAILABLE = False
+    _a1_inference_auth_context = None
+    _A1_TRIGGER_EXPLICIT_CHAT_SUBMIT = "explicit_chat_submit"
+
+
+@asynccontextmanager
+async def server_inference_authorization_context(
+    user_id: str,
+    correlation_id: str | None = None,
+    run_id: str | None = None,
+    job_id: str | None = None,
+):
+    """
+    Establish a server-authored execution provenance context for explicit user chat actions.
+    This guarantees that Wave 12 outbound LLM egress guard recognizes the call as authorized
+    by a genuine user chat action (trigger=TRIGGER_EXPLICIT_CHAT_SUBMIT).
+    Untrusted client flags (e.g. `authorized: true`) are never used as authorization proof.
+    """
+    if _A1_TRACE_AVAILABLE and _a1_inference_auth_context is not None:
+        async with _a1_inference_auth_context(
+            trigger=_A1_TRIGGER_EXPLICIT_CHAT_SUBMIT,
+            user_id=user_id,
+            correlation_id=correlation_id,
+            run_id=run_id,
+            job_id=job_id,
+        ) as ctx:
+            yield ctx
+    else:
+        # Standalone provisional stub if llm_trace is unavailable during isolated development
+        yield {
+            "trigger": _A1_TRIGGER_EXPLICIT_CHAT_SUBMIT,
+            "user_id": user_id,
+            "correlation_id": correlation_id,
+            "run_id": run_id,
+        }
+
+
+class MessageDeduplicator:
+    """In-memory deduplicator to prevent duplicate dispatch on rapid clicks or WS reconnect."""
+    def __init__(self, ttl_seconds: float = 30.0, max_entries: int = 1000):
+        self.ttl = ttl_seconds
+        self.max_entries = max_entries
+        self._cache: dict[str, float] = {}
+
+    def is_duplicate_and_record(self, key: str) -> bool:
+        if not key:
+            return False
+        now = time.monotonic()
+        expired = [k for k, exp in self._cache.items() if exp < now]
+        for k in expired:
+            self._cache.pop(k, None)
+
+        if key in self._cache:
+            return True
+
+        if len(self._cache) >= self.max_entries:
+            oldest_key = min(self._cache, key=self._cache.get)
+            self._cache.pop(oldest_key, None)
+
+        self._cache[key] = now + self.ttl
+        return False
+
+
+_message_deduplicator = MessageDeduplicator()
+
 
 
 async def _persist_message(session_id: str, role: str, content: str = None,
@@ -145,15 +224,19 @@ async def chat_websocket(websocket: WebSocket):
         return
     await ws_manager.connect(websocket, user_id)
     try:
-        # Load user settings
-        async with AsyncSessionLocal() as db:
-            result = await db.execute(
-                select(UserSettings)
-                .where(UserSettings.user_id == user_id)
-                .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
-                .limit(1)
-            )
-            user_settings = result.scalars().first()
+        # Load user settings safely (in case DB table is fresh/uninitialized)
+        user_settings = None
+        try:
+            async with AsyncSessionLocal() as db:
+                result = await db.execute(
+                    select(UserSettings)
+                    .where(UserSettings.user_id == user_id)
+                    .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+                    .limit(1)
+                )
+                user_settings = result.scalars().first()
+        except Exception as e:
+            logger.debug("Initial user_settings lookup skipped: %s", e)
 
         # Send smart suggestions on connect (for returning users)
         # Explicit handshake cleanup: NEVER invoke any generative AI path on connect;
@@ -211,15 +294,35 @@ async def chat_websocket(websocket: WebSocket):
                 run_id = msg.get("run_id")
                 feedback = msg.get("feedback") or msg.get("content") or ""
                 expected_rev = msg.get("expected_revision")
+                correlation_id = msg.get("correlation_id") or msg.get("user_intent_id") or f"corr_{uuid.uuid4().hex[:12]}"
+
+                # Deduplication for revision requests
+                client_message_id = msg.get("client_message_id")
+                dedup_key = f"{user_id}:rev:{run_id}:{client_message_id}" if client_message_id else None
+                if dedup_key and _message_deduplicator.is_duplicate_and_record(dedup_key):
+                    logger.warning("Suppressed duplicate revision request: dedup_key=%s", dedup_key)
+                    continue
+
                 from backend.oaas_knowledge_orchestrator import KnowledgeChatOrchestrator
                 try:
-                    ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
-                        request_or_run_id=run_id,
-                        user_feedback=feedback,
-                        expected_revision=expected_rev,
-                        authenticated_context={"user_id": user_id, "session_id": current_session_id},
-                        allow_test_fixture=True
-                    )
+                    auth_ctx = {
+                        "user_id": user_id,
+                        "session_id": current_session_id,
+                        "correlation_id": correlation_id,
+                        "run_id": run_id,
+                    }
+                    async with server_inference_authorization_context(
+                        user_id=user_id,
+                        correlation_id=correlation_id,
+                        run_id=run_id,
+                    ):
+                        ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
+                            request_or_run_id=run_id,
+                            user_feedback=feedback,
+                            expected_revision=expected_rev,
+                            authenticated_context=auth_ctx,
+                            allow_test_fixture=True,
+                        )
                     await ws_manager.send({
                         "type": "oaas_outcome_update",
                         "session_id": current_session_id,
@@ -229,20 +332,55 @@ async def chat_websocket(websocket: WebSocket):
                         "state": ko_resp.state.value if hasattr(ko_resp.state, "value") else str(ko_resp.state),
                         "message": ko_resp.message,
                         "deliverable_url": ko_resp.deliverable_url,
+                        "duration_seconds": getattr(ko_resp, "duration_seconds", None),
+                        "media_probe": getattr(ko_resp, "media_probe", {}),
+                        "publication_requested": getattr(ko_resp, "publication_requested", False),
+                        "publication_status": getattr(ko_resp, "publication_status", "NOT_CONNECTED"),
+                        "blocker_code": getattr(ko_resp, "blocker_code", None),
+                        "blocker_reason": getattr(ko_resp, "blocker_reason", None),
                     }, user_id)
                 except Exception as ex:
                     logger.error("Revision request error: %s", ex, exc_info=True)
                     await ws_manager.send({
+                        "type": "oaas_outcome_update",
+                        "session_id": current_session_id,
+                        "run_id": run_id or f"err-{uuid.uuid4().hex[:8]}",
+                        "state": "FAILED_TERMINAL",
+                        "message": str(ex),
+                        "blocker_code": "INFERENCE_ERROR",
+                        "blocker_reason": str(ex),
+                    }, user_id)
+                    await ws_manager.send({
                         "type": "chat_error",
                         "error": str(ex),
                         "session_id": current_session_id,
+                        "run_id": run_id,
+                        "correlation_id": correlation_id,
                     }, user_id)
 
             elif msg_type == "chat_message":
                 content = msg.get("content", "").strip()
                 if not content:
                     continue
-                logger.info("WS chat_message | user=%s | content=%s", user_id, content[:100])
+
+                client_message_id = msg.get("client_message_id")
+                user_intent_id = msg.get("user_intent_id")
+                correlation_id = msg.get("correlation_id") or user_intent_id or f"corr_{uuid.uuid4().hex[:12]}"
+
+                # Server-side deduplication against rapid duplicate submissions / reconnect resends
+                dedup_key = f"{user_id}:{client_message_id}" if client_message_id else (f"{user_id}:{user_intent_id}" if user_intent_id else None)
+                if dedup_key and _message_deduplicator.is_duplicate_and_record(dedup_key):
+                    logger.warning("Suppressed duplicate chat submission: dedup_key=%s", dedup_key)
+                    await ws_manager.send({
+                        "type": "chat_status",
+                        "status": "duplicate_suppressed",
+                        "message": "Duplicate submission ignored.",
+                        "session_id": current_session_id,
+                        "correlation_id": correlation_id,
+                    }, user_id)
+                    continue
+
+                logger.info("WS chat_message | user=%s | corr=%s | content=%s", user_id, correlation_id, content[:100])
 
                 # Auto-create session if none set
                 if not current_session_id:
@@ -267,15 +405,18 @@ async def chat_websocket(websocket: WebSocket):
                 # Persist user message
                 await _persist_message(current_session_id, "user", content=content, user_id=user_id)
 
-                # Reload user settings (may have changed via Settings page)
-                async with AsyncSessionLocal() as db:
-                    result = await db.execute(
-                        select(UserSettings)
-                        .where(UserSettings.user_id == user_id)
-                        .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
-                        .limit(1)
-                    )
-                    user_settings = result.scalars().first()
+                # Reload user settings safely (may have changed via Settings page)
+                try:
+                    async with AsyncSessionLocal() as db:
+                        result = await db.execute(
+                            select(UserSettings)
+                            .where(UserSettings.user_id == user_id)
+                            .order_by(UserSettings.updated_at.desc(), UserSettings.id.desc())
+                            .limit(1)
+                        )
+                        user_settings = result.scalars().first()
+                except Exception as e:
+                    logger.debug("User settings reload skipped: %s", e)
 
                 # Load full session history from DB
                 history = await _load_session_history(current_session_id)
@@ -302,6 +443,7 @@ async def chat_websocket(websocket: WebSocket):
                         "type": "chat_error",
                         "error": "No AI model selected. Choose a model in Global Chat to continue.",
                         "session_id": current_session_id,
+                        "correlation_id": correlation_id,
                     }, user_id)
                     continue
 
@@ -311,6 +453,7 @@ async def chat_websocket(websocket: WebSocket):
                         "type": "chat_error",
                         "error": "No reasoning effort selected. Choose Low, Medium, or High in Global Chat to continue.",
                         "session_id": current_session_id,
+                        "correlation_id": correlation_id,
                     }, user_id)
                     continue
                 raw_norm = str(eff_reasoning).strip().lower()
@@ -343,24 +486,31 @@ async def chat_websocket(websocket: WebSocket):
                             "provider": eff_prov,
                             "model": eff_model,
                             "reasoning_level": reasoning_level,
-                            "correlation_id": msg.get("user_intent_id") or msg.get("correlation_id"),
+                            "correlation_id": correlation_id,
                         }
                         allow_fixture = bool(msg.get("allow_test_fixture", True))
-                        if is_revision and run_id_match:
-                            target_run_id = run_id_match.group(0)
-                            ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
-                                request_or_run_id=target_run_id,
-                                user_feedback=content,
-                                authenticated_context=auth_ctx,
-                                allow_test_fixture=allow_fixture,
-                            )
-                        else:
-                            ko_resp = await KnowledgeChatOrchestrator.handle_video_request(
-                                request_or_message=content,
-                                authenticated_context=auth_ctx,
-                                project_id=project_id,
-                                allow_test_fixture=allow_fixture,
-                            )
+
+                        target_run_id = run_id_match.group(0) if (is_revision and run_id_match) else None
+                        async with server_inference_authorization_context(
+                            user_id=user_id,
+                            correlation_id=correlation_id,
+                            run_id=target_run_id,
+                        ):
+                            if is_revision and run_id_match:
+                                auth_ctx["run_id"] = target_run_id
+                                ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
+                                    request_or_run_id=target_run_id,
+                                    user_feedback=content,
+                                    authenticated_context=auth_ctx,
+                                    allow_test_fixture=allow_fixture,
+                                )
+                            else:
+                                ko_resp = await KnowledgeChatOrchestrator.handle_video_request(
+                                    request_or_message=content,
+                                    authenticated_context=auth_ctx,
+                                    project_id=project_id,
+                                    allow_test_fixture=allow_fixture,
+                                )
 
                         assistant_response = {
                             "content": ko_resp.message or "Knowledge-grounded motion design generated.",
@@ -392,24 +542,40 @@ async def chat_websocket(websocket: WebSocket):
                             "session_id": current_session_id,
                         }, user_id)
                     else:
-                        assistant_response = await planner.handle_message(
-                            message=content,
-                            history=history,
-                            user_settings=user_settings,
+                        async with server_inference_authorization_context(
                             user_id=user_id,
-                            previous_session_context=prev_context,
-                            pinned_provider=pinned_provider,
-                            pinned_model=pinned_model,
-                            project_id=project_id,
-                            pinned_think=pinned_think,
-                            reasoning_level=reasoning_level,
-                        )
+                            correlation_id=correlation_id,
+                        ):
+                            assistant_response = await planner.handle_message(
+                                message=content,
+                                history=history,
+                                user_settings=user_settings,
+                                user_id=user_id,
+                                previous_session_context=prev_context,
+                                pinned_provider=pinned_provider,
+                                pinned_model=pinned_model,
+                                project_id=project_id,
+                                pinned_think=pinned_think,
+                                reasoning_level=reasoning_level,
+                            )
                 except Exception as e:
                     logger.error(f"Planner error: {e}", exc_info=True)
+                    # Emit terminal outcome update so UI state resets and fails cleanly
+                    await ws_manager.send({
+                        "type": "oaas_outcome_update",
+                        "session_id": current_session_id,
+                        "run_id": f"err-{uuid.uuid4().hex[:8]}",
+                        "project_id": project_id,
+                        "state": "FAILED_TERMINAL",
+                        "message": str(e),
+                        "blocker_code": "INFERENCE_ERROR",
+                        "blocker_reason": str(e),
+                    }, user_id)
                     await ws_manager.send({
                         "type": "chat_error",
                         "error": str(e),
                         "session_id": current_session_id,
+                        "correlation_id": correlation_id,
                     }, user_id)
 
                 # Persist assistant response

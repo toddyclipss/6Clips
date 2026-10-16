@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent 2 (Chat WS, Provider, Model, and User Intent) - P0 Recovery Handoff",
+  "agent": "A2",
+  "worktree_branch": "p0fix/02-ws-chat-provider-intent",
+  "base_sha": "7a76da6ec7bb0fce8e95a38941ab4e7ac8fa68a1",
+  "ownership_scope": {
+    "exclusive_write": [
+      "backend/api/chat.py",
+      "frontend/src/components/chat/**",
+      "frontend/src/hooks/useWebSocket.js",
+      "tests/p0_recovery/a2/**",
+      "tools/p0_recovery_a2/**"
+    ],
+    "zero_edits_strictly_observed": [
+      "backend/llm_trace/**",
+      "backend/core/ai_provider.py",
+      "backend/oaas_knowledge_orchestrator/**",
+      "backend/services/**",
+      "frontend/src/pages/**",
+      "frontend/src/components/motion/**"
+    ]
+  },
+  "root_cause_summary": {
+    "incident": "User submitted 'analise e edite esse video em ingles https://www.youtube.com/watch?v=FV93IVwJP_4' with Ollama -> Gemma 4 E4B * High, failing with BLOCKED_UNAUTHORIZED_BACKGROUND_AI (trigger=unknown).",
+    "mechanism": "When KNOWLEDGE_FIRST is active (default True), incoming WebSocket 'chat_message' in backend/api/chat.py routed directly to KnowledgeChatOrchestrator.handle_video_request() and KnowledgeChatOrchestrator.revise_deliverable() without wrapping the call in an active inference_authorization_context. Consequently, _CURRENT_CONTEXT in backend/llm_trace/context.py was None, which backend/llm_trace/guard.py line 215 correctly rejected as an unauthorized background call.",
+    "resolution": "Established server-authored execution provenance at the WebSocket entry boundary via an async adapter seam 'server_inference_authorization_context(user_id=user_id, correlation_id=correlation_id, run_id=run_id)' using TRIGGER_EXPLICIT_CHAT_SUBMIT. Stripped and disallowed client authorization claims (e.g. authorized=True). Added server-side idempotency/debouncing to suppress duplicate submissions, and verified that provider, exact installed model ID (gemma4:e4b), and reasoning level are forwarded intact without fallback substitution."
+  },
+  "event_contracts": {
+    "client_to_server": {
+      "chat_message": {
+        "description": "Normalized chat submission from composer or multimodal input",
+        "fields": {
+          "type": "chat_message",
+          "content": "string (raw user text with exact YouTube URL casing, e.g. FV93IVwJP_4)",
+          "client_message_id": "string (cmsg_<timestamp>_<rand>, correlation & idempotency only)",
+          "correlation_id": "string (corr_<timestamp>_<rand>, for distributed tracing)",
+          "user_intent_id": "string (backward-compatible alias for correlation_id)",
+          "provider": "string (e.g. 'ollama')",
+          "model": "string (e.g. 'gemma4:e4b')",
+          "reasoning_level": "string ('low' | 'medium' | 'high')",
+          "project_id": "string | null (optional active project association)",
+          "revision_id": "integer | null (optional target revision)"
+        },
+        "security_invariant": "Client-supplied 'authorized' or 'trigger' fields are ignored and stripped on the server. Server authors the execution provenance."
+      },
+      "revision_request": {
+        "description": "Explicit user request to revise an existing video deliverable",
+        "fields": {
+          "type": "revision_request",
+          "run_id": "string (target run, e.g. krun-abcdef0123)",
+          "feedback": "string (refinement instructions)",
+          "expected_revision": "integer",
+          "correlation_id": "string",
+          "client_message_id": "string"
+        }
+      }
+    },
+    "server_to_client": {
+      "oaas_outcome_update": {
+        "fields": {
+          "type": "oaas_outcome_update",
+          "session_id": "string",
+          "run_id": "string",
+          "project_id": "string",
+          "revision": "integer",
+          "state": "string (REQUESTED | PLANNING | RETRIEVING_KNOWLEDGE | COMPOSING | VALIDATING | RENDERING | VIDEO_VERIFIED | REVIEW_READY | FAILED_TERMINAL | BLOCKED)",
+          "message": "string",
+          "deliverable_url": "string | null",
+          "duration_seconds": "float | null",
+          "media_probe": "object",
+          "publication_requested": "boolean",
+          "publication_status": "string",
+          "blocker_code": "string | null",
+          "blocker_reason": "string | null"
+        }
+      },
+      "chat_error": {
+        "fields": {
+          "type": "chat_error",
+          "error": "string",
+          "session_id": "string",
+          "run_id": "string | null",
+          "correlation_id": "string | null"
+        }
+      },
+      "chat_status": {
+        "fields": {
+          "type": "chat_status",
+          "status": "string ('duplicate_suppressed' | 'thinking')",
+          "message": "string",
+          "session_id": "string",
+          "correlation_id": "string | null"
+        }
+      }
+    }
+  },
+  "adapter_seam_contract": {
+    "location": "backend/api/chat.py",
+    "callable": "server_inference_authorization_context(user_id, correlation_id=None, run_id=None, job_id=None)",
+    "expected_a1_interface": {
+      "import_target": "from backend.llm_trace import inference_authorization_context, TRIGGER_EXPLICIT_CHAT_SUBMIT",
+      "manager_signature": "inference_authorization_context(trigger=TRIGGER_EXPLICIT_CHAT_SUBMIT, user_id=..., correlation_id=..., run_id=..., job_id=...)"
+    },
+    "fallback_behavior": "If backend.llm_trace is unavailable during isolated build, yields a safe dictionary without failing import, preserving zero-crash capability."
+  },
+  "runtime_observations": {
+    "observed_real": [
+      "Local Ollama 11434 responsive with installed model gemma4:e4b (ID: bb027d30ecf5, 10 GB).",
+      "Under SIXCLIPS_REQUIRE_EXPLICIT_AUTH=1, server_inference_authorization_context successfully authorized Ollama gemma4:e4b outbound generative calls without BLOCKED_UNAUTHORIZED_BACKGROUND_AI.",
+      "Exact YouTube URL 'https://www.youtube.com/watch?v=FV93IVwJP_4' preserved verbatim through UI and WebSocket layers.",
+      "Rapid duplicate submissions with identical client_message_id suppressed by MessageDeduplicator (call count = 1).",
+      "Unselected model and unselected reasoning effort rejected before inference call with explicit user guidance.",
+      "Outcomes for stale/inactive sessions are ignored by useWebSocket without polluting active session state.",
+      "Vite frontend builds cleanly with zero errors."
+    ],
+    "not_yet_observed_peer_scope": [
+      "Real end-to-end video download and ffmpeg slice of FV93IVwJP_4 in combined integrated environment (A3/A5 integration gate).",
+      "Motion graphics review stage canvas render of generated MP4 (A4/A5 integration gate)."
+    ]
+  },
+  "integration_instructions_for_a5": {
+    "files_to_merge": [
+      "backend/api/chat.py",
+      "frontend/src/components/chat/ChatPanel.jsx",
+      "frontend/src/components/chat/LiquidMultimodalInput.jsx",
+      "frontend/src/hooks/useWebSocket.js",
+      "tests/p0_recovery/a2/**",
+      "tools/p0_recovery_a2/**"
+    ],
+    "potential_conflicts": "None anticipated. A2 touched only chat WebSocket and chat components. All A1 llm_trace imports are guarded through the adapter seam in backend/api/chat.py."
+  }
+}

@@ -156,6 +156,11 @@ export default function useWebSocket() {
         setStreaming(false)
         clearStreamingText()
         clearStreamingExecutionTimeline()
+        const activeSessionId = useAppStore.getState().activeSessionId
+        if (msg.session_id && activeSessionId && msg.session_id !== activeSessionId) {
+          return
+        }
+        showSnackbar(msg.error || "An error occurred", "error")
         addMessage({ role: "system", content: `Error: ${msg.error}` })
       }),
 
@@ -347,6 +352,12 @@ export default function useWebSocket() {
       }),
 
       ws.on("oaas_outcome_update", (msg) => {
+        const activeSessionId = useAppStore.getState().activeSessionId
+        // Ignore stale outcomes from other inactive sessions
+        if (msg.session_id && activeSessionId && msg.session_id !== activeSessionId) {
+          return
+        }
+
         setLatestOutcome(msg)
         const runId = msg.run_id || `run_${Date.now()}`
         const state = msg.state || ""
