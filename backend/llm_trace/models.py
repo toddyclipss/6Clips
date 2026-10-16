@@ -16,6 +16,7 @@ ENDPOINT_CATEGORY_METADATA = "metadata"
 
 # Trigger types
 TRIGGER_EXPLICIT_CHAT_SUBMIT = "explicit_chat_submit"
+TRIGGER_USER_CHAT = "user_chat"
 TRIGGER_AUTHORIZED_RUN_ID = "authorized_run_id"
 TRIGGER_SCHEDULER_JOB_ID = "scheduler_job_id"
 TRIGGER_STARTUP = "startup"
@@ -23,6 +24,14 @@ TRIGGER_WS_CONNECT = "ws_connect"
 TRIGGER_HEALTH_CHECK = "health_check"
 TRIGGER_TEST_AUTHORIZED = "test_authorized"
 TRIGGER_UNKNOWN = "unknown"
+
+# Provenance sources
+SOURCE_WS_CHAT = "ws_chat"
+SOURCE_REST_CHAT = "rest_chat"
+SOURCE_DEFERRED_JOB = "deferred_job"
+SOURCE_SYSTEM_TASK = "system_task"
+SOURCE_TEST = "test"
+SOURCE_UNKNOWN = "unknown"
 
 # Authorization classes
 AUTH_CLASS_USER_AUTHORIZED = "USER_AUTHORIZED"
@@ -60,6 +69,8 @@ class InferenceEvent:
     correlation_id: str
     run_id: Optional[str] = None
     job_id: Optional[str] = None
+    session_id: Optional[str] = None
+    source: str = SOURCE_UNKNOWN
     idempotency_key: Optional[str] = None
     callsite_frames: List[str] = field(default_factory=list)
     outcome: str = OUTCOME_ALLOWED
