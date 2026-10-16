@@ -30,14 +30,12 @@ class KnowledgeOrchestratorStateMachine:
     ALLOWED_TRANSITIONS: Dict[KnowledgeOrchestratorState, Set[KnowledgeOrchestratorState]] = {
         KnowledgeOrchestratorState.REQUESTED: {
             KnowledgeOrchestratorState.PLANNING,
-            KnowledgeOrchestratorState.BLOCKED_RIGHTS,
             KnowledgeOrchestratorState.NEEDS_AUTHORIZATION,
             KnowledgeOrchestratorState.BLOCKED,
             KnowledgeOrchestratorState.FAILED_TERMINAL,
         },
         KnowledgeOrchestratorState.PLANNING: {
             KnowledgeOrchestratorState.RETRIEVING_KNOWLEDGE,
-            KnowledgeOrchestratorState.BLOCKED_RIGHTS,
             KnowledgeOrchestratorState.NEEDS_AUTHORIZATION,
             KnowledgeOrchestratorState.BLOCKED,
             KnowledgeOrchestratorState.FAILED_RETRYABLE,
@@ -45,7 +43,6 @@ class KnowledgeOrchestratorStateMachine:
         },
         KnowledgeOrchestratorState.RETRIEVING_KNOWLEDGE: {
             KnowledgeOrchestratorState.COMPOSING,
-            KnowledgeOrchestratorState.BLOCKED_RIGHTS,
             KnowledgeOrchestratorState.BLOCKED,
             KnowledgeOrchestratorState.FAILED_RETRYABLE,
             KnowledgeOrchestratorState.FAILED_TERMINAL,

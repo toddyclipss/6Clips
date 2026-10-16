@@ -100,24 +100,16 @@ class KnowledgeSecurityValidator:
     def validate_source_url_authorization(
         cls,
         url: str,
-        authorizations: Dict[str, Any],
+        authorizations: Optional[Dict[str, Any]] = None,
     ) -> Tuple[bool, Optional[str]]:
         """
-        Validate that any remote media URL has verified user rights and passes SSRF checks.
+        Validate that any remote media URL passes SSRF and network security checks.
+        No user ownership or rights confirmation gate is enforced.
         """
-        # 1. SSRF and scheme validation via existing IngestionSecurityValidator
+        # SSRF and scheme validation via existing IngestionSecurityValidator
         ssrf_ok, _, blocker_code, blocker_reason = IngestionSecurityValidator.validate_url(url)
         if not ssrf_ok:
             return False, f"SSRF security policy violation: {blocker_reason}"
-
-        # 2. Rights confirmation requirement
-        has_auth = (
-            authorizations.get("user_authorized") is True
-            or authorizations.get("rights_confirmed") is True
-            or authorizations.get("standing_authorization") is True
-        )
-        if not has_auth:
-            return False, "Remote media ingestion requires explicit user rights confirmation (user_authorized: true)."
 
         return True, None
 

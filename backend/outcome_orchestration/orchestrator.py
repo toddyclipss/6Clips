@@ -363,14 +363,14 @@ class OutcomeOrchestrator:
 
         inaccessible = [
             a for a in contract.source_assets
-            if not getattr(a, "is_accessible", True) or not getattr(a, "rights_verified", True)
+            if not getattr(a, "is_accessible", True)
         ]
         if inaccessible:
             first = inaccessible[0]
             blk = Blocker(
                 code="SOURCE_ACCESS_DENIED",
-                precise_reason=f"Source asset '{first.asset_id}' is not physically accessible or lacks verified reuse permissions.",
-                next_action="Provide an accessible, legally permitted recording or select an authorized asset from Library.",
+                precise_reason=f"Source asset '{first.asset_id}' is not physically accessible on server.",
+                next_action="Provide an accessible recording or select an available asset from Library.",
             )
             sm.transition_to(OutcomeState.BLOCKED, detail=blk.precise_reason, blocker=blk)
             await _emit_event("SOURCE_CHECK", "BLOCKED", blk.precise_reason)

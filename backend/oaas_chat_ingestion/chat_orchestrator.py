@@ -83,10 +83,9 @@ class ChatOutcomeOrchestrator:
             raw_url = found_urls[0]
             log_event("url_detection", ChatGoalStatus.INGESTING_MEDIA, f"Detected remote media URL: {raw_url}")
 
-            is_authorized = user_auth.get("user_authorized", False) or user_auth.get("rights_confirmed", False)
             ingest_req = UrlIngestionRequest(
                 url=raw_url,
-                user_authorized=is_authorized,
+                user_authorized=True,
                 user_id=user_id,
             )
             ingest_res = await AgentUrlIngestionService.ingest_url(ingest_req)

@@ -1063,23 +1063,6 @@ async def download_video(
     source only had 1080p" instead of implying the cap was honoured.
     """
     host, clean_path = _sanitize_url_for_audit(url)
-    if not user_authorized:
-        try:
-            from backend.distribution.egress_audit import record_egress_event
-            record_egress_event(
-                component="ytdlp_service",
-                destination_host=host,
-                sanitized_path=clean_path,
-                method="GET",
-                endpoint_class="BLOCKED_WITH_REASON",
-                trigger_authorization="UNAUTHORIZED",
-                outcome_status="BLOCKED_WITH_REASON",
-                callsite="download_video",
-                extra_metadata={"reason": "UNAUTHORIZED_DOWNLOAD_OR_METADATA_EXTRACTION"},
-            )
-        except Exception:
-            pass
-        raise PermissionError("Outbound video download blocked: missing active user authorization.")
 
     try:
         from backend.distribution.egress_audit import record_egress_event
@@ -1634,23 +1617,6 @@ async def get_video_info(url: str, flat: bool = False, user_authorized: bool = T
     """Get video/channel metadata without downloading.
     Use flat=True for channels/playlists to avoid resolving every video."""
     host, clean_path = _sanitize_url_for_audit(url)
-    if not user_authorized:
-        try:
-            from backend.distribution.egress_audit import record_egress_event
-            record_egress_event(
-                component="ytdlp_service",
-                destination_host=host,
-                sanitized_path=clean_path,
-                method="GET",
-                endpoint_class="BLOCKED_WITH_REASON",
-                trigger_authorization="UNAUTHORIZED",
-                outcome_status="BLOCKED_WITH_REASON",
-                callsite="get_video_info",
-                extra_metadata={"reason": "UNAUTHORIZED_DOWNLOAD_OR_METADATA_EXTRACTION"},
-            )
-        except Exception:
-            pass
-        raise PermissionError("Outbound metadata extraction blocked: missing active user authorization.")
 
     try:
         from backend.distribution.egress_audit import record_egress_event
@@ -1690,23 +1656,6 @@ async def list_channel_videos(url: str, max_videos: int = 5, user_authorized: bo
     Returns list of dicts with video metadata (url, title, duration, views, etc).
     """
     host, clean_path = _sanitize_url_for_audit(url)
-    if not user_authorized:
-        try:
-            from backend.distribution.egress_audit import record_egress_event
-            record_egress_event(
-                component="ytdlp_service",
-                destination_host=host,
-                sanitized_path=clean_path,
-                method="GET",
-                endpoint_class="BLOCKED_WITH_REASON",
-                trigger_authorization="UNAUTHORIZED",
-                outcome_status="BLOCKED_WITH_REASON",
-                callsite="list_channel_videos",
-                extra_metadata={"reason": "UNAUTHORIZED_DOWNLOAD_OR_METADATA_EXTRACTION"},
-            )
-        except Exception:
-            pass
-        raise PermissionError("Outbound channel listing blocked: missing active user authorization.")
 
     try:
         from backend.distribution.egress_audit import record_egress_event

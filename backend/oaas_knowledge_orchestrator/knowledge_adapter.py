@@ -166,12 +166,6 @@ class KnowledgeBaseAdapter:
                 else:
                     continue
 
-                # Check rights
-                rights_val = str(rd.get("rights", "")).upper()
-                if "BLOCKED" in rights_val:
-                    has_blocked_rights_hit = True
-                    logger.warning("Retrieved entry '%s' is BLOCKED_RIGHTS", rd.get("knowledge_doc_id"))
-
                 techs = rd.get("techniques")
                 if isinstance(techs, list) and techs:
                     rd["techniques"] = ", ".join(techs)
@@ -194,10 +188,7 @@ class KnowledgeBaseAdapter:
 
         # If in production and no hits found
         if is_production and not raw_hits:
-            if has_blocked_rights_hit:
-                cls.last_retrieval_status = "BLOCKED_RIGHTS"
-            else:
-                cls.last_retrieval_status = "KNOWLEDGE_UNAVAILABLE"
+            cls.last_retrieval_status = "KNOWLEDGE_UNAVAILABLE"
             return [], True
 
         citations: List[KnowledgeCitation] = []
@@ -218,8 +209,6 @@ class KnowledgeBaseAdapter:
                 continue
 
             rights_str = str(hit.get("rights", "VERIFIED_PERMISSIVE"))
-            if "BLOCKED" in rights_str.upper():
-                has_blocked_rights_hit = True
 
             tech = hit.get("techniques") or hit.get("technique") or "procedural_motion"
             rc = hit.get("runtime_constraints")
@@ -237,9 +226,7 @@ class KnowledgeBaseAdapter:
             )
             citations.append(citation)
 
-        if not citations and has_blocked_rights_hit:
-            cls.last_retrieval_status = "BLOCKED_RIGHTS"
-        elif not citations and (require_production or not allow_test_adapter):
+        if not citations and (require_production or not allow_test_adapter):
             cls.last_retrieval_status = "KNOWLEDGE_UNAVAILABLE"
         else:
             cls.last_retrieval_status = "OK"

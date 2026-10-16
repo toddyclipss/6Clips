@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 from typing import Optional
 from uuid import uuid4
 
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 class AgentUrlIngestionService:
-    """Manages secure background ingestion of authorized video assets."""
+    """Manages secure background ingestion of video assets."""
 
     @classmethod
     def _storage_dir(cls) -> Path:
@@ -53,22 +54,10 @@ class AgentUrlIngestionService:
     @classmethod
     async def ingest_url(cls, request: UrlIngestionRequest) -> UrlIngestionResult:
         """
-        Validate, ingest, and index an authorized remote video URL into canonical project assets.
-        Fails closed on unauthorized access, SSRF, or policy bounds violations.
+        Validate, ingest, and index a remote video URL into canonical project assets.
+        Fails closed on SSRF or policy bounds violations. No ownership/rights attestation required.
         """
-        # 1. Rights & Authorization Check
-        if not request.user_authorized:
-            return UrlIngestionResult(
-                url=request.url,
-                is_allowed=False,
-                blocker_code=IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM,
-                blocker_reason=(
-                    "Ingestion halted: User confirmation of rights or authorization to ingest this "
-                    "content is required."
-                ),
-            )
-
-        # 2. SSRF & Network Security Validation
+        # 1. SSRF & Network Security Validation
         is_valid, resolved_ip, blocker_code, blocker_reason = IngestionSecurityValidator.validate_url(request.url)
         if not is_valid:
             return UrlIngestionResult(
@@ -79,7 +68,7 @@ class AgentUrlIngestionService:
                 blocker_reason=blocker_reason,
             )
 
-        # 3. Secure Fetch & Safe Storage
+        # 2. Secure Fetch & Safe Storage
         ingest_id = f"ingest-{uuid4().hex[:10]}"
         target_file = cls._storage_dir() / f"{ingest_id}.mp4"
 
@@ -89,12 +78,20 @@ class AgentUrlIngestionService:
                 # Scaffolded test fixture stream
                 target_file.write_bytes(b"TEST_VIDEO_STREAM_BYTES_VIRALMINT_MOCK_CONTENT")
             else:
-                # Real external stream download via yt-dlp or curl if available
+                # Real external stream download via yt-dlp
                 # Use yt-dlp with SSRF-safe constraints
-                ytdlp_bin = shutil.which("yt-dlp")
-                if ytdlp_bin:
-                    cmd = [
-                        ytdlp_bin,
+                ytdlp_cmd = None
+                if shutil.which("yt-dlp"):
+                    ytdlp_cmd = [shutil.which("yt-dlp")]
+                else:
+                    try:
+                        import yt_dlp
+                        ytdlp_cmd = [sys.executable, "-m", "yt_dlp"]
+                    except ImportError:
+                        pass
+
+                if ytdlp_cmd:
+                    cmd = ytdlp_cmd + [
                         "--no-playlist",
                         "--max-filesize", f"{request.max_bytes}",
                         "-f", "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b",
@@ -122,7 +119,7 @@ class AgentUrlIngestionService:
                         url=request.url,
                         is_allowed=False,
                         blocker_code=IngestionBlockerCode.BLOCKED_FETCH_FAILED,
-                        blocker_reason="yt-dlp utility is not installed on system PATH.",
+                        blocker_reason="yt-dlp utility is not installed on system PATH or python environment.",
                     )
 
             # 4. Probe size and duration

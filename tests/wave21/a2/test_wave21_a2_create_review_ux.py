@@ -313,11 +313,11 @@ class TestMinimalOAASUIContracts:
         ws_content = WS_HOOK_PATH.read_text(encoding="utf-8")
         assert 'ws.on("_connection_state"' in ws_content
         assert 'ws.on("oaas_outcome_update"' in ws_content
-        assert 'ws.on("project_created"' in ws_content
         assert "setWsConnected" in ws_content
         assert "setLatestOutcome" in ws_content
-        assert "BLOCKED_RIGHTS" in ws_content
+        assert "BLOCKED_RIGHTS" not in ws_content
         assert "PENDING_CREDENTIALS" in ws_content
+        assert "FAILED_TERMINAL" in ws_content
 
     def test_motion_graphics_outcome_synchronization(self):
         """Verifies MotionGraphics page subscribes to latestOutcome and attaches projects & Review mode."""

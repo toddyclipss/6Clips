@@ -91,15 +91,15 @@ class InProcessFakeProducerPort(MediaProducerPort):
 
         inaccessible = [
             a for a in source_assets
-            if not getattr(a, "is_accessible", True) or not getattr(a, "rights_verified", True)
+            if not getattr(a, "is_accessible", True)
         ]
         if inaccessible:
             first = inaccessible[0]
             a_id = getattr(first, "asset_id", "unknown")
             blocker = Blocker(
                 code="SOURCE_ACCESS_DENIED",
-                precise_reason=f"Source asset '{a_id}' is not physically accessible or lacks verified reuse permissions.",
-                next_action="Provide an accessible, legally permitted recording or select an authorized asset from Library.",
+                precise_reason=f"Source asset '{a_id}' is not physically accessible on server.",
+                next_action="Provide an accessible recording or select an available asset from Library.",
             )
             return {"job_id": job_id, "accepted": False, "blocker": blocker.model_dump()}
 

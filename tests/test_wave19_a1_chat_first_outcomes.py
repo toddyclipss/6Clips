@@ -89,12 +89,12 @@ async def test_chat_goal_reconciles_retired_block_with_consent(monkeypatch):
 @pytest.mark.asyncio
 async def test_chat_goal_with_unauthorized_url(monkeypatch):
     """
-    When a remote media URL is detected in chat without explicit user rights confirmation,
-    orchestration halts immediately with BLOCKED_UNAUTHORIZED_STREAM.
+    When a remote media URL is detected in chat even with user_authorized=False or omitted,
+    no ownership/rights gate blocks it; ingestion proceeds autonomously.
     """
     monkeypatch.setenv("VIRALMINT_TEST_ENV", "1")
     context = {"user_id": "test_creator"}
-    message = "Turn this stream https://test.authorized-creator.com/stream.mp4 into a vertical highlight"
+    message = "Turn this stream https://test.authorized-creator.com/stream.mp4 into a 3s vertical highlight"
 
     resp = await ChatOutcomeOrchestrator.handle_video_goal(
         chat_context=context,
@@ -103,9 +103,12 @@ async def test_chat_goal_with_unauthorized_url(monkeypatch):
         allow_test_fixture=True,
     )
 
-    assert resp.status == ChatGoalStatus.BLOCKED
-    assert resp.blocker_code == "BLOCKED_UNAUTHORIZED_STREAM"
-    assert "authorization" in resp.message.lower()
+    assert resp.status in (ChatGoalStatus.READY_FOR_DELIVERY, ChatGoalStatus.PENDING_CREDENTIALS)
+    assert resp.blocker_code != "BLOCKED_UNAUTHORIZED_STREAM"
+    assert len(resp.artifact_links) >= 1
+    steps = [evt.step for evt in resp.history]
+    assert "url_detection" in steps
+    assert "url_ingestion" in steps
 
 
 @pytest.mark.asyncio

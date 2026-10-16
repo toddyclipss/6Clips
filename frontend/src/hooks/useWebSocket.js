@@ -352,7 +352,7 @@ export default function useWebSocket() {
         const state = msg.state || ""
         const message = msg.message || state
 
-        if (state === "BLOCKED_RIGHTS" || state === "PENDING_CREDENTIALS" || state === "FAILED_TERMINAL" || state === "FAILED_RETRYABLE" || state === "BLOCKED") {
+        if (state === "PENDING_CREDENTIALS" || state === "FAILED_TERMINAL" || state === "FAILED_RETRYABLE" || state === "BLOCKED") {
           failJob(runId, msg.blocker_reason || message || `Blocked: ${state}`)
           showSnackbar(message || `Outcome blocked: ${state}`, "warning")
           addMessage({

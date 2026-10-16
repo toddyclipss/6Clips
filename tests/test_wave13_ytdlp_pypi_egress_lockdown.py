@@ -190,32 +190,35 @@ def test_url_sanitization_strips_tokens_and_secrets():
 
 
 @pytest.mark.asyncio
-async def test_ytdlp_unauthorized_download_fails_closed():
+async def test_ytdlp_unauthorized_download_not_blocked():
     """
-    Task B: Outbound download without active user authorization fails closed with PermissionError
-    and records an audit event.
+    Task B: Outbound download with user_authorized=False or omitted must NOT fail closed
+    with PermissionError; user_authorized is no longer an admission gate.
     """
-    with pytest.raises(PermissionError, match="Outbound video download blocked"):
-        await ys.download_video("https://www.youtube.com/watch?v=test12345", user_authorized=False)
+    with patch("backend.core.executors.download_pool.run", return_value={"video_path": "test.mp4", "duration": 10, "file_size_mb": 1.0}):
+        res = await ys.download_video("https://www.youtube.com/watch?v=test12345", user_authorized=False)
+        assert res.get("video_path") == "test.mp4"
 
     events = get_recent_audit_events(component="ytdlp_service")
-    assert any(e["callsite"] == "download_video" and e["endpoint_class"] == "BLOCKED_WITH_REASON" for e in events)
+    assert any(e["callsite"] == "download_video" and e["endpoint_class"] == "USER_TOOL_DOWNLOAD" for e in events)
 
 
 @pytest.mark.asyncio
-async def test_ytdlp_unauthorized_metadata_and_channel_listing_fail_closed():
+async def test_ytdlp_unauthorized_metadata_and_channel_listing_not_blocked():
     """
-    Task B: Outbound metadata extraction and channel listing fail closed without user authorization.
+    Task B: Outbound metadata extraction and channel listing do NOT fail closed on user_authorized=False.
     """
-    with pytest.raises(PermissionError, match="Outbound metadata extraction blocked"):
-        await ys.get_video_info("https://www.youtube.com/watch?v=test12345", user_authorized=False)
+    with patch("backend.core.executors.download_pool.run", side_effect=[{"id": "test12345"}, [{"id": "vid1", "title": "Vid 1"}]]):
+        info = await ys.get_video_info("https://www.youtube.com/watch?v=test12345", user_authorized=False)
+        assert info.get("id") == "test12345"
 
-    with pytest.raises(PermissionError, match="Outbound channel listing blocked"):
-        await ys.list_channel_videos("https://www.youtube.com/@somechannel", user_authorized=False)
+        videos = await ys.list_channel_videos("https://www.youtube.com/@somechannel", user_authorized=False)
+        assert isinstance(videos, list)
+        assert len(videos) == 1
 
     events = get_recent_audit_events(component="ytdlp_service")
-    assert any(e["callsite"] == "get_video_info" and e["endpoint_class"] == "BLOCKED_WITH_REASON" for e in events)
-    assert any(e["callsite"] == "list_channel_videos" and e["endpoint_class"] == "BLOCKED_WITH_REASON" for e in events)
+    assert any(e["callsite"] == "get_video_info" and e["endpoint_class"] == "USER_TOOL_METADATA" for e in events)
+    assert any(e["callsite"] == "list_channel_videos" and e["endpoint_class"] == "USER_TOOL_CHANNEL_LIST" for e in events)
 
 
 def test_audit_log_persisted_to_temp_disk():

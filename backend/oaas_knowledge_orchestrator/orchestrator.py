@@ -157,19 +157,14 @@ class KnowledgeChatOrchestrator:
                 raw_url, req.authorizations
             )
             if not url_ok:
-                state = (
-                    KnowledgeOrchestratorState.BLOCKED_RIGHTS
-                    if "rights" in (url_err or "").lower()
-                    else KnowledgeOrchestratorState.BLOCKED
-                )
-                sm.transition_to(state, reason=f"URL rejected: {url_err}")
+                sm.transition_to(KnowledgeOrchestratorState.BLOCKED, reason=f"URL rejected: {url_err}")
                 return KnowledgeOrchestratorResponse(
                     run_id=run_id,
                     project_id=req.project_id or "none",
                     revision_id=1,
-                    state=state,
+                    state=KnowledgeOrchestratorState.BLOCKED,
                     message=f"Remote media ingestion rejected: {url_err}",
-                    blocker_code="BLOCKED_RIGHTS" if state == KnowledgeOrchestratorState.BLOCKED_RIGHTS else "BLOCKED_INGESTION",
+                    blocker_code="BLOCKED_SSRF",
                     blocker_reason=url_err,
                 )
 
@@ -227,18 +222,6 @@ class KnowledgeChatOrchestrator:
         )
 
         retrieval_status = KnowledgeBaseAdapter.last_retrieval_status
-        if retrieval_status == "BLOCKED_RIGHTS":
-            sm.transition_to(KnowledgeOrchestratorState.BLOCKED_RIGHTS, reason="Retrieved technique is BLOCKED_RIGHTS")
-            return KnowledgeOrchestratorResponse(
-                run_id=run_id,
-                project_id=req.project_id or "none",
-                revision_id=1,
-                state=KnowledgeOrchestratorState.BLOCKED_RIGHTS,
-                message="Requested motion techniques are subject to third-party rights restrictions and cannot be rendered.",
-                blocker_code="BLOCKED_RIGHTS",
-                blocker_reason="Donor material flagged with BLOCKED_RIGHTS in knowledge repository.",
-            )
-
         if retrieval_status == "KNOWLEDGE_UNAVAILABLE" or (not citations and (req.require_production_knowledge or not req.allow_test_fixture)):
             sm.transition_to(KnowledgeOrchestratorState.BLOCKED, reason="No permitted knowledge found in corpus")
             return KnowledgeOrchestratorResponse(

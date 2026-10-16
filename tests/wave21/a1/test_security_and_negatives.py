@@ -89,17 +89,19 @@ def test_security_path_traversal_and_db_protection():
 
 
 @pytest.mark.asyncio
-async def test_security_unauthorized_url_ingestion():
-    """Verify remote media URLs require explicit user rights confirmation."""
-    url = "https://youtube.com/watch?v=dQw4w9WgXcQ"
-    # No user_authorized flag
+async def test_security_unauthorized_url_ingestion(monkeypatch):
+    """Verify remote media URLs do NOT require user rights confirmation."""
+    monkeypatch.setenv("VIRALMINT_TEST_ENV", "1")
+    url = "https://test.authorized-creator.com/sample.mp4"
     resp = await KnowledgeChatOrchestrator.handle_video_request(
         request_or_message=f"Extract clips from {url}",
         authenticated_context={"user_id": "test_user"},
         authorizations={"user_authorized": False},
+        allow_test_fixture=True,
     )
-    assert resp.state in (KnowledgeOrchestratorState.BLOCKED, KnowledgeOrchestratorState.BLOCKED_RIGHTS)
-    assert "user_authorized: true" in resp.blocker_reason or "rights" in resp.blocker_reason.lower()
+    assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+    assert resp.blocker_code != "BLOCKED_RIGHTS"
+    assert "user_authorized: true" not in (resp.blocker_reason or "").lower()
 
 
 @pytest.mark.asyncio
@@ -116,26 +118,27 @@ async def test_security_ssrf_blocked_url():
             authenticated_context={"user_id": "test_user"},
             authorizations={"user_authorized": True},
         )
-        assert resp.state in (KnowledgeOrchestratorState.BLOCKED, KnowledgeOrchestratorState.BLOCKED_RIGHTS)
+        assert resp.state == KnowledgeOrchestratorState.BLOCKED
+        assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
         assert "ssrf" in (resp.blocker_reason or "").lower() or "blocked" in (resp.blocker_code or "").lower()
 
 
 @pytest.mark.asyncio
 async def test_negative_blocked_rights_technique():
-    """Verify that retrieval yielding BLOCKED_RIGHTS transitions to BLOCKED_RIGHTS truthfully."""
+    """Verify that retrieval no longer emits BLOCKED_RIGHTS; missing knowledge returns KNOWLEDGE_UNAVAILABLE."""
     with patch.object(
         KnowledgeBaseAdapter,
         "search_knowledge",
         return_value=([], True),
     ):
-        KnowledgeBaseAdapter.last_retrieval_status = "BLOCKED_RIGHTS"
-        resp = await KnowledgeChatOrchestrator.handle_video_request(
-            request_or_message="Generate video using restricted proprietary shader block",
-            authenticated_context={"user_id": "test_user"},
+        req = VideoRequestContract(
+            message="Generate video using restricted proprietary shader block",
+            user_id="test_user",
+            require_production_knowledge=True,
         )
-        assert resp.state == KnowledgeOrchestratorState.BLOCKED_RIGHTS
-        assert resp.blocker_code == "BLOCKED_RIGHTS"
-        assert "rights restrictions" in resp.message.lower()
+        resp = await KnowledgeChatOrchestrator.handle_video_request(req)
+        assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+        assert resp.blocker_code in ("KNOWLEDGE_UNAVAILABLE", "BLOCKED")
 
 
 @pytest.mark.asyncio

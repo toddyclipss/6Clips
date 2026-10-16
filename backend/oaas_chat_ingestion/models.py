@@ -43,9 +43,9 @@ class IngestionBlockerCode(str, Enum):
 class UrlIngestionRequest(BaseModel):
     """Request envelope for secure agent-operated video URL ingestion."""
     url: str
-    user_authorized: bool = Field(
-        default=False,
-        description="Whether the user explicitly authorized ingestion and confirmed rights to the video."
+    user_authorized: Optional[bool] = Field(
+        default=True,
+        description="Legacy field tolerated for backward compatibility; ownership/rights confirmation is not required."
     )
     max_duration_sec: float = Field(default=14400.0, description="Max permissible duration in seconds (4h).")
     max_bytes: int = Field(default=2 * 1024 * 1024 * 1024, description="Max permissible file size in bytes (2GB).")
@@ -66,6 +66,10 @@ class UrlIngestionResult(BaseModel):
     blocker_reason: Optional[str] = None
     asset_id: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+    @property
+    def stored_file_path(self) -> Optional[str]:
+        return self.file_path
 
 
 class ChatGoalProgressEvent(BaseModel):

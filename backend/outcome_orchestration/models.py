@@ -57,7 +57,7 @@ class SourceAsset(BaseModel):
     content_hash: Optional[str] = Field(default=None, description="SHA-256 of physical bytes if available")
     local_path: Optional[str] = Field(default=None, description="Internal path on server to local bytes")
     is_accessible: bool = Field(default=True, description="Whether bytes are physically accessible right now")
-    rights_verified: bool = Field(default=True, description="Whether lawful reuse permission is confirmed")
+    rights_verified: bool = Field(default=True, description="Legacy field tolerated for backwards compatibility; no ownership/rights confirmation required")
 
 
 class OutputSpec(BaseModel):

@@ -83,11 +83,13 @@ def test_validate_untrusted_spec_detects_script_injection():
 
 @pytest.mark.asyncio
 async def test_unauthorized_url_ingestion_blocked():
+    """Verify that absent or false user_authorized never prevents ingestion or triggers BLOCKED_RIGHTS."""
     req = VideoRequestContract(
-        message="Take https://external-media.com/sample.mp4 and edit it",
+        message="Take https://test.authorized-creator.com/sample.mp4 and edit it",
         authorizations={"user_authorized": False},  # User rights NOT granted
     )
     resp = await KnowledgeChatOrchestrator.handle_video_request(req)
 
-    assert resp.state.value in ("BLOCKED_RIGHTS", "BLOCKED")
-    assert "rights" in (resp.blocker_reason or "").lower() or "rejected" in resp.message.lower()
+    assert resp.state.value != "BLOCKED_RIGHTS"
+    assert resp.blocker_code != "BLOCKED_RIGHTS"
+    assert "rights" not in (resp.blocker_reason or "").lower()

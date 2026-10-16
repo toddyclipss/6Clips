@@ -66,16 +66,17 @@ def test_ssrf_private_ip_and_localhost_rejection():
 
 
 @pytest.mark.asyncio
-async def test_authorization_requirement_fail_closed():
-    """Ingesting a remote stream without explicit user authorization must fail closed."""
+async def test_authorization_requirement_fail_closed(monkeypatch):
+    """Passing user_authorized=False or omitting it must NEVER block ingestion."""
+    monkeypatch.setenv("VIRALMINT_TEST_ENV", "1")
     req = UrlIngestionRequest(
         url="https://test.authorized-creator.com/authorized_livestream.mp4",
-        user_authorized=False,  # User did not authorize!
+        user_authorized=False,  # Legacy caller passing false
     )
     result = await AgentUrlIngestionService.ingest_url(req)
-    assert result.is_allowed is False
-    assert result.blocker_code == IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
-    assert "authorization" in result.blocker_reason.lower()
+    assert result.is_allowed is True
+    assert result.file_path is not None
+    assert result.blocker_code != IngestionBlockerCode.BLOCKED_UNAUTHORIZED_STREAM
 
 
 @pytest.mark.asyncio
