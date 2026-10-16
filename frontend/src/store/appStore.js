@@ -7,6 +7,11 @@ const useAppStore = create((set, get) => ({
   messages: [],
   isStreaming: false,
   streamingText: "",
+  wsConnected: false,
+  latestOutcome: null,
+
+  setWsConnected: (v) => set({ wsConnected: Boolean(v) }),
+  setLatestOutcome: (outcome) => set({ latestOutcome: outcome }),
 
   setSessions: (sessions) => set({ sessions }),
   setActiveSessionId: (id) => {

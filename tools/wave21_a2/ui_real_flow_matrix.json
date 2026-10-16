@@ -1,0 +1,299 @@
+{
+  "wave": 21,
+  "agent": 2,
+  "agent_title": "REAL CREATE/REVIEW UX, ONE PLAYER AND OPTIONAL TIMELINE",
+  "base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "branch": "wave21/02-real-create-review-ui",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-02-ui",
+  "ownership_scope": [
+    "frontend/**",
+    "tests/wave21/a2/**",
+    "tools/wave21_a2/**"
+  ],
+  "frontend_event_contract": {
+    "inbound_websocket_events": [
+      {
+        "type": "oaas_outcome_update",
+        "description": "Emitted by KnowledgeChatOrchestrator for autonomous video generation progress, revisions, and deliverable handoffs.",
+        "payload": {
+          "run_id": "string (e.g. krun-1a2b3c4d5e)",
+          "project_id": "string (UUID or canonical project identifier)",
+          "revision": "integer (canonical project revision >= 1)",
+          "state": "enum (PLANNING | RETRIEVING_KNOWLEDGE | COMPOSING | VALIDATING | RENDERING | VIDEO_VERIFIED | REVIEW_READY | BLOCKED_RIGHTS | PENDING_CREDENTIALS | FAILED_TERMINAL)",
+          "message": "string (human-readable progress or explanation)",
+          "deliverable_url": "string | null (relative or absolute URL to rendered MP4)",
+          "blocker_code": "string | null",
+          "blocker_reason": "string | null"
+        },
+        "frontend_handling": "Maps in-flight states to activeJobs store; transitions to Review mode and loads project/video when deliverable_url or REVIEW_READY is present; fails activeJob truthfully on blockers."
+      },
+      {
+        "type": "_connection_state",
+        "description": "Internal WebSocket connection lifecycle event.",
+        "payload": {
+          "connected": "boolean"
+        },
+        "frontend_handling": "Updates appStore.wsConnected; informs user of offline or reconnecting status."
+      },
+      {
+        "type": "job_started",
+        "description": "Standard background job initialization.",
+        "payload": {
+          "job_id": "string",
+          "job_type": "string",
+          "message": "string",
+          "input_data": "object | null"
+        },
+        "frontend_handling": "Starts tracking activeJob with authentic step text."
+      },
+      {
+        "type": "job_progress",
+        "description": "In-flight job progression.",
+        "payload": {
+          "job_id": "string",
+          "percent": "number",
+          "step": "string"
+        },
+        "frontend_handling": "Updates activeJob without synthetic percentage inflation."
+      },
+      {
+        "type": "job_complete",
+        "description": "Job completion signal.",
+        "payload": {
+          "job_id": "string",
+          "result": "object"
+        },
+        "frontend_handling": "Marks activeJob as completed, updates UI."
+      },
+      {
+        "type": "job_failed",
+        "description": "Job failure with error message.",
+        "payload": {
+          "job_id": "string",
+          "error": "string"
+        },
+        "frontend_handling": "Marks activeJob as failed and displays error message in chat."
+      },
+      {
+        "type": "project_updated",
+        "description": "Broadcasts that a project's document has advanced to a new revision.",
+        "payload": {
+          "project_id": "string",
+          "revision": "integer",
+          "summary": "string",
+          "document": "object | null"
+        },
+        "frontend_handling": "Updates project revision and scene graph if no unsaved local dirty state exists."
+      }
+    ],
+    "outbound_websocket_events": [
+      {
+        "type": "chat_message",
+        "description": "User natural language request or chat revision sent to planner/orchestrator.",
+        "payload": {
+          "type": "chat_message",
+          "content": "string",
+          "user_intent_id": "string",
+          "authorized": true
+        }
+      },
+      {
+        "type": "set_session",
+        "description": "Binds active WebSocket connection to specific chat session.",
+        "payload": {
+          "type": "set_session",
+          "session_id": "string"
+        }
+      }
+    ]
+  },
+  "compatibility_assumptions_for_agent_5": {
+    "router_routes": "Agent 5 keeps primary routes: /motion (default), /trends, /channels, /videos, /messaging, /settings. Legacy routes (/catalog, /clips, /tools) redirect to /motion.",
+    "database_safety": "Agent 2 made zero database schema changes or migrations; uses existing Project and GeneratedVideo schemas.",
+    "backend_dependencies": "Agent 2 frontend expects backend to serve GET /api/projects/{id}, POST /api/projects, GET /api/projects/{id}/preview, GET /api/videos/{id}/stream, and WebSocket /ws/chat.",
+    "joint_e2e_integration": "Joint multi-agent E2E tests (Edge driving full stack with actual LLM generation and FFmpeg render) must be re-run on Agent 5 merged candidate branch."
+  },
+  "feature_matrix": [
+    {
+      "id": "A2-FEAT-01",
+      "title": "Five Primary Sidebar Destinations & Mandatory Order",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_EDGE_DOM",
+      "source_file": "frontend/src/components/Layout.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_sidebar_five_destinations_order",
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_rendered_dom_and_ui_elements"
+      ],
+      "details": "Strict order verified: Motion Graphics (/motion), Trends (/trends), My Channel (/channels), Library (/videos), Messages (/messaging). Settings secondary at bottom."
+    },
+    {
+      "id": "A2-FEAT-02",
+      "title": "Create and Review Stages Only (Refine Eliminated)",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_EDGE_DOM",
+      "source_file": "frontend/src/components/motion/StudioToolbar.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_motion_graphics_stages_and_advanced_editing",
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_rendered_dom_and_ui_elements"
+      ],
+      "details": "Stage switcher strictly provides Create and Review. The SaaS Refine tab is eliminated from the primary workflow."
+    },
+    {
+      "id": "A2-FEAT-03",
+      "title": "Unobtrusive Advanced Editing Disclosure",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_EDGE_DOM",
+      "source_file": "frontend/src/components/motion/StudioToolbar.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_motion_graphics_stages_and_advanced_editing",
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_advanced_editing_toggle_state"
+      ],
+      "details": "Subdued Advanced Editing button in toolbar and stage header exposes lower timeline and layers without becoming a third primary navigation mode."
+    },
+    {
+      "id": "A2-FEAT-04",
+      "title": "Complete Elimination of User-Facing Catalog Cards & Block Pickers",
+      "status": "PASS",
+      "evidence_type": "SOURCE_AUDIT_AND_EDGE_DOM",
+      "source_file": "frontend/src/components/motion/StudioResourcePanel.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_catalog_and_template_picker_eliminated",
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_rendered_dom_and_ui_elements"
+      ],
+      "details": "Zero 196 catalog cards, hover previews, or Add Block buttons in active code paths. StudioResourcePanel contains only real Media Assets and Trend Sources."
+    },
+    {
+      "id": "A2-FEAT-05",
+      "title": "Zero Phantom Project on Empty State",
+      "status": "PASS",
+      "evidence_type": "EDGE_NETWORK_AUDIT",
+      "source_file": "frontend/src/pages/MotionGraphics.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_empty_state_no_phantom_project"
+      ],
+      "details": "Opening /motion without a project query parameter lands in clean NO_PROJECT state and triggers zero POST /api/projects calls."
+    },
+    {
+      "id": "A2-FEAT-06",
+      "title": "Legacy Routes Clean Redirection Without Template Shopping",
+      "status": "PASS",
+      "evidence_type": "EDGE_BROWSER_AUTOMATION",
+      "source_file": "frontend/src/App.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_legacy_routes_redirect_to_motion"
+      ],
+      "details": "Legacy routes (/catalog, /clips, /tools) redirect cleanly to /motion without shopping query params."
+    },
+    {
+      "id": "A2-FEAT-07",
+      "title": "Typed Native Motion Adapter & Content-Safe Drop Boundaries",
+      "status": "PASS",
+      "evidence_type": "UNIT_NODE_ADAPTER",
+      "source_file": "frontend/src/utils/nativeMotionAdapter.js",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestNativeMotionAdapter::test_adapter_exports_and_canonical_tracks",
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestNativeMotionAdapter::test_content_safe_drop_boundaries",
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestNativeMotionAdapter::test_normalize_native_motion_v1_operators",
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestNativeMotionAdapter::test_normalize_native_motion_scenes_and_captions"
+      ],
+      "details": "Full typed adapter for native_motion_v1 supporting composition operators, scenes, elements, and captions. Strict boundary rejection for illegal cross-category drops."
+    },
+    {
+      "id": "A2-FEAT-08",
+      "title": "Authentic Job State & Zero Fake Percentages",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_STORE_AUDIT",
+      "source_file": "frontend/src/components/motion/StudioPreviewStage.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_authentic_job_status_and_review_panel"
+      ],
+      "details": "Job status pill consumes activeJob.step || activeJob.message || 'composing'; zero fabricated progress percentages."
+    },
+    {
+      "id": "A2-FEAT-09",
+      "title": "Review Panel Integrity & Truthful Social Publishing Blocker",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_DOM",
+      "source_file": "frontend/src/components/motion/MotionReviewPanel.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_authentic_job_status_and_review_panel"
+      ],
+      "details": "Displays authentic deliverables count, chat correction guidance, editorial approval toggle, and NOT_CONNECTED / PENDING_CREDENTIALS notice confirming editorial approval is not an uploaded post."
+    },
+    {
+      "id": "A2-FEAT-10",
+      "title": "Professional Timed Captions Overlay & Typography",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_DOM",
+      "source_file": "frontend/src/components/motion/StudioPreviewStage.jsx",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_captions_overlay_in_preview_stage"
+      ],
+      "details": "Professional caption overlay tracking currentTime with word-level highlighting (#facc15), high contrast backdrop, non-obscuring lower third placement, and accessibility polite live region."
+    },
+    {
+      "id": "A2-FEAT-11",
+      "title": "Real WebSocket OAAS Outcome and Connection State Handling",
+      "status": "PASS",
+      "evidence_type": "UNIT_AND_HOOK",
+      "source_file": "frontend/src/hooks/useWebSocket.js",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_use_websocket_oaas_outcome_and_connection_handling",
+        "tests/wave21/a2/test_wave21_a2_create_review_ux.py::TestMinimalOAASUIContracts::test_motion_graphics_outcome_synchronization"
+      ],
+      "details": "Subscribes to _connection_state, oaas_outcome_update, and project_created. Auto-attaches empty state to project, updates revision, and transitions to Review mode on deliverable ready."
+    },
+    {
+      "id": "A2-FEAT-12",
+      "title": "Responsive Viewport Verification in Microsoft Edge",
+      "status": "PASS",
+      "evidence_type": "EDGE_SCREENSHOTS",
+      "source_file": "tools/wave21_a2/evidence/screenshots",
+      "tests": [
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py::TestEdgeMinimalMotionUX::test_edge_responsive_resolutions"
+      ],
+      "details": "Verified at 1920x1080 (72KB), 1440x900 (66KB), 1366x768 (64KB), and 1920x1080 Advanced Editing (113KB)."
+    },
+    {
+      "id": "A2-FEAT-13",
+      "title": "Joint Full-Stack End-to-End Chat-to-Render-to-Review Lifecycle",
+      "status": "PENDING_MERGED_STACK",
+      "evidence_type": "CROSS_AGENT_INTEGRATION",
+      "source_file": "backend/oaas_knowledge_orchestrator/orchestrator.py",
+      "tests": [],
+      "details": "Full stack integration requires running merged candidate stack (backend Agent 1 + Agent 3 + Agent 4 + Agent 2 frontend + Agent 5 integrator). Isolated worktree contract fully verified."
+    }
+  ],
+  "evidence_manifest": {
+    "screenshots": [
+      {
+        "filename": "edge_1920x1080_create.png",
+        "path": "tools/wave21_a2/evidence/screenshots/edge_1920x1080_create.png",
+        "size_bytes": 72338,
+        "viewport": "1920x1080",
+        "view": "Create mode empty state"
+      },
+      {
+        "filename": "edge_1440x900_create.png",
+        "path": "tools/wave21_a2/evidence/screenshots/edge_1440x900_create.png",
+        "size_bytes": 66211,
+        "viewport": "1440x900",
+        "view": "Create mode empty state"
+      },
+      {
+        "filename": "edge_1366x768_create.png",
+        "path": "tools/wave21_a2/evidence/screenshots/edge_1366x768_create.png",
+        "size_bytes": 64282,
+        "viewport": "1366x768",
+        "view": "Create mode empty state"
+      },
+      {
+        "filename": "edge_1920x1080_advanced_editing.png",
+        "path": "tools/wave21_a2/evidence/screenshots/edge_1920x1080_advanced_editing.png",
+        "size_bytes": 113797,
+        "viewport": "1920x1080",
+        "view": "Advanced Editing mode with canonical timeline"
+      }
+    ]
+  }
+}

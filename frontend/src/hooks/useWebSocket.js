@@ -22,6 +22,8 @@ export default function useWebSocket() {
     removeJob,
     handleToolEvent,
     clearStreamingExecutionTimeline,
+    setWsConnected,
+    setLatestOutcome,
   } = useAppStore()
 
   // Chat tokens arrive far faster than the screen refreshes. Writing each one
@@ -338,6 +340,56 @@ export default function useWebSocket() {
 
       ws.on("action", () => {
         // Actions dispatched by planner backend
+      }),
+
+      ws.on("_connection_state", (msg) => {
+        setWsConnected(Boolean(msg?.connected))
+      }),
+
+      ws.on("oaas_outcome_update", (msg) => {
+        setLatestOutcome(msg)
+        const runId = msg.run_id || `run_${Date.now()}`
+        const state = msg.state || ""
+        const message = msg.message || state
+
+        if (state === "BLOCKED_RIGHTS" || state === "PENDING_CREDENTIALS" || state === "FAILED_TERMINAL" || state === "FAILED_RETRYABLE" || state === "BLOCKED") {
+          failJob(runId, msg.blocker_reason || message || `Blocked: ${state}`)
+          showSnackbar(message || `Outcome blocked: ${state}`, "warning")
+          addMessage({
+            role: "system",
+            content: `⚠️ **Outcome Status: ${state}**\n${message || msg.blocker_reason || ""}`,
+          })
+          return
+        }
+
+        if (state === "REVIEW_READY" || state === "VIDEO_VERIFIED" || msg.deliverable_url) {
+          completeJob(runId)
+          showSnackbar(message || `Motion design ready for review (Rev ${msg.revision || 1})`, "success")
+          return
+        }
+
+        // In-flight progress: PLANNING, RETRIEVING_KNOWLEDGE, COMPOSING, VALIDATING, RENDERING
+        const currentActive = useAppStore.getState().activeJobs[runId]
+        if (!currentActive) {
+          startJob(runId, "motion_graphics", message, {
+            projectId: msg.project_id,
+            revision: msg.revision,
+            state: state,
+          })
+        } else {
+          updateJobProgress(runId, 0, message)
+        }
+      }),
+
+      ws.on("project_created", (msg) => {
+        if (msg.project_id) {
+          setLatestOutcome({
+            project_id: msg.project_id,
+            revision: msg.revision || 1,
+            state: "CREATED",
+            message: msg.title || "Project created",
+          })
+        }
       }),
     ]
 

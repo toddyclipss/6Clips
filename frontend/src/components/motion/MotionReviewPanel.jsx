@@ -358,7 +358,7 @@ export default function MotionReviewPanel({
           sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#fef3c7", color: "#92400e", mb: 0.8 }}
         />
         <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem", display: "block", lineHeight: 1.35 }}>
-          External publishing is disabled by default. Connect and verify authorized credentials in My Channel before dispatching.
+          An approved Review is an editorial confirmation; it is never automatically uploaded or published. External social publishing requires authenticated provider API credentials in My Channel.
         </Typography>
       </Box>
     </Box>
