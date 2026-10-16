@@ -1,0 +1,68 @@
+{
+  "source_url": "https://example.com/videos/nature_showcase.mp4",
+  "source_path": "C:\\Users\\toddy\\Desktop\\ViralMint-p0fix-integration\\storage\\agent_ingest\\sample_alternate_source.mp4",
+  "source_sha256": "7dcb90561ed29e7808f11e707b9adaf2ad36a95e2b74ffe71eacdf0e9ae70575",
+  "source_duration_sec": 10.0,
+  "source_resolution": [
+    1920,
+    1080
+  ],
+  "rendered_mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-p0fix-integration\\storage\\rendered_edits\\edit_asset_sample_alter_9_16.mp4",
+  "rendered_sha256": "e57afb5b4c4db88d4622ee56861771c74901a5d3322bc81d9e2b5e73a4b5be33",
+  "rendered_duration_sec": 4.0,
+  "rendered_resolution": [
+    1080,
+    1920
+  ],
+  "target_aspect_ratio": "9:16",
+  "frame_metrics": {
+    "luminance_samples": [
+      121.74,
+      125.4,
+      131.14
+    ],
+    "variance_stds": [
+      78.43,
+      77.59,
+      78.44
+    ],
+    "motion_deltas": [
+      0.0,
+      0.0297,
+      0.0418
+    ]
+  },
+  "project_id": "6bbd7ab4-1206-4105-98ed-71ea6963a8b9",
+  "revision_id": 5,
+  "lineage_verified": true,
+  "lineage_verification_details": {
+    "is_verified": true,
+    "source_sha256": "7dcb90561ed29e7808f11e707b9adaf2ad36a95e2b74ffe71eacdf0e9ae70575",
+    "rendered_sha256": "e57afb5b4c4db88d4622ee56861771c74901a5d3322bc81d9e2b5e73a4b5be33",
+    "timeline_has_source_clip": true,
+    "timeline_clip_id": "clip_d0cd881645",
+    "timeline_asset_id": "asset_sample_alter",
+    "trim_start": 0.0,
+    "trim_end": 4.0,
+    "rendered_duration": 4.0,
+    "duration_matches_target": true,
+    "visual_frames_authentic": true,
+    "visual_correlation_score": 1.0,
+    "frame_luminance_mean": 126.09,
+    "frame_stddev_mean": 78.15,
+    "not_static_black": true,
+    "not_title_card_only": true,
+    "audio_intact": true,
+    "rejection_reason": null,
+    "details": {
+      "streams_count": 2,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "motion_deltas": [
+        0.0,
+        0.0297,
+        0.0418
+      ]
+    }
+  }
+}

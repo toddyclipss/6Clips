@@ -1,0 +1,74 @@
+{
+  "REC-01": {
+    "status": "PASS",
+    "observation": "real_ui/ws/provider",
+    "evidence_path": "tools/p0_recovery_a5/RUN_TRACE.json",
+    "details": "Exact uppercase-I URL https://www.youtube.com/watch?v=FV93IVwJP_4 successfully probed & ingested; duration 1115.01s; title 'GTA 6 Launch Trailer: Everything New YOU MISSED'."
+  },
+  "REC-02": {
+    "status": "PASS",
+    "observation": "provider/ollama",
+    "evidence_path": "tools/p0_recovery_a5/RUN_TRACE.json",
+    "details": "Real Ollama inference with gemma4:e4b succeeded under server scope (36373ms, 4562 chars)."
+  },
+  "REC-03": {
+    "status": "PASS",
+    "observation": "guard/egress",
+    "evidence_path": "tests/p0_recovery/a1/test_wave12_user_chat_execution_scope.py",
+    "details": "Missing context strictly blocked with UnauthorizedInferenceError (trigger=unknown); valid server user chat scope allowed."
+  },
+  "REC-04": {
+    "status": "PASS",
+    "observation": "orchestrator",
+    "evidence_path": "tests/p0_recovery/a5/test_knowledge_orchestrator_p0.py",
+    "details": "Unavailable source video fails closed immediately with BLOCKED_FETCH_FAILED. No procedural synthetic title card generated."
+  },
+  "REC-05": {
+    "status": "PASS",
+    "observation": "ffprobe/lineage_verifier",
+    "evidence_path": "tools/p0_recovery_a5/ALTERNATE_SOURCE_EDIT_TRACE.json",
+    "details": "Physical 9:16 edit rendered from genuine source (4.00s, 1080x1920, SHA-256: e57afb5b4c4db88d...). Verified non-static frames."
+  },
+  "REC-06": {
+    "status": "PASS",
+    "observation": "project_service/cas",
+    "evidence_path": "tools/p0_recovery_a5/ALTERNATE_SOURCE_EDIT_TRACE.json",
+    "details": "Canonical ProjectRevision 6bbd7ab4-1206-4105-98ed-71ea6963a8b9 with authentic clip lineage and consecutive CAS revision increment to 6."
+  },
+  "REC-07": {
+    "status": "PASS",
+    "observation": "ffprobe/contract",
+    "evidence_path": "tools/p0_recovery_a5/ALTERNATE_SOURCE_EDIT_TRACE.json",
+    "details": "Exact duration parity confirmed: physical media duration 4.00s is uniform across contract, timeline and player (no 9.8s vs 15.00s drift)."
+  },
+  "REC-08": {
+    "status": "PASS",
+    "observation": "orchestrator/ui",
+    "evidence_path": "tests/p0_recovery/a5/test_knowledge_orchestrator_p0.py",
+    "details": "Editing and review completed with zero social accounts connected. publication_status is NOT_REQUESTED; state is REVIEW_READY."
+  },
+  "REC-09": {
+    "status": "PASS",
+    "observation": "real_ui/edge_browser",
+    "evidence_path": "tools/p0_recovery_a5/evidence/screenshots/rec09_edge_1920x1080_motion.png",
+    "details": "Microsoft Edge browser launched headless (v155), rendered Motion Graphics UI, and captured 1920x1080 and 1366x768 evidence screenshots."
+  },
+  "REC-10": {
+    "status": "PASS",
+    "observation": "provider/orchestrator",
+    "evidence_path": "backend/oaas_knowledge_orchestrator/orchestrator.py",
+    "details": "Invalid/offline model fails closed truthfully with MODEL_INFERENCE_FAILED; zero synthetic deliverables generated."
+  },
+  "REC-11": {
+    "status": "PASS",
+    "observation": "hash/ssrf_guard",
+    "evidence_path": "tools/p0_recovery_a5/INTEGRATION_MANIFEST.json",
+    "details": "Production viralmint.db unmodified (SHA: 0B42CDD39D75DEF1...); SSRF rejected private IP http://192.168.1.1."
+  },
+  "REC-12": {
+    "status": "PASS",
+    "observation": "git_manifest",
+    "evidence_path": "tools/p0_recovery_a5/INTEGRATION_MANIFEST.json",
+    "details": "All five branch tips merged cleanly into candidate SHA 46a11dbf4e96841ca801d163d26a62acb68d5f09; common ancestor 7a76da6 confirmed."
+  }
+}

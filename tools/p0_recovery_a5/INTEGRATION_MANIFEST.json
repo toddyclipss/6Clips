@@ -1,0 +1,28 @@
+{
+  "integration_timestamp_utc": "2026-10-16T23:23:34.132485+00:00",
+  "baseline_common_ancestor_sha": "7a76da6ec7bb0fce8e95a38941ab4e7ac8fa68a1",
+  "candidate_sha": "46a11dbf4e96841ca801d163d26a62acb68d5f09",
+  "peer_tips": {
+    "A1_wave12_execution_context": "9e91c8e31b517eaaf23a628302716fac2805de4d",
+    "A2_ws_chat_provider_intent": "c4bd6534a23aa0ec1ecfc3bc942759c9f6c0689e",
+    "A3_real_source_edit_lineage": "854bb437484d7a0d622877e23aa2e500184e2711",
+    "A4_canonical_review_ui": "eda14e77e03d98352583e85410e2f796d98a2735",
+    "A5_outcome_integrator": "39e607800eedd84b3ce7d40f94513aa0728e2dc2"
+  },
+  "prod_database_sha256": "0B42CDD39D75DEF14D115AB224C2E60AAA8537A55B3290FBD9909E2C8F5D5ADE",
+  "remote_push_executed": false,
+  "gates_summary": {
+    "REC-01": "PASS",
+    "REC-02": "PASS",
+    "REC-03": "PASS",
+    "REC-04": "PASS",
+    "REC-05": "PASS",
+    "REC-06": "PASS",
+    "REC-07": "PASS",
+    "REC-08": "PASS",
+    "REC-09": "PASS",
+    "REC-10": "PASS",
+    "REC-11": "PASS",
+    "REC-12": "PASS"
+  }
+}

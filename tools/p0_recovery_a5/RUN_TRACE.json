@@ -1,0 +1,26 @@
+{
+  "run_id": "krun-e88af587d2",
+  "correlation_id": "corr-24335035539c",
+  "user_message": "analise e edite esse video em ingles https://www.youtube.com/watch?v=FV93IVwJP_4",
+  "exact_url": "https://www.youtube.com/watch?v=FV93IVwJP_4",
+  "url_casing_verified": "UPPERCASE_I_CONFIRMED",
+  "selected_provider": "ollama",
+  "selected_model": "gemma4:e4b",
+  "reasoning_level": "high",
+  "llm_elapsed_ms": 36373,
+  "llm_response_preview": "***[6Clips Main Agent Protocol Initiated]***\n\n**STATUS:** CRITICAL VERIFICATION MODE // ORCHESTRATION POLICY [HIGH] ACTIVE\n**INPUT:** YouTube URL (Video Content Analysis Required)\n**OBJECTIVE:** Analyze pacing, structure, and creative rationale for cinematic short-form content (6-10 clips).\n\n***\n\n##",
+  "server_authored_scope": {
+    "principal": "user_owner_real",
+    "session_id": "session_owner_01",
+    "trigger": "explicit_chat_submit",
+    "source": "ws_chat"
+  },
+  "ingestion_result": {
+    "is_allowed": true,
+    "duration_seconds": 1115.014,
+    "file_path": "C:\\Users\\toddy\\Desktop\\ViralMint-p0fix-integration\\storage\\agent_ingest\\ingest-ebc42af28d.mp4",
+    "file_sha256": "70f77265e310c2432b2cc26f5027d1f387680823a2fa3817d6d87821c01c61b0",
+    "channel_author": "TGG",
+    "title": "GTA 6 Launch Trailer: Everything New YOU MISSED"
+  }
+}
