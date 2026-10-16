@@ -3,7 +3,7 @@
   "agent": "Agent 1 (A1) - Wave12 LLM Egress Guard Provenance",
   "branch": "p0fix/01-wave12-execution-context",
   "base_sha": "7a76da6ec7bb0fce8e95a38941ab4e7ac8fa68a1",
-  "tip_sha": "c8630ab3f8114a970ec303b7f0c00d6d7ebd71a3",
+  "tip_sha": "9de088f6c181b96130577e2fad5ecc5c23ce0d4d",
   "target_peers": ["Agent 2 (A2)", "Agent 5 (A5)"],
   "api_contract": {
     "import_path": "backend.llm_trace",
