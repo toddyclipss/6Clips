@@ -221,17 +221,45 @@ class KnowledgeChatOrchestrator:
         if provider and model:
             from backend.core.ai_provider import get_ai_client
             try:
+                # Check for active execution context or establish server-authored scope
+                try:
+                    from backend.llm_trace import (
+                        get_current_inference_context,
+                        user_chat_execution_scope,
+                        SOURCE_WS_CHAT,
+                    )
+                except ImportError:
+                    get_current_inference_context = None
+                    user_chat_execution_scope = None
+                    SOURCE_WS_CHAT = "ws_chat"
+
                 ai_client = get_ai_client(pinned_provider=provider, pinned_model=model)
                 t0 = time.time()
                 system_prompt = (
                     "You are 6Clips Main Agent. Analyze the user's video editing request. "
                     "Extract creative pacing, language target, cutting rationale, and high-impact clip moments."
                 )
-                ai_response_text = await ai_client.chat(
-                    messages=[{"role": "user", "content": req.message}],
-                    system=system_prompt,
-                    reasoning_level=reasoning_level,
-                )
+
+                active_ctx = get_current_inference_context() if get_current_inference_context else None
+                if active_ctx is None and user_chat_execution_scope is not None and req.user_id:
+                    async with user_chat_execution_scope(
+                        authenticated_principal=req.user_id,
+                        session_id=req.session_id or "direct_session",
+                        run_id=run_id,
+                        correlation_id=correlation_id,
+                        source=SOURCE_WS_CHAT,
+                    ):
+                        ai_response_text = await ai_client.chat(
+                            messages=[{"role": "user", "content": req.message}],
+                            system=system_prompt,
+                            reasoning_level=reasoning_level,
+                        )
+                else:
+                    ai_response_text = await ai_client.chat(
+                        messages=[{"role": "user", "content": req.message}],
+                        system=system_prompt,
+                        reasoning_level=reasoning_level,
+                    )
                 elapsed_ms = int((time.time() - t0) * 1000)
                 logger.info(
                     "REAL_LLM_INFERENCE_LOG run_id=%s correlation_id=%s provider=%s model=%s elapsed_ms=%d chars=%d",
@@ -291,6 +319,22 @@ class KnowledgeChatOrchestrator:
                     blocker_reason=ingest_res.blocker_reason,
                 )
             ingested_media_path = ingest_res.stored_file_path
+
+        # Strict fail-closed guard for EDIT_EXISTING_VIDEO:
+        # If user explicitly requested to analyze/edit an existing video from URL or media,
+        # but source video could not be acquired or does not exist on disk:
+        # DO NOT quietly fall through to synthetic procedural motion (black title card).
+        if is_edit_existing_video and (not ingested_media_path or not Path(ingested_media_path).exists()):
+            sm.transition_to(KnowledgeOrchestratorState.FAILED_TERMINAL, reason="Source video acquisition failed or file missing")
+            return KnowledgeOrchestratorResponse(
+                run_id=run_id,
+                project_id=req.project_id or "none",
+                revision_id=1,
+                state=KnowledgeOrchestratorState.FAILED_TERMINAL,
+                message="Cannot edit existing video: source media file could not be acquired or is missing.",
+                blocker_code="MEDIA_ACQUISITION_FAILED",
+                blocker_reason=f"Source video file from '{raw_url if found_urls else 'unspecified URL'}' is unavailable.",
+            )
 
         # 4. Aspect Ratio, Output Count, and Duration Extraction
         aspect_ratio = "9:16"
@@ -517,9 +561,10 @@ class KnowledgeChatOrchestrator:
                 reason="Verified edited physical MP4 via ffprobe, SHA-256, and input-source lineage",
             )
 
+            publish_keywords = ["publish to", "post to", "upload to", "share to", "publicar no", "publicar na", "postar no", "postar na"]
             is_publish_requested = bool(
                 req.authorizations.get("publish_authorized")
-                or any(kw in req.message.lower() for kw in ["publish", "post to", "upload to", "publicar"])
+                or any(kw in req.message.lower() for kw in publish_keywords)
             )
             pub_status = "NOT_REQUESTED"
             if is_publish_requested:
@@ -827,9 +872,10 @@ class KnowledgeChatOrchestrator:
         primary_lib_id = library_ids[0]
 
         # 12. Distribution Authorization Check (only if requested)
+        publish_keywords = ["publish to", "post to", "upload to", "share to", "publicar no", "publicar na", "postar no", "postar na"]
         is_publish_requested = bool(
             req.authorizations.get("publish_authorized")
-            or any(kw in req.message.lower() for kw in ["publish", "post to", "upload to", "publicar"])
+            or any(kw in req.message.lower() for kw in publish_keywords)
         )
         pub_status = "NOT_REQUESTED"
         if is_publish_requested:
