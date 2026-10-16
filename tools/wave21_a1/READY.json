@@ -1,0 +1,41 @@
+{
+  "wave": 21,
+  "agent": 1,
+  "role": "Live Chat -> Knowledge -> Original Video -> Same-Project Review",
+  "status": "A1_CODE_READY",
+  "kickoff_base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "tip_sha": "5d4b4bf44c64d0fb43217b0238bfc992e6bd3a94",
+  "branch": "wave21/01-real-chat-outcomes",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat",
+  "exclusive_ownership": {
+    "backend": ["backend/oaas_knowledge_orchestrator/**"],
+    "tests": ["tests/wave21/a1/**"],
+    "tools": ["tools/wave21_a1/**"]
+  },
+  "test_counts": {
+    "wave21_a1_tests_total": 20,
+    "wave21_a1_tests_passed": 20,
+    "wave21_a1_tests_failed": 0,
+    "wave20_a1_regression_total": 26,
+    "wave20_a1_regression_passed": 26
+  },
+  "gate_statuses": {
+    "GT-01_curated_knowledge_retrieval": "PASS",
+    "GT-02_donor_sanitization_prompt_injection": "PASS",
+    "GT-03_path_and_db_isolation": "PASS",
+    "GT-04_native_actions_bridge": "PASS",
+    "GT-05_real_chat_v1_v7_outcomes": "PASS",
+    "GT-06_multi_clip_rendering": "PASS",
+    "GT-07_same_project_consecutive_revisions": "PASS",
+    "GT-08_revision_cas_rollback": "PASS",
+    "GT-09_websocket_chat_integration": "PASS",
+    "GT-10_ffprobe_and_frame_extraction": "PASS"
+  },
+  "known_blockers": [],
+  "integration_interface": {
+    "chat_integration_contract": "tools/wave21_a1/chat_integration_contract.json",
+    "ledger": "tools/wave21_a1/ledger.json",
+    "delivery_report": "tools/wave21_a1/delivery_report.md"
+  },
+  "agent_5_instructions": "Merge branch wave21/01-real-chat-outcomes. Verify that backend/api/chat.py delegates revision_request and chat generation to KnowledgeChatOrchestrator and emits oaas_outcome_update frames per chat_integration_contract.json."
+}

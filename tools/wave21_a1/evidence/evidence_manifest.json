@@ -1,0 +1,656 @@
+[
+  {
+    "journey": "V1_vertical_promo",
+    "prompt": "Create a vertical promo 9:16 for product showcase",
+    "project_id": "f1799bd6-c461-4f10-8b25-3d68d0710574",
+    "revision": 2,
+    "state": "PENDING_CREDENTIALS",
+    "library_asset_id": "0022b949-e6e6-4c3c-888c-1ee7add95bc4",
+    "library_ids": [
+      "0022b949-e6e6-4c3c-888c-1ee7add95bc4"
+    ],
+    "output_count": 1,
+    "knowledge_citations": [
+      {
+        "knowledge_doc_id": "doc:prompting/product-launch",
+        "source_path": "docs/prompting/product-launch.mdx",
+        "source_hash": "09545247443231f0e518e5c0ccc6bb1c12eadaeec6d9a594d4884727801c152e",
+        "technique": "Product launch videos",
+        "donor_group": "prompting",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: 16, product, promo, showcase, vertical | Capability: typography_kinetic | Donor: prompting"
+      },
+      {
+        "knowledge_doc_id": "block:heygen-avatar-promo-card",
+        "source_path": "docs/catalog/blocks/heygen-avatar-promo-card.mdx",
+        "source_hash": "3899fc6dc48cbfcf990295db4b9cbb4285a7d38ad1e690ffb98d8645425f466f",
+        "technique": "Easing: easing: power2.out",
+        "donor_group": "scenes-demos",
+        "capability_family": "typography_kinetic",
+        "rights": "BLOCKED_RIGHTS",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 10}",
+        "retrieval_explanation": "Matched terms: promo, showcase, vertical | Capability: typography_kinetic | Donor: scenes-demos"
+      },
+      {
+        "knowledge_doc_id": "doc:guides/product-launch-video",
+        "source_path": "docs/guides/product-launch-video.mdx",
+        "source_hash": "b90245891d1b6f78bdf9272e677757810ed43fc689bbb2c2f1ab6e794db29228",
+        "technique": "Create a product or website video",
+        "donor_group": "guides",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: create, product, promo, showcase | Capability: typography_kinetic | Donor: guides"
+      }
+    ],
+    "frames": [
+      "V1_vertical_promo_clip1_frame.png"
+    ],
+    "probes": [
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-dfa85987\\original_orig-dfa85987_final.mp4",
+        "sha256": "a6451ba4a472ef9030a233aa7d7e23c25c9379681d2b0760f2fc353a3924b5a0",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "9.860000",
+            "size": "303411"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "journey": "V2_horizontal_highlights",
+    "prompt": "Produce a 16:9 widescreen video with dynamic highlights",
+    "project_id": "9d903d8a-e92c-4a26-bde1-c3c09f55dbe7",
+    "revision": 2,
+    "state": "PENDING_CREDENTIALS",
+    "library_asset_id": "2f8fa6d8-6007-4a51-9bed-5907e9d84756",
+    "library_ids": [
+      "2f8fa6d8-6007-4a51-9bed-5907e9d84756"
+    ],
+    "output_count": 1,
+    "knowledge_citations": [
+      {
+        "knowledge_doc_id": "component:yt-camera-move",
+        "source_path": "docs/catalog/components/yt-camera-move.mdx",
+        "source_hash": "d2ff79cac9f3b90555bc7eb41c1aa6576a63ad68fc386463f50c3e20ba75f8c1",
+        "technique": "Easing: easing: power2.in, Easing: easing: power2.out",
+        "donor_group": "motion-effects",
+        "capability_family": "camera_3d",
+        "rights": "VERIFIED_PERMISSIVE",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": null}",
+        "retrieval_explanation": "Matched terms: dynamic, video | Capability: camera_3d | Donor: motion-effects"
+      },
+      {
+        "knowledge_doc_id": "block:yt-vertical-fill",
+        "source_path": "docs/catalog/blocks/yt-vertical-fill.mdx",
+        "source_hash": "a8b51cdb6487bf88f6b33f60df585cb66ac5d0ec1d437b08df80a0c64d0f5f89",
+        "technique": "Easing: easing: power2.in, Easing: easing: power3.out, Easing: easing: power2.out",
+        "donor_group": "blocks",
+        "capability_family": "responsive_layout",
+        "rights": "VERIFIED_PERMISSIVE",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 8}",
+        "retrieval_explanation": "Matched terms: widescreen | Capability: responsive_layout | Donor: blocks"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/color-grading",
+        "source_path": "docs/prompting/color-grading.mdx",
+        "source_hash": "8b73be9327a6dfc539e58533f5c2be4f5114280048270456cff8b0e683c8cf35",
+        "technique": "Bioluminescent radial intensity bloom falloff",
+        "donor_group": "prompting",
+        "capability_family": "camera_3d",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: highlights, produce, video | Capability: camera_3d | Donor: prompting"
+      }
+    ],
+    "frames": [
+      "V2_horizontal_highlights_clip1_frame.png"
+    ],
+    "probes": [
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-c3049d3d\\original_orig-c3049d3d_final.mp4",
+        "sha256": "8a1d40b1b61149c634eb938c64d7daed4ce80efa7dfbd851d8064f972c157704",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1920,
+              "height": 1080,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "9.860000",
+            "size": "404769"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "journey": "V3_infographic_data",
+    "prompt": "Generate a square 1:1 data infographic chart clip",
+    "project_id": "04c1a57e-9b13-49e1-bf5b-6ef401737563",
+    "revision": 2,
+    "state": "PENDING_CREDENTIALS",
+    "library_asset_id": "5b7974fa-d4d4-4508-8e3b-d74ee1f48949",
+    "library_ids": [
+      "5b7974fa-d4d4-4508-8e3b-d74ee1f48949"
+    ],
+    "output_count": 1,
+    "knowledge_citations": [
+      {
+        "knowledge_doc_id": "hero-primitive:chart-story",
+        "source_path": "registry/components/CATALOG.md",
+        "source_hash": "3e7a25060c1e9a96d19c031deccf0810a0ce46501535568814902582dcb49fbf",
+        "technique": "Elastic keyframe timeline hold",
+        "donor_group": "Proof and stats",
+        "capability_family": "data_visualization",
+        "rights": "VERIFIED_PERMISSIVE",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": null}",
+        "retrieval_explanation": "Matched terms: chart, clip, data | Capability: data_visualization | Donor: Proof and stats"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/capstone",
+        "source_path": "docs/prompting/capstone.mdx",
+        "source_hash": "6c07d2217b1d52854f98a7d78795f6437c69b716ce134f231bf7f140833cee32",
+        "technique": "Spring physics dampening, Multi-layer depth parallax displacement, Easing: easing: power3.out",
+        "donor_group": "prompting",
+        "capability_family": "camera_3d",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: chart, clip, data, generate | Capability: camera_3d | Donor: prompting"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/media-and-audio",
+        "source_path": "docs/prompting/media-and-audio.mdx",
+        "source_hash": "de4809ab2f61496750b63449e1f4d6d998bc8e9498a8d7559ba9d50986192cec",
+        "technique": "Per-word karaoke sweep sync",
+        "donor_group": "prompting",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: chart, clip, generate | Capability: typography_kinetic | Donor: prompting"
+      }
+    ],
+    "frames": [
+      "V3_infographic_data_clip1_frame.png"
+    ],
+    "probes": [
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-870fafde\\original_orig-870fafde_final.mp4",
+        "sha256": "ae36fa286363497f5c6cf3cf5f5045105a18c6773575d3cb7939457ca5a3c761",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1080,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "9.860000",
+            "size": "297692"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "journey": "V4_kinetic_promo",
+    "prompt": "Kinetic text promo with high energy and bold typography",
+    "project_id": "d6f7fa11-2c36-404c-a28d-b0ef8940f56f",
+    "revision": 2,
+    "state": "PENDING_CREDENTIALS",
+    "library_asset_id": "3aa0cb0a-0587-4027-9057-81bc44ab06be",
+    "library_ids": [
+      "3aa0cb0a-0587-4027-9057-81bc44ab06be"
+    ],
+    "output_count": 1,
+    "knowledge_citations": [
+      {
+        "knowledge_doc_id": "doc:prompting/transitions",
+        "source_path": "docs/prompting/transitions.mdx",
+        "source_hash": "19e61b64d888b6c1008aa0b4cd63245ddb335d112a09a3c18ad94d437f2570b4",
+        "technique": "Transitions",
+        "donor_group": "prompting",
+        "capability_family": "background_shader",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: bold, energy, high, promo | Capability: background_shader | Donor: prompting"
+      },
+      {
+        "knowledge_doc_id": "block:heygen-avatar-promo-card",
+        "source_path": "docs/catalog/blocks/heygen-avatar-promo-card.mdx",
+        "source_hash": "3899fc6dc48cbfcf990295db4b9cbb4285a7d38ad1e690ffb98d8645425f466f",
+        "technique": "Easing: easing: power2.out",
+        "donor_group": "scenes-demos",
+        "capability_family": "typography_kinetic",
+        "rights": "BLOCKED_RIGHTS",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 10}",
+        "retrieval_explanation": "Matched terms: bold, promo, typography | Capability: typography_kinetic | Donor: scenes-demos"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/music-and-slideshows",
+        "source_path": "docs/prompting/music-and-slideshows.mdx",
+        "source_hash": "9d085a1e8218c41abc56a82e3b200cb2d29a4fe50481476be759bfbf2863bb7f",
+        "technique": "Music videos and slideshows",
+        "donor_group": "prompting",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: energy, high, kinetic, promo, typography | Capability: typography_kinetic | Donor: prompting"
+      }
+    ],
+    "frames": [
+      "V4_kinetic_promo_clip1_frame.png"
+    ],
+    "probes": [
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-e70255fd\\original_orig-e70255fd_final.mp4",
+        "sha256": "9b2f81c02b321e259b17ca6f9c44f8a929b64e157aae75238ed67f9676a8beb8",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "10.290000",
+            "size": "314474"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "journey": "V5_speech_captions",
+    "prompt": "Short video with word by word professional synced captions",
+    "project_id": "88d8ddf9-aaef-4168-b3f2-0b20a4a61295",
+    "revision": 2,
+    "state": "PENDING_CREDENTIALS",
+    "library_asset_id": "dffeef7a-1762-4e8f-957d-2e28da6f2b0a",
+    "library_ids": [
+      "dffeef7a-1762-4e8f-957d-2e28da6f2b0a"
+    ],
+    "output_count": 1,
+    "knowledge_citations": [
+      {
+        "knowledge_doc_id": "caption:anchor",
+        "source_path": "skills/embedded-captions/themes/anchor.json",
+        "source_hash": "ed017f5cb3e0a558ab7f0763f775b736db0e32d62b4741f9bde793e7a379e519",
+        "technique": "Speech word alignment interpolation, Theme caption typographic layout engine",
+        "donor_group": "text-captions",
+        "capability_family": "captions_word_highlight",
+        "rights": "VERIFIED_PERMISSIVE",
+        "runtime_constraints": "{\"aspect_ratios\": [\"9:16\", \"16:9\"], \"requires_webgpu\": false, \"scene_luma_constraint\": \"any (opaque rail; settle carries a soft veil)\"}",
+        "retrieval_explanation": "Matched terms: captions, professional, word | Capability: captions_word_highlight | Donor: text-captions"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/captions-and-talking-heads",
+        "source_path": "docs/prompting/captions-and-talking-heads.mdx",
+        "source_hash": "11ee43861a2b75d1a32dc2ba462d3429431019292f376775a204871ba4529f8d",
+        "technique": "Captions and talking-head footage",
+        "donor_group": "prompting",
+        "capability_family": "captions_word_highlight",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: captions, synced, video, word | Capability: captions_word_highlight | Donor: prompting"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/media-and-audio",
+        "source_path": "docs/prompting/media-and-audio.mdx",
+        "source_hash": "de4809ab2f61496750b63449e1f4d6d998bc8e9498a8d7559ba9d50986192cec",
+        "technique": "Per-word karaoke sweep sync",
+        "donor_group": "prompting",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: captions, professional, short, synced, video, word | Capability: typography_kinetic | Donor: prompting"
+      }
+    ],
+    "frames": [
+      "V5_speech_captions_clip1_frame.png"
+    ],
+    "probes": [
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-886ed134\\original_orig-886ed134_final.mp4",
+        "sha256": "7ed2212294f93de1de0a5b64a246f49614efeef05a9fb2b01b052d4c5bce6f9d",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "10.290000",
+            "size": "317361"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "journey": "V6_multi_clip",
+    "prompt": "Generate 3 short teaser clips for social media",
+    "project_id": "05461b15-08f0-47b4-b28a-f84b40799033",
+    "revision": 2,
+    "state": "PENDING_CREDENTIALS",
+    "library_asset_id": "6ae54148-6f25-42f1-8b9c-5b84baa8a39a",
+    "library_ids": [
+      "6ae54148-6f25-42f1-8b9c-5b84baa8a39a",
+      "2f8d21d7-b2cc-4654-adc0-8e756ca8b624",
+      "1639a4dd-8118-4f3d-8e56-9d0f23403139"
+    ],
+    "output_count": 3,
+    "knowledge_citations": [
+      {
+        "knowledge_doc_id": "doc:reference/speed-ramps",
+        "source_path": "docs/reference/speed-ramps.mdx",
+        "source_hash": "da51752687fca16d523f6f7dc579bfd0767e73c3d703d4eb19d9505054009c1a",
+        "technique": "Speed ramps",
+        "donor_group": "reference",
+        "capability_family": "typography_kinetic",
+        "rights": "VERIFIED_PERMISSIVE",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: clips, media, short | Capability: typography_kinetic | Donor: reference"
+      },
+      {
+        "knowledge_doc_id": "doc:prompting/media-and-audio",
+        "source_path": "docs/prompting/media-and-audio.mdx",
+        "source_hash": "de4809ab2f61496750b63449e1f4d6d998bc8e9498a8d7559ba9d50986192cec",
+        "technique": "Per-word karaoke sweep sync",
+        "donor_group": "prompting",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: generate, media, short | Capability: typography_kinetic | Donor: prompting"
+      },
+      {
+        "knowledge_doc_id": "doc:studio/timeline",
+        "source_path": "docs/studio/timeline.mdx",
+        "source_hash": "66c5705128319d9c0ca05f4c282b755235f52523ff5bae50dc74510941cf291d",
+        "technique": "Edit timing on the timeline",
+        "donor_group": "studio",
+        "capability_family": "typography_kinetic",
+        "rights": "REFERENCE_ONLY",
+        "runtime_constraints": "{\"aspect_ratios\": [\"16:9\", \"9:16\"], \"requires_webgpu\": false, \"duration_seconds\": 6.0}",
+        "retrieval_explanation": "Matched terms: clips, media, short | Capability: typography_kinetic | Donor: studio"
+      }
+    ],
+    "frames": [
+      "V6_multi_clip_clip1_frame.png",
+      "V6_multi_clip_clip2_frame.png",
+      "V6_multi_clip_clip3_frame.png"
+    ],
+    "probes": [
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-c293890a\\original_orig-c293890a_final.mp4",
+        "sha256": "7fdf9e68f942af306d0ddf42633a3fecc02eb32247e1fc1edbddb3f733f200f8",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "10.290000",
+            "size": "312574"
+          }
+        }
+      },
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-b978f9f9\\original_orig-b978f9f9_final.mp4",
+        "sha256": "7fdf9e68f942af306d0ddf42633a3fecc02eb32247e1fc1edbddb3f733f200f8",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "10.290000",
+            "size": "312574"
+          }
+        }
+      },
+      {
+        "path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat\\storage\\generated\\original_orig-444f6881\\original_orig-444f6881_final.mp4",
+        "sha256": "7fdf9e68f942af306d0ddf42633a3fecc02eb32247e1fc1edbddb3f733f200f8",
+        "probe": {
+          "programs": [],
+          "stream_groups": [],
+          "streams": [
+            {
+              "codec_name": "h264",
+              "width": 1080,
+              "height": 1920,
+              "r_frame_rate": "30/1"
+            },
+            {
+              "codec_name": "aac",
+              "r_frame_rate": "0/0"
+            }
+          ],
+          "format": {
+            "duration": "10.290000",
+            "size": "312574"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "journey": "revision_rev1_trim",
+    "project_id": "73cc67bd-683f-4ee5-9d7a-35563fe4cb06",
+    "revision": 3,
+    "state": "REVIEW_READY",
+    "applied_deltas": [
+      {
+        "type": "revision_delta",
+        "deltas": [
+          "trimmed_dead_air_to_1.5s"
+        ]
+      }
+    ],
+    "frame": "same_proj_rev1_trim_frame.png",
+    "sha256": "53645885eefd36888aad60a58c406a82e3541862cd4017477780832347d2b757",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "1.000000",
+        "size": "71565"
+      }
+    }
+  },
+  {
+    "journey": "revision_rev2_captions",
+    "project_id": "73cc67bd-683f-4ee5-9d7a-35563fe4cb06",
+    "revision": 4,
+    "state": "REVIEW_READY",
+    "applied_deltas": [
+      {
+        "type": "revision_delta",
+        "deltas": [
+          "styled_clip_kinetic_hero_cinematic",
+          "synchronized_word_highlight_captions",
+          "synced_native_motion_captions"
+        ]
+      }
+    ],
+    "frame": "same_proj_rev2_captions_frame.png",
+    "sha256": "4fca68f4ab2bf06ef4f039eb4b098b24c8245af83362440ccb65f698a74b71ab",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "1.000000",
+        "size": "73614"
+      }
+    }
+  },
+  {
+    "journey": "revision_rev3_shorten",
+    "project_id": "73cc67bd-683f-4ee5-9d7a-35563fe4cb06",
+    "revision": 5,
+    "state": "REVIEW_READY",
+    "applied_deltas": [
+      {
+        "type": "revision_delta",
+        "deltas": [
+          "set_exact_duration_25.0s"
+        ]
+      }
+    ],
+    "frame": "same_proj_rev3_shorten_frame.png",
+    "sha256": "0c504b0d226b822aacd7a356cc6a45f34e8d1f912775988a844d2f9ee73b4506",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "1.000000",
+        "size": "61460"
+      }
+    }
+  },
+  {
+    "journey": "revision_rev_rollback",
+    "project_id": "73cc67bd-683f-4ee5-9d7a-35563fe4cb06",
+    "revision": 6,
+    "state": "REVIEW_READY",
+    "applied_deltas": [
+      {
+        "type": "revision_delta",
+        "deltas": [
+          "reverted_to_revision_2"
+        ]
+      }
+    ],
+    "frame": "same_proj_rev_rollback_frame.png",
+    "sha256": "0d7e7ed4122babeebd07f79c3817bebf03665445fa8eecfb31d855ced1ee3ab1",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1080,
+          "height": 1920,
+          "r_frame_rate": "30/1"
+        },
+        {
+          "codec_name": "aac",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "1.000000",
+        "size": "70280"
+      }
+    }
+  }
+]

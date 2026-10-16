@@ -17,12 +17,14 @@ from .models import (
     RevisionRequestContract,
     VideoRequestContract,
 )
+from .native_actions_bridge import NativeActionsBridge
 from .orchestrator import KnowledgeChatOrchestrator
 from .state_machine import KnowledgeOrchestratorStateMachine
 
 __all__ = [
     "KnowledgeChatOrchestrator",
     "KnowledgeOrchestratorStateMachine",
+    "NativeActionsBridge",
     "KnowledgeOrchestratorState",
     "VideoRequestContract",
     "RevisionRequestContract",

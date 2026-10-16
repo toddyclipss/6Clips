@@ -194,7 +194,7 @@ class KnowledgeChatOrchestrator:
                 )
             ingested_media_path = ingest_res.stored_file_path
 
-        # 4. Aspect Ratio and Duration Extraction
+        # 4. Aspect Ratio, Output Count, and Duration Extraction
         aspect_ratio = "9:16"
         msg_lower = req.message.lower()
         if "16:9" in msg_lower or "horizontal" in msg_lower or "widescreen" in msg_lower:
@@ -204,20 +204,52 @@ class KnowledgeChatOrchestrator:
         elif req.preferences.get("aspect_ratio"):
             aspect_ratio = req.preferences["aspect_ratio"]
 
+        cnt_match = re.search(r"(\d+)\s*(?:clips?|videos?|deliverables?|outputs?)\b", req.message, re.IGNORECASE)
+        output_count = req.output_count if req.output_count > 1 else (int(cnt_match.group(1)) if cnt_match else 1)
+        output_count = min(max(output_count, 1), 6)
+
         dur_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:seconds?|secs?|s)\b", req.message, re.IGNORECASE)
         duration_sec = float(dur_match.group(1)) if dur_match else float(req.preferences.get("duration_seconds", 4.0))
         duration_sec = min(max(duration_sec, 2.0), 120.0)
 
-        # 5. Knowledge Retrieval
+        # 5. Mandatory Knowledge Retrieval
         sm.transition_to(
             KnowledgeOrchestratorState.RETRIEVING_KNOWLEDGE,
             reason="Searching authenticated knowledge base for original techniques",
         )
+        kb_filters = {"aspect_ratio": aspect_ratio} if aspect_ratio in ("16:9", "9:16") else {}
         citations, is_prod_corpus = KnowledgeBaseAdapter.search_knowledge(
             query=req.message,
-            filters={"aspect_ratio": aspect_ratio},
+            filters=kb_filters,
             limit=3,
+            allow_test_adapter=req.allow_test_fixture and not req.require_production_knowledge,
+            require_production=req.require_production_knowledge,
         )
+
+        retrieval_status = KnowledgeBaseAdapter.last_retrieval_status
+        if retrieval_status == "BLOCKED_RIGHTS":
+            sm.transition_to(KnowledgeOrchestratorState.BLOCKED_RIGHTS, reason="Retrieved technique is BLOCKED_RIGHTS")
+            return KnowledgeOrchestratorResponse(
+                run_id=run_id,
+                project_id=req.project_id or "none",
+                revision_id=1,
+                state=KnowledgeOrchestratorState.BLOCKED_RIGHTS,
+                message="Requested motion techniques are subject to third-party rights restrictions and cannot be rendered.",
+                blocker_code="BLOCKED_RIGHTS",
+                blocker_reason="Donor material flagged with BLOCKED_RIGHTS in knowledge repository.",
+            )
+
+        if retrieval_status == "KNOWLEDGE_UNAVAILABLE" or (not citations and (req.require_production_knowledge or not req.allow_test_fixture)):
+            sm.transition_to(KnowledgeOrchestratorState.BLOCKED, reason="No permitted knowledge found in corpus")
+            return KnowledgeOrchestratorResponse(
+                run_id=run_id,
+                project_id=req.project_id or "none",
+                revision_id=1,
+                state=KnowledgeOrchestratorState.BLOCKED,
+                message="No permitted motion design knowledge found for requested topic.",
+                blocker_code="KNOWLEDGE_UNAVAILABLE",
+                blocker_reason="Curated knowledge base contains no permitted entries matching the query.",
+            )
 
         # 6. Motion Composition (A4 Interface)
         sm.transition_to(
@@ -237,9 +269,10 @@ class KnowledgeChatOrchestrator:
         )
 
         # Build documented creative rationale
+        techniques_summary = ", ".join(c.technique for c in citations) or "parametric_spring_motion"
         rationale = CreativeRationale(
-            intent_summary=f"Produce {duration_sec}s {aspect_ratio} video for: '{req.message[:70]}'",
-            motion_strategy="Parametric spring easing and kinetic word entrance based on cited techniques",
+            intent_summary=f"Produce {output_count} clip(s) totaling {duration_sec}s {aspect_ratio} for: '{req.message[:70]}'",
+            motion_strategy=f"Parametric spring easing curves applied from cited techniques: {techniques_summary[:100]}",
             typography_strategy="High-contrast typography with safe-area bounds and word-level timing",
             layout_hierarchy=f"Multi-scene parametric layout ({len(motion_spec.scenes)} scenes) rendered at {motion_spec.width}x{motion_spec.height}",
             pacing_and_audio="Temporal synchronization between narration beats and visual scene cuts",
@@ -282,98 +315,130 @@ class KnowledgeChatOrchestrator:
         )
         resulting_revision = commit_res["revision"]
 
-        # 9. Physical MP4 Rendering
-        sm.transition_to(KnowledgeOrchestratorState.RENDERING, reason="Rendering physical MP4 via OriginalVideoRenderer")
+        # 9. Physical MP4 Rendering (Multi-Clip Support)
+        sm.transition_to(KnowledgeOrchestratorState.RENDERING, reason=f"Rendering {output_count} physical MP4 deliverable(s)")
         word_count = max(8, int(duration_sec * 2.5))
-        spoken_text = (
-            f"{req.message}. Detailed breakdown of key points and actionable insights. "
-            f"Original motion design produced via knowledge-guided composition."
-        )
-
-        render_spec = OriginalCompositionSpec(
-            title=motion_spec.title,
-            topic=req.message,
-            target_duration_sec=int(duration_sec),
-            aspect_ratio=aspect_ratio,
-            language="en",
-            evidence_ledger=EvidenceLedger(
-                topic=req.message,
-                primary_claim="Original knowledge-grounded composition without template bundles",
-            ),
-            spoken_script=TeleprompterScript(
-                spoken_text=spoken_text,
-                word_count=word_count,
-                estimated_read_time_seconds=int(duration_sec),
-            ),
-            shot_list=[
-                ShotListEntry(
-                    scene_number=sc.scene_number,
-                    timecode_start_sec=sc.timecode_start,
-                    timecode_end_sec=sc.timecode_end,
-                    visual_description=sc.visual_description,
-                    overlay_text=sc.elements[0].properties.get("text", motion_spec.title) if sc.elements else motion_spec.title,
-                    motion_template_id="procedural-original",
-                )
-                for sc in motion_spec.scenes
-            ],
-            voice_requirement=VoiceInputRequirement.PROCEDURAL_SYNTHESIS_ALLOWED,
-        )
 
         if req.allow_test_fixture:
             import os
             os.environ["VIRALMINT_TEST_AUDIO_FIXTURE"] = "1"
 
-        render_result = await OriginalVideoRenderer.render_composition(render_spec)
-        if render_result.status != OriginalCreationStatus.RENDERED or not render_result.rendered_result:
-            err_msg = render_result.status_reason or "Physical render failed"
-            sm.transition_to(KnowledgeOrchestratorState.FAILED_TERMINAL, reason=err_msg)
-            return KnowledgeOrchestratorResponse(
-                run_id=run_id,
-                project_id=project.id,
-                revision_id=resulting_revision,
-                state=KnowledgeOrchestratorState.FAILED_TERMINAL,
-                message=f"Render execution failed: {err_msg}",
-                blocker_code="RENDER_FAILED",
-                blocker_reason=err_msg,
+        artifacts: List[Dict[str, Any]] = []
+        library_ids: List[str] = []
+        primary_verification = None
+
+        for clip_idx in range(output_count):
+            clip_title = f"{motion_spec.title} (Part {clip_idx + 1})" if output_count > 1 else motion_spec.title
+            spoken_text = (
+                f"{req.message}. Part {clip_idx + 1} breakdown of key points and actionable insights. "
+                f"Original motion design produced via knowledge-guided composition."
+                if output_count > 1
+                else (
+                    f"{req.message}. Detailed breakdown of key points and actionable insights. "
+                    f"Original motion design produced via knowledge-guided composition."
+                )
             )
 
-        rendered_mp4 = Path(render_result.rendered_result.video_path)
+            render_spec = OriginalCompositionSpec(
+                title=clip_title,
+                topic=req.message,
+                target_duration_sec=int(duration_sec),
+                aspect_ratio=aspect_ratio,
+                language="en",
+                evidence_ledger=EvidenceLedger(
+                    topic=req.message,
+                    primary_claim="Original knowledge-grounded composition without template bundles",
+                ),
+                spoken_script=TeleprompterScript(
+                    spoken_text=spoken_text,
+                    word_count=word_count,
+                    estimated_read_time_seconds=int(duration_sec),
+                ),
+                shot_list=[
+                    ShotListEntry(
+                        scene_number=sc.scene_number,
+                        timecode_start_sec=sc.timecode_start,
+                        timecode_end_sec=sc.timecode_end,
+                        visual_description=sc.visual_description,
+                        overlay_text=sc.elements[0].properties.get("text", clip_title) if sc.elements else clip_title,
+                        motion_template_id="procedural-original",
+                    )
+                    for sc in motion_spec.scenes
+                ],
+                voice_requirement=VoiceInputRequirement.PROCEDURAL_SYNTHESIS_ALLOWED,
+            )
 
-        # 10. Physical Media Verification (FFprobe & SHA-256)
-        verification = MediaVerifier.verify_media_file(
-            media_path=rendered_mp4,
-            expected_aspect_ratio=aspect_ratio,
-            min_duration_sec=min(duration_sec, 2.0),
-            raise_on_failure=True,
-        )
+            render_result = await OriginalVideoRenderer.render_composition(render_spec)
+            if render_result.status != OriginalCreationStatus.RENDERED or not render_result.rendered_result:
+                err_msg = render_result.status_reason or f"Physical render failed for clip {clip_idx + 1}"
+                sm.transition_to(KnowledgeOrchestratorState.FAILED_TERMINAL, reason=err_msg)
+                return KnowledgeOrchestratorResponse(
+                    run_id=run_id,
+                    project_id=project.id,
+                    revision_id=resulting_revision,
+                    state=KnowledgeOrchestratorState.FAILED_TERMINAL,
+                    message=f"Render execution failed: {err_msg}",
+                    blocker_code="RENDER_FAILED",
+                    blocker_reason=err_msg,
+                )
+
+            rendered_mp4 = Path(render_result.rendered_result.video_path)
+
+            # 10. Physical Media Verification (FFprobe & SHA-256)
+            verification = MediaVerifier.verify_media_file(
+                media_path=rendered_mp4,
+                expected_aspect_ratio=aspect_ratio,
+                min_duration_sec=min(duration_sec, 2.0),
+                raise_on_failure=True,
+            )
+            if primary_verification is None:
+                primary_verification = verification
+
+            # 11. Persist to Library
+            lib_asset_id = str(uuid4())
+            async with AsyncSessionLocal() as db:
+                gen_video = GeneratedVideo(
+                    id=lib_asset_id,
+                    user_id=req.user_id,
+                    title=clip_title,
+                    script=spoken_text,
+                    niche="original_motion",
+                    video_path=str(rendered_mp4),
+                    aspect_ratio=aspect_ratio,
+                    duration_seconds=int(verification.probe_duration_sec),
+                    gen_tier="oaas_knowledge_outcome",
+                )
+                db.add(gen_video)
+                await db.commit()
+
+            media_artifact = {
+                "type": "mp4_video",
+                "file_path": str(rendered_mp4),
+                "sha256_hash": verification.sha256_hash,
+                "duration_sec": verification.probe_duration_sec,
+                "aspect_ratio": aspect_ratio,
+                "width": verification.probe_width,
+                "height": verification.probe_height,
+                "clip_index": clip_idx + 1,
+                "library_asset_id": lib_asset_id,
+            }
+            artifacts.append(media_artifact)
+            library_ids.append(lib_asset_id)
+
         sm.transition_to(
             KnowledgeOrchestratorState.VIDEO_VERIFIED,
-            reason="Physical media verified via ffprobe and SHA-256 fingerprint",
+            reason=f"Verified {len(artifacts)} physical MP4(s) via ffprobe and SHA-256 fingerprint",
         )
 
-        # 11. Persist to Library
-        lib_asset_id = str(uuid4())
-        async with AsyncSessionLocal() as db:
-            gen_video = GeneratedVideo(
-                id=lib_asset_id,
-                user_id=req.user_id,
-                title=motion_spec.title,
-                script=spoken_text,
-                niche="original_motion",
-                video_path=str(rendered_mp4),
-                aspect_ratio=aspect_ratio,
-                duration_seconds=int(verification.probe_duration_sec),
-                gen_tier="oaas_knowledge_outcome",
-            )
-            db.add(gen_video)
-            await db.commit()
+        primary_mp4 = Path(artifacts[0]["file_path"])
+        primary_lib_id = library_ids[0]
 
         # 12. Distribution Authorization Check
         handoff = await DistributionHandoffManager.prepare_handoff_contract(
             job_id=run_id,
             idempotency_token=req.idempotency_token or f"tok-{run_id}",
-            render_file_sha256=verification.sha256_hash,
-            media_path=str(rendered_mp4),
+            render_file_sha256=primary_verification.sha256_hash,
+            media_path=str(primary_mp4),
             project_id=project.id,
             revision_id=resulting_revision,
             destination_channel="youtube_shorts",
@@ -397,16 +462,6 @@ class KnowledgeChatOrchestrator:
             sm.transition_to(final_state, reason="Outcome ready for creator review")
 
         # 13. Assemble and Save Immutable Evidence
-        media_artifact = {
-            "type": "mp4_video",
-            "file_path": str(rendered_mp4),
-            "sha256_hash": verification.sha256_hash,
-            "duration_sec": verification.probe_duration_sec,
-            "aspect_ratio": aspect_ratio,
-            "width": verification.probe_width,
-            "height": verification.probe_height,
-        }
-
         evidence = ImmutableRunEvidence(
             run_id=run_id,
             user_id=req.user_id,
@@ -415,23 +470,26 @@ class KnowledgeChatOrchestrator:
             revision_id=resulting_revision,
             creative_rationale=rationale,
             knowledge_citations=citations,
-            applied_actions=[{"type": "compile_native_motion", "revision": resulting_revision}],
+            applied_actions=[{"type": "compile_native_motion", "revision": resulting_revision, "output_count": output_count}],
             safety_validation={"is_safe": True, "bounds_checked": True, "zero_imported_blocks": True},
-            media_artifact=media_artifact,
+            media_artifact=artifacts[0],
             authorizations=req.authorizations,
             state_history=sm.history,
         )
         cls._save_evidence(evidence)
 
-        artifacts = [media_artifact]
         preview_details = {
             "aspect_ratio": aspect_ratio,
-            "duration_seconds": verification.probe_duration_sec,
+            "duration_seconds": primary_verification.probe_duration_sec,
             "scenes_count": len(motion_spec.scenes),
             "citations_count": len(citations),
+            "output_count": output_count,
             "is_production_corpus": is_prod_corpus,
             "spec_fingerprint": NativeMotionGeneratorAdapter.compute_spec_fingerprint(motion_spec),
         }
+
+        deliverable_url = f"/api/projects/{project.id}/export/download"
+        count_desc = f"{output_count} original video deliverables" if output_count > 1 else "Original video"
 
         return KnowledgeOrchestratorResponse(
             run_id=run_id,
@@ -439,12 +497,17 @@ class KnowledgeChatOrchestrator:
             revision_id=resulting_revision,
             state=final_state,
             message=(
-                f"Original video successfully generated at revision {resulting_revision}. "
-                f"Physical MP4 verified ({verification.probe_duration_sec:.1f}s, {aspect_ratio}). "
+                f"{count_desc} successfully generated at revision {resulting_revision} "
+                f"(Project ID: {project.id}, Library ID: {primary_lib_id}). "
+                f"Physical MP4 verified ({primary_verification.probe_duration_sec:.1f}s, {aspect_ratio}, codec: {primary_verification.video_codec}). "
                 f"Distribution status: {pub_status}."
             ),
             evidence=evidence,
             artifact_links=artifacts,
+            library_asset_id=primary_lib_id,
+            library_ids=library_ids,
+            deliverable_url=deliverable_url,
+            output_count=output_count,
             preview_details=preview_details,
             publication_status=pub_status,
         )
@@ -492,13 +555,16 @@ class KnowledgeChatOrchestrator:
 
         project_id = prior_evidence.project_id
 
-        # 3. Apply Delta via RevisionDeltaEngine
+        # 3. Apply Delta via RevisionDeltaEngine with optimistic CAS retry
         try:
-            delta_result = await RevisionDeltaEngine.apply_feedback_delta(
+            max_cas_retries = 2 if getattr(req, "allow_retry", True) else 0
+            delta_result = await RevisionDeltaEngine.apply_feedback_delta_with_retry(
                 project_id=project_id,
                 expected_revision=req.expected_revision,
                 user_feedback=req.user_feedback,
+                revert_to_revision=getattr(req, "revert_to_revision", None),
                 author="main_agent",
+                max_retries=max_cas_retries,
             )
         except RevisionConflictError as rce:
             return KnowledgeOrchestratorResponse(
@@ -614,6 +680,7 @@ class KnowledgeChatOrchestrator:
             "aspect_ratio": aspect,
             "width": verification.probe_width,
             "height": verification.probe_height,
+            "library_asset_id": lib_asset_id,
         }
 
         rationale = CreativeRationale(
@@ -647,6 +714,8 @@ class KnowledgeChatOrchestrator:
         )
         cls._save_evidence(evidence)
 
+        deliverable_url = f"/api/projects/{project_id}/export/download"
+
         return KnowledgeOrchestratorResponse(
             run_id=new_run_id,
             project_id=project_id,
@@ -654,11 +723,15 @@ class KnowledgeChatOrchestrator:
             state=KnowledgeOrchestratorState.REVIEW_READY,
             message=(
                 f"Successfully revised project {project_id} to revision {new_revision} "
-                f"based on feedback '{req.user_feedback}'. "
-                f"Physical MP4 verified ({verification.probe_duration_sec:.1f}s, {aspect})."
+                f"(Library ID: {lib_asset_id}) based on feedback '{req.user_feedback}'. "
+                f"Physical MP4 verified ({verification.probe_duration_sec:.1f}s, {aspect}, codec: {verification.video_codec})."
             ),
             evidence=evidence,
             artifact_links=[media_artifact],
+            library_asset_id=lib_asset_id,
+            library_ids=[lib_asset_id],
+            deliverable_url=deliverable_url,
+            output_count=1,
             preview_details={
                 "aspect_ratio": aspect,
                 "duration_seconds": verification.probe_duration_sec,
