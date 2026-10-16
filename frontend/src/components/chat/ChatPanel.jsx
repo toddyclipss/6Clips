@@ -211,14 +211,19 @@ export default function ChatPanel() {
     if (activeSessionId) {
       ws.send({ type: "set_session", session_id: activeSessionId })
     }
-    const userIntentId = options?.user_intent_id || `user_send_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    const clientMessageId = options?.client_message_id || `cmsg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    const correlationId = options?.correlation_id || options?.user_intent_id || `corr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    const userIntentId = options?.user_intent_id || correlationId
     const payload = {
       type: "chat_message",
       content: trimmed,
+      client_message_id: clientMessageId,
+      correlation_id: correlationId,
       user_intent_id: userIntentId,
-      authorized: true,
     }
     if (options && typeof options === "object") {
+      if (options.project_id) payload.project_id = options.project_id
+      if (options.revision_id) payload.revision_id = options.revision_id
       if (options.provider) payload.provider = options.provider
       if (options.model) payload.model = options.model
       if (options.reasoning_level) payload.reasoning_level = options.reasoning_level

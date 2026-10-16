@@ -155,13 +155,16 @@ export function LiquidMultimodalInput({
       setSelectorOpen(true)
       return
     }
+    const clientMessageId = `cmsg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    const correlationId = `corr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
     const userIntentId = `user_submit_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
     onSubmit?.(value, files.map((f) => f.file), {
       provider: selectedProvider,
       model: selectedModel,
       reasoning_level: reasoningLevel,
+      client_message_id: clientMessageId,
+      correlation_id: correlationId,
       user_intent_id: userIntentId,
-      authorized: true,
     })
     setValue("")
     files.forEach((f) => f.preview && URL.revokeObjectURL(f.preview))
