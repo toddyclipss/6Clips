@@ -60,17 +60,24 @@ def create_sample_video(output_path: Path, duration_sec: float = 3.0, width: int
 
 
 @pytest.mark.asyncio
-async def test_background_inference_without_context_is_blocked():
+async def test_background_inference_without_context_is_blocked(monkeypatch):
     """Verify Wave12 guard still rejects outbound inference when no user context is active."""
     if not HAS_LLM_TRACE:
         pytest.skip("backend.llm_trace not imported in standalone stage")
 
+    monkeypatch.setenv("SIXCLIPS_REQUIRE_EXPLICIT_AUTH", "1")
     with pytest.raises(UnauthorizedInferenceError) as exc_info:
-        check_outbound_authorization(provider="ollama", model="gemma4:e4b")
+        check_outbound_authorization(
+            provider="ollama",
+            model="gemma4:e4b",
+            url="http://127.0.0.1:11434/api/chat",
+            method="POST",
+        )
 
     err_msg = str(exc_info.value)
     assert "BLOCKED_UNAUTHORIZED_BACKGROUND_AI" in err_msg
     assert "trigger=unknown" in err_msg
+    assert exc_info.value.event.outcome == "BLOCKED"
 
 
 @pytest.mark.asyncio
@@ -93,8 +100,13 @@ async def test_server_authored_scope_enables_ollama_inference():
         assert ctx.run_id == run_id
 
         # Guard check passes cleanly
-        authorized = check_outbound_authorization(provider="ollama", model="gemma4:e4b")
-        assert authorized is True
+        event = check_outbound_authorization(
+            provider="ollama",
+            model="gemma4:e4b",
+            url="http://127.0.0.1:11434/api/chat",
+            method="POST",
+        )
+        assert event.outcome == "ALLOWED"
 
 
 @pytest.mark.asyncio
