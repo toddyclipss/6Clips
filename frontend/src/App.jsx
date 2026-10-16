@@ -130,12 +130,12 @@ export default function App() {
               <Route path="avatar" element={<Navigate to="/trends" replace />} />
               <Route path="create" element={<Navigate to="/trends" replace />} />
               <Route path="cron" element={<Navigate to="/" />} />
-              <Route path="clips" element={<LegacyRedirect to="/motion" defaultQuery={{ mode: "clip" }} />} />
+              <Route path="clips" element={<Navigate to="/motion" replace />} />
               <Route path="motion" element={<MotionRouteWrapper />} />
               <Route path="distribution" element={<LegacyRedirect to="/channels" />} />
               <Route path="analytics" element={<LegacyRedirect to="/channels" />} />
-              <Route path="catalog" element={<LegacyRedirect to="/motion" defaultQuery={{ tab: "catalog" }} />} />
-              <Route path="tools" element={<LegacyRedirect to="/motion" defaultQuery={{ mode: "tools" }} />} />
+              <Route path="catalog" element={<Navigate to="/motion" replace />} />
+              <Route path="tools" element={<Navigate to="/motion" replace />} />
               <Route path="tools/captions" element={<ToolCaptions />} />
               <Route path="tools/reframe" element={<ToolReframe />} />
               <Route path="tools/audio-enhance" element={<ToolAudioEnhance />} />

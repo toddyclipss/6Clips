@@ -54,20 +54,31 @@ const ANIMATABLE_PROPERTIES = [
 
 /**
  * Validate type compatibility between a clip and a destination track.
+ * Enforces strict content-safety boundaries:
+ * - Captions/text cannot be dropped onto audio tracks
+ * - Audio cannot be dropped onto video or captions tracks
+ * - Transitions and effects cannot cross into audio or captions
+ * - Locked tracks always reject drops
  */
 function isDropTargetValid(clip, targetTrack) {
   if (!clip || !targetTrack) return false
   if (targetTrack.locked) return false
   const destType = (targetTrack.type || "video").toLowerCase()
-  const cType = (clip.type || "").toLowerCase()
-  const isAudioClip = cType === "audio" || !!clip.audio_file
-  const isCaptionClip = cType === "captions" || cType === "caption" || !!clip.caption_text
+  const cType = (clip.type || clip.mediaType || "").toLowerCase()
+  const isAudioClip = cType === "audio" || Boolean(clip.audio_file)
+  const isCaptionClip = cType === "captions" || cType === "caption" || cType === "text" || Boolean(clip.caption_text)
+  const isTransitionClip = cType === "transition" || cType === "transitions"
+  const isEffectClip = cType === "effect" || cType === "filter" || cType === "effects"
 
-  if (isAudioClip && destType !== "audio") return false
-  if (!isAudioClip && destType === "audio") return false
-  if (isCaptionClip && destType !== "captions") return false
-  if (!isCaptionClip && destType === "captions") return false
-  return true
+  if (isAudioClip) return destType === "audio"
+  if (destType === "audio") return isAudioClip
+  if (isCaptionClip) return destType === "captions" || destType === "text"
+  if (destType === "captions" || destType === "text") return isCaptionClip
+  if (isTransitionClip) return destType === "transition" || destType === "transitions"
+  if (destType === "transition" || destType === "transitions") return isTransitionClip
+  if (isEffectClip) return destType === "effects" || destType === "effect"
+  if (destType === "effects" || destType === "effect") return isEffectClip
+  return ["video", "media", "image", "graphics", "components"].includes(destType)
 }
 
 /**

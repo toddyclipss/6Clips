@@ -132,9 +132,13 @@ export default function MotionReviewPanel({
 
   return (
     <Box sx={{ p: 2, height: "100%", overflowY: "auto", bgcolor: "#f8fafc" }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "text.primary" }}>
-          Production Outputs Review ({outputs.length})
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.5 }}>
+        <Typography
+          variant="subtitle2"
+          data-testid="review-deliverables-count"
+          sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "text.primary" }}
+        >
+          Deliverables Review ({outputs.length})
         </Typography>
         <Chip
           label={`${approvedOutputs.size}/${outputs.length} Approved`}
@@ -143,6 +147,16 @@ export default function MotionReviewPanel({
           sx={{ fontWeight: 700, fontSize: "0.7rem" }}
         />
       </Stack>
+
+      {/* Chat-based Correction Hint */}
+      <Box
+        data-testid="review-correction-guidance"
+        sx={{ mb: 1.5, p: 1, bgcolor: "#ede9fe", borderRadius: 1.5, border: "1px solid rgba(139, 92, 246, 0.2)" }}
+      >
+        <Typography variant="caption" sx={{ color: "#6d28d9", fontSize: "0.68rem", display: "block", lineHeight: 1.35 }}>
+          💡 <strong>Chat Correction:</strong> Request pacing, motion, captions, or layout adjustments directly in the Main Agent Chat.
+        </Typography>
+      </Box>
 
       <Stack spacing={1.5}>
         {outputs.map((out, idx) => {
@@ -296,11 +310,12 @@ export default function MotionReviewPanel({
                   </Button>
 
                   <Stack direction="row" spacing={0.5}>
-                    <Tooltip title="Refine this clip in Timeline without altering others" arrow>
+                    <Tooltip title="Open in Advanced Editing" arrow>
                       <IconButton
                         size="small"
                         color="primary"
                         data-testid={`refine-output-btn-${idx}`}
+                        aria-label="Open in Advanced Editing"
                         onClick={(e) => {
                           e.stopPropagation()
                           onRefineOutput && onRefineOutput(out)
@@ -331,6 +346,21 @@ export default function MotionReviewPanel({
           )
         })}
       </Stack>
+
+      {/* Publishing & Distribution Permissions Status */}
+      <Box sx={{ mt: 2, p: 1.25, bgcolor: "#ffffff", borderRadius: 2, border: "1px solid", borderColor: "divider" }} data-testid="review-publishing-status">
+        <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem", color: "text.secondary", textTransform: "uppercase", display: "block", mb: 0.5 }}>
+          External Publishing Status
+        </Typography>
+        <Chip
+          size="small"
+          label="NOT_CONNECTED / PENDING_CREDENTIALS"
+          sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#fef3c7", color: "#92400e", mb: 0.8 }}
+        />
+        <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem", display: "block", lineHeight: 1.35 }}>
+          External publishing is disabled by default. Connect and verify authorized credentials in My Channel before dispatching.
+        </Typography>
+      </Box>
     </Box>
   )
 }

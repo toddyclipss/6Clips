@@ -25,11 +25,9 @@ import StudioToolsInspector from "../components/motion/StudioToolsInspector"
 import StudioLayersPanel from "../components/motion/StudioLayersPanel"
 import StudioVariablesPanel from "../components/motion/StudioVariablesPanel"
 import StudioCodeWorkspace from "../components/motion/StudioCodeWorkspace"
-import ExtractDialog from "../components/clip/ExtractDialog"
-import useClipSettings from "../components/clip/useClipSettings"
-import useBenchRanges from "../components/clip/bench/useBenchRanges"
 import MotionInstallGate from "../components/MotionInstallGate"
 import MotionReviewPanel from "../components/motion/MotionReviewPanel"
+import { normalizeProjectForPlayer } from "../utils/nativeMotionAdapter"
 import { inspectLegacyProjectBlocks, DONOR_INTERNALIZED_IDS, SHIPPED_OPERATIONAL_IDS } from "../utils/catalogOriginals"
 
 /**
@@ -66,27 +64,37 @@ export default function MotionGraphics() {
   const handledDeepLinkAssetRef = useRef(null)
   const handledDeepLinkBlockRef = useRef(null)
 
-  // Extract dialog state
-  const [extractDialogOpen, setExtractDialogOpen] = useState(false)
-  const [extractTarget, setExtractTarget] = useState(null)
-  const [isExtracting, setIsExtracting] = useState(false)
+  // Active background jobs from appStore
+  const activeJobs = useAppStore((s) => s.activeJobs)
 
-  // Workspace exposure mode (Create / Review / Refine) — respect URL query on initial load
+  // Advanced Editing unobtrusive toggle (technical timeline & manual controls)
+  const [advancedEditing, setAdvancedEditing] = useState(() => {
+    const qp = new URLSearchParams(window.location.search)
+    const m = qp.get("mode")?.toLowerCase()
+    const adv = qp.get("advanced")?.toLowerCase()
+    return m === "refine" || adv === "true" || adv === "1"
+  })
+
+  // Workspace exposure mode: Create and Review only
   const [workspaceMode, setWorkspaceMode] = useState(() => {
     const qp = new URLSearchParams(window.location.search)
     const m = qp.get("mode")?.toLowerCase()
-    if (m && ["create", "review", "refine"].includes(m)) {
-      return m
-    }
-    if (m && ["clip", "tools", "code"].includes(m)) {
-      return "refine"
-    }
-    const t = qp.get("tab")?.toLowerCase()
-    if (t && ["clip", "tools", "code"].includes(t)) {
-      return "refine"
-    }
+    if (m === "review") return "review"
+    if (qp.get("review") || qp.get("jobId") || qp.get("job_id")) return "review"
     return "create"
   })
+
+  const activeJob = useMemo(() => {
+    const list = Object.values(activeJobs || {})
+    if (project?.id) {
+      const found = list.find((j) => j.projectId === project.id || j.project_id === project.id)
+      if (found) return found
+    }
+    const qp = new URLSearchParams(window.location.search)
+    const qJobId = qp.get("jobId") || qp.get("job_id")
+    if (qJobId && activeJobs[qJobId]) return activeJobs[qJobId]
+    return list.find((j) => j.status === "running") || null
+  }, [activeJobs, project?.id])
   const [renderedVideo, setRenderedVideo] = useState(null)
   const [productionBatch, setProductionBatch] = useState(null)
   const [selectedOutputIndex, setSelectedOutputIndex] = useState(0)
@@ -156,93 +164,10 @@ export default function MotionGraphics() {
   const [selectedAsset, setSelectedAsset] = useState(null)
   const activeAsset = selectedAsset || null
 
-  // Ghost Preview state for HyperFrames Catalog blocks (non-destructive hover preview)
-  const [ghostPreview, setGhostPreview] = useState(null)
-  const preGhostPlayingRef = useRef(false)
-
   // Diagnostic report for legacy 6Clips blocks requiring migration
   const legacyReport = useMemo(() => {
     return inspectLegacyProjectBlocks(document)
   }, [document])
-
-  const handleStartGhostPreview = useCallback((catalogItem) => {
-    if (!catalogItem) return
-    const bName = catalogItem.name || catalogItem.id
-    const isOp = SHIPPED_OPERATIONAL_IDS.has(bName) || DONOR_INTERNALIZED_IDS.has(bName) || Boolean(catalogItem.isOperational) || Boolean(catalogItem.runtime_operable)
-    if (!isOp) return
-    const aspect = aspectRatio || "9:16"
-    const previewUrl = `/api/projects/catalog/blocks/${bName}/preview?aspect_ratio=${aspect}`
-    const posterUrl = catalogItem.poster_url || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspect}`
-    if (isPlaying) {
-      preGhostPlayingRef.current = true
-      setIsPlaying(false)
-    } else {
-      preGhostPlayingRef.current = false
-    }
-    setGhostPreview({
-      block_id: bName,
-      title: catalogItem.title || bName,
-      previewUrl,
-      posterUrl,
-      item: catalogItem,
-    })
-  }, [aspectRatio, isPlaying])
-
-  const handleEndGhostPreview = useCallback(() => {
-    setGhostPreview(null)
-    if (preGhostPlayingRef.current) {
-      setIsPlaying(true)
-      preGhostPlayingRef.current = false
-    }
-  }, [])
-
-  // Keep active ghost preview in sync if aspect ratio toggles
-  useEffect(() => {
-    if (ghostPreview?.item) {
-      const bName = ghostPreview.item.name || ghostPreview.item.id
-      const aspect = aspectRatio || "9:16"
-      setGhostPreview((prev) => prev ? ({
-        ...prev,
-        previewUrl: `/api/projects/catalog/blocks/${bName}/preview?aspect_ratio=${aspect}`,
-        posterUrl: prev.item?.poster_url || `/api/projects/catalog/blocks/${bName}/poster?aspect_ratio=${aspect}`,
-      }) : null)
-    }
-  }, [aspectRatio])
-
-  const handleAskAiToInsert = useCallback((catalogItem) => {
-    const bName = catalogItem.name || catalogItem.id
-    const varsList = (catalogItem.variables || []).map(v => v.name || v.id).join(", ")
-    const instruction = `Insert HyperFrames block "${bName}" at t=${Number(currentTime || 0).toFixed(2)}s with aspect ratio ${aspectRatio}. Variables: [${varsList}].`
-    showSnackbar(`Copied AI instruction for block "${bName}"`, "info")
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(instruction).catch(() => {})
-    }
-  }, [currentTime, aspectRatio, showSnackbar])
-
-  // Clip Studio hooks for contextual clip workspace with Project document persistence
-  const clipSettings = useClipSettings()
-
-  const handleCommitBenchRanges = useCallback((ranges) => {
-    if (!activeAsset?.id) return
-    setDocument((prev) => {
-      if (!prev) return prev
-      return {
-        ...prev,
-        bench_ranges: {
-          ...(prev.bench_ranges || {}),
-          [activeAsset.id]: ranges,
-        },
-      }
-    })
-    setIsDirty(true)
-  }, [activeAsset?.id])
-
-  const benchRanges = useBenchRanges(
-    activeAsset?.id || null,
-    activeAsset?.duration_seconds || 0,
-    document?.bench_ranges?.[activeAsset?.id] || null,
-    handleCommitBenchRanges,
-  )
 
   // Real-time synchronization via websocket
   useEffect(() => {
@@ -306,15 +231,32 @@ export default function MotionGraphics() {
 
   // Synchronize workspaceMode changes with URL query string
   const handleWorkspaceModeChange = useCallback((mode) => {
-    setWorkspaceMode(mode)
-    if (mode === "refine") {
-      setLeftNav("layers")
-    }
+    const validMode = mode === "review" ? "review" : "create"
+    setWorkspaceMode(validMode)
     try {
       const url = new URL(window.location.href)
-      url.searchParams.set("mode", mode)
+      url.searchParams.set("mode", validMode)
       window.history.replaceState({}, "", url.toString())
     } catch {}
+  }, [])
+
+  const handleToggleAdvancedEditing = useCallback(() => {
+    setAdvancedEditing((prev) => {
+      const next = !prev
+      try {
+        const url = new URL(window.location.href)
+        if (next) {
+          url.searchParams.set("advanced", "1")
+        } else {
+          url.searchParams.delete("advanced")
+          if (url.searchParams.get("mode") === "refine") {
+            url.searchParams.set("mode", "review")
+          }
+        }
+        window.history.replaceState({}, "", url.toString())
+      } catch {}
+      return next
+    })
   }, [])
 
   // 1a. Immediate Project Load from URL query (independent of studio startup)
@@ -324,24 +266,17 @@ export default function MotionGraphics() {
     const requestedId = queryParams.get("projectId") || queryParams.get("project_id")
     const requestedMode = queryParams.get("mode")?.toLowerCase()
     const requestedTab = queryParams.get("tab")?.toLowerCase()
-    if (requestedMode && ["create", "review", "refine"].includes(requestedMode)) {
-      setWorkspaceMode(requestedMode)
-      if (requestedMode === "refine") {
-        setLeftNav("layers")
-      }
-    } else if (requestedMode && ["clip", "tools", "code"].includes(requestedMode)) {
-      setWorkspaceMode("refine")
-      if (requestedMode === "tools") {
-        setRightNav("tools")
-        setPinnedRight(true)
-      }
-      if (requestedMode === "clip") {
-        setLeftNav("resources")
-      }
+    const requestedAdv = queryParams.get("advanced")?.toLowerCase()
+
+    if (requestedMode === "review" || queryParams.get("review") || queryParams.get("jobId") || queryParams.get("job_id")) {
+      setWorkspaceMode("review")
+    } else {
+      setWorkspaceMode("create")
     }
-    if (requestedTab === "catalog") {
-      setPinnedLeft(true)
-      setLeftNav("resources")
+
+    if (requestedMode === "refine" || requestedTab === "refine" || requestedAdv === "1" || requestedAdv === "true") {
+      setAdvancedEditing(true)
+      setLeftNav("layers")
     }
 
     if (!requestedId) {
@@ -359,10 +294,11 @@ export default function MotionGraphics() {
       try {
         const detail = await http.get(`/api/projects/${requestedId}`)
         if (cancelled) return
+        const norm = normalizeProjectForPlayer(detail.data)
         setProject(detail.data)
         setRevision(detail.data.revision)
-        setAspectRatio(detail.data.aspect_ratio || "9:16")
-        setDocument(detail.data.document)
+        setAspectRatio(detail.data.aspect_ratio || norm.aspectRatio || "9:16")
+        setDocument(norm.tracks?.length ? { ...detail.data.document, timeline: { tracks: norm.tracks, duration_seconds: norm.duration, fps: norm.fps } } : detail.data.document)
         lastCommittedDocumentRef.current = detail.data.document
         setUndoStack([])
         setRedoStack([])
@@ -457,46 +393,6 @@ export default function MotionGraphics() {
     }
   }, [aspectRatio, showSnackbar])
 
-  const handleStartGoal = useCallback(async (goalText) => {
-    if (!goalText || !goalText.trim()) return
-    try {
-      showSnackbar("Creating project from goal...", "info")
-      const projName = goalText.length > 35 ? goalText.slice(0, 35) + "…" : goalText
-      const res = await http.post("/api/projects", {
-        name: projName,
-        aspect_ratio: aspectRatio || "9:16",
-      })
-      if (res.data?.id) {
-        setProject(res.data)
-        setRevision(res.data.revision || 1)
-        setDocument(res.data.document)
-        lastCommittedDocumentRef.current = res.data.document
-        setUndoStack([])
-        setRedoStack([])
-        setIsDirty(false)
-        showSnackbar(`Created project "${res.data.name}"`, "success")
-        try {
-          const url = new URL(window.location.href)
-          url.searchParams.set("projectId", res.data.id)
-          window.history.replaceState({}, "", url.toString())
-        } catch {}
-
-        try {
-          ws.send({
-            type: "chat_message",
-            content: goalText,
-            project_id: res.data.id,
-            user_intent_id: `goal_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-            authorized: true,
-          })
-        } catch {
-          // non-blocking
-        }
-      }
-    } catch (err) {
-      showSnackbar(err.response?.data?.detail || err.message, "error")
-    }
-  }, [aspectRatio, showSnackbar])
 
   // Global Undo/Redo keyboard shortcuts
   useEffect(() => {
@@ -587,9 +483,10 @@ export default function MotionGraphics() {
         // Fallback: keep current document
       }
     }
-    handleWorkspaceModeChange("refine")
-    showSnackbar(`Opened ${output.output_id || "output"} in Timeline Refine mode`, "info")
-  }, [project, handleWorkspaceModeChange, showSnackbar])
+    setAdvancedEditing(true)
+    setLeftNav("layers")
+    showSnackbar(`Opened ${output.output_id || "output"} in Advanced Editing`, "info")
+  }, [project, showSnackbar])
 
   // 1b. Ensure HyperFrames studio is running
   useEffect(() => {
@@ -1674,72 +1571,6 @@ export default function MotionGraphics() {
     }
   }, [handleSelectElementId])
 
-  // 8. Extract clips (Manual & Auto-cut)
-  const handleExtract = async (videoId, opts) => {
-    setIsExtracting(true)
-    try {
-      const isManual = opts.mode === "manual"
-      const payload = { caption_style: opts.caption_style }
-      if (opts.force_retranscribe) {
-        payload.whisper_quality = opts.whisper_quality
-        payload.force_retranscribe = true
-      }
-      if (opts.emoji_style && opts.emoji_style !== "moderate") payload.emoji_style = opts.emoji_style
-      if (opts.remove_silence) payload.remove_silence = true
-      if (opts.force_vertical) payload.force_vertical = true
-
-      if (isManual) {
-        payload.mode = "manual"
-        payload.time_ranges = opts.time_ranges
-      } else {
-        if (opts.min_duration) payload.min_duration = opts.min_duration
-        if (opts.max_duration) payload.max_duration = opts.max_duration
-        if (opts.max_clips) payload.max_clips = opts.max_clips
-        if (opts.user_query && opts.user_query.trim()) payload.user_query = opts.user_query.trim()
-        if (opts.target_platform) payload.target_platform = opts.target_platform
-        if (opts.genre) payload.genre = opts.genre
-      }
-
-      if (project && document) {
-        const nextDoc = {
-          ...document,
-          auto_cut_settings: {
-            mode: opts.mode || "auto",
-            caption_style: opts.caption_style,
-            remove_silence: !!opts.remove_silence,
-            force_vertical: !!opts.force_vertical,
-            time_ranges: opts.time_ranges || null,
-            configured_at: Date.now(),
-          },
-        }
-        await handleApplyOperation("update_document", { document: nextDoc })
-      }
-
-      await http.post(`/api/downloaded/${videoId}/extract-clips`, payload, {
-        headers: {
-          "X-Component-Origin": "MotionGraphics",
-          "X-User-Intent-ID": `extract_intent_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-          "X-Effect-Name": "auto-cut-dialog",
-        },
-      })
-      showSnackbar(
-        isManual
-          ? `Cutting ${opts.time_ranges?.length || ""} clip(s) from selected ranges.`
-          : "Extracting viral clips with AI analysis...",
-        "success"
-      )
-      const libRes = await http.get("/api/library/items")
-      const list = libRes.data?.items || libRes.data
-      if (Array.isArray(list)) setLibraryVideos(list)
-      return true
-    } catch (e) {
-      showSnackbar(`Extract failed: ${e.response?.data?.detail || e.message}`, "error")
-      return false
-    } finally {
-      setIsExtracting(false)
-    }
-  }
-
   const handleRefreshLibrary = useCallback(async () => {
     try {
       const res = await http.get("/api/library/items")
@@ -1755,18 +1586,6 @@ export default function MotionGraphics() {
       return []
     }
   }, [activeAsset])
-
-  const handleDoCut = async () => {
-    if (!activeAsset || benchRanges.ranges.length === 0 || isExtracting) return
-    const ok = await handleExtract(activeAsset.id, {
-      ...clipSettings.toPayload({ hasTranscript: !!activeAsset.has_transcript_segments }),
-      mode: "manual",
-      time_ranges: benchRanges.ranges.map(({ start, end }) => ({ start, end })),
-    })
-    if (ok) {
-      benchRanges.clear()
-    }
-  }
 
   // 9. Ingest Trend into Project
   const handleIngestTrend = async (trend) => {
@@ -1833,6 +1652,8 @@ export default function MotionGraphics() {
         }}
         workspaceMode={workspaceMode}
         onWorkspaceModeChange={handleWorkspaceModeChange}
+        advancedEditing={advancedEditing}
+        onToggleAdvancedEditing={handleToggleAdvancedEditing}
         isDirty={isDirty}
         isSaving={isSaving}
         onSave={handleSave}
@@ -1903,8 +1724,8 @@ export default function MotionGraphics() {
             position: "relative",
           }}
         >
-          {/* Left: Collapsed Rail Indicator */}
-        {(workspaceMode === "refine" || workspaceMode === "create") && !pinnedLeft && (
+          {/* Left: Collapsed Rail Indicator (Advanced Editing Mode only) */}
+        {advancedEditing && !pinnedLeft && (
           <Box
             sx={{
               width: 24,
@@ -1948,10 +1769,10 @@ export default function MotionGraphics() {
           </Box>
         )}
 
-        {/* Left: Layers or Sources / Assets / Catalog (Refine & Create modes) */}
-        {(workspaceMode === "refine" || workspaceMode === "create") && pinnedLeft && (
+        {/* Left: Layers or Media & Sources (Advanced Editing Mode only) */}
+        {advancedEditing && pinnedLeft && (
           <Box sx={{ width: 280, minWidth: 260, maxWidth: 340, height: "100%", zIndex: 2, display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderRight: "1px solid", borderColor: "divider" }}>
-            {/* Left Nav Header Tabs: Layers vs Resources */}
+            {/* Left Nav Header Tabs: Layers vs Media & Sources */}
             <Box sx={{ px: 1, py: 0.75, borderBottom: "1px solid", borderColor: "divider", bgcolor: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <Stack direction="row" spacing={0.5}>
                 <Button
@@ -1986,7 +1807,7 @@ export default function MotionGraphics() {
                     color: leftNav === "resources" ? "#ffffff" : "text.secondary",
                   }}
                 >
-                  Catalog & Media
+                  Media & Sources
                 </Button>
               </Stack>
             </Box>
@@ -2018,12 +1839,6 @@ export default function MotionGraphics() {
                   aspectRatio={aspectRatio}
                   onSelectSource={(asset) => setSelectedAsset(asset)}
                   onAddMediaToTimeline={handleAddMedia}
-                  onAddBlock={handleAddBlock}
-                  onIngestTrend={handleIngestTrend}
-                  onStartGhostPreview={handleStartGhostPreview}
-                  onEndGhostPreview={handleEndGhostPreview}
-                  onAskAiToInsert={handleAskAiToInsert}
-                  onRefreshLibrary={handleRefreshLibrary}
                   isPinned={pinnedLeft}
                   onTogglePin={() => setPinnedLeft(!pinnedLeft)}
                 />
@@ -2093,21 +1908,18 @@ export default function MotionGraphics() {
             onSeek={handleUserSeek}
             onRefresh={() => window.location.reload()}
             onSelectElementId={handleSelectElementId}
-            ghostPreview={ghostPreview}
-            onDismissGhostPreview={handleEndGhostPreview}
-            onInsertGhostBlock={handleAddBlock}
             workspaceMode={workspaceMode}
             renderedVideo={activeReviewOutput}
-            onProceedToRefine={() => handleRefineOutput(activeReviewOutput)}
-            onStartGoal={handleStartGoal}
+            activeJob={activeJob}
+            onOpenAdvanced={() => setAdvancedEditing(true)}
             onNewProject={handleNewProject}
           />
         </Box>
 
-        {/* Right: Properties / Variables Inspector (Refine & Review modes) */}
-        {(workspaceMode === "refine" || workspaceMode === "review") && pinnedRight && (
+        {/* Right: Properties / Variables Inspector (Advanced Editing Mode only) */}
+        {advancedEditing && pinnedRight && (
           <Box sx={{ width: 280, minWidth: 260, maxWidth: 340, height: "100%", zIndex: 2, display: "flex", flexDirection: "column", bgcolor: "#ffffff", borderLeft: "1px solid", borderColor: "divider" }}>
-            {/* Right Nav Header Tabs: Properties vs Variables vs Tools */}
+            {/* Right Nav Header Tabs: Properties vs Variables */}
             <Box sx={{ px: 1, py: 0.75, borderBottom: "1px solid", borderColor: "divider", bgcolor: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <Stack direction="row" spacing={0.5}>
                 <Button
@@ -2145,24 +1957,6 @@ export default function MotionGraphics() {
                   }}
                 >
                   Variables
-                </Button>
-                <Button
-                  size="small"
-                  data-testid="tab-tools"
-                  variant={rightNav === "tools" ? "contained" : "text"}
-                  onClick={() => setRightNav("tools")}
-                  sx={{
-                    py: 0.25,
-                    px: 1.25,
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    borderRadius: 1.5,
-                    minWidth: "auto",
-                    bgcolor: rightNav === "tools" ? "primary.main" : "transparent",
-                    color: rightNav === "tools" ? "#ffffff" : "text.secondary",
-                  }}
-                >
-                  Tools
                 </Button>
               </Stack>
             </Box>
@@ -2208,8 +2002,8 @@ export default function MotionGraphics() {
           </Box>
         )}
 
-        {/* Right: Collapsed Rail Indicator */}
-        {(workspaceMode === "refine" || workspaceMode === "review") && !pinnedRight && (
+        {/* Right: Collapsed Rail Indicator (Advanced Editing Mode only) */}
+        {advancedEditing && !pinnedRight && (
           <Box
             sx={{
               width: 24,
@@ -2237,9 +2031,10 @@ export default function MotionGraphics() {
         )}
       </Box>
 
-      {/* Lower: Full-Width Contextual Workspace (Refine Mode) spanning 100% of editor width */}
-      {workspaceMode === "refine" && (
+      {/* Lower: Full-Width Canonical Workspace (Advanced Editing Mode only) */}
+      {advancedEditing && (
         <Box
+          data-testid="studio-advanced-workspace"
           sx={{
             flex: expandedPreview ? "0 0 160px" : "1 1 44%",
             minHeight: expandedPreview ? 140 : 220,
@@ -2325,16 +2120,6 @@ export default function MotionGraphics() {
           </DialogActions>
         </Dialog>
       )}
-
-      {/* Extract Clips Dialog */}
-      <ExtractDialog
-        open={extractDialogOpen}
-        onClose={() => setExtractDialogOpen(false)}
-        video={extractTarget}
-        onExtract={handleExtract}
-        sharedSettings={clipSettings.settings}
-        onSharedSettings={clipSettings.update}
-      />
     </Box>
   )
 }
