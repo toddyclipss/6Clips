@@ -272,8 +272,9 @@ export default function MotionGraphics() {
             output_id: run_id || `clip_r${outcomeRev || revision || 1}`,
             project_revision: outcomeRev || revision || 1,
             state: "SUCCEEDED",
-            duration_seconds: 15,
-            media_probe: { width: 1080, height: 1920, video_codec: "h264", audio_codec: "aac", duration_seconds: 15 },
+            duration_seconds: latestOutcome?.duration_seconds || latestOutcome?.media_probe?.duration_seconds || 15,
+            media_probe: latestOutcome?.media_probe || { width: 1080, height: 1920, video_codec: "h264", audio_codec: "aac", duration_seconds: latestOutcome?.duration_seconds || 15 },
+            publication_requested: Boolean(latestOutcome?.publication_requested),
           })
           setWorkspaceMode("review")
           try {
@@ -1960,7 +1961,7 @@ export default function MotionGraphics() {
             onRetry={() => window.location.reload()}
             loadingMessage={isProjectLoading ? "Loading project document…" : "Starting preview server…"}
             currentTime={currentTime}
-            duration={activeReviewOutput?.media_probe?.duration_seconds || renderedVideo?.duration_seconds || document?.timeline?.duration_seconds || 15}
+            duration={activeReviewOutput?.media_probe?.duration_seconds || activeReviewOutput?.duration_seconds || renderedVideo?.duration_seconds || latestOutcome?.duration_seconds || document?.timeline?.duration_seconds || 15}
             isPlaying={isPlaying}
             onTogglePlay={() => setIsPlaying(!isPlaying)}
             onPlaybackStateChange={setIsPlaying}

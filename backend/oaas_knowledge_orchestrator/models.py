@@ -152,6 +152,10 @@ class VideoRequestContract(BaseModel):
     preferences: Dict[str, Any] = Field(default_factory=dict, description="Optional preferences (aspect, duration, mood).")
     allow_test_fixture: bool = Field(True, description="Whether isolated test audio fixtures are permitted.")
     idempotency_token: Optional[str] = Field(None, description="Optional idempotency key.")
+    provider: Optional[str] = Field(None, description="Selected AI model provider.")
+    model: Optional[str] = Field(None, description="Selected AI model identifier.")
+    reasoning_level: Optional[str] = Field(None, description="Reasoning effort level.")
+    correlation_id: Optional[str] = Field(None, description="Per-run correlation ID.")
 
 
 class RevisionRequestContract(BaseModel):
@@ -190,3 +194,6 @@ class KnowledgeOrchestratorResponse(BaseModel):
     output_count: int = Field(1, ge=1, description="Number of distinct deliverables produced.")
     preview_details: Dict[str, Any] = Field(default_factory=dict, description="Summary parameters for review.")
     publication_status: str = Field("NOT_CONNECTED", description="Verified publication status.")
+    duration_seconds: Optional[float] = Field(None, description="Physical duration from ffprobe.")
+    media_probe: Optional[Dict[str, Any]] = Field(default_factory=dict, description="ffprobe stream and container metadata.")
+    publication_requested: bool = Field(False, description="Whether user explicitly requested social publication.")

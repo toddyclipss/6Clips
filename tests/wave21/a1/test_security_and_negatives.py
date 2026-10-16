@@ -99,7 +99,7 @@ async def test_security_unauthorized_url_ingestion(monkeypatch):
         authorizations={"user_authorized": False},
         allow_test_fixture=True,
     )
-    assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+    assert resp.state != getattr(KnowledgeOrchestratorState, "BLOCKED_RIGHTS", None)
     assert resp.blocker_code != "BLOCKED_RIGHTS"
     assert "user_authorized: true" not in (resp.blocker_reason or "").lower()
 
@@ -119,7 +119,7 @@ async def test_security_ssrf_blocked_url():
             authorizations={"user_authorized": True},
         )
         assert resp.state == KnowledgeOrchestratorState.BLOCKED
-        assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+        assert resp.state != getattr(KnowledgeOrchestratorState, "BLOCKED_RIGHTS", None)
         assert "ssrf" in (resp.blocker_reason or "").lower() or "blocked" in (resp.blocker_code or "").lower()
 
 
@@ -137,7 +137,7 @@ async def test_negative_blocked_rights_technique():
             require_production_knowledge=True,
         )
         resp = await KnowledgeChatOrchestrator.handle_video_request(req)
-        assert resp.state != KnowledgeOrchestratorState.BLOCKED_RIGHTS
+        assert resp.state != getattr(KnowledgeOrchestratorState, "BLOCKED_RIGHTS", None)
         assert resp.blocker_code in ("KNOWLEDGE_UNAVAILABLE", "BLOCKED")
 
 

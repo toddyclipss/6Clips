@@ -347,20 +347,22 @@ export default function MotionReviewPanel({
         })}
       </Stack>
 
-      {/* Publishing & Distribution Permissions Status */}
-      <Box sx={{ mt: 2, p: 1.25, bgcolor: "#ffffff", borderRadius: 2, border: "1px solid", borderColor: "divider" }} data-testid="review-publishing-status">
-        <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem", color: "text.secondary", textTransform: "uppercase", display: "block", mb: 0.5 }}>
-          External Publishing Status
-        </Typography>
-        <Chip
-          size="small"
-          label="NOT_CONNECTED / PENDING_CREDENTIALS"
-          sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#fef3c7", color: "#92400e", mb: 0.8 }}
-        />
-        <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem", display: "block", lineHeight: 1.35 }}>
-          An approved Review is an editorial confirmation; it is never automatically uploaded or published. External social publishing requires authenticated provider API credentials in My Channel.
-        </Typography>
-      </Box>
+      {/* Publishing & Distribution Permissions Status - only when explicitly requested */}
+      {outputs.some((o) => o?.publication_requested) && (
+        <Box sx={{ mt: 2, p: 1.25, bgcolor: "#ffffff", borderRadius: 2, border: "1px solid", borderColor: "divider" }} data-testid="review-publishing-status">
+          <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem", color: "text.secondary", textTransform: "uppercase", display: "block", mb: 0.5 }}>
+            External Publishing Status
+          </Typography>
+          <Chip
+            size="small"
+            label="NOT_CONNECTED / PENDING_CREDENTIALS"
+            sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#fef3c7", color: "#92400e", mb: 0.8 }}
+          />
+          <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem", display: "block", lineHeight: 1.35 }}>
+            An approved Review is an editorial confirmation; it is never automatically uploaded or published. External social publishing requires authenticated provider API credentials in My Channel.
+          </Typography>
+        </Box>
+      )}
     </Box>
   )
 }

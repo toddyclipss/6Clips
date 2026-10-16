@@ -339,6 +339,7 @@ def create_app() -> FastAPI:
 
     # Register API routers
     app.include_router(chat.router)
+    app.include_router(chat_sessions.router, prefix="/api")
     app.include_router(jobs.router, prefix="/api")
     app.include_router(trends.router, prefix="/api")
     app.include_router(settings_router.router, prefix="/api")

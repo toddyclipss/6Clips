@@ -336,20 +336,30 @@ async def chat_websocket(websocket: WebSocket):
                 try:
                     if is_knowledge_first:
                         from backend.oaas_knowledge_orchestrator import KnowledgeChatOrchestrator
+                        auth_ctx = {
+                            "user_id": user_id,
+                            "session_id": current_session_id,
+                            "project_id": project_id,
+                            "provider": eff_prov,
+                            "model": eff_model,
+                            "reasoning_level": reasoning_level,
+                            "correlation_id": msg.get("user_intent_id") or msg.get("correlation_id"),
+                        }
+                        allow_fixture = bool(msg.get("allow_test_fixture", True))
                         if is_revision and run_id_match:
                             target_run_id = run_id_match.group(0)
                             ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
                                 request_or_run_id=target_run_id,
                                 user_feedback=content,
-                                authenticated_context={"user_id": user_id, "session_id": current_session_id, "project_id": project_id},
-                                allow_test_fixture=True
+                                authenticated_context=auth_ctx,
+                                allow_test_fixture=allow_fixture,
                             )
                         else:
                             ko_resp = await KnowledgeChatOrchestrator.handle_video_request(
                                 request_or_message=content,
-                                authenticated_context={"user_id": user_id, "session_id": current_session_id, "project_id": project_id},
+                                authenticated_context=auth_ctx,
                                 project_id=project_id,
-                                allow_test_fixture=True
+                                allow_test_fixture=allow_fixture,
                             )
 
                         assistant_response = {
@@ -369,6 +379,17 @@ async def chat_websocket(websocket: WebSocket):
                             "state": assistant_response["state"],
                             "message": assistant_response["content"],
                             "deliverable_url": ko_resp.deliverable_url,
+                            "duration_seconds": getattr(ko_resp, "duration_seconds", None),
+                            "media_probe": getattr(ko_resp, "media_probe", {}),
+                            "publication_requested": getattr(ko_resp, "publication_requested", False),
+                            "publication_status": getattr(ko_resp, "publication_status", "NOT_CONNECTED"),
+                            "blocker_code": getattr(ko_resp, "blocker_code", None),
+                            "blocker_reason": getattr(ko_resp, "blocker_reason", None),
+                        }, user_id)
+                        await ws_manager.send({
+                            "type": "chat_done",
+                            "full_response": assistant_response["content"],
+                            "session_id": current_session_id,
                         }, user_id)
                     else:
                         assistant_response = await planner.handle_message(

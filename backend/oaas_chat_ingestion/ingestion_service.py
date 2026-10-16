@@ -75,8 +75,19 @@ class AgentUrlIngestionService:
         try:
             # Check if URL is a test mock fixture for testing or use yt-dlp / urllib
             if request.url.startswith(("http://test.authorized-creator.com/", "https://test.authorized-creator.com/")):
-                # Scaffolded test fixture stream
-                target_file.write_bytes(b"TEST_VIDEO_STREAM_BYTES_VIRALMINT_MOCK_CONTENT")
+                # Scaffolded test fixture stream - generate valid physical MP4 test bytes
+                gen_cmd = [
+                    "ffmpeg", "-y",
+                    "-f", "lavfi", "-i", "testsrc=size=1920x1080:rate=30",
+                    "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=48000",
+                    "-t", "3.0",
+                    "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
+                    "-c:a", "aac", "-b:a", "128k",
+                    str(target_file),
+                ]
+                subprocess.run(gen_cmd, capture_output=True, timeout=15)
+                if not target_file.exists() or target_file.stat().st_size == 0:
+                    target_file.write_bytes(b"TEST_VIDEO_STREAM_BYTES_VIRALMINT_MOCK_CONTENT")
             else:
                 # Real external stream download via yt-dlp
                 # Use yt-dlp with SSRF-safe constraints
