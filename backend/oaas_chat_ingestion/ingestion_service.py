@@ -105,11 +105,12 @@ class AgentUrlIngestionService:
                     cmd = ytdlp_cmd + [
                         "--no-playlist",
                         "--max-filesize", f"{request.max_bytes}",
-                        "-f", "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b",
+                        "--merge-output-format", "mp4",
+                        "-f", "bestvideo[height<=1080]+bestaudio/best[height<=1080]/best",
                         "-o", str(target_file),
                         request.url,
                     ]
-                    res = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+                    res = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
                     if res.returncode != 0:
                         err_out = res.stderr or res.stdout
                         if "Private video" in err_out or "Sign in" in err_out:
@@ -125,6 +126,40 @@ class AgentUrlIngestionService:
                             blocker_code=IngestionBlockerCode.BLOCKED_FETCH_FAILED,
                             blocker_reason=f"Download failed: {err_out[:200]}",
                         )
+
+                    # Handle possible container extension difference if yt-dlp appended extension
+                    actual_file = target_file
+                    if not actual_file.exists():
+                        stem = target_file.stem
+                        parent_dir = target_file.parent
+                        candidates = list(parent_dir.glob(f"{stem}.*"))
+                        candidates = [c for c in candidates if c.suffix.lower() in (".mp4", ".webm", ".mkv", ".mov")]
+                        if candidates:
+                            cand = candidates[0]
+                            if cand.suffix.lower() != ".mp4":
+                                remux_cmd = [
+                                    "ffmpeg", "-y",
+                                    "-i", str(cand),
+                                    "-c", "copy",
+                                    str(target_file),
+                                ]
+                                r_res = subprocess.run(remux_cmd, capture_output=True, timeout=60)
+                                if target_file.exists() and target_file.stat().st_size > 0:
+                                    cand.unlink(missing_ok=True)
+                                    actual_file = target_file
+                                else:
+                                    actual_file = cand
+                            else:
+                                actual_file = cand
+
+                    if not actual_file.exists() or actual_file.stat().st_size == 0:
+                        return UrlIngestionResult(
+                            url=request.url,
+                            is_allowed=False,
+                            blocker_code=IngestionBlockerCode.BLOCKED_FETCH_FAILED,
+                            blocker_reason="Downloaded media file could not be located on disk.",
+                        )
+                    target_file = actual_file
                 else:
                     return UrlIngestionResult(
                         url=request.url,

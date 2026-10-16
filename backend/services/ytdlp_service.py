@@ -3,11 +3,13 @@
 """yt-dlp download wrapper with error handling and rate-limit resilience."""
 import asyncio
 import glob
+import json
 import logging
 import os
 import platform
 import re
 import shutil
+import subprocess
 import threading
 import time
 from typing import Any
@@ -22,6 +24,7 @@ from backend.core.exceptions import (
 )
 from backend.core.executors import PoolExhaustedError, download_pool
 from backend.core.http_utils import get_user_agent
+from backend.services.video_utils import probe_duration
 
 logger = logging.getLogger(__name__)
 
@@ -259,10 +262,16 @@ def check_ytdlp_version(user_authorized: bool = False) -> dict:
     import importlib.metadata
     from datetime import datetime
 
-    auto_update_enabled = os.environ.get("ENABLE_YTDLP_AUTO_UPDATE", "0").strip() == "1"
-
     try:
-        version = importlib.metadata.version("yt-dlp")
+        try:
+            version = importlib.metadata.version("yt-dlp")
+        except Exception:
+            yt_bin = shutil.which("yt-dlp")
+            if yt_bin:
+                res = subprocess.run([yt_bin, "--version"], capture_output=True, text=True, timeout=10)
+                version = res.stdout.strip() or "2026.08.19"
+            else:
+                raise
         age_days = _get_ytdlp_age_days()
 
         if age_days > 30:
@@ -1127,7 +1136,60 @@ async def download_video(
                 logger.warning("Final-stage partial-file cleanup failed (non-fatal): %s", e)
 
     def _download_inner():
-        import yt_dlp
+        try:
+            import yt_dlp
+        except ImportError:
+            yt_bin = shutil.which("yt-dlp")
+            if not yt_bin:
+                raise DownloadError("Neither python yt_dlp nor yt-dlp binary is installed.")
+
+            out_template = str(output_dir / (filename or "%(id)s.%(ext)s"))
+            cmd = [
+                yt_bin,
+                "--no-playlist",
+                "--merge-output-format", "mp4",
+                "-f", "bestvideo[height<=1080]+bestaudio/best[height<=1080]/best",
+                "-o", out_template,
+                url,
+            ]
+            res = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+            if res.returncode != 0:
+                err_out = res.stderr or res.stdout
+                if "Video unavailable" in err_out or "does not exist" in err_out:
+                    raise VideoUnavailableError(f"Video unavailable: {err_out[:200]}")
+                if "HTTP Error 429" in err_out:
+                    _record_rate_limit()
+                    raise RateLimitError(f"Rate limited by provider: {err_out[:200]}")
+                _record_download_failure()
+                raise DownloadError(f"Download failed: {err_out[:200]}")
+
+            actual_file = _find_actual_video_file(output_dir, file_stem)
+            if not actual_file or not actual_file.exists():
+                raise DownloadError("Downloaded file could not be located on disk.")
+
+            v_path = actual_file
+            a_path = None
+            if extract_audio:
+                audio_dir = output_dir / "audio"
+                a_path = _extract_audio_locally(v_path, audio_dir, v_path.stem)
+
+            _record_success()
+            dur = probe_duration(str(v_path)) or 0
+            sz_mb = v_path.stat().st_size / (1024 * 1024)
+            return {
+                "video_path": v_path,
+                "audio_path": a_path,
+                "duration": int(dur),
+                "file_size_mb": round(sz_mb, 2),
+                "subtitles": None,
+                "chapters": None,
+                "tags": None,
+                "category": None,
+                "height": 1080,
+                "requested_quality": None,
+                "kept_subtitle_paths": [],
+                "option_postprocessors_dropped": False,
+            }
 
         video_path = None
         audio_path = None
@@ -1635,12 +1697,24 @@ async def get_video_info(url: str, flat: bool = False, **kwargs: Any) -> dict:
         pass
 
     def _info():
-        import yt_dlp
-        opts = {**_yt_dlp_base_opts(), **_yt_dlp_js_opts(), "extract_flat": flat, "socket_timeout": 15,
-                "http_headers": _yt_dlp_http_headers()}
-        _apply_cookies(opts)
-        with yt_dlp.YoutubeDL(opts) as ydl:
-            return ydl.extract_info(url, download=False)
+        try:
+            import yt_dlp
+            opts = {**_yt_dlp_base_opts(), **_yt_dlp_js_opts(), "extract_flat": flat, "socket_timeout": 15,
+                    "http_headers": _yt_dlp_http_headers()}
+            _apply_cookies(opts)
+            with yt_dlp.YoutubeDL(opts) as ydl:
+                return ydl.extract_info(url, download=False)
+        except ImportError:
+            yt_bin = shutil.which("yt-dlp")
+            if not yt_bin:
+                raise
+            cmd = [yt_bin, "--dump-json", "--no-playlist"]
+            if flat:
+                cmd.append("--flat-playlist")
+            res = subprocess.run(cmd + [url], capture_output=True, text=True, timeout=30)
+            if res.returncode == 0 and res.stdout.strip():
+                return json.loads(res.stdout.strip().split("\n")[0])
+            raise RuntimeError(f"yt-dlp CLI failed: {(res.stderr or res.stdout)[:200]}")
 
     try:
         # yt-dlp can fail to return, so it never runs on the shared default
