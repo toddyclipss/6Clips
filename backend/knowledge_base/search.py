@@ -115,7 +115,11 @@ class BM25SearchEngine:
         filters: Optional[SearchFilter] = None,
         limit: int = 10
     ) -> List[SearchResult]:
-        query_tokens = tokenize(query)
+        # Security sanitization against injection attempts in queries
+        clean_query = re.sub(r"<[^>]*>", " ", query)
+        clean_query = re.sub(r"(?:javascript|eval|exec|__import__)\s*[:(]", " ", clean_query, flags=re.IGNORECASE)
+
+        query_tokens = tokenize(clean_query)
         if not query_tokens:
             return []
 
@@ -136,18 +140,34 @@ class BM25SearchEngine:
                 doc_scores[doc_idx] = doc_scores.get(doc_idx, 0.0) + score
                 matched_terms_per_doc.setdefault(doc_idx, set()).add(token)
 
-        # Boost for exact multi-token matches in title or ID
-        q_lower = query.lower()
+        # Boost for exact multi-token matches in title, ID, or caption identity
+        q_lower = clean_query.lower().strip()
+        is_caption_query = any(k in q_lower for k in ["caption", "subtitle", "karaoke", "speech", "transcript"])
+
+        # Multi-term relevance threshold: for multi-word queries (>=4 words), require at least 2 distinct matched terms
+        if len(query_tokens) >= 4:
+            for doc_idx in list(doc_scores.keys()):
+                if len(matched_terms_per_doc.get(doc_idx, set())) < 2:
+                    doc_scores.pop(doc_idx, None)
+
         for doc_idx in list(doc_scores.keys()):
             doc = self.corpus[doc_idx]
-            if q_lower in doc.title.lower():
-                doc_scores[doc_idx] *= 1.5
-            if q_lower in doc.knowledge_doc_id.lower():
-                doc_scores[doc_idx] *= 1.8
+            d_id = doc.knowledge_doc_id.lower()
+            d_title = doc.title.lower()
+
+            if q_lower in d_title:
+                doc_scores[doc_idx] *= 1.6
+            if q_lower in d_id or d_id in q_lower:
+                doc_scores[doc_idx] *= 2.2
+            if doc.caption_identity_name and doc.caption_identity_name.lower() in q_lower:
+                doc_scores[doc_idx] *= 2.5
+            if is_caption_query and (doc.capability_family == CapabilityFamily.CAPTIONS_WORD_HIGHLIGHT or doc.source_kind == "caption_identity"):
+                doc_scores[doc_idx] *= 1.4
 
         # Filter and rank candidates
         results: List[SearchResult] = []
         ranked_doc_indices = sorted(doc_scores.keys(), key=lambda idx: doc_scores[idx], reverse=True)
+
 
         for doc_idx in ranked_doc_indices:
             doc = self.corpus[doc_idx]
@@ -193,7 +213,7 @@ class BM25SearchEngine:
                 algorithms=doc.algorithms[:3],
                 equations=doc.equations[:3],
                 parameters=doc.parameters[:5],
-                rights=doc.rights.value,
+                rights=doc.rights.value if isinstance(doc.rights, RightsFlag) else str(doc.rights),
                 runtime_constraints=doc.runtime_constraints,
                 retrieval_explanation=explanation,
                 matched_chunk=matched_chunk_text
@@ -206,7 +226,37 @@ class BM25SearchEngine:
 
     def _passes_filter(self, doc: KnowledgeDoc, filters: Optional[SearchFilter]) -> bool:
         if not filters:
-            return True
+            # Default safety: exclude BLOCKED_RIGHTS in unconfigured queries
+            doc_r = doc.rights.value if isinstance(doc.rights, RightsFlag) else str(doc.rights)
+            return doc_r != RightsFlag.BLOCKED_RIGHTS.value
+
+        # Rights safety: exclude blocked unless specifically asked
+        doc_r = doc.rights.value if isinstance(doc.rights, RightsFlag) else str(doc.rights)
+        if filters.exclude_blocked and doc_r == RightsFlag.BLOCKED_RIGHTS.value:
+            if not filters.rights or (isinstance(filters.rights, RightsFlag) and filters.rights != RightsFlag.BLOCKED_RIGHTS) or (isinstance(filters.rights, str) and filters.rights != RightsFlag.BLOCKED_RIGHTS.value):
+                return False
+
+        # Explicit rights filter
+        if filters.rights:
+            req_r = filters.rights.value if isinstance(filters.rights, RightsFlag) else str(filters.rights)
+            if req_r != doc_r:
+                return False
+
+        # Caption identity specific filtering
+        if filters.is_caption_identity is not None:
+            is_cap = (doc.source_kind == "caption_identity" or doc.knowledge_doc_id.startswith("caption:"))
+            if filters.is_caption_identity != is_cap:
+                return False
+
+        # Speech synchronization compatibility
+        if filters.speech_sync_compatible is not None:
+            is_speech_sync = (
+                doc.capability_family == CapabilityFamily.CAPTIONS_WORD_HIGHLIGHT or
+                len(doc.speech_sync_rules) > 0 or
+                any("speech" in t.lower() or "sync" in t.lower() or "karaoke" in t.lower() for t in doc.tags)
+            )
+            if filters.speech_sync_compatible != is_speech_sync:
+                return False
 
         # Capability family
         if filters.capability_family:
@@ -219,13 +269,6 @@ class BM25SearchEngine:
         if filters.donor_group and filters.donor_group.lower() != doc.donor_group.lower():
             return False
 
-        # Rights
-        if filters.rights:
-            req_r = filters.rights.value if isinstance(filters.rights, RightsFlag) else str(filters.rights)
-            doc_r = doc.rights.value if isinstance(doc.rights, RightsFlag) else str(doc.rights)
-            if req_r != doc_r:
-                return False
-
         # Aspect ratio
         if filters.aspect_ratio:
             supported = doc.runtime_constraints.get("aspect_ratios", [])
@@ -236,6 +279,7 @@ class BM25SearchEngine:
         if filters.captions_suitability is not None:
             is_cap = (
                 doc.capability_family == CapabilityFamily.CAPTIONS_WORD_HIGHLIGHT or
+                doc.source_kind == "caption_identity" or
                 any("caption" in t.lower() for t in doc.tags)
             )
             if filters.captions_suitability != is_cap:

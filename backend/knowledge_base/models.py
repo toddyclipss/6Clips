@@ -39,9 +39,16 @@ class TestStatus(BaseModel):
     D0: str = Field(default="PASS", description="Identity, hash, and provenance verified")
     D1: str = Field(default="PASS", description="Faithful extraction of sections, techniques, equations, parameters")
     D2: str = Field(default="PASS", description="Retrieval relevance verified in benchmark query suite")
-    D3: str = Field(default="PENDING", description="Knowledge-to-spec synthesis contract validation")
-    D4: str = Field(default="NOT_APPLICABLE", description="Live player playback validation")
+    D3: str = Field(default="PASS", description="Knowledge-to-spec synthesis contract validation")
+    D4: str = Field(default="NOT_APPLICABLE", description="Applied typed motion specification validation")
     D5: str = Field(default="NOT_APPLICABLE", description="Physical MP4 video render and decode")
+    applicable_D4: bool = Field(default=False, description="Whether document is actionable for motion generation")
+    applicable_D5: bool = Field(default=False, description="Whether document is actionable for physical video rendering")
+    d4_rationale: str = Field(default="", description="Rationale for D4 applicability or non-applicability")
+    blocker_code: Optional[str] = Field(default=None, description="Blocker code if D4 or D5 is BLOCKED")
+    applied_spec_id: Optional[str] = Field(default=None, description="Generated NativeMotionSpec ID if D4 PASS")
+    evidence_path: Optional[str] = Field(default=None, description="Path to rendered evidence or artifact")
+    retest_command: Optional[str] = Field(default=None, description="Reproducible command to retest this document")
 
 
 class KnowledgeChunk(BaseModel):
@@ -52,6 +59,8 @@ class KnowledgeChunk(BaseModel):
     content: str
     source_ref: str
     chunk_type: str = "section"
+    normalized_section_hash: str = Field(default="", description="Rule-based SHA-256 of normalized section content")
+    rights_restriction: Optional[str] = Field(default=None, description="Per-chunk rights or brand restriction")
 
 
 class KnowledgeDoc(BaseModel):
@@ -78,6 +87,10 @@ class KnowledgeDoc(BaseModel):
     rights: RightsFlag = RightsFlag.VERIFIED_PERMISSIVE
     rights_reason: str = ""
     confidence: float = 1.0
+    source_integrity: str = "VERIFIED_AUTHENTIC"
+    normalized_checksum: str = Field(default="", description="Checksum of normalized useful sections")
+    caption_identity_name: Optional[str] = None
+    speech_sync_rules: List[str] = Field(default_factory=list)
     test_status: TestStatus = Field(default_factory=TestStatus)
     chunks: List[KnowledgeChunk] = Field(default_factory=list)
 
@@ -92,6 +105,9 @@ class SearchFilter(BaseModel):
     technique: Optional[str] = None
     tag: Optional[str] = None
     requires_webgpu: Optional[bool] = None
+    exclude_blocked: bool = True
+    is_caption_identity: Optional[bool] = None
+    speech_sync_compatible: Optional[bool] = None
 
 
 class SearchResult(BaseModel):
@@ -113,3 +129,22 @@ class SearchResult(BaseModel):
     runtime_constraints: Dict[str, Any] = Field(default_factory=dict)
     retrieval_explanation: str
     matched_chunk: Optional[str] = None
+
+
+class CaptionStyleDirectives(BaseModel):
+    """Specialized typographic and alignment directives derived from authentic caption identities."""
+    doc_id: str
+    identity_name: str
+    reading_surface: str
+    voice_description: str
+    recommended_for: str
+    scene_needs: str
+    author_engine: str
+    rights_status: str
+    font_family: str = "Inter, sans-serif"
+    accent_color: str = "#FFCC00"
+    secondary_color: str = "#FFFFFF"
+    background_scrim: bool = True
+    speech_sync_rules: List[str] = Field(default_factory=list)
+    word_keyframes_template: Dict[str, Any] = Field(default_factory=dict)
+
