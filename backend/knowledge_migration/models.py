@@ -112,10 +112,13 @@ class RollbackRecord:
 @dataclass
 class RollbackManifest:
     """Persistent ledger of all project migrations with reversible restore proof."""
-    manifest_version: str = "1.0.0"
-    wave: int = 20
+    manifest_version: str = "2.0.0"
+    wave: int = 21
     agent: int = 5
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     total_projects_audited: int = 0
     total_projects_migrated: int = 0
+    total_revisions_migrated: int = 0
     records: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    revision_records: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+

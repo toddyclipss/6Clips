@@ -1,0 +1,110 @@
+{
+  "wave": 21,
+  "agent": 5,
+  "role": "SOLE INTEGRATOR + SAFE HISTORICAL PROJECT MIGRATION + GT-41 REMOVAL GATE",
+  "branch": "wave21/05-migration-integrator",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-05-migration",
+  "base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "tip_sha": "PENDING_COMMIT",
+  "status": "STAGE_A_DEV_READY_FOR_INTEGRATION",
+  "timestamp": "2026-10-16T11:18:00Z",
+  "mandate_summary": {
+    "product_philosophy": "Motion Design OAAS, strictly Create and Review normal UX with single canonical playback surface and unobtrusive optional advanced editing.",
+    "migration_engine": "Safe, reversible, dry-run by default migration engine transforming legacy HyperFrames block dependencies into typed native_motion_v1 specifications.",
+    "database_immutability": "Production viralmint.db strictly protected with verified zero mutations during dry run (SHA256 verified 8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5).",
+    "two_gate_separation": "MIGRATION_DRY_RUN_SAFE (PASS) explicitly separated from LIVE_PRODUCTION_CUTOVER_APPROVED (PENDING_OWNER_AUTHORIZATION).",
+    "reversible_rollback": "Bit-for-bit restore proven on real projects with simulated failure canaries at 25% and 75% batch stages.",
+    "physical_proof": "Physical MP4 proof rendered and decoded via FFprobe (h264, 1080x1920, 30fps, 90 frames)."
+  },
+  "file_ownership": {
+    "owned_patterns": [
+      "backend/knowledge_migration/**",
+      "tests/wave21/a5/**",
+      "tools/wave21_a5/**"
+    ],
+    "disallowed_during_parallel_stage": [
+      "frontend/**",
+      "backend/native_motion/**",
+      "backend/knowledge_base/**",
+      "backend/oaas_knowledge_orchestrator/**",
+      "donor/**",
+      "production DB writable handles"
+    ],
+    "strictly_honored": true
+  },
+  "test_counts": {
+    "wave21_a5_tests_total": 23,
+    "wave21_a5_tests_passed": 23,
+    "wave21_a5_tests_failed": 0,
+    "wave20_a5_regression_total": 14,
+    "wave20_a5_regression_passed": 14,
+    "total_tests": 37,
+    "passed": 37,
+    "failed": 0,
+    "pass_rate": "100%",
+    "suites": [
+      "tests/wave21/a5/test_cutover_gate_safety.py",
+      "tests/wave21/a5/test_db_inventory_and_census.py",
+      "tests/wave21/a5/test_dry_run_immutability.py",
+      "tests/wave21/a5/test_isolated_db_migration.py",
+      "tests/wave21/a5/test_native_spec_compliance.py",
+      "tests/wave21/a5/test_simulated_failure_rollback.py",
+      "tests/wave20/a5"
+    ]
+  },
+  "census_summary": {
+    "total_projects": 345,
+    "clean_native_projects": 113,
+    "projects_dependent_on_blocks": 232,
+    "total_revisions": 1752,
+    "clean_native_revisions": 832,
+    "revisions_dependent_on_blocks": 920,
+    "total_legacy_block_clips_in_projects": 274,
+    "distinct_slugs_active_projects": 14,
+    "distinct_slugs_combined_db": 15,
+    "imported_donor_folders": 156,
+    "total_shipped_folders": 158
+  },
+  "gate_statuses": {
+    "GT-39": "PASS",
+    "GT-40": "PASS",
+    "GT-41": "PENDING_OWNER_AUTHORIZATION_OR_BLOCKERS",
+    "GT-42": "PASS",
+    "MIGRATION_DRY_RUN_SAFE": "PASS",
+    "LIVE_PRODUCTION_CUTOVER_APPROVED": "PENDING_OWNER_AUTHORIZATION",
+    "WAVE21_ACCEPTANCE": "PASS",
+    "FULL_PRODUCT_ACCEPTANCE": "PENDING_GT41_LIVE_CUTOVER"
+  },
+  "known_blockers": [
+    {
+      "code": "PENDING_OWNER_AUTHORIZATION_FOR_LIVE_CUTOVER",
+      "description": "Production database cutover requires explicit owner consent; GT-41 physical removal remains safely blocked until live cutover is executed. Opt-in CLI command 'execute_production_cutover.py --confirm-owner-authorization' provided."
+    }
+  ],
+  "production_vs_test_distinction": {
+    "production_artifacts": [
+      "backend/knowledge_migration/__init__.py",
+      "backend/knowledge_migration/converter.py",
+      "backend/knowledge_migration/detector.py",
+      "backend/knowledge_migration/inventory.py",
+      "backend/knowledge_migration/models.py",
+      "backend/knowledge_migration/planner.py",
+      "backend/knowledge_migration/rollback.py",
+      "backend/knowledge_migration/runner.py",
+      "backend/knowledge_migration/zero_bundle_audit.py"
+    ],
+    "test_and_tool_artifacts": [
+      "tests/wave21/a5/*",
+      "tools/wave21_a5/reconcile_db_inventory.py",
+      "tools/wave21_a5/run_migration_dry_run_and_proofs.py",
+      "tools/wave21_a5/execute_production_cutover.py",
+      "tools/wave21_a5/migration_inventory.json",
+      "tools/wave21_a5/migration_inventory_anonymized.csv",
+      "tools/wave21_a5/migration_execution_ledger.json",
+      "tools/wave21_a5/rollback_and_integrity_proof.json",
+      "tools/wave21_a5/physical_removal_gate.json",
+      "tools/wave21_a5/proofs/proof_migrated_lower_third.mp4",
+      "tools/wave21_a5/proofs/proof_migrated_lower_third.json"
+    ]
+  }
+}

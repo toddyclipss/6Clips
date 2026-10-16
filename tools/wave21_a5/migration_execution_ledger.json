@@ -1,0 +1,337 @@
+{
+  "status": "PASS",
+  "dry_run": true,
+  "database_path": "C:\\Users\\toddy\\Desktop\\ViralMint\\viralmint.db",
+  "database_sha256_unmodified": true,
+  "database_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+  "total_projects_scanned": 345,
+  "projects_dependent_on_blocks": 232,
+  "total_project_legacy_blocks_found": 274,
+  "total_revisions_scanned": 1752,
+  "revisions_dependent_on_blocks": 920,
+  "total_revision_legacy_blocks_found": 1143,
+  "sample_project_results": [
+    {
+      "project_id": "85890621-dfd2-4802-aefa-bf287066644b",
+      "project_name": "Gate A Validation Project",
+      "from_revision": 2,
+      "to_revision": 3,
+      "pre_hash": "8e8dff08313e2626e970357b761c8597f6f190e1998e8a7c0b2b5ae4a5c76513",
+      "post_hash": "5e6634df898fc9205a61460f778ec22c86e30fd3422572246529c5668477df2f",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 5.43,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "fadfe5a1-140e-4166-9792-a93387a1e816",
+      "project_name": "Gate A Validation Project",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "18d8987fcbea3ea98eafa92f6694d1a70dce9c3d6dd85a9fc8e5356dc702deaa",
+      "post_hash": "4d50ce8d644140db8bc1e6b5d04ce0885dc90b0f7818e962665f9e0f6783584b",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.51,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "f9240cb8-4eed-40d4-981b-10092233392e",
+      "project_name": "Gate A Validation Project",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "ebc535d5ccdd95d01580f41f83c5ed7e8135a57d972e8f9f5db1a7fa958407ce",
+      "post_hash": "b5746d0f444115949a2cc049814ef7517802ffd9c8d2a7cd8b4601b39a2a4ca3",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.46,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "5b85912e-67b3-45a2-801d-1bc30c4ff059",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 2,
+      "to_revision": 3,
+      "pre_hash": "488725015367dbf2f0b97ecd27192a9636b16e551e20047daadce31bf2796f79",
+      "post_hash": "157a2b51623f30b07e5ab246f158b5510572e6fbcd8ce121dfb1ed92dea6ee51",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.45,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "20d4113a-8798-4fcc-b29c-33b0b88c02dd",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "c2d2a0e0ada73240187db799ca7264c37746222951d751a4891d3d68f4e666df",
+      "post_hash": "3560cb6bd9463d1194bb7a461564df9b4156742d0e0c6b06fc554f4eac8bb887",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.45,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "2e22f277-b337-4f88-81b4-2d8d4a5991ef",
+      "project_name": "Canary weight-wave",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "d33a085614fd072a4add5f67bf0f05708b1343fa59cd21ca1657aac166cd432c",
+      "post_hash": "2bb8f96ea8a36fd937445022b9dbb5810a920f8d63a9ae1d0ae154794c4f1206",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.38,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "0f2d250f-5aa8-4192-a021-3b6581e7b71a",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "e69538962c5c0e7d49693e6c2bc9bdf5d4f7a8c91f8ce6efd0df0c60808f61eb",
+      "post_hash": "996e795f4d9f3f86490256b7e849cef6d3ef78562dbf2d2f81189246176f42c9",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.44,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "80dc6aa0-2eb9-4366-9313-decd0a7c8db3",
+      "project_name": "Canary weight-wave",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "48d0a7bf4efde8dcf074aea6bf3fab8acefeef52586ff4bff755b09c2c640505",
+      "post_hash": "8dce5eef73af7623c403a4c393e96a0638ca47776c98981fffaa0080fdbbdef0",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.39,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "66f9fa07-6dd6-4f87-8d47-127a7aa04537",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "20c70a5f631b647c2c102021f5d3eee853b1a10b571d41f3c3967e49be085547",
+      "post_hash": "b595bcbf6c495702a4900783e004f073e393a788eacd84f621581dbe743cedcc",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.44,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "9b0010ac-b0e0-4260-9243-401ddf838a2e",
+      "project_name": "Canary weight-wave",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "faa0434bb997ab47aa8983eaedf3020f0aa2b0d5aaea79c6bc008018afa58358",
+      "post_hash": "150156aabee2b450c418bf1565c6aa25081cc6f485dd0147bed5f1b3754f0349",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "spec_validated": true,
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.51,
+      "status": "DRY_RUN_PASSED"
+    }
+  ],
+  "sample_revision_results": [
+    {
+      "revision_id": "74a99638-c4e2-4dcc-873a-4781613f7a93",
+      "project_id": "85890621-dfd2-4802-aefa-bf287066644b",
+      "revision": 2,
+      "operation_type": "add_block",
+      "pre_hash": "8e8dff08313e2626e970357b761c8597f6f190e1998e8a7c0b2b5ae4a5c76513",
+      "post_hash": "86be8ccce78fc4baf8c19ae4d98da4a0ee49f44a49ade02c7b722caa59a63ef0",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.63,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "9d396e49-cbc2-4c0a-b93f-ca43ba9a4767",
+      "project_id": "fadfe5a1-140e-4166-9792-a93387a1e816",
+      "revision": 2,
+      "operation_type": "add_block",
+      "pre_hash": "b99c33de7eadb6d93e4fdba8ac86391fd05989fb01e71163c5e8177b309a63ad",
+      "post_hash": "caae19e922e7120d5550128ee2b68435e8a446dad8a26ae26aa990049751a0ec",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.58,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "167b9a1b-e693-4993-beb2-5f9abb9d7ab2",
+      "project_id": "fadfe5a1-140e-4166-9792-a93387a1e816",
+      "revision": 3,
+      "operation_type": "update_block_variables",
+      "pre_hash": "18d8987fcbea3ea98eafa92f6694d1a70dce9c3d6dd85a9fc8e5356dc702deaa",
+      "post_hash": "a288386ce92f7c33327f478fb9a0d5fc9e3f2294f390d70d4a1576878aca26e2",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.65,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "ccdfca69-9a72-42dc-b0b2-9bb91e18432b",
+      "project_id": "f9240cb8-4eed-40d4-981b-10092233392e",
+      "revision": 2,
+      "operation_type": "add_block",
+      "pre_hash": "e3b2787d2560d5dfbba89a59523a631e071b0237eb02131e419c9ca8bbb8ee07",
+      "post_hash": "0992ecd712ede12a48c1952d95a7d66af616cc9e42553e1c9f74fa2fa26bb164",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.85,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "cb04504a-83f7-4547-9132-af99d8a88d65",
+      "project_id": "f9240cb8-4eed-40d4-981b-10092233392e",
+      "revision": 3,
+      "operation_type": "update_block_variables",
+      "pre_hash": "ebc535d5ccdd95d01580f41f83c5ed7e8135a57d972e8f9f5db1a7fa958407ce",
+      "post_hash": "d321baa18547bde7e360972570cadbf5ae95978d885d5ddf7c0a18dd6fca94ba",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 1.42,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "15dc962b-ec62-4fd9-acd4-750fb37d34cc",
+      "project_id": "5b85912e-67b3-45a2-801d-1bc30c4ff059",
+      "revision": 2,
+      "operation_type": "add_block",
+      "pre_hash": "488725015367dbf2f0b97ecd27192a9636b16e551e20047daadce31bf2796f79",
+      "post_hash": "05e71e36661a5ca6f953b9eb42ca66514921ae50884d49918e3d3d722db2ca7f",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.7,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "50d86968-9931-4dea-ae9f-74e242d29d57",
+      "project_id": "20d4113a-8798-4fcc-b29c-33b0b88c02dd",
+      "revision": 2,
+      "operation_type": "add_block",
+      "pre_hash": "1f289005e12ba6adf4fc1d07e855756fee74b2bcf044cab4fdda880a05333a24",
+      "post_hash": "2571b4eb6d2245c7da015ad4b3f38e2fb6c3255786569a508ac784de4ff5f82f",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.84,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "ab291c87-a9e0-42f1-81ec-d5c947ff38be",
+      "project_id": "20d4113a-8798-4fcc-b29c-33b0b88c02dd",
+      "revision": 3,
+      "operation_type": "update_block_variables",
+      "pre_hash": "c2d2a0e0ada73240187db799ca7264c37746222951d751a4891d3d68f4e666df",
+      "post_hash": "18bd93415b00b81d732e11bc6feeca97201c0ef6d6dcd6c95b4a28483e3ed5ad",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.82,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "56ac4962-ff51-4d8c-8f4f-7ebbf8432103",
+      "project_id": "2e22f277-b337-4f88-81b4-2d8d4a5991ef",
+      "revision": 2,
+      "operation_type": "add_block",
+      "pre_hash": "31b9a42392b88fe2629a5cc32de2557b6db2c652fb1f53ab0c6807b7a3dfb353",
+      "post_hash": "bdd565388ddda075b40f0c3387013ad4b7df1056e53294c939c8d9f3a6d4d494",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.37,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "revision_id": "b57468df-9ba5-4582-a234-f375a0cfd146",
+      "project_id": "2e22f277-b337-4f88-81b4-2d8d4a5991ef",
+      "revision": 3,
+      "operation_type": "update_block_variables",
+      "pre_hash": "d33a085614fd072a4add5f67bf0f05708b1343fa59cd21ca1657aac166cd432c",
+      "post_hash": "278ee195823457235ad70ad779d64998cd23eb59485997eef61dabc9520e53b1",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "residual_legacy_blocks": 0,
+      "duration_ms": 0.37,
+      "status": "DRY_RUN_PASSED"
+    }
+  ],
+  "all_project_results_count": 232,
+  "all_revision_results_count": 920,
+  "readiness_summary": {
+    "total_projects": 345,
+    "clean_native_projects": 113,
+    "dependent_projects": 232,
+    "total_revisions": 1752,
+    "clean_native_revisions": 832,
+    "dependent_revisions": 920
+  }
+}

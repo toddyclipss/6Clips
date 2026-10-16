@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "all_canaries_passed": true,
+  "rehearsals": {
+    "failure_at_25_percent": {
+      "batch_size_total": 232,
+      "migrated_before_abort": 58,
+      "pre_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+      "partially_migrated_sha256": "26b3eaae56dbbdf070e6444db615b7543ab7c0eab3a4e34b3234b8ae65073ab3",
+      "restored_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+      "bit_for_bit_identical": true,
+      "status": "PASS"
+    },
+    "failure_at_75_percent": {
+      "batch_size_total": 232,
+      "migrated_before_abort": 174,
+      "pre_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+      "partially_migrated_sha256": "44e45e756b36f39d193570d7fe87c6754c2644a1a5e12ef8c3787d2d4f7fdfc7",
+      "restored_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+      "bit_for_bit_identical": true,
+      "status": "PASS"
+    }
+  }
+}
