@@ -5,9 +5,9 @@
   "branch": "wave21/05-migration-integrator",
   "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-05-migration",
   "base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
-  "tip_sha": "12098b5a540cde2d9b1b6f74be25175bc1278e24",
-  "status": "STAGE_A_DEV_READY_FOR_INTEGRATION",
-  "timestamp": "2026-10-16T11:18:00Z",
+  "tip_sha": "93e725218a4f7d6ce1ddb523e14e110e2b41606e",
+  "status": "STAGE_B_INTEGRATED_RELEASE_CANDIDATE",
+  "timestamp": "2026-10-16T14:50:00Z",
   "mandate_summary": {
     "product_philosophy": "Motion Design OAAS, strictly Create and Review normal UX with single canonical playback surface and unobtrusive optional advanced editing.",
     "migration_engine": "Safe, reversible, dry-run by default migration engine transforming legacy HyperFrames block dependencies into typed native_motion_v1 specifications.",
@@ -104,7 +104,9 @@
       "tools/wave21_a5/rollback_and_integrity_proof.json",
       "tools/wave21_a5/physical_removal_gate.json",
       "tools/wave21_a5/proofs/proof_migrated_lower_third.mp4",
-      "tools/wave21_a5/proofs/proof_migrated_lower_third.json"
+      "tools/wave21_a5/proofs/proof_migrated_lower_third.json",
+      "tools/wave21_a5/integrated_E2E_matrix.json",
+      "tools/wave21_a5/integration_manifest.json"
     ]
   }
 }

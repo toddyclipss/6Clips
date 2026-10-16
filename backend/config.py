@@ -152,9 +152,10 @@ class Settings(BaseSettings):
     # MOTION_SUPERSAMPLE=false in .env for faster, softer output.
     MOTION_SUPERSAMPLE: bool = True
 
-    # ── Wave 20 Feature Flags ──────────────────────────
-    KNOWLEDGE_FIRST: bool = False
+    # ── Wave 21 Feature Flags ──────────────────────────
+    KNOWLEDGE_FIRST: bool = True
     LEGACY_PROJECT_COMPAT: bool = True
+
 
 
 def _ensure_secrets(s: Settings) -> Settings:

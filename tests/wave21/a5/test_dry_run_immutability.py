@@ -10,12 +10,12 @@ from backend.knowledge_migration.runner import MigrationRunner, compute_file_sha
 
 
 def test_dry_run_guarantees_zero_database_mutations():
-    raw_path = settings.DATABASE_URL.replace("sqlite+aiosqlite:///", "").replace("sqlite:///", "")
-    prod_db = Path(raw_path).resolve()
-    if not prod_db.exists():
-        candidate = Path(r"C:\Users\toddy\Desktop\ViralMint\viralmint.db").resolve()
-        if candidate.exists():
-            prod_db = candidate
+    candidate = Path(r"C:\Users\toddy\Desktop\ViralMint\viralmint.db").resolve()
+    if candidate.exists():
+        prod_db = candidate
+    else:
+        raw_path = settings.DATABASE_URL.replace("sqlite+aiosqlite:///", "").replace("sqlite:///", "")
+        prod_db = Path(raw_path).resolve()
 
     assert prod_db.exists()
 

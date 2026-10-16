@@ -263,10 +263,11 @@ class NativeCaptionEngine:
         output_wav_path = Path(output_wav_path).resolve()
         output_wav_path.parent.mkdir(parents=True, exist_ok=True)
 
+        wav_path_str = str(output_wav_path).replace('\\', '/')
         ps_cmd = f"""
         Add-Type -AssemblyName System.Speech
         $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
-        $s.SetOutputToWaveFile('{str(output_wav_path).replace('\\', '/')}')
+        $s.SetOutputToWaveFile('{wav_path_str}')
         $s.Speak('{text}')
         $s.Dispose()
         """

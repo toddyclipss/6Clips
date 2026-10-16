@@ -215,7 +215,7 @@ export function normalizeProjectForPlayer(projectOrDoc) {
       }
 
       const opType = (op.type || op.operator || "").toLowerCase()
-      if (opType === "caption" || opType === "captions" || Boolean(op.caption_text)) {
+      if (opType === "caption" || opType === "captions" || opType === "text" || Boolean(op.caption_text)) {
         captionClips.push({ ...baseClip, type: "captions", caption_text: baseClip.text || op.caption_text })
       } else if (opType === "audio" || opType === "speech" || opType === "voiceover" || op.audio_file) {
         audioClips.push({ ...baseClip, type: "audio" })

@@ -38,16 +38,14 @@ def compute_file_sha256(path: Path) -> str:
 
 
 def run_inventory_audit() -> Dict[str, Any]:
-    print("[1/5] Discovering database configuration...")
-    # Discover DB path from settings or canonical production root
-    db_url = settings.DATABASE_URL
-    raw_path = db_url.replace("sqlite+aiosqlite:///", "").replace("sqlite:///", "")
-    db_path = Path(raw_path).resolve()
-    if not db_path.exists():
-        # Check canonical production location or VIRALMINT_DATA_DIR
-        candidate = Path(r"C:\Users\toddy\Desktop\ViralMint\viralmint.db").resolve()
-        if candidate.exists():
-            db_path = candidate
+    # Discover DB path from canonical production location or settings
+    candidate = Path(r"C:\Users\toddy\Desktop\ViralMint\viralmint.db").resolve()
+    if candidate.exists():
+        db_path = candidate
+    else:
+        db_url = settings.DATABASE_URL
+        raw_path = db_url.replace("sqlite+aiosqlite:///", "").replace("sqlite:///", "")
+        db_path = Path(raw_path).resolve()
     print(f"Resolved DB path: {db_path} (exists={db_path.exists()})")
 
     if not db_path.exists():

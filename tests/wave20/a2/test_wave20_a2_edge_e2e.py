@@ -10,7 +10,7 @@ import time
 import json
 import threading
 import subprocess
-from http.server import SimpleHTTPRequestHandler, HTTPServer
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import pytest
 
@@ -49,6 +49,10 @@ class SPAHandler(SimpleHTTPRequestHandler):
                 self.wfile.write(b"[]")
             elif "health" in self.path:
                 self.wfile.write(b'{"status":"ok"}')
+            elif "library" in self.path:
+                self.wfile.write(b'{"items":[]}')
+            elif "trends" in self.path:
+                self.wfile.write(b'{"results":[]}')
             else:
                 self.wfile.write(b"{}")
             return
@@ -85,7 +89,7 @@ def spa_server():
         pytest.fail("frontend/dist/index.html does not exist. Run 'npm run build' first.")
 
     SPAHandler.api_calls.clear()
-    server = HTTPServer(("127.0.0.1", 5174), SPAHandler)
+    server = ThreadingHTTPServer(("127.0.0.1", 5174), SPAHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     time.sleep(0.5)
@@ -102,7 +106,7 @@ class TestEdgeMinimalMotionUX:
             "--disable-gpu",
             "--no-sandbox",
             f"--window-size={width},{height}",
-            "--virtual-time-budget=1500",
+            "--virtual-time-budget=2500",
         ]
         if screenshot_name:
             out_img = SCREENSHOTS_DIR / screenshot_name

@@ -1,0 +1,104 @@
+{
+  "wave": 21,
+  "title": "Wave 21 Five-Agent Release Integration Manifest",
+  "generated_at": "2026-10-16T14:48:00Z",
+  "integrator": "Wave 21 Agent 5 (Sole Integrator)",
+  "kickoff_base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "integration_branch": "integration/wave21-five-agents",
+  "integration_worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-integration",
+  "agent_branches": {
+    "agent_1": {
+      "role": "Real Chat Outcomes, Multi-Clip Rendering, Same-Project Revisions",
+      "branch": "wave21/01-real-chat-outcomes",
+      "tip_sha": "8d2d588c554d31f0412116b1e4c8abce13bf8172",
+      "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-01-chat",
+      "merge_commit": "5efa882"
+    },
+    "agent_2": {
+      "role": "Create/Review Normal UX, Single Player, Optional Timeline, Edge E2E",
+      "branch": "wave21/02-real-create-review-ui",
+      "tip_sha": "8a0918ef6b1b5da4d368e2a6e695268cc4f84431",
+      "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-02-ui",
+      "merge_commit": "0a8b6d6"
+    },
+    "agent_3": {
+      "role": "Per-Document Knowledge QA, Exhaustive Corpus Ledger, Benchmark Suite",
+      "branch": "wave21/03-per-document-knowledge-qa",
+      "tip_sha": "1e0705f397fb1692804dd347423b50dbe2296600",
+      "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-03-knowledge",
+      "merge_commit": "32c61f3"
+    },
+    "agent_4": {
+      "role": "Original Motion Hardening, Speech Captions, Creative Benchmarks",
+      "branch": "wave21/04-original-motion-hardening",
+      "tip_sha": "ffb6d78752e3cabe3a8e367425b50f1689e7aabc",
+      "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion",
+      "merge_commit": "1e1f228"
+    },
+    "agent_5": {
+      "role": "Safe 232 Project Migration Engine, Rollback Proofs, GT-41 Gate, Release Integrator",
+      "branch": "wave21/05-migration-integrator",
+      "tip_sha": "93e725218a4f7d6ce1ddb523e14e110e2b41606e",
+      "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-05-migration",
+      "merge_commit": "4c1d62d"
+    }
+  },
+  "git_merge_sequence": [
+    "git checkout -b integration/wave21-five-agents 501697f22f670fa1c2a827f2ff7653073f17af75",
+    "git merge --no-ff 8d2d588c554d31f0412116b1e4c8abce13bf8172 -m \"merge(wave21): integrate Agent 1 chat orchestrator outcomes\"",
+    "git merge --no-ff 8a0918ef6b1b5da4d368e2a6e695268cc4f84431 -m \"merge(wave21): integrate Agent 2 Create and Review minimal UI\"",
+    "git merge --no-ff 1e0705f397fb1692804dd347423b50dbe2296600 -m \"merge(wave21): integrate Agent 3 per-document knowledge QA and retrieval\"",
+    "git merge --no-ff ffb6d78752e3cabe3a8e367425b50f1689e7aabc -m \"merge(wave21): integrate Agent 4 original native motion hardening\"",
+    "git merge --no-ff 93e725218a4f7d6ce1ddb523e14e110e2b41606e -m \"merge(wave21): integrate Agent 5 project migration and GT-41 gate\""
+  ],
+  "verification_results": {
+    "frontend_vite_build": {
+      "command": "npm run build --prefix frontend",
+      "status": "PASS",
+      "duration": "30.44s"
+    },
+    "automated_test_suites": {
+      "command": "py -3.11 -m pytest tests/wave21 tests/wave20",
+      "total_tests": 200,
+      "passed": 200,
+      "failed": 0,
+      "status": "PASS",
+      "duration": "110.73s",
+      "breakdown": {
+        "tests_wave21": 105,
+        "tests_wave20_regression": 95
+      }
+    },
+    "edge_browser_e2e": {
+      "suites": [
+        "tests/wave21/a2/test_wave21_a2_edge_e2e.py (5 passed)",
+        "tests/wave20/a2/test_wave20_a2_edge_e2e.py (4 passed)"
+      ],
+      "status": "PASS",
+      "resolutions_verified": ["1920x1080", "1440x900", "1366x768"]
+    },
+    "production_db_immutability": {
+      "db_path": "C:\\Users\\toddy\\Desktop\\ViralMint\\viralmint.db",
+      "verified_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+      "status": "UNTOUCHED_AND_BIT_IDENTICAL"
+    }
+  },
+  "truth_gates": {
+    "GT-39_donor_read_only": "PASS",
+    "GT-40_migration_readiness_inventory": "PASS",
+    "GT-41_physical_zero_block_removal": "PENDING_OWNER_AUTHORIZATION_OR_BLOCKERS",
+    "GT-42_reversible_rollback_proof": "PASS",
+    "GT-43_master_plan_alignment": "PASS",
+    "GT-44_production_safeties": "PASS",
+    "END_TO_END_CHAT_PRODUCT": "PASS",
+    "PER_DOCUMENT_VALIDATION": "PASS"
+  },
+  "acceptance_declaration": {
+    "wave_21_acceptance": "PASS",
+    "full_product_acceptance": "PENDING_GT-41_PHYSICAL_REMOVAL_AND_LIVE_CUTOVER",
+    "live_cutover_authorized": false,
+    "physical_blocks_removed": 0,
+    "physical_blocks_remaining_shipped": 156,
+    "remote_push_executed": false
+  }
+}
