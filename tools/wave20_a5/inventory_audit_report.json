@@ -1,0 +1,4768 @@
+{
+  "wave": 20,
+  "agent": 5,
+  "timestamp": "2026-10-16T00:40:00Z",
+  "donor_census": {
+    "donor_root": "C:\\Users\\toddy\\Desktop\\hyperframes",
+    "total_donor_blocks": 196,
+    "donor_blocks": [
+      "ai-answer-rank",
+      "ai-chat-reveal",
+      "app-showcase",
+      "apple-money-count",
+      "aurora",
+      "bar-chart-race",
+      "beat-freeze-cut",
+      "blob",
+      "blue-sweater-intro-video",
+      "camcorder-hud",
+      "camera-dolly-zoom",
+      "canopy-part-title",
+      "carousel-circle-1",
+      "carousel-circle-2",
+      "carousel-circle-3",
+      "carousel-circle-4",
+      "carousel-circle-5",
+      "carousel-orbit-1",
+      "carousel-orbit-2",
+      "carousel-orbit-3",
+      "carousel-orbit-4",
+      "carousel-orbit-5",
+      "carousel-path-1",
+      "carousel-path-2",
+      "carousel-path-3",
+      "carousel-path-4",
+      "carousel-path-5",
+      "carousel-text-circle-1",
+      "carousel-text-circle-2",
+      "carousel-text-circle-3",
+      "carousel-text-circle-4",
+      "carousel-text-circle-5",
+      "carousel-vision-1",
+      "carousel-vision-2",
+      "carousel-vision-3",
+      "carousel-vision-4",
+      "carousel-vision-5",
+      "chatgpt-exchange",
+      "chromatic-radial-split",
+      "cinemagraph",
+      "cinematic-zoom",
+      "claude-exchange",
+      "code-3d-extrude",
+      "code-diff",
+      "code-highlight",
+      "code-morph",
+      "code-particle-assemble",
+      "code-scroll",
+      "code-shader-dissolve",
+      "code-slice-hero",
+      "code-snippet-apple-terminal-pro",
+      "code-snippet-dark-2026",
+      "code-snippet-dark-modern",
+      "code-typing",
+      "cosmic-orb",
+      "cross-warp-morph",
+      "cuboid-carousel",
+      "data-chart",
+      "domain-warp-dissolve",
+      "editorial-flash-overlay",
+      "exploded-stack",
+      "extruded-logo",
+      "flash-through-white",
+      "flowchart",
+      "flowchart-vertical",
+      "flowing-gradient",
+      "fractal-noise",
+      "freeze-frame-dressing",
+      "frost",
+      "frost-sequence-camera-orbit",
+      "gallery-tunnel",
+      "glass-hero",
+      "glass-shard-title",
+      "glitch",
+      "godrays",
+      "goo",
+      "gooey-split",
+      "gravitational-lens",
+      "halftone-field",
+      "heygen-avatar-promo-card",
+      "holographic",
+      "hw-frame",
+      "hw-path-text",
+      "hw-pipeline",
+      "hw-scribble-transition",
+      "hw-text-cloud",
+      "hw-title",
+      "hw-write-title",
+      "instagram-follow",
+      "ios26-liquid-glass",
+      "lens-flare",
+      "light-leak",
+      "liquid-glass-notification",
+      "liquid-glass-widgets",
+      "liquid-metal",
+      "logo-outro",
+      "lottie-character-walk",
+      "lower-third-bild",
+      "lt-accent-underline",
+      "lt-bold-block",
+      "lt-clean-bar",
+      "lt-color-block",
+      "lt-dark-card",
+      "lt-kicker-name",
+      "lt-mask-reveal",
+      "lt-neon-border",
+      "lt-side-rule",
+      "lt-soft-pill",
+      "lt-stack-bars",
+      "macos-notification",
+      "macos-tahoe-liquid-glass",
+      "marble",
+      "mesh-gradient",
+      "message-thread-reveal",
+      "mk-background",
+      "mk-callout-highlight",
+      "mk-clone-wall-transition",
+      "mk-line-graph",
+      "mk-placeholder-grid",
+      "mk-progress-stat",
+      "mk-specs-list",
+      "nebula",
+      "news-ticker",
+      "north-korea-locked-down",
+      "notes-reveal",
+      "notification-cascade",
+      "nyc-paris-flight",
+      "orbit-card",
+      "organic-light-leak-overlay",
+      "oscilloscope-trace",
+      "plasma",
+      "prism",
+      "product-turntable",
+      "rack-focus",
+      "reddit-post",
+      "ridged-burn",
+      "ripple-waves",
+      "sdf-iris",
+      "share-sheet-carousel",
+      "sine-wave",
+      "slack-notification-ad",
+      "snow",
+      "spain-map",
+      "spiral-galaxy",
+      "split-flap-board",
+      "spotify-card",
+      "starfield",
+      "strands",
+      "stripes",
+      "swirl",
+      "swirl-vortex",
+      "thermal-distortion",
+      "thread-message-stack",
+      "tiktok-follow",
+      "transitions-3d",
+      "transitions-blur",
+      "transitions-cover",
+      "transitions-destruction",
+      "transitions-dissolve",
+      "transitions-distortion",
+      "transitions-grid",
+      "transitions-light",
+      "transitions-mechanical",
+      "transitions-other",
+      "transitions-push",
+      "transitions-radial",
+      "transitions-scale",
+      "ui-3d-reveal",
+      "us-map",
+      "us-map-bubble",
+      "us-map-flow",
+      "us-map-hex",
+      "vfx-anamorphic-flare",
+      "vfx-iphone-device",
+      "vfx-liquid-background",
+      "vfx-liquid-glass",
+      "vfx-magnetic",
+      "vfx-portal",
+      "vfx-shatter",
+      "vfx-text-cursor",
+      "voronoi",
+      "vpn-youtube-spot",
+      "water",
+      "waveform",
+      "week-in-merges",
+      "weight-wave",
+      "whip-pan",
+      "wireframe-portal-title",
+      "world-map",
+      "x-post",
+      "yt-comment-card",
+      "yt-lcd-background",
+      "yt-logo-intro",
+      "yt-lower-third",
+      "yt-prism-title",
+      "yt-vertical-fill"
+    ],
+    "total_donor_components": 236,
+    "total_docs_files": 1463,
+    "total_mdx_files": 552
+  },
+  "shipped_bundles_census": {
+    "total_shipped_dirs": 158,
+    "imported_donor_count": 156,
+    "imported_donor_slugs": [
+      "ai-answer-rank",
+      "ai-chat-reveal",
+      "app-showcase",
+      "aurora",
+      "bar-chart-race",
+      "beat-freeze-cut",
+      "blob",
+      "camcorder-hud",
+      "camera-dolly-zoom",
+      "carousel-circle-1",
+      "carousel-circle-2",
+      "carousel-circle-3",
+      "carousel-circle-4",
+      "carousel-circle-5",
+      "carousel-orbit-1",
+      "carousel-orbit-2",
+      "carousel-orbit-3",
+      "carousel-orbit-4",
+      "carousel-orbit-5",
+      "carousel-path-1",
+      "carousel-path-2",
+      "carousel-path-3",
+      "carousel-path-4",
+      "carousel-path-5",
+      "carousel-text-circle-1",
+      "carousel-text-circle-2",
+      "carousel-text-circle-3",
+      "carousel-text-circle-4",
+      "carousel-text-circle-5",
+      "carousel-vision-1",
+      "carousel-vision-2",
+      "carousel-vision-3",
+      "carousel-vision-4",
+      "carousel-vision-5",
+      "chromatic-radial-split",
+      "cinemagraph",
+      "cinematic-zoom",
+      "code-3d-extrude",
+      "code-diff",
+      "code-highlight",
+      "code-morph",
+      "code-particle-assemble",
+      "code-scroll",
+      "code-shader-dissolve",
+      "code-slice-hero",
+      "code-snippet-dark-2026",
+      "code-snippet-dark-modern",
+      "code-typing",
+      "cosmic-orb",
+      "cross-warp-morph",
+      "cuboid-carousel",
+      "data-chart",
+      "domain-warp-dissolve",
+      "editorial-flash-overlay",
+      "flash-through-white",
+      "flowchart",
+      "flowchart-vertical",
+      "flowing-gradient",
+      "fractal-noise",
+      "freeze-frame-dressing",
+      "frost",
+      "frost-sequence-camera-orbit",
+      "gallery-tunnel",
+      "glitch",
+      "godrays",
+      "goo",
+      "gooey-split",
+      "gravitational-lens",
+      "halftone-field",
+      "holographic",
+      "hw-frame",
+      "hw-path-text",
+      "hw-pipeline",
+      "hw-scribble-transition",
+      "hw-text-cloud",
+      "hw-title",
+      "hw-write-title",
+      "instagram-follow",
+      "lens-flare",
+      "light-leak",
+      "liquid-metal",
+      "logo-outro",
+      "lower-third-bild",
+      "lt-accent-underline",
+      "lt-bold-block",
+      "lt-clean-bar",
+      "lt-color-block",
+      "lt-dark-card",
+      "lt-kicker-name",
+      "lt-mask-reveal",
+      "lt-neon-border",
+      "lt-side-rule",
+      "lt-soft-pill",
+      "lt-stack-bars",
+      "marble",
+      "mesh-gradient",
+      "message-thread-reveal",
+      "mk-background",
+      "mk-callout-highlight",
+      "mk-clone-wall-transition",
+      "mk-line-graph",
+      "mk-placeholder-grid",
+      "mk-progress-stat",
+      "mk-specs-list",
+      "nebula",
+      "news-ticker",
+      "north-korea-locked-down",
+      "notes-reveal",
+      "notification-cascade",
+      "nyc-paris-flight",
+      "orbit-card",
+      "organic-light-leak-overlay",
+      "oscilloscope-trace",
+      "plasma",
+      "prism",
+      "rack-focus",
+      "ridged-burn",
+      "ripple-waves",
+      "sdf-iris",
+      "share-sheet-carousel",
+      "sine-wave",
+      "snow",
+      "split-flap-board",
+      "starfield",
+      "strands",
+      "stripes",
+      "swirl",
+      "swirl-vortex",
+      "thermal-distortion",
+      "thread-message-stack",
+      "tiktok-follow",
+      "transitions-3d",
+      "transitions-blur",
+      "transitions-cover",
+      "transitions-destruction",
+      "transitions-dissolve",
+      "transitions-distortion",
+      "transitions-grid",
+      "transitions-light",
+      "transitions-mechanical",
+      "transitions-other",
+      "transitions-push",
+      "transitions-radial",
+      "transitions-scale",
+      "ui-3d-reveal",
+      "us-map-hex",
+      "vfx-anamorphic-flare",
+      "vfx-magnetic",
+      "vfx-text-cursor",
+      "voronoi",
+      "water",
+      "waveform",
+      "week-in-merges",
+      "weight-wave",
+      "whip-pan",
+      "yt-lower-third"
+    ],
+    "retired_custom_count": 2,
+    "retired_custom_slugs": [
+      "creator-hud",
+      "glitch-transition"
+    ]
+  },
+  "database_census": {
+    "total_projects": 345,
+    "projects_dependent_on_blocks_count": 232,
+    "total_revisions": 1752,
+    "revisions_dependent_on_blocks_count": 920,
+    "distinct_block_ids_in_db": [
+      "ai-answer-rank",
+      "apple-money-count",
+      "aurora",
+      "bar-chart-race",
+      "carousel-text-circle-1",
+      "closure-test-block",
+      "glass-hero",
+      "hw-path-text",
+      "lower-third-bild",
+      "minimal-title",
+      "notification-cascade",
+      "spotify-card",
+      "tiktok-follow",
+      "weight-wave",
+      "yt-lower-third"
+    ]
+  },
+  "codebase_references": {
+    "shipped_blocks": [
+      "backend/catalog/audit_generator.py",
+      "backend/catalog/creative_recipes.py",
+      "backend/catalog/export_contract.py",
+      "backend/catalog/hyperframes_source_tree_audit_summary.json",
+      "backend/catalog/manifest_service.py",
+      "backend/catalog/poster_service.py",
+      "backend/catalog/preview_engine.py",
+      "backend/catalog/router.py",
+      "backend/catalog_inventory/hyperframes_196_inventory.json",
+      "backend/catalog_inventory/hyperframes_196_source_crosswalk.json",
+      "backend/catalog_inventory/wave16_196_per_id_ledger.json",
+      "backend/catalog_runtime/core/onboarding.py",
+      "backend/catalog_runtime/core/registry_engine.py",
+      "backend/catalog_runtime/core/taxonomy.py",
+      "backend/catalog_runtime/gsap/adapter.py",
+      "backend/catalog_runtime/ports/wave16_agent3/adapter.py",
+      "backend/catalog_runtime/ports/wave16_agent3/descriptors.json",
+      "backend/catalog_runtime/ports/wave16_agent4/adapter.py",
+      "backend/catalog_runtime/ports/wave17_a3/adapter.py",
+      "backend/catalog_runtime/ports/wave17_a4/adapter.py",
+      "backend/catalog_runtime/ports/wave18_a3/adapter.py",
+      "backend/catalog_runtime/ports/wave18_a4/adapter.py",
+      "backend/services/registry_adapter.py",
+      "frontend/src/components/catalog/CatalogDrawer.jsx",
+      "frontend/src/components/catalog/CatalogFacetBar.jsx",
+      "frontend/src/fixtures/hyperframes_196_fixture.json",
+      "frontend/src/pages/Catalog.jsx",
+      "frontend/src/utils/catalogInventory.js",
+      "frontend/src/utils/catalogOriginals.js"
+    ],
+    "UniversalRuntimeRegistry": [
+      "backend/catalog_runtime/core/__init__.py",
+      "backend/catalog_runtime/core/interface.py",
+      "backend/catalog_runtime/core/registry_engine.py",
+      "backend/oaas_outcomes/block_selector.py"
+    ],
+    "catalogInventory": [
+      "frontend/src/pages/Catalog.jsx"
+    ],
+    "catalogOriginals": [
+      "frontend/src/components/catalog/CatalogCard.jsx",
+      "frontend/src/components/catalog/CatalogDrawer.jsx",
+      "frontend/src/components/catalog/CatalogFacetBar.jsx",
+      "frontend/src/components/motion/StudioResourcePanel.jsx",
+      "frontend/src/pages/Catalog.jsx",
+      "frontend/src/pages/MotionGraphics.jsx",
+      "frontend/src/utils/catalogInventory.js"
+    ],
+    "kind:\\s*['\\\"]catalog['\\\"]": [
+      "frontend/src/components/catalog/CatalogResourceList.jsx",
+      "frontend/src/components/motion/StudioResourcePanel.jsx"
+    ],
+    "type:\\s*['\\\"]block['\\\"]": [
+      "frontend/src/components/catalog/CatalogResourceList.jsx",
+      "frontend/src/components/motion/StudioResourcePanel.jsx"
+    ],
+    "/catalog/preview/": [],
+    "/catalog/blocks": [
+      "backend/api/projects.py",
+      "backend/catalog/export_contract.py",
+      "backend/catalog/manifest.json",
+      "backend/catalog/manifest_service.py",
+      "backend/catalog/preview_engine.py",
+      "backend/catalog/project_intent_contract.py",
+      "backend/catalog/router.py",
+      "backend/catalog/shipped_blocks/app-showcase/registry-item.json",
+      "backend/catalog/shipped_blocks/aurora/registry-item.json",
+      "backend/catalog/shipped_blocks/blob/registry-item.json",
+      "backend/catalog/shipped_blocks/camcorder-hud/registry-item.json",
+      "backend/catalog/shipped_blocks/chromatic-radial-split/registry-item.json",
+      "backend/catalog/shipped_blocks/cinematic-zoom/registry-item.json",
+      "backend/catalog/shipped_blocks/code-3d-extrude/registry-item.json",
+      "backend/catalog/shipped_blocks/code-diff/registry-item.json",
+      "backend/catalog/shipped_blocks/code-highlight/registry-item.json",
+      "backend/catalog/shipped_blocks/code-morph/registry-item.json",
+      "backend/catalog/shipped_blocks/code-particle-assemble/registry-item.json",
+      "backend/catalog/shipped_blocks/code-scroll/registry-item.json",
+      "backend/catalog/shipped_blocks/code-shader-dissolve/registry-item.json",
+      "backend/catalog/shipped_blocks/code-slice-hero/registry-item.json",
+      "backend/catalog/shipped_blocks/code-typing/registry-item.json",
+      "backend/catalog/shipped_blocks/cross-warp-morph/registry-item.json",
+      "backend/catalog/shipped_blocks/cuboid-carousel/registry-item.json",
+      "backend/catalog/shipped_blocks/data-chart/registry-item.json",
+      "backend/catalog/shipped_blocks/domain-warp-dissolve/registry-item.json",
+      "backend/catalog/shipped_blocks/editorial-flash-overlay/registry-item.json",
+      "backend/catalog/shipped_blocks/flash-through-white/registry-item.json",
+      "backend/catalog/shipped_blocks/flowchart-vertical/registry-item.json",
+      "backend/catalog/shipped_blocks/flowchart/registry-item.json",
+      "backend/catalog/shipped_blocks/flowing-gradient/registry-item.json",
+      "backend/catalog/shipped_blocks/fractal-noise/registry-item.json",
+      "backend/catalog/shipped_blocks/freeze-frame-dressing/registry-item.json",
+      "backend/catalog/shipped_blocks/frost-sequence-camera-orbit/registry-item.json",
+      "backend/catalog/shipped_blocks/frost/registry-item.json",
+      "backend/catalog/shipped_blocks/glitch/registry-item.json",
+      "backend/catalog/shipped_blocks/godrays/registry-item.json",
+      "backend/catalog/shipped_blocks/goo/registry-item.json",
+      "backend/catalog/shipped_blocks/gravitational-lens/registry-item.json",
+      "backend/catalog/shipped_blocks/holographic/registry-item.json",
+      "backend/catalog/shipped_blocks/instagram-follow/registry-item.json",
+      "backend/catalog/shipped_blocks/lens-flare/registry-item.json",
+      "backend/catalog/shipped_blocks/light-leak/registry-item.json",
+      "backend/catalog/shipped_blocks/liquid-metal/registry-item.json",
+      "backend/catalog/shipped_blocks/logo-outro/registry-item.json",
+      "backend/catalog/shipped_blocks/marble/registry-item.json",
+      "backend/catalog/shipped_blocks/mesh-gradient/registry-item.json",
+      "backend/catalog/shipped_blocks/nebula/registry-item.json",
+      "backend/catalog/shipped_blocks/north-korea-locked-down/registry-item.json",
+      "backend/catalog/shipped_blocks/nyc-paris-flight/registry-item.json",
+      "backend/catalog/shipped_blocks/orbit-card/registry-item.json",
+      "backend/catalog/shipped_blocks/organic-light-leak-overlay/registry-item.json",
+      "backend/catalog/shipped_blocks/oscilloscope-trace/registry-item.json",
+      "backend/catalog/shipped_blocks/plasma/registry-item.json",
+      "backend/catalog/shipped_blocks/prism/registry-item.json",
+      "backend/catalog/shipped_blocks/ridged-burn/registry-item.json",
+      "backend/catalog/shipped_blocks/ripple-waves/registry-item.json",
+      "backend/catalog/shipped_blocks/sdf-iris/registry-item.json",
+      "backend/catalog/shipped_blocks/sine-wave/registry-item.json",
+      "backend/catalog/shipped_blocks/snow/registry-item.json",
+      "backend/catalog/shipped_blocks/starfield/registry-item.json",
+      "backend/catalog/shipped_blocks/strands/registry-item.json",
+      "backend/catalog/shipped_blocks/stripes/registry-item.json",
+      "backend/catalog/shipped_blocks/swirl-vortex/registry-item.json",
+      "backend/catalog/shipped_blocks/swirl/registry-item.json",
+      "backend/catalog/shipped_blocks/thermal-distortion/registry-item.json",
+      "backend/catalog/shipped_blocks/tiktok-follow/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-3d/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-blur/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-cover/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-destruction/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-dissolve/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-distortion/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-grid/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-light/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-mechanical/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-other/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-push/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-radial/registry-item.json",
+      "backend/catalog/shipped_blocks/transitions-scale/registry-item.json",
+      "backend/catalog/shipped_blocks/ui-3d-reveal/registry-item.json",
+      "backend/catalog/shipped_blocks/us-map-hex/registry-item.json",
+      "backend/catalog/shipped_blocks/vfx-magnetic/registry-item.json",
+      "backend/catalog/shipped_blocks/vfx-text-cursor/registry-item.json",
+      "backend/catalog/shipped_blocks/voronoi/registry-item.json",
+      "backend/catalog/shipped_blocks/water/registry-item.json",
+      "backend/catalog/shipped_blocks/waveform/registry-item.json",
+      "backend/catalog/shipped_blocks/whip-pan/registry-item.json",
+      "backend/catalog/shipped_blocks/yt-lower-third/registry-item.json",
+      "backend/catalog_inventory/hyperframes_196_source_crosswalk.json",
+      "backend/services/catalog_preview_service.py",
+      "frontend/src/components/catalog/CatalogCard.jsx",
+      "frontend/src/components/catalog/CatalogDrawer.jsx",
+      "frontend/src/components/catalog/CatalogResourceList.jsx",
+      "frontend/src/components/motion/StudioResourcePanel.jsx",
+      "frontend/src/pages/MotionGraphics.jsx",
+      "frontend/src/utils/catalogOriginals.js"
+    ]
+  },
+  "projects_with_blocks": {
+    "85890621-dfd2-4802-aefa-bf287066644b": {
+      "name": "Gate A Validation Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_d53d24a2",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "GATE A LIVE",
+            "TXT_SUB": "REAL PROTOCOL"
+          }
+        }
+      ]
+    },
+    "fadfe5a1-140e-4166-9792-a93387a1e816": {
+      "name": "Gate A Validation Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_5defceec",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED HEADLINE",
+            "TXT_SUB": "VERIFIED VALUE"
+          }
+        }
+      ]
+    },
+    "f9240cb8-4eed-40d4-981b-10092233392e": {
+      "name": "Gate A Validation Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_0112d244",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED HEADLINE",
+            "TXT_SUB": "VERIFIED VALUE"
+          }
+        }
+      ]
+    },
+    "5b85912e-67b3-45a2-801d-1bc30c4ff059": {
+      "name": "Canary lower-third-bild",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_e341a882",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "CANARY TITLE",
+            "TXT_SUB": "CANARY SUBTITLE"
+          }
+        }
+      ]
+    },
+    "20d4113a-8798-4fcc-b29c-33b0b88c02dd": {
+      "name": "Canary lower-third-bild",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_d696c10a",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED_CANARY TITLE",
+            "TXT_SUB": "CANARY SUBTITLE"
+          }
+        }
+      ]
+    },
+    "2e22f277-b337-4f88-81b4-2d8d4a5991ef": {
+      "name": "Canary weight-wave",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_f15b3deb",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "text": "UPDATED_HYPERWAVE",
+            "baseWeight": 200,
+            "peakWeight": 800
+          }
+        }
+      ]
+    },
+    "0f2d250f-5aa8-4192-a021-3b6581e7b71a": {
+      "name": "Canary lower-third-bild",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_ecf8e1e2",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED_CANARY TITLE",
+            "TXT_SUB": "CANARY SUBTITLE"
+          }
+        }
+      ]
+    },
+    "80dc6aa0-2eb9-4366-9313-decd0a7c8db3": {
+      "name": "Canary weight-wave",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_c9f32415",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "text": "UPDATED_HYPERWAVE",
+            "baseWeight": 200,
+            "peakWeight": 800
+          }
+        }
+      ]
+    },
+    "66f9fa07-6dd6-4f87-8d47-127a7aa04537": {
+      "name": "Canary lower-third-bild",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_df6839b9",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED_CANARY TITLE",
+            "TXT_SUB": "CANARY SUBTITLE"
+          }
+        }
+      ]
+    },
+    "9b0010ac-b0e0-4260-9243-401ddf838a2e": {
+      "name": "Canary weight-wave",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_f3a17d7e",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "text": "UPDATED_HYPERWAVE",
+            "baseWeight": 200,
+            "peakWeight": 800
+          }
+        }
+      ]
+    },
+    "86ab8b46-6a30-444e-a0a1-b7cdcdf39f18": {
+      "name": "Canary notification-cascade",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_66df7dfc",
+          "block_id": "notification-cascade",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "appTitle": "UPDATED_ViralMint Alert",
+            "message1": "Rendering Complete",
+            "sender1": "HyperFrames Engine"
+          }
+        }
+      ]
+    },
+    "57ff2a45-5625-41d2-96b0-fe09d073110f": {
+      "name": "Canary aurora",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_9965e652",
+          "block_id": "aurora",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "speed": "UPDATED_1.5",
+            "intensity": 0.8
+          }
+        }
+      ]
+    },
+    "519ecd11-3825-4777-abd5-50eb48ae1c23": {
+      "name": "Canary bar-chart-race",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_da3df6a8",
+          "block_id": "bar-chart-race",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "title": "UPDATED_Growth Race"
+          }
+        }
+      ]
+    },
+    "ce2dbcfe-e5b6-4d2c-afb2-ce39a2d65e46": {
+      "name": "Canary spotify-card",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_b813fd18",
+          "block_id": "spotify-card",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "trackTitle": "UPDATED_Signal Found",
+            "artistName": "ANON"
+          }
+        }
+      ]
+    },
+    "ae3b667a-0407-4795-a1c9-9fc8c0459181": {
+      "name": "CAS Draft Test",
+      "aspect_ratio": "16:9",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_e2a80b32",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "RECONCILED"
+          }
+        }
+      ]
+    },
+    "c460b001-77b9-4595-8502-26fcfe225742": {
+      "name": "Canary lower-third-bild",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_fcf9fd31",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED_CANARY TITLE",
+            "TXT_SUB": "CANARY SUBTITLE"
+          }
+        }
+      ]
+    },
+    "a991245d-5bfa-4b5c-a3e8-f1bd58278811": {
+      "name": "Canary weight-wave",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_eb4759dc",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "text": "UPDATED_HYPERWAVE",
+            "baseWeight": 200,
+            "peakWeight": 800
+          }
+        }
+      ]
+    },
+    "3c452fb0-9e15-481e-91cd-b69d6b6a9781": {
+      "name": "Canary notification-cascade",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_ee99de0c",
+          "block_id": "notification-cascade",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "appTitle": "UPDATED_ViralMint Alert",
+            "message1": "Rendering Complete",
+            "sender1": "HyperFrames Engine"
+          }
+        }
+      ]
+    },
+    "01dfd39a-e50a-4eaf-b6d6-d9bc72a32fcb": {
+      "name": "Canary aurora",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_4a3d969c",
+          "block_id": "aurora",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "speed": "UPDATED_1.5",
+            "intensity": 0.8
+          }
+        }
+      ]
+    },
+    "fd116d15-400d-47f5-9726-3e49a0710ade": {
+      "name": "Canary bar-chart-race",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_99ec46a3",
+          "block_id": "bar-chart-race",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "title": "UPDATED_Growth Race"
+          }
+        }
+      ]
+    },
+    "fd7c2b26-7b5e-4f83-9779-aeb0a0e0a9a2": {
+      "name": "Canary spotify-card",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_a1591069",
+          "block_id": "spotify-card",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "trackTitle": "UPDATED_Signal Found",
+            "artistName": "ANON"
+          }
+        }
+      ]
+    },
+    "edaa9196-7d3d-48e3-8570-9dc6f56ec4a9": {
+      "name": "CAS Draft Test",
+      "aspect_ratio": "16:9",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_074c475d",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "RECONCILED"
+          }
+        }
+      ]
+    },
+    "f258b4aa-804e-43b4-a39b-631e3ef45848": {
+      "name": "Gate A Validation Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_725f5edd",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "UPDATED HEADLINE",
+            "TXT_SUB": "VERIFIED VALUE"
+          }
+        }
+      ]
+    },
+    "86a55889-3541-40b6-81c1-21be2fd92ca4": {
+      "name": "Frozen Cache Reproducibility Test",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_9255716c",
+          "block_id": "closure-test-block",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "headline": "RUNNING_VERSION_A"
+          }
+        }
+      ]
+    },
+    "a05daf62-e635-445c-892a-94ee0a13d312": {
+      "name": "Frozen Cache Reproducibility Test",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_e8c845ff",
+          "block_id": "closure-test-block",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "headline": "RUNNING_VERSION_A"
+          }
+        }
+      ]
+    },
+    "9090303c-1d5d-4ee3-8780-ad6f0ccdb104": {
+      "name": "Simultaneous Real MP4 Test",
+      "aspect_ratio": "16:9",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_38d42092",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "SPEAKER ONE (SIMULTANEOUS)",
+            "TXT_SUB": "ROLE: LEAD RESEARCHER"
+          }
+        },
+        {
+          "clip_id": "elem_f3d1cd62",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 2.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "SPEAKER TWO (SIMULTANEOUS)",
+            "TXT_SUB": "ROLE: LEAD ARCHITECT"
+          }
+        }
+      ]
+    },
+    "e6573dd0-e73f-4048-a4f3-2fa74ef7055f": {
+      "name": "Browser Draft Reconcile Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_38813af7",
+          "block_id": "ai-answer-rank",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 3,
+          "variables": {
+            "undefined": "#fcfcfb"
+          }
+        }
+      ]
+    },
+    "5ccdb3e2-b50c-4803-a4c8-77604d32d89f": {
+      "name": "Timeline Pro Test Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 1,
+      "blocks": [
+        {
+          "clip_id": "elem_title_card",
+          "block_id": "minimal-title",
+          "track_id": "track_graphics_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "headline": "NEXT GEN MOTION",
+            "color": "#a855f7"
+          }
+        }
+      ]
+    },
+    "0c69a679-a7d9-4345-98b5-aaa53c424221": {
+      "name": "Timeline Pro Test Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 1,
+      "blocks": [
+        {
+          "clip_id": "elem_title_card",
+          "block_id": "minimal-title",
+          "track_id": "track_graphics_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "headline": "NEXT GEN MOTION",
+            "color": "#a855f7"
+          }
+        }
+      ]
+    },
+    "fe8256e2-cffb-4593-95e1-bfb11d3ff91e": {
+      "name": "Timeline Pro Test Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_title_card",
+          "block_id": "minimal-title",
+          "track_id": "track_graphics_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "headline": "NEXT GEN MOTION",
+            "color": "#a855f7"
+          }
+        }
+      ]
+    },
+    "7207d234-443a-4479-be45-d87b5d4d324b": {
+      "name": "Timeline Pro Test Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_title_card",
+          "block_id": "minimal-title",
+          "track_id": "track_graphics_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "headline": "NEXT GEN MOTION",
+            "color": "#a855f7"
+          }
+        }
+      ]
+    },
+    "f34b4ff0-a271-4ece-9754-9bacb6d45827": {
+      "name": "Timeline Pro Test Project",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_title_card",
+          "block_id": "minimal-title",
+          "track_id": "track_graphics_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "headline": "NEXT GEN MOTION",
+            "color": "#a855f7"
+          }
+        }
+      ]
+    },
+    "7eddf4ed-f79b-4fb7-9798-2eef603cad58": {
+      "name": "Timeline Composition Render",
+      "aspect_ratio": "16:9",
+      "current_revision": 19,
+      "blocks": [
+        {
+          "clip_id": "elem_b716a693",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "PROFESSIONAL VIRALMINT",
+            "TXT_SUB": "GSAP ANIMATED KEYFRAMES"
+          }
+        }
+      ]
+    },
+    "76288281-f421-4339-8286-9969effa77db": {
+      "name": "Phase 8 Layers Variables Render",
+      "aspect_ratio": "16:9",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_e230010d",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 3,
+          "variables": {
+            "TXT_MAIN_1_Line": "PHASE 8 LAYERS ACTIVE",
+            "TXT_SUB": "VIRALMINT VARIABLES ENGINE"
+          }
+        },
+        {
+          "clip_id": "elem_03602dd1",
+          "block_id": "notification-cascade",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 3,
+          "variables": {
+            "title": "HIDDEN ELEMENT",
+            "message": "SHOULD NOT BE RENDERED"
+          }
+        },
+        {
+          "clip_id": "elem_e0cec33f",
+          "block_id": "ai-answer-rank",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "undefined": "#fcfcfb"
+          }
+        }
+      ]
+    },
+    "f395afb3-14a8-469f-8352-f47994d6d95f": {
+      "name": "Live 9:16 Preview Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_0a584aee",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "LIVE PREVIEW TEST",
+            "TXT_SUB": "VIRALMINT 9:16 COMPOSITION"
+          }
+        }
+      ]
+    },
+    "60659b90-de43-4c7c-a7fa-f048c9e373e5": {
+      "name": "Live 16:9 Preview Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 22,
+      "blocks": [
+        {
+          "clip_id": "elem_3cedc36e",
+          "block_id": "carousel-text-circle-1",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 0.5,
+          "variables": {
+            "undefined": "#EDEDEF"
+          }
+        }
+      ]
+    },
+    "f4778d1c-cf1a-442d-b8d2-ca27bae29a31": {
+      "name": "Deterministic Motion Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_96818836",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "ANIMATED BLOCK TEST"
+          }
+        }
+      ]
+    },
+    "03eddf51-2078-48fb-93a4-74917f0dbc80": {
+      "name": "Deterministic Visual Acceptance 9:16",
+      "aspect_ratio": "9:16",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_aa337238",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "be24abbb-9a33-4e93-bdc6-16cf38833663": {
+      "name": "Deterministic Visual Acceptance 16:9",
+      "aspect_ratio": "16:9",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_8c7dff92",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "bfe8dd09-7950-45c0-9d51-40c2886fd002": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_d4ef870a",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6dce377e-2f1a-4962-ac90-88a7d7fddc55": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_70d655c5",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "1c6e4112-4fa7-4210-ba11-24670ddca080": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_72ecd835",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "c488510c-fcfe-4945-a9e6-af2d3550cb8f": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_519226ef",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "f9f8e179-eeab-461b-a267-c58350ba10d7": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_e03b1c70",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "7f1b2199-1cfa-4f87-91e6-7ab5974ede97": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_e69af1a1",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "1a67b70c-0232-46fd-ae60-d9b7a04d83bc": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_bf60c4a0",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "4e74cb3f-e838-48c1-a339-8e94f802377b": {
+      "name": "Phase 8A Closure Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "title": "Alpha Waves",
+            "color": "#8b5cf6"
+          }
+        },
+        {
+          "clip_id": "elem_bcr_beta",
+          "block_id": "bar-chart-race",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.5,
+          "duration_seconds": 6.0,
+          "variables": {
+            "title": "Top Metrics",
+            "color": "#3b82f6"
+          }
+        }
+      ]
+    },
+    "5e4169f1-38c4-4ead-93b6-f67e14abb8f7": {
+      "name": "Phase 8A Closure Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 15,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "title": "Quantum Fluctuations",
+            "color": "#10b981"
+          }
+        },
+        {
+          "clip_id": "elem_bcr_beta",
+          "block_id": "bar-chart-race",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.5,
+          "duration_seconds": 4.0,
+          "variables": {
+            "title": "Top Metrics",
+            "color": "#3b82f6"
+          }
+        }
+      ]
+    },
+    "c9f439b4-9aee-4843-a54e-9cc145fb058c": {
+      "name": "Phase 8A Closure Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 15,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "title": "Quantum Fluctuations",
+            "color": "#10b981"
+          }
+        },
+        {
+          "clip_id": "elem_bcr_beta",
+          "block_id": "bar-chart-race",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.5,
+          "duration_seconds": 4.0,
+          "variables": {
+            "title": "Top Metrics",
+            "color": "#3b82f6"
+          }
+        }
+      ]
+    },
+    "f72a9229-0dde-407b-a40b-639fc49a9719": {
+      "name": "Phase 8A Closure Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 15,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {
+            "title": "Quantum Fluctuations",
+            "color": "#10b981"
+          }
+        },
+        {
+          "clip_id": "elem_bcr_beta",
+          "block_id": "bar-chart-race",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.5,
+          "duration_seconds": 4.0,
+          "variables": {
+            "title": "Top Metrics",
+            "color": "#3b82f6"
+          }
+        }
+      ]
+    },
+    "f4f58447-c5f9-411a-95f2-7c9e31d54798": {
+      "name": "Phase 8A Gap Closure Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "RESONANCE DYNAMICS",
+            "color": "#10b981",
+            "background": "transparent"
+          }
+        },
+        {
+          "clip_id": "elem_lb_beta",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "EXCLUSIVE BREAKING",
+            "TXT_SUB": "Sonderbericht"
+          }
+        },
+        {
+          "clip_id": "elem_lb_gamma",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "DEFAULT INSTANCE",
+            "TXT_SUB": "Default Sub"
+          }
+        }
+      ]
+    },
+    "f1d3a1d4-26dc-49bb-bc05-30f6ab896251": {
+      "name": "Phase 8A Gap Closure Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "RESONANCE DYNAMICS",
+            "color": "#10b981",
+            "background": "transparent"
+          }
+        },
+        {
+          "clip_id": "elem_lb_beta",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "EXCLUSIVE BREAKING",
+            "TXT_SUB": "Sonderbericht"
+          }
+        },
+        {
+          "clip_id": "elem_lb_gamma",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "DEFAULT INSTANCE",
+            "TXT_SUB": "Default Sub"
+          }
+        }
+      ]
+    },
+    "67ce99d3-a23d-4bd4-855d-5432f14499fb": {
+      "name": "Phase 8A 16:9 Acceptance",
+      "aspect_ratio": "16:9",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "RESONANCE DYNAMICS",
+            "color": "#10b981",
+            "background": "transparent"
+          }
+        },
+        {
+          "clip_id": "elem_lb_beta",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "EXCLUSIVE BREAKING",
+            "TXT_SUB": "Sonderbericht"
+          }
+        },
+        {
+          "clip_id": "elem_lb_gamma",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "DEFAULT INSTANCE",
+            "TXT_SUB": "Default Sub"
+          }
+        }
+      ]
+    },
+    "9870c023-eea4-431b-911b-ed7ed560fc6d": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_de011ee2",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "051a581c-8727-4a37-8e75-e9a81b595dda": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_e9cac3df",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "53546b29-2e31-4a64-bffd-4c6852d86619": {
+      "name": "Visual Quality Corrected 9:16",
+      "aspect_ratio": "9:16",
+      "current_revision": 1,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "RESONANCE DYNAMICS",
+            "color": "#10b981",
+            "background": "transparent"
+          }
+        },
+        {
+          "clip_id": "elem_lb_beta",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "EXCLUSIVE BREAKING",
+            "TXT_SUB": "Sonderbericht"
+          }
+        },
+        {
+          "clip_id": "elem_lb_gamma",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "DEFAULT INSTANCE",
+            "TXT_SUB": "Default Sub"
+          }
+        }
+      ]
+    },
+    "e2e7a00b-8f6f-4c4a-bc8b-b3857c4fd1ac": {
+      "name": "Visual Quality Corrected 16:9",
+      "aspect_ratio": "16:9",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_ww_alpha",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "RESONANCE DYNAMICS",
+            "color": "#10b981",
+            "background": "transparent"
+          }
+        },
+        {
+          "clip_id": "elem_lb_beta",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "EXCLUSIVE BREAKING",
+            "TXT_SUB": "Sonderbericht"
+          }
+        },
+        {
+          "clip_id": "elem_lb_gamma",
+          "block_id": "lower-third-bild",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "TXT_MAIN_1_Line": "DEFAULT INSTANCE",
+            "TXT_SUB": "Default Sub"
+          }
+        }
+      ]
+    },
+    "57586da6-320b-4159-b771-3b783a9b50ab": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_467bf868",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "8f9e9599-1fa1-46c8-b6cf-bef63fa8be9b": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_bd4b064e",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "c64d74b7-553d-4fd9-9f6b-ab1c4968fefb": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_82401c4f",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "bc65bf58-56f0-4e0d-92c9-65b3a2528135": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_be1a680d",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3bbed41e-4a32-4573-b832-0968f7e50b96": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_19656bbc",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 5,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_ae83e833",
+          "block_id": "apple-money-count",
+          "track_id": "track_graphics_main",
+          "start_seconds": 5.33,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6f7fe536-0f5b-4824-aece-5071ff8742d2": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_7eb9e673",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "d3256028-416e-4bde-91b7-de075cc229ad": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_8eeef94d",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "bc4039c4-8233-4e1d-a4e2-d297ae669f29": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_e5ad23d3",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "24d40b18-c952-47d0-8b17-295b87ad4dec": {
+      "name": "Debug Override",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_42b2665d",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "e69def6f-85a2-45c3-bd57-3ede78989507": {
+      "name": "Phase 9 Code Render Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_a9aadb1b",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "d58c7b9c-a9ba-4f6c-b270-0d775a430ddd": {
+      "name": "Phase 9 Code Render Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_991babab",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "d404b231-bf8a-438f-92c3-4f8ae6bce777": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_6b35c5c1",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3bfe93a5-c84d-4a5e-aa6c-270c4f518952": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_ae4c809e",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ffd6ee5f-bc08-49ba-81a3-2cdcc9df517b": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_9fce78bf",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "a70e7b9c-4fcb-4349-a349-8601e01e11d9": {
+      "name": "t",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_d1553c0e",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3dcd5ebe-771d-4085-bdc8-949092b4da12": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_fef2491e",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "bfb94a0d-111d-42c0-aad8-8653dcf52e48": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_6cd27704",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "2e2e1c73-0c07-4181-ba8f-db422cfbbea1": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 11,
+      "blocks": [
+        {
+          "clip_id": "elem_7a1ba09c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ba395232-7478-4d2a-bb47-9f825b4fbfff": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_300fe147",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "cacee59b-a378-4c42-847b-59b2f2282f29": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_d1f6f587",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "b0cb4add-c883-46bc-ad9e-c6e8814b2a8a": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_2e565427",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "c676aba6-168f-415c-a2fe-d8ae37aa3716": {
+      "name": "Instance Isolation Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_6db9e849",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_c2e6d115",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "c4a82975-745d-432c-8309-08c2c5d82d59": {
+      "name": "Iso",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_d516d270",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6f81aa40-8c07-453b-8b9b-2d6c164fd762": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_44f4bfd9",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "e008f3af-f91e-473d-94a4-f462497d93da": {
+      "name": "Instance Isolation Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_fc5c90f0",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_a9f1dbe2",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "4505eb68-ecf5-4c2c-b762-abbaf1859c2e": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_93691f53",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3919fba9-7ee2-4c6d-9938-2385967500ee": {
+      "name": "Instance Isolation Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_63643b42",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_bc5beae6",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "99b68d29-76d3-4bd7-8eb4-94226383dbc1": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_8ee6ec9a",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "c41fd982-020a-44cf-aac6-d716bf6a6cde": {
+      "name": "Instance Isolation Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_9a1b1367",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_49fc23b8",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "22cc0d88-19fc-4859-9fe0-3e53cc02ce41": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_3a9a7ba3",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "1740ca6c-a366-4a0c-ac94-43b45fe65361": {
+      "name": "Instance Isolation Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_37719c05",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_8006080b",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "304f9166-dc97-4ed4-ac1f-c150865bebe3": {
+      "name": "Phase 9 Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_e3f6ffca",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3b5077f4-d5e3-4ced-80f0-7899b2d1cf7e": {
+      "name": "Instance Isolation Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_5d2612c1",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_9e923722",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 3.0,
+          "duration_seconds": 3.0,
+          "variables": {}
+        }
+      ]
+    },
+    "d6ca8eb3-f4c5-4c58-b672-f8657f7560b4": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_2b43cb3b",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "7c722a23-4452-41f0-8032-52f0137c3edb": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_5e278eb2",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "8a03b7d6-b7e8-44f1-872a-a30e2cddfda2": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_83fdc975",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "7e0bce8e-8d02-42c6-93cc-292d67e671b1": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_6ca2c4bf",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "85c8bf31-691a-4dac-9acd-ecbeb68f8d50": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_7bdfa045",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "e74ccd9e-e3d9-4bf8-87cd-fb31c3ccd437": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_6b6899d1",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "b73a4ae6-3a7a-4b31-9ea8-7bd5859125c3": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_fd603d3a",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "a871aab7-cb60-4c3c-a9fe-ec0150ac1f84": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 15,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "bcc3c993-6fea-4082-86b0-40834133f6e8": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_83ce6ae0",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "020aeeb4-67c5-4db7-9a88-f1a4ff395f16": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "9e6d4ace-338d-4597-8adc-6cc1760a6706": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_9a2627b4",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "c0334eab-9fba-4d12-88fb-dd3a7cc3261e": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "982c9315-a4bf-4b59-97f4-e893e987cdfb": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_6d6714f7",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "8db3e975-16b1-43e1-8566-2fe0c09b23c1": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 7,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "8c4343ac-510e-4cf0-a0b7-4ca460d73571": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_43efa767",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "42cc5acd-51d2-4049-93df-e1b0c585f902": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "cb479505-762a-4227-9196-1d75ac034ef0": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_c13bf08d",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "679bc2b0-4085-4c39-8a86-39646ff260e8": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6608591b-e9b7-447c-ba78-d7c8e33548ca": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_5ee1695f",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "3f039a88-2a44-4973-9e35-c3f9673b9d3f": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "66b9897f-af6b-482a-8c83-9517360e1c54": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_a8116ca9",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "50234d0e-ebd3-4c11-991b-5c5feb3d3876": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "433141d9-32e2-4b2a-b8ed-c81534652418": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_39c4314c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "aa79e716-c219-4c5c-97a1-e964d20021ca": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "a579bbc6-aeb3-48ea-8657-731b262e8288": {
+      "name": "Gate1-Parity-Attribution-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 9,
+      "blocks": [
+        {
+          "clip_id": "elem_2279d5c0",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {
+            "count": 3
+          }
+        }
+      ]
+    },
+    "2f675649-a863-4aef-a406-88cf162d75e5": {
+      "name": "Gate2-FileTree-Conflict-Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 12,
+      "blocks": [
+        {
+          "clip_id": "elem_referenced_block",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "a4a5a011-1cbc-4d46-b723-f7a1cb6074c5": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_7c7bebe8",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "818b799d-835b-4e25-a2bb-5ced37aca5dd": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_6983aa82",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "a30e2d48-2b04-41bb-9833-5df64554bc00": {
+      "name": "FrameTest",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_1f33ea48",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ed03499a-7e80-414b-a3fc-559b0a822d2f": {
+      "name": "FrameTest2",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_a07c9913",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ca395ce0-98c6-4874-ba36-6580ccbf6925": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_74d67b35",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "0405f4ac-7047-4126-9d79-f6e9aca98654": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_f1ae8922",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "25b69ca4-9b77-474a-a893-fd117391eb48": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_dbd4149f",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "5a1490b1-2a62-4440-b714-c70e40f5f509": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_2fd2d5fa",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "4ba6ec9e-c909-4014-bbd1-c57201c39d60": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_67991a78",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "e57a650f-1e21-4f03-b514-cb27b7cde725": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_5b52eeb3",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "18fdfdf7-830b-4595-be27-e72c9f4c984e": {
+      "name": "Audit Multi-Track Dense Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_lower_third",
+          "block_id": "yt-lower-third",
+          "track_id": "track_gfx_lower",
+          "start_seconds": 1.0,
+          "duration_seconds": 3.5,
+          "variables": {
+            "name": "ViralMint Studio",
+            "title": "Automated Short Form"
+          }
+        },
+        {
+          "clip_id": "elem_weight_wave",
+          "block_id": "weight-wave",
+          "track_id": "track_gfx_overlay",
+          "start_seconds": 4.5,
+          "duration_seconds": 4.0,
+          "variables": {
+            "text": "SCALE YOUR AUDIENCE",
+            "color": "#facc15"
+          }
+        },
+        {
+          "clip_id": "elem_tiktok_follow",
+          "block_id": "tiktok-follow",
+          "track_id": "track_gfx_cta",
+          "start_seconds": 7.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "username": "@viralmint_app"
+          }
+        }
+      ]
+    },
+    "cac08777-11d4-411d-b7ca-8584b045398a": {
+      "name": "Audit Multi-Track Dense Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_lower_third",
+          "block_id": "yt-lower-third",
+          "track_id": "track_gfx_lower",
+          "start_seconds": 1.0,
+          "duration_seconds": 3.5,
+          "variables": {
+            "name": "ViralMint Studio",
+            "title": "Automated Short Form"
+          }
+        },
+        {
+          "clip_id": "elem_weight_wave",
+          "block_id": "weight-wave",
+          "track_id": "track_gfx_overlay",
+          "start_seconds": 4.5,
+          "duration_seconds": 4.0,
+          "variables": {
+            "text": "SCALE YOUR AUDIENCE",
+            "color": "#facc15"
+          }
+        },
+        {
+          "clip_id": "elem_tiktok_follow",
+          "block_id": "tiktok-follow",
+          "track_id": "track_gfx_cta",
+          "start_seconds": 7.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "username": "@viralmint_app"
+          }
+        }
+      ]
+    },
+    "acfffe44-427a-4122-99f8-8718a91ea46d": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_821df5aa",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "fe8fe0b2-0bf7-493b-8d79-5400fde55eac": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_390cd597",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6b536db0-4b88-4187-a6eb-273d3cd993f4": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_23d8396f",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "0cf3ed4b-cbba-475b-9989-006b562ee33e": {
+      "name": "Dense Multi-Track Remediation Render",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_e88da950",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "headline": "VIRALMINT REMEDIATION",
+            "accent": "#00ffcc"
+          }
+        }
+      ]
+    },
+    "24fb3ab6-ba10-47c9-8054-1669dabeaa74": {
+      "name": "Dense Multi-Track Remediation Render",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_0dbfaf56",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "headline": "VIRALMINT REMEDIATION",
+            "accent": "#00ffcc"
+          }
+        }
+      ]
+    },
+    "e04047c4-ba82-43fd-a5d8-89edc281ca68": {
+      "name": "Dense Multi-Track Remediation Render",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_a7d19f88",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "headline": "VIRALMINT REMEDIATION",
+            "accent": "#00ffcc"
+          }
+        }
+      ]
+    },
+    "9dda98ba-1b59-4f48-a2d9-558c6fcdd6fa": {
+      "name": "Gate 1 Animation Diagnosis",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_f754e15d",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "febcea23-5d6b-4e0d-bbf5-5d333db68aa0": {
+      "name": "Gate 1 Animation Diagnosis",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_ff9b6b4c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "44cb6669-6c20-41ec-8751-86297da568b3": {
+      "name": "Gate 1 Animation Diagnosis",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_1bb1429c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "473355c4-d1ea-4f82-937b-b514845f92d8": {
+      "name": "Gate 1 Animation Diagnosis",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_02b29fb0",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "74c64eda-c54e-416d-9172-cb3378b5cd17": {
+      "name": "Gate 1 Animation Diagnosis",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_be4d09fa",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d8352c45-cb24-48f9-ba94-b2eeab47f33e": {
+      "name": "Gate 1 & 2 Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_bf93d0cf",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "307cf0f9-d85f-4d51-a727-3c4aef451afb": {
+      "name": "Gate 1 & 2 Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_1a12fdea",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "9b15e511-83fd-4ec1-8476-caad1321236f": {
+      "name": "Gate 4 10s Multi-Track Render",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_0d688e1a",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "a4114347-8f9d-42b6-9f4e-21f937d8d160": {
+      "name": "Gate 4 10s Multi-Track Render",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_96ca11f2",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "ecd8bb1b-3965-4092-8b3f-7fdb8c781f57": {
+      "name": "Gate 4 10s Multi-Track Render",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_c53e0899",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "7bddf2ca-1d2a-4d0c-8ec1-b5068091acc6": {
+      "name": "Gate 5 Layout Audit Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_9d5f7918",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "a00a1a3f-506b-40a1-bf33-479827979d49": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_4109d0fb",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "f4d2c135-8b6e-4b04-b134-8a60ac20a171": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "16:9",
+      "current_revision": 7,
+      "blocks": [
+        {
+          "clip_id": "elem_7e778fd3",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 5,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_6827d49a",
+          "block_id": "glass-hero",
+          "track_id": "track_graphics_main",
+          "start_seconds": 6,
+          "duration_seconds": 3,
+          "variables": {
+            "undefined": "#0b0b0c"
+          }
+        },
+        {
+          "clip_id": "elem_08f382a6",
+          "block_id": "glass-hero",
+          "track_id": "track_graphics_main",
+          "start_seconds": 9.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "undefined": "#0b0b0c"
+          }
+        }
+      ]
+    },
+    "e1c09d5e-6fdc-4099-8310-12927d2a2023": {
+      "name": "Gate 1 Animation Diagnosis",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_82f0a4fe",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "783f0b0a-e95f-40c3-9e87-65f46322894d": {
+      "name": "Visual Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_fe2efbe3",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d44a7c8e-54d8-4b3a-a688-a07efcaecc64": {
+      "name": "Visual Test 2",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_7b65d674",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 6.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "f1e8ae69-2f04-4b15-901f-41c5f47e313b": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_7cc1a32f",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "cf8bd266-3533-4262-b892-4f2291d251b4": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_b7a66d0d",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "83f4f23f-0f81-41f9-bb1d-5be0a9707e0c": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_219c5a5b",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "5f0d5998-e59e-4a06-8383-525e238baaaa": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_10be85ce",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "8855218b-901c-4d83-8984-1db0b4620bee": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_1a185b77",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "21bbd593-7e4a-4de3-a664-f4edff4fa6b3": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_a354498f",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "da1870c8-6972-414e-939e-c6c583663917": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_a354498f",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "c35f6aa2-b135-4ad4-9d94-57f7000f02a6": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_a354498f",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "f6d095bc-b8d0-49a0-a4f7-c59b5fde3276": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_75509e34",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d202082b-3281-43b3-9972-a01a45500573": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_75509e34",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d5255a89-d007-451a-94af-9c28de495af9": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_75509e34",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "c33c1003-30bb-4fa3-bddf-6bc77c465609": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_a590cf7c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "f5177d40-08fb-4853-9e2c-a65a7a5ea9bf": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_a590cf7c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "78cbfa60-908e-4186-a24b-8566d33e065b": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_a590cf7c",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "509e58b2-1e5e-45bd-9ccb-644428bae968": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_f54b0cb5",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "5de386c4-1ad4-4f32-ac02-d17c26266000": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_b8d0cf9e",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "af58e608-5748-4ee1-84b7-5c076e3f455a": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_8e79af79",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "0a38d00f-2bcb-4dc6-9ddf-de24d704c7e2": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_8e79af79",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "3b274f9d-6fe0-47b9-8bb4-0afc566a3754": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_8e79af79",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "060e4b97-7645-4430-ab56-0c4724b932b3": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_f6db1e35",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "95c26a0c-e3cd-40b7-a9cb-59faa1c776b3": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_f6db1e35",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "15f58649-66cf-407e-98c2-f5f3d2ec4841": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_f6db1e35",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "302bde10-be78-4d3b-a90c-e225b1b7e2c5": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_c615cf89",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "a49a6953-746f-4b4a-8242-448f2a85f895": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_c615cf89",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "b872c36e-cd91-4ce5-9f93-1634e0e22c12": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_c615cf89",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "74cf6cfc-433a-449a-8369-f8bf606ddb8e": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_c7170fcb",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "df614f4a-554f-4a5a-aaa7-9b3b6de02cd7": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_07c59512",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "9e6ae50f-102b-4777-8abc-5c9c7a57f6a9": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_07c59512",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "cecde88a-fb5d-41e7-9f81-234271a31fa0": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_07c59512",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "c049db3f-1605-4bc3-ae4e-aa91f284c226": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_bb3657eb",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "09ad90ad-d6ac-4ac9-9558-71887954f97d": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_bb3657eb",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d50ba24b-7841-4ec3-8cf3-b5068ad94e3f": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_bb3657eb",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d5f13156-fc63-45e5-b448-d347639bc180": {
+      "name": "Canonical Visual Acceptance Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 14,
+      "blocks": [
+        {
+          "clip_id": "elem_fbc05ef7",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "d4d69e3a-74db-41b7-83e4-53085a082f5f": {
+      "name": "Audio Test vo_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_fbc05ef7",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "38f651e6-feed-416c-b225-1cae6d8c86b1": {
+      "name": "Audio Test bgm_muted",
+      "aspect_ratio": "9:16",
+      "current_revision": 13,
+      "blocks": [
+        {
+          "clip_id": "elem_fbc05ef7",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 10.0,
+          "variables": {
+            "text": "PRESSURE MOVES THROUGH TYPE",
+            "color": "#f5f5f7"
+          }
+        }
+      ]
+    },
+    "2e527ed0-b559-41cd-9a0a-e79fdb50a519": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_740148d2",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "4961c234-e4c1-4acb-8c47-5072e347810b": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 15,
+      "blocks": [
+        {
+          "clip_id": "elem_c5a84b87",
+          "block_id": "ai-answer-rank",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0,
+          "duration_seconds": 3,
+          "variables": {
+            "undefined": "#fcfcfb"
+          }
+        },
+        {
+          "clip_id": "elem_659082f3",
+          "block_id": "ai-answer-rank",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "undefined": "#fcfcfb"
+          }
+        }
+      ]
+    },
+    "dd168ad2-b3f6-4dc7-9aaf-e86d7fad1dc4": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_cf1293c9",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "317ca335-5fb1-4a8b-80f3-143d60c77d4f": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_0b433d7b",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "9aa4be4e-4e2e-4c09-b763-945916422499": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_86dab652",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "07fcd78e-874e-42dd-9c9d-8bbaadea582a": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_810e8c33",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "28aeadab-d1d4-458a-89ec-0c1823f9d6eb": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 6,
+      "blocks": [
+        {
+          "clip_id": "elem_980640be",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "a5f49888-1d74-441b-96d5-bc2853b2a02c": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 5,
+      "blocks": [
+        {
+          "clip_id": "elem_a5c16d47",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "33a59f20-0dec-41f9-9997-8cdcb8f3ae06": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_da26d3de",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "f79de6b5-3645-4041-82b9-c157e9c78d98": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_c2c8ab64",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "b5c31bd1-56fa-44fd-a7ca-2cad066edfa2": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_ef1e77fb",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "754381d3-0a32-48ae-8bee-63597ff19339": {
+      "name": "Diag Playback",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_28344e8f",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "61508612-6385-45e2-b82b-d17b777efeb3": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_5495d58a",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "eb1a1d78-d9c5-40df-b4a2-5beb75ad9b27": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_8cb5a4af",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ad1fc559-1222-4489-bd5f-88c7e3261c2d": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_fbd0d5eb",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "8b6f7822-6fc4-4861-b962-76c4b3df6457": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_a89ac1f7",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "36cff176-b59a-4932-bb4f-82b3721cd757": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 7,
+      "blocks": [
+        {
+          "clip_id": "elem_09183ad7",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_3d5a6ebc",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_5b658a05",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "db150794-cbe9-45ec-bf4c-ba91a8672ab4": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_0409345c",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "80791d43-6b38-4d8a-9c7b-93939559f9fb": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_19649fdf",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3d44053e-cc27-4648-a8ba-5c50861f592e": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_b7865430",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6701f9fd-f12c-47c9-ad06-22c734c3ad7c": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_cff440ea",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "73cf9b5f-61c1-4e07-b48b-44768b92898a": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_fd656d68",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "d6db0cac-a0bc-4a36-a320-80bfe9e097e2": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_79640465",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ce9400fc-20d3-4de0-94f3-14aa64db6763": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_e7e0956e",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "0a4b3b6c-8a53-4507-b6bd-6da98103dff3": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_78a0fe33",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "29830190-65c2-4c07-abd8-db30315ae403": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 7,
+      "blocks": [
+        {
+          "clip_id": "elem_70d9729d",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_7212ce3c",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_cb99ddfd",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "5152bc57-ce93-4e2b-851e-26026768cbe3": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_3f1a16d6",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_ef0f33e9",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "887a707a-2ea3-441f-b4f5-187ef0705dd6": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_66426679",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "7be6d8d8-25db-4dac-8fdc-4ff0c2ec17eb": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_65391aca",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "0b7c9092-c140-456e-9943-065f25cb8f33": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 7,
+      "blocks": [
+        {
+          "clip_id": "elem_febe8445",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_01578bec",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_6e8e84b7",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "d138e8d9-95a8-4ebc-be0d-078c2c3b05be": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_af1d88b8",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "5d1c195b-bb77-4470-9c99-c2231b1520db": {
+      "name": "Diag Playback",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_a7a9451f",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3f3377cb-63ea-4e88-8fde-0e46799d244b": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_ef345bcf",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "b2d3f0be-027a-4740-ac67-1fe21597fbd3": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 8,
+      "blocks": [
+        {
+          "clip_id": "elem_77519677",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "4e935dde-eb54-4a01-8685-7c6d38972f42": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 22,
+      "blocks": [
+        {
+          "clip_id": "elem_8ef4ec55",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 6.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_cf7450bc",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 1.97,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_83cb6aff",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 1.97,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "13db1188-92f3-42a3-9fb5-e7de4a45a4a7": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_eb9bbdf0",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "ba5a366b-856a-4e11-8ad2-8534db016312": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_c9121e93",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "0ce2d7eb-97a5-4e45-8ad3-6966ab248202": {
+      "name": "Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_3a2fa26a",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "9160a880-ae68-47c6-8e9e-d0b7a36c975a": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_2c821138",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "6d3ca174-018d-462a-b34f-860ceb3f8d0b": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_5049ac87",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "769dbade-ab07-4b41-adef-364762415df2": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_648d84b3",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "8ba37a4e-30aa-499f-bfd8-0d9935d0729c": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_51dec12e",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "3876f4b1-d160-4a6a-aa0a-085e92e3e8a4": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_303b6d83",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "91380488-943b-4375-988c-dcc178cbeea9": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 4,
+      "blocks": [
+        {
+          "clip_id": "elem_b659321d",
+          "block_id": "weight-wave",
+          "track_id": "track_graphics_main",
+          "start_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "630fcfc7-81f5-416c-959f-b6db7b2821ef": {
+      "name": "Comprehensive Refine Drag & Drop Acceptance",
+      "aspect_ratio": "9:16",
+      "current_revision": 22,
+      "blocks": [
+        {
+          "clip_id": "elem_680a402b",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 6.0,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_68d8dd27",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 1.97,
+          "duration_seconds": 4.0,
+          "variables": {}
+        },
+        {
+          "clip_id": "elem_de0e6349",
+          "block_id": "weight-wave",
+          "track_id": "track_video_main",
+          "start_seconds": 1.97,
+          "duration_seconds": 4.0,
+          "variables": {}
+        }
+      ]
+    },
+    "435d6869-52bf-4786-a856-9e8c217c6f63": {
+      "name": "Regression Visual Playback Test",
+      "aspect_ratio": "9:16",
+      "current_revision": 3,
+      "blocks": [
+        {
+          "clip_id": "elem_438c2233",
+          "block_id": "yt-lower-third",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 5.0,
+          "variables": {}
+        }
+      ]
+    },
+    "79d36d05-2895-4c04-8388-de46c05b9428": {
+      "name": "New Motion Project",
+      "aspect_ratio": "9:16",
+      "current_revision": 2,
+      "blocks": [
+        {
+          "clip_id": "elem_137c4900",
+          "block_id": "ai-answer-rank",
+          "track_id": "track_graphics_main",
+          "start_seconds": 0.0,
+          "duration_seconds": 3.0,
+          "variables": {
+            "undefined": "#fcfcfb"
+          }
+        }
+      ]
+    }
+  }
+}

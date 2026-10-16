@@ -1,0 +1,30 @@
+{
+  "GT-39": {
+    "gate": "GT-39",
+    "name": "Donor Read-Only Isolation & Zero Direct Dependency",
+    "status": "PASS",
+    "notes": "HyperFrames donor checked out read-only, zero production runtime execution of donor checkout."
+  },
+  "GT-40": {
+    "gate": "GT-40",
+    "name": "Per-Project Migration Readiness & Risk Ledger",
+    "status": "PASS",
+    "projects_dependent_on_blocks": 232,
+    "notes": "Full readiness and conversion plans generated for all 232 dependent projects."
+  },
+  "GT-41": {
+    "gate": "GT-41",
+    "name": "Physical Zero Imported HyperFrames Bundles Gate",
+    "status": "PENDING_REMOVAL_GATE",
+    "imported_donor_folders_on_disk": 156,
+    "notes": "SAFETY INVARIANT PRESERVED: 232 existing projects in database still reference legacy blocks. Retaining 156 imported block folders temporarily until owner live database cutover is executed. No permanent fallback for new creative requests (KNOWLEDGE_FIRST enabled)."
+  },
+  "GT-42": {
+    "gate": "GT-42",
+    "name": "Persistent Rollback Manifest & Reversible Restore",
+    "status": "PASS",
+    "notes": "Reversible rollback verified with hash integrity checks."
+  },
+  "WAVE20_FOUNDATION_PASS": true,
+  "FULL_MIGRATION_COMPLETE": false
+}

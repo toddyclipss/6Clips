@@ -1,0 +1,158 @@
+{
+  "status": "PASS",
+  "dry_run": true,
+  "database_path": "C:\\Users\\toddy\\Desktop\\ViralMint\\viralmint.db",
+  "database_sha256_unmodified": true,
+  "database_sha256": "8776494e9ca8ff9e765acaef627b6f1da1b9e8a9309b0a5e0347fab4da034cf5",
+  "total_projects_scanned": 345,
+  "projects_dependent_on_blocks": 232,
+  "total_legacy_blocks_found": 274,
+  "sample_results": [
+    {
+      "project_id": "85890621-dfd2-4802-aefa-bf287066644b",
+      "project_name": "Gate A Validation Project",
+      "from_revision": 2,
+      "to_revision": 3,
+      "pre_hash": "8e8dff08313e2626e970357b761c8597f6f190e1998e8a7c0b2b5ae4a5c76513",
+      "post_hash": "b160e80585acb9b72a96f25671082503d2246cd6805ad85fe7c607b5d08694d4",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.41,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "fadfe5a1-140e-4166-9792-a93387a1e816",
+      "project_name": "Gate A Validation Project",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "18d8987fcbea3ea98eafa92f6694d1a70dce9c3d6dd85a9fc8e5356dc702deaa",
+      "post_hash": "5b02e089dae92a9f478ce99126600fc376cac9f929ece7ab6cdb204580623c52",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.27,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "f9240cb8-4eed-40d4-981b-10092233392e",
+      "project_name": "Gate A Validation Project",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "ebc535d5ccdd95d01580f41f83c5ed7e8135a57d972e8f9f5db1a7fa958407ce",
+      "post_hash": "d9a6a72eb5198e860cffd42bf5ccf58376da3ea01355339714e905d3b222f5b7",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.24,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "5b85912e-67b3-45a2-801d-1bc30c4ff059",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 2,
+      "to_revision": 3,
+      "pre_hash": "488725015367dbf2f0b97ecd27192a9636b16e551e20047daadce31bf2796f79",
+      "post_hash": "3447cb6783905d4734cd8858665d3e786e7e998ac8b764667b555bd8cf4859a4",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.24,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "20d4113a-8798-4fcc-b29c-33b0b88c02dd",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "c2d2a0e0ada73240187db799ca7264c37746222951d751a4891d3d68f4e666df",
+      "post_hash": "dfcdb1747d152816bdcf2cbffdf4298667b44c899bf108f41fe3fc4ee56ad526",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.25,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "2e22f277-b337-4f88-81b4-2d8d4a5991ef",
+      "project_name": "Canary weight-wave",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "d33a085614fd072a4add5f67bf0f05708b1343fa59cd21ca1657aac166cd432c",
+      "post_hash": "10817a4fdc776bc0861fc37a2eefb19f21da0edff1b058e37e8fe9fc31f94e99",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "duration_ms": 0.33,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "0f2d250f-5aa8-4192-a021-3b6581e7b71a",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "e69538962c5c0e7d49693e6c2bc9bdf5d4f7a8c91f8ce6efd0df0c60808f61eb",
+      "post_hash": "f2ef0849b5aadc44f1cfb02cf8da26bc07a2a3e724ad03702408e8cf2df146bb",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.24,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "80dc6aa0-2eb9-4366-9313-decd0a7c8db3",
+      "project_name": "Canary weight-wave",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "48d0a7bf4efde8dcf074aea6bf3fab8acefeef52586ff4bff755b09c2c640505",
+      "post_hash": "6ca2644d7e091eedd4ed48f160339174932af40267ff5d442efd23d9b86d7723",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "duration_ms": 0.27,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "66f9fa07-6dd6-4f87-8d47-127a7aa04537",
+      "project_name": "Canary lower-third-bild",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "20c70a5f631b647c2c102021f5d3eee853b1a10b571d41f3c3967e49be085547",
+      "post_hash": "3bed1f2c1b39187c190cb96a4dad2dbb0ce3813af6ceeedcf441f560f18b89bd",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "lower-third-bild"
+      ],
+      "duration_ms": 0.33,
+      "status": "DRY_RUN_PASSED"
+    },
+    {
+      "project_id": "9b0010ac-b0e0-4260-9243-401ddf838a2e",
+      "project_name": "Canary weight-wave",
+      "from_revision": 3,
+      "to_revision": 4,
+      "pre_hash": "faa0434bb997ab47aa8983eaedf3020f0aa2b0d5aaea79c6bc008018afa58358",
+      "post_hash": "997fa5246ad2fa834bf769310871c4e3a9f406eb9e05178b780900b62ebc79e2",
+      "migrated_blocks_count": 1,
+      "legacy_slugs": [
+        "weight-wave"
+      ],
+      "duration_ms": 0.34,
+      "status": "DRY_RUN_PASSED"
+    }
+  ],
+  "all_results_count": 232,
+  "readiness_summary": {
+    "total_projects": 345,
+    "clean_native_projects": 113,
+    "dependent_projects": 232
+  }
+}

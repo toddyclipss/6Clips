@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "total_tested_projects": 5,
+  "migration_verified": true,
+  "cas_concurrency_verified": true,
+  "zero_legacy_blocks_verified": true,
+  "bit_for_bit_rollback_verified": true,
+  "physical_mp4_proof": {
+    "output_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-05-migration\\tools\\wave20_a5\\proofs\\proof_migrated_native_lower_third.mp4",
+    "sha256": "4b0f260b4f895bc1c7ef4855f1dc2bd1a99617fcbc0bc343ba08d1d243a2ec40",
+    "file_size": 7077,
+    "duration": 2.0,
+    "codec_name": "h264",
+    "width": 1920,
+    "height": 1080,
+    "r_frame_rate": "30/1"
+  }
+}
