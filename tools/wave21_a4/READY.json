@@ -1,0 +1,45 @@
+{
+  "agent": "agent-4",
+  "wave": 21,
+  "role": "Original Native Motion Generation, Speech Captions, and Adversarial QA",
+  "branch": "wave21/04-original-motion-hardening",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion",
+  "base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "tip_sha": "e017d8479d08f71a3b5a512ca455ea062736d871",
+  "status": "READY_FOR_INTEGRATION",
+  "timestamp": "2026-10-16T10:03:31Z",
+  "exclusive_paths": [
+    "backend/native_motion/**",
+    "tests/wave21/a4/**",
+    "tools/wave21_a4/**"
+  ],
+  "test_counts": {
+    "wave20_regression_passed": 22,
+    "wave21_a4_new_passed": 20,
+    "total_passed": 42,
+    "failed": 0
+  },
+  "gates": {
+    "GT-41_zero_donor_runtime": "VERIFIED_PASS (Zero imported HyperFrames blocks in runtime)",
+    "creative_grammar_extensibility": "VERIFIED_PASS (Multi-scene, 9 transitions, charts, typography, viewports)",
+    "knowledge_grounding": "VERIFIED_PASS (Real A3 KnowledgeBase retrieval with applied principles)",
+    "honest_contract_enforcement": "VERIFIED_PASS (B3 real human head marked BLOCKED honestly; synthetic demo delivered separately)"
+  },
+  "callable_interface_contract": {
+    "generate_spec": "NativeMotionGenerator.generate(brief: CreativeBrief, knowledge_refs: List[KnowledgeRef], constraints: Constraints, seed: int = 42) -> NativeMotionSpec",
+    "audit_and_repair": "NativeSelfRepair.audit_and_repair(spec: NativeMotionSpec) -> NativeMotionSpec",
+    "render_to_mp4": "NativeMotionRenderer.render_to_mp4(spec: NativeMotionSpec, output_mp4_path: Path) -> RenderResult",
+    "mutate_timeline": "NativeMotionAdapter.apply_mutation(project_id: str, revision_id: str, patch: Dict[str, Any]) -> ProjectRevision"
+  },
+  "benchmark_summary": {
+    "b1_a": "PASS",
+    "b1_b": "PASS",
+    "b2_a": "PASS",
+    "b2_b": "PASS",
+    "b3_real": "BLOCKED_NO_LICENSED_HUMAN_HEAD_FOOTAGE",
+    "b3_synthetic": "PASS_SYNTHETIC_TEST_AUDIO",
+    "b4": "PASS",
+    "b5": "PASS",
+    "b6": "PASS"
+  }
+}
