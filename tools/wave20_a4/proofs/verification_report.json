@@ -1,0 +1,78 @@
+{
+  "proof1": {
+    "output_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-04-motion-engine\\tools\\wave20_a4\\proofs\\proof1_data_kinetic_9x16.mp4",
+    "sha256": "14c2f449a1697be81e61f5007ebc61ab2b21fb2623638fe34823230712ad9ce9",
+    "duration": 3.0,
+    "dimensions": "1080x1920",
+    "fps": 30,
+    "frame_count": 90,
+    "codec_name": "h264",
+    "has_audio": false,
+    "motion_delta_mid": 0.0575,
+    "motion_delta_end": 0.0072,
+    "avg_luminance": 29.81,
+    "fully_accepted": true
+  },
+  "proof2": {
+    "output_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-04-motion-engine\\tools\\wave20_a4\\proofs\\proof2_editorial_16x9.mp4",
+    "sha256": "a6686be2583506de4a6e1f87496badfea377c5fb02d19cd80a8a3c4630e3f734",
+    "duration": 3.0,
+    "dimensions": "1920x1080",
+    "fps": 30,
+    "frame_count": 90,
+    "codec_name": "h264",
+    "has_audio": false,
+    "motion_delta_mid": 0.0733,
+    "motion_delta_end": 0.0695,
+    "avg_luminance": 39.2,
+    "fully_accepted": true
+  },
+  "proof3": {
+    "output_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave20-04-motion-engine\\tools\\wave20_a4\\proofs\\proof3_speech_captions_9x16.mp4",
+    "sha256": "f64f69da045a14db2cab5f5520d683e99887ebdebc769e71dd25ce83a368f11e",
+    "duration": 4.5,
+    "dimensions": "1080x1920",
+    "fps": 30,
+    "frame_count": 135,
+    "codec_name": "h264",
+    "has_audio": true,
+    "motion_delta_mid": 0.088,
+    "motion_delta_end": 0.0295,
+    "avg_luminance": 35.88,
+    "fully_accepted": true
+  },
+  "structural_comparison": {
+    "proof1_topology": [
+      "gradient",
+      "particles",
+      "shape",
+      "data_chart",
+      "text",
+      "text",
+      "shader_effect"
+    ],
+    "proof2_topology": [
+      "gradient",
+      "particles",
+      "shape",
+      "text",
+      "text",
+      "shader_effect"
+    ],
+    "proof3_topology": [
+      "gradient",
+      "particles",
+      "text",
+      "captions"
+    ],
+    "is_topologically_distinct": true,
+    "proof1_dimensions": "1080x1920",
+    "proof2_dimensions": "1920x1080",
+    "proof1_elements_count": 7,
+    "proof2_elements_count": 6,
+    "proof3_elements_count": 4,
+    "zero_imported_blocks_used": true,
+    "all_proofs_pass_motion_delta": true,
+    "all_proofs_have_valid_frames": true
+  }
+}
