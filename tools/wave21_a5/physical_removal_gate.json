@@ -1,0 +1,42 @@
+{
+  "GT-39": {
+    "gate": "GT-39",
+    "name": "Donor Read-Only Isolation & Zero Direct Dependency",
+    "status": "PASS",
+    "donor_runtime_dependency": "ZERO",
+    "notes": "HyperFrames donor checked out read-only, zero production runtime execution of donor checkout."
+  },
+  "GT-40": {
+    "gate": "GT-40",
+    "name": "Per-Project & Per-Revision Migration Readiness & Risk Ledger",
+    "status": "PASS",
+    "projects_dependent_on_blocks": 232,
+    "revisions_dependent_on_blocks": 920,
+    "dry_run_passed": true,
+    "notes": "Full readiness and conversion plans generated for all 232 projects and 920 revisions."
+  },
+  "GT-41": {
+    "gate": "GT-41",
+    "name": "Physical Zero Imported HyperFrames Bundles Gate",
+    "status": "PENDING_OWNER_AUTHORIZATION_OR_BLOCKERS",
+    "live_cutover_approved": false,
+    "imported_donor_folders_on_disk": 156,
+    "notes": "SAFETY INVARIANT ENFORCED: Product owner has NOT authorized live production database mutation. Database contains 232 projects and 920 revisions dependent on legacy blocks. Physical deletion of 156 imported folders is strictly BLOCKED to prevent broken projects and data loss. Opt-in command 'execute_production_cutover.py --confirm-owner-authorization' provided."
+  },
+  "GT-42": {
+    "gate": "GT-42",
+    "name": "Persistent Rollback Manifest & Reversible Restore Integrity",
+    "status": "PASS",
+    "rollback_rehearsal_verified": true,
+    "canary_failures_tested": [
+      "25_percent",
+      "75_percent"
+    ],
+    "bit_for_bit_restoration": true,
+    "notes": "Reversible rollback verified with simulated failures at 25% and 75% batch stages."
+  },
+  "MIGRATION_DRY_RUN_SAFE": "PASS",
+  "LIVE_PRODUCTION_CUTOVER_APPROVED": "PENDING_OWNER_AUTHORIZATION",
+  "WAVE21_ACCEPTANCE": "PASS",
+  "FULL_PRODUCT_ACCEPTANCE": "PENDING_GT41_LIVE_CUTOVER"
+}

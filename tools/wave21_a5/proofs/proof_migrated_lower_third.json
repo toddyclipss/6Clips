@@ -1,0 +1,16 @@
+{
+  "project_id": "proof_proj",
+  "migrated_slug": "lower-third-bild",
+  "rendered_mp4": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-05-migration\\tools\\wave21_a5\\proofs\\proof_migrated_lower_third.mp4",
+  "sha256": "7063276a30ebb5ea62790175cd9d1a239000c6c8b5f51f14b563a5205cf1bb9e",
+  "duration": 3.0,
+  "dimensions": "1080x1920",
+  "fps": 30,
+  "frame_count": 90,
+  "codec_name": "h264",
+  "motion_delta_mid": 0.1,
+  "motion_delta_end": 0.1,
+  "avg_luminance": 50.0,
+  "fully_accepted": true,
+  "rendered_at": "2026-10-16T14:16:03.043069+00:00"
+}
