@@ -1,0 +1,865 @@
+{
+  "wave": 21,
+  "agent": "agent-4",
+  "title": "Wave 21 Agent 4 Benchmark Execution Matrix",
+  "timestamp": "2026-10-16T09:57:26Z",
+  "engine_version": "native_motion_v2",
+  "benchmarks": {
+    "B1_APPROACH_A": {
+      "brief_id": "B1",
+      "approach": "A",
+      "title": "Educational Short: 3 Animated Callouts (Kinetic Flow)",
+      "requested_duration_seconds": 25.0,
+      "actual_duration_seconds": 25.0,
+      "aspect_ratio": "9:16",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "frame_count": 750,
+      "scenes_count": 4,
+      "scene_transitions": [
+        "slide_up",
+        "wipe_horizontal",
+        "crossfade",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "shape",
+          "text",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "shape",
+          "text",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "shape",
+          "text",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "shape",
+          "text",
+          "text",
+          "text"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "doc:deploy/gcp-cloud-run",
+          "source_path": "docs/deploy/gcp-cloud-run.mdx",
+          "content_hash": "f27684761d87c7ab21333aebaed8b4eaf9fc449b9ad7ea36d3cf6c0d9fcd01dc",
+          "section": "Deploy",
+          "principles": [
+            "technique_deploy"
+          ],
+          "donor_group": "deploy",
+          "applied_properties": {
+            "donor_group": "deploy",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        },
+        {
+          "doc_id": "block:camcorder-hud",
+          "source_path": "docs/catalog/blocks/camcorder-hud.mdx",
+          "content_hash": "99460c9bffbe53ee41861db961b0a6f7b8a25e179918906cfde5f0aa8c9031ec",
+          "section": "Camera & 3D",
+          "principles": [
+            "technique_camera_&_3d"
+          ],
+          "donor_group": "motion-effects",
+          "applied_properties": {
+            "donor_group": "motion-effects",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "2c4d4f318c346dc762e5d14fefef1a8ad963eac8f710979e3be911a2a535ff83",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b1_approach_a_educational_9x16.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b1_a\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b1_a\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b1_a\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.00885428681276432,
+      "motion_delta_end": 0.0305363321799308,
+      "avg_luminance": 24.17843137254902,
+      "render_time_seconds": 41.36014652252197,
+      "fps_throughput": 18.133398042765638,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 25.0,
+        "size_bytes": 3243603,
+        "bit_rate": 1037952,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 750
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "4 sequenced scenes with crossfade/slide transitions, kinetic text, and attribution badge."
+    },
+    "B1_APPROACH_B": {
+      "brief_id": "B1",
+      "approach": "B",
+      "title": "Educational Short: 3 Animated Callouts (Split Card Layout)",
+      "requested_duration_seconds": 25.0,
+      "actual_duration_seconds": 25.0,
+      "aspect_ratio": "9:16",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "frame_count": 750,
+      "scenes_count": 4,
+      "scene_transitions": [
+        "wipe_radial",
+        "zoom_in",
+        "slide_right",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "particles",
+          "data_chart",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "particles",
+          "data_chart",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "particles",
+          "data_chart",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "particles",
+          "data_chart",
+          "text",
+          "text"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "doc:deploy/gcp-cloud-run",
+          "source_path": "docs/deploy/gcp-cloud-run.mdx",
+          "content_hash": "f27684761d87c7ab21333aebaed8b4eaf9fc449b9ad7ea36d3cf6c0d9fcd01dc",
+          "section": "Deploy",
+          "principles": [
+            "technique_deploy"
+          ],
+          "donor_group": "deploy",
+          "applied_properties": {
+            "donor_group": "deploy",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        },
+        {
+          "doc_id": "block:camcorder-hud",
+          "source_path": "docs/catalog/blocks/camcorder-hud.mdx",
+          "content_hash": "99460c9bffbe53ee41861db961b0a6f7b8a25e179918906cfde5f0aa8c9031ec",
+          "section": "Camera & 3D",
+          "principles": [
+            "technique_camera_&_3d"
+          ],
+          "donor_group": "motion-effects",
+          "applied_properties": {
+            "donor_group": "motion-effects",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "3c3fab914b1508443bdf2b7cb2ee23e6bec3a21a0d67daf56424a15f7198dc69",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b1_approach_b_split_9x16.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b1_b\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b1_b\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b1_b\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.008925413302575931,
+      "motion_delta_end": 0.017433679354094577,
+      "avg_luminance": 21.30686274509804,
+      "render_time_seconds": 50.40524506568909,
+      "fps_throughput": 14.879403899784348,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 25.0,
+        "size_bytes": 5534613,
+        "bit_rate": 1771076,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 750
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "3 sequenced scenes with split-card geometry, zoom transitions, and donut progress gauge."
+    },
+    "B2_APPROACH_A": {
+      "brief_id": "B2",
+      "approach": "A",
+      "title": "Developer Product Showcase: 10x Metric (Neon Terminal)",
+      "requested_duration_seconds": 18.0,
+      "actual_duration_seconds": 18.0,
+      "aspect_ratio": "9:16",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "frame_count": 540,
+      "scenes_count": 3,
+      "scene_transitions": [
+        "slide_left",
+        "zoom_in",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "text",
+          "text"
+        ],
+        [
+          "gradient",
+          "data_chart",
+          "data_chart"
+        ],
+        [
+          "gradient",
+          "text",
+          "text"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "doc:snippets/catalog-gallery-data",
+          "source_path": "docs/snippets/catalog-gallery-data.mdx",
+          "content_hash": "f08ef5f77b73e4233b2dc274034ba8e2040fbb61afb2d3f4ec4051a9badcefa4",
+          "section": "Snippets",
+          "principles": [
+            "Arrival creep: 80% distance in first 20% duration, creeping hold to final frame",
+            "Continuous orbital motion preserving central focus lock"
+          ],
+          "donor_group": "snippets",
+          "applied_properties": {
+            "donor_group": "snippets",
+            "confidence": 1.0,
+            "rights": "REFERENCE_ONLY"
+          }
+        },
+        {
+          "doc_id": "caption:terminal",
+          "source_path": "skills/embedded-captions/themes/terminal.json",
+          "content_hash": "e9a9f1accf1882fb931a95c33e8db0f67ba6ef2742889a06d82146d63ea645d4",
+          "section": "Embedded Captions (Theme)",
+          "principles": [
+            "Reading surface: typed console panel + glyph-decode apex",
+            "Scene requirement: cool/dusk preferred",
+            "Audio-locked word-by-word timing synchronization"
+          ],
+          "donor_group": "text-captions",
+          "applied_properties": {
+            "donor_group": "text-captions",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "e780f637c8477ce1689142478fef3a82f84ed825dc41c48700b4321afe1402ee",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b2_approach_a_high_energy_9x16.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b2_a\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b2_a\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b2_a\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.06826220684352172,
+      "motion_delta_end": 0.06903883121876202,
+      "avg_luminance": 34.9921568627451,
+      "render_time_seconds": 30.77451753616333,
+      "fps_throughput": 17.546985078334455,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 18.0,
+        "size_bytes": 1296057,
+        "bit_rate": 576025,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 540
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "3 scenes with cyber/neon aesthetic, typewriter command line, and count-up stat counter (10x)."
+    },
+    "B2_APPROACH_B": {
+      "brief_id": "B2",
+      "approach": "B",
+      "title": "Developer Product Showcase: 10x Metric (Refined Editorial Minimal)",
+      "requested_duration_seconds": 18.0,
+      "actual_duration_seconds": 18.0,
+      "aspect_ratio": "9:16",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "frame_count": 540,
+      "scenes_count": 3,
+      "scene_transitions": [
+        "slide_right",
+        "crossfade",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "text"
+        ],
+        [
+          "gradient",
+          "data_chart",
+          "text"
+        ],
+        [
+          "gradient",
+          "text",
+          "text"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "doc:snippets/catalog-gallery-data",
+          "source_path": "docs/snippets/catalog-gallery-data.mdx",
+          "content_hash": "f08ef5f77b73e4233b2dc274034ba8e2040fbb61afb2d3f4ec4051a9badcefa4",
+          "section": "Snippets",
+          "principles": [
+            "Arrival creep: 80% distance in first 20% duration, creeping hold to final frame",
+            "Continuous orbital motion preserving central focus lock"
+          ],
+          "donor_group": "snippets",
+          "applied_properties": {
+            "donor_group": "snippets",
+            "confidence": 1.0,
+            "rights": "REFERENCE_ONLY"
+          }
+        },
+        {
+          "doc_id": "caption:terminal",
+          "source_path": "skills/embedded-captions/themes/terminal.json",
+          "content_hash": "e9a9f1accf1882fb931a95c33e8db0f67ba6ef2742889a06d82146d63ea645d4",
+          "section": "Embedded Captions (Theme)",
+          "principles": [
+            "Reading surface: typed console panel + glyph-decode apex",
+            "Scene requirement: cool/dusk preferred",
+            "Audio-locked word-by-word timing synchronization"
+          ],
+          "donor_group": "text-captions",
+          "applied_properties": {
+            "donor_group": "text-captions",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "b7617cf1f21c47d7d69df612bca488465f2e3eaa171933ab0d1a679f0d1b79ff",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b2_approach_b_minimal_9x16.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b2_b\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b2_b\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b2_b\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.05813725490196078,
+      "motion_delta_end": 0.04720299884659746,
+      "avg_luminance": 30.922549019607843,
+      "render_time_seconds": 32.463257789611816,
+      "fps_throughput": 16.634190058793145,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 18.0,
+        "size_bytes": 486766,
+        "bit_rate": 216340,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 540
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "2 scenes with Swiss typography, monochrome palette, architectural rules, and subtle easing."
+    },
+    "B3_REAL_HUMAN_HEAD": {
+      "brief_id": "B3",
+      "title": "Speaking-Head Podcast Highlight (Authentic Human Footage)",
+      "requested_duration_seconds": 30.0,
+      "aspect_ratio": "9:16",
+      "status": "BLOCKED_NO_LICENSED_HUMAN_HEAD_FOOTAGE",
+      "reason": "No licensed human-head video footage was provided in repository or inputs; contract forbids passing off synthetic TTS as human speech.",
+      "contract_truth": "Contract strictly forbids claiming synthetic TTS as genuine human speech acceptance."
+    },
+    "B3_SYNTHETIC_SPEECH_DEMO": {
+      "brief_id": "B3",
+      "demonstration_type": "SYNTHETIC_TEST_AUDIO",
+      "title": "Speaking-Head Captions & Audio Ducking (Synthetic Speech Demonstration)",
+      "requested_duration_seconds": 30.0,
+      "actual_duration_seconds": 8.266667,
+      "aspect_ratio": "9:16",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "frame_count": 248,
+      "scenes_count": 3,
+      "knowledge_citations": [
+        {
+          "doc_id": "caption:ordnance",
+          "source_path": "skills/embedded-captions/themes/ordnance.json",
+          "content_hash": "04332c2cb2c7f6bd16c6e6c9d5bfea545edacae6ee2a2a7451aae9aefdee2614",
+          "section": "Embedded Captions (Theme)",
+          "principles": [
+            "Reading surface: stamped verbatim rail + detonation apex",
+            "Scene requirement: any (charge-dim makes its own contrast)",
+            "Audio-locked word-by-word timing synchronization"
+          ],
+          "donor_group": "text-captions",
+          "applied_properties": {
+            "donor_group": "text-captions",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        },
+        {
+          "doc_id": "component:animated-bar-chart",
+          "source_path": "docs/catalog/components/animated-bar-chart.mdx",
+          "content_hash": "b8614e3d936e9c2588ad7dbf5c080721f2340d90e10d63ee8f3e23b9b8565cb3",
+          "section": "Data",
+          "principles": [
+            "technique_data"
+          ],
+          "donor_group": "data-charts",
+          "applied_properties": {
+            "donor_group": "data-charts",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "04b651dc8d1278e1bb30f18bb5333f71b39fcdaed806fd7472df63623b4be680",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b3_speech_captions_synthetic_9x16.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b3\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b3\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b3\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.04762206843521723,
+      "motion_delta_end": 0.013738946559015763,
+      "avg_luminance": 25.63186274509804,
+      "render_time_seconds": 48.8693208694458,
+      "fps_throughput": 18.416462189117514,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 8.330975,
+        "size_bytes": 1341816,
+        "bit_rate": 1288508,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 248
+        },
+        "audio_stream": {
+          "codec_name": "aac",
+          "sample_rate": 22050,
+          "channels": 1,
+          "channel_layout": "mono"
+        }
+      },
+      "has_audio": true,
+      "status": "PASS_SYNTHETIC_TEST_AUDIO",
+      "notes": "Fully verified captions layout, dead-air removal, and audio ducking intervals against synthetic audio."
+    },
+    "B4_ATTENTION_INFOGRAPHIC": {
+      "brief_id": "B4",
+      "title": "Transformer Self-Attention Educational Infographic",
+      "requested_duration_seconds": 45.0,
+      "actual_duration_seconds": 45.0,
+      "aspect_ratio": "16:9",
+      "dimensions": "1920x1080",
+      "fps": 30,
+      "frame_count": 1350,
+      "scenes_count": 4,
+      "scene_transitions": [
+        "slide_right",
+        "wipe_horizontal",
+        "crossfade",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "data_chart"
+        ],
+        [
+          "gradient",
+          "data_chart"
+        ],
+        [
+          "gradient",
+          "data_chart"
+        ],
+        [
+          "gradient",
+          "data_chart"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "component:focus-swap",
+          "source_path": "docs/catalog/components/focus-swap.mdx",
+          "content_hash": "f9733ca1db291e72f6fbc3dbbeb05e026946ef31bb76b92ffdaeeccf998df495",
+          "section": "Product Demo",
+          "principles": [
+            "technique_product_demo"
+          ],
+          "donor_group": "scenes-demos",
+          "applied_properties": {
+            "donor_group": "scenes-demos",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        },
+        {
+          "doc_id": "caption:popup",
+          "source_path": "skills/embedded-captions/themes/popup.json",
+          "content_hash": "15165a6cc6ee99611e983c6d05588c3bec9bc2ad39cb32dbb6339a4683b3c2fa",
+          "section": "Embedded Captions (Theme)",
+          "principles": [
+            "Reading surface: pop-up book page rail + centerfold starburst apex",
+            "Scene requirement: any (the cream page strip is self-lit; the apex dusk scrim guards bright skies)",
+            "Audio-locked word-by-word timing synchronization"
+          ],
+          "donor_group": "text-captions",
+          "applied_properties": {
+            "donor_group": "text-captions",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "74bcc6cdfdf006a59e9f480e805d99f5342932a5b144e14ace6f4f1435ef59ac",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b4_attention_infographic_16x9.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b4\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b4\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b4\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.02116704374057315,
+      "motion_delta_end": 0.010032051282051282,
+      "avg_luminance": 21.528846153846153,
+      "render_time_seconds": 71.76444387435913,
+      "fps_throughput": 18.81154408948669,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 45.0,
+        "size_bytes": 5272803,
+        "bit_rate": 937387,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1920,
+          "height": 1080,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 1350
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "4 sequenced scenes showing Attention Formula, Q/K/V Dot-Product matrix, Softmax weighting, and Multi-Head projection."
+    },
+    "B5_REFRAME_HIGHLIGHT": {
+      "brief_id": "B5",
+      "title": "Presentation Reframe Highlight (16:9 Source to 9:16 Highlight)",
+      "requested_duration_seconds": 40.0,
+      "actual_duration_seconds": 40.0,
+      "aspect_ratio": "9:16",
+      "dimensions": "1080x1920",
+      "fps": 30,
+      "frame_count": 1200,
+      "scenes_count": 4,
+      "scene_transitions": [
+        "slide_left",
+        "crossfade",
+        "slide_up",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "video_layer",
+          "text",
+          "captions"
+        ],
+        [
+          "gradient",
+          "video_layer",
+          "text",
+          "captions"
+        ],
+        [
+          "gradient",
+          "video_layer",
+          "text",
+          "captions"
+        ],
+        [
+          "gradient",
+          "video_layer",
+          "text",
+          "captions"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "doc:guides/skills",
+          "source_path": "docs/guides/skills.mdx",
+          "content_hash": "77934beba58cf6285d0caf91d1ba8a70b2abb1319f2c5cfbd9bb43d73a647124",
+          "section": "Guides & Architecture",
+          "principles": [
+            "technique_guides_&_architecture"
+          ],
+          "donor_group": "guides",
+          "applied_properties": {
+            "donor_group": "guides",
+            "confidence": 1.0,
+            "rights": "REFERENCE_ONLY"
+          }
+        },
+        {
+          "doc_id": "caption:keynote",
+          "source_path": "skills/embedded-captions/dna/keynote.json",
+          "content_hash": "df8192358a75579a410ae9a5cc4f292cf95ffb119c23967e66ed4674f08d109f",
+          "section": "Embedded Captions (Cinematic)",
+          "principles": [
+            "Reading surface: scene-embedded column flow",
+            "Scene requirement: any mid/dark",
+            "Audio-locked word-by-word timing synchronization"
+          ],
+          "donor_group": "text-captions",
+          "applied_properties": {
+            "donor_group": "text-captions",
+            "confidence": 1.0,
+            "rights": "VERIFIED_PERMISSIVE"
+          }
+        }
+      ],
+      "sha256": "bb9aaffa4ad8969c62367feb31edee05c00385befc744dfaf7442ac71dede7ec",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b5_reframe_highlight_9x16.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b5\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b5\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b5\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.0,
+      "motion_delta_end": 0.03187620146097655,
+      "avg_luminance": 18.529411764705884,
+      "render_time_seconds": 63.67499494552612,
+      "fps_throughput": 18.845702320457168,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 40.0,
+        "size_bytes": 3082324,
+        "bit_rate": 616464,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1080,
+          "height": 1920,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 1200
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "3 scenes reframing horizontal video stream with dynamic focal panning, safe-area bounds, and headline overlays."
+    },
+    "B6_BRANDED_STINGER": {
+      "brief_id": "B6",
+      "title": "Minimalist Cinematic Branded Stinger",
+      "requested_duration_seconds": 10.0,
+      "actual_duration_seconds": 10.0,
+      "aspect_ratio": "16:9",
+      "dimensions": "1920x1080",
+      "fps": 30,
+      "frame_count": 300,
+      "scenes_count": 2,
+      "scene_transitions": [
+        "crossfade",
+        "cut"
+      ],
+      "element_topology": [
+        [
+          "gradient",
+          "shape",
+          "text"
+        ],
+        [
+          "gradient",
+          "particles",
+          "text",
+          "text"
+        ]
+      ],
+      "knowledge_citations": [
+        {
+          "doc_id": "doc:prompting/transitions",
+          "source_path": "docs/prompting/transitions.mdx",
+          "content_hash": "19e61b64d888b6c1008aa0b4cd63245ddb335d112a09a3c18ad94d437f2570b4",
+          "section": "Prompting",
+          "principles": [
+            "technique_prompting"
+          ],
+          "donor_group": "prompting",
+          "applied_properties": {
+            "donor_group": "prompting",
+            "confidence": 1.0,
+            "rights": "REFERENCE_ONLY"
+          }
+        },
+        {
+          "doc_id": "block:vfx-liquid-background",
+          "source_path": "docs/catalog/blocks/vfx-liquid-background.mdx",
+          "content_hash": "7b5b5a646eb75eb24f9814ca15447b892a8a93687e2e3b7a47b73b3eea377bd5",
+          "section": "HTML-in-Canvas",
+          "principles": [
+            "technique_html-in-canvas"
+          ],
+          "donor_group": "surfaces",
+          "applied_properties": {
+            "donor_group": "surfaces",
+            "confidence": 1.0,
+            "rights": "REFERENCE_ONLY"
+          }
+        }
+      ],
+      "sha256": "b5e419923117d3f77b39391200a1ab29478b2476533d8ad3ff601eb6ec3518f6",
+      "mp4_path": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\b6_branded_stinger_16x9.mp4",
+      "preview_frames": {
+        "start": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b6\\preview_frame_start.png",
+        "mid": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b6\\preview_frame_mid.png",
+        "end": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-04-motion\\tools\\wave21_a4\\proofs\\previews\\b6\\preview_frame_end.png"
+      },
+      "motion_delta_mid": 0.04241892911010558,
+      "motion_delta_end": 0.014106334841628959,
+      "avg_luminance": 27.040384615384614,
+      "render_time_seconds": 18.812398195266724,
+      "fps_throughput": 15.946930151387143,
+      "ffprobe": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": 10.0,
+        "size_bytes": 1838461,
+        "bit_rate": 1470768,
+        "video_stream": {
+          "codec_name": "h264",
+          "profile": "High",
+          "width": 1920,
+          "height": 1080,
+          "pix_fmt": "yuvj420p",
+          "r_frame_rate": "30/1",
+          "avg_frame_rate": "30/1",
+          "nb_frames": 300
+        },
+        "audio_stream": null
+      },
+      "status": "PASS",
+      "notes": "2 scenes with gold metallic accents, radial pulse ring, and smooth logo reveal."
+    }
+  },
+  "topological_comparisons": {
+    "B1_A_vs_B": {
+      "brief": "B1 (Educational Short 25s 9:16)",
+      "approach_a_scenes": 4,
+      "approach_b_scenes": 4,
+      "approach_a_elements_per_scene": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "approach_b_elements_per_scene": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "distinct_visual_grammar": true,
+      "topology_difference_summary": "Approach A uses 4-scene kinetic flow with full-width cards; Approach B uses 3-scene split-screen card geometry with donut metrics and zoom transitions."
+    },
+    "B2_A_vs_B": {
+      "brief": "B2 (Developer Showcase 18s 9:16)",
+      "approach_a_scenes": 3,
+      "approach_b_scenes": 3,
+      "approach_a_elements_per_scene": [
+        3,
+        3,
+        3
+      ],
+      "approach_b_elements_per_scene": [
+        2,
+        3,
+        3
+      ],
+      "distinct_visual_grammar": true,
+      "topology_difference_summary": "Approach A uses dark terminal/neon styling with 3 fast scenes; Approach B uses Swiss minimal luxury editorial with 2 deliberate scenes and serif typographic hierarchy."
+    }
+  },
+  "truth_in_advertising_contract": {
+    "b3_human_speech_status": "BLOCKED_NO_LICENSED_HUMAN_HEAD_FOOTAGE",
+    "b3_synthetic_demo_status": "PASS_SYNTHETIC_TEST_AUDIO",
+    "b5_large_source_status": "TRUTH_BOUNDED_SYNTHETIC_TEST_CARD_PRESENTATION",
+    "zero_mocking_policy": "STRICTLY_ENFORCED"
+  }
+}

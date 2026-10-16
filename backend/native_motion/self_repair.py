@@ -59,6 +59,9 @@ class NativeSelfRepair:
             # 4. WCAG contrast check (text vs background)
             flaws_found |= cls._repair_contrast(spec, retry_idx)
 
+            # 5. Multi-scene duration synchronization check
+            flaws_found |= cls._repair_duration_and_scenes(spec, retry_idx)
+
             if not flaws_found:
                 # All checks passed cleanly
                 return spec
@@ -256,5 +259,50 @@ class NativeSelfRepair:
                                 )
                             )
                             repaired = True
+
+        return repaired
+
+    @classmethod
+    def _repair_duration_and_scenes(cls, spec: NativeMotionSpec, retry_idx: int) -> bool:
+        repaired = False
+        now_str = datetime.datetime.utcnow().isoformat()
+
+        if not spec.scenes:
+            return False
+
+        # Ensure scene start times are monotonic and aligned
+        cur_t = 0.0
+        for i, s in enumerate(spec.scenes):
+            if abs(s.start_time - cur_t) > 0.001:
+                old_st = s.start_time
+                s.start_time = round(cur_t, 3)
+                spec.repair_log.append(
+                    RepairLogEntry(
+                        timestamp=now_str,
+                        issue_type="timing_sync",
+                        details=f"Scene '{s.id}' start time shifted from {old_st}s to {s.start_time}s to preserve timeline continuity.",
+                        patch_applied={"scene_id": s.id, "old_start": old_st, "new_start": s.start_time},
+                        retry_index=retry_idx,
+                        resolved=True,
+                    )
+                )
+                repaired = True
+            cur_t += s.duration
+
+        total_scenes_dur = round(sum(s.duration for s in spec.scenes), 3)
+        if abs(spec.duration_seconds - total_scenes_dur) > 0.001:
+            old_dur = spec.duration_seconds
+            spec.duration_seconds = total_scenes_dur
+            spec.repair_log.append(
+                RepairLogEntry(
+                    timestamp=now_str,
+                    issue_type="timing_sync",
+                    details=f"Root duration_seconds synchronized from {old_dur}s to {total_scenes_dur}s matching scene duration sum.",
+                    patch_applied={"old_duration": old_dur, "new_duration": total_scenes_dur},
+                    retry_index=retry_idx,
+                    resolved=True,
+                )
+            )
+            repaired = True
 
         return repaired

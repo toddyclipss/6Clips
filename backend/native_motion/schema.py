@@ -71,6 +71,8 @@ class KnowledgeRef(BaseModel):
     content_hash: str = Field(..., description="SHA-256 fingerprint of the source document")
     section: str = Field(..., description="Specific section or technique heading cited")
     principles: List[str] = Field(default_factory=list, description="Design principles applied")
+    donor_group: Optional[str] = Field(None, description="Donor canonical group or category")
+    applied_properties: Dict[str, Any] = Field(default_factory=dict, description="Concrete scene properties parameterized by this doc")
 
     @field_validator("doc_id", "source_path", "section")
     @classmethod
@@ -190,6 +192,24 @@ class KeyframeSpec(BaseModel):
         return sanitized
 
 
+class SceneTransitionSpec(BaseModel):
+    """Transition between adjacent scenes with true frame motion."""
+    type: Literal[
+        "none",
+        "crossfade",
+        "slide_left",
+        "slide_right",
+        "slide_up",
+        "slide_down",
+        "wipe_horizontal",
+        "wipe_radial",
+        "zoom_in",
+        "zoom_out",
+    ] = "crossfade"
+    duration: float = Field(0.5, ge=0.0, le=5.0)
+    easing: EasingCurve = "ease_in_out"
+
+
 # ============================================================================
 # Captions & Word-Level Timestamps
 # ============================================================================
@@ -225,6 +245,11 @@ class TextConfig(BaseModel):
     max_width: Optional[float] = Field(None, gt=0)
     text_transform: Literal["none", "uppercase", "lowercase", "capitalize"] = "none"
     mask_clip_path: Optional[str] = Field(None)
+    animation_type: Literal["none", "typewriter", "word_pop", "fade_slide_up", "kinetic_scale", "per_glyph_decode"] = "none"
+    stagger_delay: float = Field(0.04, ge=0.0, le=1.0)
+    highlight_words: List[str] = Field(default_factory=list)
+    highlight_color: Optional[str] = Field(None)
+    source_attribution: Optional[str] = Field(None)
 
     @field_validator("content")
     @classmethod
@@ -296,13 +321,20 @@ class DataPoint(BaseModel):
 
 
 class DataChartConfig(BaseModel):
-    chart_type: Literal["bar", "line", "donut", "counter"] = "bar"
+    chart_type: Literal["bar", "line", "donut", "counter", "diagram_attention"] = "bar"
     title: Optional[str] = Field(None)
     dataset: List[DataPoint] = Field(default_factory=list)
     show_values: bool = Field(True)
     show_grid: bool = Field(True)
     animated_progress: bool = Field(True)
     bar_corner_radius: float = Field(8.0, ge=0.0, le=30.0)
+    counter_prefix: str = Field("")
+    counter_suffix: str = Field("")
+    counter_start: float = Field(0.0)
+    counter_end: float = Field(100.0)
+    counter_decimals: int = Field(0, ge=0, le=4)
+    attention_heads: int = Field(4, ge=1, le=16)
+    attention_matrix: Optional[List[List[float]]] = None
 
     @field_validator("title")
     @classmethod
@@ -341,7 +373,7 @@ class CaptionsConfig(BaseModel):
     active_color: str = Field("#FBBF24")  # amber-400
     inactive_color: str = Field("#94A3B8")  # slate-400
     typography: TypographySpec = Field(default_factory=TypographySpec)
-    animation_mode: Literal["word_pop", "word_highlight", "kinetic_wave", "typewriter", "terminal_decode"] = "word_pop"
+    animation_mode: Literal["word_pop", "word_highlight", "kinetic_wave", "typewriter", "terminal_decode", "editorial_karaoke"] = "word_pop"
     safe_zone_anchor: Literal["bottom", "center", "top"] = "bottom"
     background_veil: bool = Field(True)
     veil_color: str = Field("rgba(15, 23, 42, 0.75)")
@@ -353,6 +385,20 @@ class CaptionsConfig(BaseModel):
         if not COLOR_REGEX.match(v):
             raise ValueError(f"Invalid caption color: {v}")
         return v
+
+
+class VideoLayerConfig(BaseModel):
+    """Configuration for an authentic source video layer or presentation reframe."""
+    source_path: Optional[str] = Field(None, description="Local path to verified media source")
+    source_start_time: float = Field(0.0, ge=0.0)
+    crop_rect: Optional[Dict[str, float]] = Field(
+        None, description="Normalized crop box {x, y, w, h} within 0.0-1.0"
+    )
+    reframe_mode: Literal["fit", "cover", "manual_crop", "center_tracked"] = "cover"
+    volume: float = Field(1.0, ge=0.0, le=2.0)
+    loop: bool = Field(False)
+    poster_frame: Optional[str] = Field(None)
+    filter_preset: Optional[str] = Field(None)
 
 
 # ============================================================================
@@ -375,7 +421,7 @@ class ElementTransform(BaseModel):
 class ElementSpec(BaseModel):
     """A distinct visual or audio-reactive layer inside a scene."""
     id: str = Field(..., min_length=1, max_length=80)
-    type: Literal["text", "shape", "gradient", "data_chart", "particles", "shader_effect", "captions"] = "text"
+    type: Literal["text", "shape", "gradient", "data_chart", "particles", "shader_effect", "captions", "video_layer"] = "text"
     start_time: float = Field(0.0, ge=0.0)
     duration: float = Field(..., gt=0.0)
     z_index: int = Field(0)
@@ -390,6 +436,7 @@ class ElementSpec(BaseModel):
     particles_config: Optional[ParticlesConfig] = None
     shader_config: Optional[ShaderConfig] = None
     captions_config: Optional[CaptionsConfig] = None
+    video_config: Optional[VideoLayerConfig] = None
 
     @field_validator("id")
     @classmethod
@@ -409,11 +456,14 @@ class CameraSpec(BaseModel):
 class SceneSpec(BaseModel):
     """A temporal block containing layers of visual motion."""
     id: str = Field(..., min_length=1, max_length=80)
+    name: Optional[str] = Field(None, max_length=120)
     start_time: float = Field(0.0, ge=0.0)
     duration: float = Field(..., gt=0.0)
     background_color: str = Field("#0A0A0C")
     camera: CameraSpec = Field(default_factory=CameraSpec)
+    transition: Optional[SceneTransitionSpec] = None
     elements: List[ElementSpec] = Field(default_factory=list)
+    knowledge_refs: List[KnowledgeRef] = Field(default_factory=list)
 
     @field_validator("id")
     @classmethod
@@ -438,6 +488,10 @@ class AudioTrackSpec(BaseModel):
     volume: float = Field(1.0, ge=0.0, le=2.0)
     fade_in_seconds: float = Field(0.0, ge=0.0)
     fade_out_seconds: float = Field(0.0, ge=0.0)
+    audio_type: Literal["speech_authentic", "synthetic_test_speech", "bgm", "sfx"] = "bgm"
+    ducking_factor: float = Field(1.0, ge=0.0, le=1.0)
+    duck_during_speech: bool = Field(False)
+    silence_trimmed: bool = Field(False)
 
 
 class RepairLogEntry(BaseModel):

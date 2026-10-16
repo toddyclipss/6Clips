@@ -1,0 +1,27 @@
+Category,Feature,Status,Evidence_Method,Notes
+Timeline Grammar,Multi-Scene Timeline Model,OPERABLE,Unit + Integration Tests,Supports unlimited sequenced scenes with per-scene duration and transitions.
+Timeline Grammar,Frame-Motion Scene Transitions,OPERABLE,Playwright + Canvas Stepping,"Crossfade, slide_left, slide_right, slide_up, slide_down, wipe_left, wipe_right, zoom_in, zoom_out."
+Timeline Grammar,Single & Dual Viewports,OPERABLE,Canvas Compiler Execution,Dynamic split layouts and multi-card visual topologies.
+Typography,Kinetic Title & Subtitle Framing,OPERABLE,Canvas Compiler Execution,"Professional responsive sizing, contrast backing, and multi-line wrapping."
+Typography,Per-Word Kinetic Timing,OPERABLE,WordTimestampSpec Alignment,Word-by-word reveal and highlight activation with bounded durations.
+Typography,Typewriter Kinetic Reveal,OPERABLE,Canvas Compiler Execution,Deterministic character progression keyed to scene playback time.
+Typography,Source Knowledge Attribution,OPERABLE,KnowledgeRef Integration,"Cites real doc IDs, sections, and hashes in discreet attribution badges."
+Data Visualization,Animated Data Counter,OPERABLE,Canvas Compiler Execution,Numeric count-up interpolation with custom prefixes and suffixes.
+Data Visualization,Animated Donut / Progress Gauge,OPERABLE,Canvas Compiler Execution,Radial sweep arc animation with percentage display.
+Data Visualization,Transformer-Attention Infographic,OPERABLE,B4 Benchmark Render,Multi-stage animated self-attention diagram with query/key/value flows and readable labels.
+Video Layers,Tracked Video Viewport & Reframe,OPERABLE,B5 Benchmark Render,Reframe 16:9 video content to 9:16 portrait viewport with dynamic focal tracking.
+Captions & Audio,Authentic Speech Timestamps Extraction,OPERABLE,Captions Engine + Whisper Adapter,Extracts real word start/end bounds; fails closed if audio missing.
+Captions & Audio,Dead-Air Silence Condensation,OPERABLE,remove_dead_air Unit Tests,Truncates speech pauses longer than threshold and realigns caption timeline.
+Captions & Audio,Audio Ducking Intervals Calculation,OPERABLE,compute_ducking_intervals Tests,Computes background music ducking bounds around speech segments.
+Captions & Audio,Synthetic Test Audio Generation,OPERABLE,B3 Synthetic Benchmark,Synthetic sine/formant voice audio with honest SYNTHETIC_TEST_AUDIO label.
+Captions & Audio,Real Human Head-Footage Grounding,BLOCKED_NO_LICENSED_HUMAN_HEAD_FOOTAGE,Benchmark B3 Verification,No licensed human-head video provided in repo; contract forbids passing off TTS as human speech.
+Knowledge Grounding,A3 KnowledgeBase Live Retrieval,OPERABLE,test_knowledge_grounding.py,"Queries 658 curated knowledge entries, extracts design principles, and applies to scene specs."
+Self-Repair & QC,Safe-Zone Margin Enforcement,OPERABLE,NativeSelfRepair Audit,"Clamps elements to 9:16 safe-margins (top 15%, bottom 20%, sides 10%)."
+Self-Repair & QC,WCAG Luminance Contrast Recovery,OPERABLE,NativeSelfRepair Audit,Adjusts background brightness or text color when contrast ratio < 4.5.
+Self-Repair & QC,Word Monotonicity & Overlap Repair,OPERABLE,NativeSelfRepair Audit,Fixes unordered or overlapping word timestamps deterministically.
+Self-Repair & QC,Timeline Continuity Duration Sync,OPERABLE,NativeSelfRepair Audit,Synchronizes scene durations with requested total timeline duration.
+Rendering & Export,Headless Browser Deterministic Stepping,OPERABLE,Playwright Edge Renderer,Deterministic window.__seekFrame / window.__seekTime stepping API.
+Rendering & Export,Fast MJPEG Ingest & H.264 / AAC Muxing,OPERABLE,FFmpeg libx264 Integration,High-throughput deterministic video capture at 25 fps with verified color space yuv420p.
+Rendering & Export,Preview Frame Extraction,OPERABLE,PNG Preview Persistence,"Start, mid, and end preview frames exported alongside MP4."
+Revisions & CAS,ProjectService Timeline Mutation,OPERABLE,test_conversational_mutation_cas.py,"Optimistic concurrency version checking, fine-grained element edits, and idempotent replays."
+Donor Migration,Zero-Block Runtime Compliance,OPERABLE,Full Workspace Verification,Zero imported HyperFrames bundle runtimes or preview widgets in production.

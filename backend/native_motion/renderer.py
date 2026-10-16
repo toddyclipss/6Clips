@@ -3,8 +3,9 @@
 """Deterministic Player & Physical Video Export Engine for Native Motion.
 
 Executes deterministic frame stepping using headless browser rendering (Edge/Chromium)
-and pipes raw uncompressed frames into FFmpeg libx264 for physical MP4 export,
-complete with FFprobe inspection, temporal motion verification, and audio muxing.
+and pipes raw frames into FFmpeg libx264 for physical MP4 export, complete with
+FFprobe stream verification, temporal motion analysis, preview frame extraction,
+and AAC audio muxing.
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -43,6 +45,9 @@ class RenderResult:
         motion_delta_mid: float,
         motion_delta_end: float,
         avg_luminance: float,
+        preview_frames: Optional[Dict[str, str]] = None,
+        render_time_seconds: float = 0.0,
+        fps_throughput: float = 0.0,
     ):
         self.output_path = output_path
         self.sha256 = sha256
@@ -56,6 +61,9 @@ class RenderResult:
         self.motion_delta_mid = motion_delta_mid
         self.motion_delta_end = motion_delta_end
         self.avg_luminance = avg_luminance
+        self.preview_frames = preview_frames or {}
+        self.render_time_seconds = render_time_seconds
+        self.fps_throughput = fps_throughput
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -70,6 +78,9 @@ class RenderResult:
             "motion_delta_mid": round(self.motion_delta_mid, 4),
             "motion_delta_end": round(self.motion_delta_end, 4),
             "avg_luminance": round(self.avg_luminance, 2),
+            "preview_frames": self.preview_frames,
+            "render_time_seconds": round(self.render_time_seconds, 3),
+            "fps_throughput": round(self.fps_throughput, 2),
             "fully_accepted": (
                 self.frame_count > 0
                 and (self.motion_delta_mid > 0.05 or self.motion_delta_end > 0.05)
@@ -87,6 +98,8 @@ class NativeMotionRenderer:
         spec: NativeMotionSpec,
         output_mp4_path: Path,
         supersample: bool = False,
+        frame_format: str = "jpeg",
+        preview_dir: Optional[Path] = None,
     ) -> RenderResult:
         """Render spec to physical MP4 via deterministic frame stepping."""
         # Ensure site-packages path is accessible for Playwright
@@ -99,6 +112,11 @@ class NativeMotionRenderer:
         output_mp4_path = Path(output_mp4_path).resolve()
         output_mp4_path.parent.mkdir(parents=True, exist_ok=True)
 
+        if preview_dir is None:
+            preview_dir = output_mp4_path.parent / "previews" / output_mp4_path.stem
+        preview_dir = Path(preview_dir).resolve()
+        preview_dir.mkdir(parents=True, exist_ok=True)
+
         raw_video_tmp = output_mp4_path.with_name(f"{output_mp4_path.stem}_raw.mp4")
 
         html_content = NativeMotionCompiler.compile_to_html(spec)
@@ -108,13 +126,14 @@ class NativeMotionRenderer:
         fps = spec.fps
 
         ffmpeg_bin = shutil.which("ffmpeg") or "ffmpeg"
+        vcodec_in = "mjpeg" if frame_format == "jpeg" else "png"
 
         # Start FFmpeg pipe process
         ffmpeg_cmd = [
             ffmpeg_bin,
             "-y",
             "-f", "image2pipe",
-            "-vcodec", "png",
+            "-vcodec", vcodec_in,
             "-r", str(fps),
             "-i", "-",
             "-c:v", "libx264",
@@ -135,9 +154,11 @@ class NativeMotionRenderer:
         frame_mid_bytes = None
         frame_end_bytes = None
         mid_idx = total_frames // 2
+        saved_previews = {}
+
+        t_render_start = time.time()
 
         with sync_playwright() as p:
-            # Prefer Edge channel if available, fallback to chromium
             try:
                 browser = p.chromium.launch(
                     channel="msedge",
@@ -152,21 +173,33 @@ class NativeMotionRenderer:
 
             page = browser.new_page(viewport={"width": w, "height": h})
             page.set_content(html_content)
-
-            # Wait for initial render
             page.wait_for_timeout(50)
 
             for idx in range(total_frames):
                 # Deterministic frame step
                 page.evaluate(f"window.__seekFrame({idx}, {total_frames})")
-                frame_bytes = page.screenshot(type="png")
 
+                if frame_format == "jpeg":
+                    frame_bytes = page.screenshot(type="jpeg", quality=95)
+                else:
+                    frame_bytes = page.screenshot(type="png")
+
+                # Track key preview frames for motion delta analysis & reporting
                 if idx == 0:
                     frame_0_bytes = frame_bytes
+                    p0 = preview_dir / "preview_frame_start.png"
+                    p0.write_bytes(page.screenshot(type="png") if frame_format != "png" else frame_bytes)
+                    saved_previews["start"] = str(p0)
                 elif idx == mid_idx:
                     frame_mid_bytes = frame_bytes
+                    pm = preview_dir / "preview_frame_mid.png"
+                    pm.write_bytes(page.screenshot(type="png") if frame_format != "png" else frame_bytes)
+                    saved_previews["mid"] = str(pm)
                 elif idx == total_frames - 1:
                     frame_end_bytes = frame_bytes
+                    pe = preview_dir / "preview_frame_end.png"
+                    pe.write_bytes(page.screenshot(type="png") if frame_format != "png" else frame_bytes)
+                    saved_previews["end"] = str(pe)
 
                 pipe_proc.stdin.write(frame_bytes)
 
@@ -176,6 +209,10 @@ class NativeMotionRenderer:
         stderr_output = pipe_proc.stderr.read()
         pipe_proc.stderr.close()
         ret = pipe_proc.wait()
+
+        t_render_end = time.time()
+        render_elapsed = t_render_end - t_render_start
+        fps_throughput = total_frames / max(0.001, render_elapsed)
 
         if ret != 0:
             raise RuntimeError(f"FFmpeg render failed with exit code {ret}: {stderr_output.decode(errors='replace')}")
@@ -193,6 +230,7 @@ class NativeMotionRenderer:
                 "-i", str(audio_file),
                 "-c:v", "copy",
                 "-c:a", "aac",
+                "-b:a", "192k",
                 "-shortest",
                 str(output_mp4_path),
             ]
@@ -232,6 +270,9 @@ class NativeMotionRenderer:
             motion_delta_mid=delta_mid,
             motion_delta_end=delta_end,
             avg_luminance=avg_lum,
+            preview_frames=saved_previews,
+            render_time_seconds=render_elapsed,
+            fps_throughput=fps_throughput,
         )
 
     @classmethod
@@ -280,7 +321,7 @@ class NativeMotionRenderer:
 
     @classmethod
     def _calculate_image_delta(cls, img1_bytes: bytes, img2_bytes: bytes) -> float:
-        """Compute normalized absolute pixel difference between two PNG images."""
+        """Compute normalized absolute pixel difference between two images."""
         try:
             from PIL import Image
             import io
@@ -289,7 +330,6 @@ class NativeMotionRenderer:
             if im1.size != im2.size:
                 im2 = im2.resize(im1.size)
 
-            # Sample 2000 points for fast, robust delta computation
             w, h = im1.size
             step_x = max(1, w // 40)
             step_y = max(1, h // 50)
@@ -307,7 +347,6 @@ class NativeMotionRenderer:
                 return 0.0
             return (diff_sum / count) / 255.0
         except Exception:
-            # Fallback byte difference ratio
             if len(img1_bytes) != len(img2_bytes):
                 return 0.1
             diff_bytes = sum(1 for a, b in zip(img1_bytes, img2_bytes) if a != b)
@@ -331,4 +370,4 @@ class NativeMotionRenderer:
                     count += 1
             return total / max(1, count)
         except Exception:
-            return 50.0  # safe assumption if PIL not available
+            return 50.0
