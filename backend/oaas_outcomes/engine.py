@@ -282,7 +282,7 @@ class OutcomeDeliveryEngine:
                 revision_id=project.revision,
                 destination_channel=target_dest,
                 user_id=request.user_id,
-                user_authorized=request.standing_authorization,
+                publish_authorized=request.standing_authorization,
             )
             job_record.distribution_handoff = handoff
 

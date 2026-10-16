@@ -425,7 +425,7 @@ class KnowledgeChatOrchestrator:
             revision_id=resulting_revision,
             destination_channel="youtube_shorts",
             user_id=req.user_id,
-            user_authorized=req.authorizations.get("user_authorized", False),
+            publish_authorized=req.authorizations.get("publish_authorized", False),
         )
 
         pub_status = handoff.provider_status or "NOT_CONNECTED"

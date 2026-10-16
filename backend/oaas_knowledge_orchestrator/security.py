@@ -113,9 +113,6 @@ class KnowledgeSecurityValidator:
 
         return True, None
 
-    # Backward-compatible alias for legacy callers
-    validate_source_url_authorization = validate_source_url_security
-
     @classmethod
     def sanitize_retrieved_knowledge(cls, text_or_chunk: str) -> Tuple[bool, Optional[str]]:
         """

@@ -1014,7 +1014,6 @@ class ExecutorService:
                         "suitability_for_3x60s": suitability,
                         "aspect_ratio_status": "unverified_prior_to_ingest",
                         "upload_date": (db_record.upload_date.isoformat() if hasattr(db_record.upload_date, "isoformat") else str(db_record.upload_date)) if db_record.upload_date else None,
-                        "rights_status": "requires_authorization",
                     })
                 await db.commit()
 
@@ -1059,7 +1058,6 @@ class ExecutorService:
                         "suitability_for_3x60s": suitability,
                         "aspect_ratio_status": "unverified_prior_to_ingest",
                         "upload_date": (r.upload_date.isoformat() if hasattr(r.upload_date, "isoformat") else str(r.upload_date)) if r.upload_date else None,
-                        "rights_status": "public_source",
                     })
                 await db.commit()
 

@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
 from uuid import uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class OutcomeJobState(str, Enum):
@@ -122,11 +122,17 @@ class Agent5DistributionHandoffContract(BaseModel):
     destination_channel: str
     schedule_window: Optional[Dict[str, str]] = None
     permission_scope: List[str] = Field(default_factory=lambda: ["content_publish", "metadata_write"])
-    user_authorized: bool = False
+    publish_authorized: bool = Field(default=False, alias="user_authorized")
     provider_status: str = "PENDING_CREDENTIALS"  # CONNECTED | NOT_CONNECTED | PENDING_CREDENTIALS
     fail_closed: bool = True
     error_truth: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    @property
+    def user_authorized(self) -> bool:
+        return self.publish_authorized
 
 
 class StateTransitionEvent(BaseModel):

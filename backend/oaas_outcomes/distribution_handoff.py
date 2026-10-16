@@ -90,7 +90,8 @@ class DistributionHandoffManager:
         revision_id: int,
         destination_channel: str,
         user_id: str = "local",
-        user_authorized: bool = False,
+        publish_authorized: bool = False,
+        user_authorized: Optional[bool] = None,
         schedule_window: Optional[Dict[str, str]] = None,
         permission_scope: Optional[List[str]] = None,
     ) -> Agent5DistributionHandoffContract:
@@ -98,6 +99,9 @@ class DistributionHandoffManager:
         Prepare immutable Agent 5 distribution handoff contract.
         Fails closed with provider_status='PENDING_CREDENTIALS' or 'NOT_CONNECTED' if credentials missing.
         """
+        if user_authorized is not None:
+            publish_authorized = user_authorized
+
         is_connected, status_truth, cred_ref = await cls.check_channel_connection(
             destination_channel=destination_channel,
             user_id=user_id,
@@ -121,14 +125,14 @@ class DistributionHandoffManager:
                 destination_channel=destination_channel,
                 schedule_window=schedule_window,
                 permission_scope=scope,
-                user_authorized=user_authorized,
+                publish_authorized=publish_authorized,
                 provider_status="PENDING_CREDENTIALS",
                 fail_closed=True,
                 error_truth=f"Publication blocked: {status_truth}",
             )
 
         # Provider is connected, check explicit authorization
-        if not user_authorized:
+        if not publish_authorized:
             return Agent5DistributionHandoffContract(
                 job_id=job_id,
                 idempotency_token=idempotency_token,
@@ -139,7 +143,7 @@ class DistributionHandoffManager:
                 destination_channel=destination_channel,
                 schedule_window=schedule_window,
                 permission_scope=scope,
-                user_authorized=False,
+                publish_authorized=False,
                 provider_status="CONNECTED",
                 fail_closed=True,
                 error_truth="Publication requires explicit user confirmation or standing authorization.",
@@ -156,7 +160,7 @@ class DistributionHandoffManager:
             destination_channel=destination_channel,
             schedule_window=schedule_window,
             permission_scope=scope,
-            user_authorized=True,
+            publish_authorized=True,
             provider_status="CONNECTED",
             fail_closed=False,
             error_truth=None,

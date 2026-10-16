@@ -244,6 +244,40 @@ def test_req_d_knowledge_engine_branded_document_query():
     assert "block:heygen-avatar-promo-card" in matched_ids
 
 
+@pytest.mark.asyncio
+async def test_req_d_knowledge_engine_default_creative_queries_without_exclusions():
+    """
+    Requirement D (Post-Hotfix Audit): Confirm normal creative search with 100% DEFAULT filters
+    does NOT exclude creative knowledge or fail on branded or stylistic queries.
+    """
+    kb = KnowledgeBase()
+
+    # 1. HeyGen avatar query with DEFAULT parameters (no custom filters)
+    res_heygen = kb.search("heygen avatar")
+    assert len(res_heygen) > 0
+    heygen_ids = [r.knowledge_doc_id for r in res_heygen]
+    # Creative avatar guides are readily available
+    assert any("avatar" in doc_id for doc_id in heygen_ids)
+
+    # 2. Third-party branded query (Nike, Redbull) with DEFAULT parameters
+    res_brands = kb.search("nike redbull showcase video")
+    assert len(res_brands) > 0
+
+    # 3. Kinetic caption styling query with DEFAULT parameters
+    res_captions = kb.search("kinetic bold captions alex hormozi")
+    assert len(res_captions) > 0
+
+    # 4. Main Agent end-to-end outcome generation with brand prompt
+    v_req = VideoRequestContract(
+        message="Create a showcase video about Nike and Redbull with bold kinetic captions",
+        allow_test_fixture=True,
+    )
+    resp = await KnowledgeChatOrchestrator.handle_video_request(v_req)
+    assert resp.state in (KnowledgeOrchestratorState.REVIEW_READY, KnowledgeOrchestratorState.PENDING_CREDENTIALS)
+    assert resp.blocker_code is None
+    assert len(resp.evidence.knowledge_citations if resp.evidence else []) >= 1
+
+
 # ==============================================================================
 # Requirement E: Human-Footage Editing without License Paperwork
 # ==============================================================================
@@ -354,7 +388,14 @@ def test_req_g_programmatic_schema_introspection():
     # 4. KnowledgeOrchestratorState
     assert not hasattr(KnowledgeOrchestratorState, "BLOCKED_RIGHTS")
 
-    # 5. OpenAPI schema introspection via FastAPI
+    # 5. KnowledgeSecurityValidator has no legacy alias
+    assert not hasattr(KnowledgeSecurityValidator, "validate_source_url_authorization")
+
+    # 6. Agent5DistributionHandoffContract uses publish_authorized
+    from backend.oaas_outcomes.models import Agent5DistributionHandoffContract
+    assert "publish_authorized" in Agent5DistributionHandoffContract.model_fields
+
+    # 7. OpenAPI schema introspection via FastAPI
     openapi = app.openapi()
     schemas = openapi.get("components", {}).get("schemas", {})
     if "UrlIngestionRequest" in schemas:
@@ -408,3 +449,40 @@ async def test_req_h_physical_mp4_ffprobe_and_sha256():
     import hashlib
     sha256 = hashlib.sha256(mp4_file.read_bytes()).hexdigest()
     assert len(sha256) == 64
+
+
+# ==============================================================================
+# Requirement I: NEEDS_AUTHORIZATION is Strictly Reserved for OAuth Publishing
+# ==============================================================================
+
+@pytest.mark.asyncio
+async def test_req_i_needs_authorization_never_occurs_for_simple_ingestion_and_editing():
+    """
+    Requirement I (Post-Hotfix Audit):
+    Verify NEEDS_AUTHORIZATION is NEVER emitted for simple media ingestion, editing,
+    or rendering when external publishing handoff is not requested.
+    NEEDS_AUTHORIZATION is strictly reserved for connected social channel OAuth tokens.
+    """
+    # 1. Simple video creation request without publishing authorization
+    v_req = VideoRequestContract(
+        message="Create clean 9:16 vertical motion typography video",
+        allow_test_fixture=True,
+    )
+    resp = await KnowledgeChatOrchestrator.handle_video_request(v_req)
+    # Must NOT block in NEEDS_AUTHORIZATION
+    assert resp.state != KnowledgeOrchestratorState.NEEDS_AUTHORIZATION
+    assert resp.state in (
+        KnowledgeOrchestratorState.REVIEW_READY,
+        KnowledgeOrchestratorState.PENDING_CREDENTIALS,
+        KnowledgeOrchestratorState.VIDEO_VERIFIED,
+    )
+    assert resp.blocker_code is None
+
+    # 2. Simple URL chat goal without publishing authorization
+    chat_resp = await ChatOutcomeOrchestrator.handle_video_goal(
+        chat_context={"user_id": "creator_simple_edit"},
+        message="Process https://test.authorized-creator.com/simple_edit_stream.mp4 and render highlight",
+        allow_test_fixture=True,
+    )
+    assert chat_resp.status in (ChatGoalStatus.READY_FOR_DELIVERY, ChatGoalStatus.PENDING_CREDENTIALS)
+    assert chat_resp.blocker_code is None
