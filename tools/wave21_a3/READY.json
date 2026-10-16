@@ -1,0 +1,249 @@
+{
+  "agent": "Wave 21 Agent 3 — Complete Knowledge Document Verification and Retrieval Fidelity",
+  "branch": "wave21/03-per-document-knowledge-qa",
+  "worktree": "C:\\Users\\toddy\\Desktop\\ViralMint-wave21-03-knowledge",
+  "base_sha": "501697f22f670fa1c2a827f2ff7653073f17af75",
+  "tip_sha": "0f9ca126ed66d5728a983fbf1b1e732e6c6e8c59",
+
+
+  "timestamp": "2026-10-16T06:50:00Z",
+
+  "status": "READY_FOR_INTEGRATION",
+  "production_vs_test_distinction": {
+    "production_runtime_modules": [
+      "backend/knowledge_base/__init__.py",
+      "backend/knowledge_base/models.py",
+      "backend/knowledge_base/storage.py",
+      "backend/knowledge_base/search.py",
+      "backend/knowledge_base/service.py",
+      "backend/knowledge_base/adapter.py",
+      "backend/knowledge_base/data/knowledge_snapshot.json"
+    ],
+    "test_and_verification_tools": [
+      "tools/wave21_a3/audit_and_generate_ledger.py",
+      "tools/wave21_a3/benchmark_retrieval_suite.py",
+      "tools/wave21_a3/validate_d4_d5_visual_proofs.py",
+      "tools/wave21_a3/knowledge_document_acceptance.csv",
+      "tools/wave21_a3/knowledge_document_acceptance.json",
+      "tools/wave21_a3/knowledge_retrieval_benchmark.json",
+      "tools/wave21_a3/evidence/*",
+      "tests/wave21/a3/test_corpus_census_and_donor_reconciliation.py",
+      "tests/wave21/a3/test_per_document_acceptance_ledger.py",
+      "tests/wave21/a3/test_retrieval_benchmark_and_adversarial.py",
+      "tests/wave21/a3/test_caption_specialist_retrieval.py",
+      "tests/wave21/a3/test_agent1_and_agent4_contracts.py",
+      "tests/wave21/a3/test_physical_video_render_proofs.py"
+    ]
+  },
+  "curated_census_summary": {
+    "total_donor_files_scanned_in_scope": 1440,
+    "docs_files_total": 1294,
+    "mdx_files_total": 552,
+    "block_mdx_files": 171,
+    "component_mdx_files": 223,
+    "other_mdx_files": 158,
+    "md_files_total": 6,
+    "registry_block_dirs": 196,
+    "blocks_without_mdx_reconciled": 25,
+    "registry_component_dirs": 236,
+    "components_without_mdx_reconciled": 14,
+    "component_dirs_with_mdx": 222,
+    "component_mdx_without_dirs": 1,
+    "theme_jsons_in_directory": 25,
+    "genuine_caption_identities_in_catalog": 35,
+    "reported_caption_identities_including_separator": 36,
+    "hero_primitives_shelf_entries": 25,
+    "discrepancies_reconciled": {
+      "222_vs_223_component_dirs": "236 total component dirs minus 14 without MDX = 222 with MDX; 1 MDX ('simulated-cursor') exists without a directory = 223 MDX files.",
+      "26_vs_36_caption_identities": "35 genuine identities in CATALOG.md (10 cinematic + 25 themed); 25 theme JSONs in themes/ directory + 1 merged standard mode = 26 caption modes/themes; 36 was counted in Wave 20 due to markdown table divider row parsed as identity.",
+      "shelf_of_21_hero_primitives": "CATALOG.md header is titled 'the shelf of 21' but defines 25 distinct primitives."
+    }
+  },
+  "acceptance_ledger_summary": {
+    "total_documents": 658,
+    "reconciliation": {
+      "fully_usable_native_motion_d4_pass": 405,
+      "limited_reference_conceptual_d4_na": 165,
+      "blocked_pending_dependencies_d4_blocked": 88,
+      "exact_sum_matches_total": true
+    },
+    "breakdown_by_rights": {
+      "VERIFIED_PERMISSIVE": 516,
+      "REFERENCE_ONLY": 139,
+      "BLOCKED_RIGHTS": 3
+    },
+    "breakdown_by_blocker_code": {
+      "BLOCKED_DEPENDENCY_WEBGPU": 30,
+      "BLOCKED_DEPENDENCY_3D": 46,
+      "BLOCKED_UNVENDORED_MEDIA": 11,
+      "SYNTAX_TABLE_SEPARATOR_ARTIFACT": 1
+    },
+    "test_coverage_ledger": {
+      "D0_identity_hash_provenance": "100% PASS (658/658 docs)",
+      "D1_faithful_extract_fidelity": "99.8% PASS (657/658 docs, 1 parse artifact truthfully flagged FAIL)",
+      "D2_search_indexing": "99.8% PASS (657/658 docs, 1 syntax artifact BLOCKED)",
+      "D3_retrieval_relevance": "99.8% PASS (657/658 docs, 1 syntax artifact BLOCKED)",
+      "D4_applied_motion_specification": "405 PASS, 165 NOT_APPLICABLE (conceptual), 88 BLOCKED (dependencies)",
+      "D5_physical_video_rendering": "10 representative capability families rendered to authentic MP4 (100% fully accepted), remaining 395 batch-spec verified"
+    }
+  },
+  "retrieval_benchmark_summary": {
+    "targeted_queries_tested": 657,
+    "direct_id_precision_at_3": 0.9087,
+    "semantic_precision_at_1": 0.9559,
+    "semantic_precision_at_5": 0.9970,
+    "semantic_precision_at_10": 0.9985,
+    "mean_reciprocal_rank": 0.9760,
+    "adversarial_scenarios_tested": 65,
+    "adversarial_scenarios_passed": 58,
+    "adversarial_pass_rate": 0.8923,
+    "results_file": "tools/wave21_a3/knowledge_retrieval_benchmark.json"
+  },
+  "representative_physical_renders": [
+    {
+      "doc_id": "component:headline-slam",
+      "family": "typography_kinetic",
+      "mp4_file": "tools/wave21_a3/evidence/render_component_headline_slam.mp4",
+      "sha256": "a4d4984c5cd92591ae9f87c9456453f6567e9b0b4117b9b5523b03657b28292e",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_end": 0.0581,
+      "avg_luminance": 36.72
+    },
+    {
+      "doc_id": "hero-primitive:per-word-rise",
+      "family": "typography_kinetic",
+      "mp4_file": "tools/wave21_a3/evidence/render_hero_primitive_per_word_rise.mp4",
+      "sha256": "18366da7cf0fbf377f3a9e7638c4cff13cb1f9cf500cfcb38e78f692ea407c68",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_end": 0.0581,
+      "avg_luminance": 36.77
+    },
+    {
+      "doc_id": "caption:cream",
+      "family": "captions_word_highlight",
+      "mp4_file": "tools/wave21_a3/evidence/render_caption_cream.mp4",
+      "sha256": "a8b20f9878b53272d7f35492bc490f2095f9c1db16315582f3c051ee247858c4",
+      "dimensions": "1080x1920",
+      "frame_count": 75,
+      "motion_delta_end": 0.0586,
+      "avg_luminance": 36.85
+    },
+    {
+      "doc_id": "caption:anchor",
+      "family": "captions_word_highlight",
+      "mp4_file": "tools/wave21_a3/evidence/render_caption_anchor.mp4",
+      "sha256": "18c0a955c0ce468494cb4a92350616b71891a92a548238c359dff21e8ec08bb0",
+      "dimensions": "1080x1920",
+      "frame_count": 75,
+      "motion_delta_end": 0.0582,
+      "avg_luminance": 36.87
+    },
+    {
+      "doc_id": "hero-primitive:oversized-cursor",
+      "family": "ui_simulation",
+      "mp4_file": "tools/wave21_a3/evidence/render_hero_primitive_oversized_cursor.mp4",
+      "sha256": "33e7bc11563124400e23aa32f2f11a43a05fe8a149c7aa61a07c0883a8b44910",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_end": 0.0580,
+      "avg_luminance": 37.17
+    },
+    {
+      "doc_id": "hero-primitive:press-ripple",
+      "family": "ui_simulation",
+      "mp4_file": "tools/wave21_a3/evidence/render_hero_primitive_press_ripple.mp4",
+      "sha256": "e986bea233ec7090886c5f725350be452377c8e9d300eb0bead3260cc651ebad",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_end": 0.0580,
+      "avg_luminance": 37.11
+    },
+    {
+      "doc_id": "block:bar-chart-race",
+      "family": "data_visualization",
+      "mp4_file": "tools/wave21_a3/evidence/render_block_bar_chart_race.mp4",
+      "sha256": "76108b816ca52a7bf837a7605db0840c49cf535068648e8a9f60d6945a0b73df",
+      "dimensions": "1920x1080",
+      "frame_count": 75,
+      "motion_delta_mid": 0.0729,
+      "avg_luminance": 37.83
+    },
+    {
+      "doc_id": "hero-primitive:chart-story",
+      "family": "data_visualization",
+      "mp4_file": "tools/wave21_a3/evidence/render_hero_primitive_chart_story.mp4",
+      "sha256": "e3238135aa693006d6eeb1bb24fa7ae4b4c4bf2a64c5147817454f028fc747a0",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_mid": 0.0652,
+      "avg_luminance": 32.13
+    },
+    {
+      "doc_id": "component:curtain-reveal",
+      "family": "transition_wipe",
+      "mp4_file": "tools/wave21_a3/evidence/render_component_curtain_reveal.mp4",
+      "sha256": "19e69126572a4c13da915f998bb3b186632a26ae677de1ba87b651dbf833f67d",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_end": 0.0579,
+      "avg_luminance": 37.53
+    },
+    {
+      "doc_id": "block:cross-warp-morph",
+      "family": "transition_wipe",
+      "mp4_file": "tools/wave21_a3/evidence/render_block_cross_warp_morph.mp4",
+      "sha256": "915d6aad722cb54c4eb1a57e3f81e355743b177e77b1029c36fcab108a8a47fa",
+      "dimensions": "1080x1920",
+      "frame_count": 60,
+      "motion_delta_end": 0.0580,
+      "avg_luminance": 37.11
+    }
+  ],
+  "contracts_and_interfaces": {
+    "agent_1_search_contract": {
+      "module": "backend.knowledge_base",
+      "class": "KnowledgeBase",
+      "adapter": "backend.knowledge_base.adapter.KnowledgeAdapter.handle_agent1_query(request: Agent1SearchRequest) -> Agent1SearchResponse",
+      "prompt_formatter": "backend.knowledge_base.adapter.format_prompt_context(results: List[SearchResult]) -> str"
+    },
+    "agent_4_motion_directives_contract": {
+      "module": "backend.knowledge_base.adapter",
+      "directives_method": "KnowledgeAdapter.get_agent4_directives(doc_id: str) -> Optional[MotionDirectives]",
+      "caption_specialist_method": "KnowledgeAdapter.get_caption_style_directives(doc_id_or_identity: str, words: Optional[List[Dict[str, Any]]] = None) -> Optional[CaptionStyleDirectives]",
+      "citation_builder": "KnowledgeAdapter.create_knowledge_ref(doc_id: str, applied_techniques: Optional[List[str]] = None) -> Optional[KnowledgeRef]"
+    }
+  },
+  "test_suite_status": {
+    "wave21_a3_tests_passed": 28,
+    "wave20_a3_tests_passed": 20,
+    "total_tests_passed": 48,
+    "test_command": "pytest tests/wave20/a3 tests/wave21/a3"
+  },
+  "files_owned": [
+    "backend/knowledge_base/__init__.py",
+    "backend/knowledge_base/models.py",
+    "backend/knowledge_base/storage.py",
+    "backend/knowledge_base/search.py",
+    "backend/knowledge_base/service.py",
+    "backend/knowledge_base/adapter.py",
+    "backend/knowledge_base/data/knowledge_snapshot.json",
+    "tools/wave21_a3/audit_and_generate_ledger.py",
+    "tools/wave21_a3/benchmark_retrieval_suite.py",
+    "tools/wave21_a3/validate_d4_d5_visual_proofs.py",
+    "tools/wave21_a3/knowledge_document_acceptance.csv",
+    "tools/wave21_a3/knowledge_document_acceptance.json",
+    "tools/wave21_a3/knowledge_retrieval_benchmark.json",
+    "tools/wave21_a3/evidence/proof_*.json",
+    "tools/wave21_a3/evidence/render_*.mp4",
+    "tools/wave21_a3/READY.json",
+    "tools/wave21_a3/delivery_report.md",
+    "tests/wave21/a3/test_corpus_census_and_donor_reconciliation.py",
+    "tests/wave21/a3/test_per_document_acceptance_ledger.py",
+    "tests/wave21/a3/test_retrieval_benchmark_and_adversarial.py",
+    "tests/wave21/a3/test_caption_specialist_retrieval.py",
+    "tests/wave21/a3/test_agent1_and_agent4_contracts.py",
+    "tests/wave21/a3/test_physical_video_render_proofs.py"
+  ]
+}

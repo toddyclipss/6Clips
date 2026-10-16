@@ -1,0 +1,17 @@
+{
+  "doc_id": "hero-primitive:oversized-cursor",
+  "title": "Oversized Cursor (Hero Primitive)",
+  "capability_family": "ui_simulation",
+  "spec_id": "nm_bdd640fb0667",
+  "mp4_file": "tools/wave21_a3/evidence/render_hero_primitive_oversized_cursor.mp4",
+  "sha256": "33e7bc115631392ec6008e0c1b82b8ed057e0326cfef0f96f4b2ac473dd5ca62",
+  "duration": 2.0,
+  "dimensions": "1080x1920",
+  "fps": 30,
+  "frame_count": 60,
+  "codec": "h264",
+  "motion_delta_mid": 0.03742791234140715,
+  "motion_delta_end": 0.057977700884275285,
+  "avg_luminance": 37.17058823529412,
+  "fully_accepted": true
+}

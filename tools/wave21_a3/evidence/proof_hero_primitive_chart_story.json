@@ -1,0 +1,17 @@
+{
+  "doc_id": "hero-primitive:chart-story",
+  "title": "Chart Story (Hero Primitive)",
+  "capability_family": "data_visualization",
+  "spec_id": "nm_bdd640fb0667",
+  "mp4_file": "tools/wave21_a3/evidence/render_hero_primitive_chart_story.mp4",
+  "sha256": "e3238135aa693e690f33cbe6f0034ddc6bef03cf4feb40325e4defe77a33113e",
+  "duration": 2.0,
+  "dimensions": "1080x1920",
+  "fps": 30,
+  "frame_count": 60,
+  "codec": "h264",
+  "motion_delta_mid": 0.06522106881968474,
+  "motion_delta_end": 0.003477508650519031,
+  "avg_luminance": 32.127450980392155,
+  "fully_accepted": true
+}

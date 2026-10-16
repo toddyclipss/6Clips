@@ -13,6 +13,7 @@ from .models import (
     SearchFilter,
     SearchResult,
     TestStatus,
+    CaptionStyleDirectives,
 )
 from .service import KnowledgeBase
 from .storage import KnowledgeRepository
@@ -35,6 +36,7 @@ __all__ = [
     "SearchFilter",
     "SearchResult",
     "TestStatus",
+    "CaptionStyleDirectives",
     "KnowledgeBase",
     "KnowledgeRepository",
     "BM25SearchEngine",
@@ -45,3 +47,4 @@ __all__ = [
     "MotionDirectives",
     "format_prompt_context",
 ]
+

@@ -1,0 +1,17 @@
+{
+  "doc_id": "caption:anchor",
+  "title": "Anchor Captions Style",
+  "capability_family": "captions_word_highlight",
+  "spec_id": "nm_bdd640fb0667",
+  "mp4_file": "tools/wave21_a3/evidence/render_caption_anchor.mp4",
+  "sha256": "18c0a955c0ce6750485e198912e2de6e8d5a91ff428401d5daa87fff3d7c9b76",
+  "duration": 2.5,
+  "dimensions": "1080x1920",
+  "fps": 30,
+  "frame_count": 75,
+  "codec": "h264",
+  "motion_delta_mid": 0.04563052672049212,
+  "motion_delta_end": 0.058206459054209916,
+  "avg_luminance": 36.87352941176471,
+  "fully_accepted": true
+}

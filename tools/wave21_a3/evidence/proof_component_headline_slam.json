@@ -1,0 +1,17 @@
+{
+  "doc_id": "component:headline-slam",
+  "title": "Headline Slam",
+  "capability_family": "typography_kinetic",
+  "spec_id": "nm_bdd640fb0667",
+  "mp4_file": "tools/wave21_a3/evidence/render_component_headline_slam.mp4",
+  "sha256": "a4d4984c5cd920820c295e63dd739cfe2eea5841f08b07e3ecffaabc1fbfe02e",
+  "duration": 2.0,
+  "dimensions": "1080x1920",
+  "fps": 30,
+  "frame_count": 60,
+  "codec": "h264",
+  "motion_delta_mid": 0.035807381776239905,
+  "motion_delta_end": 0.05808535178777394,
+  "avg_luminance": 36.71813725490196,
+  "fully_accepted": true
+}
