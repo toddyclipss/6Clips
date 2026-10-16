@@ -29,10 +29,15 @@ def test_knowledge_base_adapter_returns_validated_citations():
 
     cit = citations[0]
     assert isinstance(cit, KnowledgeCitation)
-    assert cit.knowledge_doc_id.startswith("hf-doc-")
-    assert cit.source_path.endswith(".mdx")
+    if is_prod:
+        assert ":" in cit.knowledge_doc_id or cit.knowledge_doc_id.startswith("hf-doc-")
+        assert cit.source_path.endswith(".mdx") or cit.source_path.endswith(".md")
+        assert cit.rights in ("VERIFIED_PERMISSIVE", "REFERENCE_ONLY", "PERMITTED_INERT_TECHNIQUE")
+    else:
+        assert cit.knowledge_doc_id.startswith("hf-doc-")
+        assert cit.source_path.endswith(".mdx")
+        assert cit.rights == "PERMITTED_INERT_TECHNIQUE"
     assert len(cit.source_hash) == 64
-    assert cit.rights == "PERMITTED_INERT_TECHNIQUE"
     assert cit.donor_group is not None
 
 

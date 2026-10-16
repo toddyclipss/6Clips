@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "wave": 20,
+  "role": "Agent 5 — Sole Integrator and Legacy Migration Gatekeeper",
+  "base_sha": "51924aa5acaebb8e00f899015ee26c44ca86b4fe",
+  "branches_integrated": {
+    "agent_1": {
+      "branch": "wave20/01-knowledge-chat-outcomes",
+      "tip_sha": "cc66514ff2f0595fcaec22289ff1c0a8ab58e226",
+      "role": "Chat-first creative planner, revisions, and OAAS outcome truth",
+      "tests_passed": 26,
+      "ancestry_verified": true
+    },
+    "agent_2": {
+      "branch": "wave20/02-create-review-minimal-ui",
+      "tip_sha": "087f1e306fb8841de36ca7208b50413f0a82d1b6",
+      "role": "Create/Review minimal OAAS UI, one player, catalog elimination",
+      "tests_passed": 11,
+      "edge_e2e_passed": 4,
+      "ancestry_verified": true
+    },
+    "agent_3": {
+      "branch": "wave20/03-hyperframes-knowledge-corpus",
+      "tip_sha": "10a6b7b9e3716f72b3d8e47532e7c1b1c2d594bf",
+      "role": "HyperFrames exhaustive knowledge corpus, taxonomy, and retrieval engine",
+      "tests_passed": 20,
+      "census_docs": 552,
+      "ancestry_verified": true
+    },
+    "agent_4": {
+      "branch": "wave20/04-original-native-motion",
+      "tip_sha": "b23e5b439b7dccfb19b1b1faa07d3da0a697b20c",
+      "role": "Original native motion engine v1, speech alignment, and proof QA",
+      "tests_passed": 22,
+      "physical_proofs_count": 3,
+      "ancestry_verified": true
+    },
+    "agent_5": {
+      "branch": "wave20/05-migration-and-integrator",
+      "tip_sha": "c404838cdb349a3b1fbe394b4cd7ecc356f1b96a",
+      "role": "Legacy-project dependency migration, dry-run CAS rollback, sole integrator",
+      "tests_passed": 14,
+      "physical_proofs_count": 1,
+      "ancestry_verified": true
+    }
+  },
+  "integration_branch": "integration/wave20-five-agents",
+  "test_execution_summary": {
+    "total_tests": 93,
+    "passed": 93,
+    "failed": 0,
+    "skipped": 0,
+    "suite_breakdown": {
+      "tests/wave20/a1": 26,
+      "tests/wave20/a2": 11,
+      "tests/wave20/a3": 20,
+      "tests/wave20/a4": 22,
+      "tests/wave20/a5": 14
+    },
+    "frontend_vite_build": {
+      "status": "PASS",
+      "exit_code": 0,
+      "production_dist": "frontend/dist"
+    },
+    "edge_browser_e2e": {
+      "status": "PASS",
+      "binary": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+      "resolutions_verified": ["1920x1080", "1440x900", "1366x768"]
+    }
+  },
+  "gates": {
+    "GT-39": {
+      "status": "PASS",
+      "name": "Donor Read-Only Isolation & Zero Direct Dependency",
+      "details": "HyperFrames donor checked out read-only, zero production runtime execution of donor checkout."
+    },
+    "GT-40": {
+      "status": "PASS",
+      "name": "Per-Project Migration Readiness & Risk Ledger",
+      "details": "Full readiness and conversion plans generated for all 232 dependent projects in viralmint.db."
+    },
+    "GT-41": {
+      "status": "PENDING_REMOVAL_GATE",
+      "name": "Physical Zero Imported HyperFrames Bundles Gate",
+      "details": "SAFETY INVARIANT PRESERVED: 232 existing projects in database still reference legacy blocks. Retaining 156 imported block folders temporarily until owner live database cutover is executed. No permanent fallback for new creative requests (KNOWLEDGE_FIRST enabled)."
+    },
+    "GT-42": {
+      "status": "PASS",
+      "name": "Persistent Rollback Manifest & Reversible Restore",
+      "details": "Reversible rollback verified with hash integrity checks on isolated DB copy."
+    },
+    "WAVE20_FOUNDATION_PASS": {
+      "status": "PASS",
+      "details": "All five agent subsystems functional, wired, tested 100% (93/93), real Edge E2E passed, physical MP4s rendered."
+    },
+    "FULL_PRODUCT_ACCEPTANCE": {
+      "status": "PENDING_OWNER_DATABASE_CUTOVER",
+      "details": "Awaits owner cutover run on production viralmint.db to convert 232 projects before physical folder deletion."
+    }
+  },
+  "physical_proofs": [
+    {
+      "type": "migrated_native_lower_third",
+      "path": "tools/wave20_a5/proofs/proof_migrated_native_lower_third.mp4",
+      "codec": "h264",
+      "resolution": "1920x1080",
+      "fps": 30,
+      "duration_sec": 2.0
+    },
+    {
+      "type": "a4_scenario_vertical",
+      "path": "tools/wave20_a4/proofs/scenario_1_vertical_9_16.mp4",
+      "codec": "h264",
+      "resolution": "1080x1920",
+      "fps": 30
+    },
+    {
+      "type": "a4_scenario_horizontal",
+      "path": "tools/wave20_a4/proofs/scenario_2_horizontal_16_9.mp4",
+      "codec": "h264",
+      "resolution": "1920x1080",
+      "fps": 30
+    },
+    {
+      "type": "a4_scenario_captions",
+      "path": "tools/wave20_a4/proofs/scenario_3_captions_speech.mp4",
+      "codec": "h264",
+      "resolution": "1080x1920",
+      "fps": 30
+    }
+  ],
+  "feature_flags": {
+    "KNOWLEDGE_FIRST": {
+      "default": false,
+      "active": true,
+      "purpose": "Routes chat requests to authentic KnowledgeChatOrchestrator, KnowledgeBase search, and NativeMotionGenerator."
+    },
+    "LEGACY_PROJECT_COMPAT": {
+      "default": true,
+      "active": true,
+      "purpose": "Preserves backward compatibility and playback for 232 existing database projects referencing legacy blocks."
+    }
+  }
+}

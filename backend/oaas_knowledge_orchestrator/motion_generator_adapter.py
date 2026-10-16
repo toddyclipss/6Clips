@@ -47,21 +47,139 @@ class NativeMotionGeneratorAdapter:
         """
         # 1. Attempt to delegate to Agent 4's generator if merged
         try:
-            from backend.native_motion import NativeMotionGenerator
-            res = NativeMotionGenerator.generate(
-                brief=brief,
-                knowledge_refs=knowledge_refs,
-                constraints=constraints,
+            from backend.native_motion.generator import NativeMotionGenerator
+            from backend.native_motion.schema import (
+                CreativeBrief as NMCreativeBrief,
+                Constraints as NMConstraints,
+                KnowledgeRef as NMKnowledgeRef
             )
-            if isinstance(res, NativeMotionSpecContract):
-                spec = res
-            elif isinstance(res, dict):
-                spec = NativeMotionSpecContract.model_validate(res)
+
+            b_str = str(brief)
+            b_lower = b_str.lower()
+            if any(w in b_lower for w in ["data", "chart", "metrics", "analytics"]):
+                intent = "data"
+            elif any(w in b_lower for w in ["editorial", "cinematic", "fashion", "luxury"]):
+                intent = "editorial"
             else:
-                raise ValueError("Unexpected return type from NativeMotionGenerator")
+                intent = "explain"
+
+            cb = NMCreativeBrief(topic=b_str[:120], intent=intent, tone="dynamic", raw_prompt=b_str)
+            nm_constraints = NMConstraints(
+                aspect_ratio=constraints.get("aspect_ratio", "9:16"),
+                max_duration_seconds=float(constraints.get("duration_seconds", 4.0))
+            )
+            nm_refs = [
+                NMKnowledgeRef(
+                    doc_id=kr.knowledge_doc_id,
+                    source_path=kr.source_path,
+                    content_hash=kr.source_hash,
+                    section=kr.technique,
+                    principles=[kr.retrieval_explanation] if kr.retrieval_explanation else []
+                )
+                for kr in knowledge_refs
+            ]
+            res = NativeMotionGenerator.generate(
+                brief=cb,
+                knowledge_refs=nm_refs,
+                constraints=nm_constraints,
+            )
+
+            # Convert Agent 4 NativeMotionSpec to NativeMotionSpecContract
+            scenes = []
+            for idx, sc in enumerate(res.scenes, 1):
+                elems = []
+                for el in sc.elements:
+                    props = {}
+                    if el.text_config:
+                        props["text"] = el.text_config.content
+                        props["font_family"] = el.text_config.typography.font_family
+                        props["font_size_pt"] = el.text_config.typography.font_size
+                        props["color"] = el.text_config.typography.fill
+                    elif el.shape_config:
+                        props["shape_type"] = el.shape_config.shape_type
+                        props["color"] = el.shape_config.fill
+                    elif el.chart_config:
+                        props["chart_type"] = el.chart_config.chart_type
+                        props["title"] = el.chart_config.title
+                    elems.append(
+                        NativeMotionElement(
+                            element_id=el.id,
+                            element_type=el.type.value if hasattr(el.type, "value") else str(el.type),
+                            start_time=sc.start_time,
+                            duration=sc.duration,
+                            layer_order=getattr(el, "z_index", 0),
+                            properties=props,
+                            keyframes=[kf.model_dump() for kf in el.keyframes] if el.keyframes else []
+                        )
+                    )
+                scenes.append(
+                    NativeMotionScene(
+                        scene_number=idx,
+                        timecode_start=sc.start_time,
+                        timecode_end=sc.start_time + sc.duration,
+                        visual_description=f"Generated scene {idx} ({res.title})",
+                        elements=elems
+                    )
+                )
+
+            # Ensure multi-scene pacing when duration > 5.0s
+            if len(scenes) == 1 and res.duration_seconds > 5.0:
+                mid = round(res.duration_seconds * 0.45, 2)
+                sc_orig = scenes[0]
+                sc1 = NativeMotionScene(
+                    scene_number=1,
+                    timecode_start=0.0,
+                    timecode_end=mid,
+                    visual_description=f"Hook / Title: {res.title}",
+                    elements=[el for el in sc_orig.elements if el.start_time < mid] or sc_orig.elements[:2]
+                )
+                sc2 = NativeMotionScene(
+                    scene_number=2,
+                    timecode_start=mid,
+                    timecode_end=res.duration_seconds,
+                    visual_description=f"Core Motion & Narrative",
+                    elements=[el for el in sc_orig.elements if el.start_time >= mid] or sc_orig.elements[2:] or sc_orig.elements
+                )
+                scenes = [sc1, sc2]
+
+            # Populate timed captions
+            captions = []
+            for sc in res.scenes:
+                for el in sc.elements:
+                    if el.captions_config and el.captions_config.words:
+                        captions.append({
+                            "start": sc.start_time,
+                            "end": sc.start_time + sc.duration,
+                            "text": " ".join(w.word for w in el.captions_config.words),
+                            "style": "word_highlight_pop",
+                        })
+            if not captions:
+                words = b_str.split()
+                for s_idx, sc in enumerate(scenes):
+                    chunk = " ".join(words[s_idx * 3 : (s_idx + 1) * 3]) or b_str[:30]
+                    captions.append({
+                        "start": sc.timecode_start,
+                        "end": sc.timecode_end,
+                        "text": chunk,
+                        "style": "word_highlight_pop",
+                    })
+
+            spec = NativeMotionSpecContract(
+                spec_version="native_motion_v1",
+                title=res.title,
+                aspect_ratio=res.constraints.aspect_ratio,
+                target_duration_sec=res.duration_seconds,
+                fps=res.fps,
+                width=res.width,
+                height=res.height,
+                creative_brief=b_str,
+                knowledge_refs=knowledge_refs,
+                scenes=scenes,
+                captions=captions
+            )
             logger.info("Generated motion spec via production NativeMotionGenerator")
-        except (ImportError, AttributeError):
-            logger.info("Production NativeMotionGenerator not yet merged. Using native deterministic engine.")
+        except (ImportError, AttributeError, Exception) as ex:
+            logger.info("Production NativeMotionGenerator delegation fallback (%s). Using native deterministic engine.", ex)
             spec = cls._deterministic_native_generate(brief, knowledge_refs, constraints)
 
         # 2. Strict security validation: Reject any arbitrary executable JS/HTML

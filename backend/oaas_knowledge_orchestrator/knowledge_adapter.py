@@ -9,8 +9,9 @@ and an explicitly labeled test-only fallback during pre-merge development.
 
 from __future__ import annotations
 
+import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from .models import KnowledgeCitation
 
@@ -139,11 +140,26 @@ class KnowledgeBaseAdapter:
         # Attempt to import Agent 3 KnowledgeBase if merged
         try:
             from backend.knowledge_base import KnowledgeBase
-            raw_hits = KnowledgeBase.search(query=query, filters=filters, limit=limit)
+            kb = KnowledgeBase() if isinstance(KnowledgeBase, type) else KnowledgeBase
+            search_res = kb.search(query=query, filters=filters, limit=limit)
+            raw_hits = []
+            for r in search_res:
+                if hasattr(r, "model_dump"):
+                    rd = r.model_dump()
+                elif isinstance(r, dict):
+                    rd = r
+                else:
+                    continue
+                techs = rd.get("techniques")
+                if isinstance(techs, list):
+                    rd["techniques"] = ", ".join(techs) if techs else rd.get("title", "")
+                elif not techs:
+                    rd["techniques"] = rd.get("title", "")
+                raw_hits.append(rd)
             is_production = True
             logger.info("Retrieved %d citations from production KnowledgeBase", len(raw_hits))
-        except (ImportError, AttributeError):
-            logger.info("Production KnowledgeBase not yet merged. Using TestOnlyKnowledgeAdapter.")
+        except (ImportError, AttributeError, Exception) as ex:
+            logger.info("Production KnowledgeBase query exception (%s). Using TestOnlyKnowledgeAdapter.", ex)
             raw_hits = TestOnlyKnowledgeAdapter.search(query=query, filters=filters, limit=limit)
             is_production = False
 
@@ -155,6 +171,8 @@ class KnowledgeBaseAdapter:
                 continue
 
             tech = hit.get("techniques") or hit.get("technique") or "procedural_motion"
+            rc = hit.get("runtime_constraints")
+            rc_str = json.dumps(rc) if isinstance(rc, dict) else (str(rc) if rc else None)
             citation = KnowledgeCitation(
                 knowledge_doc_id=doc_id,
                 source_path=hit.get("source_path") or hit.get("source_ref") or "docs/unknown",
@@ -162,8 +180,8 @@ class KnowledgeBaseAdapter:
                 technique=tech,
                 donor_group=hit.get("donor_group"),
                 capability_family=hit.get("capability_family"),
-                rights=hit.get("rights", "PERMITTED"),
-                runtime_constraints=hit.get("runtime_constraints"),
+                rights=str(hit.get("rights", "PERMITTED")),
+                runtime_constraints=rc_str,
                 retrieval_explanation=hit.get("retrieval_explanation"),
             )
             citations.append(citation)

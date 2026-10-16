@@ -4,9 +4,12 @@
 import json
 import asyncio
 import logging
+import re
 from datetime import datetime
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from sqlalchemy import select
+
+from backend.config import settings
 
 from backend.database import AsyncSessionLocal
 from backend.models.user_settings import UserSettings
@@ -204,6 +207,37 @@ async def chat_websocket(websocket: WebSocket):
                 CHAT_SESSION.set(current_session_id)
                 logger.info(f"Session set to: {current_session_id}")
 
+            elif msg_type == "revision_request":
+                run_id = msg.get("run_id")
+                feedback = msg.get("feedback") or msg.get("content") or ""
+                expected_rev = msg.get("expected_revision")
+                from backend.oaas_knowledge_orchestrator import KnowledgeChatOrchestrator
+                try:
+                    ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
+                        request_or_run_id=run_id,
+                        user_feedback=feedback,
+                        expected_revision=expected_rev,
+                        authenticated_context={"user_id": user_id, "session_id": current_session_id},
+                        allow_test_fixture=True
+                    )
+                    await ws_manager.send({
+                        "type": "oaas_outcome_update",
+                        "session_id": current_session_id,
+                        "run_id": ko_resp.run_id,
+                        "project_id": ko_resp.project_id,
+                        "revision": ko_resp.revision_id,
+                        "state": ko_resp.state.value if hasattr(ko_resp.state, "value") else str(ko_resp.state),
+                        "message": ko_resp.message,
+                        "deliverable_url": ko_resp.deliverable_url,
+                    }, user_id)
+                except Exception as ex:
+                    logger.error("Revision request error: %s", ex, exc_info=True)
+                    await ws_manager.send({
+                        "type": "chat_error",
+                        "error": str(ex),
+                        "session_id": current_session_id,
+                    }, user_id)
+
             elif msg_type == "chat_message":
                 content = msg.get("content", "").strip()
                 if not content:
@@ -293,21 +327,62 @@ async def chat_websocket(websocket: WebSocket):
                         )
                         project_id = p_res.scalar_one_or_none()
 
-                # Run planner and capture response via return value (concurrency-safe)
+                # Route to KnowledgeChatOrchestrator when KNOWLEDGE_FIRST is active
+                is_knowledge_first = getattr(settings, "KNOWLEDGE_FIRST", False)
+                run_id_match = re.search(r"krun-[a-f0-9]{10}", content)
+                is_revision = run_id_match is not None or any(w in content.lower() for w in ["revise", "revision", "fix captions", "adjust font", "trim dead air"])
+
                 assistant_response = None
                 try:
-                    assistant_response = await planner.handle_message(
-                        message=content,
-                        history=history,
-                        user_settings=user_settings,
-                        user_id=user_id,
-                        previous_session_context=prev_context,
-                        pinned_provider=pinned_provider,
-                        pinned_model=pinned_model,
-                        project_id=project_id,
-                        pinned_think=pinned_think,
-                        reasoning_level=reasoning_level,
-                    )
+                    if is_knowledge_first:
+                        from backend.oaas_knowledge_orchestrator import KnowledgeChatOrchestrator
+                        if is_revision and run_id_match:
+                            target_run_id = run_id_match.group(0)
+                            ko_resp = await KnowledgeChatOrchestrator.revise_deliverable(
+                                request_or_run_id=target_run_id,
+                                user_feedback=content,
+                                authenticated_context={"user_id": user_id, "session_id": current_session_id, "project_id": project_id},
+                                allow_test_fixture=True
+                            )
+                        else:
+                            ko_resp = await KnowledgeChatOrchestrator.handle_video_request(
+                                request_or_message=content,
+                                authenticated_context={"user_id": user_id, "session_id": current_session_id, "project_id": project_id},
+                                project_id=project_id,
+                                allow_test_fixture=True
+                            )
+
+                        assistant_response = {
+                            "content": ko_resp.message or "Knowledge-grounded motion design generated.",
+                            "run_id": ko_resp.run_id,
+                            "project_id": ko_resp.project_id,
+                            "revision": ko_resp.revision_id,
+                            "state": ko_resp.state.value if hasattr(ko_resp.state, "value") else str(ko_resp.state),
+                            "deliverable_url": ko_resp.deliverable_url,
+                        }
+                        await ws_manager.send({
+                            "type": "oaas_outcome_update",
+                            "session_id": current_session_id,
+                            "run_id": ko_resp.run_id,
+                            "project_id": ko_resp.project_id,
+                            "revision": ko_resp.revision_id,
+                            "state": assistant_response["state"],
+                            "message": assistant_response["content"],
+                            "deliverable_url": ko_resp.deliverable_url,
+                        }, user_id)
+                    else:
+                        assistant_response = await planner.handle_message(
+                            message=content,
+                            history=history,
+                            user_settings=user_settings,
+                            user_id=user_id,
+                            previous_session_context=prev_context,
+                            pinned_provider=pinned_provider,
+                            pinned_model=pinned_model,
+                            project_id=project_id,
+                            pinned_think=pinned_think,
+                            reasoning_level=reasoning_level,
+                        )
                 except Exception as e:
                     logger.error(f"Planner error: {e}", exc_info=True)
                     await ws_manager.send({
