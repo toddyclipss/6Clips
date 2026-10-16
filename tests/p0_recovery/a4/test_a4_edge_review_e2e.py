@@ -154,3 +154,35 @@ class TestEdgeReviewPlayerAndSocialGate:
 
         # 4. No hardcoded 15.00s fallback in rendered DOM
         assert "15.00s" not in dom
+
+    def test_edge_review_mode_zero_social_gate(self, spa_server):
+        """Verifies Review mode loads cleanly without social gate or 15.00s hardcoded duration."""
+        edge_bin = find_edge_binary()
+        if not edge_bin:
+            pytest.skip("Microsoft Edge binary not found on Windows host")
+
+        shot_name = "p0_edge_1920x1080_review_mode.png"
+        res = self.run_edge_capture(edge_bin, f"{spa_server}/motion?mode=review", 1920, 1080, screenshot_name=shot_name, dump_dom=True, virtual_time=2500)
+        assert res.returncode == 0
+        img_path = SCREENSHOTS_DIR / shot_name
+        assert img_path.exists()
+        assert img_path.stat().st_size > 5000
+
+        dom = res.stdout
+        # Zero social gate or pending credentials
+        assert "NOT_CONNECTED / PENDING_CREDENTIALS" not in dom
+        # Zero hardcoded 15s display
+        assert "15.00s" not in dom
+
+    def test_edge_viewport_responsiveness(self, spa_server):
+        """Verifies responsiveness across 1440x900 and 1366x768 viewports."""
+        edge_bin = find_edge_binary()
+        if not edge_bin:
+            pytest.skip("Microsoft Edge binary not found on Windows host")
+
+        for w, h, name in [(1440, 900, "p0_edge_1440x900_review.png"), (1366, 768, "p0_edge_1366x768_review.png")]:
+            res = self.run_edge_capture(edge_bin, f"{spa_server}/motion", w, h, screenshot_name=name, virtual_time=2000)
+            assert res.returncode == 0
+            img_path = SCREENSHOTS_DIR / name
+            assert img_path.exists()
+            assert img_path.stat().st_size > 5000

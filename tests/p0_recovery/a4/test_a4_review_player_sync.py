@@ -151,3 +151,34 @@ class TestMotionGraphicsOrchestrationContracts:
         mg_src = MOTION_PAGE_PATH.read_text(encoding="utf-8")
         assert "const url = output.download_url || output.preview_ref || output.video_url" in mg_src
         assert "${output.output_id || output.artifact_id || \"clip\"}.mp4" in mg_src
+
+    def test_source_vs_output_duration_lineage_preserves_probe_duration(self):
+        """Verifies that when source duration is 19.0s and output probe duration is 8.00s, output probe is preserved."""
+        code = """
+        const projectWithSource = {
+            id: 'proj_source_edit',
+            source_video_duration: 19.0,
+            media_probe: { duration_seconds: 8.0, width: 1080, height: 1920 },
+            document: {
+                spec_version: 'native_motion_v1',
+                aspect_ratio: '9:16',
+                duration_seconds: 8.0
+            }
+        };
+        const normalized = adapter.normalizeProjectForPlayer(projectWithSource);
+        console.log(JSON.stringify({
+            duration: normalized.duration,
+            isOutputDuration: normalized.duration === 8.0
+        }));
+        """
+        out = json.loads(run_node_adapter(code))
+        assert out["duration"] == 8.0
+        assert out["isOutputDuration"] is True
+
+    def test_atomic_replacement_on_new_revision(self):
+        """Verifies syncOutcome updates targetRev to new revision and canonicalizes incoming deliverable."""
+        mg_src = MOTION_PAGE_PATH.read_text(encoding="utf-8")
+        assert "targetRev = outcomeRev || detail.data.revision || 1" in mg_src
+        assert "canonicalDeliverable =" in mg_src
+        assert "setRenderedVideo(canonicalDeliverable)" in mg_src
+        assert "setSelectedOutputIndex(0)" in mg_src

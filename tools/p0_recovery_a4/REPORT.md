@@ -65,7 +65,7 @@ Agent 4 resolved the UI defect where:
 
 ### A. Unit and Component Tests
 **Command:** `pytest tests/p0_recovery/a4/test_a4_review_player_sync.py`  
-**Result:** 13 passed in 0.45s  
+**Result:** 15 passed in 0.61s  
 - `TestNativeMotionAdapterDurationSync`:
   - `test_respects_probe_duration`: PASS (duration: 8.0)
   - `test_respects_document_duration_when_no_probe`: PASS (duration: 9.8)
@@ -83,16 +83,22 @@ Agent 4 resolved the UI defect where:
   - `test_sync_outcome_invalidates_stale_deliverable_on_failure`: PASS
   - `test_motion_graphics_passes_real_duration_and_on_duration_change`: PASS
   - `test_export_output_uses_download_url_and_canonical_id`: PASS
+  - `test_source_vs_output_duration_lineage_preserves_probe_duration`: PASS (source: 19.0s, output probe: 8.0s)
+  - `test_atomic_replacement_on_new_revision`: PASS
 
 ### B. Microsoft Edge Browser E2E Tests
 **Command:** `pytest tests/p0_recovery/a4/test_a4_edge_review_e2e.py`  
-**Result:** 1 passed in 4.38s  
+**Result:** 3 passed in 16.32s  
 - Headless Microsoft Edge rendering against compiled SPA.
-- Screenshot captured: `tools/p0_recovery_a4/evidence/screenshots/p0_edge_1920x1080_motion_review.png` (>5KB).
+- Screenshots captured in `tools/p0_recovery_a4/evidence/screenshots/`:
+  - `p0_edge_1920x1080_motion_review.png` (71.8 KB)
+  - `p0_edge_1920x1080_review_mode.png` (75.4 KB)
+  - `p0_edge_1440x900_review.png` (66.3 KB)
+  - `p0_edge_1366x768_review.png` (64.2 KB)
 - Verified DOM assertions:
   1. Five sidebar entries: Motion Graphics, Trends, My Channel, Library, Messages.
   2. Create / Review mode switcher only (zero Refine tab).
-  3. Zero `PENDING_CREDENTIALS` or `External Social Publishing Status` on initial load.
+  3. Zero `PENDING_CREDENTIALS` or `External Social Publishing Status` on initial load or review mode.
   4. Zero hardcoded `15.00s` fallback in rendered DOM.
 
 ### C. Frontend Production Build
@@ -110,3 +116,4 @@ Agent 4 resolved the UI defect where:
 | Atomic Deliverable Invalidation on Failure | **PASS** | Clears `renderedVideo` and `productionBatch` on terminal errors |
 | Navigation & Mode Constraints | **PASS** | 5 sidebars, Create/Review only, optional Advanced Editing |
 | Scope & Boundary Enforcement | **PASS** | Strictly owned files modified only, no forbidden cross-agent edits |
+| Evidence & Handoff Contract | **PASS** | `HANDOFF.json`, `REPORT.md`, screenshots, and 18/18 passing tests |

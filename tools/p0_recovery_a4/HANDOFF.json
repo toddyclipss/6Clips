@@ -42,18 +42,24 @@
     "single_player_identity": "StudioPreviewStage remounts cleanly on artifact key change, resets currentTime to 0, and player scrubber/timecode displays the exact physical media duration.",
     "export_integrity": "The Export Output action prefers download_url, falls back to preview_ref/video_url, and names the downloaded file with canonical output_id or artifact_id."
   },
+  "evidence_screenshots": [
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1920x1080_motion_review.png",
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1920x1080_review_mode.png",
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1440x900_review.png",
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1366x768_review.png"
+  ],
   "test_ledger": {
     "unit_component_tests": {
       "path": "tests/p0_recovery/a4/test_a4_review_player_sync.py",
-      "count": 13,
-      "passed": 13,
+      "count": 15,
+      "passed": 15,
       "failed": 0,
       "status": "PASS"
     },
     "edge_browser_e2e_tests": {
       "path": "tests/p0_recovery/a4/test_a4_edge_review_e2e.py",
-      "count": 1,
-      "passed": 1,
+      "count": 3,
+      "passed": 3,
       "failed": 0,
       "status": "PASS"
     },
