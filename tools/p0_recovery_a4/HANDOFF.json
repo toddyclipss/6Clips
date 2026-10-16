@@ -1,0 +1,72 @@
+{
+  "agent": "A4",
+  "name": "Review UI, Single Artifact Player Sync & No Social Gate",
+  "branch": "p0fix/04-canonical-review-ui",
+  "base_sha": "7a76da6ec7bb0fce8e95a38941ab4e7ac8fa68a1",
+  "owned_paths": [
+    "frontend/src/pages/MotionGraphics.jsx",
+    "frontend/src/components/motion/StudioPreviewStage.jsx",
+    "frontend/src/components/motion/MotionReviewPanel.jsx",
+    "frontend/src/utils/nativeMotionAdapter.js",
+    "tests/p0_recovery/a4/**",
+    "tools/p0_recovery_a4/**"
+  ],
+  "consumed_backend_outcome_fields": {
+    "project_id": "string - ID of the canonical project associated with the video",
+    "revision_id": "number | string - Project revision number (e.g. 1, 2)",
+    "run_id": "string - Unique execution run ID for the generation/edit job",
+    "artifact_id": "string - Canonical deliverable artifact ID",
+    "deliverable_url": "string - Primary video stream / mp4 url",
+    "media_url": "string - Alternative deliverable url field",
+    "download_url": "string - Direct mp4 download URL for client-side export",
+    "preview_ref": "string - Preview video reference url",
+    "sha256": "string - SHA256 checksum of physical rendered MP4",
+    "media_probe": {
+      "duration_seconds": "number - Exact physical media duration measured via ffprobe",
+      "width": "number - Physical media width (e.g. 1080)",
+      "height": "number - Physical media height (e.g. 1920)",
+      "fps": "number - Framerate",
+      "codec": "string - Video codec (e.g. h264)"
+    },
+    "duration_seconds": "number - Fallback duration in seconds if media_probe is omitted",
+    "publication_requested": "boolean | string - 'true' or 'REQUESTED' only when user explicitly requested social publishing",
+    "publication_status": "string - Current publishing queue status if requested (e.g. PENDING_SOCIAL_AUTHORIZATION, PUBLISHED)",
+    "state": "string - Outcome status: SUCCEEDED | FAILED_TERMINAL | BLOCKED | BLOCKED_UNAUTHORIZED_BACKGROUND_AI | FAILED_RETRYABLE",
+    "blocker_reason": "string - Truthful error description on failure",
+    "message": "string - User-facing progress or error message"
+  },
+  "ui_contract_guarantees": {
+    "zero_social_gate_for_edit_only": "When publication_requested is false or omitted, the Review panel completely suppresses 'review-publishing-status' and never shows PENDING_CREDENTIALS or blocks MP4 playback/download.",
+    "honest_duration_sync": "No hardcoded 15.00s fallback in player or review panel. Uses media_probe.duration_seconds first, then timeline duration, or real video onLoadedMetadata duration.",
+    "atomic_deliverable_invalidation": "On terminal failure (e.g. BLOCKED_UNAUTHORIZED_BACKGROUND_AI, FAILED_TERMINAL) or new run dispatch, old stale video and deliverables are atomically cleared from state so the user never sees a previous run's completed video or fake success.",
+    "single_player_identity": "StudioPreviewStage remounts cleanly on artifact key change, resets currentTime to 0, and player scrubber/timecode displays the exact physical media duration.",
+    "export_integrity": "The Export Output action prefers download_url, falls back to preview_ref/video_url, and names the downloaded file with canonical output_id or artifact_id."
+  },
+  "evidence_screenshots": [
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1920x1080_motion_review.png",
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1920x1080_review_mode.png",
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1440x900_review.png",
+    "tools/p0_recovery_a4/evidence/screenshots/p0_edge_1366x768_review.png"
+  ],
+  "test_ledger": {
+    "unit_component_tests": {
+      "path": "tests/p0_recovery/a4/test_a4_review_player_sync.py",
+      "count": 15,
+      "passed": 15,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "edge_browser_e2e_tests": {
+      "path": "tests/p0_recovery/a4/test_a4_edge_review_e2e.py",
+      "count": 3,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "frontend_production_build": {
+      "command": "npm run build in frontend",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  }
+}

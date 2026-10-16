@@ -128,7 +128,7 @@ export function normalizeProjectForPlayer(projectOrDoc) {
     return {
       isNativeMotion: false,
       tracks: [],
-      duration: 15,
+      duration: 0,
       fps: 30,
       aspectRatio: "9:16",
       schemaVersion: "legacy",
@@ -138,14 +138,20 @@ export function normalizeProjectForPlayer(projectOrDoc) {
   const doc = projectOrDoc.document || projectOrDoc
   const isNative = isNativeMotionV1(doc)
 
-  const duration = Number(
-    doc.duration ??
-    doc.duration_seconds ??
-    doc.timeline?.duration_seconds ??
-    projectOrDoc.duration ??
-    projectOrDoc.duration_seconds ??
-    15
+  const probeDuration = Number(
+    projectOrDoc.media_probe?.duration_seconds ??
+    doc.media_probe?.duration_seconds
   )
+  const duration = Number.isFinite(probeDuration) && probeDuration > 0
+    ? probeDuration
+    : Number(
+        doc.duration_seconds ??
+        doc.duration ??
+        doc.timeline?.duration_seconds ??
+        projectOrDoc.duration_seconds ??
+        projectOrDoc.duration ??
+        0
+      )
   const fps = Number(doc.fps || doc.timeline?.fps || 30)
   const aspectRatio = doc.aspect_ratio || doc.aspectRatio || projectOrDoc.aspect_ratio || projectOrDoc.aspectRatio || "9:16"
 

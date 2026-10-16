@@ -233,10 +233,41 @@ export default function MotionGraphics() {
   // Synchronize incoming OAAS outcomes (deliverables, revisions, and project IDs)
   useEffect(() => {
     if (!latestOutcome) return
-    const { project_id, revision: outcomeRev, state, deliverable_url, run_id, message } = latestOutcome
+    const { project_id, revision: outcomeRev, state, deliverable_url, run_id, message, blocker_reason } = latestOutcome
 
     const syncOutcome = async () => {
-      // 1. If we have a project_id from outcome, attach to it if no project or if it matches
+      // 1. If failure or blocked terminal error received, invalidate deliverable atomically
+      if (
+        state === "FAILED_TERMINAL" ||
+        state === "BLOCKED" ||
+        state === "BLOCKED_UNAUTHORIZED_BACKGROUND_AI" ||
+        state === "FAILED_RETRYABLE"
+      ) {
+        setRenderedVideo(null)
+        setProductionBatch(null)
+        setSelectedOutputIndex(0)
+        const errMsg = blocker_reason || message || `Outcome blocked (${state})`
+        setProjectError(errMsg)
+        showSnackbar(errMsg, "error")
+        return
+      }
+
+      // 2. If new run started (in-progress), clear old finished deliverable so it is not shown as current
+      if (
+        state === "PLANNING" ||
+        state === "RETRIEVING_KNOWLEDGE" ||
+        state === "COMPOSING" ||
+        state === "RENDERING"
+      ) {
+        if (run_id && renderedVideo && renderedVideo.run_id && renderedVideo.run_id !== run_id) {
+          setRenderedVideo(null)
+          setProductionBatch(null)
+          setSelectedOutputIndex(0)
+        }
+        setProjectError(null)
+      }
+
+      // 3. If we have a project_id from outcome, attach to it if no project or if it matches
       if (project_id && (!project || project.id === project_id)) {
         try {
           const detail = await http.get(`/api/projects/${project_id}`)
@@ -261,21 +292,64 @@ export default function MotionGraphics() {
         }
       }
 
-      // 2. If deliverable ready or review ready, display in Review mode
+      // 4. If deliverable ready or review ready, display in Review mode
       if (deliverable_url || state === "REVIEW_READY" || state === "VIDEO_VERIFIED") {
+        setProjectError(null)
         const vidUrl = deliverable_url || (project_id ? `/api/projects/${project_id}/preview` : null)
         if (vidUrl) {
-          setRenderedVideo({
-            id: run_id || `render_${Date.now()}`,
+          const rawProbeDur = Number(latestOutcome?.media_probe?.duration_seconds)
+          const rawDurSec = Number(latestOutcome?.duration_seconds)
+          const rawDur = Number(latestOutcome?.duration)
+          const verifiedDuration = (Number.isFinite(rawProbeDur) && rawProbeDur > 0)
+            ? rawProbeDur
+            : (Number.isFinite(rawDurSec) && rawDurSec > 0)
+              ? rawDurSec
+              : (Number.isFinite(rawDur) && rawDur > 0)
+                ? rawDur
+                : 0
+
+          const isPubRequested = Boolean(
+            latestOutcome?.publication_requested === true ||
+            latestOutcome?.publication_requested === "true" ||
+            latestOutcome?.publication_requested === "REQUESTED"
+          )
+
+          const canonicalDeliverable = {
+            id: latestOutcome?.artifact_id || run_id || `render_${Date.now()}`,
+            output_id: latestOutcome?.artifact_id || run_id || `clip_r${outcomeRev || revision || 1}`,
+            run_id: run_id || null,
+            project_id: project_id || project?.id,
+            project_revision: outcomeRev || latestOutcome?.revision_id || revision || 1,
+            library_video_id: latestOutcome?.library_video_id || latestOutcome?.video_id || null,
+            artifact_id: latestOutcome?.artifact_id || null,
             video_url: vidUrl,
             preview_ref: vidUrl,
-            output_id: run_id || `clip_r${outcomeRev || revision || 1}`,
-            project_revision: outcomeRev || revision || 1,
+            download_url: latestOutcome?.download_url || vidUrl,
+            sha256: latestOutcome?.sha256 || latestOutcome?.etag || null,
             state: "SUCCEEDED",
-            duration_seconds: latestOutcome?.duration_seconds || latestOutcome?.media_probe?.duration_seconds || 15,
-            media_probe: latestOutcome?.media_probe || { width: 1080, height: 1920, video_codec: "h264", audio_codec: "aac", duration_seconds: latestOutcome?.duration_seconds || 15 },
-            publication_requested: Boolean(latestOutcome?.publication_requested),
-          })
+            duration_seconds: verifiedDuration,
+            media_probe: {
+              width: latestOutcome?.media_probe?.width || latestOutcome?.width || 1080,
+              height: latestOutcome?.media_probe?.height || latestOutcome?.height || 1920,
+              video_codec: latestOutcome?.media_probe?.video_codec || "h264",
+              audio_codec: latestOutcome?.media_probe?.audio_codec || "aac",
+              duration_seconds: verifiedDuration,
+              fps: latestOutcome?.media_probe?.fps || 30,
+            },
+            publication_requested: isPubRequested,
+            publication_status: latestOutcome?.publication_status || (isPubRequested ? "PENDING_SOCIAL_AUTHORIZATION" : "NOT_REQUESTED"),
+            captions: latestOutcome?.captions || null,
+          }
+
+          setRenderedVideo(canonicalDeliverable)
+          if (latestOutcome?.outputs && Array.isArray(latestOutcome.outputs) && latestOutcome.outputs.length > 0) {
+            setProductionBatch({ outputs: latestOutcome.outputs })
+          } else {
+            setProductionBatch(null)
+          }
+          setSelectedOutputIndex(0)
+          setCurrentTime(0)
+          setIsPlaying(false)
           setWorkspaceMode("review")
           try {
             const url = new URL(window.location.href)
@@ -517,15 +591,15 @@ export default function MotionGraphics() {
 
   const handleExportOutput = useCallback((output) => {
     if (!output) return
-    const url = output.preview_ref || output.video_url
+    const url = output.download_url || output.preview_ref || output.video_url
     if (url) {
       const link = document.createElement("a")
       link.href = url
-      link.download = `${output.output_id || "clip"}.mp4`
+      link.download = `${output.output_id || output.artifact_id || "clip"}.mp4`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-      showSnackbar(`Exporting ${output.output_id || "clip"}.mp4...`, "success")
+      showSnackbar(`Exporting ${output.output_id || output.artifact_id || "clip"}.mp4...`, "success")
     } else {
       showSnackbar("Output artifact is not yet available for export", "warning")
     }
@@ -1961,7 +2035,7 @@ export default function MotionGraphics() {
             onRetry={() => window.location.reload()}
             loadingMessage={isProjectLoading ? "Loading project document…" : "Starting preview server…"}
             currentTime={currentTime}
-            duration={activeReviewOutput?.media_probe?.duration_seconds || activeReviewOutput?.duration_seconds || renderedVideo?.duration_seconds || latestOutcome?.duration_seconds || document?.timeline?.duration_seconds || 15}
+            duration={activeReviewOutput?.media_probe?.duration_seconds || activeReviewOutput?.duration_seconds || renderedVideo?.duration_seconds || latestOutcome?.duration_seconds || document?.timeline?.duration_seconds || 0}
             isPlaying={isPlaying}
             onTogglePlay={() => setIsPlaying(!isPlaying)}
             onPlaybackStateChange={setIsPlaying}
@@ -1973,6 +2047,20 @@ export default function MotionGraphics() {
             renderedVideo={activeReviewOutput}
             activeJob={activeJob}
             onOpenAdvanced={() => setAdvancedEditing(true)}
+            onDurationChange={(newDur) => {
+              if (Number.isFinite(newDur) && newDur > 0) {
+                setDocument((prev) => {
+                  if (!prev?.timeline) return prev
+                  return {
+                    ...prev,
+                    timeline: {
+                      ...prev.timeline,
+                      duration_seconds: newDur,
+                    },
+                  }
+                })
+              }
+            }}
             onNewProject={handleNewProject}
           />
         </Box>
@@ -2124,7 +2212,7 @@ export default function MotionGraphics() {
             <StudioTimelineWorkspace
               tracks={document?.timeline?.tracks || []}
               currentTime={currentTime}
-              duration={document?.timeline?.duration_seconds || 15}
+              duration={document?.timeline?.duration_seconds || 0}
               fps={document?.timeline?.fps || 30}
               isPlaying={isPlaying}
               onTogglePlay={() => setIsPlaying(!isPlaying)}

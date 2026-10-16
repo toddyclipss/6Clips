@@ -111,6 +111,15 @@ function ScoreBreakdownPanel({ clip }) {
   )
 }
 
+const isExplicitPublicationRequested = (clip) => {
+  if (!clip) return false
+  const req = clip.publication_requested
+  if (req === true || req === "true" || req === "REQUESTED") return true
+  const pubStatus = clip.publication_status
+  if (pubStatus && pubStatus !== "NOT_REQUESTED" && pubStatus !== "NONE" && pubStatus !== "DISABLED") return true
+  return false
+}
+
 export default function MotionReviewPanel({
   outputs = [],
   selectedOutputIndex = 0,
@@ -164,7 +173,8 @@ export default function MotionReviewPanel({
           const isSelected = selectedOutputIndex === idx
           const isApproved = approvedOutputs.has(out.output_id) || approvedOutputs.has(outId)
           const probe = out.media_probe || {}
-          const dur = probe.duration_seconds || out.duration_seconds || 0
+          const rawDur = probe.duration_seconds ?? out.duration_seconds ?? out.duration
+          const dur = Number.isFinite(Number(rawDur)) && Number(rawDur) > 0 ? Number(rawDur) : 0
           const resolution = probe.width && probe.height ? `${probe.width}×${probe.height}` : "1080×1920"
           const state = out.state || (out.video_url || out.preview_ref ? "SUCCEEDED" : "PENDING")
           const isFailed = state === "FAILED"
@@ -173,7 +183,7 @@ export default function MotionReviewPanel({
 
           return (
             <Card
-              key={out.output_id || idx}
+              key={out.artifact_id || out.sha256 || out.output_id || idx}
               data-testid={`review-output-card-${idx}`}
               onClick={() => onSelectOutput && onSelectOutput(idx)}
               sx={{
@@ -227,7 +237,7 @@ export default function MotionReviewPanel({
 
                 {/* Technical Probe Specs & Framing */}
                 <Typography variant="caption" sx={{ fontFamily: "monospace", color: "text.secondary", display: "block", mb: 0.8 }}>
-                  9:16 ({resolution}) • {dur.toFixed(2)}s • {probe.video_codec || "h264"}/{probe.audio_codec || "aac"}
+                  9:16 ({resolution}) • {dur > 0 ? `${dur.toFixed(2)}s` : "0.00s"} • {probe.video_codec || "h264"}/{probe.audio_codec || "aac"}
                 </Typography>
 
                 {framingPreset && (
@@ -347,19 +357,20 @@ export default function MotionReviewPanel({
         })}
       </Stack>
 
-      {/* Publishing & Distribution Permissions Status - only when explicitly requested */}
-      {outputs.some((o) => o?.publication_requested) && (
+      {/* Publishing & Distribution Permissions Status - strictly only when explicitly requested by user */}
+      {outputs.some(isExplicitPublicationRequested) && (
         <Box sx={{ mt: 2, p: 1.25, bgcolor: "#ffffff", borderRadius: 2, border: "1px solid", borderColor: "divider" }} data-testid="review-publishing-status">
           <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.68rem", color: "text.secondary", textTransform: "uppercase", display: "block", mb: 0.5 }}>
-            External Publishing Status
+            External Social Publishing Status
           </Typography>
           <Chip
             size="small"
-            label="NOT_CONNECTED / PENDING_CREDENTIALS"
+            data-testid="publishing-status-chip"
+            label={outputs.find(isExplicitPublicationRequested)?.publication_status || "PENDING_SOCIAL_AUTHORIZATION"}
             sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700, bgcolor: "#fef3c7", color: "#92400e", mb: 0.8 }}
           />
           <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem", display: "block", lineHeight: 1.35 }}>
-            An approved Review is an editorial confirmation; it is never automatically uploaded or published. External social publishing requires authenticated provider API credentials in My Channel.
+            Separate publication queue: An approved Review is an editorial confirmation for personal use and local MP4 download. External social distribution to connected platforms occurs independently in My Channel.
           </Typography>
         </Box>
       )}
